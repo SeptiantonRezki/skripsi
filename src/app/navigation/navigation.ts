@@ -18,6 +18,14 @@ export const navigation = [
                     'bg'   : '#F44336',
                     'fg'   : '#FFFFFF'
                 }
+            },
+            {
+                'id':'module-1',
+                'title':'Module-1',
+                'translate': 'NAV.MODULE-1',
+                'type' : 'item',
+                'icon' : 'home',
+                'url'  : '/module-1',
             }
         ]
     }

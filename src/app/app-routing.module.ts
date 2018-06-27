@@ -4,8 +4,13 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 // routes
 const appRoutes: Routes = [
     {
-        path      : '**',
-        redirectTo: 'sample'
+        path      : '',
+        redirectTo: 'sample',
+        pathMatch:'full'
+    },
+    {
+    	path : 'module-1',
+    	loadChildren:'./pages/module-1/module-1.module#Module1Module'
     }
 ];
 
