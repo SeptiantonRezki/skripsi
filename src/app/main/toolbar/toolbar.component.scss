@@ -39,6 +39,10 @@
     .quick-panel-toggle-button {
         min-width: 64px;
         height: 64px;
+        &.no-radius{
+            border-radius: 0;
+            background-color: #fff;
+        }
 
         @include media-breakpoint-down('xs') {
             height: 56px;
@@ -58,5 +62,15 @@
         @include media-breakpoint-down('xs') {
             height: 56px;
         }
+    }
+
+    .username{
+        font-size: 13px;
+        font-weight: 200;
+    }
+
+    .iso{
+        font-size: 13px;
+        font-weight: 200;
     }
 }

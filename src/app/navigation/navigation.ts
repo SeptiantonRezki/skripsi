@@ -1,31 +1,65 @@
 export const navigation = [
     {
-        'id'      : 'applications',
-        'title'   : 'Applications',
-        'translate': 'NAV.APPLICATIONS',
+        'id'      : 'home',
+        'title'   : 'Home',
+        'translate': 'Home',
         'type'    : 'group',
         'children': [
             {
-                'id'   : 'sample',
-                'title': 'Sample',
-                'translate': 'NAV.SAMPLE.TITLE',
-                'type' : 'item',
-                'icon' : 'email',
-                'url'  : '/sample',
-                'badge': {
-                    'title': 25,
-                    'translate': 'NAV.SAMPLE.BADGE',
-                    'bg'   : '#F44336',
-                    'fg'   : '#FFFFFF'
-                }
-            },
-            {
-                'id':'module-1',
-                'title':'Module-1',
-                'translate': 'NAV.MODULE-1',
+                'id'   : 'dashboard',
+                'title': 'Dashboard',
+                'translate': 'Dashboard',
                 'type' : 'item',
                 'icon' : 'home',
-                'url'  : '/module-1',
+                'url'  : '/dashboard'
+            }
+        ]
+    },
+    {
+        'id'      : 'e-order',
+        'title'   : 'E-Order Management',
+        'translate': 'E-Order Management',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'view-e-order',
+                'title': 'View E-Order',
+                'translate': 'View E-Order',
+                'type' : 'item',
+                'icon' : 'shopping_cart',
+                'url'  : '/e-order/view'
+            },
+             {
+                'id'   : 'e-order-status',
+                'title': 'E-Order Status',
+                'translate': 'E-Order Status',
+                'type' : 'item',
+                'icon' : 'mail',
+                'url'  : '/e-order/status'
+            },
+            {
+                'id'   : 'delivery-status',
+                'title': 'Delivery Status',
+                'translate': 'Delivery Status',
+                'type' : 'item',
+                'icon' : 'calendar_today',
+                'url'  : '/delivery/status'
+            },
+             {
+                'id'   : 'e-order-history',
+                'title': 'E-Order History',
+                'translate': 'E-Order History',
+                'type' : 'item',
+                'icon' : 'menu',
+                'url'  : '/e-order/history'
+            },
+            {
+                'id'   : 'record-payment',
+                'title': 'Record Payments',
+                'translate': 'Record Payments',
+                'type' : 'item',
+                'icon' : 'menu',
+                'url'  : '/record/payments'
             }
         ]
     }

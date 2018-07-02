@@ -13,7 +13,7 @@ import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
 import { FuseMainModule } from './main/main.module';
-import { FuseSampleModule } from './main/content/sample/sample.module';
+import { DashboardModule } from './main/content/dashboard/dashboard.module';
 
 // add app route module
 import { AppRoutingModule } from './app-routing.module';
@@ -35,7 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
-        FuseSampleModule
+        DashboardModule
     ],
     bootstrap   : [
         AppComponent

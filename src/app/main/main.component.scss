@@ -1,5 +1,5 @@
 @import "src/@fuse/scss/fuse";
-
+@import "src/variable.scss";
 fuse-main {
     display: flex;
     flex-direction: column;
@@ -26,6 +26,18 @@ fuse-main {
                 flex: 1;
                 flex-direction: column;
                 overflow: hidden;
+
+                .toolbar-main{
+                    background-color: map-get($colors,primary-red);
+                    color:map-get($colors,white);
+                }
+
+                .avatar{
+                    width: 32px;
+                    min-width: 32px;
+                    height: 32px;
+                    min-height: 32px;
+                }
 
                 #wrapper {
                     display: flex;

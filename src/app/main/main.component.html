@@ -4,7 +4,7 @@
 
         <!-- TOOLBAR: Above -->
         <ng-container *ngIf="fuseSettings.layout.toolbar === 'above'">
-            <fuse-toolbar class="above" [ngClass]="fuseSettings.colorClasses.toolbar"></fuse-toolbar>
+            <fuse-toolbar class="above toolbar-main"></fuse-toolbar>
         </ng-container>
         <!-- / TOOLBAR: Above -->
 
@@ -32,18 +32,11 @@
 
                 <!-- TOOLBAR: Below -->
                 <ng-container *ngIf="fuseSettings.layout.toolbar === 'below'">
-                    <fuse-toolbar class="below" [ngClass]="fuseSettings.colorClasses.toolbar"></fuse-toolbar>
+                    <fuse-toolbar class="below toolbar-main"></fuse-toolbar>
                 </ng-container>
                 <!-- / TOOLBAR: Below -->
 
                 <fuse-content></fuse-content>
-
-                <!-- FOOTER: Below -->
-                <ng-container *ngIf="fuseSettings.layout.footer === 'below'">
-                    <fuse-footer class="below" [ngClass]="fuseSettings.colorClasses.footer"></fuse-footer>
-                </ng-container>
-                <!-- / FOOTER: Below -->
-
             </div>
 
             <!-- NAVBAR: Right -->
@@ -57,13 +50,6 @@
             <!-- / NAVBAR: Right -->
 
         </div>
-
-        <!-- FOOTER: Above -->
-        <ng-container *ngIf="fuseSettings.layout.footer === 'above'">
-            <fuse-footer class="above" [ngClass]="fuseSettings.colorClasses.footer"></fuse-footer>
-        </ng-container>
-        <!-- FOOTER: Above -->
-
     </div>
 
     <!-- QUICK PANEL -->
@@ -73,5 +59,3 @@
     <!-- / QUICK PANEL -->
 
 </mat-sidenav-container>
-
-<fuse-theme-options [navigation]="navigation"></fuse-theme-options>

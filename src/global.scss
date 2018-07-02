@@ -1,0 +1,4 @@
+@import "./variable.scss";
+.nav .nav-item .nav-link.active{
+	background-color:map-get($colors,primary-red);
+}

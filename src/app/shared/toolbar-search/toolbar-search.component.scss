@@ -1,0 +1,34 @@
+:host {
+	.toolbar-search-main{
+		padding-left: 19px;
+		mat-icon.search{
+			font-size: 13px;
+			@media screen and (min-width: 720px){
+			text-align: right;
+			position: relative;
+			top:3px;
+		    }
+		}
+	 	.toolbar-search{
+	 		@media screen and (min-width: 720px){
+	 			padding-left: 27px;
+	 		}
+			background-color: transparent;
+			font-size: 13px;
+			color:#fff;
+			line-height: 20px;
+			width: 100%;
+			&::placeholder{
+				color:#fff;
+				opacity: 0.7;
+			}
+			&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+			    color: #fff;
+			}
+
+			&::-ms-input-placeholder { /* Microsoft Edge */
+			    color: #fff;
+			}
+		}
+	}
+}
