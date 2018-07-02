@@ -62,5 +62,21 @@ export const navigation = [
                 'url'  : '/record/payments'
             }
         ]
+    },
+    {
+        'id' : 'testing',
+        'title' : 'Testing',
+        'translate' : 'Testing',
+        'type' : 'group',
+        'children' : [
+            {
+                'id':'module-1',
+                'title':'Module-1',
+                'translate':'Module',
+                'type':'item',
+                'icon':'menu',
+                'url':'module-1'
+            }
+        ]
     }
 ];

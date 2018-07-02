@@ -17,6 +17,8 @@ import { DashboardModule } from './main/content/dashboard/dashboard.module';
 
 // add app route module
 import { AppRoutingModule } from './app-routing.module';
+import { FuseFakeDbService } from './fuse-fake-db/fuse-fake-db.service';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 
@@ -35,7 +37,11 @@ import { AppRoutingModule } from './app-routing.module';
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
-        DashboardModule
+        DashboardModule,
+        InMemoryWebApiModule.forRoot(FuseFakeDbService, {
+            delay             : 0,
+            passThruUnknownUrl: true
+        }),
     ],
     bootstrap   : [
         AppComponent
