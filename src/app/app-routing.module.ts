@@ -11,6 +11,10 @@ const appRoutes: Routes = [
     {
     	path : 'module-1',
     	loadChildren:'./pages/module-1/module-1.module#Module1Module'
+    },
+    {
+      path : 'module-2',
+      loadChildren:'./pages/module-2/module-2.module#Module2Module'
     }
 ];
 

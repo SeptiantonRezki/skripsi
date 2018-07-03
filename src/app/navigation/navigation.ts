@@ -72,10 +72,18 @@ export const navigation = [
             {
                 'id':'module-1',
                 'title':'Module-1',
-                'translate':'Module',
+                'translate':'Module Datatable example',
                 'type':'item',
                 'icon':'menu',
                 'url':'module-1'
+            },
+             {
+                'id':'module-2',
+                'title':'Module-2',
+                'translate':'Module form and validation example',
+                'type':'item',
+                'icon':'menu',
+                'url':'module-2'
             }
         ]
     }
