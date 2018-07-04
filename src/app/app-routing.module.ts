@@ -15,6 +15,10 @@ const appRoutes: Routes = [
     {
       path : 'module-2',
       loadChildren:'./pages/module-2/module-2.module#Module2Module'
+    },
+    {
+      path:'login',
+      loadChildren:'./pages/login/login.module#LoginModule'
     }
 ];
 

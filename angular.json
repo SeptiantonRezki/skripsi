@@ -46,6 +46,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/fonts/proxima-fontface/stylesheet.css",
               "src/styles.scss"
             ],
             "scripts": []

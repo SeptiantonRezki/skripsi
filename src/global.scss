@@ -2,3 +2,7 @@
 .nav .nav-item .nav-link.active{
 	background-color:map-get($colors,primary-red);
 }
+.form-primary .mat-form-field-underline .mat-form-field-ripple{
+
+  background-color:map-get($colors,primary-red) !important;
+}

@@ -1,0 +1,41 @@
+<div id="ayoLogin" fxLayout="row" fxLayoutAlign="space-around center">
+	<div class="lgn-container">
+		<div class="lgn-box">
+			<div class="top">
+				<img src="/assets/images/ayo/ayo-logo-color.svg"/>
+				<div class="title">Sign into your account</div>
+			</div>
+			<div class="middle-form">
+				<form name="form" [formGroup]="loginForm">
+					<div class="label">Phone Number</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="10px">
+						<mat-form-field class="form-primary" fxFlex="10">
+							<input matInput>
+						</mat-form-field>
+
+						<mat-form-field fxFlex="90" class="form-primary">
+							<input matInput  required>
+						</mat-form-field>
+
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+						<mat-form-field class="form-primary">
+							<input matInput type="password" placeholder="Password">
+						</mat-form-field>
+					</div>
+					<div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
+					fxLayoutAlign="space-between center">
+					<mat-checkbox class="remember-me" aria-label="Remember Me">
+						Remember Me
+					</mat-checkbox>
+
+					<a class="forgot-password" [routerLink]="'/pages/auth/forgot-password'">
+						Forgot Password?
+					</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="lgn-container">Two</div>
+</div>
