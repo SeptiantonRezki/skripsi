@@ -5,7 +5,7 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 const appRoutes: Routes = [
     {
         path      : '',
-        redirectTo: 'dashboard',
+        redirectTo: 'login',
         pathMatch:'full'
     },
     {
@@ -19,6 +19,14 @@ const appRoutes: Routes = [
     {
       path:'login',
       loadChildren:'./pages/login/login.module#LoginModule'
+    },
+    {
+      path:'forgot-password',
+      loadChildren:'./pages/forgot-password/forgot-password.module#ForgotPasswordModule'
+    },
+    {
+      path:'reset-password',
+      loadChildren:'./pages/reset-password/reset-password.module#ResetPasswordModule'
     }
 ];
 
