@@ -27,6 +27,10 @@ const appRoutes: Routes = [
     {
       path:'reset-password',
       loadChildren:'./pages/reset-password/reset-password.module#ResetPasswordModule'
+    },
+    {
+      path:'error-404',
+      loadChildren:'./pages/404/error-404.module#Error404Module'
     }
 ];
 
