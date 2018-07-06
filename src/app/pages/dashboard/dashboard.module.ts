@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { DashboardRoutingModule } from './dashboard-routing.module';
+
 
 
 
@@ -7,19 +9,12 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { DashboardComponent } from './dashboard.component';
 
-const routes = [
-    {
-        path     : 'dashboard',
-        component: DashboardComponent
-    }
-];
-
 @NgModule({
     declarations: [
         DashboardComponent
     ],
     imports     : [
-        RouterModule.forChild(routes),
+        DashboardRoutingModule,
         FuseSharedModule
     ],
     exports     : [

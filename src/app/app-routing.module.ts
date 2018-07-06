@@ -9,6 +9,10 @@ const appRoutes: Routes = [
         pathMatch:'full'
     },
     {
+    	path : 'dashboard',
+    	loadChildren:'./pages/dashboard/dashboard.module#DashboardModule'
+    },
+    {
     	path : 'module-1',
     	loadChildren:'./pages/module-1/module-1.module#Module1Module'
     },
@@ -29,14 +33,14 @@ const appRoutes: Routes = [
       loadChildren:'./pages/reset-password/reset-password.module#ResetPasswordModule'
     },
     {
-      path:'error-404',
+      path:'**',
       loadChildren:'./pages/404/error-404.module#Error404Module'
     }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes, {
-    preloadingStrategy: PreloadAllModules
+    // preloadingStrategy: PreloadAllModules
   })],
   exports: [RouterModule]
 })
