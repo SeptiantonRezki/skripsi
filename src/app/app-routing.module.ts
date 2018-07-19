@@ -33,6 +33,10 @@ const appRoutes: Routes = [
       loadChildren:'./pages/reset-password/reset-password.module#ResetPasswordModule'
     },
     {
+      path:'admin',
+      loadChildren:'./pages/admin/admin.module#AdminModule'
+    },
+    {
       path:'**',
       loadChildren:'./pages/404/error-404.module#Error404Module'
     }

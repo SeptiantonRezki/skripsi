@@ -18,6 +18,7 @@ import { FaqFakeDb } from './faq';
 import { KnowledgeBaseFakeDb } from './knowledge-base';
 import { IconsFakeDb } from './icons';
 import { QuickPanelFakeDb } from './quick-panel';
+import { AyoAdminFake } from './ayo-admin-user';
 
 export class FuseFakeDbService implements InMemoryDbService
 {
@@ -30,7 +31,7 @@ export class FuseFakeDbService implements InMemoryDbService
             'analytics-dashboard-widgets': AnalyticsDashboardDb.widgets,
 
             // Calendar
-            'calendar': CalendarFakeDb.data,
+            'admin_user': AyoAdminFake.users,
 
             // E-Commerce
             'e-commerce-dashboard': ECommerceFakeDb.dashboard,

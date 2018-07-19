@@ -1,0 +1,59 @@
+ <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Admin Detail'">
+    </page-content-header>
+    <!-- / HEADER -->
+    <div class="content pt-24">
+        <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+            <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+                <h3>Admin Detail</h3>
+                <mat-form-field class="radius-select green">
+                    <mat-select value="option1">
+                        <mat-option value="option1">Status Active</mat-option>
+                        <mat-option value="option2">Option 2</mat-option>
+                        <mat-option value="option3">Option 3</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <form>
+                <div class="ayo-middle pt-24" fxLayout="column">
+
+                    <mat-form-field fxFlex="100" class="is-light">
+                        <input matInput placeholder="Nama"  [value]="formdata.nama" required>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light">
+                        <input matInput placeholder="Email"  [value]="formdata.email" required>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light">
+                        <mat-select placeholder="Role" [value]="formdata.role" required>
+                            <mat-option [value]="'a'">
+                                Role A
+                            </mat-option>
+                            <mat-option [value]="'b'">
+                                Role B
+                            </mat-option>
+                            <mat-option [value]="'c'">
+                                Role C
+                            </mat-option>
+                            <mat-option [value]="'d'">
+                                Role D
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+                    <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                            <button mat-stroked-button>Reset Password</button>
+                    </div>
+
+                    <div class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                        <button mat-raised-button  type="button" class="confirmation-button" fxFlex="30">
+                            Update
+                        </button>
+                    </div>
+
+          </div>
+      </form>
+  </div>
+
+</div>
+</div>

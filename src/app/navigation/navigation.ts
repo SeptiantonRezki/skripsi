@@ -16,6 +16,30 @@ export const navigation = [
         ]
     },
     {
+        'id'    : 'admin-management',
+        'title' : 'admin-management',
+        'translate':'admin Management',
+        'type' :'group',
+        'children' : [
+            {
+                'id':'user',
+                'title':'user',
+                'translate':'User',
+                'type':'item',
+                'icon':'people',
+                'url':'/admin/user'
+            },
+            {
+                'id':'role',
+                'title':'role',
+                'translate':'Role',
+                'type':'item',
+                'icon':'people',
+                'url':'/admin/role'
+            }
+        ]
+    },
+    {
         'id'      : 'e-order',
         'title'   : 'E-Order Management',
         'translate': 'E-Order Management',

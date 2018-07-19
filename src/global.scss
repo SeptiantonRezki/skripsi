@@ -17,3 +17,156 @@
   font-size: 14px !important;
   color:rgba(0,0,0,1) !important;
 }
+
+.mat-form-field-appearance-legacy.is-light .mat-form-field-label,
+.mat-form-field-label{
+  font-weight: normal !important;
+  font-size: 14px !important;
+  color:rgba(0,0,0,1) !important;
+}
+
+.dark-brown-bg{
+	background-color: #3E3E3E;
+	color:white!important;
+}
+
+.button-header{
+	button{
+		// margin: 4px 12px;
+		margin: 0px 0 0 15px;
+		max-height: 36px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.3px;
+		&.is-danger{
+			color:#fff;
+			background-color: $primary-red;
+		}
+	}
+}
+
+
+.ngx-datatable .datatable-header .datatable-header-cell.sortable .datatable-header-cell-wrapper {
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+}
+
+.datatable-body-cell-label{
+  a{
+    color: #000;
+    font-weight: bold;
+    border-bottom: 1px solid $primary-red;
+
+    &:hover{
+    color: $primary-red;
+    text-decoration: none !important;
+    }
+  }
+}
+
+button.data-content{
+	min-width: 100px;
+	color:#fff;
+	font-size: 11px;
+	border-radius: 5px;
+	&.primary-green{
+		background-color: map-get($colors,primary-green);
+	}
+	&.primary-red{
+		background-color: map-get($colors,primary-light-red);
+	}
+}
+
+button.confirmation-button{
+  background-color: map-get($colors,confirmation-button);
+  color:#fff;
+  font-weight: 300;
+}
+
+.is-half{
+  @media screen and (min-width: 1024px){
+    width: 50%;
+  }
+}
+
+.is-thirdquart{
+  @media screen and (min-width: 1024px){
+    width: 75%;
+  }
+}
+
+.mat-step-header .mat-step-icon{
+  background-color: #fff;
+  color:map-get($colors,confirmation-button);
+  font-weight: 700;
+  border:1px solid map-get($colors,confirmation-button);
+
+}
+
+.ayo-main-wrapper{
+  padding:0 24px;
+  margin: 12px;
+  border:1px solid #F3F3F3;
+  padding-bottom: 12px; 
+}
+
+mat-form-field.radius-select {
+  .mat-form-field-infix{
+    border: 1px solid;
+    border-radius: 6px;
+    padding: 8px;
+    min-width: 155px;
+  }
+  .mat-form-field-wrapper{
+    padding-bottom: 0;
+  }
+  .mat-form-field-underline{
+    display: none;
+  }
+  &.green{
+    .mat-form-field-infix{
+      border-color:#388E3C;
+      .mat-select-value-text{
+        color:#388E3C;
+      }
+    }
+  }
+
+}
+
+.inner-card{
+  width: 100%;
+  @media screen and (min-width: 1024px){
+  width: 60%;
+  }
+  background: #fff;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.35); 
+  .top-inner{
+    border-bottom: 1px solid #EFEFEF;
+    div{
+      padding-top: 12px;
+      font-size: 15px;
+      padding-left: 12px;
+      padding-bottom: 12px;
+      mat-icon{
+        font-size: 15px;
+        color:#4A90E2;
+        position: relative;
+        top:3px;
+      }
+    }
+  }
+  .middle-inner{
+    padding: 28px;
+    div.full-width{
+      padding-top: 5px;
+      width: 100%;
+    }
+    mat-progress-bar.red .mat-progress-bar-fill::after {
+      background-color: #BB130F;
+    }
+  }
+}

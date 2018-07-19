@@ -13,7 +13,6 @@ import { fuseConfig } from './fuse-config';
 
 import { AppComponent } from './app.component';
 import { FuseMainModule } from './main/main.module';
-import { DashboardModule } from './main/content/dashboard/dashboard.module';
 
 // add app route module
 import { AppRoutingModule } from './app-routing.module';
@@ -37,7 +36,6 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
         FuseModule.forRoot(fuseConfig),
         FuseSharedModule,
         FuseMainModule,
-        DashboardModule,
         InMemoryWebApiModule.forRoot(FuseFakeDbService, {
             delay             : 0,
             passThruUnknownUrl: true
