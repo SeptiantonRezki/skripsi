@@ -50,7 +50,7 @@ export const navigation = [
             {
                 'id':'admin-principal',
                 'title':'Admin Principal',
-                'translate':'User',
+                'translate':'Admin Principal',
                 'type':'item',
                 'icon':'assignment',
                 'url':'/admin/admin-principal'
