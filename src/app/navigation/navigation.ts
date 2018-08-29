@@ -61,7 +61,7 @@ export const navigation = [
                 'translate':'Field force',
                 'type':'item',
                 'icon':'picture_in_picture',
-                'url':'/user-management/fieldforce'
+                'url':'/user-management/field-force'
             },
             {
                 'id':'paguyuban',

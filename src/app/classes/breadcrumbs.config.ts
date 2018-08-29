@@ -17,6 +17,15 @@ export const brConfig = {
                         }
                 ]
         },
+        fieldforce: {
+                index: [
+                        {
+                                type: 'current',
+                                url: '/user-management/field-force',
+                                name: 'Field Force List'
+                        }
+                ]
+        },
 	admin:{
 		user:{
 			index:[{
