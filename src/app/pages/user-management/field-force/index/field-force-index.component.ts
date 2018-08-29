@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-field-force-index',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FieldForceIndexComponent implements OnInit {
 
-  constructor() { }
+  rows: any[];
+	loadingIndicator = true;
+	reorderable = true;
+	constructor(private http: HttpClient){
+		
+	    
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+		this.http.get('api/contacts-contacts')
+          .subscribe((contacts: any) => {
+              this.rows = contacts;
+              this.loadingIndicator = false;
+          });
+	}
 
 }

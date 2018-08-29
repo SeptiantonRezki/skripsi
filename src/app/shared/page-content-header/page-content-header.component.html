@@ -1,7 +1,9 @@
 <div id="contentHeader" class="header dark-brown-bg p-24 h-160" fxLayout="row" fxLayoutAlign="start center">
         <div fxLayout="column" fxLayoutAlign="center start" class="main-column">
             <div class="white-fg" fxLayout="row" fxLayoutAlign="start">
+                <a [routerLink]="['']">
                 <mat-icon class="secondary-text s-16">home</mat-icon>
+                </a>
                 <ng-container *ngFor="let breadcrumb of breadcrumbs">
                 <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
                 <span class="secondary-text s-16" *ngIf="breadcrumb.type == 'parent'"><a routerLink="{{breadcrumb.url}}">{{breadcrumb.name}}</a></span>

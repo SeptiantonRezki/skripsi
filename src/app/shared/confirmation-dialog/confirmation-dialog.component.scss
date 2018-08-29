@@ -1,0 +1,24 @@
+.dialog-container {
+    text-align: center;
+};
+
+.actions {
+    text-align:center;
+    padding-top:30px;
+    button {
+        margin: 20px auto;
+        &.confirm {
+            background-color:#388E3C;
+        }
+        &.reject {
+            background-color:#DC1E2D;
+        }
+        padding: 0 12px;
+        color: #fff;
+        min-height: 36px;
+        width: 'auto';
+        @media screen and (min-width: 720px){
+            width: 40%;
+        }
+    }
+}
