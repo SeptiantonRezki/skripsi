@@ -17,6 +17,10 @@ const appRoutes: Routes = [
     	loadChildren:'./pages/module-1/module-1.module#Module1Module'
     },
     {
+      path : 'admin-principal',
+      loadChildren:'./pages/admin-principal/admin-principal.module#AdminPrincipalModule'
+    },
+    {
       path : 'module-2',
       loadChildren:'./pages/module-2/module-2.module#Module2Module'
     },
