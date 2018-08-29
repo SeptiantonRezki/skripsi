@@ -8,6 +8,15 @@ export const brConfig = {
 			}
 		]
 	},
+        adminprincipal: {
+                index: [
+                        {
+                                type: 'current',
+                                url: '/user-management/admin-principal',
+                                name: 'Admin Principal List'
+                        }
+                ]
+        },
 	admin:{
 		user:{
 			index:[{

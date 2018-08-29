@@ -53,7 +53,7 @@ export const navigation = [
                 'translate':'Admin Principal',
                 'type':'item',
                 'icon':'assignment',
-                'url':'/admin/admin-principal'
+                'url':'/user-management/admin-principal'
             },
             {
                 'id':'field-force',
@@ -61,7 +61,7 @@ export const navigation = [
                 'translate':'Field force',
                 'type':'item',
                 'icon':'picture_in_picture',
-                'url':'/admin/fieldforce'
+                'url':'/user-management/fieldforce'
             },
             {
                 'id':'paguyuban',
@@ -69,7 +69,7 @@ export const navigation = [
                 'translate':'Paguyuban',
                 'type':'item',
                 'icon':'account_balance',
-                'url':'/admin/paguyuban'
+                'url':'/user-management/paguyuban'
             },
             {
                 'id':'wholesaler',
@@ -77,7 +77,7 @@ export const navigation = [
                 'translate':'Field force',
                 'type':'item',
                 'icon':'domain',
-                'url':'/admin/wholesaler'
+                'url':'/user-management/wholesaler'
             },
             {
                 'id':'retailer',
@@ -85,7 +85,7 @@ export const navigation = [
                 'translate':'Retailer',
                 'type':'item',
                 'icon':'store',
-                'url':'/admin/retailer'
+                'url':'/user-management/retailer'
             },
             {
                 'id':'consumer',
@@ -93,7 +93,7 @@ export const navigation = [
                 'translate':'Consumer',
                 'type':'item',
                 'icon':'person',
-                'url':'/admin/consumer'
+                'url':'/user-management/consumer'
             }
         ]
     },
