@@ -15,6 +15,7 @@ export const navigation = [
             }
         ]
     },
+    /*
     {
         'id'    : 'admin-management',
         'title' : 'admin-management',
@@ -39,58 +40,267 @@ export const navigation = [
             }
         ]
     },
+    */
     {
-        'id'      : 'e-order',
-        'title'   : 'E-Order Management',
-        'translate': 'E-Order Management',
+        'id'    : 'user-management',
+        'title' : 'User Management',
+        'translate':'Management Pengguna',
+        'type' :'group',
+        'children' : [
+            {
+                'id':'admin-principal',
+                'title':'Admin Principal',
+                'translate':'User',
+                'type':'item',
+                'icon':'assignment',
+                'url':'/admin/admin-principal'
+            },
+            {
+                'id':'field-force',
+                'title':'Field Force',
+                'translate':'Field force',
+                'type':'item',
+                'icon':'picture_in_picture',
+                'url':'/admin/fieldforce'
+            },
+            {
+                'id':'paguyuban',
+                'title':'Paguyuban',
+                'translate':'Paguyuban',
+                'type':'item',
+                'icon':'account_balance',
+                'url':'/admin/paguyuban'
+            },
+            {
+                'id':'wholesaler',
+                'title':'Field Force',
+                'translate':'Field force',
+                'type':'item',
+                'icon':'domain',
+                'url':'/admin/wholesaler'
+            },
+            {
+                'id':'retailer',
+                'title':'Retailer',
+                'translate':'Retailer',
+                'type':'item',
+                'icon':'store',
+                'url':'/admin/retailer'
+            },
+            {
+                'id':'consumer',
+                'title':'Consumer',
+                'translate':'Consumer',
+                'type':'item',
+                'icon':'person',
+                'url':'/admin/consumer'
+            }
+        ]
+    },
+    {
+        'id'    : 'ads',
+        'title' : 'Application Ads',
+        'translate':'Iklan dalam Aplikasi',
+        'type' :'group',
+        'children' : [
+            {
+                'id':'online-banner',
+                'title':'Online Banner',
+                'translate':'Spanduk Online',
+                'type':'item',
+                'icon':'image',
+                'url':'/adv/banner'
+            },
+            {
+                'id':'landing-page',
+                'title':'Landing Page',
+                'translate':'Halaman Tujuan',
+                'type':'item',
+                'icon':'language',
+                'url':'/adv/landingpage'
+            }
+        ]
+    },
+    {
+        'id'    : 'product-management',
+        'title' : 'Product Management',
+        'translate':'Management Barang (SKU)',
+        'type' :'group',
+        'children' : [
+            {
+                'id':'product',
+                'title':'Product',
+                'translate':'Produk',
+                'type':'item',
+                'icon':'collections',
+                'url':'/product/view'
+            },
+            {
+                'id':'reward-catalog',
+                'title':'Reward Catalog',
+                'translate':'Katalog Hadiah',
+                'type':'item',
+                'icon':'image',
+                'url':'/product/reward'
+            },
+            {
+                'id':'reward-history',
+                'title':'Reward History',
+                'translate':'Riwayat Hadiah',
+                'type':'item',
+                'icon':'timer',
+                'url':'/product/rewardhistory'
+            },
+            {
+                'id':'coin-management',
+                'title':'Coin Management',
+                'translate':'Manajemen Koin',
+                'type':'item',
+                'icon':'stars',
+                'url':'/product/coin'
+            }
+        ]
+    },
+    {
+        'id'    : 'dte',
+        'title' : 'DTE',
+        'translate':'DTE',
+        'type' :'group',
+        'children' : [
+            {
+                'id':'template-task',
+                'title':'Template Task',
+                'translate':'Template Tugas',
+                'type':'item',
+                'icon':'assignment',
+                'url':'/dte/template'
+            },
+            {
+                'id':'trade-program',
+                'title':'Trade Program',
+                'translate':'Trade Program',
+                'type':'item',
+                'icon':'assignment',
+                'url':'/dte/trade'
+            },
+            {
+                'id':'schedule-program',
+                'title':'Schedule Program',
+                'translate':'Pengatur Jadwal Program',
+                'type':'item',
+                'icon':'date_range',
+                'url':'/dte/scheduleprogram'
+            },
+            {
+                'id':'audience',
+                'title':'Audience',
+                'translate':'Audience',
+                'type':'item',
+                'icon':'person',
+                'url':'/dte/audience'
+            }
+        ]
+    },
+    {
+        'id'      : 'notification',
+        'title'   : 'Notification',
+        'translate': 'Notifikasi',
         'type'    : 'group',
         'children': [
             {
-                'id'   : 'view-e-order',
-                'title': 'View E-Order',
-                'translate': 'View E-Order',
+                'id'   : 'create-notification',
+                'title': 'Create Notification',
+                'translate': 'Buat Notifikasi',
                 'type' : 'item',
-                'icon' : 'shopping_cart',
-                'url'  : '/e-order/view'
-            },
-             {
-                'id'   : 'e-order-status',
-                'title': 'E-Order Status',
-                'translate': 'E-Order Status',
+                'icon' : 'notifications',
+                'url'  : '/notification/index'
+            }
+        ]
+    },
+    {
+        'id'      : 'content-management',
+        'title'   : 'Content Management',
+        'translate': 'Manajemen Konten',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'tnc',
+                'title': 'terms & Condition',
+                'translate': 'Syarat & Ketentuan',
                 'type' : 'item',
-                'icon' : 'mail',
-                'url'  : '/e-order/status'
+                'icon' : 'list_alt',
+                'url'  : '/content/tnc'
             },
             {
-                'id'   : 'delivery-status',
-                'title': 'Delivery Status',
-                'translate': 'Delivery Status',
+                'id'   : 'privacy-policy',
+                'title': 'Privacy Policy',
+                'translate': 'Kebijakan Privasi',
                 'type' : 'item',
-                'icon' : 'calendar_today',
-                'url'  : '/delivery/status'
-            },
-             {
-                'id'   : 'e-order-history',
-                'title': 'E-Order History',
-                'translate': 'E-Order History',
-                'type' : 'item',
-                'icon' : 'menu',
-                'url'  : '/e-order/history'
+                'icon' : 'lock',
+                'url'  : '/content/privacy'
             },
             {
-                'id'   : 'record-payment',
-                'title': 'Record Payments',
-                'translate': 'Record Payments',
+                'id'   : 'help',
+                'title': 'Help',
+                'translate': 'Bantuan',
                 'type' : 'item',
-                'icon' : 'menu',
-                'url'  : '/record/payments'
+                'icon' : 'description',
+                'url'  : '/content/help'
+            },
+        ]
+    },
+    {
+        'id'      : 'newsfeed-management',
+        'title'   : 'Newsfeed Management',
+        'translate': 'Manajemen Newsfeed',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'newsfeed-category',
+                'title': 'Newsfeed Category',
+                'translate': 'Syarat & Ketentuan',
+                'type' : 'item',
+                'icon' : 'view_agenda',
+                'url'  : '/newsfeed/category'
+            },
+            {
+                'id'   : 'newsfeed-news',
+                'title': 'Newsfeed News',
+                'translate': 'Daftar Berita',
+                'type' : 'item',
+                'icon' : 'view_agenda',
+                'url'  : '/newsfeed/news'
+            }
+        ]
+    },
+    {
+        'id'      : 'setting',
+        'title'   : 'Setting',
+        'translate': 'Pengaturan',
+        'type'    : 'group',
+        'children': [
+            {
+                'id'   : 'user-access',
+                'title': 'User Access',
+                'translate': 'Akses Karyawan',
+                'type' : 'item',
+                'icon' : 'group_add',
+                'url'  : '/setting/access'
+            },
+            {
+                'id'   : 'change-password',
+                'title': 'Change Password',
+                'translate': 'Ubah Kata Sandi',
+                'type' : 'item',
+                'icon' : 'vpn_key',
+                'url'  : '/setting/account'
             }
         ]
     },
     {
         'id' : 'testing',
         'title' : 'Testing',
-        'translate' : 'Testing',
+        'translate' : 'Example',
         'type' : 'group',
         'children' : [
             {
