@@ -8,9 +8,21 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminPrincipalIndexComponent implements OnInit {
 
-  constructor() { }
+  rows: any[];
+    loadingIndicator = true;
+    reorderable = true;
+    constructor(private http: HttpClient)
+    {
+    	
+        
+    }
 
   ngOnInit() {
+  	this.http.get('api/contacts-contacts')
+            .subscribe((contacts: any) => {
+                this.rows = contacts;
+                this.loadingIndicator = false;
+            });
   }
 
 }
