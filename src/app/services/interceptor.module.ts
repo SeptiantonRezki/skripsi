@@ -1,12 +1,17 @@
-import { Injectable, Injector } from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpResponse, HttpErrorResponse }
-  from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';
-import { DataService } from './data.service';
-import { Observable } from 'rxjs/Rx';
-import { Router } from '@angular/router';
-import { DialogService } from './dialog.service';
-
+import { Injectable, Injector } from "@angular/core";
+import {
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpEvent,
+  HttpResponse,
+  HttpErrorResponse
+} from "@angular/common/http";
+import { AuthenticationService } from "./authentication.service";
+import { DataService } from "./data.service";
+import { Observable } from "rxjs/Rx";
+import { Router } from "@angular/router";
+import { DialogService } from "./dialog.service";
 
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
@@ -17,75 +22,103 @@ export class BaseInterceptor implements HttpInterceptor {
     //   return this.injector.get(AuthenticationService).postRefreshToken();
     // }).share();
   }
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler,
-  ) {
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authReq = this.authenticateRequest(req);
-    return next.handle(authReq).do((event: HttpEvent<any>) => {
-      // do event;
-    }).catch((err: any) => {
-      return this.throwIntercept(err, req);
-    });
+    return next
+      .handle(authReq)
+      .do((event: HttpEvent<any>) => {
+        // do event;
+      })
+      .catch((err: any) => {
+        return this.throwIntercept(err, req);
+      });
   }
 
   authenticateRequest(request: HttpRequest<any>) {
-    const token = this.injector.get(DataService).getAuthorization() ? this.injector.get(DataService).getAuthorization()['access_token'] : null
+    const token = this.injector.get(DataService).getAuthorization()
+      ? this.injector.get(DataService).getAuthorization()["access_token"]
+      : null;
     if (token) {
-      const duplicate = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
+      const duplicate = request.clone({
+        headers: request.headers.set("Authorization", "Bearer " + token)
+      });
       return duplicate;
     }
     return request;
-
   }
 
   throwIntercept(err, req) {
-    console.error('HTTP ERROR LOGGER', err);
+    console.error("HTTP ERROR LOGGER", err);
+    if (err.status === 0)
+      this.injector
+        .get(DialogService)
+        .openSnackBar({
+          message:
+            "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!"
+        });
+
     if (err instanceof HttpErrorResponse) {
       // kondisi ketika check isms
       if (err.status == 404) {
-        if(err.error.status == false){
-          this.injector.get(DialogService).openCustomDialog(null, 'Data tidak valid / tidak ditemukan');
+        if (err.error.status == false) {
+          this.injector
+            .get(DialogService)
+            .openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
         }
         return Observable.throw(err);
-      }
-      else if (err.status == 400) {
-        if (req.method == 'POST') {
-          this.injector.get(DialogService).openCustomDialog(null, 'Username/Password Salah');
+      } else if (err.status == 400) {
+        if (req.method == "POST") {
+          this.injector
+            .get(DialogService)
+            .openSnackBar({ message: "Username/Password Salah" });
         }
         return Observable.throw(err);
-      }
-      else if (err.status == 401) {
-        if (req.method == 'POST') {
-          this.injector.get(DialogService).openCustomDialog(null, 'Username/Password Salah');
+      } else if (err.status == 401) {
+        if (req.method == "POST") {
+          this.injector
+            .get(DialogService)
+            .openSnackBar({ message: "Username/Password Salah" });
         }
-        return Observable.throw(err);
-      }
-      else if (err.status == 403) {
+
+        if (err.error === "Unauthorized") {
+          window.localStorage.clear();
+          this.router.navigate(["login"]);
+          this.injector
+            .get(DialogService)
+            .openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
+        }
 
         return Observable.throw(err);
-      }
-      else if (err.status == 422) {
-        if (req.method === 'POST') {
+      } else if (err.status == 403) {
+        return Observable.throw(err);
+      } else if (err.status == 422) {
+        let reqOtc = Object.entries(req.body).map(([key]) => ({ key }));
+        if (req.method === "POST") {
+          if (reqOtc[0]["key"] === "password_current") {
+            return Observable.throw(err);
+          }
+
           let errorArray = Object.values(err.error.errors);
-          this.injector.get(DialogService).openCustomDialog(null, errorArray[0][0]);
+          this.injector
+            .get(DialogService)
+            .openSnackBar({
+              message: `Terjadi Kesalahan, ${errorArray[0][0]}`
+            });
         }
         return Observable.throw(err);
-      }
-      else if (err.status == 404 || err.status == 500) {
+      } else if (err.status == 404 || err.status == 500) {
         return Observable.throw(err);
-      }
-      else {
+      } else {
         const status = err.status;
         const errMsg = {
           error: err.error,
           status: status,
-          headers: err.headers,
-
+          headers: err.headers
         };
-        return Observable.throw(errMsg || 'Server error');
+        return Observable.throw(errMsg || "Server error");
       }
     }
+
     return Observable.of(err);
   }
 

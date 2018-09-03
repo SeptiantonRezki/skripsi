@@ -1,61 +1,96 @@
 <ul class="cb-slideshow">
-	<li><span></span></li>
-	<li><span></span></li>
-	<li><span></span></li>
-	<li><span></span></li>
-	<li><span></span></li>
-	<li><span></span></li>
+  <li><span></span></li>
+  <li><span></span></li>
+  <li><span></span></li>
+  <li><span></span></li>
+  <li><span></span></li>
+  <li><span></span></li>
 </ul>
 <div id="ayoLogin" fxLayout="row" fxLayoutAlign="center center">
-	<div class="lgn-container" fxFlex="420px" fxFlex.lt-md="80%">
-		<div class="lgn-box">
-			<div class="top">
-				<img src="assets/images/ayo/AYO-logo.png" srcset="assets/images/ayo/AYO-logo@2x.png 2x" />
-				<div class="title">Sign into your account</div>
-			</div>
-			<div class="middle-form">
-			
-				<form name="form" [formGroup]="loginForm">
+  <div class="lgn-container" fxFlex="420px" fxFlex.lt-md="80%">
+    <div class="lgn-box">
+      <div class="top">
+        <img src="assets/images/ayo/AYO-logo.png" srcset="assets/images/ayo/AYO-logo@2x.png 2x" />
+        <div class="title">Masuk ke Akun Anda</div>
+      </div>
+      <div class="middle-form">
 
-					<div class="label">Email</div>
-					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="10px">
-						<mat-form-field fxFlex="100" class="form-primary">
-							<input matInput  required>
-						</mat-form-field>
-					</div>
+        <form name="form" [formGroup]="loginForm" (ngSubmit)="submit()">
 
-					<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-						<mat-form-field class="form-primary">
-							<input matInput type="password" placeholder="Password">
-						</mat-form-field>
-					</div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field class="is-light form-primary">
+              <input matInput type="email" placeholder="Email Pengguna" formControlName="username">
+              <mat-error *ngIf="loginForm.controls['username'].hasError('required') && loginForm.controls['username'].touched ">
+                Email Pengguna harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
 
-					<div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
-						<mat-checkbox class="remember-me red" aria-label="Remember Me">
-							Remember Me
-						</mat-checkbox>
-						<a class="forgot-password" [routerLink]="'/forgot-password'">
-							Forgot Password?
-						</a>
-					</div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field class="is-light form-primary">
+              <input matInput type="password" placeholder="Kata Sandi" formControlName="password">
+              <mat-error *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched ">
+                Kata Sandi harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
 
-					<div class="login-button" fxLayout="row">
-						<button mat-raised-button aria-label="Login" type="button" color="primary-red" [routerLink]="'/dashboard'">Login</button>
-					</div>
-				</form>
-				
-			</div>
-		</div>
-	</div>
-	
-	<div class="lgn-container text-container" fxShow fxHide.lt-md="true" fxHide.lg="false">
-		<h2>Selamat datang di</h2>
-		<h1>Sampoerna AYO</h1>
+          <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+            <mat-checkbox class="remember-me red" aria-label="Remember Me">
+              Ingat Saya
+            </mat-checkbox>
+            <!-- <a class="forgot-password" [routerLink]="'/forgot-password'">
+              Forgot Password?
+            </a> -->
+          </div>
 
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+          <div class="login-button" fxLayout="row">
+            <button mat-raised-button aria-label="Login" type="submit" color="primary-red" [disabled]="submitting">
+              <ng-container *ngIf="submitting == false">
+                Masuk
+              </ng-container>
+              <ng-container *ngIf="submitting == true">
+                <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+              </ng-container>
+            </button>
+          </div>
+        </form>
 
-		<p><mat-icon>check_circle</mat-icon> Lorem Ipsum is simply dummy text of the printing.</p>
-		<p><mat-icon>check_circle</mat-icon> Lorem Ipsum is simply dummy text of the printing.</p>
-		<p><mat-icon>check_circle</mat-icon> Lorem Ipsum is simply dummy text of the printing.</p>
-	</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lgn-container text-container" fxShow fxHide.lt-md="true" fxHide.lg="false">
+    <h2>Selamat datang di</h2>
+    <h1>Sampoerna AYO</h1>
+
+    <div class="txt-ayo">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </div>
+
+    <div fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="10">
+          <mat-icon style="width: 43px;height: 43px;font-size: 43px;">check_circle_outline</mat-icon>
+        </div>
+        <div fxFlex="70">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="10">
+          <mat-icon style="width: 43px;height: 43px;font-size: 43px;">check_circle_outline</mat-icon>
+        </div>
+        <div fxFlex="70">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="10">
+          <mat-icon style="width: 43px;height: 43px;font-size: 43px;">check_circle_outline</mat-icon>
+        </div>
+        <div fxFlex="70">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

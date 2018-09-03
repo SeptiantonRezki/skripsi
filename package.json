@@ -53,7 +53,9 @@
     "rxjs-compat": "6.1.0",
     "underscore": "^1.9.1",
     "web-animations-js": "2.3.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "angular-file": "^0.5.4",
+    "angular-froala-wysiwyg": "^2.8.4-1"
   },
   "devDependencies": {
     "@angular/cli": "~6.0.8",

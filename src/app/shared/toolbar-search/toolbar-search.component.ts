@@ -1,21 +1,17 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
-    selector   : 'toolbar-search',
-    templateUrl: './toolbar-search.component.html',
-    styleUrls  : ['./toolbar-search.component.scss']
+  selector: "toolbar-search",
+  templateUrl: "./toolbar-search.component.html",
+  styleUrls: ["./toolbar-search.component.scss"]
 })
-export class ToolbarSearchComponent
-{
-	@Input() navigation: any;
+export class ToolbarSearchComponent {
+  @Input()
+  navigation: any;
 
+  constructor() {}
 
-    constructor()
-    {
-    	
-    }
-
-    ngOnInit(){
-    	console.log('check navigation',this.navigation)
-    }
+  ngOnInit() {
+    console.log("check navigation", this.navigation);
+  }
 }

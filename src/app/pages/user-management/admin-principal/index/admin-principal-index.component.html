@@ -1,35 +1,78 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-     <ngx-datatable
-            class="material"
-            [rows]="rows"
-            [loadingIndicator]="loadingIndicator"
-            [columnMode]="'force'"
-            [headerHeight]="48"
-            [footerHeight]="56"
-            [rowHeight]="'auto'"
-            [scrollbarH]="true"
-            [reorderable]="reorderable"
-            [selectionType]="'checkbox'"
-            [limit]="10">
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Daftar Admin'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
+        <mat-icon>add</mat-icon>TAMBAH
+      </button>
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
 
-            <ngx-datatable-column [width]="48"
-                                  [canAutoResize]="false"
-                                  [sortable]="false">
-                <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-                             let-selectFn="selectFn">
-                    <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-                </ng-template>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Admin Principal</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
+        (select)="onSelect($event)">
 
-                <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-                             let-onCheckboxChangeFn="onCheckboxChangeFn">
-                    <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
-                </ng-template>
-            </ngx-datatable-column>
+        <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
+          </ng-template>
 
-            <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
 
-            <ngx-datatable-column name="Last Name" prop="lastName"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama" prop="fullname">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directEdit(row)">{{row.fullname}} </a>
+          </ng-template>
+        </ngx-datatable-column>
 
-            <ngx-datatable-column name="Company" prop="company"></ngx-datatable-column>
-        </ngx-datatable>
+        <ngx-datatable-column name="Nomor Ponsel" prop="phone" summary-template="activeCell"></ngx-datatable-column>
+
+        <ngx-datatable-column [width]="100" name="Status" prop="active_status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
+                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+              </p>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Terkahir Masuk" prop="last_login">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
 </div>

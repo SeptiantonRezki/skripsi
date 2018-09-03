@@ -1,69 +1,86 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { FuseConfigService } from '@fuse/services/config.service';
-import { fuseAnimations } from '@fuse/animations';
+import { FuseConfigService } from "@fuse/services/config.service";
+import { fuseAnimations } from "@fuse/animations";
+import { AuthenticationService } from "../../services/authentication.service";
+import { DataService } from "../../services/data.service";
+import { Router } from "@angular/router";
+import { commonFormValidator } from "../../classes/commonFormValidator";
 
 @Component({
-    selector   : 'login',
-    templateUrl: './login.component.html',
-    styleUrls  : ['./login.component.scss']
+  selector: "login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements OnInit
-{
-    loginForm: FormGroup;
-    loginFormErrors: any;
+export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
+  loginFormErrors: any;
+  submitting: boolean;
 
-    constructor(
-        private fuseConfig: FuseConfigService,
-        private formBuilder: FormBuilder
-    )
-    {
-        this.fuseConfig.setConfig({
-            layout: {
-                navigation: 'none',
-                toolbar   : 'none',
-                footer    : 'none'
+  constructor(
+    private fuseConfig: FuseConfigService,
+    private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private dataService: DataService,
+    private router: Router
+  ) {
+    this.fuseConfig.setConfig({
+      layout: {
+        navigation: "none",
+        toolbar: "none",
+        footer: "none"
+      }
+    });
+
+    this.loginFormErrors = {
+      email: {},
+      password: {}
+    };
+
+    this.submitting = false;
+  }
+
+  ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      username: ["", [Validators.required]],
+      password: ["", Validators.required]
+    });
+
+    this.loginForm.valueChanges.subscribe(() => {
+      commonFormValidator.parseFormChanged(
+        this.loginForm,
+        this.loginFormErrors
+      );
+    });
+  }
+
+  submit() {
+    if (this.loginForm.valid) {
+      this.submitting = true;
+      let body = {
+        username: this.loginForm.get("username").value,
+        password: this.loginForm.get("password").value
+      };
+      this.authenticationService.login(body).subscribe(
+        res => {
+          this.dataService.setAuthorization(res);
+          this.authenticationService.getProfileDetail().subscribe(profile => {
+            if (profile.status == "active") {
+              this.dataService.setToStorage("profile", profile);
+              this.router.navigate(["dashboard"]);
+              this.submitting = false;
+            } else {
+              this.router.navigate(["activation/verify"]);
             }
-        });
-
-        this.loginFormErrors = {
-            email   : {},
-            password: {}
-        };
-    }
-
-    ngOnInit()
-    {
-        this.loginForm = this.formBuilder.group({
-            email   : ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
-        });
-
-        this.loginForm.valueChanges.subscribe(() => {
-            this.onLoginFormValuesChanged();
-        });
-    }
-
-    onLoginFormValuesChanged()
-    {
-        for ( const field in this.loginFormErrors )
-        {
-            if ( !this.loginFormErrors.hasOwnProperty(field) )
-            {
-                continue;
-            }
-
-            // Clear previous errors
-            this.loginFormErrors[field] = {};
-
-            // Get the control
-            const control = this.loginForm.get(field);
-
-            if ( control && control.dirty && !control.valid )
-            {
-                this.loginFormErrors[field] = control.errors;
-            }
+          });
+        },
+        err => {
+          this.submitting = false;
         }
+      );
+    } else {
+      commonFormValidator.validateAllFields(this.loginForm);
     }
+  }
 }

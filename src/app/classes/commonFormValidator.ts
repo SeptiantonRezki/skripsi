@@ -1,25 +1,46 @@
-export class commonFormValidator{
-   
-   public static parseFormChanged(form,formError){
-   	 {
-        for ( const field in formError )
-        {
-            if ( !formError.hasOwnProperty(field) )
-            {
-                continue;
-            }
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl
+} from "@angular/forms";
 
-            // Clear previous errors
-            formError[field] = {};
-
-            // Get the control
-            const control = form.get(field);
-
-            if ( control && control.dirty && !control.valid )
-            {
-                formError[field] = control.errors;
-            }
+export class commonFormValidator {
+  public static parseFormChanged(form, formError) {
+    {
+      for (const field in formError) {
+        if (!formError.hasOwnProperty(field)) {
+          continue;
         }
+
+        // Clear previous errors
+        formError[field] = {};
+
+        // Get the control
+        const control = form.get(field);
+
+        if (control && control.dirty && !control.valid) {
+          formError[field] = control.errors;
+        }
+      }
     }
-   }
+  }
+
+  public static passwordConfirming(c: AbstractControl): { invalid: boolean } {
+    if (c.get("password").value !== c.get("confirm_password").value) {
+      return { invalid: true };
+    }
+  }
+
+  public static validateAllFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFields(control);
+      }
+    });
+  }
 }

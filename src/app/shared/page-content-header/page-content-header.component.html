@@ -1,19 +1,21 @@
 <div id="contentHeader" class="header dark-brown-bg p-24 h-160" fxLayout="row" fxLayoutAlign="start center">
-        <div fxLayout="column" fxLayoutAlign="center start" class="main-column">
-            <div class="white-fg" fxLayout="row" fxLayoutAlign="start">
-                <a [routerLink]="['']">
-                <mat-icon class="secondary-text s-16">home</mat-icon>
-                </a>
-                <ng-container *ngFor="let breadcrumb of breadcrumbs">
-                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
-                <span class="secondary-text s-16" *ngIf="breadcrumb.type == 'parent'"><a routerLink="{{breadcrumb.url}}">{{breadcrumb.name}}</a></span>
-                <span class="secondary-text s-16" *ngIf="breadcrumb.type == 'current'">{{breadcrumb.name}}</span>
-               </ng-container>
-            </div>
-            <div fxLayout="row" fxLayout.xs="column" class="middle-container" fxLayoutAlign="space-between center">
-            <div class="h1 mt-16">{{contentTitle}}</div>
-            <div class="button-header">
-            	<ng-content></ng-content>
-            </div>
-        </div>
+  <div fxLayout="column" fxLayoutAlign="center start" class="main-column">
+    <div class="white-fg" fxLayout="row" fxLayoutAlign="start">
+      <a [routerLink]="['']">
+        <mat-icon class="secondary-text s-16">home</mat-icon>
+      </a>
+      <ng-container *ngFor="let breadcrumb of breadcrumbs">
+        <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+        <span class="secondary-text s-16" *ngIf="breadcrumb.type == 'parent'">
+          <a routerLink="{{breadcrumb.url}}">{{breadcrumb.name}}</a>
+        </span>
+        <span class="secondary-text s-16" *ngIf="breadcrumb.type == 'current'">{{breadcrumb.name}}</span>
+      </ng-container>
     </div>
+    <div fxLayout="row" fxLayout.xs="column" class="middle-container" fxLayoutAlign="space-between center">
+      <div class="h1 mt-16">{{contentTitle}}</div>
+      <div class="button-header">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
