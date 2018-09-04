@@ -1,5 +1,10 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+
+import { FuseSharedModule } from "@fuse/shared.module";
+import { SharedModule } from "../../shared/shared.module";
+import { ngfModule } from "angular-file";
 
 import { SkuManagementRoutingModule } from "./sku-management-routing.module";
 import { ProductIndexComponent } from "./product/index/product-index.component";
@@ -10,9 +15,54 @@ import { RewardCreateComponent } from "./reward/create/reward-create.component";
 import { RewardEditComponent } from "./reward/edit/reward-edit.component";
 import { RewardHistoryIndexComponent } from "./reward-history/index/reward-history-index.component";
 import { CoinIndexComponent } from "./coin/index/coin-index.component";
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatTabsModule,
+  MatChipsModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatRadioModule,
+  MatTooltipModule,
+  MatAutocompleteModule,
+  MatSnackBarModule,
+  MatProgressBarModule
+} from "@angular/material";
+
+import {
+  ListBrandResolver,
+  ListCategoryResolver,
+  ListPackagingResolver
+} from "../../resolver/product.resolver";
 
 @NgModule({
-  imports: [CommonModule, SkuManagementRoutingModule],
+  imports: [
+    CommonModule,
+    SkuManagementRoutingModule,
+    FuseSharedModule,
+    SharedModule,
+    NgxDatatableModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatTooltipModule,
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+    ngfModule
+  ],
   declarations: [
     ProductIndexComponent,
     ProductCreateComponent,
@@ -33,6 +83,6 @@ import { CoinIndexComponent } from "./coin/index/coin-index.component";
     RewardHistoryIndexComponent,
     CoinIndexComponent
   ],
-  providers: []
+  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver]
 })
 export class SkuManagementModule {}

@@ -8,7 +8,7 @@ import { Page } from "../../../../classes/laravel-pagination";
 import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
-import { AdminPrincipalService } from "../../../../services/admin-principal.service";
+import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 
 @Component({
   selector: "app-admin-principal-index",
@@ -64,10 +64,10 @@ export class AdminPrincipalIndexComponent {
     // setTimeout(() => {
     //     this._fuseSplashScreenService.hide();
     // }, 3000);
-    this.getUserList();
+    this.getAdminList();
   }
 
-  getUserList() {
+  getAdminList() {
     this.adminPrincipalService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -142,12 +142,12 @@ export class AdminPrincipalIndexComponent {
   }
 
   confirmDelete() {
-    this.adminPrincipalService.delete({ id_staff: this.id }).subscribe(
+    this.adminPrincipalService.delete({ principal_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
 
-        this.getUserList();
+        this.getAdminList();
       },
       err => {
         this.dialogService.openSnackBar({ message: err.error.message });

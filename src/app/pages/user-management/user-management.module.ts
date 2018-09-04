@@ -22,7 +22,6 @@ import {
   MatProgressSpinnerModule
 } from "@angular/material";
 
-import { ListRoleAdminResolver } from "../../resolver/admin-principal.resolver";
 import { AdminPrincipalEditComponent } from "./admin-principal/edit/admin-principal-edit.component";
 import { FieldForceCreateComponent } from "./field-force/create/field-force-create.component";
 import { FieldForceEditComponent } from "./field-force/edit/field-force-edit.component";
@@ -35,6 +34,11 @@ import { WholesalerEditComponent } from "./wholesaler/edit/wholesaler-edit.compo
 import { RetailerIndexComponent } from "./retailer/index/retailer-index.component";
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
+
+import {
+  ListRoleAdminResolver,
+  ListLevelFFResolver
+} from "../../resolver/user-management.resolver";
 
 @NgModule({
   imports: [
@@ -87,6 +91,6 @@ import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
     RetailerCreateComponent,
     RetailerEditComponent
   ],
-  providers: [ListRoleAdminResolver]
+  providers: [ListRoleAdminResolver, ListLevelFFResolver]
 })
 export class UserManagementModule {}

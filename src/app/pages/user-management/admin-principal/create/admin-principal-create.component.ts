@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { AdminPrincipalService } from "../../../../services/admin-principal.service";
+import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -63,6 +63,10 @@ export class AdminPrincipalCreateComponent {
         this.verticalStepperStep2Errors
       );
     });
+  }
+
+  selectionChange(event) {
+    console.log(event.value);
   }
 
   submit() {

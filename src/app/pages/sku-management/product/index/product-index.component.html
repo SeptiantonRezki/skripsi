@@ -1,3 +1,86 @@
-<p>
-  product-index works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Produk'">
+    <button style="min-width: 170px;" [routerLink]="['/sku-management', 'product', 'create']" mat-raised-button
+      aria-label="Produk" type="button">
+      <mat-icon>add</mat-icon>TAMBAH PRODUK
+    </button>
+    <!-- <button style="min-width: 170px;" mat-raised-button type="button" class="is-danger">HAPUS</button> -->
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center"
+        class="p-16 export">
+        <button mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_downward</mat-icon> Import CSV
+        </button>
+        <button mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export CSV
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Daftar Produk</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
+        (select)="onSelect($event)">
+
+        <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+              <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+            </ng-template>
+  
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+              <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            </ng-template>
+          </ngx-datatable-column> -->
+
+        <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container pl-8 pt-8 pb-8 pr-0">
+              <img class="product-image" *ngIf="row.image_url" [src]="row.image_url">
+              <img class="product-image" *ngIf="!row.image_url" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Produk" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" [routerLink]="['/product', 'edit', row.id]">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Perusahaan" prop="brand_name"></ngx-datatable-column>
+
+        <ngx-datatable-column [width]="88" name="Kategori" prop="category_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.status == 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status == 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

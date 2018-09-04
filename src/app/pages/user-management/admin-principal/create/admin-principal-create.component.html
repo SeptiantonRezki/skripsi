@@ -18,19 +18,18 @@
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="nama" required>
+                <input matInput type="text" placeholder="Nama" formControlName="nama">
                 <mat-error *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
                   Nama harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="email" placeholder="Alamat Email" formControlName="email" required>
+                <input matInput type="email" placeholder="Alamat Email" formControlName="email">
                 <mat-error *ngIf="verticalStepperStep1.controls['email'].hasError('required') && verticalStepperStep1.controls['email'].touched ">
                   Alamat email harus diisi.
                 </mat-error>
               </mat-form-field>
-
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
@@ -59,6 +58,8 @@
                 </mat-error>
               </mat-form-field>
 
+              <!-- <dropdown-form [dataCb]="listRole" [dataPlaceholder]="'Peran'" [form]="verticalStepperStep2"
+                (selectionChange)="selectionChange($event)"></dropdown-form> -->
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">

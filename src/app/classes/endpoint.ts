@@ -47,16 +47,6 @@ export class Endpoint {
         change_password: `${AYO_API}/api/general/otp/change-password`,
         logout: `${AYO_API}/oauth/token/revoke`
       },
-      retailer: {
-        list_level: `${AYO_API}/api/${type_api}/level`,
-        list_shipping: `${AYO_API}/api/${type_api}/shipping`,
-        create: `${AYO_API}/api/${type_api}/retailer`,
-        get: `${AYO_API}/api/${type_api}/retailer`,
-        deactivate: `${AYO_API}/api/${type_api}/${
-          context.retailer_id
-        }/deactivate`,
-        update: `${AYO_API}/api/${type_api}/retailer/${context.retailer_id}`
-      },
       admin_principal: {
         get: `${AYO_API}/api/${type_api}/user/principal`,
         create: `${AYO_API}/api/${type_api}/user/principal`,
@@ -67,6 +57,77 @@ export class Endpoint {
           context.principal_id
         }`,
         list_role: `${AYO_API}/api/${type_api}/user/role`
+      },
+      field_force: {
+        get: `${AYO_API}/api/${type_api}/user/field-force`,
+        create: `${AYO_API}/api/${type_api}/user/field-force`,
+        update: `${AYO_API}/api/${type_api}/user/field-force/${
+          context.fieldforce_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/user/field-force/${
+          context.fieldforce_id
+        }`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${
+          context.level_desc
+        }`,
+        list_other_children: `${AYO_API}/api/general/area/get_children/${
+          context.level_desc
+        }?parent_id=${context.parent_id}`
+      },
+      wholesaler: {
+        get: `${AYO_API}/api/${type_api}/user/wholesaler`,
+        create: `${AYO_API}/api/${type_api}/user/wholesaler`,
+        update: `${AYO_API}/api/${type_api}/user/wholesaler/${
+          context.wholesaler_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${
+          context.wholesaler_id
+        }`
+      },
+      retailer: {
+        get: `${AYO_API}/api/${type_api}/user/retailer`,
+        create: `${AYO_API}/api/${type_api}/user/retailer`,
+        update: `${AYO_API}/api/${type_api}/user/retailer/${
+          context.retailer_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/user/retailer/${
+          context.retailer_id
+        }`
+      },
+      banner: {
+        get: `${AYO_API}/api/${type_api}/content/banner`,
+        create: `${AYO_API}/api/${type_api}/content/banner`,
+        update: `${AYO_API}/api/${type_api}/content/banner/${
+          context.banner_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`
+      },
+      landingPage: {
+        get: `${AYO_API}/api/${type_api}/content/static-page`,
+        create: `${AYO_API}/api/${type_api}/content/static-page`,
+        update: `${AYO_API}/api/${type_api}/content/static-page/${
+          context.page_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/content/static-page/${
+          context.page_id
+        }`
+      },
+      product: {
+        get: `${AYO_API}/api/${type_api}/product/product`,
+        detail: `${AYO_API}/api/${type_api}/product/product/${
+          context.product_id
+        }`,
+        create: `${AYO_API}/api/${type_api}/product/product`,
+        put: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
+        delete: `${AYO_API}/api/${type_api}/product/product/${
+          context.product_id
+        }`,
+        list_brand: `${AYO_API}/api/${type_api}/product/brand`,
+        list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${
+          context.parent_id
+        }`,
+        list_packaging: `${AYO_API}/api/${type_api}/product/packaging`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

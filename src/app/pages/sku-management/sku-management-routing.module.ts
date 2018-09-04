@@ -9,6 +9,11 @@ import { RewardCreateComponent } from "./reward/create/reward-create.component";
 import { RewardEditComponent } from "./reward/edit/reward-edit.component";
 import { RewardHistoryIndexComponent } from "./reward-history/index/reward-history-index.component";
 import { CoinIndexComponent } from "./coin/index/coin-index.component";
+import {
+  ListBrandResolver,
+  ListCategoryResolver,
+  ListPackagingResolver
+} from "../../resolver/product.resolver";
 
 const routes: Routes = [
   {
@@ -28,13 +33,23 @@ const routes: Routes = [
     component: ProductCreateComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.product.create
+    },
+    resolve: {
+      listBrand: ListBrandResolver,
+      listCategory: ListCategoryResolver,
+      listPackaging: ListPackagingResolver
     }
   },
   {
-    path: "product/edit",
+    path: "product/edit/:id",
     component: ProductEditComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.product.edit
+    },
+    resolve: {
+      listBrand: ListBrandResolver,
+      listCategory: ListCategoryResolver,
+      listPackaging: ListPackagingResolver
     }
   },
   {

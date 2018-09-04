@@ -17,8 +17,10 @@ import { WholesalerEditComponent } from "./wholesaler/edit/wholesaler-edit.compo
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerIndexComponent } from "./retailer/index/retailer-index.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
-
-import { ListRoleAdminResolver } from "../../resolver/admin-principal.resolver";
+import {
+  ListRoleAdminResolver,
+  ListLevelFFResolver
+} from "app/resolver/user-management.resolver";
 
 const routes: Routes = [
   {
@@ -67,7 +69,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.fieldforce.create
     },
     resolve: {
-      listRole: ListRoleAdminResolver
+      listLevel: ListLevelFFResolver
     }
   },
   {
@@ -77,7 +79,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.fieldforce.edit
     },
     resolve: {
-      listRole: ListRoleAdminResolver
+      listLevel: ListLevelFFResolver
     }
   },
   {

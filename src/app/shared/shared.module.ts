@@ -7,11 +7,14 @@ import {
   MatProgressBarModule,
   MatToolbarModule,
   MatInputModule,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+  MatSelectModule
 } from "@angular/material";
 import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.component";
 import { PageContentComponent } from "./page-content-header/page-content-header.component";
 import { FuseSharedModule } from "@fuse/shared.module";
+import { DropdownTreeComponent } from "./dropdown-tree/dropdown-tree.component";
 
 @NgModule({
   imports: [
@@ -19,10 +22,20 @@ import { FuseSharedModule } from "@fuse/shared.module";
     MatInputModule,
     FuseSharedModule,
     RouterModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
-  declarations: [ToolbarSearchComponent, PageContentComponent],
-  exports: [ToolbarSearchComponent, PageContentComponent],
+  declarations: [
+    ToolbarSearchComponent,
+    PageContentComponent,
+    DropdownTreeComponent
+  ],
+  exports: [
+    ToolbarSearchComponent,
+    PageContentComponent,
+    DropdownTreeComponent
+  ],
   entryComponents: [],
   providers: [
     {

@@ -4,7 +4,7 @@ import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { AdminPrincipalService } from "../../../../services/admin-principal.service";
+import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 
 @Component({
   selector: "app-admin-principal-edit",

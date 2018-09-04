@@ -1,0 +1,17 @@
+<ng-container *ngIf="form">
+  <form [formGroup]="form">
+    <div formArrayName="area" *ngFor="let item of dataCb; let i = index;">
+      <div [formGroupName]="i" fxLayout="row wrap">
+        <mat-form-field fxFlex="100" class="is-light form-primary">
+          <mat-select placeholder="{{item['title'] | toCapitalize}}" (selectionChange)="change($event, i)"
+            [formControlName]="item['title']">
+            <mat-option *ngFor="let val of item['data']" [value]="val">{{val.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls['area'].controls[i].touched">
+            {{item['title'] | toCapitalize}} harus diisi
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</ng-container>

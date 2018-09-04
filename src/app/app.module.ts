@@ -35,7 +35,29 @@ import { BaseInterceptor } from "./services/interceptor.module";
 import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
 import { DialogService } from "./services/dialog.service";
-import { AdminPrincipalService } from "./services/admin-principal.service";
+import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
+import { FieldForceService } from "./services/user-management/field-force.service";
+import { PaguyubanService } from "./services/user-management/paguyuban.service";
+import { WholesalerService } from "./services/user-management/wholesaler.service";
+import { RetailerService } from "./services/user-management/retailer.service";
+import { BannerService } from "./services/inapp-marketing/banner.service";
+import { LandingPageService } from "./services/inapp-marketing/landing-page.service";
+import { ProductService } from "./services/sku-management/product.service";
+import { RewardService } from "./services/sku-management/reward.service";
+import { RewardHistoryService } from "./services/sku-management/reward-history.service";
+import { CoinService } from "./services/sku-management/coin.service";
+import { TemplateTaskService } from "./services/dte/template-task.service";
+import { TradeProgramService } from "./services/dte/trade-program.service";
+import { ScheduleTradeProgramService } from "./services/dte/schedule-trade-program.service";
+import { AudienceService } from "./services/dte/audience.service";
+import { NotificationService } from "./services/notification.service";
+import { TncService } from "./services/content-management/tnc.service";
+import { PrivacyService } from "./services/content-management/privacy.service";
+import { HelpService } from "./services/content-management/help.service";
+import { CategoryService } from "./services/newsfeed-management/category.service";
+import { NewsService } from "./services/newsfeed-management/news.service";
+import { AccessService } from "./services/settings/access.service";
+import { AccountService } from "./services/settings/account.service";
 
 @NgModule({
   declarations: [
@@ -66,6 +88,28 @@ import { AdminPrincipalService } from "./services/admin-principal.service";
     DataService,
     DialogService,
     AdminPrincipalService,
+    FieldForceService,
+    PaguyubanService,
+    WholesalerService,
+    RetailerService,
+    BannerService,
+    LandingPageService,
+    ProductService,
+    RewardService,
+    RewardHistoryService,
+    CoinService,
+    TemplateTaskService,
+    TradeProgramService,
+    ScheduleTradeProgramService,
+    AudienceService,
+    NotificationService,
+    TncService,
+    PrivacyService,
+    HelpService,
+    CategoryService,
+    NewsService,
+    AccessService,
+    AccountService,
     AuthGuard,
     NonAuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
