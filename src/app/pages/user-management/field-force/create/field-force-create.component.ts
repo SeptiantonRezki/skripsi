@@ -93,7 +93,7 @@ export class FieldForceCreateComponent {
       .subscribe(res => {
         let ObjectArea = {
           data: res.data,
-          title: event.value,
+          title: "Zone",
           required: true
         };
 
@@ -113,35 +113,61 @@ export class FieldForceCreateComponent {
   }
 
   onSelect(param) {
-    if (param.event.value.parent_id) {
-      this.fieldForcePrincipal
-        .getListOtherChildren({
-          level_desc: this.verticalStepperStep2.get("level_desc").value,
-          parent_id: param.event.value.parent_id
-        })
-        .subscribe(res => {
-          let ObjectArea = {
-            data: res.data,
-            title: param.event.value.name,
-            required: true
-          };
+    this.fieldForcePrincipal
+      .getListOtherChildren({ parent_id: param.event.value.id })
+      .subscribe(res => {
+        let area = this.verticalStepperStep2.get("area") as FormArray;
 
+        if (res["status"] === false || param.event.value.name === "all") {
           if (param.index !== this.ObjectArea.length - 1) {
             this.ObjectArea.splice(param.index + 1, this.ObjectArea.length);
-          }
-          this.ObjectArea.push(ObjectArea);
+            area.controls.splice(param.index + 1, area.length);
 
-          let area = this.verticalStepperStep2.get("area") as FormArray;
-          while (area.length > this.ObjectArea.length) {
-            area.removeAt(area.length - this.ObjectArea.length);
+            while (area.length > this.ObjectArea.length) {
+              if (param.index + 1 === area.length) return;
+              area.removeAt(area.length - 1);
+            }
           }
-          area.push(
-            this.formBuilder.group({
-              [ObjectArea["title"]]: ["", Validators.required]
-            })
+
+          let arrayFinal = area.controls.map(item => item);
+
+          this.verticalStepperStep2.setControl(
+            "area",
+            this.formBuilder.array(arrayFinal)
           );
-        });
-    }
+
+          return;
+        }
+
+        let ObjectArea = {
+          data: res,
+          title: res[0]["level_desc"]
+        };
+
+        if (param.index !== this.ObjectArea.length - 1) {
+          this.ObjectArea.splice(param.index + 1, this.ObjectArea.length);
+          area.controls.splice(param.index + 1, area.length);
+        }
+
+        this.ObjectArea.push(ObjectArea);
+
+        while (area.length > this.ObjectArea.length) {
+          if (param.index + 1 === area.length) return;
+          area.removeAt(area.length - 1);
+        }
+
+        let available = area.controls
+          .map(item => Object.keys(item.value))
+          .filter(item => item[0] === res[0]["level_desc"])[0];
+
+        if (available && available.length > 0) return;
+
+        area.push(
+          this.formBuilder.group({
+            [ObjectArea["title"]]: ["", Validators.required]
+          })
+        );
+      });
   }
 
   submit() {
@@ -167,6 +193,10 @@ export class FieldForceCreateComponent {
     //   commonFormValidator.validateAllFields(this.verticalStepperStep1);
     //   commonFormValidator.validateAllFields(this.verticalStepperStep2);
     // }
-    console.log(this.verticalStepperStep2.get("area").value);
+    console.log(
+      this.verticalStepperStep2.get("area").value[
+        this.verticalStepperStep2.get("area").value.length - 1
+      ]
+    );
   }
 }

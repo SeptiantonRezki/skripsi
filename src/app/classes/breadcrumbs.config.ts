@@ -185,7 +185,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/adv/banner",
+          url: "/advertisement/banner",
           name: "Spanduk Online"
         },
         {
@@ -197,7 +197,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/adv/banner",
+          url: "/advertisement/banner",
           name: "Spanduk Online"
         },
         {
@@ -218,7 +218,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/adv/landing-page",
+          url: "/advertisement/landing-page",
           name: "Halaman Tujuan"
         },
         {
@@ -230,7 +230,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/adv/landing-page",
+          url: "/advertisement/landing-page",
           name: "Halaman Tujuan"
         },
         {

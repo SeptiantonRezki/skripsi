@@ -9,7 +9,7 @@
  * AYO Sampoerna Staging
  *
  */
-//const AYO_API = 'http://192.168.2.228/api';
+// const AYO_API = "http://192.168.2.228/";
 const AYO_API = "https://ayo-api.dxtr.asia";
 const type_api = "principal";
 
@@ -61,7 +61,7 @@ export class Endpoint {
       field_force: {
         get: `${AYO_API}/api/${type_api}/user/field-force`,
         create: `${AYO_API}/api/${type_api}/user/field-force`,
-        update: `${AYO_API}/api/${type_api}/user/field-force/${
+        put: `${AYO_API}/api/${type_api}/user/field-force/${
           context.fieldforce_id
         }`,
         delete: `${AYO_API}/api/${type_api}/user/field-force/${
@@ -71,14 +71,14 @@ export class Endpoint {
         list_children: `${AYO_API}/api/general/area/get_children/${
           context.level_desc
         }`,
-        list_other_children: `${AYO_API}/api/general/area/get_children/${
-          context.level_desc
-        }?parent_id=${context.parent_id}`
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${
+          context.parent_id
+        }`
       },
       wholesaler: {
         get: `${AYO_API}/api/${type_api}/user/wholesaler`,
         create: `${AYO_API}/api/${type_api}/user/wholesaler`,
-        update: `${AYO_API}/api/${type_api}/user/wholesaler/${
+        put: `${AYO_API}/api/${type_api}/user/wholesaler/${
           context.wholesaler_id
         }`,
         delete: `${AYO_API}/api/${type_api}/user/wholesaler/${
@@ -88,9 +88,7 @@ export class Endpoint {
       retailer: {
         get: `${AYO_API}/api/${type_api}/user/retailer`,
         create: `${AYO_API}/api/${type_api}/user/retailer`,
-        update: `${AYO_API}/api/${type_api}/user/retailer/${
-          context.retailer_id
-        }`,
+        put: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
         delete: `${AYO_API}/api/${type_api}/user/retailer/${
           context.retailer_id
         }`
@@ -98,15 +96,13 @@ export class Endpoint {
       banner: {
         get: `${AYO_API}/api/${type_api}/content/banner`,
         create: `${AYO_API}/api/${type_api}/content/banner`,
-        update: `${AYO_API}/api/${type_api}/content/banner/${
-          context.banner_id
-        }`,
+        put: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
         delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`
       },
       landingPage: {
         get: `${AYO_API}/api/${type_api}/content/static-page`,
         create: `${AYO_API}/api/${type_api}/content/static-page`,
-        update: `${AYO_API}/api/${type_api}/content/static-page/${
+        put: `${AYO_API}/api/${type_api}/content/static-page/${
           context.page_id
         }`,
         delete: `${AYO_API}/api/${type_api}/content/static-page/${

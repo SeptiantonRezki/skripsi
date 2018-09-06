@@ -147,7 +147,7 @@ export class LandingPageIndexComponent {
   }
 
   confirmDelete() {
-    this.landingPageService.delete({ id_page: this.id }).subscribe(
+    this.landingPageService.delete({ page_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });

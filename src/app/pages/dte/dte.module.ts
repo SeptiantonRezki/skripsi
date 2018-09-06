@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 import { DteRoutingModule } from "./dte-routing.module";
 import { TemplateIndexComponent } from "./template/index/template-index.component";
@@ -14,9 +15,38 @@ import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-p
 import { AudienceIndexComponent } from "./audience/index/audience-index.component";
 import { AudienceCreateComponent } from "./audience/create/audience-create.component";
 import { AudienceEditComponent } from "./audience/edit/audience-edit.component";
+import {
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule,
+  MatOptionModule,
+  MatCheckboxModule,
+  MatSelectModule,
+  MatTabsModule,
+  MatTooltipModule,
+  MatButtonModule,
+  MatSlideToggleModule
+} from "@angular/material";
+import { FuseSharedModule } from "@fuse/shared.module";
+import { SharedModule } from "app/shared/shared.module";
 
 @NgModule({
-  imports: [CommonModule, DteRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DteRoutingModule,
+    FuseSharedModule,
+    SharedModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatTabsModule,
+    MatTooltipModule,
+    MatButtonModule,
+    MatSlideToggleModule
+  ],
   declarations: [
     TemplateIndexComponent,
     TemplateCreateComponent,
