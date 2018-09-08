@@ -134,6 +134,16 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/template/${
           context.template_id
         }`
+      },
+      trade_program: {
+        get: `${AYO_API}/api/${type_api}/creator`,
+        create: `${AYO_API}/api/${type_api}/creator`,
+        put: `${AYO_API}/api/${type_api}/creator/${
+          context.trade_program_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/creator/${
+          context.trade_program_id
+        }`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

@@ -28,13 +28,34 @@ import {
   MatSlideToggleModule,
   MatMenuModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDatepickerModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
 import { UploadImageComponent } from "./template/dialog/upload-image/upload-image.component";
 import { ngfModule } from "angular-file";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @NgModule({
   imports: [
@@ -57,7 +78,8 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
     MatDialogModule,
     MatMenuModule,
     ngfModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    MatDatepickerModule
   ],
   declarations: [
     TemplateIndexComponent,
@@ -88,7 +110,14 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
     AudienceCreateComponent,
     AudienceEditComponent
   ],
-  providers: [],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ],
   entryComponents: [UploadImageComponent]
 })
 export class DteModule {}

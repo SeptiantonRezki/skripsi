@@ -63,7 +63,7 @@ export class TemplateIndexComponent {
         this.rows = res.data.map(item => {
           return {
             ...item,
-            image: `${this.endPoint.getEndPoint()}/storage/${item.image}`
+            image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
           }
         });
         this.onLoad = false;
@@ -88,7 +88,12 @@ export class TemplateIndexComponent {
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      this.rows = res.data.map(item => {
+        return {
+          ...item,
+          image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
+        }
+      });
 
       this.loadingIndicator = false;
     });
@@ -104,7 +109,12 @@ export class TemplateIndexComponent {
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      this.rows = res.data.map(item => {
+        return {
+          ...item,
+          image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
+        }
+      });
 
       this.loadingIndicator = false;
     });
@@ -118,7 +128,12 @@ export class TemplateIndexComponent {
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      this.rows = res.data.map(item => {
+        return {
+          ...item,
+          image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
+        }
+      });
       
       this.loadingIndicator = false;
     });
