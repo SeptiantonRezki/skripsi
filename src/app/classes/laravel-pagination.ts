@@ -8,6 +8,7 @@ export class Page {
   sort: any;
   sort_type: string;
   search: string;
+  filter: string;
   status: string;
   start_date: string;
   end_date: string;
@@ -19,6 +20,7 @@ export class Page {
     this.sort = null;
     this.sort_type = "asc";
     this.search = "";
+    this.filter = "";
     this.status = "";
     this.start_date = "";
     this.end_date = "";

@@ -77,7 +77,7 @@ const routes: Routes = [
     }
   },
   {
-    path: "schedule-trade-program/edit",
+    path: "schedule-trade-program/edit/:id",
     component: ScheduleProgramEditComponent,
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.edit
@@ -98,7 +98,7 @@ const routes: Routes = [
     }
   },
   {
-    path: "audience/edit",
+    path: "audience/edit/:id",
     component: AudienceEditComponent,
     data: {
       breadcrumbs: brConfig.dte.audience.edit

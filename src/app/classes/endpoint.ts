@@ -50,48 +50,30 @@ export class Endpoint {
       admin_principal: {
         get: `${AYO_API}/api/${type_api}/user/principal`,
         create: `${AYO_API}/api/${type_api}/user/principal`,
-        put: `${AYO_API}/api/${type_api}/user/principal/${
-          context.principal_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/user/principal/${
-          context.principal_id
-        }`,
+        put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
+        delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         list_role: `${AYO_API}/api/${type_api}/user/role`
       },
       field_force: {
         get: `${AYO_API}/api/${type_api}/user/field-force`,
         create: `${AYO_API}/api/${type_api}/user/field-force`,
-        put: `${AYO_API}/api/${type_api}/user/field-force/${
-          context.fieldforce_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/user/field-force/${
-          context.fieldforce_id
-        }`,
+        put: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
+        delete: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${
-          context.level_desc
-        }`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${
-          context.parent_id
-        }`
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       wholesaler: {
         get: `${AYO_API}/api/${type_api}/user/wholesaler`,
         create: `${AYO_API}/api/${type_api}/user/wholesaler`,
-        put: `${AYO_API}/api/${type_api}/user/wholesaler/${
-          context.wholesaler_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${
-          context.wholesaler_id
-        }`
+        put: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
+        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`
       },
       retailer: {
         get: `${AYO_API}/api/${type_api}/user/retailer`,
         create: `${AYO_API}/api/${type_api}/user/retailer`,
         put: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/retailer/${
-          context.retailer_id
-        }`
+        delete: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`
       },
       banner: {
         get: `${AYO_API}/api/${type_api}/content/banner`,
@@ -102,48 +84,45 @@ export class Endpoint {
       landingPage: {
         get: `${AYO_API}/api/${type_api}/content/static-page`,
         create: `${AYO_API}/api/${type_api}/content/static-page`,
-        put: `${AYO_API}/api/${type_api}/content/static-page/${
-          context.page_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/content/static-page/${
-          context.page_id
-        }`
+        put: `${AYO_API}/api/${type_api}/content/static-page/${context.page_id}`,
+        delete: `${AYO_API}/api/${type_api}/content/static-page/${context.page_id}`
       },
       product: {
         get: `${AYO_API}/api/${type_api}/product/product`,
-        detail: `${AYO_API}/api/${type_api}/product/product/${
-          context.product_id
-        }`,
+        detail: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
         create: `${AYO_API}/api/${type_api}/product/product`,
         put: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
-        delete: `${AYO_API}/api/${type_api}/product/product/${
-          context.product_id
-        }`,
+        delete: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
         list_brand: `${AYO_API}/api/${type_api}/product/brand`,
-        list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${
-          context.parent_id
-        }`,
+        list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${context.parent_id}`,
         list_packaging: `${AYO_API}/api/${type_api}/product/packaging`
       },
       template_task: {
         get: `${AYO_API}/api/${type_api}/template`,
         create: `${AYO_API}/api/${type_api}/template`,
-        put: `${AYO_API}/api/${type_api}/template/${
-          context.template_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/template/${
-          context.template_id
-        }`
+        put: `${AYO_API}/api/${type_api}/template/${context.template_id}`,
+        delete: `${AYO_API}/api/${type_api}/template/${context.template_id}`
       },
       trade_program: {
         get: `${AYO_API}/api/${type_api}/creator`,
         create: `${AYO_API}/api/${type_api}/creator`,
-        put: `${AYO_API}/api/${type_api}/creator/${
-          context.trade_program_id
-        }`,
-        delete: `${AYO_API}/api/${type_api}/creator/${
-          context.trade_program_id
-        }`
+        put: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
+        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`
+      },
+      schedule_trade_program: {
+        get: `${AYO_API}/api/${type_api}/scheduler`,
+        detail: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
+        create: `${AYO_API}/api/${type_api}/scheduler`,
+        put: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
+        delete: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
+        reject_audience: `${AYO_API}/api/${type_api}/scheduler/reject/audience`,
+      },
+      audience: {
+        get: `${AYO_API}/api/${type_api}/audience`,
+        detail: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
+        create: `${AYO_API}/api/${type_api}/audience`,
+        put: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
+        delete: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
