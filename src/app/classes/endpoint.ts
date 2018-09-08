@@ -124,8 +124,22 @@ export class Endpoint {
           context.parent_id
         }`,
         list_packaging: `${AYO_API}/api/${type_api}/product/packaging`
+      },
+      template_task: {
+        get: `${AYO_API}/api/${type_api}/template`,
+        create: `${AYO_API}/api/${type_api}/template`,
+        put: `${AYO_API}/api/${type_api}/template/${
+          context.template_id
+        }`,
+        delete: `${AYO_API}/api/${type_api}/template/${
+          context.template_id
+        }`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
+  }
+
+  getEndPoint() {
+    return AYO_API;
   }
 }

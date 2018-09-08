@@ -1,3 +1,53 @@
-<p>
-  upload-image works!
-</p>
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah Gambar</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop [fileDropDisabled]="product" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
+      [(file)]="files" [accept]="product ? 'none' : 'image/*'" [class.invalid-drag]="validComboDrag===false"
+      [class.valid-drag]="validComboDrag">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix>Tarik Gambar Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2mb</span>
+      </div>
+    </div>
+
+    <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" class="pt-48 pb-16">
+      <div class="">
+        <div class="deleteBanner">
+          <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+        </div>
+        <div class="previewBanner" [ngfBackground]="files"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">Pilih</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>

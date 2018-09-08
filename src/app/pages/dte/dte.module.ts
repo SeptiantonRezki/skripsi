@@ -25,10 +25,16 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatButtonModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatMenuModule,
+  MatToolbarModule,
+  MatDialogModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
+import { UploadImageComponent } from "./template/dialog/upload-image/upload-image.component";
+import { ngfModule } from "angular-file";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 @NgModule({
   imports: [
@@ -45,7 +51,13 @@ import { SharedModule } from "app/shared/shared.module";
     MatTabsModule,
     MatTooltipModule,
     MatButtonModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatDialogModule,
+    MatMenuModule,
+    ngfModule,
+    NgxDatatableModule
   ],
   declarations: [
     TemplateIndexComponent,
@@ -59,7 +71,8 @@ import { SharedModule } from "app/shared/shared.module";
     ScheduleProgramEditComponent,
     AudienceIndexComponent,
     AudienceCreateComponent,
-    AudienceEditComponent
+    AudienceEditComponent,
+    UploadImageComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -75,6 +88,7 @@ import { SharedModule } from "app/shared/shared.module";
     AudienceCreateComponent,
     AudienceEditComponent
   ],
-  providers: []
+  providers: [],
+  entryComponents: [UploadImageComponent]
 })
 export class DteModule {}
