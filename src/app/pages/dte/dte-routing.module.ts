@@ -13,7 +13,7 @@ import { AudienceIndexComponent } from "./audience/index/audience-index.componen
 import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
 import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedule-program-create.component";
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
-import { ListTradeProgramResolver, ListTemplateResolver } from "../../resolver/dte.resolver";
+import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, ListRetailerResolver } from "../../resolver/dte.resolver";
 
 const routes: Routes = [
   {
@@ -100,13 +100,21 @@ const routes: Routes = [
     component: AudienceCreateComponent,
     data: {
       breadcrumbs: brConfig.dte.audience.create
+    },
+    resolve: {
+      listScheduler: ListSchedulerResolver,
+      listRetailer: ListRetailerResolver
     }
   },
   {
-    path: "audience/edit/:id",
+    path: "audience/edit",
     component: AudienceEditComponent,
     data: {
       breadcrumbs: brConfig.dte.audience.edit
+    },
+    resolve: {
+      listScheduler: ListSchedulerResolver,
+      listRetailer: ListRetailerResolver
     }
   }
 ];

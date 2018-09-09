@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
-import { DatatableComponent } from '../../../../../../node_modules/@swimlane/ngx-datatable';
-import { Subject, Observable } from '../../../../../../node_modules/rxjs';
-import { Router } from '../../../../../../node_modules/@angular/router';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Subject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from '../../../../services/dte/audience.service';
+import { DataService } from '../../../../services/data.service';
 
 @Component({
   selector: 'app-audience-index',
@@ -34,6 +35,7 @@ export class AudienceIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private dataService: DataService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -119,6 +121,11 @@ export class AudienceIndexComponent {
     return this.rows.map(row => row["active_status"]);
   }
 
+  directEdit(param?: any): void {
+    this.dataService.setToStorage('detail_audience', param);
+    this.router.navigate(['dte', 'audience', 'edit']);
+  }
+
   deleteAudience(id) {
     this.id = id;
     let data = {
@@ -131,7 +138,7 @@ export class AudienceIndexComponent {
   }
 
   confirmDelete() {
-    this.audienceService.delete({ trade_program_id: this.id }).subscribe(res => {
+    this.audienceService.delete({ audience_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         this.getAudience();

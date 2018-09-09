@@ -40,7 +40,7 @@ import { ngfModule } from "angular-file";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { ListTradeProgramResolver, ListTemplateResolver } from "../../resolver/dte.resolver";
+import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, ListRetailerResolver } from "../../resolver/dte.resolver";
 
 import {
   DateAdapter,
@@ -118,6 +118,8 @@ export const MY_FORMATS = {
   providers: [
     ListTradeProgramResolver,
     ListTemplateResolver,
+    ListSchedulerResolver,
+    ListRetailerResolver,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

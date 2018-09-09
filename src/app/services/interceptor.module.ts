@@ -80,7 +80,7 @@ export class BaseInterceptor implements HttpInterceptor {
             .openSnackBar({ message: "Username/Password Salah" });
         }
 
-        if (err.error === "Unauthorized") {
+        if (err.error === "Tidak ada otorisasi") {
           window.localStorage.clear();
           this.router.navigate(["login"]);
           this.injector

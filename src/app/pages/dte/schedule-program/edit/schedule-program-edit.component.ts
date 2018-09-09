@@ -42,4 +42,20 @@ export class ScheduleProgramEditComponent {
     })
   }
 
+  submit() {
+    let body = {
+      _method: 'PUT',
+      status_scheduler: 'publish'
+    }
+
+    this.scheduleTradeProgramService.put(body, {schedule_tp_id: this.idScheduler}).subscribe(
+      res => {
+        this.dialogService.openSnackBar({ message: 'Status Berhasil diubah' });
+        this.router.navigate(['dte', 'schedule-trade-program']);
+      },
+      err => {
+        console.log(err.error.message)
+      }
+    )
+  }
 }

@@ -1,3 +1,133 @@
-<p>
-  audience-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Audience'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+      <form autocomplete="off" [formGroup]="formAudience">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Buat Audience</h2>
+        </div>
+        <div class="ayo-middle py-24" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Grup">
+              <mat-error *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
+                Nama Pengatur Jadwal Program Dagang harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Nama Pengatur Jadwal Trade Program" formControlName="trade_scheduler_id">
+                <mat-option *ngFor="let item of listScheduler" [value]="item.id">{{item.scheduler_name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formAudience.controls['trade_scheduler_id'].hasError('required') && formAudience.controls['trade_scheduler_id'].touched">
+                Nama Pengatur Jadwal Trade Program harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-radio-group formControlName="type" (change)="changeValue()">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listType" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16"
+            fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
+              <mat-error *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['max'].touched">
+                Audience Minimal harus diisi
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
+              <mat-error *ngIf="formAudience.controls['max'].hasError('required') && formAudience.controls['max'].touched">
+                Audience Maksimal harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="21px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Nasional"
+                formControlName="national">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Divisi"
+                formControlName="division">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Wilayah"
+                formControlName="region">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Area"
+                formControlName="area">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Distrik"
+                formControlName="district">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="15%" class="is-light form-primary">
+              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Teritori"
+                formControlName="teritory">
+            </mat-form-field>
+          </div>
+
+          <div class="p-0">
+            <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+              [rowHeight]="'auto'" [limit]="10" [selected]="selected" [selectionType]="'checkbox'"
+              [selectAllRowsOnPage]="false" (select)='onSelect($event)' [sorts]="[{prop: 'name', dir: 'asc'}]">
+              <!-- <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true"> -->
+              <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true" [draggable]="false"
+                [resizeable]="false" [headerCheckboxable]="true">
+                <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                  let-selectFn="selectFn">
+                  <mat-checkbox [checked]="allRowsSelected" [disabled]="formAudience.get('type').value === 'pick-all'"
+                    (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                </ng-template>
+
+                <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                  let-onCheckboxChangeFn="onCheckboxChangeFn">
+                  <mat-checkbox [checked]="isSelected" [disabled]="formAudience.get('type').value === 'pick-all'"
+                    (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="Kode" prop="refferal_code"></ngx-datatable-column>
+              <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+              <ngx-datatable-column name="Daftar Ayo" prop="status">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
+                  <span *ngIf="row.status === 'not-registered'">No</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Kode Divisi" prop="sales_point"></ngx-datatable-column>
+              <ngx-datatable-column name="Wilayah" prop="region"></ngx-datatable-column>
+              <ngx-datatable-column name="Area" prop="area"></ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

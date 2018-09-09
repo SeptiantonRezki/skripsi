@@ -43,11 +43,11 @@
 
         <ngx-datatable-column name="Nama Grup" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" [routerLink]="['/dte', 'audience', 'edit', row.id]">{{row.name}}</span>
+            <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Pengaturan Jadwal" prop="trade_name"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama Pengaturan Jadwal" [sortable]="false" prop="trade_name"></ngx-datatable-column>
 
         <ngx-datatable-column name="Jumlah Pengguna" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
 
@@ -68,7 +68,7 @@
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteAudience(row.id)">
+              <button mat-icon-button color="primary" matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

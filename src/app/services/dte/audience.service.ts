@@ -33,4 +33,24 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
+
+  getListAudience(): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_scheduler');
+    return this.getApi(url);
+  }
+
+  getListRetailer(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_retailer');
+    return this.getApi(url, queryParams);
+  }
+
+  getListRetailerSelected(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'detail', context);
+    return this.getApi(url);
+  }
+
+  validateBudget(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'validate_budget');
+    return this.postApi(url, body);
+  }
 }

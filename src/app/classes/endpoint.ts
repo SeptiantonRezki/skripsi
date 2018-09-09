@@ -121,10 +121,13 @@ export class Endpoint {
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,
-        detail: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
+        detail: `${AYO_API}/api/${type_api}/audience/${context.audience_id}?page=all`,
         create: `${AYO_API}/api/${type_api}/audience`,
         put: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
         delete: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
+        list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
+        list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
+        validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
