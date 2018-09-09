@@ -1,3 +1,89 @@
-<p>
-  schedule-program-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detil Pengatur Jadwal Trade Program'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+      <form autocomplete="off">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Detil Pengatur Jadwal Trade Program</h2>
+        </div>
+        <div class="ayo-middle py-24" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang" [value]="dataScheduler['name']"
+                name="name" disabled>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select [value]="dataScheduler['trade_creator_id']" placeholder="Trade Program" name="trade_creator_id"
+                disabled>
+                <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="py-8">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Audience</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Audience / Grup" [value]="dataScheduler['audience']" disabled>
+                <button mat-button matTooltip="Lihat daftar audience" matSuffix mat-icon-button>
+                  <mat-icon>table_chart</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
+
+            <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Template Tugas</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Template Tugas" [value]="item.name" disabled>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="22%" class="is-light form-primary">
+                <input matInput type="text" min="0" [value]="item['pivot'].coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
+                  disabled>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="22%" class="is-light form-primary">
+                <input matInput type="text" min="0" [value]="item['pivot'].coin_approved" placeholder="Nilai Coin Tugas Terkirim"
+                  disabled>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" [value]="item['pivot'].start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                  disabled>
+                <mat-icon matSuffix>date_range</mat-icon>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" [value]="item['pivot'].end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                  disabled>
+                <mat-icon matSuffix>date_range</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['audience']" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+            REJECT
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

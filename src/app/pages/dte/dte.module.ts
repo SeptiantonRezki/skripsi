@@ -29,7 +29,9 @@ import {
   MatMenuModule,
   MatToolbarModule,
   MatDialogModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatAutocompleteModule,
+  MatRadioModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
@@ -38,6 +40,7 @@ import { ngfModule } from "angular-file";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { ListTradeProgramResolver, ListTemplateResolver } from "../../resolver/dte.resolver";
 
 import {
   DateAdapter,
@@ -77,6 +80,8 @@ export const MY_FORMATS = {
     MatToolbarModule,
     MatDialogModule,
     MatMenuModule,
+    MatAutocompleteModule,
+    MatRadioModule,
     ngfModule,
     NgxDatatableModule,
     MatDatepickerModule
@@ -111,6 +116,8 @@ export const MY_FORMATS = {
     AudienceEditComponent
   ],
   providers: [
+    ListTradeProgramResolver,
+    ListTemplateResolver,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

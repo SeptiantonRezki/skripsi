@@ -405,7 +405,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/dte/template-task",
+          url: "/dte/schedule-trade-program",
           name: "Pengaturan Jadwal Trade Program"
         },
         {
@@ -417,7 +417,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/dte/template-task",
+          url: "/dte/schedule-trade-program",
           name: "Pengaturan Jadwal Trade Program"
         },
         {

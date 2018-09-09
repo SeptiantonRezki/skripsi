@@ -54,11 +54,11 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="uploadImage('master')">
+                <button mat-menu-item (click)="uploadImage('master', null)">
                   <mat-icon>photo</mat-icon>
                   <span>Ubah</span>
                 </button>
-                <button mat-menu-item (click)="deleteImage('master')">
+                <button mat-menu-item (click)="deleteImage('master', null)">
                   <mat-icon>delete</mat-icon>
                   <span>Hapus</span>
                 </button>

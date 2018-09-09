@@ -13,6 +13,7 @@ import { AudienceIndexComponent } from "./audience/index/audience-index.componen
 import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
 import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedule-program-create.component";
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
+import { ListTradeProgramResolver, ListTemplateResolver } from "../../resolver/dte.resolver";
 
 const routes: Routes = [
   {
@@ -77,10 +78,14 @@ const routes: Routes = [
     }
   },
   {
-    path: "schedule-trade-program/edit/:id",
+    path: "schedule-trade-program/detail/:id",
     component: ScheduleProgramEditComponent,
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.edit
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
     }
   },
   {

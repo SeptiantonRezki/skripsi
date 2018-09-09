@@ -107,7 +107,7 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/creator`,
         create: `${AYO_API}/api/${type_api}/creator`,
         put: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
-        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`
+        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
       },
       schedule_trade_program: {
         get: `${AYO_API}/api/${type_api}/scheduler`,
@@ -116,6 +116,8 @@ export class Endpoint {
         put: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
         delete: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
         reject_audience: `${AYO_API}/api/${type_api}/scheduler/reject/audience`,
+        list_tp: `${AYO_API}/api/${type_api}/creator?page=all&search=${context.param}`,
+        list_template: `${AYO_API}/api/${type_api}/template?page=all&search=${context.param}`,
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,

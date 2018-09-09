@@ -1,3 +1,148 @@
-<p>
-  schedule-program-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Pengatur Jadwal Trade Program'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+      <form autocomplete="off" [formGroup]="formSchedule">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Buat Pengatur Jadwal Trade Program</h2>
+        </div>
+        <div class="ayo-middle py-24" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Pengatur Jadwal Program Dagang">
+              <mat-error *ngIf="formSchedule.controls['name'].hasError('required') && formSchedule.controls['name'].touched">
+                Nama Pengatur Jadwal Program Dagang harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
+                formControlName="trade_creator_id" [matAutocomplete]="tradeProgram">
+              <mat-autocomplete #tradeProgram="matAutocomplete" [displayWith]="displayTpName">
+                <mat-option *ngFor="let item of filteredTpOptions | async" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
+                Trade Program harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="py-24" formArrayName="task_templates" *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
+
+            <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Template Tugas</strong>
+              </h3>
+            </div>
+            <div [formGroupName]="i">
+              <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Pilih Template Tugas" (keyup)="searchTemplateTask.next({value: $event.target.value, index: i})"
+                    formControlName="task_template_id" [matAutocomplete]="templateTugas">
+                  <mat-autocomplete #templateTugas="matAutocomplete" [displayWith]="displayTemplateName">
+                    <mat-option *ngFor="let item of filteredTemplateOptions | async" [value]="item">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="item.controls['task_template_id'].hasError('required') && item.controls['task_template_id'].touched">
+                    Template Tugas harus diisi
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="number" min="0" formControlName="coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
+                    numericOnly>
+                  <mat-error *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
+                    Nilai Coin Tugas Terkirim harus diisi
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="number" min="0" formControlName="coin_approved" placeholder="Nilai Coin Tugas Disetujui"
+                    numericOnly>
+                  <mat-error *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
+                    Nilai Coin Tugas Disetujui harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput [matDatepicker]="dari" formControlName="start_date" [min]="minDate" placeholder="Tanggal Mulai"
+                    (dateChange)="setMinDate(i)">
+                  <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
+                    Tanggal Mulai harus diisi
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="dari">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #dari></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput [matDatepicker]="sampai" formControlName="end_date" placeholder="Tanggal Berakhir"
+                    [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value)">
+                  <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
+                    Tanggal Berakhir harus diisi
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="sampai">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #sampai></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="pb-16">
+                <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+                  <h3 class="">
+                    <strong>Pengingat Tugas</strong>
+                  </h3>
+                </div>
+                <mat-radio-group formControlName="repeated">
+                  <mat-radio-button class="radio-button pr-24" *ngFor="let item of listReminder" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="pb-16" fxLayout="column">
+                <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+                  <h3 class="">
+                    <strong>Notifikasi Tambahan</strong>
+                  </h3>
+                </div>
+                <mat-radio-group formControlName="is_backup" (change)="changeValue(i)">
+                  <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification" [value]="item.value">
+                    {{item.name}}&nbsp;&nbsp;
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-radio-group *ngIf="item.get('is_backup').value === 1" formControlName="notif">
+                  <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAddNotif" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="confirm" fxLayout="row" fxLayoutGap="20px">
+                <button mat-raised-button *ngIf="i === formSchedule.get('task_templates')['controls'].length - 1" type="button"
+                  (click)="addTaskTemplate()" fxFlex="10">
+                  <mat-icon class="secondary-text">add</mat-icon> Tambah
+                </button>
+                <button mat-stroked-button *ngIf="formSchedule.get('task_templates')['controls'].length != 1" type="button"
+                  color="primary" (click)="deleteTaskTemplate(i)" fxFlex="10">
+                  <mat-icon class="">delete</mat-icon> Hapus
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
