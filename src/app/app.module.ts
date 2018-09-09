@@ -58,6 +58,7 @@ import { CategoryService } from "./services/newsfeed-management/category.service
 import { NewsService } from "./services/newsfeed-management/news.service";
 import { AccessService } from "./services/settings/access.service";
 import { AccountService } from "./services/settings/account.service";
+import { GoogleAnalyticsService } from "./services/google-analytics.service";
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { AccountService } from "./services/settings/account.service";
     AccessService,
     AccountService,
     AuthGuard,
+    GoogleAnalyticsService,
     NonAuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
@@ -121,4 +123,6 @@ import { AccountService } from "./services/settings/account.service";
     ToastInformationComponent
   ]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) {}
+}

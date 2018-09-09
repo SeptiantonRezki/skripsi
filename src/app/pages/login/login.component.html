@@ -19,9 +19,9 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field class="is-light form-primary">
-              <input matInput type="email" placeholder="Email Pengguna" formControlName="username">
+              <input matInput type="email" placeholder="Email / Username" formControlName="username">
               <mat-error *ngIf="loginForm.controls['username'].hasError('required') && loginForm.controls['username'].touched ">
-                Email Pengguna harus diisi.
+                Email / Username harus diisi.
               </mat-error>
             </mat-form-field>
           </div>

@@ -88,9 +88,8 @@
           </mat-tab>
           <mat-tab label="Gambar Produk">
             <div class="ayo-middle p-24" style="height: 480px;" fxLayout="column">
-              <div ngfDrop multiple="1" [fileDropDisabled]="product" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
-                [(file)]="files" [accept]="product ? 'none' : 'image/*'" [class.invalid-drag]="validComboDrag===false"
-                [class.valid-drag]="validComboDrag">
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" [accept]="'image/*'"
+                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                   <br>
@@ -110,10 +109,6 @@
                     <div class="previewIcon" [ngfBackground]="files"></div>
                   </div>
                 </div>
-              </div>
-
-              <div *ngIf="!files && product" class="pt-48">
-                <img class="previewIcon" [src]="product.image_url">
               </div>
             </div>
           </mat-tab>

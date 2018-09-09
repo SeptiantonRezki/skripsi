@@ -54,7 +54,7 @@
             <mat-form-field fxFlex="100" class="descInput exportTextarea">
               <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Deskripsi Tugas Material')"
                 style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
-                [disabled]="!material"></textarea>
+                [disabled]="!templateTaskForm.get('material').value"></textarea>
             </mat-form-field>
           </div>
 
@@ -225,7 +225,7 @@
             </div>
             <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <div class="more-option">
-                <span class="add-option" (click)="addRejectedReason(i)">Tambahkan Alasan </span>
+                <span class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
               </div>
             </div>
           </div>
@@ -242,7 +242,7 @@
         <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
           <mat-icon>text_fields</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text" (click)="uploadImage('master')">
+        <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text" (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
         </button>
       </div>

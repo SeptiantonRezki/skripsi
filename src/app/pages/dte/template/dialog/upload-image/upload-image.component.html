@@ -18,9 +18,8 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <div ngfDrop [fileDropDisabled]="product" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
-      [(file)]="files" [accept]="product ? 'none' : 'image/*'" [class.invalid-drag]="validComboDrag===false"
-      [class.valid-drag]="validComboDrag">
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>

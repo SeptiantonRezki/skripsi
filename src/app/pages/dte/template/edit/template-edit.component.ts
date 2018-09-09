@@ -167,7 +167,7 @@ export class TemplateEditComponent {
     }))
   }
 
-  addRejectedReason(idx) {
+  addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
     rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length+1}` }))
   }
