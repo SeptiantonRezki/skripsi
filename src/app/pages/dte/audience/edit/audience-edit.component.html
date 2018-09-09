@@ -87,6 +87,7 @@
           </div>
 
           <div class="p-0">
+            <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
             <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
               [rowHeight]="'auto'" [limit]="10" [selected]="selected" [selectionType]="'checkbox'"
               [selectAllRowsOnPage]="false" (select)='onSelect($event)' [sorts]="[{prop: 'name', dir: 'asc'}]">

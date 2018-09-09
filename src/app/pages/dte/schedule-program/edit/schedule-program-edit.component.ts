@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
+import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';
 
 @Component({
   selector: 'app-schedule-program-edit',
@@ -14,6 +15,7 @@ export class ScheduleProgramEditComponent {
   idScheduler: any;
   dataScheduler: any;
   formSchedule: FormGroup;
+  dialogRef: any;
 
   listTradeProgram: Array<any>;
   listTemplate: Array<any>;
@@ -22,6 +24,7 @@ export class ScheduleProgramEditComponent {
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
@@ -57,5 +60,18 @@ export class ScheduleProgramEditComponent {
         console.log(err.error.message)
       }
     )
+  }
+
+  openListAudience(item) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = item;
+
+    this.dialogRef = this.dialog.open(ListAudienceDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => { })
   }
 }

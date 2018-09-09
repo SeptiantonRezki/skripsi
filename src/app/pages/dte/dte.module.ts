@@ -31,7 +31,8 @@ import {
   MatDialogModule,
   MatDatepickerModule,
   MatAutocompleteModule,
-  MatRadioModule
+  MatRadioModule,
+  MatProgressBarModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
@@ -47,6 +48,7 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE
 } from "@angular/material/core";
+import { ListAudienceDialogComponent } from "./schedule-program/dialog/list-audience-dialog.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -84,7 +86,8 @@ export const MY_FORMATS = {
     MatRadioModule,
     ngfModule,
     NgxDatatableModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatProgressBarModule
   ],
   declarations: [
     TemplateIndexComponent,
@@ -99,7 +102,8 @@ export const MY_FORMATS = {
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent,
-    UploadImageComponent
+    UploadImageComponent,
+    ListAudienceDialogComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -127,6 +131,6 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ],
-  entryComponents: [UploadImageComponent]
+  entryComponents: [UploadImageComponent, ListAudienceDialogComponent]
 })
 export class DteModule {}

@@ -37,8 +37,9 @@
               <mat-form-field fxFlex="45%" class="is-light form-primary">
                 <input matInput type="text" placeholder="Audience / Grup" [value]="dataScheduler['audience'].name"
                   disabled>
-                <button mat-button matTooltip="Lihat daftar audience" matSuffix mat-icon-button>
-                  <mat-icon>table_chart</mat-icon>
+                <button mat-button matTooltip="Lihat daftar audience" (click)="openListAudience(dataScheduler['audience'])"
+                  matSuffix mat-icon-button>
+                  <mat-icon>view_list</mat-icon>
                 </button>
               </mat-form-field>
             </div>
@@ -79,7 +80,8 @@
           </div>
         </div>
 
-        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['trade_audience_group_id']" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['audience'] === null"
+          fxLayout="row" fxLayoutGap="20px">
           <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             REJECT
           </button> -->

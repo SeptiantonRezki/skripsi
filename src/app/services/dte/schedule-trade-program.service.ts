@@ -48,4 +48,9 @@ export class ScheduleTradeProgramService extends BaseService {
     const url = this.getUrl(this.namespace, 'list_template', context);
     return this.getApi(url);
   }
+
+  getListRetailerSelected(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_audience', context);
+    return this.getApi(url, queryParams);
+  }
 }

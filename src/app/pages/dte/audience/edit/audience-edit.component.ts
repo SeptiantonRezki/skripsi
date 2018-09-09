@@ -25,6 +25,7 @@ export class AudienceEditComponent {
   selected = [];
   area: Array<any>;
   queries: any;
+  loadingIndicator: Boolean;
 
   searchRetailer = new Subject<string>();
 
@@ -34,7 +35,7 @@ export class AudienceEditComponent {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private audienceService: AudienceService
+    private audienceService: AudienceService,
   ) { 
     this.formAudienceError = {
       name: {},
@@ -115,6 +116,8 @@ export class AudienceEditComponent {
   }
 
   detailAudienceSelect() {
+    this.loadingIndicator = true;
+    let i = 0;
     this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }).subscribe(
       res => {
         for (const item of res.data) {
@@ -123,6 +126,10 @@ export class AudienceEditComponent {
               this.selected.push(value);
             }
           }
+
+          i++;
+          if (res.data.length - 1 === i) 
+          return this.loadingIndicator = false;
         }
       }
     )

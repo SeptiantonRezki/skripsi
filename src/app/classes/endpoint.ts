@@ -118,6 +118,7 @@ export class Endpoint {
         reject_audience: `${AYO_API}/api/${type_api}/scheduler/reject/audience`,
         list_tp: `${AYO_API}/api/${type_api}/creator?page=all&search=${context.param}`,
         list_template: `${AYO_API}/api/${type_api}/template?page=all&search=${context.param}`,
+        list_audience: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,
