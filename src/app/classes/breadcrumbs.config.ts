@@ -641,6 +641,23 @@ export const brConfig = {
           url: "",
           name: "Daftar Berita"
         }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/newsfeed-management/category",
+          name: "Kategori Newsfeed"
+        },
+        {
+          type: "parent",
+          url: "/newsfeed-management/news",
+          name: "Daftar Berita"
+        },
+        {
+          type: "current",
+          url: "/newsfeed-management/news",
+          name: "Detail Berita"
+        }
       ]
     }
   },

@@ -34,17 +34,15 @@ export class Endpoint {
       //   detail: `${AYO_API}/api/${API_VERSION}/pages/${context.page_id}`
       // }
       authentication: {
-        verify_isms: `${AYO_API}/api/source/customer/${context.business_code}/${
-          context.phone
-        }`,
+        verify_isms: `${AYO_API}/api/source/customer/${context.business_code}/${context.phone}`,
         store_user: `${AYO_API}/api/${type_api}/user`,
         //login: `${AYO_API}/oauth/token` ,
         login: `${AYO_API}/api/${type_api}/token`,
         verify_code: `${AYO_API}/api/general/otp/verify-account`,
         me: `${AYO_API}/oauth/user`,
         resend_otp: `${AYO_API}/api/general/otp/send`,
-        reset_password: `${AYO_API}/api/general/otp/reset-password`,
-        change_password: `${AYO_API}/api/general/otp/change-password`,
+        reset_password: `${AYO_API}/oauth/password/reset`,
+        change_password: `${AYO_API}/oauth/password/forgot`,
         logout: `${AYO_API}/oauth/token/revoke`
       },
       admin_principal: {
@@ -137,6 +135,7 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/newsfeed`,
         put: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
         delete: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
+        list_category: `${AYO_API}/api/${type_api}/rssfeed/category?page=all`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

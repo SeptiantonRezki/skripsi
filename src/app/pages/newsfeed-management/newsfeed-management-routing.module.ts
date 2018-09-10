@@ -6,6 +6,8 @@ import { CategoryIndexComponent } from "./category/index/category-index.componen
 import { CategoryCreateComponent } from "./category/create/category-create.component";
 import { CategoryEditComponent } from "./category/edit/category-edit.component";
 import { NewsIndexComponent } from "./news/index/news-index.component";
+import { ListCategoryNewsfeedResolver } from "app/resolver/newsfeed-management.resolver";
+import { NewsDetailComponent } from "./news/detail/news-detail.component";
 
 const routes: Routes = [
   {
@@ -39,6 +41,16 @@ const routes: Routes = [
     component: NewsIndexComponent,
     data: {
       breadcrumbs: brConfig.newsfeedManagement.news.index
+    },
+    resolve: {
+      listCategory: ListCategoryNewsfeedResolver
+    }
+  },
+  {
+    path: "news/detail",
+    component: NewsDetailComponent,
+    data: {
+      breadcrumbs: brConfig.newsfeedManagement.news.detail
     }
   }
 ];

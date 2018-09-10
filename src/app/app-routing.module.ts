@@ -72,7 +72,7 @@ const appRoutes: Routes = [
     canActivate: [NonAuthGuard]
   },
   {
-    path: "reset-password",
+    path: "reset-password/:token",
     loadChildren:
       "./pages/reset-password/reset-password.module#ResetPasswordModule",
     canActivate: [NonAuthGuard]

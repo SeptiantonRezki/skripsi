@@ -1,3 +1,95 @@
-<p>
-  news-index works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Daftar Berita'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <form [formGroup]="formFilter" autoComplete="off">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+          <div class="p-8">
+            <mat-form-field class="is-light form-primary category">
+              <mat-select formControlName="category_id">
+                <mat-option value="all">Semua Kategori</mat-option>
+                <mat-option *ngFor="let item of listCategory" [value]="item.id">Kategori {{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon>search</mat-icon>
+            <mat-form-field autoComplete="off" class="is-light tab-search">
+              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8">
+          <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
+            <input matInput #from [matDatepicker]="dari" placeholder="Dari Tanggal" formControlName="start_date"
+              (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
+            <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="formFilter.get('start_date').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-datepicker-toggle matSuffix [for]="dari">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #dari></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
+            <input matInput [matDatepicker]="sampai" [min]="minDate" placeholder="Sampai Tanggal" formControlName="end_date"
+              readonly>
+            <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="formFilter.get('end_date').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-datepicker-toggle matSuffix [for]="sampai">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #sampai></mat-datepicker>
+          </mat-form-field>
+          <div class="button-row pb-16">
+            <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+          </div>
+        </div>
+      </form>
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
+
+        <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container pl-8 pt-8 pb-8 pr-0">
+              <img class="banner-image" *ngIf="row.image" [src]="row.image">
+              <img class="banner-image" *ngIf="!row.image" [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'">
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Judul Berita" [width]="240" prop="title">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <span class="row-name" (click)="directDetail(row)">{{row.title}}</span>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Kategori" prop="creator_id"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.created_at | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.status === 'publish'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status === 'unpublish'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

@@ -18,8 +18,18 @@ export class NewsService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  put(body?, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "put", context);
+    return this.postApi(url, body);
+  }
+
   delete(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
+  }
+
+  getListCategory(): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_category');
+    return this.getApi(url);
   }
 }

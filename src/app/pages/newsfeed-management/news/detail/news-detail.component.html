@@ -1,0 +1,47 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detail Berita'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formBerita">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="">
+          <h2 class="">Detail Berita</h2>
+          <div>
+            <mat-form-field [class]="formBerita.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let item of statusNews;" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="start center" class="pt-16">
+            <div fxFlex="3" class="pt-4">
+              <mat-icon class="secondary-text">insert_link</mat-icon>
+            </div>
+            <div fxFlex="90">
+              <span style="border-bottom: 1px solid #ccc">{{detailNews.link}}</span>
+            </div>
+          </div>
+          <div class="py-16">
+            <img class="priview-image-news" [src]="detailNews.image">
+          </div>
+          <div fxLayout="column" class="pb-24">
+            <span class="mat-headline">{{detailNews.title}}</span>
+            <small class="secondary-text">{{detailNews.date | date:'dd MMMM yyyy'}}</small>
+          </div>
+          <div fxLayout="column" class="pb-24">
+            <p [innerHtml]="detailNews.description" style="text-align: justify"></p>
+          </div>
+        </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
