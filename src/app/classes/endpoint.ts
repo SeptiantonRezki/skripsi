@@ -79,7 +79,10 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/content/banner`,
         create: `${AYO_API}/api/${type_api}/content/banner`,
         put: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`
+        delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       landingPage: {
         get: `${AYO_API}/api/${type_api}/content/static-page`,
@@ -129,6 +132,11 @@ export class Endpoint {
         list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
+      },
+      news: {
+        get: `${AYO_API}/api/${type_api}/newsfeed`,
+        put: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
+        delete: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

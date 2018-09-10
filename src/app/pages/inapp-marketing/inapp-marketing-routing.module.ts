@@ -7,6 +7,7 @@ import { BannerEditComponent } from "./banner/edit/banner-edit.component";
 import { LandingPageIndexComponent } from "./landing-page/index/landing-page-index.component";
 import { LandingPageCreateComponent } from "./landing-page/create/landing-page-create.component";
 import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.component";
+import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 
 const routes: Routes = [
   {
@@ -26,6 +27,9 @@ const routes: Routes = [
     component: BannerCreateComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.banner.create
+    }, 
+    resolve: {
+      listLevelArea: ListLevelAreaResolver
     }
   },
   {
@@ -33,6 +37,9 @@ const routes: Routes = [
     component: BannerEditComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.banner.edit
+    }, 
+    resolve: {
+      listLevelArea: ListLevelAreaResolver
     }
   },
   {

@@ -15,8 +15,33 @@ export class BannerService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  delete(context): Observable<any> {
+  create(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "create");
+    return this.postApi(url, body);
+  }
+
+  put(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, "put", context);
+    return this.postApi(url, body);
+  }
+
+  delete(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
+  }
+
+  getListLevel(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_level");
+    return this.getApi(url);
+  }
+
+  getListChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_children", context);
+    return this.getApi(url);
+  }
+
+  getListOtherChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
   }
 }

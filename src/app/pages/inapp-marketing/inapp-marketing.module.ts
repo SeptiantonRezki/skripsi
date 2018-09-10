@@ -21,7 +21,8 @@ import {
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatDatepickerModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatRadioModule
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -34,6 +35,7 @@ import {
 } from "@angular/material/core";
 
 import { ngfModule } from "angular-file";
+import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 
 export const MY_FORMATS = {
   parse: {
@@ -65,6 +67,7 @@ export const MY_FORMATS = {
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatTooltipModule,
+    MatRadioModule,
     ngfModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
@@ -86,6 +89,7 @@ export const MY_FORMATS = {
     LandingPageEditComponent
   ],
   providers: [
+    ListLevelAreaResolver,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

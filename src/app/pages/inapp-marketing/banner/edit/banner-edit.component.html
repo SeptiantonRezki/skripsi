@@ -1,3 +1,223 @@
-<p>
-  banner-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Ubah Spanduk'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+      <form autocomplete="off" [formGroup]="formBannerGroup">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Ubah Spanduk</h2>
+          <div>
+            <mat-form-field [class]="formBannerGroup.get('enable').value === 1 ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="enable">
+                <mat-option *ngFor="let item of listStatus;" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <h3 class="">
+              <strong>Informasi Spanduk</strong>
+            </h3>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Spanduk">
+              <mat-error *ngIf="formBannerGroup.controls['name'].hasError('required') && formBannerGroup.controls['name'].touched">
+                Nama Spanduk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="20%" class="is-light form-primary">
+              <input matInput [matDatepicker]="dari" formControlName="from" placeholder="Dari" (dateChange)="setMinDate()">
+              <mat-error *ngIf="formBannerGroup.controls['from'].hasError('required') && formBannerGroup.controls['from'].touched">
+                Berlaku dari tanggal harus diisi
+              </mat-error>
+              <mat-datepicker-toggle matSuffix [for]="dari">
+                <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #dari></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field fxFlex="20%" class="is-light form-primary">
+              <input matInput [matDatepicker]="sampai" formControlName="to" placeholder="Sampai" [min]="minDate">
+              <mat-error *ngIf="formBannerGroup.controls['to'].hasError('required') && formBannerGroup.controls['to'].touched">
+                Berlaku sampai tanggal harus diisi
+              </mat-error>
+              <mat-datepicker-toggle matSuffix [for]="sampai">
+                <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #sampai></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <h3 class="">
+              <strong>Audience</strong>
+            </h3>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['national'].hasError('required') && formBannerGroup.controls['national'].touched">
+                National harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formBannerGroup.get('zone').value)">
+                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' :
+                  item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['zone'].hasError('required') && formBannerGroup.controls['zone'].touched">
+                Zone harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formBannerGroup.get('region').value)">
+                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name
+                  === 'all' ? 'Semua Regional'
+                  :
+                  item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['region'].hasError('required') && formBannerGroup.controls['region'].touched">
+                Regional harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formBannerGroup.get('area').value)">
+                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name
+                  === 'all' ? 'Semua Area'
+                  :
+                  item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['area'].hasError('required') && formBannerGroup.controls['area'].touched">
+                Area harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formBannerGroup.get('salespoint').value)">
+                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name
+                  === 'all' ? 'Semua
+                  Salespoint'
+                  :
+                  item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['salespoint'].hasError('required') && formBannerGroup.controls['salespoint'].touched">
+                Salespoint harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formBannerGroup.get('district').value)">
+                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  District': item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['district'].hasError('required') && formBannerGroup.controls['district'].touched">
+                Distrik harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory">
+                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name
+                  === 'all' ? 'Semua
+                  Territori'
+                  :
+                  item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formBannerGroup.controls['territory'].hasError('required') && formBannerGroup.controls['territory'].touched">
+                Territori harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+            [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+              <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+              <br>
+              <span matPrefix>Tarik gambar spanduk iklan Anda kesini /
+                <strong>Pilih File</strong> berdimensi 410p x 210p.</span>
+              <span matPrefix>Besar file maksimal 2mb</span>
+            </div>
+          </div>
+          <div class="pt-48 pb-16">
+            <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0">
+              <div class="">
+                <div class="deleteBanner">
+                  <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+                </div>
+                <div class="previewBanner" [ngfBackground]="files"></div>
+              </div>
+            </div>
+            <div *ngIf="!files && detailBanner.image_url">
+              <img class="previewBanner" [src]="detailBanner.image_url">
+            </div>
+          </div>
+          <div class="pb-24">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
+                <mat-error *ngIf="formBannerGroup.get('title').invalid">
+                  Nama Halaman harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">Isi Halaman</h3>
+            </div>
+            <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+          </div>
+
+
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Promo</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="promo" class="radio-group">
+              <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
+              <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Grup Pengguna</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="user_group" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Batasan Umur</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="age" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listAge" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" (click)="submit('draft')" fxFlex="20">
+            SIMPAN SEBAGAI DRAF
+          </button>
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
+            SIMPAN DAN KIRIM
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
