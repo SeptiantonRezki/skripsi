@@ -41,7 +41,7 @@ export class FieldForceCreateComponent {
     this.submitting = false;
     this.verticalStepperStep1Errors = {
       name: {},
-      phone: {}
+      username: {}
     };
     this.verticalStepperStep2Errors = {
       level_desc: {}
@@ -53,7 +53,7 @@ export class FieldForceCreateComponent {
   ngOnInit() {
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
-      phone: ["", Validators.required]
+      username: ["", Validators.required]
     });
 
     this.verticalStepperStep2 = this.formBuilder.group({

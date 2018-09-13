@@ -19,7 +19,7 @@ export class AdminPrincipalEditComponent {
   detailAdminPrincipal: any;
   listStatus: any[] = [
     { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "passive" }
+    { name: "Status Non Aktif", value: "inactive" }
   ];
 
   constructor(
