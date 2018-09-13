@@ -32,7 +32,7 @@ export class AdminPrincipalService extends BaseService {
   }
 
   getListRole(): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_role");
+    const url = this.getUrl(this.namespace, "list_role_nolimit");
     return this.getApi(url);
   }
 }

@@ -9,8 +9,9 @@
  * AYO Sampoerna Staging
  *
  */
-// const AYO_API = "http://192.168.2.228/";
-const AYO_API = "https://ayo-api.dxtr.asia";
+const AYO_API = "http://192.168.2.228/"; // ip internal
+// const AYO_API = "https://ayo-api.dxtr.asia";
+// const AYO_API = "http://43.243.140.58:3232"; // ip public
 const type_api = "principal";
 
 export class Endpoint {
@@ -43,14 +44,16 @@ export class Endpoint {
         resend_otp: `${AYO_API}/api/general/otp/send`,
         reset_password: `${AYO_API}/oauth/password/reset`,
         change_password: `${AYO_API}/oauth/password/forgot`,
-        logout: `${AYO_API}/oauth/token/revoke`
+        logout: `${AYO_API}/oauth/token/revoke`,
+        check_token: `${AYO_API}/oauth/check/token`,
       },
       admin_principal: {
         get: `${AYO_API}/api/${type_api}/user/principal`,
         create: `${AYO_API}/api/${type_api}/user/principal`,
         put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
-        list_role: `${AYO_API}/api/${type_api}/user/role`
+        list_role: `${AYO_API}/api/${type_api}/user/role`,
+        list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
       },
       field_force: {
         get: `${AYO_API}/api/${type_api}/user/field-force`,

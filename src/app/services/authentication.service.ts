@@ -76,4 +76,9 @@ export class AuthenticationService extends BaseService {
     const url = this.getUrl(this.namespace, "logout");
     return this.postApi(url, body);
   }
+
+  checkToken(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "check_token");
+    return this.postApi(url, body);
+  }
 }

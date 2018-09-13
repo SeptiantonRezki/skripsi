@@ -45,6 +45,7 @@ export class ResetPasswordComponent implements OnInit {
 
     this.activatedRoute.params.subscribe((res: Params) => {
       this.token = res['token'];
+      // console.log('Token: '+ this.token);
     });
 
     this.activatedRoute.queryParams.subscribe(res => {
