@@ -5,6 +5,11 @@ import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "../../services/authentication.service";
 import { DialogService } from "../../services/dialog.service";
+import {
+  Router,
+  ActivatedRoute,
+  Params
+} from "../../../../node_modules/@angular/router";
 
 @Component({
   selector: "app-forgot-password",
@@ -18,6 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private dialogService: DialogService,
     private authenticationService: AuthenticationService
   ) {
@@ -70,6 +76,8 @@ export class ForgotPasswordComponent implements OnInit {
 
       this.authenticationService.changePassword(body).subscribe(res => {
         console.log(res);
+        this.router.navigate(['login']);
+        this.dialogService.openSnackBar({ message: res.status });
       });
     } else {
       this.dialogService.openSnackBar({ message: "Email harus diisi" });
