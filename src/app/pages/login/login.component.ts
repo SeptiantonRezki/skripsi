@@ -7,6 +7,7 @@ import { AuthenticationService } from "../../services/authentication.service";
 import { DataService } from "../../services/data.service";
 import { Router } from "@angular/router";
 import { commonFormValidator } from "../../classes/commonFormValidator";
+import { DialogService } from "../../services/dialog.service";
 
 @Component({
   selector: "login",
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private dataService: DataService,
+    private dialogService: DialogService,
     private router: Router
   ) {
     this.fuseConfig.setConfig({
@@ -71,7 +73,8 @@ export class LoginComponent implements OnInit {
               this.router.navigate(["dashboard"]);
               this.submitting = false;
             } else {
-              this.router.navigate(["activation/verify"]);
+              this.dataService.unSetAuthorization();
+              this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
             }
           });
         },

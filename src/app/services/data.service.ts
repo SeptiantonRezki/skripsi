@@ -4,8 +4,12 @@ import { Injectable } from '@angular/core';
 export class DataService {
     
     setAuthorization(authorization) {
-       let auth = JSON.stringify(authorization);
-       window.localStorage.setItem('auth',auth);
+        let auth = JSON.stringify(authorization);
+        window.localStorage.setItem('auth',auth);
+    }
+    
+    unSetAuthorization() {
+        window.localStorage.removeItem('auth');
     }
     
     getAuthorization() {
