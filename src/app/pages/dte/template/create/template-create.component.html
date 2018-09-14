@@ -126,17 +126,17 @@
                     <input matInput value="Tesk jawaban panjang" disabled>
                   </mat-form-field>
                 </ng-container>
-                <!-- <ng-container *ngIf="item.get('typeSelection').value['value'] == 'cloud_upload'">
-                <div fxLayout="row wrap" fxLayoutAlign="center center">
-                  <div class="button">
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                      <mat-icon class="secondary-text">photo_camera</mat-icon>
-                      <span class="h5 text-center">UNGGAH BUKTI FOTO</span>
+                <ng-container *ngIf="item.get('typeSelection').value['value'] == 'image'">
+                  <div fxLayout="row wrap" fxLayoutAlign="center center">
+                    <div class="button">
+                      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                        <mat-icon class="secondary-text">photo_camera</mat-icon>
+                        <span class="h5 text-center">UNGGAH BUKTI FOTO</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ng-container> -->
-                <ng-container *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea'">
+                </ng-container>
+                <ng-container *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image'">
                   <div fxFlex="100" fxLayout="column">
                     <div formArrayName="additional" *ngFor="let additional of item.get('additional')['controls']; let j=index;">
                       <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
@@ -187,10 +187,10 @@
                 </ng-container>
               </div>
               <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
-                <section class="required-section secondary-text">
+                <!-- <section class="required-section secondary-text">
                   <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                 </section>
-                <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div>
+                <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div> -->
                 <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)" matTooltipPosition="below"
                   class="secondary-text">
                   <mat-icon class="secondary-text">delete</mat-icon>
@@ -229,9 +229,9 @@
           (click)="addQuestion()">
           <mat-icon>add_circle</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
+        <!-- <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
           <mat-icon>text_fields</mat-icon>
-        </button>
+        </button> -->
         <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text" (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
         </button>

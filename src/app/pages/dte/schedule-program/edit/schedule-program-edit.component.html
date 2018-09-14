@@ -39,7 +39,7 @@
                   disabled>
                 <button mat-button matTooltip="Lihat daftar audience" (click)="openListAudience(dataScheduler['audience'])"
                   matSuffix mat-icon-button>
-                  <mat-icon>view_list</mat-icon>
+                  <mat-icon class="s-24">view_list</mat-icon>
                 </button>
               </mat-form-field>
             </div>
@@ -54,25 +54,25 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Template Tugas" [value]="item.name" disabled>
+                <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
               </mat-form-field>
 
               <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item['pivot'].coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
+                <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
                   disabled>
               </mat-form-field>
 
               <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item['pivot'].coin_approved" placeholder="Nilai Coin Tugas Terkirim"
+                <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
                   disabled>
               </mat-form-field>
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item['pivot'].start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
                   disabled>
                 <mat-icon matSuffix>date_range</mat-icon>
               </mat-form-field>
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item['pivot'].end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
                   disabled>
                 <mat-icon matSuffix>date_range</mat-icon>
               </mat-form-field>

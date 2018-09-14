@@ -7,6 +7,7 @@ import { UploadImageComponent } from "../dialog/upload-image/upload-image.compon
 import { DialogService } from "../../../../services/dialog.service";
 import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
+import * as _ from 'underscore';
 
 @Component({
   selector: "app-template-create",
@@ -22,7 +23,8 @@ export class TemplateCreateComponent {
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
-    { name: "Kotak Centang", value: "checkbox", icon: "check_box" }
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" }
   ];
 
   @ViewChild("autosize")
@@ -119,14 +121,18 @@ export class TemplateCreateComponent {
 
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    let newId = _.max(questions.value, function(item){ return item.id })
+    if (newId === -Infinity) newId = { id: 0 }
+    
     questions.push(this.formBuilder.group({
+      id: newId.id+1,
       question: `Pertanyaan`,
       type: 'radio',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image: [''],
       // others: false,
-      required: false
+      // required: false
     }))
   }
 
@@ -176,21 +182,23 @@ export class TemplateCreateComponent {
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
         questions: questions.map((item, index) => {
-          if (item.question_image) {
-            return {
-              question: item.question,
-              type: item.type,
-              required: item.required,
-              question_image: item.question_image || null,
-              additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : []
-            }
-          }
+          // if (item.question_image) {
           return {
+            id: item.id,
             question: item.question,
             type: item.type,
-            required: item.required,
-            additional: item.additional.map(item => item.option)
+            // required: item.required,
+            question_image: item.question_image || '',
+            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : []
           }
+          // }
+          // return {
+          //   id: item.id,
+          //   question: item.question,
+          //   type: item.type,
+          //   // required: item.required,
+          //   additional: item.additional.map(item => item.option)
+          // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }

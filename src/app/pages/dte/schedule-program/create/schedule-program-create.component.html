@@ -72,8 +72,8 @@
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput [matDatepicker]="dari" formControlName="start_date" [min]="minDate" placeholder="Tanggal Mulai"
-                    (dateChange)="setMinDate(i)" readonly>
+                  <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date" [min]="minDate"
+                    placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
                   <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
                     Tanggal Mulai harus diisi
                   </mat-error>
@@ -83,8 +83,9 @@
                   <mat-datepicker #dari></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput [matDatepicker]="sampai" formControlName="end_date" placeholder="Tanggal Berakhir"
-                    [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value)" readonly>
+                  <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
+                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value)"
+                    readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
                   </mat-error>

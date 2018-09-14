@@ -45,6 +45,7 @@ export class BannerCreateComponent {
     quickInsertButtons: [""],
     imageUpload: false,
     pasteImage: false,
+    enter: "ENTER_BR",
     toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'html'],
   };
 

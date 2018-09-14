@@ -25,8 +25,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="25" floatLabel="never" class="orders datepicker is-light">
-            <input matInput #from [matDatepicker]="dari" placeholder="Dari Tanggal" formControlName="start_date"
-              (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
+            <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+              formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
             <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('start_date').setValue('')">
               <mat-icon>close</mat-icon>
@@ -37,8 +37,8 @@
             <mat-datepicker #dari></mat-datepicker>
           </mat-form-field>
           <mat-form-field fxFlex="25" floatLabel="never" class="orders datepicker is-light">
-            <input matInput [matDatepicker]="sampai" [min]="minDate" placeholder="Sampai Tanggal" formControlName="end_date"
-              readonly>
+            <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="Sampai Tanggal"
+              formControlName="end_date" readonly>
             <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('end_date').setValue('')">
               <mat-icon>close</mat-icon>

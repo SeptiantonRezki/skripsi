@@ -28,7 +28,11 @@ export class LandingPageEditComponent {
     placeholderText: "Isi Halaman",
     height: 150,
     quickInsertTags: [""],
-    quickInsertButtons: [""]
+    quickInsertButtons: [""],
+    imageUpload: false,
+    pasteImage: false,
+    enter: "ENTER_BR",
+    toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'html'],
   };
 
   constructor(
