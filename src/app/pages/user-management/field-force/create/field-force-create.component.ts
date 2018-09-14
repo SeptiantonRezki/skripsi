@@ -13,6 +13,8 @@ import {
 } from "../../../../../../node_modules/@angular/router";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 
+import { DataService } from '../../../../services/data.service';
+
 @Component({
   selector: "app-field-force-create",
   templateUrl: "./field-force-create.component.html",
@@ -31,11 +33,14 @@ export class FieldForceCreateComponent {
   submitting: Boolean;
   ObjectArea: any = [];
 
+  area: Array<any>;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
     private dialogService: DialogService,
     private router: Router,
+    private dataService: DataService,
     private activatedRoute: ActivatedRoute
   ) {
     this.submitting = false;
@@ -48,9 +53,14 @@ export class FieldForceCreateComponent {
     };
 
     this.listLevel = this.activatedRoute.snapshot.data["listLevel"].data;
+
+    this.area = dataService.getFromStorage('profile')['area_type'];
+    console.log(this.area);
+
   }
 
   ngOnInit() {
+
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
       username: ["", Validators.required]

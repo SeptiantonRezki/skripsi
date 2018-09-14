@@ -38,7 +38,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Wholesaler" prop="fullname">
+        <ngx-datatable-column name="Nama Toko" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directEdit(row)">{{row.businesses[0].name}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Pemilik" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directEdit(row)">{{row.fullname}} </a>
           </ng-template>
