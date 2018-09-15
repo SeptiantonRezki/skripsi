@@ -95,7 +95,7 @@ submitting: Boolean;
           address: this.verticalStepperStep1.get("address").value,
           business_code: this.verticalStepperStep1.get("business_code").value,
           owner: this.verticalStepperStep2.get("owner").value,
-          phone: '+62' + this.verticalStepperStep2.get("phone").value,
+          phone: '0' + this.verticalStepperStep2.get("phone").value,
           areas: [this.verticalStepperStep3.get("area").value]
         };
   

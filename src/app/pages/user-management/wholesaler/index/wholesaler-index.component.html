@@ -44,7 +44,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Pemilik" prop="fullname">
+        <ngx-datatable-column name="Nama Pemilik" prop="owner">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directEdit(row)">{{row.owner}} </a>
           </ng-template>
@@ -52,7 +52,7 @@
 
         <ngx-datatable-column name="Kode WS" prop="code" summary-template="activeCell"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="Status" prop="status" headerClass="textright">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="name-container pl-12">
               <mat-icon *ngIf="row.status === 'A'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
