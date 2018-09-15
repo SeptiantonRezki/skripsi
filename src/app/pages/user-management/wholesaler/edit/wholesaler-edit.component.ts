@@ -42,7 +42,7 @@ export class WholesalerEditComponent{
     this.detailWholesaler = this.dataService.getFromStorage(
       "detail_wholesaler"
     );
-    console.log(this.detailWholesaler);
+    // console.log(this.detailWholesaler);
   }
 
   ngOnInit() {
@@ -69,22 +69,24 @@ export class WholesalerEditComponent{
       address: this.detailWholesaler.address,
       code: this.detailWholesaler.code,
       owner: this.detailWholesaler.owner,
-      phone: parseInt(this.detailWholesaler.phone),
+      phone: (this.detailWholesaler.phone) ? parseInt(this.detailWholesaler.phone): '',
       status: this.detailWholesaler.status,
       area_code: this.detailWholesaler.area_code
     });
   }
 
   submit() {
+    // console.log(this.formWs);
     if (this.formWs.valid) {
       let body = {
         _method: "PUT",
         name: this.formWs.get("name").value,
         address: this.formWs.get("address").value,
-        code: this.formWs.get("business_code").value,
+        business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
-        phone: '+62' + this.formWs.get("phone").value,
-        area_code: [this.formWs.get("area").value]
+        phone: '0' + this.formWs.get("phone").value,
+        areas: [this.formWs.get("area_code").value],
+        status: this.formWs.get("status").value
       };
 
       this.WholesalerService
