@@ -76,7 +76,8 @@ export class AdminPrincipalCreateComponent {
       let body = {
         name: this.verticalStepperStep1.get("nama").value,
         email: this.verticalStepperStep1.get("email").value,
-        role_id: this.verticalStepperStep2.get("role").value
+        role_id: this.verticalStepperStep2.get("role").value,
+        status: 'active'
       };
 
       this.adminPrincipalService.create(body).subscribe(

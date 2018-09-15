@@ -5,7 +5,7 @@
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','wholesaler','create']">
         <mat-icon>add</mat-icon>BUAT
       </button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button>
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -27,7 +27,7 @@
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
+        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
@@ -36,7 +36,7 @@
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected"></mat-checkbox>
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column name="Nama Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

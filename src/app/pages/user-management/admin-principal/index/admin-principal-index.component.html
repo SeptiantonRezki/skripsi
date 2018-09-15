@@ -5,7 +5,7 @@
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button>
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -27,7 +27,7 @@
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
+        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
@@ -36,7 +36,7 @@
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected"></mat-checkbox>
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -44,12 +44,16 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nomor Ponsel" prop="phone" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column name="Email" prop="email" summary-template="activeCell">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <a class="direct-edit" (click)="directEdit(row)">{{row.email}} </a>
+              </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="100" name="Status" prop="active_status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
+              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
@@ -57,11 +61,11 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+        <!-- <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">

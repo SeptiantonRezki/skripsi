@@ -33,7 +33,7 @@ export class RetailerIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private retailerService: RetailerService
+    private RetailerService: RetailerService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -51,19 +51,11 @@ export class RetailerIndexComponent {
   }
 
   ngOnInit() {
-    // this._fuseSplashScreenService.show();
-    // this.http.get("api/ayo-b2b-user").subscribe((contacts: any) => {
-    //   this.rows = contacts;
-    //   this.loadingIndicator = false;
-    // });
-    // setTimeout(() => {
-    //     this._fuseSplashScreenService.hide();
-    // }, 3000);
     this.getRetailerList();
   }
 
   getRetailerList() {
-    this.retailerService.get(this.pagination).subscribe(
+    this.RetailerService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
@@ -88,7 +80,7 @@ export class RetailerIndexComponent {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.retailerService.get(this.pagination).subscribe(res => {
+    this.RetailerService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -103,7 +95,7 @@ export class RetailerIndexComponent {
 
     console.log("check pagination", this.pagination);
 
-    this.retailerService.get(this.pagination).subscribe(
+    this.RetailerService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
@@ -123,7 +115,7 @@ export class RetailerIndexComponent {
 
     console.log(this.pagination);
 
-    this.retailerService.get(this.pagination).subscribe(res => {
+    this.RetailerService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -142,7 +134,7 @@ export class RetailerIndexComponent {
   }
 
   confirmDelete() {
-    this.retailerService.delete({ wholesaler_id: this.id }).subscribe(
+    this.RetailerService.delete({ retailer_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
