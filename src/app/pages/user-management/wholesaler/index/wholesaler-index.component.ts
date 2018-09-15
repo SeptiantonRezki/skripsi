@@ -6,6 +6,7 @@ import { Router } from "../../../../../../node_modules/@angular/router";
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
+import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 
 @Component({
   selector: "app-wholesaler-index",
@@ -33,6 +34,7 @@ export class WholesalerIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
+    private fuseSplashScreen: FuseSplashScreenService,
     private wholesalerService: WholesalerService
   ) {
     this.onLoad = true;
@@ -51,14 +53,7 @@ export class WholesalerIndexComponent {
   }
 
   ngOnInit() {
-    // this._fuseSplashScreenService.show();
-    // this.http.get("api/ayo-b2b-user").subscribe((contacts: any) => {
-    //   this.rows = contacts;
-    //   this.loadingIndicator = false;
-    // });
-    // setTimeout(() => {
-    //     this._fuseSplashScreenService.hide();
-    // }, 3000);
+    this.fuseSplashScreen.show();
     this.getWholesalerList();
   }
 
@@ -69,6 +64,8 @@ export class WholesalerIndexComponent {
         this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
+
+        this.fuseSplashScreen.hide();
       },
       err => {
         console.error(err);

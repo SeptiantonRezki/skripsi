@@ -67,7 +67,8 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <!-- disable delete ws -->
+        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
               <button mat-icon-button color="primary" (click)="deleteWholesaler(row.id)">
@@ -75,7 +76,7 @@
               </button>
             </div>
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
       </ngx-datatable>
     </div>
   </div>
