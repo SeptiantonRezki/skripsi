@@ -63,14 +63,14 @@ export const navigation = [
         icon: "picture_in_picture",
         url: "/user-management/field-force"
       },
-      {
-        id: "paguyuban",
-        title: "Paguyuban",
-        translate: "Paguyuban",
-        type: "item",
-        icon: "account_balance",
-        url: "/user-management/paguyuban"
-      },
+      // {
+      //   id: "paguyuban",
+      //   title: "Paguyuban",
+      //   translate: "Paguyuban",
+      //   type: "item",
+      //   icon: "account_balance",
+      //   url: "/user-management/paguyuban"
+      // },
       {
         id: "wholesaler",
         title: "Wholesaler",
