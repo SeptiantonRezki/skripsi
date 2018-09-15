@@ -5,6 +5,7 @@ import { RoleIndexComponent } from "./role/index/role-index.component";
 import { RoleCreateComponent } from "./role/create/role-create.component";
 import { RoleEditComponent } from "./role/edit/role-edit.component";
 import { ChangePasswordIndexComponent } from "./change-password/index/change-password-index.component";
+import { ListMenuResolver } from "../../resolver/settings.resolver";
 
 const routes: Routes = [
   {
@@ -24,13 +25,19 @@ const routes: Routes = [
     component: RoleCreateComponent,
     data: {
       breadcrumbs: brConfig.settings.access.create
+    },
+    resolve: {
+      menu: ListMenuResolver
     }
   },
   {
-    path: "access/edit",
+    path: "access/edit/:id",
     component: RoleEditComponent,
     data: {
       breadcrumbs: brConfig.settings.access.edit
+    },
+    resolve: {
+      menu: ListMenuResolver
     }
   },
   {

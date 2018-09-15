@@ -36,7 +36,7 @@
           </div>
 
           <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
-            <mat-checkbox class="remember-me red" aria-label="Remember Me">
+            <mat-checkbox class="remember-me red" [formControl]="rememberMe" aria-label="Remember Me">
               Ingat Saya
             </mat-checkbox>
             <a class="forgot-password" [routerLink]="'/forgot-password'">

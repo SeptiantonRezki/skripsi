@@ -64,7 +64,7 @@
 
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national">
-                <mat-option *ngFor="let item of listLevelArea" [value]="item">{{item.name}}</mat-option>
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formBannerGroup.controls['national'].hasError('required') && formBannerGroup.controls['national'].touched">
                 National harus diisi
@@ -72,7 +72,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formBannerGroup.get('zone').value)">
-                <mat-option *ngFor="let item of list['zone']" [value]="item">{{item.name === 'all' ? 'Semua Zona' :
+                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' :
                   item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formBannerGroup.controls['zone'].hasError('required') && formBannerGroup.controls['zone'].touched">
@@ -81,7 +81,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formBannerGroup.get('region').value)">
-                <mat-option *ngFor="let item of list['region']" [value]="item">{{item.name === 'all' ? 'Semua Regional'
+                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  Regional'
                   :
                   item.name}}</mat-option>
               </mat-select>
@@ -91,7 +92,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formBannerGroup.get('area').value)">
-                <mat-option *ngFor="let item of list['area']" [value]="item">{{item.name === 'all' ? 'Semua Area'
+                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua Area'
                   :
                   item.name}}</mat-option>
               </mat-select>
@@ -101,7 +102,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formBannerGroup.get('salespoint').value)">
-                <mat-option *ngFor="let item of list['salespoint']" [value]="item">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ? 'Semua
                   Salespoint'
                   :
                   item.name}}</mat-option>
@@ -112,7 +113,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formBannerGroup.get('district').value)">
-                <mat-option *ngFor="let item of list['district']" [value]="item">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                   District'
                   :
                   item.name}}</mat-option>
@@ -123,7 +124,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Territory" formControlName="territory">
-                <mat-option *ngFor="let item of list['territory']" [value]="item">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
                   Territori'
                   :
                   item.name}}</mat-option>

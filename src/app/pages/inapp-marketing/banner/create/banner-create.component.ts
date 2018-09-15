@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { BannerService } from '../../../../services/inapp-marketing/banner.service';
 import { DateAdapter } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { DataService } from '../../../../services/data.service';
 
 @Component({
   selector: 'app-banner-create',
@@ -25,6 +26,7 @@ export class BannerCreateComponent {
   list_territory: any[];
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
+  areaFromLogin;
 
   lvl: any[];
   minDate: any;
@@ -53,11 +55,13 @@ export class BannerCreateComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialogService: DialogService,
+    private dataService: DataService,
     private bannerService: BannerService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder
   ) { 
     this.adapter.setLocale('id');
+    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     // this.validComboDrag = true;
 
     this.formBannerErrors = {
@@ -98,7 +102,7 @@ export class BannerCreateComponent {
       user_group: ["retailer", Validators.required],
       age: ["18+", Validators.required],
       promo: ["yes", Validators.required],
-      national: [this.listLevelArea[0], Validators.required],
+      national: ["", Validators.required],
       zone: [""],
       region: [""],
       area: [""],
@@ -112,13 +116,58 @@ export class BannerCreateComponent {
     })
 
     this.setMinDate();
-    this.getAudienceArea('zone', this.listLevelArea[0]);
+    this.initArea();
+    // this.getAudienceArea('zone', this.listLevelArea[0]);
   }
 
-  getAudienceArea(selection, item) {
+  initArea() {
+    this.areaFromLogin.map(item => {
+      let level_desc = '';
+      switch (item.type.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          this.formBannerGroup.get('national').setValue(item.id);
+          this.formBannerGroup.get('national').disable();
+          break
+        case 'division':
+          level_desc = 'region';
+          this.formBannerGroup.get('zone').setValue(item.id);
+          this.formBannerGroup.get('zone').disable();
+          break;
+        case 'region':
+          level_desc = 'area';
+          this.formBannerGroup.get('region').setValue(item.id);
+          this.formBannerGroup.get('region').disable();
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          this.formBannerGroup.get('area').setValue(item.id);
+          this.formBannerGroup.get('area').disable();
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          this.formBannerGroup.get('salespoint').setValue(item.id);
+          this.formBannerGroup.get('salespoint').disable();
+          break;
+        case 'district':
+          level_desc = 'territory';
+          this.formBannerGroup.get('district').setValue(item.id);
+          this.formBannerGroup.get('district').disable();
+          break;
+        case 'territory':
+          this.formBannerGroup.get('territory').setValue(item.id);
+          this.formBannerGroup.get('territory').disable();
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+  }
+
+  getAudienceArea(selection, id) {
+    let item: any;
     switch (selection) {
       case 'zone':
-          this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+          this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
             this.list[selection] = res;
           });
 
@@ -134,8 +183,9 @@ export class BannerCreateComponent {
           this.list['territory'] = [];
         break;
       case 'region':
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -153,8 +203,9 @@ export class BannerCreateComponent {
           this.list['territory'] = [];
         break;
       case 'area':
+          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -170,8 +221,9 @@ export class BannerCreateComponent {
           this.list['territory'] = [];
         break;
       case 'salespoint':
+          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -185,8 +237,9 @@ export class BannerCreateComponent {
           this.list['territory'] = [];
         break;
       case 'district':
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -198,8 +251,9 @@ export class BannerCreateComponent {
           this.list['territory'] = [];
         break;
       case 'territory':
+          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: item.id }).subscribe(res => {
+            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -227,7 +281,7 @@ export class BannerCreateComponent {
     if (this.formBannerGroup.valid && this.files && this.files.size < 2000000) {
 
       let areas = [];
-      let value = this.formBannerGroup.value;
+      let value = this.formBannerGroup.getRawValue();
       value = Object.entries(value).map(([key, value]) => ({key, value}));
 
       let fd = new FormData();
@@ -243,10 +297,11 @@ export class BannerCreateComponent {
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
       fd.append('promo', this.formBannerGroup.get('promo').value);
       fd.append('age', this.formBannerGroup.get('age').value);
+      fd.append('static_page', 'yes');
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
-        if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value.id))
+        if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
       })
       
       areas.map(item => {

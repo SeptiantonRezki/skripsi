@@ -1,3 +1,74 @@
-<p>
-  role-index works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Akses Karyawan'">
+    <button style="width: 170px" [routerLink]="['/settings','access', 'create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT PERAN
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Peran</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
+
+        <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn">
+              <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+            </ng-template>
+  
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+              <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            </ng-template>
+          </ngx-datatable-column> -->
+
+        <ngx-datatable-column name="Nama Peran" prop="name">
+          <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+          </ng-template> -->
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tipe Akses" prop="type"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date:
+            'dd/MM/yyyy'}}</ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+                <div class="name-container pl-12">
+                  <mat-icon *ngIf="row.status === 'publish'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+                  <mat-icon *ngIf="row.status === 'draft'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+                </div>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+        <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" [routerLink]="['/settings', 'access', 'edit', row.id]">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
