@@ -1,3 +1,92 @@
-<p>
-  wholesaler-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Admin Detail'">
+    </page-content-header>
+    <!-- / HEADER -->
+    <div class="content p-24">
+      <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+  
+        <form [formGroup]="formWs">
+          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3>Detil Wholesaler</h3>
+            <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="column">
+  
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Nama" type="text" formControlName="name">
+              <mat-error *ngIf="formWs.controls['name'].hasError('required') && formWs.controls['name'].touched ">
+                Nama Toko harus diisi.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Alamat Toko" type="address" formControlName="address">
+              <mat-error *ngIf="formWs.controls['address'].hasError('required') && formWs.controls['address'].touched ">
+                Alamat Toko harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Kode iSMS" formControlName="code">
+              <mat-error *ngIf="formWs.controls['code'].hasError('required') && formWs.controls['code'].touched ">
+                Kode iSMS harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+              <mat-error *ngIf="formWs.controls['owner'].hasError('required') && formWs.controls['owner'].touched ">
+                Nama Pemilik harus diisi.
+              </mat-error>
+            </mat-form-field>
+            
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <div class="label">Nomor Ponsel</div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                  <mat-form-field fxFlex="5" fxFlex.xs="30" class="form-primary">
+                    <input matInput value="+62" readonly>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
+                    <input matInput formControlName="phone" type="tel" min="0">
+                  </mat-form-field>
+                </div>
+                <mat-error *ngIf="formWs.controls['phone'].hasError('required') && formWs.controls['phone'].touched ">
+                  Nomor ponsel harus diisi.
+                </mat-error>
+              </div>
+
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Area" formControlName="area_code">
+                <mat-error *ngIf="formWs.controls['area_code'].hasError('required') && formWs.controls['area_code'].touched ">
+                  Area harus diisi.
+                </mat-error>
+              </mat-form-field>
+            
+            <!-- <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Kata Sandi Baru" type="password" formControlName="password">
+            </mat-form-field>
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Konfirmasi Kata Sandi" type="password" formControlName="confirmation_password">
+            </mat-form-field> -->
+  
+            <!-- <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
+              <button mat-stroked-button>Reset Password</button>
+            </div> -->
+  
+            <div class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                SIMPAN
+              </button>
+            </div>
+  
+          </div>
+        </form>
+      </div>
+  
+    </div>
+  </div>
+  

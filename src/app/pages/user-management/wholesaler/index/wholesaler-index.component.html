@@ -40,23 +40,23 @@
 
         <ngx-datatable-column name="Nama Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directEdit(row)">{{row.businesses[0].name}} </a>
+            <a class="direct-edit" (click)="directEdit(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Nama Pemilik" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directEdit(row)">{{row.fullname}} </a>
+            <a class="direct-edit" (click)="directEdit(row)">{{row.owner}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode WS" prop="business_code" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column name="Kode WS" prop="code" summary-template="activeCell"></ngx-datatable-column>
 
         <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="name-container pl-12">
-              <mat-icon *ngIf="row.status === 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
-              <mat-icon *ngIf="row.status === 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+              <mat-icon *ngIf="row.status === 'A'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status === 'I'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
             </div>
           </ng-template>
         </ngx-datatable-column>
