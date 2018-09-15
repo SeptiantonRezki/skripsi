@@ -33,7 +33,8 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="20%" class="is-light form-primary">
-              <input matInput [matDatepicker]="dari" formControlName="from" placeholder="Dari" (dateChange)="setMinDate()">
+              <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="from" placeholder="Dari"
+                (dateChange)="setMinDate()">
               <mat-error *ngIf="formBannerGroup.controls['from'].hasError('required') && formBannerGroup.controls['from'].touched">
                 Berlaku dari tanggal harus diisi
               </mat-error>
@@ -43,7 +44,8 @@
               <mat-datepicker #dari></mat-datepicker>
             </mat-form-field>
             <mat-form-field fxFlex="20%" class="is-light form-primary">
-              <input matInput [matDatepicker]="sampai" formControlName="to" placeholder="Sampai" [min]="minDate">
+              <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="to" placeholder="Sampai"
+                [min]="minDate">
               <mat-error *ngIf="formBannerGroup.controls['to'].hasError('required') && formBannerGroup.controls['to'].touched">
                 Berlaku sampai tanggal harus diisi
               </mat-error>
