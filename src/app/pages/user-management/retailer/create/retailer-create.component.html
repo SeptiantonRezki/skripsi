@@ -64,13 +64,20 @@
                   </mat-error>
                 </mat-form-field>
   
-                <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput fxFlex="7" fxFlex.xs="20" value="+62" readonly>
-                  <input matInput fxFlex="93" fxFlex.xs="80" type="tel" placeholder="No. HP" formControlName="phone">
-                  <mat-error *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
-                    No. HP harus diisi.
-                  </mat-error>
-                </mat-form-field>
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <div class="label">Nomor Ponsel</div>
+                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                      <mat-form-field fxFlex="5" fxFlex.xs="30" class="form-primary">
+                        <input matInput value="+62" readonly>
+                      </mat-form-field>
+                      <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
+                        <input matInput formControlName="phone" type="tel" min="0">
+                      </mat-form-field>
+                    </div>
+                    <mat-error *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
+                      Nomor ponsel harus diisi.
+                    </mat-error>
+                  </div>
   
               </div>
   
