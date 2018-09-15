@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
 import { fuseAnimations } from "@fuse/animations";
@@ -8,6 +8,7 @@ import { DataService } from "../../services/data.service";
 import { Router } from "@angular/router";
 import { commonFormValidator } from "../../classes/commonFormValidator";
 import { DialogService } from "../../services/dialog.service";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "login",
@@ -19,13 +20,20 @@ export class LoginComponent implements OnInit {
   loginFormErrors: any;
   submitting: boolean;
 
+  rememberMe: FormControl = new FormControl();
+
+  username: any;
+  password: any;
+  userlogin: any;
+
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private dataService: DataService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -41,12 +49,26 @@ export class LoginComponent implements OnInit {
     };
 
     this.submitting = false;
+    this.rememberMe.setValue(false);
   }
 
   ngOnInit() {
+    this.userlogin = this.cookieService.getAll();
+
+    try {
+      this.username = this.userlogin['username'];
+      this.password = this.userlogin['password'];
+
+      if(this.userlogin['username']) {
+        this.rememberMe.setValue(true);
+      }
+    } catch (error) {
+      
+    }
+
     this.loginForm = this.formBuilder.group({
-      username: ["", [Validators.required]],
-      password: ["", Validators.required]
+      username: [this.username, [Validators.required]],
+      password: [this.password, Validators.required]
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -75,6 +97,14 @@ export class LoginComponent implements OnInit {
             } else {
               this.dataService.unSetAuthorization();
               this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
+            }
+
+            if(this.rememberMe.value) {
+              this.cookieService.set('username', this.loginForm.get("username").value);
+              this.cookieService.set('password', this.loginForm.get("password").value);
+            } else {
+              this.cookieService.delete('username');
+              this.cookieService.delete('password');
             }
           });
         },

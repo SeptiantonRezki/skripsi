@@ -26,6 +26,7 @@ export class BannerEditComponent {
   detailBanner: any;
 
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
+  areaFromLogin;
 
   lvl: any[];
   minDate: any;
@@ -61,6 +62,7 @@ export class BannerEditComponent {
   ) { 
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
+    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     // this.validComboDrag = true;
 
     this.formBannerErrors = {
@@ -101,7 +103,7 @@ export class BannerEditComponent {
       user_group: ["retailer", Validators.required],
       age: ["18+", Validators.required],
       promo: ["yes", Validators.required],
-      national: [this.listLevelArea[0]['id'], Validators.required],
+      national: [1, Validators.required],
       zone: [""],
       salespoint: [""],
       region: [""],
@@ -115,7 +117,43 @@ export class BannerEditComponent {
     })
 
     this.setMinDate();
+    this.initArea();
     this.initFormGroup();
+  }
+
+  initArea() {
+    this.areaFromLogin.map(item => {
+      switch (item.type.trim()) {
+        case 'national':
+          this.formBannerGroup.get('national').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break
+        case 'division':
+          this.formBannerGroup.get('zone').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+        case 'region':
+          this.formBannerGroup.get('region').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+        case 'area':
+          this.formBannerGroup.get('area').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+        case 'salespoint':
+          this.formBannerGroup.get('salespoint').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+        case 'district':
+          this.formBannerGroup.get('district').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+        case 'territory':
+          this.formBannerGroup.get('territory').disable();
+          // this.formBannerGroup.get('national').setValue(item.id);
+          break;
+      }
+    })
   }
 
   initFormGroup() {
@@ -288,7 +326,7 @@ export class BannerEditComponent {
     if (this.formBannerGroup.valid || this.files && this.files.size < 2000000) {
 
       let areas = [];
-      let value = this.formBannerGroup.value;
+      let value = this.formBannerGroup.getRawValue();
       value = Object.entries(value).map(([key, value]) => ({key, value}));
 
       let fd = new FormData();
@@ -304,6 +342,7 @@ export class BannerEditComponent {
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
       fd.append('promo', this.formBannerGroup.get('promo').value);
       fd.append('age', this.formBannerGroup.get('age').value);
+      fd.append('static_page', 'yes');
 
       if (this.files)
       fd.append('image', this.files);

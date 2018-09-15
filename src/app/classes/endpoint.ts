@@ -139,6 +139,14 @@ export class Endpoint {
         put: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
         delete: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
         list_category: `${AYO_API}/api/${type_api}/rssfeed/category?page=all`
+      },
+      role: {
+        get: `${AYO_API}/api/${type_api}/user/role`,
+        detail: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
+        create: `${AYO_API}/api/${type_api}/user/role`,
+        put: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
+        delete: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
+        list_menu: `${AYO_API}/api/${type_api}/user/role`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

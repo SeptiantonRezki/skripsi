@@ -38,9 +38,7 @@ export class LandingPageIndexComponent {
     this.onLoad = true;
     this.selected = [];
 
-    const observable = this.keyUp
-      .map(value => event.target["value"])
-      .debounceTime(1000)
+    const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
         return Observable.of(search).delay(500);
