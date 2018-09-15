@@ -40,7 +40,7 @@ export class ScheduleProgramEditComponent {
 
   ngOnInit() {
     this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
-      this.dataScheduler = res;
+      this.dataScheduler = res; 
       this.onLoad = false;
     })
   }
