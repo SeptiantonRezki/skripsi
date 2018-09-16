@@ -37,7 +37,8 @@ import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
 
 import {
   ListRoleAdminResolver,
-  ListLevelFFResolver
+  ListLevelFFResolver,
+  ListLevelAreaResolver
 } from "../../resolver/user-management.resolver";
 
 @NgModule({
@@ -91,6 +92,6 @@ import {
     RetailerCreateComponent,
     RetailerEditComponent
   ],
-  providers: [ListRoleAdminResolver, ListLevelFFResolver]
+  providers: [ListRoleAdminResolver, ListLevelFFResolver, ListLevelAreaResolver]
 })
 export class UserManagementModule {}

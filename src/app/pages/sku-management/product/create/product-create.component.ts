@@ -1,15 +1,16 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
-import { Subject, Observable } from "rxjs";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
+import { Subject, Observable, ReplaySubject } from "rxjs";
 
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { ProductService } from "../../../../services/sku-management/product.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
-import { MatChipInputEvent, MatSelectChange } from "@angular/material";
+import { MatChipInputEvent, MatSelectChange, MatSelect } from "@angular/material";
 
 import * as moment from "moment";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-product-create",
@@ -45,6 +46,12 @@ export class ProductCreateComponent {
 
   filteredSkuOptions: Observable<string[]>;
 
+  public filterCategory: FormControl = new FormControl();
+  public filteredCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
@@ -56,9 +63,9 @@ export class ProductCreateComponent {
 
     this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
     this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data;
-    this.listPackaging = this.activatedRoute.snapshot.data[
-      "listPackaging"
-    ].data;
+    this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data;
+
+    this.filteredCategory.next(this.listCategory.slice());
 
     this.formProductErrors = {
       name: {},
@@ -79,6 +86,30 @@ export class ProductCreateComponent {
         this.formProductErrors
       );
     });
+
+    this.filterCategory.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringCategory();
+      });
+  }
+
+  filteringCategory() {
+    if (!this.listCategory) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterCategory.value;
+    if (!search) {
+      this.filteredCategory.next(this.listCategory.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredCategory.next(
+      this.listCategory.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   createFormGroup(): void {

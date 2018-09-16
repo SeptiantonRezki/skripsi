@@ -34,24 +34,27 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
+        <!-- <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container pl-8 pt-8 pb-8 pr-0">
               <img class="banner-image" *ngIf="row.image" [src]="row.image">
               <img class="banner-image" *ngIf="!row.image" [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'">
             </div>
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
-        <ngx-datatable-column [width]="540" name="Nama" prop="name">
+        <ngx-datatable-column name="Nama" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-
+        <ngx-datatable-column [width]="540" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
         <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row pl-8">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
               <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

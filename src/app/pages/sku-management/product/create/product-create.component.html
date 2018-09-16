@@ -50,8 +50,10 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Kategori Produk" formControlName="category" (selectionChange)="selectionChange($event)">
-                  <mat-option [value]="item.id" *ngFor="let item of listCategory">
+                <mat-select formControlName="category" placeholder="Kategori Produk" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterCategory" [placeholderLabel]="'Cari Kategori...'"
+                    [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>

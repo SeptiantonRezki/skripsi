@@ -42,7 +42,7 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="descInput exportTextarea">
-              <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Deskripsi Tugas Material')"
+              <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
                 style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                 [disabled]="!templateTaskForm.get('material').value"></textarea>
             </mat-form-field>

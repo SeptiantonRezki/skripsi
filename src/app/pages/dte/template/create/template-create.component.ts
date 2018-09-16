@@ -48,9 +48,9 @@ export class TemplateCreateComponent {
     this.templateTaskForm = this.formBuilder.group({
       name: ["Judul Tugas", Validators.required],
       description: ["Deskripsi Tugas", Validators.required],
-      image: ["", Validators.required], 
+      image: [""], 
       material: false,
-      material_description: ["Deskripsi Tugas Material", Validators.required],
+      material_description: ["Jenis Material", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required)
     })
