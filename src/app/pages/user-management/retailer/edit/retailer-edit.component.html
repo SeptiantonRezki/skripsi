@@ -1,3 +1,185 @@
-<p>
-  retailer-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Retailer Detail'">
+    </page-content-header>
+    <!-- / HEADER -->
+    <div class="content p-24" *ngIf="!onLoad">
+      <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+  
+        <form [formGroup]="formRetailer">
+          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3>Detil Retailer</h3>
+            <mat-form-field [class]="formRetailer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="column">
+  
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Nama" type="text" formControlName="name">
+              <mat-error *ngIf="formRetailer.controls['name'].hasError('required') && formRetailer.controls['name'].touched ">
+                Nama Toko harus diisi.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Alamat Toko" type="address" formControlName="address">
+              <mat-error *ngIf="formRetailer.controls['address'].hasError('required') && formRetailer.controls['address'].touched ">
+                Alamat Toko harus diisi.
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Kode Agen" formControlName="business_code">
+              <mat-error *ngIf="formRetailer.controls['business_code'].hasError('required') && formRetailer.controls['business_code'].touched ">
+                Kode Agen harus diisi.
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+              <mat-error *ngIf="formRetailer.controls['owner'].hasError('required') && formRetailer.controls['owner'].touched ">
+                Nama Pemilik harus diisi.
+              </mat-error>
+            </mat-form-field>
+  
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <small>Nomor Ponsel</small>
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
+                  <input matInput value="+62" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
+                  <input matInput formControlName="phone" type="tel" min="0">
+                </mat-form-field>
+              </div>
+              <mat-error *ngIf="formRetailer.controls['phone'].hasError('required') && formRetailer.controls['phone'].touched ">
+                Nomor ponsel harus diisi.
+              </mat-error>
+            </div>
+  
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Area" formControlName="area">
+              <mat-error *ngIf="formRetailer.controls['area'].hasError('required') && formRetailer.controls['area'].touched ">
+                Area harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Latitude" formControlName="latitude">
+                <mat-error *ngIf="formRetailer.controls['latitude'].hasError('required') && formRetailer.controls['latitude'].touched ">
+                    Latitude harus diisi.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Longitude" formControlName="longitude">
+                <mat-error *ngIf="formRetailer.controls['longitude'].hasError('required') && formRetailer.controls['longitude'].touched ">
+                    Longitude harus diisi.
+                </mat-error>
+            </mat-form-field>
+
+
+                <mat-form-field fxFlex="100" class="is-light">
+                  <mat-select placeholder="Tipe Retailer" formControlName="type">
+                    <mat-option *ngFor="let item of listType" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formRetailer.controls['type'].hasError('required') && formRetailer.controls['type'].touched ">
+                      Tipe Retailer harus diisi
+                  </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field fxFlex="100" class="is-light">
+                  <mat-select placeholder="Internal Classification" formControlName="InternalClassification">
+                    <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formRetailer.controls['InternalClassification'].hasError('required') && formRetailer.controls['InternalClassification'].touched ">
+                      Internal Classification harus diisi
+                  </mat-error>
+                </mat-form-field>
+            <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+  
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="National" formControlName="national">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['national'].hasError('required') && formRetailer.controls['national'].touched">
+                  National harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formRetailer.get('zone').value)">
+                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['zone'].hasError('required') && formRetailer.controls['zone'].touched">
+                  Zone harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formRetailer.get('region').value)">
+                  <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['region'].hasError('required') && formRetailer.controls['region'].touched">
+                  Regional harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formRetailer.get('area').value)">
+                  <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['area'].hasError('required') && formRetailer.controls['area'].touched">
+                  Area harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formRetailer.get('salespoint').value)">
+                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['salespoint'].hasError('required') && formRetailer.controls['salespoint'].touched">
+                  Salespoint harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formRetailer.get('district').value)">
+                  <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['district'].hasError('required') && formRetailer.controls['district'].touched">
+                  Distrik harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Territory" formControlName="territory">
+                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formRetailer.controls['territory'].hasError('required') && formRetailer.controls['territory'].touched">
+                  Territori harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div> -->
+  
+            <!-- <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="Kata Sandi Baru" type="password" formControlName="password">
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="Konfirmasi Kata Sandi" type="password" formControlName="confirmation_password">
+              </mat-form-field> -->
+  
+            <!-- <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                <button mat-stroked-button>Reset Password</button>
+              </div> -->
+  
+            <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                SIMPAN
+              </button>
+            </div>
+  
+          </div>
+        </form>
+      </div>
+  
+    </div>
+  </div>
+  

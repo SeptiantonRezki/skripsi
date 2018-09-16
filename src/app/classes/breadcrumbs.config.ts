@@ -8,6 +8,17 @@ export const brConfig = {
       }
     ]
   },
+  profile: {
+    myProfile: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Profil Saya"
+        }
+      ]
+    }
+  },
   adminprincipal: {
     index: [
       {

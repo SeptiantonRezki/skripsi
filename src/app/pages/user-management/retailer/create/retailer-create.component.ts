@@ -30,7 +30,7 @@ listType: any[] = [
 ];
 
 listIC: any[] = [
-  { name: "REGULAR", value: "REGULAR" },
+  { name: "NON-SRC", value: "NON-SRC" },
   { name: "SRC", value: "SRC" }
 ];
 

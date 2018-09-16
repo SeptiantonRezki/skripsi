@@ -28,6 +28,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "my-profile",
+    loadChildren: "./pages/profile/profile.module#ProfileModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "sku-management",
     loadChildren:
       "./pages/sku-management/sku-management.module#SkuManagementModule",
