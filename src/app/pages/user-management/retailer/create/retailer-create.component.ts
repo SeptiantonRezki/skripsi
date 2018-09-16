@@ -15,10 +15,12 @@ export class RetailerCreateComponent{
 verticalStepperStep1: FormGroup;
 verticalStepperStep2: FormGroup;
 verticalStepperStep3: FormGroup;
+verticalStepperStep4: FormGroup;
 
 verticalStepperStep1Errors: any;
 verticalStepperStep2Errors: any;
 verticalStepperStep3Errors: any;
+verticalStepperStep4Errors: any;
 
 submitting: Boolean;
 
@@ -40,7 +42,13 @@ submitting: Boolean;
         phone: {}
       };
       this.verticalStepperStep3Errors = {
-        area: {}
+        area: {},
+        latitude: {},
+        longitude: {}
+      };
+      this.verticalStepperStep4Errors = {
+        type: {},
+        InternalClassification: {}
       };
     }
   
@@ -57,7 +65,14 @@ submitting: Boolean;
       });
   
       this.verticalStepperStep3 = this.formBuilder.group({
-        area: ["", Validators.required]
+        area: ["", Validators.required],
+        latitude: ["", Validators.required],
+        longitude: ["", Validators.required],
+      });
+  
+      this.verticalStepperStep4 = this.formBuilder.group({
+        type: ["", Validators.required],
+        InternalClassification: ["", Validators.required]
       });
   
       this.verticalStepperStep1.valueChanges.subscribe(() => {
@@ -80,6 +95,13 @@ submitting: Boolean;
           this.verticalStepperStep3Errors
         );
       });
+  
+      this.verticalStepperStep4.valueChanges.subscribe(() => {
+        commonFormValidator.parseFormChanged(
+          this.verticalStepperStep4,
+          this.verticalStepperStep4Errors
+        );
+      });
     }
   
     selectionChange(event) {
@@ -96,7 +118,11 @@ submitting: Boolean;
           business_code: this.verticalStepperStep1.get("business_code").value,
           owner: this.verticalStepperStep2.get("owner").value,
           phone: '0' + this.verticalStepperStep2.get("phone").value,
-          areas: [this.verticalStepperStep3.get("area").value]
+          areas: [this.verticalStepperStep3.get("area").value],
+          latitude: [this.verticalStepperStep3.get("latitude").value],
+          longitude: [this.verticalStepperStep3.get("longitude").value],
+          type: [this.verticalStepperStep3.get("type").value],
+          InternalClassification: [this.verticalStepperStep3.get("InternalClassification").value]
         };
   
         this.RetailerService.create(body).subscribe(
@@ -104,7 +130,7 @@ submitting: Boolean;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan"
             });
-            this.router.navigate(["user-management", "wholesaler"]);
+            this.router.navigate(["user-management", "retailer"]);
           },
           err => {
             this.submitting = false;
@@ -114,6 +140,7 @@ submitting: Boolean;
         commonFormValidator.validateAllFields(this.verticalStepperStep1);
         commonFormValidator.validateAllFields(this.verticalStepperStep2);
         commonFormValidator.validateAllFields(this.verticalStepperStep3);
+        commonFormValidator.validateAllFields(this.verticalStepperStep4);
       }
     }
 
