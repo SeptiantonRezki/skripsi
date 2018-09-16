@@ -76,8 +76,8 @@ listIC: any[] = [
   
       this.verticalStepperStep3 = this.formBuilder.group({
         area: ["", Validators.required],
-        latitude: ["", Validators.required],
-        longitude: ["", Validators.required],
+        latitude: [""],
+        longitude: [""],
       });
   
       this.verticalStepperStep4 = this.formBuilder.group({
@@ -128,12 +128,12 @@ listIC: any[] = [
           address: this.verticalStepperStep1.get("address").value,
           business_code: this.verticalStepperStep1.get("business_code").value,
           owner: this.verticalStepperStep2.get("owner").value,
-          phone: '0' + this.verticalStepperStep2.get("phone").value,
+          phone: '+62' + this.verticalStepperStep2.get("phone").value,
           areas: [this.verticalStepperStep3.get("area").value],
-          latitude: [this.verticalStepperStep3.get("latitude").value],
-          longitude: [this.verticalStepperStep3.get("longitude").value],
-          type: [this.verticalStepperStep4.get("type").value],
-          InternalClassification: [this.verticalStepperStep4.get("InternalClassification").value]
+          latitude: this.verticalStepperStep3.get("latitude").value,
+          longitude: this.verticalStepperStep3.get("longitude").value,
+          type: this.verticalStepperStep4.get("type").value,
+          InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
         };
   
         this.RetailerService.create(body).subscribe(

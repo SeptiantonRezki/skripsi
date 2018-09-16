@@ -17,12 +17,17 @@
         </div>
         <div class="ayo-middle pt-24" fxLayout="column">
 
-          <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama" type="text" formControlName="name">
-            <mat-error *ngIf="formAdmin.controls['name'].hasError('required') && formAdmin.controls['name'].touched ">
-              Nama harus diisi.
-            </mat-error>
-          </mat-form-field>
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Nama" type="text" formControlName="name">
+              <mat-error *ngIf="formAdmin.controls['name'].hasError('required') && formAdmin.controls['name'].touched ">
+                Nama harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput disabled placeholder="Username" type="text" formControlName="username">
+            </mat-form-field>
+
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput placeholder="Email" type="email" formControlName="email">
             <mat-error *ngIf="formAdmin.controls['email'].hasError('required') && formAdmin.controls['email'].touched ">
