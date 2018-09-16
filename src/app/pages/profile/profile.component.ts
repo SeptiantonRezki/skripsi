@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
       }
 
       if (body.password === body.password_confirmation) {
-        this.authenticationService.changePassword(body).subscribe(
+        this.authenticationService.changePasswordEditProfile(body).subscribe(
           res => {
             this.dialogService.openSnackBar({ message: 'Kata Sandi berhasil diubah.'});
             this.ngOnInit();

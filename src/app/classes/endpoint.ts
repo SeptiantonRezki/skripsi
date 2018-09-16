@@ -44,6 +44,7 @@ export class Endpoint {
         resend_otp: `${AYO_API}/api/general/otp/send`,
         reset_password: `${AYO_API}/oauth/password/reset`,
         change_password: `${AYO_API}/oauth/password/forgot`,
+        change_password_edit_profile: `${AYO_API}/oauth/password/change`,
         logout: `${AYO_API}/oauth/token/revoke`,
         check_token: `${AYO_API}/oauth/check/token`,
       },

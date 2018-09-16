@@ -72,6 +72,13 @@ export class AuthenticationService extends BaseService {
     return this.postApi(url, body);
   }
 
+  changePasswordEditProfile(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "change_password_edit_profile");
+    return this.postApi(url, body);
+  }
+
+  
+
   doLogout(body): Observable<any> {
     const url = this.getUrl(this.namespace, "logout");
     return this.postApi(url, body);

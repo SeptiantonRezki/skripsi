@@ -3,7 +3,7 @@
   <mat-progress-bar *ngIf="showLoadingBar" class="loading-bar" color="accent" mode="indeterminate"></mat-progress-bar>
 
   <div fxFlex fxFill fxLayout="row" fxLayoutAlign="start center">
-    <h3 class="pl-16">{{profile?.businesses[0]?.name}}</h3>
+    <!-- <h3 class="pl-16">{{profile?.businesses[0]?.name}}</h3> -->
     <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
 
       <button mat-icon-button class="toggle-button-navbar" *ngIf="!noNav" (click)="toggleSidebarOpened('navbar')"
