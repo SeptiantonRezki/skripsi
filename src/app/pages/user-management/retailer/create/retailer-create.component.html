@@ -96,18 +96,70 @@
             <form [formGroup]="verticalStepperStep3">
   
               <ng-template matStepLabel>Area</ng-template>
-  
               <div fxFlex="1 0 auto" fxLayout="column">
-  
                 <mat-form-field fxFlex="100" class="is-light">
                   <input matInput type="text" placeholder="Area" formControlName="area">
                   <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched ">
                     Area harus diisi.
                   </mat-error>
                 </mat-form-field>
+              </div>
+
+              <div fxFlex="1 0 auto" fxLayout="column">
+                  <mat-form-field fxFlex="100" class="is-light">
+                    <input matInput type="text" placeholder="Latitude" formControlName="latitude">
+                    <mat-error *ngIf="verticalStepperStep3.controls['latitude'].hasError('required') && verticalStepperStep3.controls['latitude'].touched ">
+                        Latitude harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              <div fxFlex="1 0 auto" fxLayout="column">
+                  <mat-form-field fxFlex="100" class="is-light">
+                    <input matInput type="text" placeholder="Longitude" formControlName="longitude">
+                    <mat-error *ngIf="verticalStepperStep3.controls['longitude'].hasError('required') && verticalStepperStep3.controls['longitude'].touched ">
+                        Longitude harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
   
+              <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+                <button mat-raised-button matStepperNext type="button" class="confirmation-button">
+                  Lanjut
+                </button>
               </div>
   
+            </form>
+  
+          </mat-step>
+  
+          <mat-step [stepControl]="verticalStepperStep4">
+  
+            <form [formGroup]="verticalStepperStep4">
+  
+              <ng-template matStepLabel>Tipe Toko</ng-template>
+              <div fxFlex="1 0 auto" fxLayout="column">
+                <mat-form-field fxFlex="100" class="is-light">
+                    <mat-select placeholder="Tipe Retailer" formControlName="type">
+                      <mat-option *ngFor="let item of listType" [value]="item.value">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="verticalStepperStep4.controls['type'].hasError('required') && verticalStepperStep4.controls['type'].touched ">
+                        Tipe Retailer harus diisi
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+
+              <div fxFlex="1 0 auto" fxLayout="column">
+                  <mat-form-field fxFlex="100" class="is-light">
+                      <mat-select placeholder="Internal Classification" formControlName="InternalClassification">
+                        <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="verticalStepperStep4.controls['InternalClassification'].hasError('required') && verticalStepperStep4.controls['InternalClassification'].touched ">
+                          Internal Classification harus diisi
+                      </mat-error>
+                    </mat-form-field>
+              </div>
+              
               <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
                 <button mat-raised-button matStepperNext type="button" class="confirmation-button">
                   Lanjut

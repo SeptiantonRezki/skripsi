@@ -24,6 +24,16 @@ verticalStepperStep4Errors: any;
 
 submitting: Boolean;
 
+listType: any[] = [
+  { name: "General Trade", value: "General Trade" },
+  { name: "Modern Trade", value: "Modern Trade" }
+];
+
+listIC: any[] = [
+  { name: "REGULAR", value: "REGULAR" },
+  { name: "SRC", value: "SRC" }
+];
+
   constructor(
     private formBuilder: FormBuilder,
     private RetailerService: RetailerService,
@@ -75,6 +85,7 @@ submitting: Boolean;
         InternalClassification: ["", Validators.required]
       });
   
+
       this.verticalStepperStep1.valueChanges.subscribe(() => {
         commonFormValidator.parseFormChanged(
           this.verticalStepperStep1,
@@ -121,8 +132,8 @@ submitting: Boolean;
           areas: [this.verticalStepperStep3.get("area").value],
           latitude: [this.verticalStepperStep3.get("latitude").value],
           longitude: [this.verticalStepperStep3.get("longitude").value],
-          type: [this.verticalStepperStep3.get("type").value],
-          InternalClassification: [this.verticalStepperStep3.get("InternalClassification").value]
+          type: [this.verticalStepperStep4.get("type").value],
+          InternalClassification: [this.verticalStepperStep4.get("InternalClassification").value]
         };
   
         this.RetailerService.create(body).subscribe(
