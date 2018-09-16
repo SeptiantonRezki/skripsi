@@ -10,7 +10,7 @@
  *
  */
 // const AYO_API = "http://192.168.2.228/"; // ip internal
-const AYO_API = "https://ayo-api.dxtr.asia"; // aws
+const AYO_API = "https://ayo-api.dxtr.asia";
 // const AYO_API = "http://43.243.140.58:3232"; // ip public
 const type_api = "principal";
 
@@ -68,7 +68,11 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/user/wholesaler`,
         create: `${AYO_API}/api/${type_api}/user/wholesaler`,
         put: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`
+        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
+        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       retailer: {
         get: `${AYO_API}/api/${type_api}/user/retailer`,
@@ -97,9 +101,9 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/product/product`,
         put: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
         delete: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
-        list_brand: `${AYO_API}/api/${type_api}/product/brand`,
+        list_brand: `${AYO_API}/api/${type_api}/product/brand?page=all`,
         list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${context.parent_id}`,
-        list_packaging: `${AYO_API}/api/${type_api}/product/packaging`
+        list_packaging: `${AYO_API}/api/${type_api}/product/packaging?page=all`
       },
       template_task: {
         get: `${AYO_API}/api/${type_api}/template`,

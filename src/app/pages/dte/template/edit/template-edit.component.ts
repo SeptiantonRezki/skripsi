@@ -54,9 +54,9 @@ export class TemplateEditComponent {
     this.templateTaskForm = this.formBuilder.group({
       name: ["Judul Tugas", Validators.required],
       description: ["Deskripsi Tugas", Validators.required],
-      image: ["", Validators.required], 
+      image: [""], 
       material: false,
-      material_description: ["Deskripsi Tugas Material", Validators.required],
+      material_description: ["Jenis Material", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([], Validators.required)
     })
@@ -78,7 +78,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('name').setValue(this.detailTask.name);
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
-    this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Deskripsi Tugas Material');
+    this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image);
     this.detailTask['questions'].map(item => {
       questions.push(this.formBuilder.group({

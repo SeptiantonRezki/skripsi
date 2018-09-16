@@ -3,6 +3,7 @@ import { Resolve } from "@angular/router";
 import { AdminPrincipalService } from "../services/user-management/admin-principal.service";
 import { Observable } from "rxjs";
 import { FieldForceService } from "../services/user-management/field-force.service";
+import { WholesalerService } from "../services/user-management/wholesaler.service";
 
 @Injectable()
 export class ListRoleAdminResolver implements Resolve<any> {
@@ -17,5 +18,13 @@ export class ListLevelFFResolver implements Resolve<any> {
   constructor(private fieldForcePrincipal: FieldForceService) {}
   resolve(): Observable<any> {
     return this.fieldForcePrincipal.getListLevel();
+  }
+}
+
+@Injectable()
+export class ListLevelAreaResolver implements Resolve<any>{
+  constructor(private wholesalerService: WholesalerService){}
+  resolve(): Observable<any> {
+    return this.wholesalerService.getListLevel();
   }
 }

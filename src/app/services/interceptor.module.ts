@@ -35,9 +35,7 @@ export class BaseInterceptor implements HttpInterceptor {
   }
 
   authenticateRequest(request: HttpRequest<any>) {
-    const token = this.injector.get(DataService).getAuthorization()
-      ? this.injector.get(DataService).getAuthorization()["access_token"]
-      : null;
+    const token = this.injector.get(DataService).getAuthorization() ? this.injector.get(DataService).getAuthorization()["access_token"] : null;
     if (token) {
       const duplicate = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token)
@@ -48,44 +46,31 @@ export class BaseInterceptor implements HttpInterceptor {
   }
 
   throwIntercept(err, req) {
-    console.error("HTTP ERROR LOGGER", err);
+    // console.error("HTTP ERROR LOGGER", err);
     if (err.status === 0)
-      this.injector
-        .get(DialogService)
-        .openSnackBar({
-          message:
-            "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!"
-        });
+      this.injector.get(DialogService).openSnackBar({ message: "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!" });
 
     if (err instanceof HttpErrorResponse) {
       // kondisi ketika check isms
       if (err.status == 404) {
         if (err.error.status == false) {
-          this.injector
-            .get(DialogService)
-            .openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
+          this.injector.get(DialogService).openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
         }
         return Observable.throw(err);
       } else if (err.status == 400) {
         if (req.method == "POST") {
-          this.injector
-            .get(DialogService)
-            .openSnackBar({ message: "Username/Password Salah" });
+          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukan salah" });
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
         if (req.method == "POST") {
-          this.injector
-            .get(DialogService)
-            .openSnackBar({ message: "Username/Password Salah" });
+          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukan salah" });
         }
 
         if (err.error === "Tidak ada otorisasi") {
           window.localStorage.clear();
           this.router.navigate(["login"]);
-          this.injector
-            .get(DialogService)
-            .openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
+          this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
         }
 
         return Observable.throw(err);
@@ -98,12 +83,13 @@ export class BaseInterceptor implements HttpInterceptor {
             return Observable.throw(err);
           }
 
-          let errorArray = Object.values(err.error.errors);
-          this.injector
-            .get(DialogService)
-            .openSnackBar({
-              message: `Terjadi Kesalahan, ${errorArray[0][0]}`
-            });
+          if (err.error['status']) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error['status']})
+          } else {
+            let errorArray = Object.values(err.error.errors);
+            // this.injector.get(DialogService).openCustomDialog(null, errorArray[0][0]);
+            this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0]})
+          }
         }
         return Observable.throw(err);
       } else if (err.status == 404 || err.status == 500) {

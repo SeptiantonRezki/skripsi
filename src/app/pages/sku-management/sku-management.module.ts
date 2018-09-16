@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "../../shared/shared.module";
@@ -46,6 +47,7 @@ import {
     FuseSharedModule,
     SharedModule,
     NgxDatatableModule,
+    NgxMatSelectSearchModule,
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,

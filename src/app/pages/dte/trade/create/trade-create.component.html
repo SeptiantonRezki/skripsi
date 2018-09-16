@@ -11,6 +11,26 @@
       <br>
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
         <div class="ayo-middle" fxLayout="column">
+          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+            [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+              <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+              <br>
+              <span matPrefix>Tarik gambar Anda kesini /
+                <strong>Pilih File</strong> berdimensi 410p x 210p.</span>
+              <span matPrefix>Besar file maksimal 2mb</span>
+            </div>
+          </div>
+          <div class="py-48">
+            <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0">
+              <div class="">
+                <div class="deleteBanner">
+                  <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+                </div>
+                <div class="previewBanner" [ngfBackground]="files"></div>
+              </div>
+            </div>
+          </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
@@ -22,8 +42,8 @@
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
-                placeholder="Tanggal Mulai" (dateChange)="setMinEndDate()">
+              <input matInput formControlName="start_date" [min]="minDateFrom" (focus)="startDate.open()"
+                [matDatepicker]="startDate" placeholder="Tanggal Mulai" (dateChange)="setMinEndDate()">
               <mat-datepicker-toggle matSuffix [for]="startDate">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>

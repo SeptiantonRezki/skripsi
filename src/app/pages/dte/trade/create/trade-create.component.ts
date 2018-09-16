@@ -16,8 +16,12 @@ export class TradeCreateComponent {
   formTradeProgram: FormGroup;
   formTradeProgramError: any;
 
-  minDate: Date;
-  minExpireDate: Date;
+  minDateFrom: any;
+  minDate: any;
+  minExpireDate: any;
+
+  files: File;
+  validComboDrag: boolean;
   
   constructor(
     private router: Router,
@@ -27,6 +31,9 @@ export class TradeCreateComponent {
     private tradeProgramService: TradeProgramService
   ) { 
     this.adapter.setLocale('id');
+    this.minDateFrom = moment();
+    this.minDate = moment();
+    this.minExpireDate = moment();
     
     this.formTradeProgramError = {
       name: {},
@@ -61,8 +68,16 @@ export class TradeCreateComponent {
     this.minExpireDate = this.formTradeProgram.get("end_date").value;
   }
 
+  removeImage(): void {
+    this.files = undefined;
+  }
+
   submit(): void {
+    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2mb!' })
+
     if (this.formTradeProgram.valid) {
+      let fd = new FormData();
+
       let body = {
         name: this.formTradeProgram.get('name').value,
         start_date: this.convertDate(this.formTradeProgram.get('start_date').value),
@@ -71,7 +86,14 @@ export class TradeCreateComponent {
         coin_expiry_date: this.convertDate(this.formTradeProgram.get('coin_expiry_date').value)
       }
 
-      this.tradeProgramService.create(body).subscribe(
+      fd.append('name', body.name);
+      fd.append('start_date', body.start_date);
+      fd.append('end_date', body.end_date);
+      fd.append('budget', body.budget);
+      fd.append('coin_expiry_date', body.coin_expiry_date);
+      if (this.files) fd.append('image', this.files);
+  
+      this.tradeProgramService.create(fd).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
           this.router.navigate(['dte', 'trade-program']);

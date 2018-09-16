@@ -19,7 +19,8 @@ import { RetailerIndexComponent } from "./retailer/index/retailer-index.componen
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
 import {
   ListRoleAdminResolver,
-  ListLevelFFResolver
+  ListLevelFFResolver,
+  ListLevelAreaResolver
 } from "app/resolver/user-management.resolver";
 
 const routes: Routes = [
@@ -121,7 +122,10 @@ const routes: Routes = [
     component: WholesalerCreateComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.create
-    }
+    },
+    // resolve: {
+    //   listLevel: ListLevelAreaResolver
+    // }
   },
   {
     path: "wholesaler/edit",
