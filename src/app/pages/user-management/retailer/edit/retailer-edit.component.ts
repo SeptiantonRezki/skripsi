@@ -15,6 +15,7 @@ import { RetailerService } from "../../../../services/user-management/retailer.s
 export class RetailerEditComponent {
   formRetailer: FormGroup;
   formdataErrors: any;
+  onLoad: Boolean;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -41,6 +42,7 @@ export class RetailerEditComponent {
     private dataService: DataService,
     private RetailerService: RetailerService
   ) {
+    this.onLoad = false;
     this.formdataErrors = {
       name: {},
       address: {},
@@ -63,6 +65,8 @@ export class RetailerEditComponent {
   }
 
   ngOnInit() {
+    
+
     this.formRetailer = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
@@ -90,6 +94,7 @@ export class RetailerEditComponent {
         { name: "Status Non Aktif", value: "inactive" }
       ];
     }
+    this.onLoad = true;
   }
 
   setDetailRetailer() {
