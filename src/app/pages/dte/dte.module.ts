@@ -49,6 +49,7 @@ import {
   MAT_DATE_LOCALE
 } from "@angular/material/core";
 import { ListAudienceDialogComponent } from "./schedule-program/dialog/list-audience-dialog.component";
+import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 
 export const MY_FORMATS = {
   parse: {
@@ -120,6 +121,7 @@ export const MY_FORMATS = {
     AudienceEditComponent
   ],
   providers: [
+    PendingChangesGuard,
     ListTradeProgramResolver,
     ListTemplateResolver,
     ListSchedulerResolver,

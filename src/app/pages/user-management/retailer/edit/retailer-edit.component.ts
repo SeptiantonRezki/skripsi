@@ -34,13 +34,19 @@ export class RetailerEditComponent {
     { name: "SRC", value: "SRC" }
   ];  
 
+  listLevelArea: any[];
+  list: any;
+
+  areaFromLogin;
+  detailAreaSelected: any[];
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
-    private RetailerService: RetailerService
+    private retailerService: RetailerService
   ) {
     this.onLoad = false;
     this.formdataErrors = {
@@ -57,11 +63,26 @@ export class RetailerEditComponent {
       InternalClassification: {}
     };
 
-    this.detailRetailer = this.dataService.getFromStorage(
-      "detail_retailer"
-    );
+    this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
+    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
 
-    console.log(this.detailRetailer);
+    this.listLevelArea = [
+      {
+        "id": 1,
+        "parent_id": null,
+        "code": "SLSNTL      ",
+        "name": "Sales National"
+      }
+    ];
+
+    this.list = {
+      zone: [],
+      region: [],
+      area: [],
+      salespoint: [],
+      district: [],
+      territory: []
+    }
   }
 
   ngOnInit() {
@@ -74,7 +95,13 @@ export class RetailerEditComponent {
       owner: ["", Validators.required],
       phone: ["", Validators.required],
       status: ["", Validators.required],
+      national: ["", Validators.required],
+      zone: ["", Validators.required],
+      salespoint: ["", Validators.required],
+      region: ["", Validators.required],
       area: ["", Validators.required],
+      district: ["", Validators.required],
+      territory: ["", Validators.required],
       latitude: [""],
       longitude: [""],
       type: ["", Validators.required],
@@ -84,9 +111,9 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
 
-    this.setDetailRetailer();
+    // this.setDetailRetailer();
     
-    if(this.formRetailer.get('status').value === 'not-registered'){
+    if(this.detailRetailer.status === 'not-registered'){
       this.formRetailer.get('status').disable();
     }else{
       this.listStatus = [
@@ -95,9 +122,76 @@ export class RetailerEditComponent {
       ];
     }
     this.onLoad = true;
+    this.retailerService.getParentArea({ parent: this.detailRetailer.area_id[0] }).subscribe(res => {
+      this.detailAreaSelected = res.data;
+      this.onLoad = false;
+
+      this.initArea();
+      this.initFormGroup();
+    })
   }
 
-  setDetailRetailer() {
+  initArea() {
+    this.areaFromLogin.map(item => {
+      switch (item.type.trim()) {
+        case 'national':
+          this.formRetailer.get('national').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break
+        case 'division':
+          this.formRetailer.get('zone').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+        case 'region':
+          this.formRetailer.get('region').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+        case 'area':
+          this.formRetailer.get('area').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+        case 'salespoint':
+          this.formRetailer.get('salespoint').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+        case 'district':
+          this.formRetailer.get('district').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+        case 'territory':
+          this.formRetailer.get('territory').disable();
+          // this.formRetailer.get('national').setValue(item.id);
+          break;
+      }
+    })
+  }
+
+  initFormGroup() {
+    this.detailAreaSelected.map(item => {
+      let level_desc = '';
+      switch (item.level_desc.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          break
+        case 'division':
+          level_desc = 'region';
+          break;
+        case 'region':
+          level_desc = 'area';
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          break;
+        case 'district':
+          level_desc = 'territory';
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+
     this.formRetailer.setValue({
       name: this.detailRetailer.name,
       address: this.detailRetailer.address,
@@ -105,15 +199,146 @@ export class RetailerEditComponent {
       owner: this.detailRetailer.owner,
       phone: this.detailRetailer.phone.replace('+62', ''),
       status: this.detailRetailer.status,
-      area: this.detailRetailer.area_id[0],
       latitude: this.detailRetailer.latitude,
       longitude: this.detailRetailer.longitude,
       type: this.detailRetailer.type_hms,
-      InternalClassification: this.detailRetailer.classification
+      InternalClassification: this.detailRetailer.classification,
+      national: this.getArea('national'),
+      zone: this.getArea('division'),
+      region: this.getArea('region'),
+      area: this.getArea('area'),
+      salespoint: this.getArea('salespoint'),
+      district: this.getArea('district'),
+      territory: this.getArea('teritory'),
     });
-    
-    // console.log(this.formRetailer.get('status').value);
   }
+
+  getAudienceArea(selection, id) {
+    let item: any;
+    switch (selection) {
+      case 'zone':
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.filter(item => item.name !== 'all');
+          });
+
+          this.formRetailer.get('region').setValue('');
+          this.formRetailer.get('area').setValue('');
+          this.formRetailer.get('salespoint').setValue('');
+          this.formRetailer.get('district').setValue('');
+          this.formRetailer.get('territory').setValue('');
+          this.list['region'] = [];
+          this.list['area'] = [];
+          this.list['salespoint'] = [];
+          this.list['district'] = [];
+          this.list['territory'] = [];
+        break;
+      case 'region':
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+          if (item.name !== 'all') {
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+          } else {
+            this.list[selection] = []
+          }
+
+          this.formRetailer.get('region').setValue('');
+          this.formRetailer.get('area').setValue('');
+          this.formRetailer.get('salespoint').setValue('');
+          this.formRetailer.get('district').setValue('');
+          this.formRetailer.get('territory').setValue('');
+          this.list['area'] = [];
+          this.list['salespoint'] = [];
+          this.list['district'] = [];
+          this.list['territory'] = [];
+        break;
+      case 'area':
+          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+          if (item.name !== 'all') {
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+          } else {
+            this.list[selection] = []
+          }
+
+          this.formRetailer.get('area').setValue('');
+          this.formRetailer.get('salespoint').setValue('');
+          this.formRetailer.get('district').setValue('');
+          this.formRetailer.get('territory').setValue('');
+          this.list['salespoint'] = [];
+          this.list['district'] = [];
+          this.list['territory'] = [];
+        break;
+      case 'salespoint':
+          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+          if (item.name !== 'all') {
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+          } else {
+            this.list[selection] = []
+          }
+
+          this.formRetailer.get('salespoint').setValue('');
+          this.formRetailer.get('district').setValue('');
+          this.formRetailer.get('territory').setValue('');
+          this.list['district'] = [];
+          this.list['territory'] = [];
+        break;
+      case 'district':
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+          if (item.name !== 'all') {
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+          } else {
+            this.list[selection] = []
+          }
+
+          this.formRetailer.get('district').setValue('');
+          this.formRetailer.get('territory').setValue('');
+          this.list['territory'] = [];
+        break;
+      case 'territory':
+          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+          if (item.name !== 'all') {
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+          } else {
+            this.list[selection] = []
+          }
+
+          this.formRetailer.get('territory').setValue('');
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  getArea(selection) {
+    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  }
+
+  // setDetailRetailer() {
+  //   this.formRetailer.setValue({
+  //     name: this.detailRetailer.name,
+  //     address: this.detailRetailer.address,
+  //     business_code: this.detailRetailer.code,
+  //     owner: this.detailRetailer.owner,
+  //     phone: this.detailRetailer.phone.replace('+62', ''),
+  //     status: this.detailRetailer.status,
+  //     area: this.detailRetailer.area_id[0],
+  //     latitude: this.detailRetailer.latitude,
+  //     longitude: this.detailRetailer.longitude,
+  //     type: this.detailRetailer.type_hms,
+  //     InternalClassification: this.detailRetailer.classification
+  //   });
+    
+  //   // console.log(this.formRetailer.get('status').value);
+  // }
 
   submit() {
     if (this.formRetailer.valid) {
@@ -125,25 +350,23 @@ export class RetailerEditComponent {
         owner: this.formRetailer.get("owner").value,
         phone: '+62' + this.formRetailer.get("phone").value,
         status: this.formRetailer.get("status").value,
-        areas: [this.formRetailer.get("area").value],
+        areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value,
         longitude: this.formRetailer.get("longitude").value,
         type: this.formRetailer.get("type").value,
         InternalClassification: this.formRetailer.get("InternalClassification").value
       };
 
-      this.RetailerService
-        .put(body, { retailer_id: this.detailRetailer.id })
-        .subscribe(
-          res => {
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Diubah"
-            });
-            this.router.navigate(["user-management", "retailer"]);
-            window.localStorage.removeItem("detail_retailer");
-          },
-          err => {}
-        );
+      this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
+        res => {
+          this.dialogService.openSnackBar({
+            message: "Data Berhasil Diubah"
+          });
+          this.router.navigate(["user-management", "retailer"]);
+          window.localStorage.removeItem("detail_retailer");
+        },
+        err => {}
+      );
     } else {
       this.dialogService.openSnackBar({
         message: "Silakan lengkapi data terlebih dahulu!"

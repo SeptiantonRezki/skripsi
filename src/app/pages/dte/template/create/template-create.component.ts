@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, HostListener } from "@angular/core";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
@@ -8,6 +8,7 @@ import { DialogService } from "../../../../services/dialog.service";
 import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import * as _ from 'underscore';
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-template-create",
@@ -29,6 +30,21 @@ export class TemplateCreateComponent {
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
+
+
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    return true;
+  }
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -60,6 +76,10 @@ export class TemplateCreateComponent {
     })
 
     this.templateTaskForm.get('material_description').disable();
+
+    this.templateTaskForm.valueChanges.subscribe(res => {
+      this.valueChange = true;
+    })
   }
 
   addAdditional(idx) {

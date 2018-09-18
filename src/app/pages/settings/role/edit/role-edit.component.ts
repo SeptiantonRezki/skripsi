@@ -310,7 +310,7 @@ export class RoleEditComponent {
       this.accessService.put(body, { role_id: this.roleId }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
-          this.router.navigate(['staff', 'role']);
+          this.router.navigate(['settings', 'access']);
         },
         err => {
           console.log(err.error.message);

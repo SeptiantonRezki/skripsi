@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { DateAdapter } from '@angular/material';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TradeProgramService } from 'app/services/dte/trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-trade-edit',
@@ -25,6 +26,23 @@ export class TradeEditComponent {
 
   files: File;
   validComboDrag: boolean;
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    if (this.files) {
+      return false;
+    }
+
+    return true;
+  }
   
   constructor(
     private router: Router,
@@ -69,6 +87,10 @@ export class TradeEditComponent {
       end_date: this.detailFormTrade.end_date,
       budget: this.detailFormTrade.budget,
       coin_expiry_date: this.detailFormTrade.coin_expiry_date
+    })
+
+    this.formTradeProgram.valueChanges.subscribe(res => {
+      this.valueChange = true;
     })
 
     this.setMinEndDate('init');

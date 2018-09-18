@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatDialog, MatDialogConfig } from '@angular/material';
@@ -9,6 +9,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { UploadImageComponent } from '../dialog/upload-image/upload-image.component';
 import { DataService } from '../../../../services/data.service';
 import * as _ from 'underscore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-template-edit',
@@ -32,6 +33,21 @@ export class TemplateEditComponent {
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
+
+
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    return true;
+  }
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -69,6 +85,10 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material_description').disable();
 
     this.setValue();
+
+    this.templateTaskForm.valueChanges.subscribe(res => {
+      this.valueChange = true;
+    })
   }
 
   setValue() {

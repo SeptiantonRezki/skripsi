@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import * as moment from 'moment';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DialogService } from '../../../../services/dialog.service';
@@ -6,6 +6,7 @@ import { TradeProgramService } from '../../../../services/dte/trade-program.serv
 import { Router } from '@angular/router';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { DateAdapter } from '@angular/material';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-trade-create',
@@ -22,6 +23,23 @@ export class TradeCreateComponent {
 
   files: File;
   validComboDrag: boolean;
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    if (this.files) {
+      return false;
+    }
+
+    return true;
+  }
   
   constructor(
     private router: Router,
@@ -55,6 +73,10 @@ export class TradeCreateComponent {
 
     this.formTradeProgram.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formTradeProgram, this.formTradeProgramError);
+    })
+
+    this.formTradeProgram.valueChanges.subscribe(res => {
+      this.valueChange = true;
     })
   }
 
