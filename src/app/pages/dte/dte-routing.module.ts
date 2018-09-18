@@ -14,6 +14,7 @@ import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-p
 import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedule-program-create.component";
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
 import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, ListRetailerResolver } from "../../resolver/dte.resolver";
+import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 
 const routes: Routes = [
   {
@@ -33,14 +34,16 @@ const routes: Routes = [
     component: TemplateCreateComponent,
     data: {
       breadcrumbs: brConfig.dte.template.create
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "template-task/edit",
     component: TemplateEditComponent,
     data: {
       breadcrumbs: brConfig.dte.template.edit
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "trade-program",
@@ -54,14 +57,16 @@ const routes: Routes = [
     component: TradeCreateComponent,
     data: {
       breadcrumbs: brConfig.dte.trade.create
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "trade-program/edit",
     component: TradeEditComponent,
     data: {
       breadcrumbs: brConfig.dte.trade.edit
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "schedule-trade-program",
@@ -75,7 +80,8 @@ const routes: Routes = [
     component: ScheduleProgramCreateComponent,
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.create
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "schedule-trade-program/detail/:id",
@@ -86,7 +92,8 @@ const routes: Routes = [
     resolve: {
       listTradeProgram: ListTradeProgramResolver,
       listTemplate: ListTemplateResolver
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "audience",
@@ -104,7 +111,8 @@ const routes: Routes = [
     resolve: {
       listScheduler: ListSchedulerResolver,
       listRetailer: ListRetailerResolver
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: "audience/edit",
@@ -115,7 +123,8 @@ const routes: Routes = [
     resolve: {
       listScheduler: ListSchedulerResolver,
       listRetailer: ListRetailerResolver
-    }
+    },
+    canDeactivate: [PendingChangesGuard]
   }
 ];
 
