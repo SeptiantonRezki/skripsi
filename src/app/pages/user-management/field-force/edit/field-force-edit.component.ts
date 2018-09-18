@@ -290,11 +290,50 @@ export class FieldForceEditComponent {
   }
 
   submit() {
-    if (this.formFF.valid) {
 
-    } else {
-      commonFormValidator.validateAllFields(this.formFF);
-    }
+    if (this.formFF.valid) {  
+
+      // fullname: this.detailFF.fullname,
+      // username: this.detailFF.username,
+      // status: this.detailFF.status,
+      // national: this.getArea('national'),
+      // zone: this.getArea('division'),
+      // region: this.getArea('region'),
+      // area: this.getArea('area'),
+      // salespoint: this.getArea('salespoint'),
+      // district: this.getArea('district'),
+      // territory: this.getArea('teritory'),
+      // password: [""],
+      // password_confirmation: [""],
+
+
+      let body = {
+        _method: "PUT",
+        username: this.formFF.get("username").value,
+        name: this.formFF.get("fullname").value,
+        password: this.formFF.get("password").value,
+        password_confirmation: this.formFF.get("password_confirmation").value,
+        areas: [this.formFF.get('territory').value],
+        status: this.formFF.get("status").value
+      };
+
+    this.fieldforceService
+      .put(body, { fieldforce_id: this.detailFF.id })
+      .subscribe(
+        res => {
+          this.dialogService.openSnackBar({
+            message: "Data Berhasil Diubah"
+          });
+          this.router.navigate(["user-management", "field-force"]);
+          window.localStorage.removeItem("detail_field_force");
+        },
+        err => {}
+      );
+  } else {
+    this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+    commonFormValidator.validateAllFields(this.formFF);
+  }
+
   }
 
 }
