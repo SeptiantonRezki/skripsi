@@ -62,6 +62,9 @@
                   <mat-error *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
                     Nilai Coin Tugas Terkirim harus diisi
                   </mat-error>
+                  <mat-error *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
+                    Nilai Coin Tugas Terkirim tidak boleh kurang dari 0
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
@@ -69,6 +72,9 @@
                     numericOnly>
                   <mat-error *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
                     Nilai Coin Tugas Disetujui harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="item.controls['coin_approved'].hasError('min') && item.controls['coin_approved'].touched">
+                    Nilai Coin Tugas Disetujui tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">

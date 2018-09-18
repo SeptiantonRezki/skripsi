@@ -55,8 +55,8 @@
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
         [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-        [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
-        [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
 
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -86,20 +86,21 @@
         <ngx-datatable-column [sortable]="false" name="Audience / Grup" prop="audience_name"></ngx-datatable-column>
 
         <ngx-datatable-column [sortable]="false" name="Status" prop="status_scheduler">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <div class="name-container">
-                  <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
-                    [ngClass]="row.status_scheduler == 'publish' ? 'mat-green-800-bg' : 'mat-yellow-900-bg'">
-                    {{row.status_scheduler}}
-                  </p>
-                </div>
-            </ng-template>
-          </ngx-datatable-column>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+                [ngClass]="row.status_scheduler == 'publish' ? 'mat-green-800-bg' : 'mat-yellow-900-bg'">
+                {{row.status_scheduler}}
+              </p>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row pl-8">
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteStp(row.id)">
+              <button mat-icon-button color="primary" [disabled]="row.status_scheduler === 'publish'" matTooltip="Hapus"
+                (click)="deleteStp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

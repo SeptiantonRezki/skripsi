@@ -92,8 +92,7 @@ const routes: Routes = [
     resolve: {
       listTradeProgram: ListTradeProgramResolver,
       listTemplate: ListTemplateResolver
-    },
-    canDeactivate: [PendingChangesGuard]
+    }
   },
   {
     path: "audience",
