@@ -4,6 +4,7 @@ import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
 import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
+import { DataService } from "app/services/data.service";
 
 @Component({
   selector: 'app-retailer-create',
@@ -11,37 +12,46 @@ import { Router, ActivatedRoute } from "@angular/router";
   styleUrls: ['./retailer-create.component.scss']
 })
 export class RetailerCreateComponent{
-// Vertical Stepper
-verticalStepperStep1: FormGroup;
-verticalStepperStep2: FormGroup;
-verticalStepperStep3: FormGroup;
-verticalStepperStep4: FormGroup;
+  // Vertical Stepper
+  verticalStepperStep1: FormGroup;
+  verticalStepperStep2: FormGroup;
+  verticalStepperStep3: FormGroup;
+  verticalStepperStep4: FormGroup;
 
-verticalStepperStep1Errors: any;
-verticalStepperStep2Errors: any;
-verticalStepperStep3Errors: any;
-verticalStepperStep4Errors: any;
+  verticalStepperStep1Errors: any;
+  verticalStepperStep2Errors: any;
+  verticalStepperStep3Errors: any;
+  verticalStepperStep4Errors: any;
 
-submitting: Boolean;
+  submitting: Boolean;
 
-listType: any[] = [
-  { name: "General Trade", value: "General Trade" },
-  { name: "Modern Trade", value: "Modern Trade" }
-];
+  listLevelArea: any[];
+  list: any;
 
-listIC: any[] = [
-  { name: "REGULAR", value: "REGULAR" },
-  { name: "SRC", value: "SRC" }
-];
+  typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
+  areaFromLogin;
+
+  listType: any[] = [
+    { name: "General Trade", value: "General Trade" },
+    { name: "Modern Trade", value: "Modern Trade" }
+  ];
+
+  listIC: any[] = [
+    { name: "REGULAR", value: "REGULAR" },
+    { name: "SRC", value: "SRC" }
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
-    private RetailerService: RetailerService,
+    private retailerService: RetailerService,
     private dialogService: DialogService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dataService: DataService
     ) { 
       this.submitting = false;
+      this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+
       this.verticalStepperStep1Errors = {
         name: {},
         address: {},
@@ -51,15 +61,41 @@ listIC: any[] = [
         owner: {},
         phone: {}
       };
+
       this.verticalStepperStep3Errors = {
+        national: {},
+        zone: {},
+        region: {},
         area: {},
+        salespoint: {},
+        district: {},
+        territory: {},
         latitude: {},
         longitude: {}
       };
+
       this.verticalStepperStep4Errors = {
         type: {},
         InternalClassification: {}
       };
+
+      this.listLevelArea = [
+        {
+          "id": 1,
+          "parent_id": null,
+          "code": "SLSNTL      ",
+          "name": "Sales National"
+        }
+      ];
+  
+      this.list = {
+        zone: [],
+        region: [],
+        area: [],
+        salespoint: [],
+        district: [],
+        territory: []
+      }
     }
   
     ngOnInit() {
@@ -75,7 +111,13 @@ listIC: any[] = [
       });
   
       this.verticalStepperStep3 = this.formBuilder.group({
+        national: ["", Validators.required],
+        zone: ["", Validators.required],
+        region: ["", Validators.required],
         area: ["", Validators.required],
+        salespoint: ["", Validators.required],
+        district: ["", Validators.required],
+        territory: ["", Validators.required],
         latitude: ["", Validators.required],
         longitude: ["", Validators.required],
       });
@@ -113,6 +155,156 @@ listIC: any[] = [
           this.verticalStepperStep4Errors
         );
       });
+
+      this.initArea();
+    }
+
+    initArea() {
+      this.areaFromLogin.map(item => {
+        let level_desc = '';
+        switch (item.type.trim()) {
+          case 'national':
+            level_desc = 'zone';
+            this.verticalStepperStep3.get('national').setValue(item.id);
+            this.verticalStepperStep3.get('national').disable();
+            break
+          case 'division':
+            level_desc = 'region';
+            this.verticalStepperStep3.get('zone').setValue(item.id);
+            this.verticalStepperStep3.get('zone').disable();
+            break;
+          case 'region':
+            level_desc = 'area';
+            this.verticalStepperStep3.get('region').setValue(item.id);
+            this.verticalStepperStep3.get('region').disable();
+            break;
+          case 'area':
+            level_desc = 'salespoint';
+            this.verticalStepperStep3.get('area').setValue(item.id);
+            this.verticalStepperStep3.get('area').disable();
+            break;
+          case 'salespoint':
+            level_desc = 'district';
+            this.verticalStepperStep3.get('salespoint').setValue(item.id);
+            this.verticalStepperStep3.get('salespoint').disable();
+            break;
+          case 'district':
+            level_desc = 'territory';
+            this.verticalStepperStep3.get('district').setValue(item.id);
+            this.verticalStepperStep3.get('district').disable();
+            break;
+          case 'territory':
+            this.verticalStepperStep3.get('territory').setValue(item.id);
+            this.verticalStepperStep3.get('territory').disable();
+            break;
+        }
+        this.getAudienceArea(level_desc, item.id);
+      });
+    }
+  
+    getAudienceArea(selection, id) {
+      let item: any;
+      switch (selection) {
+        case 'zone':
+            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+              this.list[selection] = res.filter(item => item.name !== 'all');
+            });
+  
+            this.verticalStepperStep3.get('region').setValue('');
+            this.verticalStepperStep3.get('area').setValue('');
+            this.verticalStepperStep3.get('salespoint').setValue('');
+            this.verticalStepperStep3.get('district').setValue('');
+            this.verticalStepperStep3.get('territory').setValue('');
+            this.list['region'] = [];
+            this.list['area'] = [];
+            this.list['salespoint'] = [];
+            this.list['district'] = [];
+            this.list['territory'] = [];
+          break;
+        case 'region':
+            item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+            if (item.name !== 'all') {
+              this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+                this.list[selection] = res.filter(item => item.name !== 'all');
+              });
+            } else {
+              this.list[selection] = []
+            }
+  
+            this.verticalStepperStep3.get('region').setValue('');
+            this.verticalStepperStep3.get('area').setValue('');
+            this.verticalStepperStep3.get('salespoint').setValue('');
+            this.verticalStepperStep3.get('district').setValue('');
+            this.verticalStepperStep3.get('territory').setValue('');
+            this.list['area'] = [];
+            this.list['salespoint'] = [];
+            this.list['district'] = [];
+            this.list['territory'] = [];
+          break;
+        case 'area':
+            item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+            if (item.name !== 'all') {
+              this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+                this.list[selection] = res.filter(item => item.name !== 'all');
+              });
+            } else {
+              this.list[selection] = []
+            }
+  
+            this.verticalStepperStep3.get('area').setValue('');
+            this.verticalStepperStep3.get('salespoint').setValue('');
+            this.verticalStepperStep3.get('district').setValue('');
+            this.verticalStepperStep3.get('territory').setValue('');
+            this.list['salespoint'] = [];
+            this.list['district'] = [];
+            this.list['territory'] = [];
+          break;
+        case 'salespoint':
+            item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+            if (item.name !== 'all') {
+              this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+                this.list[selection] = res.filter(item => item.name !== 'all');
+              });
+            } else {
+              this.list[selection] = []
+            }
+  
+            this.verticalStepperStep3.get('salespoint').setValue('');
+            this.verticalStepperStep3.get('district').setValue('');
+            this.verticalStepperStep3.get('territory').setValue('');
+            this.list['district'] = [];
+            this.list['territory'] = [];
+          break;
+        case 'district':
+            item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+            if (item.name !== 'all') {
+              this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+                this.list[selection] = res.filter(item => item.name !== 'all');
+              });
+            } else {
+              this.list[selection] = []
+            }
+  
+            this.verticalStepperStep3.get('district').setValue('');
+            this.verticalStepperStep3.get('territory').setValue('');
+            this.list['territory'] = [];
+          break;
+        case 'territory':
+            item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+            if (item.name !== 'all') {
+              this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+                this.list[selection] = res.filter(item => item.name !== 'all');
+              });
+            } else {
+              this.list[selection] = []
+            }
+  
+            this.verticalStepperStep3.get('territory').setValue('');
+          break;
+      
+        default:
+          break;
+      }
     }
   
     selectionChange(event) {
@@ -128,15 +320,15 @@ listIC: any[] = [
           address: this.verticalStepperStep1.get("address").value,
           business_code: this.verticalStepperStep1.get("business_code").value,
           owner: this.verticalStepperStep2.get("owner").value,
-          phone: '0' + this.verticalStepperStep2.get("phone").value,
-          areas: [this.verticalStepperStep3.get("area").value],
-          latitude: [this.verticalStepperStep3.get("latitude").value],
-          longitude: [this.verticalStepperStep3.get("longitude").value],
-          type: [this.verticalStepperStep4.get("type").value],
-          InternalClassification: [this.verticalStepperStep4.get("InternalClassification").value]
+          phone: '+62' + this.verticalStepperStep2.get("phone").value,
+          areas: [this.verticalStepperStep3.get("territory").value],
+          latitude: this.verticalStepperStep3.get("latitude").value,
+          longitude: this.verticalStepperStep3.get("longitude").value,
+          type: this.verticalStepperStep4.get("type").value,
+          InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
         };
   
-        this.RetailerService.create(body).subscribe(
+        this.retailerService.create(body).subscribe(
           res => {
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan"

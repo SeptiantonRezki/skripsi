@@ -2,10 +2,10 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Field Force'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button>
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -23,11 +23,10 @@
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
-        (select)="onSelect($event)">
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]" (select)="onSelect($event)">
 
-        <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
+        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
@@ -36,7 +35,7 @@
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected"></mat-checkbox>
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -65,7 +64,10 @@
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
-            <div class="button-row pl-8">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
               <button mat-icon-button color="primary" (click)="deleteFf(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

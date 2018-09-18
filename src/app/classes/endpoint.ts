@@ -60,6 +60,7 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/field-force`,
         put: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
         delete: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
+        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
@@ -78,7 +79,11 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/user/retailer`,
         create: `${AYO_API}/api/${type_api}/user/retailer`,
         put: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`
+        delete: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
+        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       banner: {
         get: `${AYO_API}/api/${type_api}/content/banner`,
@@ -150,7 +155,10 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/role`,
         put: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
         delete: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
-        list_menu: `${AYO_API}/api/${type_api}/user/role`
+        list_menu: `${AYO_API}/api/${type_api}/user/role/available_permissions`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

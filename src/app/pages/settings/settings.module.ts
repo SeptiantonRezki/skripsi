@@ -15,7 +15,8 @@ import {
   MatSelectModule, 
   MatInputModule, 
   MatFormFieldModule, 
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatDividerModule
 } from "@angular/material";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
@@ -37,7 +38,8 @@ import { ListMenuResolver } from "../../resolver/settings.resolver";
     MatProgressBarModule,
     MatSelectModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDividerModule
   ],
   declarations: [
     RoleIndexComponent,

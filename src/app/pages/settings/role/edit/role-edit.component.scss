@@ -1,0 +1,57 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+  .faq {
+    flex: 1 0 auto; // max-width: 640px;
+
+    .title {
+      font-size: 25px;
+      font-weight: 500;
+      padding: 30px 0 0 16px;
+    }
+
+    .item {
+      padding: 10px 16px;
+      margin: 10px 35px 50px 0px;
+
+      .question {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .answer {
+        font-size: 16px;
+        line-height: 1.5;
+        color: rgba(0, 0, 0, 0.54);
+      }
+
+      .access-name {
+        font-size: .75em;
+      }
+    }
+
+    .divider {
+      width: 1px;
+      margin: 0 20px;
+      background-color: rgba(0, 0, 0, 0.12);
+      height: 124px;
+    }
+
+    .line {
+      border-right: 1px solid #ccc;
+    }
+
+    .separator {
+      border-bottom: 10px solid #ccc !important;
+    }
+
+    @media screen and (max-width: 900px) {
+      .divider {
+        width: 0px;
+        margin: 0px;
+        background-color: none;
+        height: 0px;
+      }
+    }
+  }
+}

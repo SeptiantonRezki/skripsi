@@ -35,9 +35,6 @@ const routes: Routes = [
     component: RoleEditComponent,
     data: {
       breadcrumbs: brConfig.settings.access.edit
-    },
-    resolve: {
-      menu: ListMenuResolver
     }
   },
   {

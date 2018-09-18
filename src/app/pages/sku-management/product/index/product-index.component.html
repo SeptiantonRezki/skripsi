@@ -73,7 +73,10 @@
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
-            <div class="button-row pl-8">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" matTooltip="Ubah" [routerLink]="['/product', 'edit', row.id]">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
               <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
