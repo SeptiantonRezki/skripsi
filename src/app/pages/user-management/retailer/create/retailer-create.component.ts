@@ -37,7 +37,7 @@ export class RetailerCreateComponent{
   ];
 
   listIC: any[] = [
-    { name: "REGULAR", value: "REGULAR" },
+    { name: "NON-SRC", value: "NON-SRC" },
     { name: "SRC", value: "SRC" }
   ];
 
@@ -118,8 +118,8 @@ export class RetailerCreateComponent{
         salespoint: ["", Validators.required],
         district: ["", Validators.required],
         territory: ["", Validators.required],
-        latitude: ["", Validators.required],
-        longitude: ["", Validators.required],
+        latitude: [""],
+        longitude: [""]
       });
   
       this.verticalStepperStep4 = this.formBuilder.group({

@@ -31,6 +31,7 @@ export class AdminPrincipalCreateComponent {
     this.submitting = false;
     this.verticalStepperStep1Errors = {
       nama: {},
+      username: {},
       email: {}
     };
     this.verticalStepperStep2Errors = {
@@ -43,6 +44,7 @@ export class AdminPrincipalCreateComponent {
   ngOnInit() {
     this.verticalStepperStep1 = this.formBuilder.group({
       nama: ["", Validators.required],
+      username: [""],
       email: ["", Validators.required]
     });
 
@@ -75,6 +77,7 @@ export class AdminPrincipalCreateComponent {
 
       let body = {
         name: this.verticalStepperStep1.get("nama").value,
+        username: this.verticalStepperStep1.get("username").value,
         email: this.verticalStepperStep1.get("email").value,
         role_id: this.verticalStepperStep2.get("role").value,
         status: 'active'

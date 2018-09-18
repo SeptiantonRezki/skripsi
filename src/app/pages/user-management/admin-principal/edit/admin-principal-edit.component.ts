@@ -32,6 +32,7 @@ export class AdminPrincipalEditComponent {
   ) {
     this.formdataErrors = {
       name: {},
+      username: {},
       email: {},
       role: {}
     };
@@ -45,6 +46,7 @@ export class AdminPrincipalEditComponent {
   ngOnInit() {
     this.formAdmin = this.formBuilder.group({
       name: ["", Validators.required],
+      username: [""],
       email: ["", Validators.required],
       role: ["", Validators.required],
       status: [""],
@@ -62,6 +64,7 @@ export class AdminPrincipalEditComponent {
   setDetailAdminPrincipal() {
     this.formAdmin.setValue({
       name: this.detailAdminPrincipal.fullname,
+      username: this.detailAdminPrincipal.username,
       email: this.detailAdminPrincipal.email,
       role: this.detailAdminPrincipal.role_id,
       status: this.detailAdminPrincipal.status,
@@ -75,6 +78,7 @@ export class AdminPrincipalEditComponent {
       let body = {
         _method: "PUT",
         name: this.formAdmin.get("name").value,
+        username: this.formAdmin.get("username").value,
         email: this.formAdmin.get("email").value,
         role_id: this.formAdmin.get("role").value,
         status: this.formAdmin.get("status").value

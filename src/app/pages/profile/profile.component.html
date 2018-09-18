@@ -1,0 +1,74 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Profil Saya'">
+
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <form [formGroup]="changePassword" autocomplete="off">
+      <div class="ayo-main-wrapper mat-bg-white">
+        <div fxLayout="row" class="pb-16" fxLayoutAlign="start center">
+          <h2 class="">Profil Saya</h2>
+        </div>
+        <div class="ayo-content-middle pb-48">
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Nama" [value]="profile.fullname" readonly>
+            </mat-form-field>
+          </div>
+          
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Username" [value]="profile.username" readonly>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Email" [value]="profile.email" readonly>
+            </mat-form-field>
+          </div>
+          
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Peran" [value]="profile.role_name" readonly>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="pt-16" fxLayoutAlign="start center">
+            <h2 class="">Ubah Kata Sandi Baru</h2>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="password" formControlName="old_password" placeholder="Kata Sandi Sekarang">
+              <mat-error *ngIf="changePassword.controls['old_password'].hasError('required') && changePassword.controls['old_password'].touched">
+                Kata Sandi Sekarang harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="password" formControlName="password" placeholder="Kata Sandi Baru">
+              <mat-error *ngIf="changePassword.controls['password'].hasError('required') && changePassword.controls['password'].touched">
+                Kata Sandi Baru harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="password" formControlName="password_confirmation" placeholder="Konfirmasi Kata Sandi Baru">
+              <mat-error *ngIf="changePassword.controls['password_confirmation'].hasError('required') && changePassword.controls['password_confirmation'].touched">
+                Konfirmasi Kata Sandi Baru harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="confirm pt-8 pb-24" fxLayout="row">
+          <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
