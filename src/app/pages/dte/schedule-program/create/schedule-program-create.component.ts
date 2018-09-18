@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DateAdapter, MatDatepicker } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -32,6 +32,20 @@ export class ScheduleProgramCreateComponent {
 
   filteredTpOptions: Observable<string[]>;
   filteredTemplateOptions: Observable<string[]>;
+  
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    return true;
+  }
 
   constructor(
     private adapter: DateAdapter<any>,
@@ -81,13 +95,17 @@ export class ScheduleProgramCreateComponent {
     this.formSchedule.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formSchedule, this.formScheduleError);
     })
+
+    this.formSchedule.valueChanges.subscribe(res => {
+      this.valueChange = true;
+    })
   }
 
   createTaskTemplate(): FormGroup {
     return this.formBuilder.group({
       task_template_id: ["", Validators.required],
-      coin_delivered: ["", Validators.required],
-      coin_approved: ["", Validators.required],
+      coin_delivered: ["", [Validators.required, Validators.min(0)]],
+      coin_approved: ["", [Validators.required, Validators.min(0)]],
       start_date: ["", Validators.required],
       end_date: ["", Validators.required],
       repeated: ["by-weekly", Validators.required],

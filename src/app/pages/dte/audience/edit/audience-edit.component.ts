@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,6 +28,20 @@ export class AudienceEditComponent {
   loadingIndicator: Boolean;
 
   searchRetailer = new Subject<string>();
+
+  valueChange: Boolean;
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.valueChange) {
+      return false;
+    }
+
+    return true;
+  }
 
   constructor(
     private router: Router,
@@ -86,6 +100,10 @@ export class AudienceEditComponent {
         this.formAudience.get('min').enable({emitEvent: false});
         this.formAudience.get('max').enable({emitEvent: false});
       }
+    })
+
+    this.formAudience.valueChanges.subscribe(() => {
+      this.valueChange = true;
     })
   }
 
