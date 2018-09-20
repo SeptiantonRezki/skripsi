@@ -1,3 +1,57 @@
-<p>
-  privacy-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Kebijakan Privasi'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formPrivacy">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">Buat Kebijakan Privasi</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <!-- <div ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                accept="image/*" [(dragFiles)]="dragFiles" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+                <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                  <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                  <br>
+                  <span matPrefix>Tarik gambar kesini /
+                    <strong>Pilih File</strong>
+                  </span>
+                </div>
+              </div> -->
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="text" formControlName="title" placeholder="Judul Kebijakan Privasi">
+              <mat-error *ngIf="formPrivacy.controls['title'].hasError('required') && formPrivacy.controls['title'].touched">
+                Judul Kebijakan Privasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="user" placeholder="Grup Pengguna">
+                <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formPrivacy.controls['user'].hasError('required') && formPrivacy.controls['user'].touched">
+                Grup Pengguna harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+            <h3 class="">Konten Kebijakan Privasi</h3>
+          </div>
+          <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+          <!-- <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPageGroup.get('body').hasError('required')">
+                Isi Halaman harus diisi
+              </mat-error> -->
+        </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

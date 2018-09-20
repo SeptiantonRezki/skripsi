@@ -130,8 +130,8 @@ export class Endpoint {
         put: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
         delete: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}`,
         reject_audience: `${AYO_API}/api/${type_api}/scheduler/reject/audience`,
-        list_tp: `${AYO_API}/api/${type_api}/creator?page=all&search=${context.param}`,
-        list_template: `${AYO_API}/api/${type_api}/template?page=all&search=${context.param}`,
+        list_tp: `${AYO_API}/api/${type_api}/creator?page=all`,
+        list_template: `${AYO_API}/api/${type_api}/template?page=all`,
         list_audience: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
       },
       audience: {
@@ -160,6 +160,24 @@ export class Endpoint {
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+      },
+      tnc: {
+        get: `${AYO_API}/api/${type_api}/content/content?type=terms-conditions`,
+        create: `${AYO_API}/api/${type_api}/content/content`,
+        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+      },
+      privacy: {
+        get: `${AYO_API}/api/${type_api}/content/content?type=privacy-policy`,
+        create: `${AYO_API}/api/${type_api}/content/content`,
+        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+      },
+      help: {
+        get: `${AYO_API}/api/${type_api}/content/content?type=help`,
+        create: `${AYO_API}/api/${type_api}/content/content`,
+        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

@@ -517,7 +517,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/content-management/term-and-condition",
+          url: "/content-management/terms-and-condition",
           name: "Syarat & Ketentuan"
         },
         {
@@ -529,7 +529,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/content-management/term-and-condition",
+          url: "/content-management/terms-and-condition",
           name: "Syarat & Ketentuan"
         },
         {
