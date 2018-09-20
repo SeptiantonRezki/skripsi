@@ -175,6 +175,19 @@ button.confirmation-button {
   }
 }
 
+.message-box {
+  padding: 16px;
+  background: #607d8b;
+  border-left: 6px solid #37474f;
+  color: #fff;
+}
+
+.message-box.warning {
+  background: #ffecb3;
+  border-left-color: #ffc107;
+  color: rgba(0, 0, 0, .87);
+}
+
 // .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
 //   border-color: #FF0C3E !important;
 // }

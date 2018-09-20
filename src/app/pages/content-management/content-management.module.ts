@@ -11,9 +11,47 @@ import { PrivacyEditComponent } from "./privacy/edit/privacy-edit.component";
 import { HelpIndexComponent } from "./help/index/help-index.component";
 import { HelpCreateComponent } from "./help/create/help-create.component";
 import { HelpEditComponent } from "./help/edit/help-edit.component";
+import { FuseSharedModule } from "@fuse/shared.module";
+import { SharedModule } from "app/shared/shared.module";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { 
+  MatButtonModule, 
+  MatCheckboxModule, 
+  MatIconModule, 
+  MatFormFieldModule, 
+  MatInputModule, 
+  MatSelectModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatDatepickerModule,
+  MatTooltipModule,
+  MatRadioModule
+} from "@angular/material";
+import { ngfModule } from "angular-file";
+import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 
 @NgModule({
-  imports: [CommonModule, ContentManagementRoutingModule],
+  imports: [
+    CommonModule, 
+    ContentManagementRoutingModule,
+    FuseSharedModule,
+    SharedModule,
+    NgxDatatableModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatTooltipModule,
+    MatRadioModule,
+    ngfModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
+  ],
   declarations: [
     TncIndexComponent,
     TncCreateComponent,
