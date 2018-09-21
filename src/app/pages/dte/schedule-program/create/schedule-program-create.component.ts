@@ -1,11 +1,11 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { DateAdapter, MatDatepicker } from '@angular/material';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { DateAdapter, MatDatepicker, MatSelect } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../../services/dialog.service';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
-import { Subject, Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
+import { startWith, map, takeUntil } from 'rxjs/operators';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import * as moment from 'moment';
 
@@ -18,6 +18,7 @@ export class ScheduleProgramCreateComponent {
   formSchedule: FormGroup;
   formScheduleError: any;
   minDate: any;
+  maxStartDateTemplate: any;
   maxDateTemplate: any;
 
   searchTradeProgram = new Subject<string>();
@@ -32,15 +33,26 @@ export class ScheduleProgramCreateComponent {
 
   filteredTpOptions: Observable<string[]>;
   filteredTemplateOptions: Observable<string[]>;
+
+  public filterTP: FormControl = new FormControl();
+  public filteredTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  public filterTask: FormControl = new FormControl();
+  public filteredTask: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
+  tradeProgramObj: any;
   
   valueChange: Boolean;
+  saveData: Boolean;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange) {
+    if (this.valueChange && !this.saveData) {
       return false;
     }
 
@@ -55,9 +67,10 @@ export class ScheduleProgramCreateComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService
   ) { 
+    this.saveData = false;
     this.adapter.setLocale("id");
-    this.listTradeProgram = [];
-    this.listTemplateTask = []
+    this.listTemplateTask = this.activatedRoute.snapshot.data["listTemplate"].data;
+    this.listTradeProgram = this.activatedRoute.snapshot.data["listTradeProgram"].data;
 
     this.formScheduleError = {
       name: {},
@@ -65,24 +78,26 @@ export class ScheduleProgramCreateComponent {
       task_templates: []
     }
 
+    this.filteredTP.next(this.listTradeProgram.slice());
+    this.filteredTask.next(this.listTemplateTask.slice());
     this.minDate = moment();
 
-    this.searchTradeProgram.debounceTime(500)
-    .flatMap(key => {
-      return Observable.of(key).delay(300);
-    })
-    .subscribe(res => {
-      this.filterTradeProgram(res);
-    })
+    // this.searchTradeProgram.debounceTime(500)
+    // .flatMap(key => {
+    //   return Observable.of(key).delay(300);
+    // })
+    // .subscribe(res => {
+    //   this.filterTradeProgram(res);
+    // })
 
-    this.searchTemplateTask.map(value => value)
-    .debounceTime(500)
-    .flatMap(key => {
-      return Observable.of(key).delay(300);
-    })
-    .subscribe(res => {
-      this.filterTemplateTask(res);
-    })
+    // this.searchTemplateTask.map(value => value)
+    // .debounceTime(500)
+    // .flatMap(key => {
+    //   return Observable.of(key).delay(300);
+    // })
+    // .subscribe(res => {
+    //   this.filterTemplateTask(res);
+    // })
   }
 
   ngOnInit() {
@@ -99,6 +114,54 @@ export class ScheduleProgramCreateComponent {
     this.formSchedule.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+
+    this.filterTP.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringTP();
+      });
+
+    this.filterTask.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringTask();
+      });
+  }
+
+  filteringTP() {
+    if (!this.listTradeProgram) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterTP.value;
+    if (!search) {
+      this.filteredTP.next(this.listTradeProgram.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredTP.next(
+      this.listTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  filteringTask() {
+    if (!this.listTemplateTask) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterTask.value;
+    if (!search) {
+      this.filteredTask.next(this.listTemplateTask.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredTask.next(
+      this.listTemplateTask.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   createTaskTemplate(): FormGroup {
@@ -124,48 +187,56 @@ export class ScheduleProgramCreateComponent {
     template.removeAt(idx);
   }
 
-  _filterTp(value): any[] {
-    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
-    return this.listTradeProgram.filter(item => item.name.toLowerCase().includes(filterValue));
+  getTradeProgram() {
+    let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
+    let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
+    
+    this.minDate = tradeProgram['start_date'];
+    this.maxStartDateTemplate = tradeProgram['end_date'];
   }
 
-  _filterTemplate(value): any[] {
-    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
-    return this.listTemplateTask.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
+  // _filterTp(value): any[] {
+  //   const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+  //   return this.listTradeProgram.filter(item => item.name.toLowerCase().includes(filterValue));
+  // }
 
-  filterTradeProgram(param) {
-    if(param.length >= 3) {
-      this.scheduleTradeProgramService.getTradeProgram({ param: param }).subscribe(res => {
-        this.listTradeProgram = res.data;
-        this.filteredTpOptions = this.formSchedule.get("trade_creator_id").valueChanges.pipe(startWith(""), map(value => this._filterTp(value)));
-      })
-    } else {
-      this.listTradeProgram = [];
-      this.filteredTpOptions = this.formSchedule.get("trade_creator_id").valueChanges.pipe(startWith(""), map(value => this._filterTp(value)));
-    }
-  }
+  // _filterTemplate(value): any[] {
+  //   const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+  //   return this.listTemplateTask.filter(item => item.name.toLowerCase().includes(filterValue));
+  // }
 
-  filterTemplateTask(param) {
-    let template = this.formSchedule.get('task_templates') as FormArray;
-    if(param['value'].length >= 3) {
-      this.scheduleTradeProgramService.getTemplate({ param: param['value'] }).subscribe(res => {
-        this.listTemplateTask = res.data;
-        this.filteredTemplateOptions = template.at(param['index']).get("task_template_id").valueChanges.pipe(startWith(""), map(value => this._filterTemplate(value)));
-      })
-    } else {
-      this.listTemplateTask = [];
-      this.filteredTemplateOptions = template.at(param['index']).get("task_template_id").valueChanges.pipe(startWith(""), map(value => this._filterTemplate(value)));
-    }
-  }
+  // filterTradeProgram(param) {
+  //   if(param.length >= 3) {
+  //     this.scheduleTradeProgramService.getTradeProgram({ param: param }).subscribe(res => {
+  //       this.listTradeProgram = res.data;
+  //       this.filteredTpOptions = this.formSchedule.get("trade_creator_id").valueChanges.pipe(startWith(""), map(value => this._filterTp(value)));
+  //     })
+  //   } else {
+  //     this.listTradeProgram = [];
+  //     this.filteredTpOptions = this.formSchedule.get("trade_creator_id").valueChanges.pipe(startWith(""), map(value => this._filterTp(value)));
+  //   }
+  // }
 
-  displayTpName(param?): any {
-    return param ? param.name : param;
-  }
+  // filterTemplateTask(param) {
+  //   let template = this.formSchedule.get('task_templates') as FormArray;
+  //   if(param['value'].length >= 3) {
+  //     this.scheduleTradeProgramService.getTemplate({ param: param['value'] }).subscribe(res => {
+  //       this.listTemplateTask = res.data;
+  //       this.filteredTemplateOptions = template.at(param['index']).get("task_template_id").valueChanges.pipe(startWith(""), map(value => this._filterTemplate(value)));
+  //     })
+  //   } else {
+  //     this.listTemplateTask = [];
+  //     this.filteredTemplateOptions = template.at(param['index']).get("task_template_id").valueChanges.pipe(startWith(""), map(value => this._filterTemplate(value)));
+  //   }
+  // }
 
-  displayTemplateName(param?): any {
-    return param ? param.name : param;
-  }
+  // displayTpName(param?): any {
+  //   return param ? param.name : param;
+  // }
+
+  // displayTemplateName(param?): any {
+  //   return param ? param.name : param;
+  // }
 
   setMinDate(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
@@ -187,24 +258,25 @@ export class ScheduleProgramCreateComponent {
 
   submit() {
     if (this.formSchedule.valid) {
-      let tradeProgram = this.formSchedule.get('trade_creator_id').value;
-      if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
+      this.saveData = !this.saveData;
+      // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
+      // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
       
       let body = {
         name: this.formSchedule.get('name').value,
-        trade_creator_id: this.formSchedule.get('trade_creator_id').value['id'],
+        trade_creator_id: this.formSchedule.get('trade_creator_id').value,
         task_templates: this.formSchedule.get('task_templates').value.map(item => {
-          let template = item.task_template_id['id'];
-          if (!template) return this.dialogService.openSnackBar({ message: `Data Template Tugas "${item.task_template_id}" tidak tersedia, mohon lakukan pencarian kembali!` })
+          // let template = item.task_template_id['id'];
+          // if (!template) return this.dialogService.openSnackBar({ message: `Data Template Tugas "${item.task_template_id}" tidak tersedia, mohon lakukan pencarian kembali!` })
 
           return {
-            task_template_id: item.task_template_id['id'],
+            task_template_id: item.task_template_id,
             coin_delivered: item.coin_delivered,
             coin_approved: item.coin_approved,
             start_date: this.convertDate(item.start_date),
             end_date: this.convertDate(item.end_date),
             repeated: item.repeated,
-            is_backup: item.is_backup,
+            is_backup: 0,
             notif: item.is_backup === 1 ? item.notif : null
           }
         })

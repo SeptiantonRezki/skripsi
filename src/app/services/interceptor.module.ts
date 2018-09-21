@@ -77,11 +77,11 @@ export class BaseInterceptor implements HttpInterceptor {
       } else if (err.status == 403) {
         return Observable.throw(err);
       } else if (err.status == 422) {
-        let reqOtc = Object.entries(req.body).map(([key]) => ({ key }));
+        // let reqOtc = Object.entries(req.body).map(([key]) => ({ key }));
         if (req.method === "POST") {
-          if (reqOtc[0]["key"] === "password_current") {
-            return Observable.throw(err);
-          }
+          // if (reqOtc[0]["key"] === "password_current") {
+          //   return Observable.throw(err);
+          // }
 
           if (err.error['status']) {
             this.injector.get(DialogService).openSnackBar({ message: err.error['status']})

@@ -21,13 +21,24 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
+              <!-- <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
                 formControlName="trade_creator_id" [matAutocomplete]="tradeProgram">
               <mat-autocomplete #tradeProgram="matAutocomplete" [displayWith]="displayTpName">
                 <mat-option *ngFor="let item of filteredTpOptions | async" [value]="item">
                   {{item.name}}
                 </mat-option>
               </mat-autocomplete>
+              <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
+                Trade Program harus diisi
+              </mat-error> -->
+              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" #singleSelect
+                (selectionChange)="getTradeProgram()">
+                <ngx-mat-select-search [formControl]="filterTP" [placeholderLabel]="'Cari Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredTP | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
               <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
                 Trade Program harus diisi
               </mat-error>
@@ -44,7 +55,7 @@
             <div [formGroupName]="i">
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Pilih Template Tugas" (keyup)="searchTemplateTask.next({value: $event.target.value, index: i})"
+                  <!-- <input matInput type="text" placeholder="Pilih Template Tugas" (keyup)="searchTemplateTask.next({value: $event.target.value, index: i})"
                     formControlName="task_template_id" [matAutocomplete]="templateTugas">
                   <mat-autocomplete #templateTugas="matAutocomplete" [displayWith]="displayTemplateName">
                     <mat-option *ngFor="let item of filteredTemplateOptions | async" [value]="item">
@@ -53,6 +64,16 @@
                   </mat-autocomplete>
                   <mat-error *ngIf="item.controls['task_template_id'].hasError('required') && item.controls['task_template_id'].touched">
                     Template Tugas harus diisi
+                  </mat-error> -->
+                  <mat-select formControlName="task_template_id" placeholder="Pilih Template Tugas" #singleSelect>
+                    <ngx-mat-select-search [formControl]="filterTask" [placeholderLabel]="'Cari Template Tugas...'"
+                      [noEntriesFoundLabel]="'Tidak ada Template Tugas yang ditemukan'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of filteredTask | async" [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
+                    Trade Program harus diisi
                   </mat-error>
                 </mat-form-field>
 
@@ -79,7 +100,7 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date" [min]="minDate"
-                    placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
+                    [max]="maxStartDateTemplate" placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
                   <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
                     Tanggal Mulai harus diisi
                   </mat-error>

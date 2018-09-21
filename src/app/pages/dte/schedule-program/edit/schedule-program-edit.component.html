@@ -9,9 +9,6 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="">Detil Pengatur Jadwal Trade Program</h2>
         </div>
-        <div class="message-box warning">
-          This is a warning message box!
-        </div>
         <div class="ayo-middle py-24" fxLayout="column">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -44,6 +41,25 @@
                   matSuffix mat-icon-button>
                   <mat-icon class="s-24">view_list</mat-icon>
                 </button>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="py-8">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Estimasi Budget</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Permintaan Dana" [value]="dataScheduler['budget_request'] | rupiahFormater"
+                  disabled>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Dana Trade Program" [value]="dataScheduler['budget_trade_program'] | rupiahFormater"
+                  disabled>
               </mat-form-field>
             </div>
           </div>
