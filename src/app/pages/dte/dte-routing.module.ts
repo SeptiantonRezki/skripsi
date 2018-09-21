@@ -81,6 +81,10 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.create
     },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
     canDeactivate: [PendingChangesGuard]
   },
   {

@@ -27,13 +27,14 @@ export class TradeEditComponent {
   files: File;
   validComboDrag: boolean;
   valueChange: Boolean;
+  saveData: Boolean;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange) {
+    if (this.valueChange && !this.saveData) {
       return false;
     }
 
@@ -56,6 +57,7 @@ export class TradeEditComponent {
     this.minDateFrom = moment();
     this.minDate = moment();
     this.minExpireDate = moment();
+    this.saveData = false;
     
     this.formTradeProgramError = {
       name: {},
@@ -73,7 +75,7 @@ export class TradeEditComponent {
       name: ['', Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
-      budget: ['', Validators.required],
+      budget: ['', [Validators.required, Validators.min(0)]],
       coin_expiry_date: ['', Validators.required]
     })
 
@@ -88,6 +90,10 @@ export class TradeEditComponent {
       budget: this.detailFormTrade.budget,
       coin_expiry_date: this.detailFormTrade.coin_expiry_date
     })
+
+    if (this.detailFormTrade.status === 'active') {
+      this.formTradeProgram.disable();
+    }
 
     this.formTradeProgram.valueChanges.subscribe(res => {
       this.valueChange = true;
@@ -121,6 +127,7 @@ export class TradeEditComponent {
     if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2mb!' })
 
     if (this.formTradeProgram.valid) {
+      this.saveData = !this.saveData;
       let fd = new FormData();
 
       let body = {

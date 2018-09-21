@@ -8,7 +8,7 @@ import { AudienceService } from "../services/dte/audience.service";
 export class ListTradeProgramResolver implements Resolve<any> {
   constructor(private schedulerTradeProgramService: ScheduleTradeProgramService) {}
   resolve(): Observable<any> {
-    return this.schedulerTradeProgramService.getTradeProgram({ param: "" });
+    return this.schedulerTradeProgramService.getTradeProgram();
   }
 }
 
@@ -16,7 +16,7 @@ export class ListTradeProgramResolver implements Resolve<any> {
 export class ListTemplateResolver implements Resolve<any> {
   constructor(private schedulerTradeProgramService: ScheduleTradeProgramService) {}
   resolve(): Observable<any> {
-    return this.schedulerTradeProgramService.getTemplate({ param: "" });
+    return this.schedulerTradeProgramService.getTemplate();
   }
 }
 

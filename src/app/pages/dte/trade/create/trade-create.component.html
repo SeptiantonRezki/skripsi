@@ -72,6 +72,9 @@
               <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi
               </mat-error>
+              <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
+                Dana Trade Program tidak boleh kurang dari 0
+              </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">

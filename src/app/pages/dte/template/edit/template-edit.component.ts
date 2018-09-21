@@ -34,7 +34,7 @@ export class TemplateEditComponent {
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
-
+  saveData: Boolean;
   valueChange: Boolean;
 
   @HostListener('window:beforeunload')
@@ -42,7 +42,7 @@ export class TemplateEditComponent {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange) {
+    if (this.valueChange && !this.saveData) {
       return false;
     }
 
@@ -57,6 +57,7 @@ export class TemplateEditComponent {
     private dataService: DataService,
     private taskTemplateService: TemplateTaskService
   ) {
+    this.saveData = false;
     this.templateTaskFormError = {
       name: {},
       description: {},
@@ -99,7 +100,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
-    this.templateTaskForm.get('image').setValue(this.detailTask.image);
+    this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
     this.detailTask['questions'].map(item => {
       questions.push(this.formBuilder.group({
         id: item.id,
@@ -225,6 +226,7 @@ export class TemplateEditComponent {
 
   submit(): void {
     if (this.templateTaskForm.valid) {
+      this.saveData = !this.saveData;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
 

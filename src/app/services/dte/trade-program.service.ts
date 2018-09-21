@@ -33,4 +33,19 @@ export class TradeProgramService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
+
+  getListLevel(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_level");
+    return this.getApi(url);
+  }
+
+  getListChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_children", context);
+    return this.getApi(url);
+  }
+
+  getListOtherChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
+  }
 }

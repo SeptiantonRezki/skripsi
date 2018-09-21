@@ -31,7 +31,7 @@ export class TemplateCreateComponent {
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
-
+  saveData: Boolean;
   valueChange: Boolean;
 
   @HostListener('window:beforeunload')
@@ -39,7 +39,7 @@ export class TemplateCreateComponent {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange) {
+    if (this.valueChange && !this.saveData) {
       return false;
     }
 
@@ -53,6 +53,7 @@ export class TemplateCreateComponent {
     private dialogService: DialogService,
     private taskTemplateService: TemplateTaskService
   ) {
+    this.saveData = false;
     this.templateTaskFormError = {
       name: {},
       description: {},
@@ -192,6 +193,7 @@ export class TemplateCreateComponent {
 
   submit(): void {
     if (this.templateTaskForm.valid) {
+      this.saveData = !this.saveData;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
 

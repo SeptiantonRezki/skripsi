@@ -11,8 +11,11 @@
       <br>
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
         <div class="ayo-middle" fxLayout="column">
-          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
-            [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+          <div class="message-box warning" *ngIf="detailFormTrade.status === 'active'">
+            Data tidak bisa diubah, karena Trade Program sedang berjalan.
+          </div>
+          <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16" [(validDrag)]="validComboDrag"
+            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
@@ -45,8 +48,8 @@
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput formControlName="start_date" [min]="minDateFrom" [matDatepicker]="startDate" (focus)="startDate.open()"
-                placeholder="Tanggal Mulai" (dateChange)="setMinEndDate()">
+              <input matInput type="text" formControlName="start_date" [min]="minDateFrom" [matDatepicker]="startDate"
+                (focus)="startDate.open()" placeholder="Tanggal Mulai" (dateChange)="setMinEndDate()">
               <mat-datepicker-toggle matSuffix [for]="startDate">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
@@ -57,8 +60,8 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput formControlName="end_date" [matDatepicker]="endDate" (focus)="endDate.open()" placeholder="Tanggal Berakhir"
-                [min]="minDate" (dateChange)="setMinExpireDate()">
+              <input matInput type="text" formControlName="end_date" [matDatepicker]="endDate" (focus)="endDate.open()"
+                placeholder="Tanggal Berakhir" [min]="minDate" (dateChange)="setMinExpireDate()">
               <mat-datepicker-toggle matSuffix [for]="endDate">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
@@ -75,12 +78,15 @@
               <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi
               </mat-error>
+              <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
+                Dana Trade Program tidak boleh kurang dari 0
+              </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput formControlName="coin_expiry_date" [matDatepicker]="dp" (focus)="dp.open()" placeholder="Tanggal Kadaluarsa Coin Trade Program"
-                [min]="minExpireDate">
+              <input matInput type="text" formControlName="coin_expiry_date" [matDatepicker]="dp" (focus)="dp.open()"
+                placeholder="Tanggal Kadaluarsa Coin Trade Program" [min]="minExpireDate">
               <mat-datepicker-toggle matSuffix [for]="dp">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
@@ -93,7 +99,8 @@
         </div>
       </form>
       <div class="confirm pt-24 pb-24" fxLayout="row">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+        <button mat-raised-button type="button" [disabled]="detailFormTrade.status === 'active'" class="confirmation-button"
+          fxFlex="20" (click)="submit()">
           SIMPAN
         </button>
       </div>
