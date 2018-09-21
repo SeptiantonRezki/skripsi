@@ -68,7 +68,8 @@
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button color="primary" matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
+              <button mat-icon-button color="primary" [disabled]="row.status === 'approved'" matTooltip="Hapus Audience Grup"
+                (click)="deleteAudience(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

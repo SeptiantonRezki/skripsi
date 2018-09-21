@@ -53,4 +53,19 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, 'validate_budget');
     return this.postApi(url, body);
   }
+
+  getListLevel(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_level");
+    return this.getApi(url);
+  }
+
+  getListChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_children", context);
+    return this.getApi(url);
+  }
+
+  getListOtherChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
+  }
 }

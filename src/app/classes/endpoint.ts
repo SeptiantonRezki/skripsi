@@ -146,6 +146,9 @@ export class Endpoint {
         list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       news: {
         get: `${AYO_API}/api/${type_api}/newsfeed`,
