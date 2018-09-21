@@ -1,3 +1,58 @@
-<p>
-  category-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Buat Kategori'"></page-content-header>
+    <!-- / HEADER -->
+  
+    <div class="content p-24">
+      <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+        <form autocomplete="off" [formGroup]="formCategoryGroup">
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <h2 class="">Buat Kategori</h2>
+          </div>
+          <div class="ayo-middle" fxLayout="column">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" formControlName="name" placeholder="Nama Kategori">
+                <mat-error *ngIf="formCategoryGroup.controls['name'].hasError('required') && formCategoryGroup.controls['name'].touched">
+                  Nama Spanduk harus diisi
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayout="row" class="pt-24 pb-24" fxLayoutAlign="space-between center">
+                <span class="h3">RSS Link</span>
+                <button type="button" mat-raised-button matTooltip="Tambah Kemasan" fxFlex="3" (click)="addNewRSS()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <div formArrayName="link" *ngFor="let item of formCategoryGroup.get('link')['controls']; let i = index;">
+                <div [formGroupName]="i" fxLayout="row">
+                    <mat-form-field fxFlex="100%" class="is-light form-primary">
+                      <input matInput type="url" formControlName="url" placeholder="URL Link">
+                      <mat-error *ngIf="item.controls['url'].hasError('required') && item.controls['url'].touched">
+                        URL harus diisi
+                      </mat-error>
+                      <mat-error *ngIf="item.controls['url'].invalid && item.controls['url'] !== ''">
+                          URL tidak valid
+                      </mat-error>
+                       
+                    </mat-form-field>
+                  <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
+                    <button type="button" mat-icon-button color="primary" (click)="removeRSS(item, i)"
+                      [disabled]="i === 0">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+          <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
+              SIMPAN
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

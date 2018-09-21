@@ -150,6 +150,12 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
         list_category: `${AYO_API}/api/${type_api}/rssfeed/category?page=all`
       },
+      news_category: {
+        get: `${AYO_API}/api/${type_api}/rssfeed/category`,
+        create: `${AYO_API}/api/${type_api}/rssfeed/category`,
+        put: `${AYO_API}/api/${type_api}/rssfeed/category/${context.category_id}`,
+        delete: `${AYO_API}/api/${type_api}/rssfeed/category/${context.category_id}`
+      },
       role: {
         get: `${AYO_API}/api/${type_api}/user/role`,
         detail: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
