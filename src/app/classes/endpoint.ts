@@ -184,6 +184,14 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/content/content`,
         put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
         delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+      },
+      coin: {
+        retailer: `${AYO_API}/api/principal/coin?type=retailer`,
+        program: `${AYO_API}/api/principal/coin?type=program`,
+        get_program: `${AYO_API}/api/principal/coin/program/${context.program_id}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

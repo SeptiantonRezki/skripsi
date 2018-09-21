@@ -12,6 +12,7 @@ export class Page {
   status: string;
   start_date: string;
   end_date: string;
+  area: any;
 
   constructor() {
     this.per_page = 15;
@@ -24,6 +25,7 @@ export class Page {
     this.status = "";
     this.start_date = "";
     this.end_date = "";
+    this.area = null;
   }
 
   public static renderPagination(pagination, response) {
