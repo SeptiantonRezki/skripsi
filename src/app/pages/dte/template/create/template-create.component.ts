@@ -193,7 +193,8 @@ export class TemplateCreateComponent {
 
   submit(): void {
     if (this.templateTaskForm.valid) {
-      this.saveData = !this.saveData;
+      // this.saveData = !this.saveData;
+      this.saveData = true;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
 

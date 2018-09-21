@@ -396,7 +396,8 @@ export class AudienceCreateComponent {
           retailer_id: this.selected.map(item => item.id)
         }
 
-        this.saveData = !this.saveData;
+        // this.saveData = !this.saveData;
+        this.saveData = true;
         this.audienceService.create(body).subscribe(
           res => {
             this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan'})
