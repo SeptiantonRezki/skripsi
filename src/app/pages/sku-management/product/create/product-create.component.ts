@@ -49,6 +49,12 @@ export class ProductCreateComponent {
   public filterCategory: FormControl = new FormControl();
   public filteredCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  public filterBrand: FormControl = new FormControl();
+  public filteredBrand: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  public filterSubCategory: FormControl = new FormControl();
+  public filteredSubCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
@@ -60,20 +66,24 @@ export class ProductCreateComponent {
     private productService: ProductService
   ) {
     this.otherProduct = [];
+    this.listSubCategory = [];
 
     this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
     this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data;
     this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data;
 
     this.filteredCategory.next(this.listCategory.slice());
+    this.filteredBrand.next(this.listBrand.slice());
+    this.filteredSubCategory.next(this.listSubCategory.slice());
 
     this.formProductErrors = {
       name: {},
-      alias: [],
+      // alias: [],
       status: {},
       category: {},
       brand: {},
-      packaging: {}
+      packaging: {},
+      // convertion: {}
     };
   }
 
@@ -91,6 +101,18 @@ export class ProductCreateComponent {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringCategory();
+      });
+
+    this.filterBrand.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringBrand();
+      });
+
+    this.filterSubCategory.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringSubCategory();
       });
   }
 
@@ -112,16 +134,53 @@ export class ProductCreateComponent {
     );
   }
 
+  filteringSubCategory() {
+    if (!this.listSubCategory) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterSubCategory.value;
+    if (!search) {
+      this.filteredSubCategory.next(this.listSubCategory.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredSubCategory.next(
+      this.listSubCategory.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  filteringBrand() {
+    if (!this.listBrand) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBrand.value;
+    if (!search) {
+      this.filteredBrand.next(this.listBrand.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredBrand.next(
+      this.listBrand.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
   createFormGroup(): void {
     this.formProductGroup = this.formBuilder.group({
       name: ["", Validators.required],
-      alias: this.formBuilder.array([], Validators.required),
+      alias: this.formBuilder.array([]),
       status: ["active", Validators.required],
       brand: ["", Validators.required],
       category: ["", Validators.required],
-      subCategory: ["", Validators.required],
-      otherSubCategory: ["", Validators.required],
-      packaging: ["", Validators.required]
+      subCategory: [""],
+      // otherSubCategory: ["", Validators.required],
+      packaging: ["", Validators.required],
+      // convertion: ["", [Validators.min(0)]]
     });
   }
 
@@ -172,10 +231,7 @@ export class ProductCreateComponent {
   }
 
   submit(): void {
-    if (
-      this.formProductGroup.valid &&
-      (this.files && this.files.size < 2000000)
-    ) {
+    if (this.formProductGroup.valid && (this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
 
       let aliasChip = this.formProductGroup.get("alias").value.map(item => {
@@ -187,9 +243,11 @@ export class ProductCreateComponent {
         alias: aliasChip,
         image: this.files,
         brand_id: this.formProductGroup.get("brand").value,
-        category_id: this.formProductGroup.get("category").value,
+        category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
+        // sub_category_id: this.formProductGroup.get("subCategory").value,
         packaging_id: this.formProductGroup.get("packaging").value,
-        status: this.formProductGroup.get("status").value
+        status: this.formProductGroup.get("status").value,
+        // convertion: this.formProductGroup.get("convertion").value
       };
 
       let fd = new FormData();
@@ -199,8 +257,10 @@ export class ProductCreateComponent {
       fd.append("description", "");
       fd.append("brand_id", body.brand_id);
       fd.append("category_id", body.category_id);
+      // fd.append("sub_category_id", body.sub_category_id);
       fd.append("packaging_id", body.packaging_id);
       fd.append("status", body.status);
+      // fd.append("convertion", body.convertion);
 
       body.alias.map(item => {
         fd.append("alias[]", item);
@@ -210,12 +270,10 @@ export class ProductCreateComponent {
         res => {
           this.loadingIndicator = false;
           this.router.navigate(["sku-management", "product"]);
-          this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
-          });
+          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
         },
         err => {
-          this.dialogService.openSnackBar({ message: err.error.message });
+          // this.dialogService.openSnackBar({ message: err.error.message });
           this.loadingIndicator = false;
         }
       );
@@ -232,6 +290,7 @@ export class ProductCreateComponent {
       }
 
       this.dialogService.openSnackBar({ message: msg });
+      commonFormValidator.validateAllFields(this.formProductGroup);
     }
   }
 

@@ -108,7 +108,7 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/product/product`,
         put: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
         delete: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
-        list_brand: `${AYO_API}/api/${type_api}/product/brand?page=all`,
+        list_brand: `${AYO_API}/api/general/product/brand?page=all`,
         list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${context.parent_id}`,
         list_packaging: `${AYO_API}/api/${type_api}/product/packaging?page=all`
       },

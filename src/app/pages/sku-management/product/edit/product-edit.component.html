@@ -1,3 +1,142 @@
-<p>
-  product-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Ubah Produk'">
+    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+      <form autocomplete="off" [formGroup]="formProductGroup" (keydown.enter)="$event.preventDefault();">
+        <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+        <mat-tab-group>
+          <mat-tab label="Informasi Produk">
+            <div class="ayo-middle p-24" fxLayout="column">
+              <!-- <div class="button-row">
+                    <button mat-raised-button>
+                      <mat-icon>horizontal_split</mat-icon> SCAN BARCODE</button>
+                  </div>
+                  <br> -->
+
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input matInput type="text" placeholder="Nama Produk" formControlName="name">
+                <mat-error *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
+                  Nama Produk harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <!-- <mat-select placeholder="Perusahaan" formControlName="brand">
+                    <mat-option [value]="item.id" *ngFor="let item of listBrand">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select> -->
+                <mat-select formControlName="brand" placeholder="Perusahaan" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterBrand" [placeholderLabel]="'Cari Perusahaan...'"
+                    [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of filteredBrand | async" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formProductGroup.controls['brand'].hasError('required') && formProductGroup.controls['brand'].touched">
+                  Perusahaan harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-chip-list #chipList>
+                  <mat-chip color="primary" *ngFor="let item of formProductGroup.get('alias')['controls']; let i = index;"
+                    [selectable]="selectable" [removable]="removable" (removed)="removeAlias(i)">
+                    {{item.get('alias').value}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <input matInput placeholder="Nama Lain Produk" type="text" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="addAlias($event)">
+                </mat-chip-list>
+                <mat-error *ngIf="formProductGroup.controls['alias'].hasError('required') && formProductGroup.controls['alias'].touched">
+                  Nama Lain Produk harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select formControlName="category" placeholder="Kategori Produk" #singleSelect (selectionChange)="selectionChange()">
+                  <ngx-mat-select-search [formControl]="filterCategory" [placeholderLabel]="'Cari Kategori...'"
+                    [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
+                  Kategori Produk harus diisi
+                </mat-error>
+              </mat-form-field>
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select placeholder="Sub Kategori" formControlName="subCategory">
+                    <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
+                    Kategori Produk harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
+
+                <mat-form-field fxFlex="50" class="is-light form-primary">
+                  <mat-select placeholder="UOM" formControlName="packaging">
+                    <mat-option [value]="item.id" *ngFor="let item of listPackaging">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formProductGroup.controls['packaging'].hasError('required') && formProductGroup.controls['packaging'].touched">
+                    Nama UOM harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field fxFlex="25" class="is-light form-primary">
+                  <input matInput type="number" formControlName="convertion" placeholder="Konversi">
+                </mat-form-field> -->
+              </div>
+              <div class="pt-16">
+                <strong>Status Produk</strong>
+              </div>
+              <mat-radio-group formControlName="status" class="radio-group pb-16">
+                <mat-radio-button class="radio-button" *ngFor="let item of statusProduk" [value]="item.status">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </mat-tab>
+          <mat-tab label="Gambar Produk">
+            <div class="ayo-middle p-24" style="height: 480px;" fxLayout="column">
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" [accept]="'image/*'"
+                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+                <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                  <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                  <br>
+                  <span matPrefix>Tarik Gambar Kesini atau
+                    <strong>Pilih File</strong>
+                  </span>
+                  <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span>
+                </div>
+              </div>
+
+              <div *ngIf="files" class="pt-48">
+                <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0">
+                  <div class="">
+                    <div class="delete">
+                      <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+                    </div>
+                    <div class="previewIcon" [ngfBackground]="files"></div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!files && detailProduct" class="pt-48">
+                <img class="previewIcon" [src]="detailProduct.image_url">
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </div>
+  </div>
+</div>
