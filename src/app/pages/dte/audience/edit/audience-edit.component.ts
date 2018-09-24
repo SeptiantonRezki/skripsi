@@ -339,22 +339,17 @@ export class AudienceEditComponent {
 
   detailAudienceSelect() {
     this.loadingIndicator = true;
-    let i = 0;
     this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }).subscribe(
       res => {
-        for (const item of res.data) {
-          for (const value of this.rows) {
-            if (item.id === value.id) {
-              this.selected.push(value);
-            }
-          }
-
-          i++;
-          if (res.data.length === i) 
-          this.loadingIndicator = false;
-        }
+        this.selected = (res.data || []).map(item => { return this.getRows(item.id) });
+        this.loadingIndicator = false;
       }
     )
+  }
+
+  getRows(id) {
+    let index = this.rows.map(item => item.id).indexOf(id);
+    return this.rows[index];
   }
 
   // initArea() {
