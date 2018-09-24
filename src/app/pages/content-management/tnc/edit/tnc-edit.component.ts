@@ -93,7 +93,7 @@ export class TncEditComponent {
           window.localStorage.removeItem('detail_tnc');
         },
         err => {
-          this.dialogService.openSnackBar({ message: err.error.message });
+          // this.dialogService.openSnackBar({ message: err.error.message });
           // this.loadingIndicator = false;
         }
       );

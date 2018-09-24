@@ -82,7 +82,7 @@ export class TncCreateComponent {
           });
         },
         err => {
-          this.dialogService.openSnackBar({ message: err.error.message });
+          // this.dialogService.openSnackBar({ message: err.error.message });
           // this.loadingIndicator = false;
         }
       );
