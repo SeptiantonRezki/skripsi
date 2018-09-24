@@ -350,7 +350,7 @@ export class AudienceEditComponent {
           }
 
           i++;
-          if (res.data.length - 1 === i) 
+          if (res.data.length === i) 
           this.loadingIndicator = false;
         }
       }
