@@ -54,12 +54,12 @@ export class RetailerEditComponent {
       address: {},
       business_code: {},
       owner: {},
-      phone: {},
+      // phone: {},
       status: {},
       area: {},
       latitude: {},
       longitude: {},
-      type: {},
+      // type: {},
       InternalClassification: {}
     };
 
@@ -104,7 +104,7 @@ export class RetailerEditComponent {
       territory: ["", Validators.required],
       latitude: [""],
       longitude: [""],
-      type: ["", Validators.required],
+      type: [""],
       InternalClassification: ["", Validators.required]
     });
     this.formRetailer.valueChanges.subscribe(() => {
@@ -197,7 +197,7 @@ export class RetailerEditComponent {
       address: this.detailRetailer.address,
       business_code: this.detailRetailer.code,
       owner: this.detailRetailer.owner,
-      phone: this.detailRetailer.phone.replace('+62', ''),
+      phone: this.detailRetailer.phone,
       status: this.detailRetailer.status,
       latitude: this.detailRetailer.latitude,
       longitude: this.detailRetailer.longitude,
@@ -211,6 +211,8 @@ export class RetailerEditComponent {
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
     });
+
+    this.formRetailer.get("phone").disable();
   }
 
   getAudienceArea(selection, id) {
@@ -348,7 +350,7 @@ export class RetailerEditComponent {
         address: this.formRetailer.get("address").value,
         business_code: this.formRetailer.get("business_code").value,
         owner: this.formRetailer.get("owner").value,
-        phone: '+62' + this.formRetailer.get("phone").value,
+        phone: this.formRetailer.getRawValue()["phone"],
         status: this.formRetailer.get("status").value,
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value,
@@ -360,7 +362,7 @@ export class RetailerEditComponent {
       this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Diubah"
+            message: "Data berhasil diubah"
           });
           this.router.navigate(["user-management", "retailer"]);
           window.localStorage.removeItem("detail_retailer");

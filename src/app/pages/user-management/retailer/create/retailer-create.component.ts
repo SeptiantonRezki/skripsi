@@ -75,7 +75,7 @@ export class RetailerCreateComponent{
       };
 
       this.verticalStepperStep4Errors = {
-        type: {},
+        // type: {},
         InternalClassification: {}
       };
 
@@ -123,7 +123,7 @@ export class RetailerCreateComponent{
       });
   
       this.verticalStepperStep4 = this.formBuilder.group({
-        type: ["", Validators.required],
+        // type: ["", Validators.required],
         InternalClassification: ["", Validators.required]
       });
   
@@ -324,15 +324,13 @@ export class RetailerCreateComponent{
           areas: [this.verticalStepperStep3.get("territory").value],
           latitude: this.verticalStepperStep3.get("latitude").value,
           longitude: this.verticalStepperStep3.get("longitude").value,
-          type: this.verticalStepperStep4.get("type").value,
+          type: "General Trade",
           InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
         };
   
         this.retailerService.create(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan"
-            });
+            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
             this.router.navigate(["user-management", "retailer"]);
           },
           err => {
