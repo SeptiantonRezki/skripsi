@@ -59,6 +59,7 @@ import { NewsService } from "./services/newsfeed-management/news.service";
 import { AccessService } from "./services/settings/access.service";
 import { AccountService } from "./services/settings/account.service";
 import { GoogleAnalyticsService } from "./services/google-analytics.service";
+import { NavigationService } from "./services/navigation.service";
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { GoogleAnalyticsService } from "./services/google-analytics.service";
     AuthGuard,
     GoogleAnalyticsService,
     NonAuthGuard,
+    NavigationService,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
