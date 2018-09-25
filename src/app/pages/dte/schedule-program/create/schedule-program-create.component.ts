@@ -258,7 +258,7 @@ export class ScheduleProgramCreateComponent {
 
   submit() {
     if (this.formSchedule.valid) {
-      this.saveData = !this.saveData;
+      this.saveData = true;
       // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
       // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
       
