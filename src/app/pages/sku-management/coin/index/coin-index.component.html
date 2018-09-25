@@ -89,7 +89,7 @@
             <ngx-datatable-column name="Nomor Ponsel" prop="phone"></ngx-datatable-column>
             <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                {{row.terakhir_masuk?.date | date:'dd/MM/yyyy'}}
+                {{row.terakhir_masuk?.date | date:'dd/MM/yyyy HH:mm'}}
               </ng-template>
             </ngx-datatable-column>
 
