@@ -99,6 +99,8 @@ export class RetailerCreateComponent{
     }
   
     ngOnInit() {
+      let regex = new RegExp(/[1-9]/g);
+
       this.verticalStepperStep1 = this.formBuilder.group({
         name: ["", Validators.required],
         address: ["", Validators.required],
@@ -155,6 +157,11 @@ export class RetailerCreateComponent{
           this.verticalStepperStep4Errors
         );
       });
+
+      this.verticalStepperStep2.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+        if (regex.test(res))
+        this.verticalStepperStep2.get('phone').setValue(res.match(regex).join(""), { emitEvent: false });
+      })
 
       this.initArea();
     }

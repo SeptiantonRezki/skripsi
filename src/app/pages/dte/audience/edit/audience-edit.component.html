@@ -21,8 +21,13 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Nama Pengatur Jadwal Trade Program" formControlName="trade_scheduler_id">
-                <mat-option *ngFor="let item of listScheduler" [value]="item.id">{{item.scheduler_name}}</mat-option>
+              <mat-select formControlName="trade_scheduler_id" placeholder="Nama Pengatur Jadwal Trade Program"
+                #singleSelect>
+                <ngx-mat-select-search [formControl]="filterScheduler" [placeholderLabel]="'Cari Jadwal Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Jadwal Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredScheduler | async" [value]="item.id">
+                  {{item.scheduler_name}}
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="formAudience.controls['trade_scheduler_id'].hasError('required') && formAudience.controls['trade_scheduler_id'].touched">
                 Nama Pengatur Jadwal Trade Program harus diisi

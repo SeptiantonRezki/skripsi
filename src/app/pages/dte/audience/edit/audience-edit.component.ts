@@ -1,11 +1,13 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
+import { MatSelect } from '@angular/material';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-audience-edit',
@@ -37,6 +39,12 @@ export class AudienceEditComponent {
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
+
+  public filterScheduler: FormControl = new FormControl();
+  public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -92,13 +100,16 @@ export class AudienceEditComponent {
     .subscribe(res => {
       // this.searchingRetailer();
     })
-
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.audience === null);
-    this.rows = activatedRoute.snapshot.data['listRetailer'];
-
-    // this.onSelect();
     this.area = dataService.getFromStorage('profile')['area_type'];
     this.detailAudience = dataService.getFromStorage('detail_audience');
+
+    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => 
+      item.status_audience === null || 
+      item.trade_audience_group_id === this.detailAudience.id
+    );
+
+    this.filteredScheduler.next(this.listScheduler.slice());
+    this.rows = activatedRoute.snapshot.data['listRetailer'];
   }
 
   ngOnInit() {
@@ -153,6 +164,30 @@ export class AudienceEditComponent {
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       this.searchingRetailer(res);
     })
+
+    this.filterScheduler.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringScheduler();
+      });
+  }
+
+  filteringScheduler() {
+    if (!this.listScheduler) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterScheduler.value;
+    if (!search) {
+      this.filteredScheduler.next(this.listScheduler.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredScheduler.next(
+      this.listScheduler.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   initArea() {
@@ -419,7 +454,6 @@ export class AudienceEditComponent {
   }
 
   submit() {
-    console.log(this.formAudience)
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get('type').value === 'limit';

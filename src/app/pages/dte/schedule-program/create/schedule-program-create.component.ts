@@ -277,7 +277,7 @@ export class ScheduleProgramCreateComponent {
             end_date: this.convertDate(item.end_date),
             repeated: item.repeated,
             is_backup: 0,
-            notif: item.is_backup === 1 ? item.notif : null
+            notif: item.is_backup === 1 ? item.notif : 0
           }
         })
       }

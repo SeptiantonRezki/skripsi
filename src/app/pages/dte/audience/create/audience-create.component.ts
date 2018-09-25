@@ -1,11 +1,13 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../../../../services/data.service';
 import { AudienceService } from '../../../../services/dte/audience.service';
 import { DialogService } from '../../../../services/dialog.service';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
+import { MatSelect } from '@angular/material';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-audience-create',
@@ -36,16 +38,22 @@ export class AudienceCreateComponent {
   loadingIndicator: Boolean;
   saveData: Boolean;
 
+  public filterScheduler: FormControl = new FormControl();
+  public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange && !this.saveData)
+    if (this.valueChange && !this.saveData || (this.selected.length > 0 && !this.saveData))
       return false;
 
-    if (this.selected.length > 0)
-      return false;
+    // if (this.selected.length > 0)
+    //   return false;
 
     return true;
   }
@@ -93,7 +101,10 @@ export class AudienceCreateComponent {
       // this.searchingRetailer();
     })
 
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.audience === null);
+    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
+    this.filteredScheduler.next(this.listScheduler.slice());
+    
+
     this.rows = activatedRoute.snapshot.data['listRetailer'];
 
     // this.onSelect();
@@ -151,6 +162,30 @@ export class AudienceCreateComponent {
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       this.searchingRetailer(res);
     })
+
+    this.filterScheduler.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringScheduler();
+      });
+  }
+
+  filteringScheduler() {
+    if (!this.listScheduler) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterScheduler.value;
+    if (!search) {
+      this.filteredScheduler.next(this.listScheduler.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredScheduler.next(
+      this.listScheduler.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   initArea() {
@@ -404,7 +439,7 @@ export class AudienceCreateComponent {
             this.router.navigate(['dte', 'audience']);
           },
           err => {
-            this.dialogService.openSnackBar({ message: err.error.message })
+            // this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
           }
         )
