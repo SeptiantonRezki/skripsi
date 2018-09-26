@@ -8,6 +8,7 @@ import { DialogService } from '../../../../services/dialog.service';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { MatSelect } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
+import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 
 @Component({
   selector: 'app-audience-create',
@@ -64,7 +65,8 @@ export class AudienceCreateComponent {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private audienceService: AudienceService
+    private audienceService: AudienceService,
+    private rupiahFormater: RupiahFormaterPipe
   ) { 
     this.saveData = false;
     this.formAudienceError = {
@@ -103,7 +105,7 @@ export class AudienceCreateComponent {
 
     this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
     this.filteredScheduler.next(this.listScheduler.slice());
-    
+
 
     this.rows = activatedRoute.snapshot.data['listRetailer'];
 
@@ -421,7 +423,7 @@ export class AudienceCreateComponent {
 
       this.audienceService.validateBudget(budget).subscribe(res => {
         if (res.selisih < 0) 
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${res.selisih}!`})
+          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!`})
         
         let body = {
           name: this.formAudience.get('name').value,

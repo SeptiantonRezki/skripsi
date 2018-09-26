@@ -51,6 +51,20 @@ import {
 import { ListAudienceDialogComponent } from "./schedule-program/dialog/list-audience-dialog.component";
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { NgxMatSelectSearchModule } from "../../../../node_modules/ngx-mat-select-search";
+import { NgxCurrencyModule } from "ngx-currency";
+import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
+};
 
 export const MY_FORMATS = {
   parse: {
@@ -90,7 +104,8 @@ export const MY_FORMATS = {
     NgxDatatableModule,
     MatDatepickerModule,
     MatProgressBarModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   declarations: [
     TemplateIndexComponent,
@@ -123,6 +138,7 @@ export const MY_FORMATS = {
     AudienceEditComponent
   ],
   providers: [
+    RupiahFormaterPipe,
     PendingChangesGuard,
     ListTradeProgramResolver,
     ListTemplateResolver,

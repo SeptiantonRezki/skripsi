@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="'Ubah Trade Program'"></page-content-header>
   <!-- / HEADER -->
 
-  <div class="content p-24" fusePerfectScrollbar>
+  <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="start center">
         <h2 class="">Ubah Trade Program</h2>
@@ -73,7 +73,7 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="number" min="0" formControlName="budget" placeholder="Dana Trade Program"
+              <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program"
                 numericOnly>
               <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi

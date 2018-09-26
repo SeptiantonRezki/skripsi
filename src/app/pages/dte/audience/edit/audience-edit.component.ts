@@ -8,6 +8,7 @@ import { AudienceService } from 'app/services/dte/audience.service';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { MatSelect } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
+import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 
 @Component({
   selector: 'app-audience-edit',
@@ -65,6 +66,7 @@ export class AudienceEditComponent {
     private dataService: DataService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private rupiahFormater: RupiahFormaterPipe
   ) { 
     this.saveData = false;
     this.formAudienceError = {
@@ -472,7 +474,7 @@ export class AudienceEditComponent {
 
       this.audienceService.validateBudget(budget).subscribe(res => {
         if (res.selisih < 0) 
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${res.selisih}!`})
+          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!`})
         
         let body = {
           _method: 'PUT',
@@ -515,7 +517,7 @@ export class AudienceEditComponent {
 
     this.audienceService.validateBudget(budget).subscribe(res => {
       if (res.selisih < 0) 
-        return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${res.selisih}!`})
+        return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!`})
       
       let body = {
         _method: 'PUT',
