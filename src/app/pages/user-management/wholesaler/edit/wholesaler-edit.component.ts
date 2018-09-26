@@ -77,7 +77,7 @@ export class WholesalerEditComponent{
 
   ngOnInit() {
     this.onLoad = true;
-    let regex = new RegExp(/[1-9]/g);
+    let regex = new RegExp(/[0-9]/g);
 
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
@@ -107,8 +107,12 @@ export class WholesalerEditComponent{
       this.initFormGroup();
 
       this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
-        if (regex.test(res))
-        this.formWs.get('phone').setValue(res.match(regex).join(""), { emitEvent: false });
+        if(res.match(regex)) {
+          if(res.substring(0, 1) == '0'){
+            let phone = res.substring(1);
+            this.formWs.get('phone').setValue(phone, { emitEvent: false });
+          }
+        }
       })
     })
   }
