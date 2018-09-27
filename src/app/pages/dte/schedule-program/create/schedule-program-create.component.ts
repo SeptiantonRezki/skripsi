@@ -278,7 +278,7 @@ export class ScheduleProgramCreateComponent {
   getRepeated(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (this.setMaxDate(template.at(idx).get('start_date'), idx) < template.at(idx).get('end_date').value) {
+    if (this.setMaxDate(template.at(idx).get('start_date').value, idx) < template.at(idx).get('end_date').value) {
       template.at(idx).get('end_date').setValue('');
     }
   }
