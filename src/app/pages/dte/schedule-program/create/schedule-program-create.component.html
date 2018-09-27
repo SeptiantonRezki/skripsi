@@ -111,7 +111,7 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value)"
+                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value, i)"
                     readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
@@ -128,7 +128,7 @@
                     <strong>Pengulangan Tugas</strong>
                   </h3>
                 </div>
-                <mat-radio-group formControlName="repeated">
+                <mat-radio-group formControlName="repeated" (change)="getRepeated(i)">
                   <mat-radio-button class="radio-button pr-24" *ngFor="let item of listReminder" [value]="item.value">
                     {{item.name}}
                   </mat-radio-button>

@@ -43,7 +43,7 @@ export class ScheduleProgramCreateComponent {
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
   tradeProgramObj: any;
-  
+
   valueChange: Boolean;
   saveData: Boolean;
 
@@ -59,6 +59,15 @@ export class ScheduleProgramCreateComponent {
     return true;
   }
 
+  // dateFilter = (date: Date): boolean => {
+  //   const dateUtc = new Date(date);
+  //   const day = dateUtc.getDay();
+  //
+  //   console.log(day);
+  //   // Prevent Saturday and Sunday from being selected.
+  //   return day !== 0;
+  // }
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -66,7 +75,7 @@ export class ScheduleProgramCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService
-  ) { 
+  ) {
     this.saveData = false;
     this.adapter.setLocale("id");
     this.listTemplateTask = this.activatedRoute.snapshot.data["listTemplate"].data;
@@ -190,7 +199,7 @@ export class ScheduleProgramCreateComponent {
   getTradeProgram() {
     let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
     let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
-    
+
     this.minDate = tradeProgram['start_date'];
     this.maxStartDateTemplate = tradeProgram['end_date'];
   }
@@ -243,17 +252,35 @@ export class ScheduleProgramCreateComponent {
     template.at(idx).get('end_date').setValue('');
   }
 
-  setMaxDate(dateSelected) {
-    return moment(dateSelected).add(7, 'days');
+  setMaxDate(dateSelected, i) {
+    let template = this.formSchedule.get('task_templates') as FormArray;
+    let dateNumber = moment(template.at(i).get('start_date').value).day();
+
+    let datePlus = dateNumber ? (6 - dateNumber) + 1 : 6;
+    let start_date = moment(template.at(i).get('start_date').value).format('YYYY/MM/DD 23:59:00');
+
+    let overDate = Date.parse(start_date) >= Date.parse(this.maxStartDateTemplate);
+    if (overDate)
+      return this.maxStartDateTemplate;
+
+    return template.at(i).get('repeated').value === 'none' ? this.maxStartDateTemplate : moment(dateSelected).add(datePlus, 'days');
   }
 
   changeValue(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (template.at(idx).get('is_backup').value === 0) 
+    if (template.at(idx).get('is_backup').value === 0)
       template.at(idx).get('notif').disable();
-    else 
+    else
     template.at(idx).get('notif').enable();
+  }
+
+  getRepeated(idx) {
+    let template = this.formSchedule.get('task_templates') as FormArray;
+
+    if (this.setMaxDate(template.at(idx).get('start_date'), idx) < template.at(idx).get('end_date').value) {
+      template.at(idx).get('end_date').setValue('');
+    }
   }
 
   submit() {
@@ -261,7 +288,7 @@ export class ScheduleProgramCreateComponent {
       this.saveData = true;
       // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
       // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
-      
+
       let body = {
         name: this.formSchedule.get('name').value,
         trade_creator_id: this.formSchedule.get('trade_creator_id').value,
