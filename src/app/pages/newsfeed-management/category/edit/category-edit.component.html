@@ -2,7 +2,7 @@
     <!-- HEADER -->
     <page-content-header [contentTitle]="'Ubah Kategori'"></page-content-header>
     <!-- / HEADER -->
-  
+
     <div class="content p-24">
       <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
         <form autocomplete="off" [formGroup]="formCategoryGroup">
@@ -24,7 +24,7 @@
 
               <div fxLayout="row" class="pt-24 pb-24" fxLayoutAlign="space-between center">
                 <span class="h3">RSS Link</span>
-                <button type="button" mat-raised-button matTooltip="Tambah Kemasan" fxFlex="3" (click)="addNewRSS()">
+                <button type="button" mat-raised-button matTooltip="Tambah RSS Link" fxFlex="3" (click)="addNewRSS()">
                   <mat-icon>add</mat-icon>
                 </button>
               </div>
@@ -36,19 +36,20 @@
                       <mat-error *ngIf="item.controls['url'].hasError('required') && item.controls['url'].touched">
                         URL harus diisi
                       </mat-error>
-                      <mat-error *ngIf="item.controls['url'].invalid && item.controls['url'] !== ''">
-                          URL tidak valid
+                      <mat-error *ngIf="item.controls['url'].invalid && item.get('url').value !== ''">
+                        URL tidak valid
                       </mat-error>
-                       
+
                     </mat-form-field>
                   <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
                     <button type="button" mat-icon-button color="primary" (click)="removeRSS(item, i)"
-                      [disabled]="i === 0">
+                      [disabled]="formCategoryGroup.get('link').value.length <= 1">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
                 </div>
               </div>
+
 
           </div>
           <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
@@ -60,4 +61,3 @@
       </div>
     </div>
   </div>
-  

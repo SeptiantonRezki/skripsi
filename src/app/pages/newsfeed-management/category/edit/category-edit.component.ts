@@ -38,7 +38,7 @@ export class CategoryEditComponent implements OnInit {
     private CategoryService: CategoryService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder
-  ) { 
+  ) {
     this.adapter.setLocale('id');
     this.detailNewsCategory = this.dataService.getFromStorage(
       "detail_news_category"
@@ -53,7 +53,7 @@ export class CategoryEditComponent implements OnInit {
       status: {},
       link: []
     }
-    
+
     this.setDetailCategoryNews();
   }
 
@@ -64,25 +64,25 @@ export class CategoryEditComponent implements OnInit {
     let linkItem = this.formCategoryGroup.get("link") as FormArray;
     let formLink = this.formCategoryGroup.controls["link"];
     console.log(this.detailNewsCategory.links);
-    this.detailNewsCategory.links.map((item, index) => { 
+    this.detailNewsCategory.links.map((item, index) => {
       console.log('rss link: ' + item);
       if(item !== ''){
-        return linkItem.push(this.formBuilder.group({ 
-          url: item 
+        return linkItem.push(this.formBuilder.group({
+          url: [item, [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]]
         }));
       }else{
         console.log('empty');
       }
-      
-    })    
+
+    })
   }
 
   addItemLink(): FormGroup {
     return this.formBuilder.group({
       url: [
-        "", 
+        "",
         [
-          Validators.required, 
+          Validators.required,
           Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")
         ]
       ]
@@ -109,7 +109,7 @@ export class CategoryEditComponent implements OnInit {
   confirmRemoveRSS(): void {
     let packaging = this.formCategoryGroup.get("link") as FormArray;
     packaging.removeAt(this.rssIndex);
-    
+
     this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
     this.dialogService.brodcastCloseConfirmation();
   }
@@ -121,7 +121,7 @@ export class CategoryEditComponent implements OnInit {
       status: ["", Validators.required],
       link: this.formBuilder.array([])
     });
-  }  
+  }
 
 
   submit(status?: string): void {
