@@ -32,12 +32,13 @@
             <span class="mat-headline">{{detailNews.title}}</span>
             <small class="secondary-text">{{detailNews.date | date:'dd MMMM yyyy'}}</small>
           </div>
-          <div fxLayout="column" class="pb-24">
+          <div fxLayout="column" class="pb-48">
             <p [innerHtml]="detailNews.description" style="text-align: justify"></p>
           </div>
+          <mat-checkbox formControlName="is_notif">Kirim push notification?</mat-checkbox>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="25" (click)="submit()">
             SIMPAN
           </button>
         </div>

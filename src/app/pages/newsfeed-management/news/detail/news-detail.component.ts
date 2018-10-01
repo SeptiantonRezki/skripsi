@@ -21,20 +21,22 @@ export class NewsDetailComponent {
     private dialogService: DialogService,
     private newsService: NewsService,
     private formBuilder: FormBuilder
-  ) { 
+  ) {
     this.detailNews = dataService.getFromStorage('detail_news');
   }
 
   ngOnInit() {
     this.formBerita = this.formBuilder.group({
-      status: [this.detailNews.status]
+      status: [this.detailNews.status],
+      is_notif: [this.detailNews['is_notif']]
     })
   }
 
   submit() {
     let body = {
       _method: 'PUT',
-      status: this.formBerita.get('status').value
+      status: this.formBerita.get('status').value,
+      is_notif: this.formBerita.get('is_notif').value,
     }
 
     this.newsService.put(body, {news_id: this.detailNews.id}).subscribe(
