@@ -7,6 +7,7 @@ import { UploadImageComponent } from "../dialog/upload-image/upload-image.compon
 import { DialogService } from "../../../../services/dialog.service";
 import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
+import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
 import { Observable } from "rxjs";
 
@@ -33,13 +34,14 @@ export class TemplateCreateComponent {
 
   saveData: Boolean;
   valueChange: Boolean;
+  duplicateTask: any;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.valueChange && !this.saveData) {
+    if (this.valueChange && !this.saveData || this.duplicateTask && !this.saveData) {
       return false;
     }
 
@@ -47,12 +49,15 @@ export class TemplateCreateComponent {
   }
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private dialog: MatDialog, 
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private router: Router,
     private dialogService: DialogService,
-    private taskTemplateService: TemplateTaskService
+    private taskTemplateService: TemplateTaskService,
+    private dataService: DataService
   ) {
+    this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
+
     this.saveData = false;
     this.templateTaskFormError = {
       name: {},
@@ -65,7 +70,7 @@ export class TemplateCreateComponent {
     this.templateTaskForm = this.formBuilder.group({
       name: ["Judul Tugas", Validators.required],
       description: ["Deskripsi Tugas", Validators.required],
-      image: [""], 
+      image: [""],
       material: false,
       material_description: ["Jenis Material", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
@@ -78,15 +83,52 @@ export class TemplateCreateComponent {
 
     this.templateTaskForm.get('material_description').disable();
 
+    if (this.duplicateTask) this.setValue();
+
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
+    })
+  }
+
+  setValue() {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
+
+    this.templateTaskForm.get('name').setValue(this.duplicateTask.name);
+    this.templateTaskForm.get('description').setValue(this.duplicateTask.description);
+    this.templateTaskForm.get('material').setValue(this.duplicateTask.material === 'yes' ? true : false);
+    this.templateTaskForm.get('material_description').setValue(this.duplicateTask['material_description'] ? this.duplicateTask['material_description'] : 'Jenis Material');
+    this.templateTaskForm.get('image').setValue(this.duplicateTask.image_url);
+    this.duplicateTask['questions'].map(item => {
+      questions.push(this.formBuilder.group({
+        id: item.id,
+        question: item.question,
+        question_image: item['question_image'] ? item['question_image'] : '',
+        type: item.type,
+        typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
+        // required: item.required,
+        additional: this.formBuilder.array(
+          item.additional.map(item => {
+            return this.formBuilder.group({ option: item })
+          })
+        )
+      }))
+    })
+
+    if (this.duplicateTask.material === 'no')
+      this.templateTaskForm.get('material_description').disable();
+    else
+      this.templateTaskForm.get('material_description').enable();
+
+    this.duplicateTask['rejected_reason_choices'].map(item => {
+      return rejected.push(this.formBuilder.group({ reason: item }))
     })
   }
 
   addAdditional(idx) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
-    
+
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length+1}` }));
   }
 
@@ -96,7 +138,7 @@ export class TemplateCreateComponent {
       let rejected_reason = this.templateTaskForm.get(type) as FormArray;
       return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx+1))
     }
-    
+
     if (questionsIdx !== undefined && additionalIdx === undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       return questions.at(questionsIdx).get('question').setValue(text);
@@ -144,7 +186,7 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function(item){ return item.id })
     if (newId === -Infinity) newId = { id: 0 }
-    
+
     questions.push(this.formBuilder.group({
       id: newId.id+1,
       question: `Pertanyaan`,
@@ -255,7 +297,7 @@ export class TemplateCreateComponent {
 
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { 
+    this.dialogRef.afterClosed().subscribe(response => {
       if(response) {
         switch (type) {
           case 'master':

@@ -32,7 +32,7 @@ export class TemplateIndexComponent {
   activeCellTemp: TemplateRef<any>;
 
   keyUp = new Subject<string>();
-  
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -134,7 +134,7 @@ export class TemplateIndexComponent {
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
       });
-      
+
       this.loadingIndicator = false;
     });
   }
@@ -146,6 +146,11 @@ export class TemplateIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_template_task', param);
     this.router.navigate(['dte', 'template-task', 'edit']);
+  }
+
+  duplicate(param?: any): void {
+    this.dataService.setToStorage('duplicate_template_task', param);
+    this.router.navigate(['dte', 'template-task', 'create']);
   }
 
   deleteTemplateTask(id) {

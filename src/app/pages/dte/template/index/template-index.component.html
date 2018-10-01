@@ -48,10 +48,13 @@
             <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="540" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
-        <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="500" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
+                <mat-icon class="secondary-text">filter_none</mat-icon>
+              </button>
               <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
