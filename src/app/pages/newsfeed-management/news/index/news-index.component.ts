@@ -116,7 +116,7 @@ export class NewsIndexComponent {
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
-    this.pagination.filter = this.formFilter.get('category_id').value;
+    this.pagination['category_id'] = this.formFilter.get('category_id').value === 'all' ? '' : this.formFilter.get('category_id').value;
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
 

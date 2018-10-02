@@ -28,7 +28,7 @@ export class NewsDetailComponent {
   ngOnInit() {
     this.formBerita = this.formBuilder.group({
       status: [this.detailNews.status],
-      is_notif: [this.detailNews['is_notif']]
+      is_notif: [this.detailNews['is_notif'] === 1 ? true : false]
     })
   }
 
@@ -36,7 +36,7 @@ export class NewsDetailComponent {
     let body = {
       _method: 'PUT',
       status: this.formBerita.get('status').value,
-      is_notif: this.formBerita.get('is_notif').value,
+      is_notif: this.formBerita.get('is_notif').value === true ? 1 : 0,
     }
 
     this.newsService.put(body, {news_id: this.detailNews.id}).subscribe(
