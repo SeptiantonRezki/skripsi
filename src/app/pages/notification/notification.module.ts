@@ -5,6 +5,7 @@ import { NotificationRoutingModule } from "./notification-routing.module";
 import { NotificationIndexComponent } from "./index/notification-index.component";
 import { NotificationCreateComponent } from "./create/notification-create.component";
 import { NotificationEditComponent } from "./edit/notification-edit.component";
+import { PageGuard } from "app/classes/auth.guard";
 
 @NgModule({
   imports: [CommonModule, NotificationRoutingModule],
@@ -18,6 +19,6 @@ import { NotificationEditComponent } from "./edit/notification-edit.component";
     NotificationCreateComponent,
     NotificationEditComponent
   ],
-  providers: []
+  providers: [PageGuard]
 })
 export class NotificationModule {}

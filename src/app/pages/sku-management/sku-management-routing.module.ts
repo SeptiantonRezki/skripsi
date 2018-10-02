@@ -9,6 +9,7 @@ import { RewardCreateComponent } from "./reward/create/reward-create.component";
 import { RewardEditComponent } from "./reward/edit/reward-edit.component";
 import { RewardHistoryIndexComponent } from "./reward-history/index/reward-history-index.component";
 import { CoinIndexComponent } from "./coin/index/coin-index.component";
+import { PageGuard } from "app/classes/auth.guard";
 import {
   ListBrandResolver,
   ListCategoryResolver,
@@ -26,7 +27,8 @@ const routes: Routes = [
     component: ProductIndexComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.product.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "product/create",
@@ -38,7 +40,8 @@ const routes: Routes = [
       listBrand: ListBrandResolver,
       listCategory: ListCategoryResolver,
       listPackaging: ListPackagingResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "product/edit/:id",
@@ -50,42 +53,48 @@ const routes: Routes = [
       listBrand: ListBrandResolver,
       listCategory: ListCategoryResolver,
       listPackaging: ListPackagingResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "reward",
     component: RewardIndexComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.reward.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "reward/create",
     component: RewardCreateComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.reward.create
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "reward/edit",
     component: RewardEditComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.reward.edit
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "reward-history",
     component: RewardHistoryIndexComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.rewardHistory.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "coin",
     component: CoinIndexComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.coin.index
-    }
+    },
+    canActivate: [PageGuard]
   }
 ];
 

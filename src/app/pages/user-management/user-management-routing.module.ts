@@ -17,6 +17,7 @@ import { WholesalerEditComponent } from "./wholesaler/edit/wholesaler-edit.compo
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerIndexComponent } from "./retailer/index/retailer-index.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
+import { PageGuard } from "app/classes/auth.guard";
 import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
@@ -34,7 +35,8 @@ const routes: Routes = [
     component: AdminPrincipalIndexComponent,
     data: {
       breadcrumbs: brConfig.adminprincipal.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "admin-principal/create",
@@ -44,7 +46,8 @@ const routes: Routes = [
     },
     resolve: {
       listRole: ListRoleAdminResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "admin-principal/edit",
@@ -54,14 +57,16 @@ const routes: Routes = [
     },
     resolve: {
       listRole: ListRoleAdminResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "field-force",
     component: FieldForceIndexComponent,
     data: {
       breadcrumbs: brConfig.fieldforce.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "field-force/create",
@@ -71,7 +76,8 @@ const routes: Routes = [
     },
     resolve: {
       listLevel: ListLevelFFResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "field-force/edit",
@@ -81,7 +87,8 @@ const routes: Routes = [
     },
     resolve: {
       listLevel: ListLevelFFResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "paguyuban",
@@ -123,6 +130,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.wholesaler.create
     },
+    canActivate: [PageGuard]
     // resolve: {
     //   listLevel: ListLevelAreaResolver
     // }
@@ -132,28 +140,32 @@ const routes: Routes = [
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.edit
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "retailer",
     component: RetailerIndexComponent,
     data: {
       breadcrumbs: brConfig.retailer.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "retailer/create",
     component: RetailerCreateComponent,
     data: {
       breadcrumbs: brConfig.retailer.create
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "retailer/edit",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.edit
-    }
+    },
+    canActivate: [PageGuard]
   }
 ];
 

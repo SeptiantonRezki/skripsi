@@ -6,15 +6,15 @@ import { RoleIndexComponent } from "./role/index/role-index.component";
 import { RoleCreateComponent } from "./role/create/role-create.component";
 import { RoleEditComponent } from "./role/edit/role-edit.component";
 import { ChangePasswordIndexComponent } from "./change-password/index/change-password-index.component";
-import { 
-  MatIconModule, 
-  MatCheckboxModule, 
-  MatButtonModule, 
-  MatSliderModule, 
-  MatProgressBarModule, 
-  MatSelectModule, 
-  MatInputModule, 
-  MatFormFieldModule, 
+import {
+  MatIconModule,
+  MatCheckboxModule,
+  MatButtonModule,
+  MatSliderModule,
+  MatProgressBarModule,
+  MatSelectModule,
+  MatInputModule,
+  MatFormFieldModule,
   MatSlideToggleModule,
   MatDividerModule
 } from "@angular/material";
@@ -22,10 +22,11 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
 import { ListMenuResolver } from "../../resolver/settings.resolver";
+import { PageGuard } from "app/classes/auth.guard";
 
 @NgModule({
   imports: [
-    CommonModule, 
+    CommonModule,
     SettingsRoutingModule,
     FuseSharedModule,
     SharedModule,
@@ -53,6 +54,6 @@ import { ListMenuResolver } from "../../resolver/settings.resolver";
     RoleEditComponent,
     ChangePasswordIndexComponent
   ],
-  providers: [ListMenuResolver]
+  providers: [ListMenuResolver, PageGuard]
 })
 export class SettingsModule {}

@@ -16,6 +16,7 @@ import { RewardCreateComponent } from "./reward/create/reward-create.component";
 import { RewardEditComponent } from "./reward/edit/reward-edit.component";
 import { RewardHistoryIndexComponent } from "./reward-history/index/reward-history-index.component";
 import { CoinIndexComponent } from "./coin/index/coin-index.component";
+import { PageGuard } from "app/classes/auth.guard";
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -85,6 +86,6 @@ import {
     RewardHistoryIndexComponent,
     CoinIndexComponent
   ],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver]
+  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard]
 })
 export class SkuManagementModule {}

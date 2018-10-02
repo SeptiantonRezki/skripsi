@@ -31,6 +31,7 @@ import {
 
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { PageGuard } from "app/classes/auth.guard";
 
 import {
   DateAdapter,
@@ -54,7 +55,7 @@ export const MY_FORMATS = {
 
 @NgModule({
   imports: [
-    CommonModule, 
+    CommonModule,
     NewsfeedManagementRoutingModule,
     FuseSharedModule,
     SharedModule,
@@ -98,7 +99,8 @@ export const MY_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    PageGuard
   ],
 })
 export class NewsfeedManagementModule {}

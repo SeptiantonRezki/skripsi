@@ -83,10 +83,15 @@ const appRoutes: Routes = [
     canActivate: [NonAuthGuard]
   },
   {
-    path: "admin",
-    loadChildren: "./pages/admin/admin.module#AdminModule",
+    path: "access-denied",
+    loadChildren: "./pages/500/access-denied.module#AccessDeniedModule",
     canActivate: [AuthGuard]
   },
+  // {
+  //   path: "admin",
+  //   loadChildren: "./pages/admin/admin.module#AdminModule",
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: "**",
     loadChildren: "./pages/404/error-404.module#Error404Module"

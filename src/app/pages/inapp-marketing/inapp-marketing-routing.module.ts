@@ -8,6 +8,7 @@ import { LandingPageIndexComponent } from "./landing-page/index/landing-page-ind
 import { LandingPageCreateComponent } from "./landing-page/create/landing-page-create.component";
 import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.component";
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
+import { PageGuard } from "app/classes/auth.guard";
 
 const routes: Routes = [
   {
@@ -20,48 +21,54 @@ const routes: Routes = [
     component: BannerIndexComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.banner.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "banner/create",
     component: BannerCreateComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.banner.create
-    }, 
+    },
     resolve: {
       listLevelArea: ListLevelAreaResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "banner/edit",
     component: BannerEditComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.banner.edit
-    }, 
+    },
     resolve: {
       listLevelArea: ListLevelAreaResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "landing-page",
     component: LandingPageIndexComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.landingPage.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "landing-page/create",
     component: LandingPageCreateComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.landingPage.create
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "landing-page/edit",
     component: LandingPageEditComponent,
     data: {
       breadcrumbs: brConfig.inappMarketing.landingPage.edit
-    }
+    },
+    canActivate: [PageGuard]
   }
 ];
 

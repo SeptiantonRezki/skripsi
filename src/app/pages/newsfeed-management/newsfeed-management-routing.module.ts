@@ -8,6 +8,7 @@ import { CategoryEditComponent } from "./category/edit/category-edit.component";
 import { NewsIndexComponent } from "./news/index/news-index.component";
 import { ListCategoryNewsfeedResolver } from "app/resolver/newsfeed-management.resolver";
 import { NewsDetailComponent } from "./news/detail/news-detail.component";
+import { PageGuard } from "app/classes/auth.guard";
 
 const routes: Routes = [
   {
@@ -20,21 +21,24 @@ const routes: Routes = [
     component: CategoryIndexComponent,
     data: {
       breadcrumbs: brConfig.newsfeedManagement.category.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "category/create",
     component: CategoryCreateComponent,
     data: {
       breadcrumbs: brConfig.newsfeedManagement.category.create
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "category/edit",
     component: CategoryEditComponent,
     data: {
       breadcrumbs: brConfig.newsfeedManagement.category.edit
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "news",
@@ -44,14 +48,16 @@ const routes: Routes = [
     },
     resolve: {
       listCategory: ListCategoryNewsfeedResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "news/detail",
     component: NewsDetailComponent,
     data: {
       breadcrumbs: brConfig.newsfeedManagement.news.detail
-    }
+    },
+    canActivate: [PageGuard]
   }
 ];
 

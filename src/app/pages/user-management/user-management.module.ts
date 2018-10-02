@@ -35,6 +35,8 @@ import { RetailerIndexComponent } from "./retailer/index/retailer-index.componen
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
 
+import { PageGuard } from "app/classes/auth.guard";
+
 import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
@@ -92,6 +94,6 @@ import {
     RetailerCreateComponent,
     RetailerEditComponent
   ],
-  providers: [ListRoleAdminResolver, ListLevelFFResolver, ListLevelAreaResolver]
+  providers: [ListRoleAdminResolver, ListLevelFFResolver, ListLevelAreaResolver, PageGuard]
 })
 export class UserManagementModule {}

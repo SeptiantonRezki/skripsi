@@ -6,6 +6,7 @@ import { RoleCreateComponent } from "./role/create/role-create.component";
 import { RoleEditComponent } from "./role/edit/role-edit.component";
 import { ChangePasswordIndexComponent } from "./change-password/index/change-password-index.component";
 import { ListMenuResolver } from "../../resolver/settings.resolver";
+import { PageGuard } from "app/classes/auth.guard";
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
     component: RoleIndexComponent,
     data: {
       breadcrumbs: brConfig.settings.access.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "access/create",
@@ -28,21 +30,24 @@ const routes: Routes = [
     },
     resolve: {
       menu: ListMenuResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "access/edit/:id",
     component: RoleEditComponent,
     data: {
       breadcrumbs: brConfig.settings.access.edit
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "account",
     component: ChangePasswordIndexComponent,
     data: {
       breadcrumbs: brConfig.settings.account.index
-    }
+    },
+    canActivate: [PageGuard]
   }
 ];
 

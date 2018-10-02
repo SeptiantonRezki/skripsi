@@ -27,6 +27,7 @@ import {
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
+import { PageGuard } from "app/classes/auth.guard";
 
 import {
   DateAdapter,
@@ -95,7 +96,8 @@ export const MY_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    PageGuard
   ]
 })
 export class InappMarketingModule {}

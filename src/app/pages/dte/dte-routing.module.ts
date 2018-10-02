@@ -15,6 +15,7 @@ import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedu
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
 import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, ListRetailerResolver } from "../../resolver/dte.resolver";
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
+import { PageGuard } from "app/classes/auth.guard";
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
     component: TemplateIndexComponent,
     data: {
       breadcrumbs: brConfig.dte.template.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "template-task/create",
@@ -35,7 +37,8 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.template.create
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "template-task/edit",
@@ -43,14 +46,16 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.template.edit
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "trade-program",
     component: TradeIndexComponent,
     data: {
       breadcrumbs: brConfig.dte.trade.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "trade-program/create",
@@ -58,7 +63,8 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.trade.create
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "trade-program/edit",
@@ -66,14 +72,16 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.trade.edit
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "schedule-trade-program",
     component: ScheduleProgramIndexComponent,
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "schedule-trade-program/create",
@@ -85,7 +93,8 @@ const routes: Routes = [
       listTradeProgram: ListTradeProgramResolver,
       listTemplate: ListTemplateResolver
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "schedule-trade-program/detail/:id",
@@ -96,14 +105,16 @@ const routes: Routes = [
     resolve: {
       listTradeProgram: ListTradeProgramResolver,
       listTemplate: ListTemplateResolver
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "audience",
     component: AudienceIndexComponent,
     data: {
       breadcrumbs: brConfig.dte.audience.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "audience/create",
@@ -115,7 +126,8 @@ const routes: Routes = [
       listScheduler: ListSchedulerResolver,
       listRetailer: ListRetailerResolver
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   },
   {
     path: "audience/edit",
@@ -127,7 +139,8 @@ const routes: Routes = [
       listScheduler: ListSchedulerResolver,
       listRetailer: ListRetailerResolver
     },
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
   }
 ];
 
