@@ -43,6 +43,7 @@ export class AudienceCreateComponent {
   formFilter: FormGroup;
 
   loadingIndicator: Boolean;
+  reorderable = true;
   saveData: Boolean;
 
   public filterScheduler: FormControl = new FormControl();
