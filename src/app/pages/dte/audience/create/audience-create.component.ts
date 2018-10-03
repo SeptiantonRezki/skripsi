@@ -460,7 +460,7 @@ export class AudienceCreateComponent {
     this.audienceService.getListRetailer({ area: area_id }).subscribe(
       res => {
         // this.rows = res['data'];
-        this.selected = [];
+        // this.selected = [];
         // this.loadingIndicator = false;
 
         if (res['data'].length === 0) {
@@ -501,6 +501,7 @@ export class AudienceCreateComponent {
   }
 
   submit() {
+    console.log(this.selected); return;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get('type').value === 'limit';
