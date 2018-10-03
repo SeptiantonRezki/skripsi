@@ -501,7 +501,6 @@ export class AudienceCreateComponent {
   }
 
   submit() {
-    console.log(this.selected); return;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get('type').value === 'limit';
