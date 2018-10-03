@@ -175,8 +175,8 @@ export class FieldForceEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      password: [""],
-      password_confirmation: [""],
+      password: "",
+      password_confirmation: "",
     });
   }
 
@@ -311,28 +311,28 @@ export class FieldForceEditComponent {
         _method: "PUT",
         username: this.formFF.get("username").value,
         name: this.formFF.get("fullname").value,
-        password: this.formFF.get("password").value,
-        password_confirmation: this.formFF.get("password_confirmation").value,
         areas: [this.formFF.get('territory').value],
         status: this.formFF.get("status").value
       };
 
-    this.fieldforceService
-      .put(body, { fieldforce_id: this.detailFF.id })
-      .subscribe(
+      if (this.formFF.get("password").value)
+        body['password'] = this.formFF.get("password").value;
+
+      if (this.formFF.get("password_confirmation").value)
+        body['password_confirmation'] = this.formFF.get("password_confirmation").value;
+
+      this.fieldforceService.put(body, { fieldforce_id: this.detailFF.id }).subscribe(
         res => {
-          this.dialogService.openSnackBar({
-            message: "Data Berhasil Diubah"
-          });
+          this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
           this.router.navigate(["user-management", "field-force"]);
           window.localStorage.removeItem("detail_field_force");
         },
         err => {}
       );
-  } else {
-    this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-    commonFormValidator.validateAllFields(this.formFF);
-  }
+    } else {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formFF);
+    }
 
   }
 

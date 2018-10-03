@@ -158,7 +158,7 @@
             <div fxLayout="row">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
-                <mat-error *ngIf="formBannerGroup.get('title').invalid">
+                <mat-error *ngIf="formBannerGroup.controls['title'].hasError('required') && formBannerGroup.controls['title'].touched">
                   Nama Halaman harus diisi
                 </mat-error>
               </mat-form-field>
@@ -167,6 +167,9 @@
               <h3 class="">Isi Halaman</h3>
             </div>
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+            <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formBannerGroup.controls['body'].hasError('required') && formBannerGroup.controls['body'].touched">
+              Isi Halaman harus diisi
+            </mat-error>
           </div>
 
 

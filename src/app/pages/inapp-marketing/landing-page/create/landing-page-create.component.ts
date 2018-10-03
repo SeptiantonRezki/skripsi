@@ -84,9 +84,8 @@ export class LandingPageCreateComponent {
         }
       );
     } else {
-      this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!"
-      });
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formPageGroup);
     }
   }
 }

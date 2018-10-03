@@ -17,19 +17,19 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
-                <mat-form-field fxFlex="100" class="is-light">
-                    <input matInput type="text" placeholder="Nama" formControlName="nama">
-                    <mat-error *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
-                      Nama harus diisi.
-                    </mat-error>
-                  </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Nama" formControlName="nama">
+                <mat-error *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
+                  Nama harus diisi.
+                </mat-error>
+              </mat-form-field>
 
-                  <mat-form-field fxFlex="100" class="is-light">
-                    <input matInput type="text" placeholder="Username" formControlName="username">
-                    <mat-error *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                      Username harus diisi.
-                    </mat-error>
-                  </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Username" formControlName="username">
+                <mat-error *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
+                  Username harus diisi.
+                </mat-error>
+              </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="email" placeholder="Alamat Email" formControlName="email">
@@ -40,7 +40,7 @@
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
                 Lanjut
               </button>
             </div>
@@ -70,7 +70,7 @@
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
                 Lanjut
               </button>
             </div>

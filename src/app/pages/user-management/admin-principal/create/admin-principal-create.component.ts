@@ -71,6 +71,14 @@ export class AdminPrincipalCreateComponent {
     console.log(event.value);
   }
 
+  step1() {
+    commonFormValidator.validateAllFields(this.verticalStepperStep1);
+  }
+
+  step2() {
+    commonFormValidator.validateAllFields(this.verticalStepperStep2);
+  }
+ 
   submit() {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid) {
       this.submitting = true;

@@ -286,6 +286,18 @@ export class WholesalerCreateComponent{
   selectionChange(event) {
     console.log(event.value);
   }
+
+  step1() {
+    commonFormValidator.validateAllFields(this.verticalStepperStep1);
+  }
+
+  step2() {
+    commonFormValidator.validateAllFields(this.verticalStepperStep2);
+  }
+
+  step3() {
+    commonFormValidator.validateAllFields(this.verticalStepperStep3);
+  }
     
   submit() {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid) {

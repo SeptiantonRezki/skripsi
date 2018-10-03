@@ -333,6 +333,7 @@ export class BannerCreateComponent {
       }
 
       this.dialogService.openSnackBar({ message: msg });
+      commonFormValidator.validateAllFields(this.formBannerGroup);
     }
   }
 

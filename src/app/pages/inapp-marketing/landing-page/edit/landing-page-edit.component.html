@@ -20,7 +20,7 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
-              <mat-error *ngIf="formPageError.title.required">
+              <mat-error *ngIf="formPageGroup.controls['title'].hasError('required') && formPageGroup.controls['title'].touched">
                 Nama Halaman harus diisi
               </mat-error>
             </mat-form-field>
@@ -29,6 +29,9 @@
             <h3 class="">Isi Halaman</h3>
           </div>
           <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+          <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPageGroup.controls['body'].hasError('required') && formPageGroup.controls['body'].touched">
+            Isi Halaman harus diisi
+          </mat-error>
           <div class="pt-48 pb-16">
             <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0">
               <div class="">
