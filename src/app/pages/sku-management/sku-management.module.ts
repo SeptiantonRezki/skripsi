@@ -32,7 +32,10 @@ import {
   MatTooltipModule,
   MatAutocompleteModule,
   MatSnackBarModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatMenuModule,
+  MatToolbarModule,
+  MatDialogModule
 } from "@angular/material";
 
 import {
@@ -40,6 +43,8 @@ import {
   ListCategoryResolver,
   ListPackagingResolver
 } from "../../resolver/product.resolver";
+import { ScanBarcodeDialogComponent } from "./product/create/dialog/scan-barcode-dialog.component";
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 @NgModule({
   imports: [
@@ -64,7 +69,10 @@ import {
     MatAutocompleteModule,
     MatSnackBarModule,
     MatProgressBarModule,
-    ngfModule
+    MatDialogModule,
+    MatToolbarModule,
+    ngfModule,
+    AutofocusModule
   ],
   declarations: [
     ProductIndexComponent,
@@ -74,7 +82,8 @@ import {
     RewardCreateComponent,
     RewardEditComponent,
     RewardHistoryIndexComponent,
-    CoinIndexComponent
+    CoinIndexComponent,
+    ScanBarcodeDialogComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -86,6 +95,7 @@ import {
     RewardHistoryIndexComponent,
     CoinIndexComponent
   ],
+  entryComponents: [ScanBarcodeDialogComponent],
   providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard]
 })
 export class SkuManagementModule {}

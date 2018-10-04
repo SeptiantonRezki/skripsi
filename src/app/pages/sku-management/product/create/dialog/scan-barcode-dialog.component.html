@@ -1,0 +1,43 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <span>Pindai Kode Batang Produk</span>
+      </div>
+
+    </div>
+    <!-- <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button> -->
+
+  </mat-toolbar>
+
+  <form autocomplete="off">
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+      <!-- NAME -->
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div class="card-name">
+          <!-- <mat-form-field class="w-100-p otc" floatLabel="never" appearance="standard">
+            <textarea matInput rows="3" placeholder="Alasan Untuk Menon-aktifkan"></textarea>
+          </mat-form-field> -->
+          <img src="assets/images/ayo/scan.gif" style="width: 40%; display: block; margin-left: auto; margin-right: auto;" />
+        </div>
+        <input autofocus id="barcode" type="text" [formControl]="barcode">
+      </div>
+      <!-- / NAME -->
+    </div>
+  </form>
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxFlex="1 0 auto">
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>

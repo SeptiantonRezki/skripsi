@@ -1,0 +1,178 @@
+@import "src/@fuse/scss/fuse";
+
+.scrumboard-card-dialog {
+  @include media-breakpoint('xs') {
+    width: 100%;
+  }
+
+  @include media-breakpoint-up('xs') {
+    width: 480px;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+
+    // border-radius: 8px !important;
+    .mat-toolbar {
+      .due-date {
+        .mat-form-field {
+          width: auto;
+          margin: 0 8px;
+
+          .mat-form-field-wrapper {
+            padding: 0;
+
+            .mat-form-field-flex {
+              align-items: center;
+              font-size: 18px;
+              padding: 0 0 12px 0;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              text-align: center;
+              letter-spacing: 0.25em;
+
+              .mat-form-field-infix {
+                display: none;
+              }
+
+              .mat-input-element {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
+        .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+          width: 24px;
+        }
+      }
+    }
+
+    .mat-dialog-content {
+      position: relative;
+
+      // background-color: #F5F5F5;
+      .card-name {
+        width: 100%;
+        font-size: 22px;
+
+        @include media-breakpoint(xs) {
+          font-size: 14px;
+        }
+      }
+
+      .description {
+        padding-bottom: 16px;
+      }
+
+      .sections {
+        .section {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+          margin-bottom: 32px;
+
+          &:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+
+            .section-content {
+              padding-bottom: 0;
+            }
+          }
+
+          .section-header {
+            font-size: 16px;
+
+            mat-icon {
+              margin-right: 8px;
+              color: rgba(0, 0, 0, 0.6);
+            }
+
+            .section-title {
+              font-weight: 500;
+            }
+          }
+
+          .section-content {
+            padding: 24px 0 32px 0;
+          }
+
+          .xn-yq-Md {
+            background-color: #fff;
+            border-top: 1px solid #e5e5e5;
+          }
+
+          .xn-xq-ic {
+            bottom: 0;
+          }
+
+          .xn-xq-hc,
+          .xn-xq-ic {
+            position: absolute;
+            left: 0;
+            right: 0;
+          }
+        }
+      }
+
+      mat-form-field.otc {
+        .mat-form-field-wrapper {
+          padding: 0;
+        }
+
+        .mat-form-field-flex {
+          align-items: center;
+          font-size: 28px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          text-align: center;
+        }
+
+        .mat-form-field-infix {
+          // display: none;
+          border-top: 0;
+          padding: 10px;
+        }
+
+        .mat-form-field-underline {
+          display: none;
+        }
+
+        input {
+          letter-spacing: 0.35em;
+          -webkit-text-security: disc;
+        }
+      }
+    }
+  }
+
+  .mat-dialog-title {
+    // height: 120px;
+    border-bottom: .05px solid #ccc;
+  }
+
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .greyBox {
+    background-color: #A8A8A8;
+    font-weight: bold;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .lightGreyBox {
+    background-color: #eee;
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  #barcode:focus {
+    text-indent: -9999em;
+    text-shadow: 9999em 0 0 #000;
+  }
+}

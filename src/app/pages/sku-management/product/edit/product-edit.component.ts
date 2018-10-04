@@ -7,10 +7,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { ProductService } from "../../../../services/sku-management/product.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
-import { MatChipInputEvent, MatSelectChange, MatSelect } from "@angular/material";
+import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
 import * as moment from "moment";
 import { takeUntil } from "rxjs/operators";
+import { ScanBarcodeDialogComponent } from "../create/dialog/scan-barcode-dialog.component";
 
 @Component({
   selector: 'app-product-edit',
@@ -63,12 +64,15 @@ export class ProductEditComponent {
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
+  dialogRef: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialogService: DialogService,
-    private productService: ProductService
+    private productService: ProductService,
+    private dialog: MatDialog,
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -140,6 +144,7 @@ export class ProductEditComponent {
       }
 
       this.formProductGroup.get("name").setValue(res.name);
+      this.formProductGroup.get("barcode").setValue(res.barcode);
       this.formProductGroup.get("brand").setValue(res.brand_id);
       this.formProductGroup.get("packaging").setValue(res.packaging_id);
       this.formProductGroup.get("status").setValue(res.status);
@@ -223,6 +228,7 @@ export class ProductEditComponent {
       brand: ["", Validators.required],
       category: ["", Validators.required],
       subCategory: [""],
+      barcode: [""],
       // otherSubCategory: ["", Validators.required],
       packaging: ["", Validators.required],
       // convertion: ["", [Validators.min(0)]]
@@ -291,6 +297,7 @@ export class ProductEditComponent {
         brand_id: this.formProductGroup.get("brand").value,
         category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
         // sub_category_id: this.formProductGroup.get("subCategory").value,
+        barcode: this.formProductGroup.get("barcode").value,
         packaging_id: this.formProductGroup.get("packaging").value,
         status: this.formProductGroup.get("status").value,
         // convertion: this.formProductGroup.get("convertion").value
@@ -299,7 +306,7 @@ export class ProductEditComponent {
       let fd = new FormData();
       fd.append("_method", "PUT");
       fd.append("name", body.name);
-      fd.append("barcode", "");
+      fd.append("barcode", body.barcode);
       
       if (this.files) fd.append("image", body.image);
 
@@ -345,6 +352,22 @@ export class ProductEditComponent {
 
   removeImage(): void {
     this.files = undefined;
+  }
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { "title": "Testing" };
+    
+    this.dialogRef = this.dialog.open(ScanBarcodeDialogComponent, dialogConfig);
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.formProductGroup.get("barcode").setValue(response);
+      }
+    })
   }
 
   convertDate(param?: Date) {
