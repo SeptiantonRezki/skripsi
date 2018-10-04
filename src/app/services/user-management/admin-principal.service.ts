@@ -31,6 +31,11 @@ export class AdminPrincipalService extends BaseService {
     return this.deleteApi(url);
   }
 
+  deleteMultiple(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "delete_multiple");
+    return this.postApi(url, body);
+  }
+
   getListRole(): Observable<any> {
     const url = this.getUrl(this.namespace, "list_role_nolimit");
     return this.getApi(url);
