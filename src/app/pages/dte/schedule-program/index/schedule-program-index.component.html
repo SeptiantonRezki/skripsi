@@ -7,6 +7,7 @@
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
+    <div class="loading" *ngIf="showLoading"></div>
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Pengatur Jadwal Trade Program</h2>
@@ -96,11 +97,16 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="128" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button color="" matTooltip="Lihat" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button color="" [disabled]="row.status_audience !== 'approved'" matTooltip="Eksport Trade Program"
+                (click)="export(row.id)">
+                <mat-icon *ngIf="row.status_audience === 'approved'" class="orange-500-fg">save_alt</mat-icon>
+                <mat-icon *ngIf="row.status_audience !== 'approved'" class="secondary-text">save_alt</mat-icon>
               </button>
               <button mat-icon-button color="primary" [disabled]="row.status_scheduler === 'publish'" matTooltip="Hapus"
                 (click)="deleteStp(row.id)">

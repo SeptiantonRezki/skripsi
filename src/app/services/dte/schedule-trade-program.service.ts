@@ -39,6 +39,11 @@ export class ScheduleTradeProgramService extends BaseService {
     return this.deleteApi(url);
   }
 
+  export(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export');
+    return this.postApi(url, body);
+  }
+
   getTradeProgram(): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_tp');
     return this.getApi(url);

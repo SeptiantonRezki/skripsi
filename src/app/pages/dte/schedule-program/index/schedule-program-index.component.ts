@@ -20,6 +20,7 @@ export class ScheduleProgramIndexComponent {
   id: any;
 
   loadingIndicator = true;
+  showLoading: Boolean;
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
@@ -149,6 +150,20 @@ export class ScheduleProgramIndexComponent {
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
     });
+  }
+  
+  export(id) {
+    this.showLoading = true;
+    this.scheduleTradeProgramService.export({ trade_scheduler_id: id }).subscribe(res => {
+      // window.open(res.data, "_blank");
+      const link = document.createElement('a');
+      link.target = '_blank';
+      link.href = res.data;
+      link.setAttribute('visibility', 'hidden');
+      link.click();
+      this.showLoading = false;
+      // console.log(res);
+    })
   }
 
   convertDate(param?: Date) {
