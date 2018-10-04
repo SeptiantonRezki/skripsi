@@ -172,7 +172,8 @@ export class AudienceCreateComponent {
     })
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.searchingRetailer(res);
+      // this.searchingRetailer(res);
+      this.getRetailer();
     })
 
     this.filterScheduler.valueChanges
@@ -184,12 +185,22 @@ export class AudienceCreateComponent {
 
   getRetailer() {
     this.pagination.per_page = 25;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length-1].value;
+
     this.loadingIndicator = true;
+    this.pagination.area = area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      
+      res.data.map(item => {
+        if (item.checked) {
+          this.selected.push(item);
+        }
+      })
     })
   }
 
@@ -202,6 +213,12 @@ export class AudienceCreateComponent {
       this.rows = res.data;
 
       this.loadingIndicator = false;
+
+      res.data.map(item => {
+        if (item.checked) {
+          this.selected.push(item);
+        }
+      })
     });
   }
 
@@ -456,19 +473,20 @@ export class AudienceCreateComponent {
     let area_id = areaSelected[areaSelected.length-1].value;
 
     this.loadingIndicator = true;
+    this.pagination.area = area_id;
 
-    this.audienceService.getListRetailer({ area: area_id }).subscribe(
+    this.audienceService.getListRetailer(this.pagination).subscribe(
       res => {
-        // this.rows = res['data'];
+        this.rows = res['data'];
         // this.selected = [];
-        // this.loadingIndicator = false;
+        this.loadingIndicator = false;
 
-        if (res['data'].length === 0) {
-          this.loadingIndicator = false;
-          return this.rows = [];
-        }
+        // if (res['data'].length === 0) {
+        //   this.loadingIndicator = false;
+        //   return this.rows = [];
+        // }
 
-        this.appendRows(res['data'], res['next_page_url']);
+        // this.appendRows(res['data'], res['next_page_url']);
       },
       err => {
         console.log(err.error.message);
