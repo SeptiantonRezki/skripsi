@@ -52,6 +52,7 @@ export class PagesName {
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
+      "/settings/account": "principal.ubahpassword.lihat",
     }
     return PAGES[name];
   }

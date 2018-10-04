@@ -83,8 +83,6 @@ export class AdminPrincipalIndexComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-
-    console.log("Select Event", selected, this.selected);
   }
 
   setPage(pageInfo) {
@@ -146,6 +144,39 @@ export class AdminPrincipalIndexComponent {
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
 
         this.getAdminList();
+      },
+      err => {
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
+  deleteAllUser(): void {
+    if (this.selected.length > 0) {
+      let data = {
+        titleDialog: "Hapus Admin Principal",
+        captionDialog: "Apakah anda yakin untuk menghapus data yang telah dipilih ?",
+        confirmCallback: this.confirmAllDelete.bind(this),
+        buttonText: ["Hapus", "Batal"]
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    } else {
+      this.dialogService.openSnackBar({ message: 'Tidak ada admin principal yang dipilih'})
+    }
+  }
+
+  confirmAllDelete() {
+    let body = {
+      ids: this.selected.filter(item => item.status === 'active').map(item => item.id)
+    }
+
+    this.adminPrincipalService.deleteMultiple(body).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+
+        this.getAdminList();
+        this.selected = [];
       },
       err => {
         this.dialogService.openSnackBar({ message: err.error.message });

@@ -22,6 +22,9 @@ export class ResetPasswordComponent implements OnInit {
   token: any;
   email: any;
 
+  showPassword = false;
+  showConfirmPassword = false;
+
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,

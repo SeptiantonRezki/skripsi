@@ -15,6 +15,8 @@ export class FieldForceEditComponent {
   formFF: FormGroup;
   formdataErrors: any;
   onLoad: Boolean;
+  showPassword = false;
+  showConfirmPassword = false;
 
   detailFF: any;
   listStatus: any[] = [

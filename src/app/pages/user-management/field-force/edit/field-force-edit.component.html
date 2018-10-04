@@ -96,13 +96,31 @@
           </div>
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="100" class="is-light form-primary">
+            <!-- <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="password" formControlName="password" placeholder="Kata Sandi Baru">
+            </mat-form-field> -->
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi Baru">
+              <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi Baru">
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword = !showPassword">
+                <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+              </button>
             </mat-form-field>
           </div>
           <div fxLayout="row">
-            <mat-form-field fxFlex="100" class="is-light form-primary">
+            <!-- <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="password" formControlName="password_confirmation" placeholder="Konfirmasi Kata Sandi Baru">
+            </mat-form-field> -->
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
+                placeholder="Konfirmasi Kata Sandi Baru">
+              <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
+                placeholder="Konfirmasi Kata Sandi Baru">
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showConfirmPassword = !showConfirmPassword">
+                <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
+              </button>
             </mat-form-field>
           </div>
 

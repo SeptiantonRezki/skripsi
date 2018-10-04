@@ -6,6 +6,8 @@
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
+      <button style="min-width: 170px;" *ngIf="selected.length > 0" mat-raised-button type="button" class="is-danger"
+        (click)="deleteAllUser()">HAPUS</button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -23,20 +25,21 @@
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
+        [selectionType]="'checkbox'" [selected]="selected" [count]="pagination.total" [limit]="pagination.per_page"
+        [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
         (select)="onSelect($event)">
 
-        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template>
 
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected"></mat-checkbox>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -44,10 +47,22 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Email" prop="email" summary-template="activeCell">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <a class="direct-edit" (click)="directEdit(row)">{{row.email}} </a>
-              </ng-template>
+        <ngx-datatable-column [width]="250" name="Email" prop="email" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directEdit(row)">{{row.email}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Terakhir Diubah" prop="updated_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.updated_at | date:'dd/MM/yyyy'}} by {{row?.updated_by_name || '-' | toCapitalize }}
+          </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="100" name="Status" prop="active_status">
@@ -58,12 +73,6 @@
                 {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
             </div>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
           </ng-template>
         </ngx-datatable-column>
 

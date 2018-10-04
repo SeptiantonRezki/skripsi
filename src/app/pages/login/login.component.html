@@ -28,7 +28,12 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field class="is-light form-primary">
-              <input matInput type="password" placeholder="Kata Sandi" formControlName="password">
+              <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
+              <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi">
+              <button mat-button matSuffix mat-icon-button (click)="showPassword = !showPassword">
+                <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+              </button>
               <mat-error *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched ">
                 Kata Sandi harus diisi.
               </mat-error>

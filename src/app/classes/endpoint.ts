@@ -54,6 +54,7 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/principal`,
         put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
+        delete_multiple: `${AYO_API}/api/${type_api}/user/principal/delete/multiple`,
         list_role: `${AYO_API}/api/${type_api}/user/role`,
         list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
       },
@@ -136,7 +137,8 @@ export class Endpoint {
         reject_audience: `${AYO_API}/api/${type_api}/scheduler/reject/audience`,
         list_tp: `${AYO_API}/api/${type_api}/creator?page=all`,
         list_template: `${AYO_API}/api/${type_api}/template?page=all`,
-        list_audience: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
+        list_audience: `${AYO_API}/api/${type_api}/audience/show/${context.audience_id}`,
+        export: `${AYO_API}/api/${type_api}/scheduler/export`
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,
@@ -203,6 +205,9 @@ export class Endpoint {
       menu: {
         get: `${AYO_API}/api/${type_api}/menu`
       },
+      notification: {
+        get: `${AYO_API}/api/${type_api}/notification`
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   password: any;
   userlogin: any;
 
+  showPassword = false;
+
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,

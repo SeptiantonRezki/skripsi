@@ -15,6 +15,10 @@ export class ChangePasswordIndexComponent implements OnInit {
   changePassword: FormGroup;
   changePasswordError: any;
 
+  showCurrentPassword = false;
+  showPassword = false;
+  showConfirmPassword = false;
+
   constructor(
     private dataService: DataService, 
     private formBuilder: FormBuilder,

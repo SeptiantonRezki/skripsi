@@ -32,6 +32,7 @@ export class AudienceEditComponent {
   area: Array<any>;
   queries: any;
   loadingIndicator: Boolean;
+  reorderable = true;
 
   searchRetailer = new Subject<string>();
 
@@ -447,9 +448,6 @@ export class AudienceEditComponent {
         })
       }
 
-      console.log(this.selected);
-      // this.onSelect({ selected: selectedRows });
-
       this.rows = res.data;
       this.loadingIndicator = false;
     });
@@ -593,7 +591,11 @@ export class AudienceEditComponent {
           trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
           min: limit ? this.formAudience.get('min').value : '',
           max: limit ? this.formAudience.get('max').value : '',
-          retailer_id: this.selected.map(item => item.id)
+          // retailer_id: this.selected.map(item => item.id)
+        }
+
+        if (this.formAudience.get('type').value !== 'pick-all') {
+          body['retailer_id'] = this.selected.map(item => item.id)
         }
 
         this.saveData = !this.saveData;
@@ -632,11 +634,15 @@ export class AudienceEditComponent {
       
       let body = {
         _method: 'PUT',
-        name: this.formAudience.get('name').value,
-        trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
+        name: audience['name'],
+        trade_scheduler_id: audience['trade_scheduler_id'],
         min: audience.min,
         max: audience.max,
-        retailer_id: this.selected.map(item => item.id)
+        // retailer_id: this.selected.map(item => item.id)
+      }
+
+      if (audience['type'] !== 'pick-all') {
+        body['retailer_id'] = this.selected.map(item => item.id)
       }
 
       this.saveData = !this.saveData;
