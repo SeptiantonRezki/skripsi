@@ -162,20 +162,21 @@
 
     <div class="p-0">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
-      <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-        [rowHeight]="'auto'" [limit]="10" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false"
-        (select)='onSelect($event)' [sorts]="[{prop: 'name', dir: 'asc'}]">
-        <!-- <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-                  [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true"> -->
-        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true" [draggable]="false" [resizeable]="false"
-          [headerCheckboxable]="true">
-          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+      <ngx-datatable class="material" [rows]="rows" [selected]="selected" [columnMode]="'force'" [headerHeight]="48"
+        [footerHeight]="56" [rowHeight]="'auto'" [reorderable]="reorderable" [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false"
+        [externalSorting]="true" (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
+        [rowIdentity]="getId" (sort)="onSort($event)">
+        <ngx-datatable-column [width]="68" *ngIf="formAudience.get('type').value !== 'pick-all'" [canAutoResize]="false"
+          [sortable]="true" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true">
+          <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-checkbox [checked]="allRowsSelected" [disabled]="formAudience.get('type').value === 'pick-all'"
               (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-          </ng-template>
+          </ng-template> -->
 
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+          <ng-template ngx-datatable-cell-template let-value="value" let-row="row" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected" [disabled]="formAudience.get('type').value === 'pick-all'" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>

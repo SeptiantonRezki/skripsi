@@ -154,6 +154,8 @@ export class AudienceCreateComponent {
       if (res === 'pick-all') {
         this.formAudience.get('min').disable({emitEvent: false});
         this.formAudience.get('max').disable({emitEvent: false});
+
+        this.getRetailer();
       } else {
         this.formAudience.get('min').enable({emitEvent: false});
         this.formAudience.get('max').enable({emitEvent: false});
@@ -189,7 +191,7 @@ export class AudienceCreateComponent {
     let area_id = areaSelected[areaSelected.length-1].value;
 
     this.loadingIndicator = true;
-    this.pagination.area = area_id;
+    this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

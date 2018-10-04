@@ -46,8 +46,7 @@
             </mat-radio-group>
           </div>
 
-          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16"
-            fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
               <mat-error *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['min'].touched">
@@ -102,7 +101,7 @@
             </mat-form-field>
           </div> -->
 
-      <form [formGroup]="formFilter" autoComplete="off" *ngIf="formAudience.get('type').value !== 'pick-all'">
+      <form [formGroup]="formFilter" *ngIf="formAudience.get('type').value === 'limit'" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -165,7 +164,7 @@
     <div class="p-0">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [reorderable]="reorderable" [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''"
+        [rowHeight]="'auto'" [reorderable]="reorderable" [selected]="selected" [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''"
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false"
         [externalSorting]="true" (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
         [rowIdentity]="getId" (sort)="onSort($event)">

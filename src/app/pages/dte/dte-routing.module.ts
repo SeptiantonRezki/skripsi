@@ -137,7 +137,7 @@ const routes: Routes = [
     },
     resolve: {
       listScheduler: ListSchedulerResolver,
-      listRetailer: ListRetailerResolver
+      // listRetailer: ListRetailerResolver
     },
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]

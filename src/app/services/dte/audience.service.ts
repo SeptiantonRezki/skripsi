@@ -44,9 +44,9 @@ export class AudienceService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  getListRetailerSelected(context): Observable<any> {
+  getListRetailerSelected(context, queryParams): Observable<any> {
     const url = this.getUrl(this.namespace, 'detail', context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   validateBudget(body): Observable<any> {

@@ -9,6 +9,8 @@ import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { MatSelect } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
+import { Page } from 'app/classes/laravel-pagination';
+import * as _ from "underscore";
 
 @Component({
   selector: 'app-audience-edit',
@@ -41,6 +43,9 @@ export class AudienceEditComponent {
   areaFromLogin;
   formFilter: FormGroup;
 
+  pagination: Page = new Page();
+  pageAccess = [];
+
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
@@ -69,6 +74,8 @@ export class AudienceEditComponent {
     private rupiahFormater: RupiahFormaterPipe
   ) { 
     this.saveData = false;
+    this.rows = [];
+
     this.formAudienceError = {
       name: {},
       min: {},
@@ -111,7 +118,7 @@ export class AudienceEditComponent {
     );
 
     this.filteredScheduler.next(this.listScheduler.slice());
-    this.rows = activatedRoute.snapshot.data['listRetailer'];
+    // this.rows = activatedRoute.snapshot.data['listRetailer'];
   }
 
   ngOnInit() {
@@ -141,14 +148,20 @@ export class AudienceEditComponent {
 
     this.initAudience();
     this.initArea();
+    this.getRetailer();
 
     this.formAudience.controls['type'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
         this.formAudience.get('min').disable({emitEvent: false});
         this.formAudience.get('max').disable({emitEvent: false});
+
+        this.formFilter.disable({emitEvent: false});
+        this.getRetailer();
       } else {
         this.formAudience.get('min').enable({emitEvent: false});
         this.formAudience.get('max').enable({emitEvent: false});
+
+        this.formFilter.enable({emitEvent: false});
       }
     })
 
@@ -164,7 +177,8 @@ export class AudienceEditComponent {
     })
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.searchingRetailer(res);
+      // this.searchingRetailer(res);
+      this.getRetailer();
     })
 
     this.filterScheduler.valueChanges
@@ -371,17 +385,100 @@ export class AudienceEditComponent {
       this.formAudience.get('trade_scheduler_id').disable();
     }
 
-    this.detailAudienceSelect();
+    this.formFilter.disable();
+
+    // this.detailAudienceSelect();
+  }
+
+
+
+  getRetailer() {
+    this.pagination.per_page = 25;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length-1].value;
+
+    this.loadingIndicator = true;
+    this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
+
+    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.pagination.page = 1;
+
+      let pageAccess = _.contains(this.pageAccess, this.pagination['page'] === undefined ? 1 : this.pagination['page']);
+      // if (!pageAccess) this.pageAccess.push(this.pagination['page'] === undefined ? 1 : this.pagination['page']);
+
+      if (!pageAccess) {
+        let selectedRows = res.data.filter(item => item.checked);
+        selectedRows.map(item => {
+          let founded = _.contains(this.selected.map(item => item.id), item.id);
+          if (founded) {
+            selectedRows.splice(0, 1);
+          } else {
+            return this.selected.push(item);
+          }
+        })
+      }
+
+      // this.onSelect({ selected: selectedRows });
+
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    })
+  }
+
+  setPage(pageInfo) {
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+
+    let pageAccess = _.contains(this.pageAccess, this.pagination.page);
+    if (!pageAccess) this.pageAccess.push(this.pagination.page);
+
+    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      if (!pageAccess) {
+        let selectedRows = res.data.filter(item => item.checked);
+        selectedRows.map(item => {
+          let founded = _.contains(this.selected.map(item => item.id), item.id);
+          if (founded) {
+            selectedRows.splice(0, 1);
+          } else {
+            return this.selected.push(item);
+          }
+        })
+      }
+
+      console.log(this.selected);
+      // this.onSelect({ selected: selectedRows });
+
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event['newValue'];
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+
+      this.loadingIndicator = false;
+    });
   }
 
   detailAudienceSelect() {
-    this.loadingIndicator = true;
-    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }).subscribe(
-      res => {
-        this.selected = (res.data || []).map(item => { return this.getRows(item.id) });
-        this.loadingIndicator = false;
-      }
-    )
+    // this.loadingIndicator = true;
+    // this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, { area: area_id }).subscribe(
+    //   res => {
+    //     this.selected = (res.data || []).map(item => { return this.getRows(item.id) });
+    //     this.loadingIndicator = false;
+
+    //     console.log(this.selected)
+    //   }
+    // )
   }
 
   getRows(id) {
@@ -416,23 +513,31 @@ export class AudienceEditComponent {
   // }
 
   searchingRetailer(res) {
-    let queries = res;
-    this.queries = {
-      national: 1,
-      division:  parseInt(queries['zone']) === parseInt("1") ? '' : queries['zone'],
-      region:  parseInt(queries['region']) === parseInt(queries['zone']) ? '' : queries['region'],
-      area:  parseInt(queries['area']) === parseInt(queries['region']) ? '' : queries['area'],
-      salespoint:  parseInt(queries['salespoint']) === parseInt(queries['area']) ? '' : queries['salespoint'],
-      district:  parseInt(queries['district']) === parseInt(queries['salespoint']) ? '' : queries['district'],
-      teritory:  parseInt(queries['territory']) === parseInt(queries['district']) ? '' : queries['territory'],
-    }
+    // let queries = res;
+    // this.queries = {
+    //   national: 1,
+    //   division:  parseInt(queries['zone']) === parseInt("1") ? '' : queries['zone'],
+    //   region:  parseInt(queries['region']) === parseInt(queries['zone']) ? '' : queries['region'],
+    //   area:  parseInt(queries['area']) === parseInt(queries['region']) ? '' : queries['area'],
+    //   salespoint:  parseInt(queries['salespoint']) === parseInt(queries['area']) ? '' : queries['salespoint'],
+    //   district:  parseInt(queries['district']) === parseInt(queries['salespoint']) ? '' : queries['district'],
+    //   teritory:  parseInt(queries['territory']) === parseInt(queries['district']) ? '' : queries['territory'],
+    // }
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length-1].value;
+
     this.loadingIndicator = true;
 
-    this.audienceService.getListRetailer(this.queries).subscribe(
+    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, { area: area_id }).subscribe(
       res => {
-        this.rows = res;
-        this.selected = [];
-        this.loadingIndicator = false;
+        // this.rows = res['data'];
+        // this.selected = [];
+        // this.loadingIndicator = false;
+
+        if (res['data'].length === 0) {
+          this.loadingIndicator = false;
+          return this.rows = [];
+        }
       },
       err => {
         console.log(err.error.message);
@@ -453,6 +558,12 @@ export class AudienceEditComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+
+    console.log(this.selected);
+  }
+
+  getId(row) {
+    return row.id;
   }
 
   submit() {
@@ -499,11 +610,11 @@ export class AudienceEditComponent {
         )
       })
     } else {
+      commonFormValidator.validateAllFields(this.formAudience);
+
       if (this.formAudience.valid && this.selected.length < 0) {
         return this.dialogService.openCustomDialog({ message: 'Belum ada Audience yang dipilih!' });
       }
-      
-      commonFormValidator.validateAllFields(this.formAudience);
       return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
   }

@@ -140,7 +140,7 @@ export class Endpoint {
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,
-        detail: `${AYO_API}/api/${type_api}/audience/${context.audience_id}?page=all`,
+        detail: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
         create: `${AYO_API}/api/${type_api}/audience`,
         put: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
         delete: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
