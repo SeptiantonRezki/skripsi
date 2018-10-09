@@ -7,6 +7,8 @@ import { BannerService } from '../../../../services/inapp-marketing/banner.servi
 import { DateAdapter } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
+import { TemplateBanner } from 'app/classes/banner-template';
+import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-banner-edit',
@@ -17,6 +19,7 @@ export class BannerEditComponent {
 
   onLoad: boolean;
   loadingIndicator: boolean;
+  showLoading: Boolean;
   listLevelArea: any[];
   list: any;
   list_region: any[];
@@ -34,7 +37,13 @@ export class BannerEditComponent {
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
 
+  bannerTemplate: TemplateBanner = new TemplateBanner();
+  templateBannerList: any[];
+  bannerSelected: any;
+  imageConverted: any;
+
   files: File;
+  image: any;
   validComboDrag: boolean;
 
   formBannerGroup: FormGroup;
@@ -90,6 +99,8 @@ export class BannerEditComponent {
       district: [],
       territory: []
     }
+
+    this.templateBannerList = this.bannerTemplate.getTemplateBanner('LOREM IPSUM');
   }
 
   ngOnInit() {
@@ -109,7 +120,17 @@ export class BannerEditComponent {
       region: [""],
       area: [""],
       district: [""],
-      territory: [""]
+      territory: [""],
+      banner_selected: this.formBuilder.group({
+        "id": [""],
+        "name": [""],
+        "image": [""],
+        "title": [""],
+        "button_text": [""],
+        "class": [""],
+        "button_class": [""],
+        "product": [""]
+      })
     })
 
     this.formBannerGroup.valueChanges.subscribe(() => {
@@ -119,6 +140,10 @@ export class BannerEditComponent {
     this.setMinDate();
     this.initArea();
     this.initFormGroup();
+
+    this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
+      this.bannerSelected = res;
+    })
   }
 
   initArea() {
@@ -322,8 +347,43 @@ export class BannerEditComponent {
     return o1.id === o2.id && o1.level === o2.id;
   }
 
-  submit(status?: string): void {
-    if (this.formBannerGroup.valid || this.files && this.files.size < 2000000) {
+  changeImage(event) {
+    this.readThis(event);
+  }
+
+  readThis(inputValue: any): void {
+    var file:File = inputValue;
+    var myReader:FileReader = new FileReader();
+  
+    myReader.onloadend = (e) => {
+      this.image = myReader.result;
+      if (this.bannerSelected['id'] === 5) {
+        this.bannerSelected['product'] = this.image
+        this.formBannerGroup.get('banner_selected').get('product').setValue(this.image);
+      } else {
+        this.bannerSelected['image'] = this.image;
+        this.formBannerGroup.get('banner_selected').get('image').setValue(this.image);
+      }
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  selectBannerTemplate(item: any) {
+    this.bannerSelected = item;
+    this.formBannerGroup.get('banner_selected').setValue(item);
+  }
+
+  async submit(status?: string) {
+    if ((this.formBannerGroup.valid && this.bannerSelected == undefined) || (this.formBannerGroup.valid && this.bannerSelected)) {
+
+      if (this.bannerSelected) {
+        this.showLoading = true;
+        await html2canvas(document.querySelector("#banner")).then(canvas => {
+          this.imageConverted = this.convertCanvasToImage(canvas);
+          this.showLoading = false;
+        });
+      }
 
       let areas = [];
       let value = this.formBannerGroup.getRawValue();
@@ -344,8 +404,9 @@ export class BannerEditComponent {
       fd.append('age', this.formBannerGroup.get('age').value);
       fd.append('static_page', 'yes');
 
-      if (this.files)
-      fd.append('image', this.files);
+      if (this.bannerSelected) {
+        fd.append('image', this.imageConverted);
+      }
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
@@ -370,12 +431,10 @@ export class BannerEditComponent {
 
     } else {
       let msg;
-      if (!this.formBannerGroup.valid) {
+      if (this.formBannerGroup.invalid) {
         msg = "Silakan lengkapi data terlebih dahulu!";
-      } else if (!this.files) {
+      } else if (!this.bannerSelected) {
         msg = "Gambar spanduk belum dipilih!";
-      } else if (this.files.size > 2000000) {
-        msg = "Ukuran gambar tidak boleh melebihi 2mb!";
       } else {
         msg = "Silakan lengkapi data terlebih dahulu!";
       }
@@ -383,6 +442,13 @@ export class BannerEditComponent {
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formBannerGroup);
     }
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+    
+    return image.src;
   }
 
 }

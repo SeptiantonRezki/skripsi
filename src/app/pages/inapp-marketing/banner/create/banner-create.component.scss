@@ -1,0 +1,286 @@
+:host {
+  .banner-image-template {
+    height: 210px;
+    width: 410px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+
+    &:hover {
+      border: 2px solid #BB130F;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      box-sizing: border-box;
+      height: 210px;
+      width: 410px;
+      cursor: pointer;
+    }
+  }
+
+  .banner-image-template-selected {
+    height: 210px;
+    width: 410px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .selected-banner {
+    box-sizing: border-box;
+    height: 210px;
+    width: 410px;
+    border: 2px solid #BB130F;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .banner-image-custom {
+    border-radius: 6px;
+    display: inline-block;
+    background-size: 100% 100%;
+    width: 390px;
+    height: 190px;
+    margin: 8px;
+    position: relative;
+  }
+
+  .template-a div {
+    &.title {
+      color: white;
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      width: 215px;
+      height: 100px;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      text-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.button {
+      position: absolute;
+      top: 140px;
+      left: 10px;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      height: 38px;
+      width: 128px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 13px 23px;
+      font-weight: bold;
+      line-height: 14px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      text-shadow: none;
+
+      &.red {
+        background-color: #BB130F;
+        color: white
+      }
+
+      &.white {
+        background-color: white;
+        color: #BB130F;
+      }
+    }
+  }
+
+  .template-b div {
+    &.title {
+      color: white;
+      position: absolute;
+      top: 20px;
+      right: 0;
+      width: 215px;
+      height: 100px;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      text-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.button {
+      position: absolute;
+      top: 140px;
+      right: 20px;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      height: 38px;
+      width: 128px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 13px 23px;
+      font-weight: bold;
+      line-height: 14px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      text-shadow: none;
+
+      &.red {
+        background-color: #BB130F;
+        color: white
+      }
+
+      &.white {
+        background-color: white;
+        color: #BB130F;
+      }
+    }
+  }
+
+  .template-c div {
+    &.title {
+      color: white;
+      position: absolute;
+      top: 146px;
+      left: 10px;
+      width: 235px;
+      /* height: 100px; */
+      text-transform: uppercase;
+      font-size: 0.8em;
+      text-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.button {
+      position: absolute;
+      top: 140px;
+      right: 10px;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      height: 38px;
+      width: 128px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 13px 23px;
+      font-weight: bold;
+      line-height: 14px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      text-shadow: none;
+
+      &.red {
+        background-color: #BB130F;
+        color: white
+      }
+
+      &.white {
+        background-color: white;
+        color: #BB130F;
+      }
+    }
+  }
+
+  .template-d div {
+    &.title {
+      color: white;
+      position: absolute;
+      top: 130px;
+      left: 10px;
+      width: 215px;
+      /* height: 100px; */
+      text-transform: uppercase;
+      font-size: 0.9em;
+      text-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.button {
+      position: absolute;
+      top: 140px;
+      right: 10px;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      height: 38px;
+      width: 128px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 13px 23px;
+      font-weight: bold;
+      line-height: 14px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      text-shadow: none;
+
+      &.red {
+        background-color: #BB130F;
+        color: white
+      }
+
+      &.white {
+        background-color: white;
+        color: #BB130F;
+      }
+    }
+  }
+
+  .template-e div {
+    &.title {
+      color: white;
+      position: absolute;
+      top: 20px;
+      left: 190px;
+      width: 190px;
+      /* height: 100px; */
+      text-transform: uppercase;
+      font-size: 0.9em;
+      text-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &.button {
+      position: absolute;
+      top: 90px;
+      left: 190px;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      height: 38px;
+      width: 128px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 13px 23px;
+      font-weight: bold;
+      line-height: 14px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+      text-shadow: none;
+
+      &.red {
+        background-color: #BB130F;
+        color: white
+      }
+
+      &.white {
+        background-color: white;
+        color: #BB130F;
+      }
+    }
+  }
+
+  .product {
+    width: 170px;
+    margin: 8px 10px 10px 8px;
+    border-radius: 5px;
+  }
+
+  .red-circle-button {
+    height: 12px;
+    width: 12px;
+    background-color: #BB130F;
+    border-radius: 36px;
+    margin: 12px 12px 12px 0;
+  }
+
+  .white-circle-button {
+    height: 12px;
+    width: 12px;
+    background-color: white;
+    border-radius: 36px;
+    margin: 12px 12px 12px 0;
+    border: 1px solid #000;
+  }
+
+  .loading {
+    position: fixed;
+    left: 0px;
+    top: 1px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('../../../../../assets/images/ayo/loading.svg') center no-repeat;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}

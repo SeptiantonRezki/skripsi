@@ -8,6 +8,8 @@ import { BannerService } from '../../../../services/inapp-marketing/banner.servi
 import { DateAdapter } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
+import { TemplateBanner } from 'app/classes/banner-template';
+import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-banner-create',
@@ -18,6 +20,7 @@ export class BannerCreateComponent {
 
   onLoad: boolean;
   loadingIndicator: boolean;
+  showLoading: Boolean;
   listLevelArea: any[];
   list: any;
   list_region: any[];
@@ -34,7 +37,13 @@ export class BannerCreateComponent {
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
 
+  bannerTemplate: TemplateBanner = new TemplateBanner();
+  templateBannerList: any[];
+  bannerSelected: any;
+  imageConverted: any;
+
   files: File;
+  image: any;
   validComboDrag: boolean;
 
   formBannerGroup: FormGroup;
@@ -89,6 +98,8 @@ export class BannerCreateComponent {
       district: [],
       territory: []
     }
+
+    this.templateBannerList = this.bannerTemplate.getTemplateBanner('LOREM IPSUM');
   }
 
   ngOnInit() {
@@ -108,7 +119,17 @@ export class BannerCreateComponent {
       area: [""],
       salespoint: [""],
       district: [""],
-      territory: [""]
+      territory: [""],
+      banner_selected: this.formBuilder.group({
+        "id": [""],
+        "name": [""],
+        "image": [""],
+        "title": [""],
+        "button_text": [""],
+        "class": [""],
+        "button_class": [""],
+        "product": [""]
+      })
     })
 
     this.formBannerGroup.valueChanges.subscribe(() => {
@@ -118,6 +139,10 @@ export class BannerCreateComponent {
     this.setMinDate();
     this.initArea();
     // this.getAudienceArea('zone', this.listLevelArea[0]);
+
+    this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
+      this.bannerSelected = res;
+    })
   }
 
   initArea() {
@@ -277,8 +302,41 @@ export class BannerCreateComponent {
     this.minDate = this.formBannerGroup.get("from").value;
   }
 
-  submit(status?: string): void {
-    if (this.formBannerGroup.valid && this.files && this.files.size < 2000000) {
+  changeImage(event) {
+    this.readThis(event);
+  }
+
+  readThis(inputValue: any): void {
+    var file:File = inputValue;
+    var myReader:FileReader = new FileReader();
+  
+    myReader.onloadend = (e) => {
+      this.image = myReader.result;
+      if (this.bannerSelected['id'] === 5) {
+        this.bannerSelected['product'] = this.image
+        this.formBannerGroup.get('banner_selected').get('product').setValue(this.image);
+      } else {
+        this.bannerSelected['image'] = this.image;
+        this.formBannerGroup.get('banner_selected').get('image').setValue(this.image);
+      }
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  selectBannerTemplate(item: any) {
+    this.bannerSelected = item;
+    this.formBannerGroup.get('banner_selected').setValue(item);
+  }
+
+  async submit(status?: string) {
+    if (this.formBannerGroup.valid && this.bannerSelected) {
+
+      this.showLoading = true;
+      await html2canvas(document.querySelector("#banner")).then(canvas => {
+        this.imageConverted = this.convertCanvasToImage(canvas);
+        this.showLoading = false;
+      });
 
       let areas = [];
       let value = this.formBannerGroup.getRawValue();
@@ -286,7 +344,7 @@ export class BannerCreateComponent {
 
       let fd = new FormData();
       fd.append('name', this.formBannerGroup.get('name').value);
-      fd.append('image', this.files);
+      fd.append('image', this.imageConverted);
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
       fd.append('enable', this.formBannerGroup.get('enable').value);
@@ -322,12 +380,10 @@ export class BannerCreateComponent {
 
     } else {
       let msg;
-      if (!this.formBannerGroup.valid) {
+      if (this.formBannerGroup.invalid) {
         msg = "Silakan lengkapi data terlebih dahulu!";
-      } else if (!this.files) {
+      } else if (!this.bannerSelected) {
         msg = "Gambar spanduk belum dipilih!";
-      } else if (this.files.size > 2000000) {
-        msg = "Ukuran gambar tidak boleh melebihi 2mb!";
       } else {
         msg = "Silakan lengkapi data terlebih dahulu!";
       }
@@ -335,6 +391,13 @@ export class BannerCreateComponent {
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formBannerGroup);
     }
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+    
+    return image.src;
   }
 
 }

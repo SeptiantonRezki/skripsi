@@ -4,6 +4,7 @@
   <!-- / HEADER -->
 
   <div class="content p-24">
+    <div class="loading" *ngIf="showLoading"></div>
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off" [formGroup]="formBannerGroup">
         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -134,8 +135,25 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
-            [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+          <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+            <span class="text-bold">Pilih Template Iklan</span>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <div fxFlex="45" class="pb-24" *ngFor="let item of templateBannerList">
+              <span>{{item.name}}</span>
+              <div [ngClass]="{'selected-banner': bannerSelected?.id === item.id, 'banner-image-template' : bannerSelected?.id !== item.id }"
+                (click)="selectBannerTemplate(item)">
+                <div [class]="'banner-image-custom ' + item.class" [title]="item.name" [style.background-image]="'url(' + item.image + ')'">
+                  <img *ngIf="item.product" [src]="item.product" class="product">
+                  <div class="title">{{item.title}}</div>
+                  <div [class]="'button ' + item.button_class">{{item.button_text}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="bannerSelected" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
+            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+            (fileChange)="changeImage($event)">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
@@ -144,13 +162,57 @@
               <span matPrefix>Besar file maksimal 2mb</span>
             </div>
           </div>
-          <div class="pt-48 pb-16">
+          <!-- <div class="pt-48 pb-16">
             <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0">
               <div class="">
                 <div class="deleteBanner">
                   <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
                 </div>
                 <div class="previewBanner" [ngfBackground]="files"></div>
+              </div>
+            </div>
+          </div> -->
+          <div *ngIf="bannerSelected" class="pt-16" formGroupName="banner_selected">
+            <div *ngIf="bannerSelected['id'] !== 6">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <input matInput type="text" formControlName="title" placeholder="Tulisan Utama / Teks Utama / Isi Promosi">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <input matInput type="text" formControlName="button_text" placeholder="Tulisan Pada Tombol">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="button_class" placeholder="Warna Tombol">
+                    <mat-select-trigger>
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <span [ngClass]="{'red-circle-button': bannerSelected.button_class === 'red', 'white-circle-button': bannerSelected.button_class === 'white'}"></span>{{bannerSelected.button_class
+                        === 'red' ? 'Merah' : 'Putih'}}
+                      </div>
+                    </mat-select-trigger>
+                    <mat-option value="red">Merah</mat-option>
+                    <mat-option value="white">Putih</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+              <span class="text-bold">Contoh Tampilan Spanduk</span>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+              *ngIf="bannerSelected">
+              <div fxFlex="45">
+                <div class="banner-image-template-selected">
+                  <div id="banner" [class]="'banner-image-custom ' + bannerSelected.class" [title]="bannerSelected.name"
+                    [style.background-image]="'url(' + bannerSelected.image + ')'">
+                    <img *ngIf="bannerSelected.product" [src]="bannerSelected.product" class="product">
+                    <div class="title">{{bannerSelected.title}}</div>
+                    <div [class]="'button ' + bannerSelected.button_class">{{bannerSelected.button_text}}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
