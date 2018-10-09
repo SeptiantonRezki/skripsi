@@ -155,7 +155,7 @@ export class AudienceCreateComponent {
         this.formAudience.get('min').disable({emitEvent: false});
         this.formAudience.get('max').disable({emitEvent: false});
 
-        this.getRetailer();
+        // this.getRetailer();
       } else {
         this.formAudience.get('min').enable({emitEvent: false});
         this.formAudience.get('max').enable({emitEvent: false});
@@ -191,18 +191,13 @@ export class AudienceCreateComponent {
     let area_id = areaSelected[areaSelected.length-1].value;
 
     this.loadingIndicator = true;
-    this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
+    this.pagination.area = area_id;
+    // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
-      
-      res.data.map(item => {
-        if (item.checked) {
-          this.selected.push(item);
-        }
-      })
     })
   }
 
@@ -215,12 +210,6 @@ export class AudienceCreateComponent {
       this.rows = res.data;
 
       this.loadingIndicator = false;
-
-      res.data.map(item => {
-        if (item.checked) {
-          this.selected.push(item);
-        }
-      })
     });
   }
 
@@ -530,10 +519,10 @@ export class AudienceCreateComponent {
       if (limit && selectedRetailer < min) 
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
       else if (limit && selectedRetailer > max) 
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebih dari ${max} Audience` });
+        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience` });
       
       let budget = {
-        total_retailer: this.selected.length,
+        total_retailer: limit ? this.selected.length : this.pagination.total,
         trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
       }
 
@@ -544,12 +533,25 @@ export class AudienceCreateComponent {
         let body = {
           name: this.formAudience.get('name').value,
           trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
-          min: limit ? this.formAudience.get('min').value : '',
-          max: limit ? this.formAudience.get('max').value : ''
+          // min: limit ? this.formAudience.get('min').value : '',
+          // max: limit ? this.formAudience.get('max').value : ''
         }
 
         if (this.formAudience.get('type').value !== 'pick-all') {
-          body['retailer_id'] = this.selected.map(item => item.id)
+          body['retailer_id'] = this.selected.map(item => item.id);
+          body['min'] = this.formAudience.get('min').value;
+          body['max'] = this.formAudience.get('max').value;
+
+        } else {
+          body['area_id'] = this.pagination.area;
+
+          if (this.pagination.area !== 1) {
+            body['min'] = 1;
+            body['max'] = this.pagination.total;
+          } else {
+            body['min'] = "";
+            body['max'] = "";
+          }
         }
 
         // this.saveData = !this.saveData;
@@ -568,8 +570,8 @@ export class AudienceCreateComponent {
     } else {
       commonFormValidator.validateAllFields(this.formAudience);
 
-      if (this.formAudience.valid && this.selected.length < 0) {
-        return this.dialogService.openCustomDialog({ message: 'Belum ada Audience yang dipilih!' });
+      if (this.formAudience.valid && this.selected.length === 0) {
+        return this.dialogService.openSnackBar({ message: 'Belum ada Audience yang dipilih!' });
       }
       
       return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });

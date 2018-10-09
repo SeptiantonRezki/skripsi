@@ -46,7 +46,8 @@
             </mat-radio-group>
           </div>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16"
+            fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
               <mat-error *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['min'].touched">
@@ -101,7 +102,7 @@
             </mat-form-field>
           </div> -->
 
-      <form [formGroup]="formFilter" *ngIf="formAudience.get('type').value === 'limit'" autoComplete="off">
+      <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">

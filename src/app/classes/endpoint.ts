@@ -148,6 +148,7 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
         list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
+        list_retailer_selected: `${AYO_API}/api/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
