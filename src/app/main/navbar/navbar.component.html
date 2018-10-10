@@ -1,37 +1,35 @@
 <ng-container *ngIf="layout == 'vertical'">
 
-    <div class="navbar-vertical">
+  <div class="navbar-vertical">
 
-        <div class="navbar-header">
+    <div class="navbar-header">
 
-            <div class="logo">
-                <img class="logo-icon" src="assets/images/ayo/ayo-logo-grey.png" srcset="assets/images/ayo/ayo-logo-grey@2x.png 2x">
-            </div>
+      <div class="logo">
+        <img class="logo-icon" src="assets/images/ayo/Horizontal_(Alt_White)@2x.png" srcset="assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x">
+      </div>
 
-            <button mat-icon-button class="toggle-button-navbar"
-                    (click)="toggleSidebarFolded()" fxHide.lt-lg>
-                <mat-icon class="small-top">arrow_back</mat-icon>
-            </button>
+      <button mat-icon-button class="toggle-button-navbar" (click)="toggleSidebarFolded()" fxHide.lt-lg>
+        <mat-icon class="small-top">arrow_back</mat-icon>
+      </button>
 
-            <button mat-icon-button class="toggle-button-navbar"
-                    (click)="toggleSidebarOpened()" fxHide.gt-md>
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-
-        </div>
-
-        <div class="navbar-content" fusePerfectScrollbar>
-            <fuse-navigation [navigation]="navigation" layout="vertical"></fuse-navigation>
-        </div>
+      <button mat-icon-button class="toggle-button-navbar" (click)="toggleSidebarOpened()" fxHide.gt-md>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
 
     </div>
+
+    <div class="navbar-content" fusePerfectScrollbar>
+      <fuse-navigation [navigation]="navigation" layout="vertical"></fuse-navigation>
+    </div>
+
+  </div>
 
 </ng-container>
 
 <ng-container *ngIf="layout == 'horizontal'">
 
-    <div class="navbar-horizontal">
-        <fuse-navigation [navigation]="navigation" layout="horizontal"></fuse-navigation>
-    </div>
+  <div class="navbar-horizontal">
+    <fuse-navigation [navigation]="navigation" layout="horizontal"></fuse-navigation>
+  </div>
 
 </ng-container>
