@@ -104,6 +104,9 @@
                   <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
                     Tanggal Mulai harus diisi
                   </mat-error>
+                  <mat-error *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
+                    Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
+                  </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="dari">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                   </mat-datepicker-toggle>
@@ -111,10 +114,13 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="setMaxDate(item.get('start_date').value, i)"
+                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate"
                     readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
+                    Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="sampai">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -128,7 +134,8 @@
                     <strong>Pengulangan Tugas</strong>
                   </h3>
                 </div>
-                <mat-radio-group formControlName="repeated" (change)="getRepeated(i)">
+                <!-- <mat-radio-group formControlName="repeated" (change)="getRepeated(i)"> -->
+                <mat-radio-group formControlName="repeated">
                   <mat-radio-button class="radio-button pr-24" *ngFor="let item of listReminder" [value]="item.value">
                     {{item.name}}
                   </mat-radio-button>

@@ -27,7 +27,7 @@ export class ScheduleProgramCreateComponent {
   listTradeProgram: Array<any>;
   listTemplateTask: Array<any>;
   listAudience: Array<any>;
-  listReminder: Array<any> = [{ name: 'Tiap Minggu', value: 'by-weekly' }, { name: 'Tiap 2 Minggu', value: 'bi-weekly' }, { name: 'Tidak Ada', value: 'none' }];
+  listReminder: Array<any> = [{ name: 'Tiap Minggu', value: 'by-weekly' }, { name: 'Tidak Ada', value: 'none' }];
   listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
   listAddNotif: Array<any> = [{ name: 'H+1', value: 1}, { name: 'H+2', value: 2}, { name: 'H+3', value: 3}];
 
