@@ -357,9 +357,9 @@ export class AudienceEditComponent {
 
   initAudience() {
     this.formAudience.get('name').setValue(this.detailAudience.name);
-    this.formAudience.get('min').setValue(this.detailAudience.min);
-    this.formAudience.get('max').setValue(this.detailAudience.max);
-    this.formAudience.get('type').setValue(this.detailAudience.max && this.detailAudience.min ? 'limit' : 'pick-all');
+    // this.formAudience.get('min').setValue(this.detailAudience.min);
+    // this.formAudience.get('max').setValue(this.detailAudience.max);
+    this.formAudience.get('type').setValue('limit');
     this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
 
     if (!this.detailAudience.min) {
@@ -433,6 +433,9 @@ export class AudienceEditComponent {
     this.audienceService.getListRetailerIdSelected({ audience_id: this.detailAudience.id }).subscribe(
       res => {
         this.selected = res;
+
+        this.formAudience.get('min').setValue(this.detailAudience.min ? this.detailAudience.min : 1);
+        this.formAudience.get('max').setValue(this.detailAudience.max ? this.detailAudience.max : res.length);
       }
     )
   }
