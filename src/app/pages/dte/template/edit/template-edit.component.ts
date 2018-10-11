@@ -69,11 +69,11 @@ export class TemplateEditComponent {
 
   ngOnInit() {
     this.templateTaskForm = this.formBuilder.group({
-      name: ["Judul Tugas", Validators.required],
-      description: ["Deskripsi Tugas", Validators.required],
+      name: ["", Validators.required],
+      description: ["", Validators.required],
       image: [""], 
       material: false,
-      material_description: ["Jenis Material", Validators.required],
+      material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([], Validators.required)
     })
@@ -273,10 +273,14 @@ export class TemplateEditComponent {
       )
 
     } else {
-      if (!this.templateTaskForm.get('image').valid)
+      commonFormValidator.validateAllFields(this.templateTaskForm);
+      if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
+        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+
+      if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if(!this.templateTaskForm.get('questions').valid)
+      if(this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
     }
   }

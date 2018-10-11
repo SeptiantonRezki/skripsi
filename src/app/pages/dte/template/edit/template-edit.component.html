@@ -29,17 +29,27 @@
 
         <div class="p-24">
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-form-field fxFlex="100" class="titleInput exportTextarea">
-              <textarea matInput aria-label="Judul Tugas" (focus)="$event.target.select()" (change)="defaultValue($event, 'name', 'Judul Tugas')"
-                formControlName="name" style="font-size: 34px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                class="titletextareaInput"></textarea>
+            <mat-form-field fxFlex="100" class="titleInput exportTextarea title-template" floatLabel="never">
+              <!-- <textarea matInput aria-label="Judul Tugas" (focus)="$event.target.select()" (change)="defaultValue($event, 'name', 'Judul Tugas')"
+                    formControlName="name" style="font-size: 34px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                    class="titletextareaInput"></textarea> -->
+              <textarea matInput placeholder="Judul Tugas" formControlName="name" style="font-size: 34px;"
+                cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
+              <mat-error *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
+                Judul Tugas harus diisi
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-form-field fxFlex="100" class="descInput exportTextarea">
-              <textarea matInput formControlName="description" (focus)="$event.target.select()" (change)="defaultValue($event, 'description', 'Deskripsi Tugas')"
-                style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea>
+            <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
+              <!-- <textarea matInput formControlName="description" (focus)="$event.target.select()" (change)="defaultValue($event, 'description', 'Deskripsi Tugas')"
+                    style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea> -->
+              <textarea matInput formControlName="description" placeholder="Deskripsi Tugas" style="font-size: 13px;"
+                cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea>
+              <mat-error *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
+                Deskripsi Tugas harus diisi
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -51,10 +61,15 @@
           </div>
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-form-field fxFlex="100" class="descInput exportTextarea">
-              <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
-                style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
-                [disabled]="!templateTaskForm.get('material').value"></textarea>
+            <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
+              <!-- <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
+                    style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
+                    [disabled]="!templateTaskForm.get('material').value"></textarea> -->
+              <textarea matInput formControlName="material_description" placeholder="Jenis Material" style="font-size: 13px;"
+                cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput" [disabled]="!templateTaskForm.get('material').value"></textarea>
+              <mat-error *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
+                Jenis Material Tugas harus diisi
+              </mat-error>
             </mat-form-field>
           </div>
 

@@ -45,6 +45,21 @@
   color: rgba(0, 0, 0, 1) !important;
 }
 
+.mat-form-field-appearance-legacy.title-template .mat-form-field-label,
+.mat-form-field-label {
+  font-weight: normal !important;
+  font-size: 23px !important;
+  padding-bottom: 10px;
+  color: rgba(0, 0, 0, .5) !important;
+}
+
+.mat-form-field-appearance-legacy.desc-template .mat-form-field-label,
+.mat-form-field-label {
+  font-weight: normal !important;
+  font-size: 12px !important;
+  color: rgba(0, 0, 0, .5) !important;
+}
+
 .mat-select-disabled .mat-select-value {
   color: black !important;
 }

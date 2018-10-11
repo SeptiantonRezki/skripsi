@@ -68,11 +68,11 @@ export class TemplateCreateComponent {
 
   ngOnInit() {
     this.templateTaskForm = this.formBuilder.group({
-      name: ["Judul Tugas", Validators.required],
-      description: ["Deskripsi Tugas", Validators.required],
+      name: ["", Validators.required],
+      description: ["", Validators.required],
       image: [""],
       material: false,
-      material_description: ["Jenis Material", Validators.required],
+      material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required)
     })
@@ -182,6 +182,17 @@ export class TemplateCreateComponent {
     questions.at(idx).get('typeSelection').setValue(typeSelection);
   }
 
+  defineQuestion(): FormGroup {
+    return this.formBuilder.group({
+      id: 1,
+      question: `Pertanyaan`,
+      type: 'radio',
+      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      additional: this.formBuilder.array([this.createAdditional()]),
+      question_image: ['']
+    })
+  }
+
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function(item){ return item.id })
@@ -234,6 +245,7 @@ export class TemplateCreateComponent {
   }
 
   submit(): void {
+    console.log(this.templateTaskForm);
     if (this.templateTaskForm.valid) {
       // this.saveData = !this.saveData;
       this.saveData = true;
@@ -279,10 +291,14 @@ export class TemplateCreateComponent {
       )
 
     } else {
-      if (!this.templateTaskForm.get('image').valid)
+      commonFormValidator.validateAllFields(this.templateTaskForm);
+      if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
+        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+
+      if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if(!this.templateTaskForm.get('questions').valid)
+      if(this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
     }
   }
