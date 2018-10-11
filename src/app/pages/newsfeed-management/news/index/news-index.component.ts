@@ -112,6 +112,7 @@ export class NewsIndexComponent {
   }
 
   updateFilter(string) {
+    if (!this.formFilter.get('start_date').value && this.formFilter.get('end_date').value) return this.dialogService.openSnackBar({ message: 'Dari tanggal harus diisi!' });
     if (this.formFilter.get('start_date').value && !this.formFilter.get('end_date').value) return this.dialogService.openSnackBar({ message: 'Sampai tanggal harus diisi!' });
 
     this.loadingIndicator = true;
