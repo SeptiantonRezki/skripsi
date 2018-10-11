@@ -7,7 +7,8 @@
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
       <button style="min-width: 170px;" *ngIf="selected.length > 0" mat-raised-button type="button" class="is-danger"
-        (click)="deleteAllUser()">HAPUS</button>
+        (click)="deleteAllUser()">NON
+        AKTIFKAN</button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -24,10 +25,10 @@
         </div>
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [selected]="selected" [count]="pagination.total" [limit]="pagination.per_page"
-        [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'fullname', dir: 'asc'}]"
-        (select)="onSelect($event)">
+        [headerHeight]="48" [footerHeight]="56" [selected]="selected" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [selectionType]="'checkbox'" [selected]="selected" [count]="pagination.total"
+        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+        [sorts]="[{prop: 'fullname', dir: 'asc'}]" (select)="onSelect($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"

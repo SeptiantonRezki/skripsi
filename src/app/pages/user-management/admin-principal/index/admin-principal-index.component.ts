@@ -154,10 +154,10 @@ export class AdminPrincipalIndexComponent {
   deleteAllUser(): void {
     if (this.selected.length > 0) {
       let data = {
-        titleDialog: "Hapus Admin Principal",
-        captionDialog: "Apakah anda yakin untuk menghapus data yang telah dipilih ?",
+        titleDialog: "Non-aktifkan Admin Principal",
+        captionDialog: "Apakah anda yakin untuk menon-aktifkan data yang telah dipilih ?",
         confirmCallback: this.confirmAllDelete.bind(this),
-        buttonText: ["Hapus", "Batal"]
+        buttonText: ["Non-aktifkan", "Batal"]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
