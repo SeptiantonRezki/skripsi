@@ -16,7 +16,7 @@
               <input matInput placeholder="Nama" [value]="profile.fullname" readonly>
             </mat-form-field>
           </div>
-          
+
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput placeholder="Username" [value]="profile.username" readonly>
@@ -28,7 +28,7 @@
               <input matInput placeholder="Email" [value]="profile.email" readonly>
             </mat-form-field>
           </div>
-          
+
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput placeholder="Peran" [value]="profile.role_name" readonly>
@@ -39,7 +39,12 @@
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="password" formControlName="old_password" placeholder="Kata Sandi Sekarang">
+              <input matInput type="text" *ngIf="currentPassword" formControlName="old_password" placeholder="Kata Sandi Sekarang">
+              <input matInput type="password" *ngIf="!currentPassword" formControlName="old_password" placeholder="Kata Sandi Sekarang">
+              <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="currentPassword = !currentPassword">
+                <mat-icon *ngIf="!currentPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="currentPassword">visibility_off</mat-icon>
+              </button>
               <mat-error *ngIf="changePassword.controls['old_password'].hasError('required') && changePassword.controls['old_password'].touched">
                 Kata Sandi Sekarang harus diisi
               </mat-error>
@@ -47,7 +52,12 @@
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="password" formControlName="password" placeholder="Kata Sandi Baru">
+              <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi Baru">
+              <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi Baru">
+              <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword = !showPassword">
+                <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+              </button>
               <mat-error *ngIf="changePassword.controls['password'].hasError('required') && changePassword.controls['password'].touched">
                 Kata Sandi Baru harus diisi
               </mat-error>
@@ -56,7 +66,14 @@
 
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="password" formControlName="password_confirmation" placeholder="Konfirmasi Kata Sandi Baru">
+              <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
+                placeholder="Konfirmasi Kata Sandi Baru">
+              <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
+                placeholder="Konfirmasi Kata Sandi Baru">
+              <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showConfirmPassword = !showConfirmPassword">
+                <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
+                <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
+              </button>
               <mat-error *ngIf="changePassword.controls['password_confirmation'].hasError('required') && changePassword.controls['password_confirmation'].touched">
                 Konfirmasi Kata Sandi Baru harus diisi
               </mat-error>

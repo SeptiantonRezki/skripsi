@@ -8,7 +8,8 @@ import { ProfileComponent } from "./profile.component";
 import {
   MatInputModule,
   MatButtonModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatIconModule
 } from "@angular/material";
 
 @NgModule({
@@ -18,7 +19,8 @@ import {
     SharedModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule
   ],
   declarations: [ProfileComponent],
   exports: [ProfileComponent]

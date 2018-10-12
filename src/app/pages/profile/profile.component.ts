@@ -15,6 +15,10 @@ export class ProfileComponent implements OnInit {
   changePassword: FormGroup;
   changePasswordError: any;
 
+  currentPassword = false;
+  showPassword = false;
+  showConfirmPassword = false;
+
   constructor(
     private dataService: DataService, 
     private formBuilder: FormBuilder,
