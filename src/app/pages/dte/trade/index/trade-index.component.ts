@@ -100,12 +100,12 @@ export class TradeIndexComponent {
       territory: [""]
     })
 
+    this.initArea();
+    this.getTp();
+
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.getTp();
     })
-
-    this.initArea();
-    this.getTp();
   }
 
   initArea() {

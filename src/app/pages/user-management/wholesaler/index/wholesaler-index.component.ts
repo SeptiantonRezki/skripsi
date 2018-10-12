@@ -89,12 +89,12 @@ export class WholesalerIndexComponent {
       territory: [""]
     })
 
+    this.initArea();
+    this.getWholesalerList();
+
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.getWholesalerList();
     })
-
-    this.initArea();
-    this.getWholesalerList();
   }
 
   initArea() {

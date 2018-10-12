@@ -101,13 +101,13 @@ export class CoinIndexComponent {
       territory: [""]
     })
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
-      this.getRetailer();
-    })
-
     this.initArea();
     this.getRetailer();
     this.getTrade();
+
+    this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
+      this.getRetailer();
+    })
   }
 
   initArea() {

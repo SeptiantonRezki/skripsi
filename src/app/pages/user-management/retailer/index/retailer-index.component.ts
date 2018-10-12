@@ -86,12 +86,12 @@ export class RetailerIndexComponent {
       territory: [""]
     })
 
+    this.initArea();
+    this.getRetailerList();
+
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.getRetailerList();
     })
-
-    this.initArea();
-    this.getRetailerList();
   }
 
   initArea() {

@@ -87,6 +87,7 @@
             <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="Kode Agen" prop="code"></ngx-datatable-column>
             <ngx-datatable-column name="Nomor Ponsel" prop="phone"></ngx-datatable-column>
+            <ngx-datatable-column name="Total Koin" prop="coin"></ngx-datatable-column>
             <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.terakhir_masuk?.date | date:'dd/MM/yyyy HH:mm'}}
