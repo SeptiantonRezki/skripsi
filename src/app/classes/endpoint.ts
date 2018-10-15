@@ -54,7 +54,7 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/principal`,
         put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
-        delete_multiple: `${AYO_API}/api/${type_api}/user/principal/delete/multiple`,
+        delete_multiple: `${AYO_API}/api/${type_api}/user/principal/inactive/multiple`,
         list_role: `${AYO_API}/api/${type_api}/user/role`,
         list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
       },
