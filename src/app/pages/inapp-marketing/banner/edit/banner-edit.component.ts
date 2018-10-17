@@ -387,7 +387,7 @@ export class BannerEditComponent {
 
       if (this.bannerSelected) {
         this.showLoading = true;
-        await html2canvas(document.querySelector("#banner"), { scale: 5 }).then(canvas => {
+        await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
           this.imageConverted = this.convertCanvasToImage(canvas);
           this.showLoading = false;
         });
