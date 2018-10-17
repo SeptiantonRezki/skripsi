@@ -333,7 +333,7 @@ export class BannerCreateComponent {
     if (this.formBannerGroup.valid && this.bannerSelected) {
 
       this.showLoading = true;
-      await html2canvas(document.querySelector("#banner")).then(canvas => {
+      await html2canvas(document.querySelector("#banner"), { scale: 5 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
         this.showLoading = false;
       });
