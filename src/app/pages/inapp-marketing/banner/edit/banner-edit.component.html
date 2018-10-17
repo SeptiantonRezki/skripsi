@@ -10,8 +10,8 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="">Ubah Spanduk</h2>
           <div>
-            <mat-form-field [class]="formBannerGroup.get('enable').value === 1 ? 'radius-select green' : 'radius-select red'">
-              <mat-select formControlName="enable">
+            <mat-form-field [class]="formBannerGroup.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
                 <mat-option *ngFor="let item of listStatus;" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>

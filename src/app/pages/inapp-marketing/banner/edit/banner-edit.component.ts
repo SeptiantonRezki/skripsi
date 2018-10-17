@@ -33,7 +33,7 @@ export class BannerEditComponent {
 
   lvl: any[];
   minDate: any;
-  listStatus: any[] = [{name: 'Status Aktif', value: 1}, {name: 'Status Non Aktif', value: 0}];
+  listStatus: any[] = [{name: 'Status Aktif', value: 'publish'}, {name: 'Status Non Aktif', value: 'draft'}];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
 
@@ -45,6 +45,8 @@ export class BannerEditComponent {
   files: File;
   image: any;
   validComboDrag: boolean;
+
+  statusChange: Boolean;
 
   formBannerGroup: FormGroup;
   formBannerErrors: any;
@@ -111,6 +113,7 @@ export class BannerEditComponent {
       enable: [1, Validators.required],
       title: ["", Validators.required],
       body: ["", Validators.required],
+      status: ["", Validators.required],
       user_group: ["retailer", Validators.required],
       age: ["18+", Validators.required],
       promo: ["yes", Validators.required],
@@ -143,6 +146,10 @@ export class BannerEditComponent {
 
     this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
       this.bannerSelected = res;
+    })
+
+    this.formBannerGroup.controls['status'].valueChanges.subscribe(res => {
+      this.statusChange = true;
     })
   }
 
@@ -216,6 +223,7 @@ export class BannerEditComponent {
     this.formBannerGroup.get('user_group').setValue(this.detailBanner.user_group);
     this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
     this.formBannerGroup.get('age').setValue(this.detailBanner.age);
+    this.formBannerGroup.get('status').setValue(this.detailBanner.status);
 
     this.formBannerGroup.get('zone').setValue(this.getArea('division'));
     this.formBannerGroup.get('region').setValue(this.getArea('region'));
@@ -396,7 +404,7 @@ export class BannerEditComponent {
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
       fd.append('enable', this.formBannerGroup.get('enable').value);
       fd.append('target_page[type]', 'static_page');
-      fd.append('status', status);
+      fd.append('status', this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status);
       fd.append('title', this.formBannerGroup.get('title').value);
       fd.append('body', this.formBannerGroup.get('body').value);
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
