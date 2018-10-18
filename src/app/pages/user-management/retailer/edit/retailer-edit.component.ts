@@ -355,7 +355,7 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value,
         longitude: this.formRetailer.get("longitude").value,
-        type: this.formRetailer.get("type").value,
+        type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value
       };
 
