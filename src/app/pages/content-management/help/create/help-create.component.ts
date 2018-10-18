@@ -27,6 +27,7 @@ export class HelpCreateComponent {
   validComboDrag: Boolean;
   
   public options: Object = {
+    key: "mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==",
     placeholderText: "Isi Konten",
     height: 150,
     quickInsertTags: [""],

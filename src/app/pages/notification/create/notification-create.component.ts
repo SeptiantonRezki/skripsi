@@ -38,6 +38,7 @@ export class NotificationCreateComponent {
 
   files: File;
   public options: Object = {
+    key: "mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==",
     placeholderText: "Isi Konten",
     height: 150,
     quickInsertTags: [""],
@@ -290,12 +291,16 @@ export class NotificationCreateComponent {
         title: this.formNotification.get("title").value,
         body: this.formNotification.get("body").value,
         type: this.formNotification.get("user_group").value,
-        age: this.formNotification.get("age").value,
+        // age: this.formNotification.get("age").value,
         static_page: this.formNotification.get("static_page").value,
         // static_page_title: this.formNotification.get("static_page_title").value,
         // static_page_body: this.formNotification.get("static_page_body").value,
         area_id : _.last(areas)
       };
+
+      if (body['type'] === 'customer') {
+        body['age'] = this.formNotification.get("age").value;
+      }
 
       if (body['static_page']) {
         body['static_page_title'] = this.formNotification.get("static_page_title").value;

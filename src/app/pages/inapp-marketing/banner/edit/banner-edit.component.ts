@@ -52,6 +52,7 @@ export class BannerEditComponent {
   formBannerErrors: any;
 
   public options: Object = {
+    key: "mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==",
     placeholderText: "Isi Halaman",
     height: 150,
     quickInsertTags: [""],
@@ -138,6 +139,15 @@ export class BannerEditComponent {
 
     this.formBannerGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formBannerGroup, this.formBannerErrors);
+    })
+
+    this.formBannerGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
+      if (res === 'retailer') {
+        this.formBannerGroup.controls['age'].disable();
+        this.formBannerGroup.controls['age'].setValue('18+');
+      } else {
+        this.formBannerGroup.controls['age'].enable();
+      }
     })
 
     this.setMinDate();
@@ -409,7 +419,7 @@ export class BannerEditComponent {
       fd.append('body', this.formBannerGroup.get('body').value);
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
       fd.append('promo', this.formBannerGroup.get('promo').value);
-      fd.append('age', this.formBannerGroup.get('age').value);
+      fd.append('age', this.formBannerGroup.get('age').disabled ? "18+" : this.formBannerGroup.get('age').value);
       fd.append('static_page', 'yes');
 
       if (this.bannerSelected) {
