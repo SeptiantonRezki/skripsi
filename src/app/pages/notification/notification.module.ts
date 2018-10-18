@@ -4,20 +4,53 @@ import { CommonModule } from "@angular/common";
 import { NotificationRoutingModule } from "./notification-routing.module";
 import { NotificationIndexComponent } from "./index/notification-index.component";
 import { NotificationCreateComponent } from "./create/notification-create.component";
-import { NotificationEditComponent } from "./edit/notification-edit.component";
 import { PageGuard } from "app/classes/auth.guard";
+import { FuseSharedModule } from "@fuse/shared.module";
+import { SharedModule } from "app/shared/shared.module";
+import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { 
+  MatButtonModule, 
+  MatCheckboxModule, 
+  MatIconModule, 
+  MatFormFieldModule, 
+  MatInputModule, 
+  MatSelectModule,
+  MatStepperModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule
+} from "@angular/material";
+
+import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 
 @NgModule({
-  imports: [CommonModule, NotificationRoutingModule],
+  imports: [
+    CommonModule, 
+    NotificationRoutingModule,
+    CommonModule,
+    FuseSharedModule,
+    SharedModule,
+    NgxDatatableModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
+  ],
   declarations: [
     NotificationIndexComponent,
-    NotificationCreateComponent,
-    NotificationEditComponent
+    NotificationCreateComponent
   ],
   exports: [
     NotificationIndexComponent,
-    NotificationCreateComponent,
-    NotificationEditComponent
+    NotificationCreateComponent
   ],
   providers: [PageGuard]
 })

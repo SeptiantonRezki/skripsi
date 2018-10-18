@@ -207,7 +207,12 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/menu`
       },
       notification: {
-        get: `${AYO_API}/api/${type_api}/notification`
+        get: `${AYO_API}/api/${type_api}/notification`,
+        create: `${AYO_API}/api/${type_api}/notification`,
+        delete: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

@@ -1,3 +1,57 @@
-<p>
-  notification-index works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Notifikasi'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/notifications', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Notifikasi</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'title', dir: 'asc'}]" (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Judul Notifikasi" prop="title">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
+            {{row.title}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Grup Pengguna" prop="type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}</ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date: 'dd/MM/yyyy
+            HH:mm:ss'}}</ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,130 @@
-<p>
-  notification-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Notifikasi'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formNotification">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">Buat Notifikasi</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <mat-form-field fxFlex="50" class="is-light form-primary">
+            <input matInput type="text" formControlName="title" placeholder="Judul Notifikasi">
+            <mat-error *ngIf="formNotification.controls['title'].hasError('required') && formNotification.controls['title'].touched">
+              Judul Notifikasi harus diisi
+            </mat-error>
+          </mat-form-field>
+          <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <h3 class="">Konten Notifikasi</h3>
+          </div>
+          <textarea [froalaEditor]="options" formControlName="body" fxFlex="100"></textarea>
+          <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formNotification.controls['body'].hasError('required') && formNotification.controls['body'].touched">
+            Konten Notifikasi harus diisi
+          </mat-error>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formNotification.controls['national'].hasError('required') && formNotification.controls['national'].touched">
+                National harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formNotification.get('zone').value)">
+                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formNotification.get('region').value)">
+                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formNotification.get('area').value)">
+                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formNotification.get('salespoint').value)">
+                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formNotification.get('district').value)">
+                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory">
+                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="pb-16">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Buat Halaman Tujuan?</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="static_page" class="radio-group" (change)="changeValue()">
+              <mat-radio-button class="radio-button" *ngFor="let item of createLandingPage" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="pt-16 pb-24" *ngIf="formNotification.get('static_page').value === 1">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input matInput type="text" formControlName="static_page_title" placeholder="Nama Halaman">
+                <mat-error *ngIf="formNotification.controls['static_page_title'].hasError('required') && formNotification.controls['static_page_title'].touched">
+                  Nama Halaman harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">Isi Halaman</h3>
+            </div>
+            <textarea [froalaEditor]="options" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
+            <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
+              Isi Halaman harus diisi
+            </mat-error>
+          </div>
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Grup Pengguna</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="user_group" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Batasan Umur</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="age" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listAge" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
