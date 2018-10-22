@@ -92,6 +92,16 @@ export class Endpoint {
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
+      paguyuban: {
+        get: `${AYO_API}/api/${type_api}/user/paguyuban`,
+        create: `${AYO_API}/api/${type_api}/user/paguyuban`,
+        put: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
+        delete: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+      },
       banner: {
         get: `${AYO_API}/api/${type_api}/content/banner`,
         create: `${AYO_API}/api/${type_api}/content/banner`,

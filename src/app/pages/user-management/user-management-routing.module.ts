@@ -68,17 +68,17 @@ const routes: Routes = [
     },
     canActivate: [PageGuard]
   },
-  {
-    path: "field-force/create",
-    component: FieldForceCreateComponent,
-    data: {
-      breadcrumbs: brConfig.fieldforce.create
-    },
-    resolve: {
-      listLevel: ListLevelFFResolver
-    },
-    canActivate: [PageGuard]
-  },
+  // {
+  //   path: "field-force/create",
+  //   component: FieldForceCreateComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.fieldforce.create
+  //   },
+  //   resolve: {
+  //     listLevel: ListLevelFFResolver
+  //   },
+  //   canActivate: [PageGuard]
+  // },
   {
     path: "field-force/edit",
     component: FieldForceEditComponent,

@@ -248,6 +248,8 @@ export class WholesalerIndexComponent {
   getWholesalerList() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length-1].value;
+    this.pagination.sort = "name";
+    this.pagination.sort_type = "asc";
       
     this.loadingIndicator = true;
     this.wholesalerService.get(this.pagination).subscribe(
