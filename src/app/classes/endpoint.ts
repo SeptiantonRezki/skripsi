@@ -55,8 +55,12 @@ export class Endpoint {
         put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete_multiple: `${AYO_API}/api/${type_api}/user/principal/inactive/multiple`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_role: `${AYO_API}/api/${type_api}/user/role`,
         list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       field_force: {
         get: `${AYO_API}/api/${type_api}/user/field-force`,
