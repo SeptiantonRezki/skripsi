@@ -68,6 +68,8 @@ export class NewsIndexComponent {
   }
 
   getListNews() {
+    this.pagination.sort = "date";
+    this.pagination.sort_type = "desc";
     this.newsService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
