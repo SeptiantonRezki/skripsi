@@ -182,19 +182,19 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
-        <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone"></ngx-datatable-column>
+        <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
-        <ngx-datatable-column name="Field Force" prop="ff_name"></ngx-datatable-column>
+        <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Daftar Ayo" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
             <span *ngIf="row.status === 'not-registered'">No</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="division_code"></ngx-datatable-column>
-        <ngx-datatable-column name="Wilayah" prop="region_code"></ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area_code"></ngx-datatable-column>
+        <ngx-datatable-column name="Kode Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Wilayah" prop="region_code" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column>
       </ngx-datatable>
     </div>
 
