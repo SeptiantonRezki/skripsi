@@ -78,7 +78,7 @@ export class PaguyubanCreateComponent {
     this.verticalStepperStep1 = this.formBuilder.group({
       fullname: ["", Validators.required],
       group_name: ["", Validators.required],
-      username: [""],
+      username: ["", Validators.required],
       password: ["", Validators.required],
       password_confirmation: ["", Validators.required],
     });

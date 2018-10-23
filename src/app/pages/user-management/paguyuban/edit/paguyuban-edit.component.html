@@ -33,6 +33,9 @@
 
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput disabled placeholder="Username" type="text" formControlName="username">
+            <mat-error *ngIf="formPaguyuban.controls['username'].hasError('required') && formPaguyuban.controls['username'].touched ">
+              Username harus diisi.
+            </mat-error>
           </mat-form-field>
 
           <div fxLayout="row">
