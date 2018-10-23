@@ -30,6 +30,11 @@ export class BannerService extends BaseService {
     return this.deleteApi(url);
   }
 
+  getParentArea(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "parent", context);
+    return this.getApi(url);
+  }
+
   getListLevel(): Observable<any> {
     const url = this.getUrl(this.namespace, "list_level");
     return this.getApi(url);

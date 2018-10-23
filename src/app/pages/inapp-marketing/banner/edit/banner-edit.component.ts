@@ -9,6 +9,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
 import * as html2canvas from 'html2canvas';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-banner-edit',
@@ -41,6 +42,7 @@ export class BannerEditComponent {
   templateBannerList: any[];
   bannerSelected: any;
   imageConverted: any;
+  detailAreaSelected: any;
 
   files: File;
   image: any;
@@ -152,7 +154,12 @@ export class BannerEditComponent {
 
     this.setMinDate();
     this.initArea();
-    this.initFormGroup();
+
+    this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] }).subscribe(res => {
+      this.detailAreaSelected = res.data;
+
+      this.initFormGroup();
+    })
 
     this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
       this.bannerSelected = res;
@@ -199,7 +206,7 @@ export class BannerEditComponent {
   }
 
   initFormGroup() {
-    this.detailBanner.areas.map(item => {
+    this.detailAreaSelected.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
         case 'national':
@@ -349,7 +356,7 @@ export class BannerEditComponent {
   }
 
   getArea(selection) {
-    return this.detailBanner.areas.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
   removeImage(): void {
@@ -431,9 +438,10 @@ export class BannerEditComponent {
         if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value))
       })
       
-      areas.map(item => {
-        fd.append('areas[]', item)
-      })
+      fd.append('areas[]', _.last(areas));
+      // areas.map(item => {
+      //   fd.append('areas[]', item)
+      // })
       
       this.bannerService.put(fd, {banner_id: this.detailBanner.id}).subscribe(
         res => {

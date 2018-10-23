@@ -380,10 +380,11 @@ export class BannerCreateComponent {
         const filteredValue = value.filter(item => item.key === type && item.value);
         if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
       })
-      
-      areas.map(item => {
-        fd.append('areas[]', item)
-      })
+
+      fd.append('areas[]', _.last(areas));
+      // areas.map(item => {
+      //   fd.append('areas[]', item)
+      // })
       
       this.bannerService.create(fd).subscribe(
         res => {
