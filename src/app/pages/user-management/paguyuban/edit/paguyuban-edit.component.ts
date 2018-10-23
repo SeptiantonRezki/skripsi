@@ -75,7 +75,7 @@ export class PaguyubanEditComponent {
   ngOnInit() {
     this.formPaguyuban = this.formBuilder.group({
       fullname: ["", Validators.required],
-      username: [""],
+      username: ["", Validators.required],
       group_name: ["", Validators.required],
       principal_id: ["", Validators.required],
       status: [""],
