@@ -147,6 +147,7 @@ export class AdminPrincipalIndexComponent {
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
 
         this.getAdminList();
+        this.selected = [];
       },
       err => {
         this.dialogService.openSnackBar({ message: err.error.message });

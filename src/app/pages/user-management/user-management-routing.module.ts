@@ -21,7 +21,8 @@ import { PageGuard } from "app/classes/auth.guard";
 import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
-  ListLevelAreaResolver
+  ListLevelAreaResolver,
+  ListAdminPrincipalResolver
 } from "app/resolver/user-management.resolver";
 
 const routes: Routes = [
@@ -95,7 +96,8 @@ const routes: Routes = [
     component: PaguyubanIndexComponent,
     data: {
       breadcrumbs: brConfig.paguyuban.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "paguyuban/create",
@@ -104,8 +106,9 @@ const routes: Routes = [
       breadcrumbs: brConfig.paguyuban.edit
     },
     resolve: {
-      listRole: ListRoleAdminResolver
-    }
+      listAdminPrincipal: ListAdminPrincipalResolver
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "paguyuban/edit",
@@ -114,15 +117,17 @@ const routes: Routes = [
       breadcrumbs: brConfig.paguyuban.edit
     },
     resolve: {
-      listRole: ListRoleAdminResolver
-    }
+      listAdminPrincipal: ListAdminPrincipalResolver
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "wholesaler",
     component: WholesalerIndexComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "wholesaler/create",

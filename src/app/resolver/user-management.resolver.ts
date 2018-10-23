@@ -4,6 +4,7 @@ import { AdminPrincipalService } from "../services/user-management/admin-princip
 import { Observable } from "rxjs";
 import { FieldForceService } from "../services/user-management/field-force.service";
 import { WholesalerService } from "../services/user-management/wholesaler.service";
+import { PaguyubanService } from "app/services/user-management/paguyuban.service";
 
 @Injectable()
 export class ListRoleAdminResolver implements Resolve<any> {
@@ -26,5 +27,12 @@ export class ListLevelAreaResolver implements Resolve<any>{
   constructor(private wholesalerService: WholesalerService){}
   resolve(): Observable<any> {
     return this.wholesalerService.getListLevel();
+  }
+}
+@Injectable()
+export class ListAdminPrincipalResolver implements Resolve<any> {
+  constructor(private paguyubanService: PaguyubanService){}
+  resolve(): Observable<any> {
+    return this.paguyubanService.getListAdminPrincipal();
   }
 }

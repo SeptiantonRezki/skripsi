@@ -40,7 +40,8 @@ import { PageGuard } from "app/classes/auth.guard";
 import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
-  ListLevelAreaResolver
+  ListLevelAreaResolver,
+  ListAdminPrincipalResolver
 } from "../../resolver/user-management.resolver";
 
 @NgModule({
@@ -94,6 +95,12 @@ import {
     RetailerCreateComponent,
     RetailerEditComponent
   ],
-  providers: [ListRoleAdminResolver, ListLevelFFResolver, ListLevelAreaResolver, PageGuard]
+  providers: [
+    ListRoleAdminResolver,
+    ListLevelFFResolver, 
+    ListLevelAreaResolver,
+    ListAdminPrincipalResolver,
+    PageGuard
+  ]
 })
 export class UserManagementModule {}

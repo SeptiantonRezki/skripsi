@@ -9,8 +9,8 @@
  * AYO Sampoerna Staging
  *
  */
-// const AYO_API = "http://192.168.2.228/"; // ip internal
-const AYO_API = "https://ayo-api.dxtr.asia";
+const AYO_API = "http://192.168.2.228/"; // ip internal
+// const AYO_API = "https://ayo-api.dxtr.asia";
 // const AYO_API = "http://43.243.140.58:3232"; // ip public
 // const AYO_API = "https://api.src.id"; // production
 const type_api = "principal";
@@ -56,7 +56,7 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
         delete_multiple: `${AYO_API}/api/${type_api}/user/principal/inactive/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_role: `${AYO_API}/api/${type_api}/user/role`,
+        list_role: `${AYO_API}/api/${type_api}/user/role?page=all`,
         list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
@@ -97,7 +97,9 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/paguyuban`,
         put: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
         delete: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
+        delete_multiple: `${AYO_API}/api/${type_api}/user/paguyuban/delete/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        list_principal: `${AYO_API}/api/${type_api}/user/principal?page=all`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
