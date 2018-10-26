@@ -210,8 +210,8 @@
               *ngIf="bannerSelected">
               <div fxFlex="45">
                 <div class="banner-image-template-selected">
-                  <div id="banner" [class]="'banner-image-custom ' + bannerSelected.class" [title]="bannerSelected.name"
-                    [style.background-image]="'url(' + bannerSelected.image + ')'">
+                  <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class" [title]="bannerSelected.name">
+                    <img [src]="bannerSelected.image" width="390" height="190" [alt]="bannerSelected.name">
                     <img *ngIf="bannerSelected.product" [src]="bannerSelected.product" class="product">
                     <div class="title">{{bannerSelected.title}}</div>
                     <div [class]="'button ' + bannerSelected.button_class">{{bannerSelected.button_text}}</div>
@@ -226,7 +226,7 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <div class="banner-image-template-selected">
-                <img [src]="detailBanner.image_url" class="banner-image-custom">
+                <img [src]="detailBanner.image_url" class="banner-image-custom-selected">
               </div>
             </div>
           </div>

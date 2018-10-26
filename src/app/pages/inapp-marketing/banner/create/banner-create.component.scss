@@ -45,6 +45,15 @@
     position: relative;
   }
 
+  .banner-image-custom-selected {
+    // border-radius: 6px;
+    display: inline-block;
+    width: 390px;
+    height: 190px;
+    margin: 13px 9px;
+    position: relative;
+  }
+
   .template-a div {
     &.title {
       color: white;
@@ -254,6 +263,9 @@
     width: 170px;
     margin: 8px 10px 10px 8px;
     border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .red-circle-button {
