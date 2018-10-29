@@ -22,6 +22,7 @@
     width: 410px;
     border-radius: 6px;
     background-color: #FFFFFF;
+    padding: 12px 10px;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
   }
 
@@ -47,11 +48,11 @@
 
   .banner-image-custom-selected {
     // border-radius: 6px;
-    display: inline-block;
+    // display: inline-block;
     width: 390px;
-    height: 190px;
-    margin: 13px 9px;
-    position: relative;
+    // height: 190px;
+    // margin: 13px 9px;
+    position: sticky;
   }
 
   .template-a div {
