@@ -184,6 +184,27 @@ export const brConfig = {
       }
     ]
   },
+  customer: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Daftar Customer"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/customer",
+        name: "Daftar Customer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Customer"
+      }
+    ]
+  },
   inappMarketing: {
     banner: {
       index: [

@@ -60,6 +60,7 @@ import { AccessService } from "./services/settings/access.service";
 import { AccountService } from "./services/settings/account.service";
 import { GoogleAnalyticsService } from "./services/google-analytics.service";
 import { NavigationService } from "./services/navigation.service";
+import { CustomerService } from "./services/user-management/customer.service";
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { NavigationService } from "./services/navigation.service";
     AdminPrincipalService,
     FieldForceService,
     PaguyubanService,
+    CustomerService,
     WholesalerService,
     RetailerService,
     BannerService,

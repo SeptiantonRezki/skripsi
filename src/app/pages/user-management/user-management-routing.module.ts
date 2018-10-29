@@ -24,6 +24,8 @@ import {
   ListLevelAreaResolver,
   ListAdminPrincipalResolver
 } from "app/resolver/user-management.resolver";
+import { CustomerIndexComponent } from "./customer/index/customer-index.component";
+import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
 
 const routes: Routes = [
   {
@@ -171,7 +173,23 @@ const routes: Routes = [
       breadcrumbs: brConfig.retailer.edit
     },
     canActivate: [PageGuard]
-  }
+  },
+  {
+    path: "customer",
+    component: CustomerIndexComponent,
+    data: {
+      breadcrumbs: brConfig.customer.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "customer/detail/:id",
+    component: CustomerDetailComponent,
+    data: {
+      breadcrumbs: brConfig.customer.detail
+    },
+    // canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,79 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detail Customer'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+
+      <form [formGroup]="formCustomer">
+        <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+          <h3>Detail Customer</h3>
+          <mat-form-field [class]="formCustomer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+            <mat-select formControlName="status">
+              <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="ayo-middle pt-24" fxLayout="column">
+
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16 pb-64" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Nama" type="text" formControlName="fullname">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Jenis Kelamin" type="text" formControlName="gender">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Kota" type="text" formControlName="city">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Tanggal Lahir" type="text" formControlName="birth_date">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Merokok?" type="text" formControlName="is_smoking">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Email" type="text" formControlName="email">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Retailer Toko" type="text" formControlName="refferal_name">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Kode Referensi" type="text" formControlName="refferal_code">
+            </mat-form-field>
+          </div>
+
+          <!-- <mat-form-field fxFlex="100" class="is-light">
+            <input matInput disabled placeholder="Username" type="text" formControlName="username">
+          </mat-form-field>
+
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Email" type="email" formControlName="email">
+            <mat-error *ngIf="formCustomer.controls['email'].hasError('required') && formCustomer.controls['email'].touched ">
+              Alamat email harus diisi.
+            </mat-error>
+          </mat-form-field>
+          <div fxFlex="100" fxLayout="row">
+            <mat-form-field fxFlex="40" class="is-light">
+              <mat-select placeholder="Peran" formControlName="role">
+                <mat-option *ngFor="let item of listRole" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formCustomer.controls['role'].hasError('required') && formCustomer.controls['role'].touched ">
+                Peran harus diisi.
+              </mat-error>
+            </mat-form-field> -->
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

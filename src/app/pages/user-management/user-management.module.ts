@@ -43,6 +43,8 @@ import {
   ListLevelAreaResolver,
   ListAdminPrincipalResolver
 } from "../../resolver/user-management.resolver";
+import { CustomerIndexComponent } from "./customer/index/customer-index.component";
+import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
 
 @NgModule({
   imports: [
@@ -76,7 +78,9 @@ import {
     WholesalerEditComponent,
     RetailerIndexComponent,
     RetailerCreateComponent,
-    RetailerEditComponent
+    RetailerEditComponent,
+    CustomerIndexComponent,
+    CustomerDetailComponent
   ],
   declarations: [
     AdminPrincipalIndexComponent,
@@ -93,7 +97,9 @@ import {
     WholesalerEditComponent,
     RetailerIndexComponent,
     RetailerCreateComponent,
-    RetailerEditComponent
+    RetailerEditComponent,
+    CustomerIndexComponent,
+    CustomerDetailComponent
   ],
   providers: [
     ListRoleAdminResolver,
