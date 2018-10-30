@@ -180,7 +180,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.customer.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "customer/detail/:id",
@@ -188,7 +188,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.customer.detail
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
 ];
 
