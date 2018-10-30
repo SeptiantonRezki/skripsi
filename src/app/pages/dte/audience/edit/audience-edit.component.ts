@@ -387,6 +387,8 @@ export class AudienceEditComponent {
 
   getRetailer() {
     this.pagination.per_page = 25;
+    this.pagination.sort = 'name';
+    this.pagination.sort_type = 'asc';
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     let area_id = areaSelected[areaSelected.length-1].value;
 

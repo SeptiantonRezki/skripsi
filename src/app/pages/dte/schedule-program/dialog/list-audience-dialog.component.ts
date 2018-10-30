@@ -31,6 +31,8 @@ export class ListAudienceDialogComponent {
 
   ngOnInit() {
     this.onLoad = true;
+    this.pagination.sort = 'name';
+    this.pagination.sort_type = 'asc';
     this.schedulerService.getListRetailerSelected({ audience_id: this.data.id }, this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
