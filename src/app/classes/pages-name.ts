@@ -16,6 +16,8 @@ export class PagesName {
       "/user-management/paguyuban": "principal.paguyuban.lihat",
       "/user-management/paguyuban/create": "principal.paguyuban.buat",
       "/user-management/paguyuban/edit": "principal.paguyuban.ubah",
+      "/user-management/customer": "principal.paguyuban.lihat",
+      "/user-management/customer/detail/": "principal.paguyuban.lihat",
       "/advertisement/banner": "principal.spanduk.lihat",
       "/advertisement/banner/create": "principal.spanduk.buat",
       "/advertisement/banner/edit": "principal.spanduk.ubah",
