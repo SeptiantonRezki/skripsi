@@ -54,7 +54,8 @@ export class CustomerDetailComponent {
           is_smoking: [res.is_smoking === 1 ? 'Ya, Saya Merokok' : 'Tidak, Saya Tidak Merokok'],
           email: [res.email || '-'],
           refferal_name: [res.refferal_name || '-'],
-          refferal_code: [res.refferal_code || '-']
+          refferal_code: [res.refferal_code || '-'],
+          total_coupon: [res.total_coupon]
         });
 
         this.formCustomer.disable();

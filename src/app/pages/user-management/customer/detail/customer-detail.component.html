@@ -17,7 +17,7 @@
         </div>
         <div class="ayo-middle pt-24" fxLayout="column">
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16 pb-64" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45" class="is-light">
               <input matInput placeholder="Nama" type="text" formControlName="fullname">
             </mat-form-field>
@@ -71,7 +71,18 @@
               </mat-error>
             </mat-form-field> -->
         </div>
-
+        <div fxLayout="column" class="rectangle-point px-16">
+          <h3>
+            <strong>Total Kupon</strong>
+          </h3>
+          <div fxLayout="row" class="pt-16" fxLayoutAlign="space-between center">
+            <div class="oval-coupon">
+              <span>C</span>
+            </div>
+            <span class="value-target-pembelian">{{formCustomer.get('total_coupon').value | rupiahFormaterWithoutRp}}</span>
+          </div>
+        </div>
+        <div class="pb-64"></div>
       </form>
     </div>
 
