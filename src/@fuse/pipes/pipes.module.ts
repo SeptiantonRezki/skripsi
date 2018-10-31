@@ -5,7 +5,7 @@ import { GetByIdPipe } from "./getById.pipe";
 import { HtmlToPlaintextPipe } from "./htmlToPlaintext.pipe";
 import { FilterPipe } from "./filter.pipe";
 import { CamelCaseToDashPipe } from "./camelCaseToDash.pipe";
-import { RupiahFormaterPipe } from "./rupiah-formater";
+import { RupiahFormaterPipe, RupiahFormaterWithoutRpPipe } from "./rupiah-formater";
 import { CapitalizePipe } from "./capitalize";
 
 @NgModule({
@@ -16,7 +16,8 @@ import { CapitalizePipe } from "./capitalize";
     FilterPipe,
     CamelCaseToDashPipe,
     RupiahFormaterPipe,
-    CapitalizePipe
+    CapitalizePipe,
+    RupiahFormaterWithoutRpPipe
   ],
   imports: [],
   exports: [
@@ -26,7 +27,8 @@ import { CapitalizePipe } from "./capitalize";
     FilterPipe,
     CamelCaseToDashPipe,
     RupiahFormaterPipe,
-    CapitalizePipe
+    CapitalizePipe,
+    RupiahFormaterWithoutRpPipe
   ]
 })
 export class FusePipesModule {}

@@ -1,0 +1,39 @@
+:host {
+  .button-topup {
+    height: 40px;
+    width: 179px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .target-pembelian {
+    height: 40px;
+    width: 176.79px;
+    border-radius: 13px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .value-target-pembelian {
+    height: 29px;
+    width: 123px;
+    color: #000000;
+    font-family: "Proxima Nova";
+    font-size: 22px;
+    line-height: 29px;
+    text-align: right;
+  }
+
+  .oval-coupon {
+    box-sizing: border-box;
+    height: 55px;
+    width: 55px;
+    border: 2px solid #BB130F;
+    border-radius: 50%;
+    color: #BB130F;
+    font-size: 3em;
+    padding: 0px 10px 0px 10px;
+  }
+}
