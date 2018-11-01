@@ -143,7 +143,7 @@ export class ProductIndexComponent {
         this.getProducts();
       },
       err => {
-        this.dialogService.openSnackBar({ message: err.error.message });
+        // this.dialogService.openSnackBar({ message: err.error.message });
       }
     );
   }

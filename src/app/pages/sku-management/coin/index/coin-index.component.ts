@@ -25,6 +25,9 @@ export class CoinIndexComponent {
   selected: any[];
   id: any[];
 
+  retailer_id: any;
+  type: any;
+
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
@@ -370,6 +373,44 @@ export class CoinIndexComponent {
       this.rowsTP = res.data;
       this.loadingIndicatorTP = false;
     });
+  }
+
+  flush(type, item) {
+    this.type = type;
+    this.retailer_id = item.id;
+    let data = {
+      titleDialog: "Flush Coin",
+      captionDialog: "Anda akan menghapus semua coin di "+ item.name +". Coin yang terhapus tidak akan bisa dikembalikan.",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Ok", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    let body = {
+      type: this.type
+    }
+
+    if (this.type === 'retailer') 
+      body['retailer_id'] = this.retailer_id;
+    else 
+      body['trade_program_id'] = this.retailer_id;
+
+    this.coinService.flush(body).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Flush coin berhasil" });
+
+        if (this.type === 'retailer') 
+          this.getRetailer();
+        else 
+          this.getTrade();
+      },
+      err => {
+        // this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
   }
 
   // directEdit(param?: any): void {
