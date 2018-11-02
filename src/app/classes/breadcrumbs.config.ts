@@ -356,6 +356,30 @@ export const brConfig = {
           url: "",
           name: "Manajemen Koin"
         }
+      ],
+      trade: [
+        {
+          type: "parent",
+          url: "/sku-management/coin",
+          name: "Manajemen Koin"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Trade Program"
+        }
+      ],
+      retailer: [
+        {
+          type: "parent",
+          url: "/sku-management/coin",
+          name: "Manajemen Koin"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Retailer"
+        }
       ]
     }
   },

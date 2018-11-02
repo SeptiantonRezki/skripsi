@@ -6,6 +6,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-coin-index',
@@ -27,6 +28,7 @@ export class CoinIndexComponent {
 
   retailer_id: any;
   type: any;
+  selectedTab: any;
 
   loadingIndicator = true;
   reorderable = true;
@@ -54,6 +56,13 @@ export class CoinIndexComponent {
   ) { 
     this.onLoad = true;
     this.onLoadTP = true;
+
+    const selectedTab = this.dataService.getFromStorage('setSelectedTabCoin');
+    if (selectedTab) {
+      this.selectedTab = selectedTab;
+    } else {
+      this.selectedTab = 0;
+    }
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -299,11 +308,16 @@ export class CoinIndexComponent {
 
     console.log("check pagination", this.pagination);
 
-    this.coinService.getRetailer(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.loadingIndicator = false;
-    });
+    this.coinService.getRetailer(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        this.loadingIndicator = false;
+      },
+      err => {
+        this.loadingIndicator = false;
+      }
+    );
   }
 
   updateFilter(string) {
@@ -355,11 +369,16 @@ export class CoinIndexComponent {
 
     console.log("check pagination", this.paginationTP);
 
-    this.coinService.getProgram(this.paginationTP).subscribe(res => {
-      Page.renderPagination(this.paginationTP, res);
-      this.rowsTP = res.data;
-      this.loadingIndicatorTP = false;
-    });
+    this.coinService.getProgram(this.paginationTP).subscribe(
+      res => {
+        Page.renderPagination(this.paginationTP, res);
+        this.rowsTP = res.data;
+        this.loadingIndicatorTP = false;
+      },
+      err => {
+        this.loadingIndicatorTP = false;
+      }
+    );
   }
 
   updateFilterTP(string) {
@@ -381,13 +400,13 @@ export class CoinIndexComponent {
     let data = {
       titleDialog: "Flush Coin",
       captionDialog: "Anda akan menghapus semua coin di "+ item.name +". Coin yang terhapus tidak akan bisa dikembalikan.",
-      confirmCallback: this.confirmDelete.bind(this),
+      confirmCallback: this.confirmFlush.bind(this),
       buttonText: ["Ok", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDelete() {
+  confirmFlush() {
     let body = {
       type: this.type
     }
@@ -413,37 +432,12 @@ export class CoinIndexComponent {
     );
   }
 
-  // directEdit(param?: any): void {
-  //   // let navigationExtras: NavigationExtras = {
-  //   //   queryParams: param
-  //   // }
-  //   this.dataService.setToStorage("detail_page", param);
-  //   this.router.navigate(["advertisement", "landing-page", "edit"]);
-  // }
+  setToStorage(item, name) {
+    this.dataService.setToStorage(name, item);
+  }
 
-  // deletePage(id): void {
-  //   this.id = id;
-  //   let data = {
-  //     titleDialog: "Hapus Halaman Tujuan",
-  //     captionDialog: "Apakah anda yakin untuk menghapus Halaman Tujuan ini ?",
-  //     confirmCallback: this.confirmDelete.bind(this),
-  //     buttonText: ["Hapus", "Batal"]
-  //   };
-  //   this.dialogService.openCustomConfirmationDialog(data);
-  // }
-
-  // confirmDelete() {
-  //   this.coinService.delete({ page_id: this.id }).subscribe(
-  //     res => {
-  //       this.dialogService.brodcastCloseConfirmation();
-  //       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-
-  //       this.getLandingPage();
-  //     },
-  //     err => {
-  //       this.dialogService.openSnackBar({ message: err.error.message });
-  //     }
-  //   );
-  // }
+  setSelectedTab(tabChangeEvent: MatTabChangeEvent) {
+    this.selectedTab = tabChangeEvent.index;
+  }
 
 }

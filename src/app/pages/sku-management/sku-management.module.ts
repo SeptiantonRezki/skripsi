@@ -45,6 +45,9 @@ import {
 } from "../../resolver/product.resolver";
 import { ScanBarcodeDialogComponent } from "./product/create/dialog/scan-barcode-dialog.component";
 import { AutofocusModule } from 'angular-autofocus-fix';
+import { DetailTradeProgramComponent } from './coin/detail/detail-trade-program/detail-trade-program.component';
+import { DetailRetailerComponent } from './coin/detail/detail-retailer/detail-retailer.component';
+import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 
 @NgModule({
   imports: [
@@ -83,7 +86,9 @@ import { AutofocusModule } from 'angular-autofocus-fix';
     RewardEditComponent,
     RewardHistoryIndexComponent,
     CoinIndexComponent,
-    ScanBarcodeDialogComponent
+    ScanBarcodeDialogComponent,
+    DetailTradeProgramComponent,
+    DetailRetailerComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -93,9 +98,11 @@ import { AutofocusModule } from 'angular-autofocus-fix';
     RewardCreateComponent,
     RewardEditComponent,
     RewardHistoryIndexComponent,
-    CoinIndexComponent
+    CoinIndexComponent,
+    DetailTradeProgramComponent,
+    DetailRetailerComponent
   ],
   entryComponents: [ScanBarcodeDialogComponent],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard]
+  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe]
 })
 export class SkuManagementModule {}

@@ -15,6 +15,8 @@ import {
   ListCategoryResolver,
   ListPackagingResolver
 } from "../../resolver/product.resolver";
+import { DetailTradeProgramComponent } from "./coin/detail/detail-trade-program/detail-trade-program.component";
+import { DetailRetailerComponent } from "./coin/detail/detail-retailer/detail-retailer.component";
 
 const routes: Routes = [
   {
@@ -93,6 +95,22 @@ const routes: Routes = [
     component: CoinIndexComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.coin.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "coin/detail-trade-program/:id",
+    component: DetailTradeProgramComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.coin.trade
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "coin/detail-retailer/:id",
+    component: DetailRetailerComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.coin.retailer
     },
     canActivate: [PageGuard]
   }

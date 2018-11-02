@@ -39,4 +39,19 @@ export class CoinService extends BaseService {
     const url = this.getUrl(this.namespace, "flush");
     return this.postApi(url, body);
   }
+
+  detailProgram(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail_program", context);
+    return this.getApi(url, queryParams);
+  }
+
+  detailRetailer(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail_retailer", context);
+    return this.getApi(url, queryParams);
+  }
+
+  getParentArea(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "parent", context);
+    return this.getApi(url);
+  }
 }

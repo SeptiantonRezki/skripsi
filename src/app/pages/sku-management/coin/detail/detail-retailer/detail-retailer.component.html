@@ -1,0 +1,104 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detail Retailer'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Detail Retailer</h2>
+      </div>
+
+      <form [formGroup]="formDetailRetailer">
+        <div class="ayo-middle p-24" fxLayout="column">
+
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Nama" type="text" formControlName="name">
+          </mat-form-field>
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Alamat Toko" type="address" formControlName="address">
+          </mat-form-field>
+
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput type="text" placeholder="Kode Agen" formControlName="business_code">
+          </mat-form-field>
+
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+          </mat-form-field>
+
+          <mat-form-field fxFlex.xs="70" class="is-light">
+            <input matInput placeholder="Nomor Ponsel" formControlName="phone" type="text">
+          </mat-form-field>
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formDetailRetailer.get('zone').value)">
+                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formDetailRetailer.get('region').value)">
+                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formDetailRetailer.get('area').value)">
+                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formDetailRetailer.get('salespoint').value)">
+                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formDetailRetailer.get('district').value)">
+                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory">
+                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Trade Program</h2>
+      </div>
+
+      <ngx-datatable style="border-top: 1px solid #e3e3e3" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
+        (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Nama Trade Program" prop="trade_program" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama Template Tugas" prop="template_name" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Tipe" prop="type" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.type.toUpperCase()}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Jumlah Koin" prop="coin" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin | rupiahFormaterWithoutRp}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Tanggal Kadaluarsa Koin" prop="coin_expiry_date" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
