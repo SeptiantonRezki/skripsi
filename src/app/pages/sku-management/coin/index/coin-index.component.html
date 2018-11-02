@@ -84,10 +84,14 @@
 
             <!-- <ngx-datatable-column name="Kode Halaman" prop="kode_halaman"></ngx-datatable-column> -->
 
-            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Nama" prop="name">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.id]" (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Kode Agen" prop="code"></ngx-datatable-column>
             <ngx-datatable-column name="Nomor Ponsel" prop="phone"></ngx-datatable-column>
-            <ngx-datatable-column name="Total Koin" prop="coin"></ngx-datatable-column>
+            <ngx-datatable-column name="Total Koin" prop="coin" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.terakhir_masuk?.date | date:'dd/MM/yyyy HH:mm'}}
@@ -97,7 +101,7 @@
             <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
                 <div class="button-row pl-8">
-                  <button mat-icon-button color="primary">
+                  <button matTooltip="Flush Coin" type="button" mat-icon-button color="primary" (click)="flush('retailer', row)">
                     <mat-icon>history</mat-icon>
                   </button>
                 </div>
@@ -126,7 +130,11 @@
 
             <!-- <ngx-datatable-column name="Kode Halaman" prop="kode_halaman"></ngx-datatable-column> -->
 
-            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Nama" prop="name">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-trade-program', row.id]" (click)="setToStorage(row, 'coin_detail_trade_program')">{{row.name}}</span>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Dana" prop="budget">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.budget | rupiahFormater}}
@@ -151,7 +159,7 @@
             <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
                 <div class="button-row pl-8">
-                  <button mat-icon-button color="primary">
+                  <button matTooltip="Flush Coin" type="button" mat-icon-button color="primary" (click)="flush('program', row)">
                     <mat-icon>history</mat-icon>
                   </button>
                 </div>

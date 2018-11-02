@@ -1,0 +1,75 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detail Trade Program'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Detail Trade Program</h2>
+      </div>
+
+      <form [formGroup]="formDetailTrade">
+        <div class="ayo-middle p-24" fxLayout="column">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
+            </mat-form-field>
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input matInput type="text" formControlName="start_date" placeholder="Tanggal Mulai">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input matInput type="text" formControlName="end_date" placeholder="Tanggal Berakhir">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="47%" class="is-light form-primary">
+              <input matInput type="text" formControlName="coin_expiry_date" placeholder="Tanggal Kadaluarsa Coin Trade Program">
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Daftar Retailer</h2>
+      </div>
+
+      <ngx-datatable style="border-top: 1px solid #e3e3e3" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
+        (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Nama" prop="name" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.retailer_id]" (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nama Trade Program" prop="trade_program" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama Template Tugas" prop="template_name" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="Tipe" prop="type" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.type.toUpperCase()}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Jumlah Koin" prop="coin" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin | rupiahFormaterWithoutRp}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Tanggal Kadaluarsa Koin" prop="coin_expiry_date" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

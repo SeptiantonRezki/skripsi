@@ -220,10 +220,13 @@ export class Endpoint {
       coin: {
         retailer: `${AYO_API}/api/${type_api}/coin?type=retailer`,
         program: `${AYO_API}/api/${type_api}/coin?type=program`,
-        get_program: `${AYO_API}/api/${type_api}/coin/program/${context.program_id}`,
+        detail_retailer: `${AYO_API}/api/${type_api}/coin/retailer/${context.retailer_id}`,
+        detail_program: `${AYO_API}/api/${type_api}/coin/program/${context.trade_program_id}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        flush: `${AYO_API}/api/principal/coin`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
       menu: {
         get: `${AYO_API}/api/${type_api}/menu`

@@ -7,6 +7,7 @@ import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-retailer-index",
@@ -36,6 +37,9 @@ export class RetailerIndexComponent {
   formFilter: FormGroup;
   filterArea: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -45,6 +49,9 @@ export class RetailerIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.retailer');
+    console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [

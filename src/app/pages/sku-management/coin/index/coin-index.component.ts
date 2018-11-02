@@ -6,6 +6,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-coin-index',
@@ -24,6 +25,10 @@ export class CoinIndexComponent {
   rowsTP: any[];
   selected: any[];
   id: any[];
+
+  retailer_id: any;
+  type: any;
+  selectedTab: any;
 
   loadingIndicator = true;
   reorderable = true;
@@ -51,6 +56,13 @@ export class CoinIndexComponent {
   ) { 
     this.onLoad = true;
     this.onLoadTP = true;
+
+    const selectedTab = this.dataService.getFromStorage('setSelectedTabCoin');
+    if (selectedTab) {
+      this.selectedTab = selectedTab;
+    } else {
+      this.selectedTab = 0;
+    }
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -261,6 +273,8 @@ export class CoinIndexComponent {
   getRetailer() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length-1].value;
+    this.pagination.sort = 'name';
+    this.pagination.sort_type = 'asc';
 
     this.loadingIndicator = true;
     this.coinService.getRetailer(this.pagination).subscribe(
@@ -296,11 +310,16 @@ export class CoinIndexComponent {
 
     console.log("check pagination", this.pagination);
 
-    this.coinService.getRetailer(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.loadingIndicator = false;
-    });
+    this.coinService.getRetailer(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        this.loadingIndicator = false;
+      },
+      err => {
+        this.loadingIndicator = false;
+      }
+    );
   }
 
   updateFilter(string) {
@@ -317,7 +336,8 @@ export class CoinIndexComponent {
   }
 
   getTrade() {
-
+    this.paginationTP.sort = 'name';
+    this.paginationTP.sort_type = 'asc';
     this.loadingIndicatorTP = true;
     this.coinService.getProgram(this.paginationTP).subscribe(
       res => {
@@ -352,11 +372,16 @@ export class CoinIndexComponent {
 
     console.log("check pagination", this.paginationTP);
 
-    this.coinService.getProgram(this.paginationTP).subscribe(res => {
-      Page.renderPagination(this.paginationTP, res);
-      this.rowsTP = res.data;
-      this.loadingIndicatorTP = false;
-    });
+    this.coinService.getProgram(this.paginationTP).subscribe(
+      res => {
+        Page.renderPagination(this.paginationTP, res);
+        this.rowsTP = res.data;
+        this.loadingIndicatorTP = false;
+      },
+      err => {
+        this.loadingIndicatorTP = false;
+      }
+    );
   }
 
   updateFilterTP(string) {
@@ -372,37 +397,50 @@ export class CoinIndexComponent {
     });
   }
 
-  // directEdit(param?: any): void {
-  //   // let navigationExtras: NavigationExtras = {
-  //   //   queryParams: param
-  //   // }
-  //   this.dataService.setToStorage("detail_page", param);
-  //   this.router.navigate(["advertisement", "landing-page", "edit"]);
-  // }
+  flush(type, item) {
+    this.type = type;
+    this.retailer_id = item.id;
+    let data = {
+      titleDialog: "Flush Coin",
+      captionDialog: "Anda akan menghapus semua coin di "+ item.name +". Coin yang terhapus tidak akan bisa dikembalikan.",
+      confirmCallback: this.confirmFlush.bind(this),
+      buttonText: ["Ok", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
 
-  // deletePage(id): void {
-  //   this.id = id;
-  //   let data = {
-  //     titleDialog: "Hapus Halaman Tujuan",
-  //     captionDialog: "Apakah anda yakin untuk menghapus Halaman Tujuan ini ?",
-  //     confirmCallback: this.confirmDelete.bind(this),
-  //     buttonText: ["Hapus", "Batal"]
-  //   };
-  //   this.dialogService.openCustomConfirmationDialog(data);
-  // }
+  confirmFlush() {
+    let body = {
+      type: this.type
+    }
 
-  // confirmDelete() {
-  //   this.coinService.delete({ page_id: this.id }).subscribe(
-  //     res => {
-  //       this.dialogService.brodcastCloseConfirmation();
-  //       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+    if (this.type === 'retailer') 
+      body['retailer_id'] = this.retailer_id;
+    else 
+      body['trade_program_id'] = this.retailer_id;
 
-  //       this.getLandingPage();
-  //     },
-  //     err => {
-  //       this.dialogService.openSnackBar({ message: err.error.message });
-  //     }
-  //   );
-  // }
+    this.coinService.flush(body).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Flush coin berhasil" });
+
+        if (this.type === 'retailer') 
+          this.getRetailer();
+        else 
+          this.getTrade();
+      },
+      err => {
+        // this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
+  setToStorage(item, name) {
+    this.dataService.setToStorage(name, item);
+  }
+
+  setSelectedTab(tabChangeEvent: MatTabChangeEvent) {
+    this.selectedTab = tabChangeEvent.index;
+  }
 
 }
