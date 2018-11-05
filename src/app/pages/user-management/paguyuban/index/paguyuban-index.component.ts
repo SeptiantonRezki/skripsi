@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PaguyubanService } from 'app/services/user-management/paguyuban.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-paguyuban-index',
@@ -36,6 +37,9 @@ export class PaguyubanIndexComponent {
   formFilter: FormGroup;
   filterArea: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -45,6 +49,9 @@ export class PaguyubanIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.paguyuban');
+    console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -379,6 +386,11 @@ export class PaguyubanIndexComponent {
     // }
     this.dataService.setToStorage("detail_paguyuban", param);
     this.router.navigate(["user-management", "paguyuban", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_paguyuban", param);
+    this.router.navigate(["user-management", "paguyuban", "detail"]);
   }
 
   deleteAllPaguyuban(): void {

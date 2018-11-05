@@ -8,6 +8,7 @@ import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { DialogService } from "../../../../services/dialog.service";
 import { FieldForceService } from "../../../../services/user-management/field-force.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-field-force-index",
@@ -37,6 +38,9 @@ export class FieldForceIndexComponent {
   formFilter: FormGroup;
   filterArea: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -47,6 +51,9 @@ export class FieldForceIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.fieldforce');
+    console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -352,5 +359,10 @@ export class FieldForceIndexComponent {
     // }
     this.dataService.setToStorage("detail_field_force", param);
     this.router.navigate(["user-management", "field-force", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_field_force", param);
+    this.router.navigate(["user-management", "field-force", "detail"]);
   }
 }

@@ -80,13 +80,13 @@ export class PagesName {
     if (!permission) return;
 
     let query = name.toLowerCase();
-    let filterPermission = permission.filter(item => item.toLowerCase().indexOf(query) >= 0);
+    let filterPermission = permission.filter(item => item.indexOf(query) >= 0);
     
     return {
-      "lihat": filterPermission.filter(item => item.toLowerCase().indexOf('lihat') >= 0)[0],
-      "buat": filterPermission.filter(item => item.toLowerCase().indexOf('buat') >= 0)[0],
-      "ubah": filterPermission.filter(item => item.toLowerCase().indexOf('ubah') >= 0)[0],
-      "hapus": filterPermission.filter(item => item.toLowerCase().indexOf('hapus') >= 0)[0],
+      "lihat": filterPermission.filter(item => item.indexOf('lihat') >= 0)[0],
+      "buat": filterPermission.filter(item => item.indexOf('buat') >= 0)[0],
+      "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
+      "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
   }
 }

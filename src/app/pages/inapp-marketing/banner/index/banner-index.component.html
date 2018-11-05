@@ -45,7 +45,7 @@
 
         <ngx-datatable-column name="Nama" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -72,7 +72,13 @@
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row pl-8">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
               <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

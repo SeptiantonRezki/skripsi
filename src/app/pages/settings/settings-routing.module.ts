@@ -42,6 +42,14 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "access/detail/:id",
+    component: RoleEditComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "account",
     component: ChangePasswordIndexComponent,
     data: {

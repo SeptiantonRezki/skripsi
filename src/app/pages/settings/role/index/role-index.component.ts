@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { AccessService } from '../../../../services/settings/access.service';
 import { Router } from '@angular/router';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-role-index',
@@ -25,6 +26,9 @@ export class RoleIndexComponent {
 
   keyUp = new Subject<string>();
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -38,6 +42,9 @@ export class RoleIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.akses');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -120,14 +127,6 @@ export class RoleIndexComponent {
       this.rows = res.data;
       this.loadingIndicator = false;
     });
-  }
-
-  directEdit(param?: any): void {
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: param
-    // }
-    this.dataService.setToStorage("detail_page", param);
-    this.router.navigate(["advertisement", "landing-page", "edit"]);
   }
 
   getActives() {

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Tingkatan Akses'">
+  <page-content-header [contentTitle]="isDetail ? 'Detail Tingkatan Akses' : 'Ubah Tingkatan Akses'">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -87,7 +87,7 @@
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25" *ngFor="let item of items.value">
                     <div class="access-name">{{item.nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status" [disabled]="isDetail"></mat-slide-toggle>
                   </div>
                 </div>
               </div>
@@ -95,7 +95,7 @@
           </div>
         </div>
       </div>
-      <div class="confirm pl-16 pt-8 pb-24" fxLayout="row">
+      <div *ngIf="!isDetail" class="confirm pl-16 pt-8 pb-24" fxLayout="row">
         <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25" (click)="submit()">
           SIMPAN
         </button>

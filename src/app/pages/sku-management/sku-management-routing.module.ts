@@ -59,6 +59,19 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "product/detail/:id",
+    component: ProductEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.product.detail
+    },
+    resolve: {
+      listBrand: ListBrandResolver,
+      listCategory: ListCategoryResolver,
+      listPackaging: ListPackagingResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "reward",
     component: RewardIndexComponent,
     data: {

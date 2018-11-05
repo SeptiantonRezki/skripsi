@@ -353,4 +353,9 @@ export class RetailerIndexComponent {
     this.dataService.setToStorage("detail_retailer", param);
     this.router.navigate(["user-management", "retailer", "edit"]);
   }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_retailer", param);
+    this.router.navigate(["user-management", "retailer", "detail"]);
+  }
 }

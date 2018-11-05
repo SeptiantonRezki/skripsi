@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
@@ -36,12 +36,15 @@ export class TemplateEditComponent {
 
   saveData: Boolean;
   valueChange: Boolean;
+  isDetail: Boolean;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
+    if (this.isDetail) return true;
+
     if (this.valueChange && !this.saveData) {
       return false;
     }
@@ -55,7 +58,8 @@ export class TemplateEditComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private taskTemplateService: TemplateTaskService
+    private taskTemplateService: TemplateTaskService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.saveData = false;
     this.templateTaskFormError = {
@@ -63,6 +67,10 @@ export class TemplateEditComponent {
       description: {},
       image: {}
     }
+
+    activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.detailTask = this.dataService.getFromStorage('detail_template_task');
   }
@@ -119,6 +127,8 @@ export class TemplateEditComponent {
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     })
+
+    if (this.isDetail) this.templateTaskForm.disable();
   }
 
   addAdditional(idx) {

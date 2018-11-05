@@ -10,6 +10,7 @@ import { Endpoint } from 'app/classes/endpoint';
 
 import * as moment from 'moment';
 import { FormGroup, FormBuilder } from '../../../../../../node_modules/@angular/forms';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-trade-index',
@@ -42,6 +43,9 @@ export class TradeIndexComponent {
   areaFromLogin;
   formFilter: FormGroup;
   filterArea: Boolean;
+
+  permission: any;
+  roles: PagesName = new PagesName();
   
   constructor(
     private router: Router,
@@ -52,6 +56,9 @@ export class TradeIndexComponent {
   ) {
     this.onLoad = true;
     this.filterArea = false;
+
+    this.permission = this.roles.getRoles('principal.tradeprogram');
+    console.log(this.permission);
     
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -358,6 +365,11 @@ export class TradeIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_trade_program', param);
     this.router.navigate(['dte', 'trade-program', 'edit']);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('detail_trade_program', param);
+    this.router.navigate(['dte', 'trade-program', 'detail']);
   }
 
   deleteTp(id) {

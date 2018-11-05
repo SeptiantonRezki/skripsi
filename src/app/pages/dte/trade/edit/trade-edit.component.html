@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Trade Program'"></page-content-header>
+  <page-content-header [contentTitle]="isDetail ? 'Detail Trade Program' : 'Ubah Trade Program'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="start center">
-        <h2 class="">Ubah Trade Program</h2>
+        <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Trade Program</h2>
       </div>
       <br>
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
@@ -14,8 +14,8 @@
           <div class="message-box warning" *ngIf="detailFormTrade.status === 'active'">
             Data tidak bisa diubah, karena Trade Program sedang berjalan.
           </div>
-          <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16" [(validDrag)]="validComboDrag"
-            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+          <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16" [(validDrag)]="validComboDrag" [(invalidDrag)]="isDetail"
+            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" [fileDropDisabled]="isDetail">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
@@ -98,7 +98,7 @@
           </div>
         </div>
       </form>
-      <div class="confirm pt-24 pb-24" fxLayout="row">
+      <div  *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row">
         <button mat-raised-button type="button" [disabled]="detailFormTrade.status === 'active'" class="confirmation-button"
           fxFlex="20" (click)="submit()">
           SIMPAN

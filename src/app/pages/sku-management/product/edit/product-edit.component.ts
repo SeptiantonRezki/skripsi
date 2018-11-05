@@ -65,6 +65,7 @@ export class ProductEditComponent {
   private _onDestroy = new Subject<void>();
 
   dialogRef: any;
+  isDetail: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,6 +81,7 @@ export class ProductEditComponent {
 
     activatedRoute.url.subscribe(params => {
       this.idProduct = params[2].path;
+      this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
     this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
@@ -162,6 +164,8 @@ export class ProductEditComponent {
       setTimeout(() => {
         this.onLoad = false;  
       }, 500);
+
+      if (this.isDetail) this.formProductGroup.disable();
       
     })
   }

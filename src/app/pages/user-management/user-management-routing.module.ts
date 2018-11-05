@@ -64,6 +64,17 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "admin-principal/detail",
+    component: AdminPrincipalEditComponent,
+    data: {
+      breadcrumbs: brConfig.adminprincipal.detail
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "field-force",
     component: FieldForceIndexComponent,
     data: {
@@ -87,6 +98,17 @@ const routes: Routes = [
     component: FieldForceEditComponent,
     data: {
       breadcrumbs: brConfig.fieldforce.edit
+    },
+    resolve: {
+      listLevel: ListLevelFFResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "field-force/detail",
+    component: FieldForceEditComponent,
+    data: {
+      breadcrumbs: brConfig.fieldforce.detail
     },
     resolve: {
       listLevel: ListLevelFFResolver
@@ -124,6 +146,17 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "paguyuban/detail",
+    component: PaguyubanEditComponent,
+    data: {
+      breadcrumbs: brConfig.paguyuban.detail
+    },
+    resolve: {
+      listAdminPrincipal: ListAdminPrincipalResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "wholesaler",
     component: WholesalerIndexComponent,
     data: {
@@ -151,6 +184,14 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "wholesaler/detail",
+    component: WholesalerEditComponent,
+    data: {
+      breadcrumbs: brConfig.wholesaler.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "retailer",
     component: RetailerIndexComponent,
     data: {
@@ -171,6 +212,14 @@ const routes: Routes = [
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.edit
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer/detail",
+    component: RetailerEditComponent,
+    data: {
+      breadcrumbs: brConfig.retailer.detail
     },
     canActivate: [PageGuard]
   },

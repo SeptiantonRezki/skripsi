@@ -54,7 +54,7 @@
 
         <ngx-datatable-column name="Nama Produk" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" [routerLink]="['/sku-management', 'product', 'edit', row.id]">{{row.name}}</span>
+            <span class="row-name" [routerLink]="['/sku-management', 'product', 'detail', row.id]">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -74,7 +74,10 @@
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah Produk" [routerLink]="['/sku-management', 'product', 'edit', row.id]">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Detail Produk" [routerLink]="['/sku-management', 'product', 'detail', row.id]">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Produk" [routerLink]="['/sku-management', 'product', 'edit', row.id]">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)">

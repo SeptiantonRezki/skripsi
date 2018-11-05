@@ -98,7 +98,7 @@
 
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directEdit(row)">{{row.fullname}} </a>
+            <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
           </ng-template>
         </ngx-datatable-column>
 
@@ -128,7 +128,10 @@
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deleteFf(row.id)">

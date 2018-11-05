@@ -28,6 +28,8 @@ export class WholesalerEditComponent{
   areaFromLogin;
   detailAreaSelected: any[];
 
+  isDetail: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -51,6 +53,10 @@ export class WholesalerEditComponent{
       district: {},
       territory: {}
     };
+
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.detailWholesaler = this.dataService.getFromStorage("detail_wholesaler");
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
@@ -183,7 +189,7 @@ export class WholesalerEditComponent{
       address: this.detailWholesaler.address,
       code: this.detailWholesaler.code,
       owner: this.detailWholesaler.owner,
-      phone: (this.detailWholesaler.phone) ? parseInt(this.detailWholesaler.phone): '',
+      phone: (this.detailWholesaler.phone) ? (this.isDetail ? `+62${parseInt(this.detailWholesaler.phone)}` : parseInt(this.detailWholesaler.phone)) : '',
       status: this.detailWholesaler.status,
       national: this.getArea('national'),
       zone: this.getArea('division'),
@@ -193,6 +199,8 @@ export class WholesalerEditComponent{
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
     });
+
+    if (this.isDetail) this.formWs.disable();
   }
 
   getAudienceArea(selection, id) {

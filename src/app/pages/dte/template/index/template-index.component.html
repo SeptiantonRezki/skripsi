@@ -45,7 +45,7 @@
 
         <ngx-datatable-column name="Nama" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="500" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
@@ -55,7 +55,10 @@
               <button mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
                 <mat-icon class="secondary-text">content_copy</mat-icon>
               </button>
-              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)">

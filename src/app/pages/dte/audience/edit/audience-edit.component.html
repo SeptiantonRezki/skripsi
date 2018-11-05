@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Audience'"></page-content-header>
+  <page-content-header [contentTitle]="isDetail ? 'Detail Audience' : 'Ubah Audience'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">Ubah Audience</h2>
+        <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Audience</h2>
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formAudience">
@@ -177,7 +177,7 @@
 
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" [disabled]="formAudience.get('type').value === 'pick-all'" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" [disabled]="isDetail" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
@@ -197,7 +197,7 @@
       </ngx-datatable>
     </div>
 
-    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+    <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button" (click)="submit()"
         fxFlex="20">
         SIMPAN

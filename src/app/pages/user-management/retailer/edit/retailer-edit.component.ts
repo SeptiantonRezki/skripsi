@@ -40,6 +40,8 @@ export class RetailerEditComponent {
   areaFromLogin;
   detailAreaSelected: any[];
 
+  isDetail: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -65,6 +67,10 @@ export class RetailerEditComponent {
 
     this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+
+    activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.listLevelArea = [
       {
@@ -212,6 +218,8 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
     });
 
+    if (this.isDetail) this.formRetailer.disable();
+    
     this.formRetailer.get("phone").disable();
   }
 
