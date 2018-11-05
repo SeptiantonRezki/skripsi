@@ -422,7 +422,7 @@ export class CoinIndexComponent {
     this.coinService.flush(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Flush coin berhasil" });
+        this.dialogService.openSnackBar({ message: `Flush coin ${this.type === 'retailer' ? 'Retailer' : 'Trade Program'} berhasil` });
 
         if (this.type === 'retailer') 
           this.getRetailer();
