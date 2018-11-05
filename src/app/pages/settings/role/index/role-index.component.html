@@ -65,7 +65,7 @@
               <button mat-icon-button *ngIf="!permission?.ubah" color="" [routerLink]="['/settings', 'access', 'detail', row.id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)">
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

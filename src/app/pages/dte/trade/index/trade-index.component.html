@@ -140,7 +140,7 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" [disabled]="row.status === 'active'" (click)="deleteTp(row.id)">
+              <button mat-icon-button color="primary" matTooltip="Hapus" [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

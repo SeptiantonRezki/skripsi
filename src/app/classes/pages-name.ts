@@ -80,7 +80,7 @@ export class PagesName {
     if (!permission) return;
 
     let query = name.toLowerCase();
-    let filterPermission = permission.filter(item => item.indexOf(query) >= 0);
+    let filterPermission = permission.filter(item => item != null).filter(item => item.indexOf(query) >= 0);
     
     return {
       "lihat": filterPermission.filter(item => item.indexOf('lihat') >= 0)[0],

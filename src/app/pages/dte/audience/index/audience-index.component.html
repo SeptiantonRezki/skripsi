@@ -74,7 +74,7 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" [disabled]="row.status === 'approved'" matTooltip="Hapus Audience Grup"
+              <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus" matTooltip="Hapus Audience Grup"
                 (click)="deleteAudience(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import { DateAdapter } from '@angular/material';
 import * as moment from 'moment';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-schedule-program-index',
@@ -33,6 +34,9 @@ export class ScheduleProgramIndexComponent {
   formFilter: FormGroup;
   keyUp = new Subject<string>();
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -45,6 +49,9 @@ export class ScheduleProgramIndexComponent {
     this.adapter.setLocale("id");
     this.rows = [];
     this.onLoad = true;
+
+    this.permission = this.roles.getRoles('principal.tugas');
+    console.log(this.permission);
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {
