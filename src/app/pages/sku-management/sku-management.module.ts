@@ -48,6 +48,8 @@ import { AutofocusModule } from 'angular-autofocus-fix';
 import { DetailTradeProgramComponent } from './coin/detail/detail-trade-program/detail-trade-program.component';
 import { DetailRetailerComponent } from './coin/detail/detail-retailer/detail-retailer.component';
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
+import { RetailerComponent } from './coin/index/retailer/retailer.component';
+import { ProgramComponent } from './coin/index/program/program.component';
 
 @NgModule({
   imports: [
@@ -88,7 +90,9 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
     CoinIndexComponent,
     ScanBarcodeDialogComponent,
     DetailTradeProgramComponent,
-    DetailRetailerComponent
+    DetailRetailerComponent,
+    RetailerComponent,
+    ProgramComponent
   ],
   exports: [
     ProductIndexComponent,
