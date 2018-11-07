@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DateAdapter } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
@@ -29,11 +29,15 @@ export class TradeEditComponent {
   valueChange: Boolean;
   saveData: Boolean;
 
+  isDetail: Boolean;
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
+    if (this.isDetail) return true;
+
     if (this.valueChange && !this.saveData) {
       return false;
     }
@@ -51,7 +55,8 @@ export class TradeEditComponent {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private dataService: DataService,
-    private tradeProgramService: TradeProgramService
+    private tradeProgramService: TradeProgramService,
+    private activatedRoute: ActivatedRoute
   ) { 
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -66,6 +71,10 @@ export class TradeEditComponent {
       budget: {},
       coin_expiry_date: {}
     }
+
+    activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.detailFormTrade = this.dataService.getFromStorage('detail_trade_program');
   }
@@ -101,6 +110,8 @@ export class TradeEditComponent {
 
     this.setMinEndDate('init');
     this.setMinExpireDate('init');
+
+    if (this.isDetail) this.formTradeProgram.disable();
   }
 
   setMinEndDate(init?) {

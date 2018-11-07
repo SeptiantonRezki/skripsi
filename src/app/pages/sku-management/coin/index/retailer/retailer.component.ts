@@ -1,25 +1,34 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
-import { Page } from "app/classes/laravel-pagination";
-import { Subject, Observable } from "rxjs";
-import { DatatableComponent } from "@swimlane/ngx-datatable";
-import { Router } from "@angular/router";
-import { DialogService } from "app/services/dialog.service";
-import { DataService } from "app/services/data.service";
-import { RetailerService } from "../../../../services/user-management/retailer.service";
-import { FormGroup, FormBuilder } from "@angular/forms";
-import { PagesName } from "app/classes/pages-name";
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Page } from 'app/classes/laravel-pagination';
+import { Subject, Observable } from 'rxjs';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DialogService } from 'app/services/dialog.service';
+import { DataService } from 'app/services/data.service';
+import { CoinService } from 'app/services/sku-management/coin.service';
 
 @Component({
-  selector: "app-retailer-index",
-  templateUrl: "./retailer-index.component.html",
-  styleUrls: ["./retailer-index.component.scss"]
+  selector: 'data-retailer',
+  templateUrl: './retailer.component.html',
+  styleUrls: ['./retailer.component.scss']
 })
-export class RetailerIndexComponent {
+export class RetailerComponent {
+
+  listLevelArea: any[];
+  list: any;
+  areaFromLogin;
+
+  formFilter: FormGroup;
+
   rows: any[];
   selected: any[];
   id: any[];
 
+  retailer_id: any;
+  type: any;
+
   loadingIndicator = true;
+  showLoadingBar: Boolean;
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
@@ -31,27 +40,13 @@ export class RetailerIndexComponent {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
 
-  listLevelArea: any[];
-  list: any;
-  areaFromLogin;
-  formFilter: FormGroup;
-  filterArea: Boolean;
-
-  permission: any;
-  roles: PagesName = new PagesName();
-
   constructor(
-    private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private retailerService: RetailerService,
     private formBuilder: FormBuilder,
-  ) {
+    private coinService: CoinService
+  ) { 
     this.onLoad = true;
-    this.selected = [];
-
-    this.permission = this.roles.getRoles('principal.retailer');
-    console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -72,7 +67,7 @@ export class RetailerIndexComponent {
       territory: []
     }
 
-    const observable = this.keyUp.debounceTime(1000)
+    this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
         return Observable.of(search).delay(500);
@@ -83,6 +78,7 @@ export class RetailerIndexComponent {
   }
 
   ngOnInit() {
+
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
@@ -94,10 +90,10 @@ export class RetailerIndexComponent {
     })
 
     this.initArea();
-    this.getRetailerList();
+    this.getRetailer();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
-      this.getRetailerList();
+      this.getRetailerByArea();
     })
   }
 
@@ -148,7 +144,7 @@ export class RetailerIndexComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
             this.list[selection] = res;
           });
 
@@ -166,7 +162,7 @@ export class RetailerIndexComponent {
       case 'region':
           item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -186,7 +182,7 @@ export class RetailerIndexComponent {
       case 'area':
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -204,7 +200,7 @@ export class RetailerIndexComponent {
       case 'salespoint':
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -220,7 +216,7 @@ export class RetailerIndexComponent {
       case 'district':
           item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -234,7 +230,7 @@ export class RetailerIndexComponent {
       case 'territory':
           item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.coinService.getListOtherChildren({ parent_id: id }).subscribe(res => {
               this.list[selection] = res;
             });
           } else {
@@ -249,19 +245,47 @@ export class RetailerIndexComponent {
     }
   }
 
-  getRetailerList() {
+  getRetailer() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length-1].value;
-    this.pagination.sort = "name";
-    this.pagination.sort_type = "asc";
-      
+    this.pagination.sort = 'name';
+    this.pagination.sort_type = 'asc';
+
+    this.showLoadingBar = true;
+    this.coinService.getRetailer(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        
+        setTimeout(() => {
+          this.onLoad = false;
+          this.loadingIndicator = false;
+          this.showLoadingBar = false;
+        }, 80);
+      },
+      err => {
+        console.error(err);
+        this.onLoad = false;
+        this.showLoadingBar = false;
+      }
+    );
+  }
+
+
+
+  getRetailerByArea() {
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
+    this.table.offset = 0;
+    this.pagination.area = areaSelected[areaSelected.length-1].value;
+    this.pagination.sort = 'name';
+    this.pagination.sort_type = 'asc';
+
     this.loadingIndicator = true;
-    this.retailerService.get(this.pagination).subscribe(
+    this.coinService.getRetailer(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.onLoad = false;
-
         this.loadingIndicator = false;
       },
       err => {
@@ -271,18 +295,11 @@ export class RetailerIndexComponent {
     );
   }
 
-  onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-
-    console.log("Select Event", selected, this.selected);
-  }
-
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.retailerService.get(this.pagination).subscribe(res => {
+    this.coinService.getRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -297,7 +314,7 @@ export class RetailerIndexComponent {
 
     console.log("check pagination", this.pagination);
 
-    this.retailerService.get(this.pagination).subscribe(
+    this.coinService.getRetailer(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
@@ -315,47 +332,51 @@ export class RetailerIndexComponent {
     this.pagination.search = string;
     this.pagination.page = 1;
 
-    console.log(this.pagination);
-
-    this.retailerService.get(this.pagination).subscribe(res => {
+    this.coinService.getRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
     });
   }
 
-  deleteWholesaler(id): void {
-    this.id = id;
+
+
+  flush(type, item) {
+    this.type = type;
+    this.retailer_id = item.id;
     let data = {
-      titleDialog: "Hapus Retailer",
-      captionDialog: "Apakah anda yakin untuk menghapus Retailer ini ?",
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      titleDialog: "Flush Coin",
+      captionDialog: "Anda akan menghapus semua coin di "+ item.name +". Coin yang terhapus tidak akan bisa dikembalikan.",
+      confirmCallback: this.confirmFlush.bind(this),
+      buttonText: ["Ok", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDelete() {
-    this.retailerService.delete({ retailer_id: this.id }).subscribe(
+  confirmFlush() {
+    let body = {
+      type: this.type
+    }
+
+    if (this.type === 'retailer') 
+      body['retailer_id'] = this.retailer_id;
+    else 
+      body['trade_program_id'] = this.retailer_id;
+
+    this.coinService.flush(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-
-        this.getRetailerList();
+        this.dialogService.openSnackBar({ message: `Flush coin ${this.type === 'retailer' ? 'Retailer' : 'Trade Program'} berhasil` });
+        this.getRetailer();
       },
       err => {
-        this.dialogService.openSnackBar({ message: err.error.message });
+        // this.dialogService.openSnackBar({ message: err.error.message });
       }
     );
   }
 
-  directEdit(param?: any): void {
-    this.dataService.setToStorage("detail_retailer", param);
-    this.router.navigate(["user-management", "retailer", "edit"]);
+  setToStorage(item, name) {
+    this.dataService.setToStorage(name, item);
   }
 
-  directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_retailer", param);
-    this.router.navigate(["user-management", "retailer", "detail"]);
-  }
 }

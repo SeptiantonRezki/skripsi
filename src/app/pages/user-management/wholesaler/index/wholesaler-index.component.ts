@@ -8,6 +8,7 @@ import { DataService } from "app/services/data.service";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-wholesaler-index",
@@ -37,6 +38,9 @@ export class WholesalerIndexComponent {
   formFilter: FormGroup;
   filterArea: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -47,6 +51,9 @@ export class WholesalerIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.wholesaler');
+    console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
@@ -349,5 +356,10 @@ export class WholesalerIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_wholesaler", param);
     this.router.navigate(["user-management", "wholesaler", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_wholesaler", param);
+    this.router.navigate(["user-management", "wholesaler", "detail"]);
   }
 }

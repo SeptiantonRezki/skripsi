@@ -50,6 +50,15 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "template-task/detail",
+    component: TemplateEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.detail
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
     path: "trade-program",
     component: TradeIndexComponent,
     data: {
@@ -71,6 +80,15 @@ const routes: Routes = [
     component: TradeEditComponent,
     data: {
       breadcrumbs: brConfig.dte.trade.edit
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "trade-program/detail",
+    component: TradeEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.trade.detail
     },
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
@@ -134,6 +152,19 @@ const routes: Routes = [
     component: AudienceEditComponent,
     data: {
       breadcrumbs: brConfig.dte.audience.edit
+    },
+    resolve: {
+      listScheduler: ListSchedulerResolver,
+      // listRetailer: ListRetailerResolver
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/detail",
+    component: AudienceEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.detail
     },
     resolve: {
       listScheduler: ListSchedulerResolver,

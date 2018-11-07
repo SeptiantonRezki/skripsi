@@ -34,6 +34,8 @@ export class PaguyubanEditComponent {
   showPassword = false;
   showConfirmPassword = false;
 
+  isDetail: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -67,6 +69,10 @@ export class PaguyubanEditComponent {
       group_name: {},
       principal_id: {}
     };
+
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.listAdminPrincipal = this.activatedRoute.snapshot.data["listAdminPrincipal"].data;
     this.detailPaguyuban = this.dataService.getFromStorage("detail_paguyuban");
@@ -178,6 +184,8 @@ export class PaguyubanEditComponent {
     this.formPaguyuban.controls['salespoint'].setValue(this.getArea('salespoint'));
     this.formPaguyuban.controls['district'].setValue(this.getArea('district'));
     this.formPaguyuban.controls['territory'].setValue(this.getArea('teritory'));
+
+    if (this.isDetail) this.formPaguyuban.disable();
   }
 
   getAudienceArea(selection, id) {

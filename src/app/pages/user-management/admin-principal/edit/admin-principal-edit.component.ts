@@ -30,6 +30,8 @@ export class AdminPrincipalEditComponent {
   areaFromLogin;
   detailAreaSelected: any[];
 
+  isDetail: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -66,6 +68,10 @@ export class AdminPrincipalEditComponent {
 
     this.listRole = this.activatedRoute.snapshot.data["listRole"].data;
     this.detailAdminPrincipal = this.dataService.getFromStorage("detail_admin_principal");
+
+    activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
   }
 
   ngOnInit() {
@@ -184,6 +190,9 @@ export class AdminPrincipalEditComponent {
     this.formAdmin.controls['salespoint'].setValue(this.getArea('salespoint'));
     this.formAdmin.controls['district'].setValue(this.getArea('district'));
     this.formAdmin.controls['territory'].setValue(this.getArea('teritory'));
+
+
+    if (this.isDetail) this.formAdmin.disable();
 
     // this.formAdmin.setValue({
     //   name: this.detailAdminPrincipal.fullname,

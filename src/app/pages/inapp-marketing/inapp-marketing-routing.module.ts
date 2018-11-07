@@ -47,6 +47,17 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "banner/detail",
+    component: BannerEditComponent,
+    data: {
+      breadcrumbs: brConfig.inappMarketing.banner.detail
+    },
+    resolve: {
+      listLevelArea: ListLevelAreaResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "landing-page",
     component: LandingPageIndexComponent,
     data: {

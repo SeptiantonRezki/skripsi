@@ -9,6 +9,7 @@ import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-admin-principal-index",
@@ -32,6 +33,9 @@ export class AdminPrincipalIndexComponent {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
@@ -42,6 +46,9 @@ export class AdminPrincipalIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.adminprincipal');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -191,5 +198,10 @@ export class AdminPrincipalIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_admin_principal", param);
     this.router.navigate(["user-management", "admin-principal", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_admin_principal", param);
+    this.router.navigate(["user-management", "admin-principal", "detail"]);
   }
 }

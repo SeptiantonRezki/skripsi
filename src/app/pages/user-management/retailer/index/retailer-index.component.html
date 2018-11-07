@@ -98,7 +98,7 @@
 
         <ngx-datatable-column name="Nama Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directEdit(row)">{{row.name}} </a>
+            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
@@ -138,6 +138,18 @@
               </div>
             </ng-template>
           </ngx-datatable-column> -->
+          <ngx-datatable-column [width]="60" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+              <div class="button-row pl-8">
+                <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                  <mat-icon class="secondary-text">assignment</mat-icon>
+                </button>
+                <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>

@@ -46,6 +46,7 @@ export class AudienceEditComponent {
 
   pagination: Page = new Page();
   pageAccess = [];
+  isDetail: Boolean;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -58,6 +59,8 @@ export class AudienceEditComponent {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
+    if (this.isDetail) return true;
+
     if ((this.valueChange && !this.saveData) || (this.selected.length !== this.detailAudience.total_audiences && !this.saveData)) {
       return false;
     }
@@ -76,6 +79,11 @@ export class AudienceEditComponent {
   ) { 
     this.saveData = false;
     this.rows = [];
+
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
+
 
     this.formAudienceError = {
       name: {},
@@ -381,6 +389,10 @@ export class AudienceEditComponent {
     // this.formFilter.disable();
 
     this.detailAudienceSelect();
+    if (this.isDetail) {
+      this.formAudience.disable();
+      this.formFilter.disable();
+    }
   }
 
 

@@ -55,3 +55,15 @@
     }
   }
 }
+
+:host /deep/ .mat-input-element:disabled {
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+// :host /deep/ .mat-disabled .mat-slide-toggle-thumb {
+//   background-color: #f44336;
+// }
+
+// :host /deep/ .mat-disabled .mat-slide-toggle-bar {
+//   background-color: rgba(244, 67, 54, 0.5)
+// }

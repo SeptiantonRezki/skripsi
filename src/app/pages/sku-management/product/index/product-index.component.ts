@@ -4,6 +4,7 @@ import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { ProductService } from "app/services/sku-management/product.service";
 import { DialogService } from "app/services/dialog.service";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-product-index",
@@ -27,12 +28,18 @@ export class ProductIndexComponent {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private productService: ProductService,
     private dialogService: DialogService
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.produk');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()

@@ -24,6 +24,7 @@ export class RoleEditComponent {
   listLevelArea: any[];
   list: any;
   detailRoles: any;
+  isDetail: Boolean;
 
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
@@ -64,6 +65,7 @@ export class RoleEditComponent {
 
     this.activatedRoute.url.subscribe(param => {
       this.roleId = param[2].path;
+      this.isDetail = param[1].path === 'detail' ? true : false;
     });
   }
 
@@ -166,6 +168,8 @@ export class RoleEditComponent {
     this.formRolesGroup.get('salespoint').setValue(this.getArea('salespoint'));
     this.formRolesGroup.get('district').setValue(this.getArea('district'));
     this.formRolesGroup.get('territory').setValue(this.getArea('teritory'));
+
+    if (this.isDetail) this.formRolesGroup.disable();
   }
 
   getAudienceArea(selection, id) {

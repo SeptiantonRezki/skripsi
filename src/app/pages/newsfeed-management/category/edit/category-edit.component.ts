@@ -22,6 +22,7 @@ export class CategoryEditComponent implements OnInit {
   formCategoryGroup: FormGroup;
   formCategoryErrors: any;
   detailNewsCategory: any;
+  isDetail: Boolean;
 
   rssIndex: any;
   linkValue = [];
@@ -43,6 +44,9 @@ export class CategoryEditComponent implements OnInit {
     this.detailNewsCategory = this.dataService.getFromStorage(
       "detail_news_category"
     );
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
     console.log(this.detailNewsCategory);
   }
 
@@ -75,6 +79,8 @@ export class CategoryEditComponent implements OnInit {
       }
 
     })
+
+    if (this.isDetail) this.formCategoryGroup.disable();
   }
 
   addItemLink(): FormGroup {

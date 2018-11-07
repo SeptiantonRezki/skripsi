@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material';
 import * as moment from 'moment';
 import { Router } from '../../../../../../node_modules/@angular/router';
 import { DataService } from '../../../../services/data.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-category-index',
@@ -30,6 +31,9 @@ export class CategoryIndexComponent{
   formFilter: FormGroup;
   keyUp = new Subject<string>();
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -45,7 +49,8 @@ export class CategoryIndexComponent{
     this.rows = [];
     this.onLoad = true;
 
-
+    this.permission = this.roles.getRoles('principal.kategorinewsfeed');
+    console.log(this.permission);
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {
@@ -153,9 +158,14 @@ export class CategoryIndexComponent{
     });
   }
 
-  directDetail(row) {
+  directEdit(row) {
     this.dataService.setToStorage('detail_news_category', row);
     this.router.navigate(['newsfeed-management', 'category', 'edit']);
+  }
+
+  directDetail(row) {
+    this.dataService.setToStorage('detail_news_category', row);
+    this.router.navigate(['newsfeed-management', 'category', 'detail']);
   }
 
   convertDate(param?: Date) {

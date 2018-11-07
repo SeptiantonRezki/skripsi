@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from '../../../../services/dte/audience.service';
 import { DataService } from '../../../../services/data.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-audience-index',
@@ -30,6 +31,9 @@ export class AudienceIndexComponent {
   activeCellTemp: TemplateRef<any>;
 
   keyUp = new Subject<string>();
+
+  permission: any;
+  roles: PagesName = new PagesName();
   
   constructor(
     private router: Router,
@@ -39,6 +43,9 @@ export class AudienceIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.audience');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -124,6 +131,11 @@ export class AudienceIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_audience', param);
     this.router.navigate(['dte', 'audience', 'edit']);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('detail_audience', param);
+    this.router.navigate(['dte', 'audience', 'detail']);
   }
 
   deleteAudience(id) {

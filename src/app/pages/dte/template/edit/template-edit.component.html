@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Tugas'">
-    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
+  <page-content-header [contentTitle]="isDetail ? 'Detail Tugas' : 'Ubah Tugas'">
+    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
   </page-content-header>
   <!-- / HEADER -->
 
@@ -74,7 +74,7 @@
           </div>
 
           <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto" *ngIf="templateTaskForm.get('image').value">
-            <div fxLayout="row" fxLayoutAlign="start start">
+            <div fxLayout="row" fxLayoutAlign="start start" *ngIf="!isDetail">
               <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -99,7 +99,7 @@
                   <input matInput formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', 'Pertanyaan', i)">
                 </mat-form-field>
 
-                <button mat-icon-button fxFlex="5" matTooltip="Sisipkan Gambar" matTooltipPosition="below" class="add-image secondary-text"
+                <button mat-icon-button fxFlex="5" *ngIf="!isDetail" matTooltip="Sisipkan Gambar" matTooltipPosition="below" class="add-image secondary-text"
                   (click)="uploadImage('question', i)">
                   <mat-icon class="secondary-text">photo</mat-icon>
                 </button>
@@ -123,7 +123,7 @@
                 </mat-form-field>
               </div>
               <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto" *ngIf="item.get('question_image').value">
-                <div fxLayout="row" fxLayoutAlign="start start">
+                <div fxLayout="row" fxLayoutAlign="start start" *ngIf="!isDetail">
                   <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
                     <mat-icon>more_vert</mat-icon>
                   </button>
@@ -174,7 +174,7 @@
                             (change)="defaultValue($event, 'questions', 'Opsi ', i, j)">
                         </mat-form-field>
                         <div fxFlex="10"></div>
-                        <button *ngIf="item.get('additional').value.length > 1" (click)="deleteAdditional(i, j)"
+                        <button *ngIf="item.get('additional').value.length > 1 && !isDetail" (click)="deleteAdditional(i, j)"
                           mat-icon-button fxFlex="5" matTooltip="Hapus" matTooltipPosition="below" class="secondary-text">
                           <mat-icon class="secondary-text">close</mat-icon>
                         </button>
@@ -194,7 +194,7 @@
                           <mat-icon class="secondary-text">close</mat-icon>
                         </button>
                       </div> -->
-                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="!isDetail">
                       <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                         'radio' ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
@@ -216,7 +216,7 @@
                   <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                 </section>
                 <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div> -->
-                <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)" matTooltipPosition="below"
+                <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)" matTooltipPosition="below" *ngIf="!isDetail"
                   class="secondary-text">
                   <mat-icon class="secondary-text">delete</mat-icon>
                 </button>
@@ -232,13 +232,13 @@
                     (change)="defaultValue($event, 'rejected_reason_choices', 'Alasan ', k)">
                 </mat-form-field>
 
-                <button mat-icon-button fxFlex="5" *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1"
+                <button mat-icon-button fxFlex="5" *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && !isDetail"
                   matTooltip="Hapus" matTooltipPosition="below" class="add-image secondary-text" (click)="deleteReason(k)">
                   <mat-icon class="secondary-text">close</mat-icon>
                 </button>
               </div>
             </div>
-            <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="!isDetail">
               <div class="more-option">
                 <span class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
               </div>
@@ -249,7 +249,7 @@
       </form>
       <!-- </div> -->
 
-      <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column">
+      <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column" *ngIf="!isDetail">
         <button mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
           (click)="addQuestion()">
           <mat-icon>add_circle</mat-icon>

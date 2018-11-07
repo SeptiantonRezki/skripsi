@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { BannerService } from "app/services/inapp-marketing/banner.service";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: "app-banner-index",
@@ -30,6 +31,9 @@ export class BannerIndexComponent {
 
   keyUp = new Subject<string>();
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -38,6 +42,9 @@ export class BannerIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.spanduk');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -123,6 +130,11 @@ export class BannerIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_banner", param);
     this.router.navigate(["advertisement", "banner", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_banner", param);
+    this.router.navigate(["advertisement", "banner", "detail"]);
   }
 
   deleteSpanduk(id) {

@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TemplateTaskService } from '../../../../services/dte/template-task.service';
 import { Endpoint } from '../../../../classes/endpoint';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-template-index',
@@ -33,6 +34,9 @@ export class TemplateIndexComponent {
 
   keyUp = new Subject<string>();
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -41,6 +45,9 @@ export class TemplateIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.tugas');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -146,6 +153,11 @@ export class TemplateIndexComponent {
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_template_task', param);
     this.router.navigate(['dte', 'template-task', 'edit']);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('detail_template_task', param);
+    this.router.navigate(['dte', 'template-task', 'detail']);
   }
 
   duplicate(param?: any): void {

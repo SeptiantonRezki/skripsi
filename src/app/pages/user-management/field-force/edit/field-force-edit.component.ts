@@ -30,6 +30,8 @@ export class FieldForceEditComponent {
   areaFromLogin;
   detailAreaSelected: any[];
 
+  isDetail: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -48,6 +50,10 @@ export class FieldForceEditComponent {
       district: {},
       territory: {}
     };
+
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.detailFF = this.dataService.getFromStorage("detail_field_force");
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
@@ -180,6 +186,8 @@ export class FieldForceEditComponent {
       password: "",
       password_confirmation: "",
     });
+
+    if (this.isDetail) this.formFF.disable();
   }
 
   getAudienceArea(selection, id) {

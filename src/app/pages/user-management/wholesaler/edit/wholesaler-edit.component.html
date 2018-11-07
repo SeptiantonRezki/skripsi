@@ -44,7 +44,11 @@
             </mat-error>
           </mat-form-field>
 
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+            <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
+          </mat-form-field>
+
+          <div *ngIf="!isDetail" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
             <small>Nomor Ponsel</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
@@ -136,7 +140,7 @@
               <button mat-stroked-button>Reset Password</button>
             </div> -->
 
-          <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+          <div *ngIf="!isDetail" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>

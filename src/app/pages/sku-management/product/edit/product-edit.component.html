@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Produk'">
-    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
+  <page-content-header [contentTitle]="isDetail ? 'Detail Produk' : 'Ubah Produk'">
+    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
@@ -12,7 +12,7 @@
         <mat-tab-group>
           <mat-tab label="Informasi Produk">
             <div class="ayo-middle p-24" fxLayout="column">
-              <div class="button" (click)="openDialog()">
+              <div *ngIf="!isDetail" class="button" (click)="openDialog()">
                 <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                   <mat-icon class="secondary-text">horizontal_split</mat-icon>
                   <span class="h5 text-center">SCAN BARCODE</span>
@@ -30,11 +30,6 @@
                 <input matInput type="text" placeholder="Barcode" formControlName="barcode" readonly>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <!-- <mat-select placeholder="Perusahaan" formControlName="brand">
-                    <mat-option [value]="item.id" *ngFor="let item of listBrand">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-select> -->
                 <mat-select formControlName="brand" placeholder="Perusahaan" #singleSelect>
                   <ngx-mat-select-search [formControl]="filterBrand" [placeholderLabel]="'Cari Perusahaan...'"
                     [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"></ngx-mat-select-search>
@@ -47,15 +42,15 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-chip-list #chipList>
+                <mat-chip-list #chipList [disabled]="isDetail">
                   <mat-chip color="primary" *ngFor="let item of formProductGroup.get('alias')['controls']; let i = index;"
                     [selectable]="selectable" [removable]="removable" (removed)="removeAlias(i)">
                     {{item.get('alias').value}}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    <mat-icon matChipRemove *ngIf="removable && !isDetail">cancel</mat-icon>
                   </mat-chip>
                   <input matInput placeholder="Nama Lain Produk" type="text" [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                    (matChipInputTokenEnd)="addAlias($event)">
+                    (matChipInputTokenEnd)="addAlias($event)" [disabled]="isDetail">
                 </mat-chip-list>
                 <mat-error *ngIf="formProductGroup.controls['alias'].hasError('required') && formProductGroup.controls['alias'].touched">
                   Nama Lain Produk harus diisi
@@ -113,8 +108,8 @@
           </mat-tab>
           <mat-tab label="Gambar Produk">
             <div class="ayo-middle p-24" style="height: 480px;" fxLayout="column">
-              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" [accept]="'image/*'"
-                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [invalidDrag]="isDetail" [(file)]="files" [accept]="'image/*'"
+                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" [fileDropDisabled]="isDetail">
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                   <br>

@@ -41,6 +41,14 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "category/detail",
+    component: CategoryEditComponent,
+    data: {
+      breadcrumbs: brConfig.newsfeedManagement.category.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "news",
     component: NewsIndexComponent,
     data: {

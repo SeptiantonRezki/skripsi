@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Kategori'"></page-content-header>
+  <page-content-header [contentTitle]="isDetail ? 'Detail Kategori' : 'Ubah Kategori'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off" [formGroup]="formCategoryGroup">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Ubah Kategori</h2>
+          <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Kategori</h2>
           <mat-form-field [class]="formCategoryGroup.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
@@ -24,7 +24,7 @@
 
           <div fxLayout="row" class="pt-24 pb-24" fxLayoutAlign="space-between center">
             <span class="h3">RSS Link</span>
-            <button type="button" mat-raised-button matTooltip="Tambah RSS Link" fxFlex="3" (click)="addNewRSS()">
+            <button *ngIf="!isDetail" type="button" mat-raised-button matTooltip="Tambah RSS Link" fxFlex="3" (click)="addNewRSS()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -41,7 +41,7 @@
                 </mat-error>
 
               </mat-form-field>
-              <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
+              <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center" *ngIf="!isDetail">
                 <button type="button" mat-icon-button color="primary" (click)="removeRSS(item, i)" [disabled]="formCategoryGroup.get('link').value.length <= 1">
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -51,7 +51,7 @@
 
 
         </div>
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
             SIMPAN
           </button>

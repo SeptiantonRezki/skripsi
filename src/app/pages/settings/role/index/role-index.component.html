@@ -59,10 +59,13 @@
         <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" [routerLink]="['/settings', 'access', 'edit', row.id]">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" [routerLink]="['/settings', 'access', 'edit', row.id]">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" [routerLink]="['/settings', 'access', 'detail', row.id]">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

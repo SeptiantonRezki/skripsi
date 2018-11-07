@@ -53,6 +53,8 @@ export class BannerEditComponent {
   formBannerGroup: FormGroup;
   formBannerErrors: any;
 
+  isDetail: Boolean;
+
   public options: Object = {
     key: "mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==",
     placeholderText: "Isi Halaman",
@@ -78,6 +80,10 @@ export class BannerEditComponent {
     this.detailBanner = dataService.getFromStorage('detail_banner');
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     // this.validComboDrag = true;
+
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
 
     this.formBannerErrors = {
       name: '',
@@ -248,6 +254,8 @@ export class BannerEditComponent {
     this.formBannerGroup.get('salespoint').setValue(this.getArea('salespoint'));
     this.formBannerGroup.get('district').setValue(this.getArea('district'));
     this.formBannerGroup.get('territory').setValue(this.getArea('teritory'));
+
+    if (this.isDetail) this.formBannerGroup.disable();
   }
 
   getAudienceArea(selection, id) {

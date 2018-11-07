@@ -50,6 +50,18 @@ export const brConfig = {
         url: "",
         name: "Ubah Admin Principal"
       }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/admin-principal",
+        name: "Daftar Admin Principal"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Admin Principal"
+      }
     ]
   },
   fieldforce: {
@@ -84,6 +96,19 @@ export const brConfig = {
         name: "Ubah Field Force"
       }
     ]
+    ,
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/field-force",
+        name: "Daftar Field Force"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Field Force"
+      }
+    ]
   },
   paguyuban: {
     index: [
@@ -115,6 +140,18 @@ export const brConfig = {
         type: "current",
         url: "",
         name: "Ubah Paguyuban"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/paguyuban",
+        name: "Daftar Paguyuban"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Paguyuban"
       }
     ]
   },
@@ -149,6 +186,18 @@ export const brConfig = {
         url: "",
         name: "Ubah Wholesaler"
       }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/wholesaler",
+        name: "Daftar Wholesaler"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Wholesaler"
+      }
     ]
   },
   retailer: {
@@ -181,6 +230,18 @@ export const brConfig = {
         type: "current",
         url: "",
         name: "Ubah Retailer"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/retailer",
+        name: "Daftar Retailer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Retailer"
       }
     ]
   },
@@ -236,6 +297,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah Spanduk Online"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/advertisement/banner",
+          name: "Spanduk Online"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Spanduk Online"
         }
       ]
     },
@@ -304,6 +377,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah Produk"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/product",
+          name: "Daftar Produk"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
         }
       ]
     },
@@ -415,6 +500,18 @@ export const brConfig = {
           url: "",
           name: "Ubah Tugas"
         }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/template-task",
+          name: "Daftar Tugas"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Tugas"
+        }
       ]
     },
     trade: {
@@ -438,6 +535,18 @@ export const brConfig = {
         }
       ],
       edit: [
+        {
+          type: "parent",
+          url: "/dte/trade-program",
+          name: "Trade Program"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Trade Program"
+        }
+      ],
+      detail: [
         {
           type: "parent",
           url: "/dte/trade-program",
@@ -513,6 +622,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah Audience"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/audience",
+          name: "Audience"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Audience"
         }
       ]
     }
@@ -683,6 +804,18 @@ export const brConfig = {
           url: "",
           name: "Ubah Kategori"
         }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/newsfeed-management/category",
+          name: "Kategori Newsfeed"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Kategori"
+        }
       ]
     },
     news: {
@@ -748,6 +881,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah Tingkatan Akses"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/settings/access",
+          name: "Akses Karyawan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Tingkatan Akses"
         }
       ]
     },
