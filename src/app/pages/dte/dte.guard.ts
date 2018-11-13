@@ -35,6 +35,11 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
   }
 
   confirm() {
+    const token = this.dataService.getAuthorization();
+    if (!token) {
+      return true;
+    }
+    
     const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
     if (leave) {
       window.localStorage.removeItem('duplicate_template_task');
