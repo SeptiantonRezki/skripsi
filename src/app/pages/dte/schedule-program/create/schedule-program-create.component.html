@@ -72,18 +72,18 @@
                       {{item.name}}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
-                    Trade Program harus diisi
+                  <mat-error *ngIf="item.controls['task_template_id'].hasError('required') && item.controls['task_template_id'].touched">
+                    Template Tugas harus diisi
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
                   <input matInput type="number" min="0" formControlName="coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
                     numericOnly>
-                  <mat-error *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
+                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
                     Nilai Coin Tugas Terkirim harus diisi
                   </mat-error>
-                  <mat-error *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
+                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
                     Nilai Coin Tugas Terkirim tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
@@ -91,10 +91,10 @@
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
                   <input matInput type="number" min="0" formControlName="coin_approved" placeholder="Nilai Coin Tugas Disetujui"
                     numericOnly>
-                  <mat-error *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
+                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
                     Nilai Coin Tugas Disetujui harus diisi
                   </mat-error>
-                  <mat-error *ngIf="item.controls['coin_approved'].hasError('min') && item.controls['coin_approved'].touched">
+                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved'].hasError('min') && item.controls['coin_approved'].touched">
                     Nilai Coin Tugas Disetujui tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
