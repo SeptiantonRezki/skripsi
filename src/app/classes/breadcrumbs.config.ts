@@ -904,7 +904,14 @@ export const brConfig = {
           name: "Ubah Kata Sandi"
         }
       ]
-    }
+    },
+    force_update: [
+      {
+        type: "current",
+        url: "",
+        name: "Pemberitahuan Aplikasi"
+      }
+    ]
   },
   admin: {
     user: {

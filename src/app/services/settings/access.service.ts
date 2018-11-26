@@ -54,4 +54,9 @@ export class AccessService extends BaseService{
     const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
   }
+
+  forceUpdate(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'force_update');
+    return this.postApi(url, body);
+  }
 }

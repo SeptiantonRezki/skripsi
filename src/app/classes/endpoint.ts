@@ -197,7 +197,8 @@ export class Endpoint {
         list_menu: `${AYO_API}/api/${type_api}/user/role/available_permissions`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        force_update: `${AYO_API}/api/${type_api}/force-update`,
       },
       tnc: {
         get: `${AYO_API}/api/${type_api}/content/content?type=terms-conditions`,

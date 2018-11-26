@@ -1,0 +1,100 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Pemberitahuan Pembaruan Aplikasi'">
+
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <form [formGroup]="formForceUpdate" autocomplete="off">
+      <div class="ayo-main-wrapper mat-bg-white is-half">
+        <div fxLayout="row" class="pb-16" fxLayoutAlign="start center">
+          <h2 class="">Pemberitahuan Pembaruan Aplikasi</h2>
+        </div>
+        <div class="ayo-content-middle pb-48">
+
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-select placeholder="Pilih Aplikasi" formControlName="appsName">
+                <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formForceUpdate.controls['appsName'].hasError('required') && formForceUpdate.controls['appsName'].touched">
+                Nama Aplikasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" formControlName="version" placeholder="Versi Aplikasi">
+              <mat-error *ngIf="formForceUpdate.controls['version'].hasError('required') && formForceUpdate.controls['version'].touched">
+                Versi Aplikasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" formControlName="title" placeholder="Isi Pesan">
+              <mat-error *ngIf="formForceUpdate.controls['title'].hasError('required') && formForceUpdate.controls['title'].touched">
+                Isi Pesan harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Notifikasi Versi Terbaru</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="notifNewVersion" (change)="changeValue()">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of yesOrNo" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutAlign="start center" *ngIf="formForceUpdate.controls['notifNewVersion'].value === 'yes'" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" formControlName="notifMessage" placeholder="Isi Pesan Notifikasi">
+              <mat-error *ngIf="formForceUpdate.controls['notifMessage'].hasError('required') && formForceUpdate.controls['notifMessage'].touched">
+                Isi Pesan Notifikasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Force Update</strong>
+              </h3>
+            </div>
+            <div fxLayout="row">
+              <mat-radio-group formControlName="forceUpdate" class="radio-group">
+                <mat-radio-button class="radio-button" *ngFor="let item of yesOrNo" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div> -->
+          <div class="pb-16">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                  <strong>Force Update</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="forceUpdate">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of yesOrNo" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="confirm pt-8 pb-24" fxLayout="row">
+          <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="30" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+  

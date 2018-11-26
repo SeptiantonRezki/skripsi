@@ -16,13 +16,15 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatSlideToggleModule,
-  MatDividerModule
+  MatDividerModule,
+  MatRadioModule
 } from "@angular/material";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
 import { ListMenuResolver } from "../../resolver/settings.resolver";
 import { PageGuard } from "app/classes/auth.guard";
+import { ForceUpdateAppsComponent } from './force-update-apps/force-update-apps.component';
 
 @NgModule({
   imports: [
@@ -40,19 +42,22 @@ import { PageGuard } from "app/classes/auth.guard";
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
-    MatDividerModule
+    MatDividerModule,
+    MatRadioModule
   ],
   declarations: [
     RoleIndexComponent,
     RoleCreateComponent,
     RoleEditComponent,
-    ChangePasswordIndexComponent
+    ChangePasswordIndexComponent,
+    ForceUpdateAppsComponent
   ],
   exports: [
     RoleIndexComponent,
     RoleCreateComponent,
     RoleEditComponent,
-    ChangePasswordIndexComponent
+    ChangePasswordIndexComponent,
+    ForceUpdateAppsComponent
   ],
   providers: [ListMenuResolver, PageGuard]
 })

@@ -7,6 +7,7 @@ import { RoleEditComponent } from "./role/edit/role-edit.component";
 import { ChangePasswordIndexComponent } from "./change-password/index/change-password-index.component";
 import { ListMenuResolver } from "../../resolver/settings.resolver";
 import { PageGuard } from "app/classes/auth.guard";
+import { ForceUpdateAppsComponent } from "./force-update-apps/force-update-apps.component";
 
 const routes: Routes = [
   {
@@ -54,6 +55,14 @@ const routes: Routes = [
     component: ChangePasswordIndexComponent,
     data: {
       breadcrumbs: brConfig.settings.account.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "force-update-apps",
+    component: ForceUpdateAppsComponent,
+    data: {
+      breadcrumbs: brConfig.settings.force_update
     },
     canActivate: [PageGuard]
   }
