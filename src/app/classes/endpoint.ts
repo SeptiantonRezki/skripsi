@@ -9,8 +9,8 @@
  * AYO Sampoerna Staging
  *
  */
-const AYO_API = "http://192.168.2.228"; // ip internal
-// const AYO_API = "https://ayo-api.dxtr.asia";
+// const AYO_API = "http://192.168.2.228"; // ip internal
+const AYO_API = "https://ayo-api.dxtr.asia";
 // const AYO_API = "http://dev.ayo-api.dxtr.asia"; // development
 // const AYO_API = "http://43.243.140.58:3232"; // ip public
 // const AYO_API = "https://api.src.id"; // production
