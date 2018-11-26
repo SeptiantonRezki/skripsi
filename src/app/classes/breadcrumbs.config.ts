@@ -250,19 +250,19 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Customer"
+        name: "Daftar Consumer"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/customer",
-        name: "Daftar Customer"
+        name: "Daftar Consumer"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Customer"
+        name: "Detail Consumer"
       }
     ]
   },
