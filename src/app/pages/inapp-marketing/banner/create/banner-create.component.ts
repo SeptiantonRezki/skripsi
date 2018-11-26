@@ -35,7 +35,7 @@ export class BannerCreateComponent {
   minDate: any;
   listStatus: any[] = [{name: 'Status Aktif', value: 'publish'}, {name: 'Status Non Aktif', value: 'draft'}];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua Umur", value: "18-" }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];

@@ -81,10 +81,10 @@
                   <input matInput type="number" min="0" formControlName="coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
                     numericOnly>
                   <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
-                    Nilai Coin Tugas Terkirim harus diisi
+                    Nilai Coin harus diisi
                   </mat-error>
                   <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
-                    Nilai Coin Tugas Terkirim tidak boleh kurang dari 0
+                    Nilai Coin  tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
 
