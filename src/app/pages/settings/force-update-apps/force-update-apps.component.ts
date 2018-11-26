@@ -10,7 +10,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
   styleUrls: ['./force-update-apps.component.scss']
 })
 export class ForceUpdateAppsComponent {
-  listApps: any[] = [{ name: 'Aplikasi Consumer', value: 'costumer'}, { name: 'Aplikasi Retailer', value: 'retailer' }];
+  listApps: any[] = [{ name: 'Aplikasi Consumer', value: 'consumer'}, { name: 'Aplikasi Retailer', value: 'retailer' }];
   yesOrNo: any[] = [{name:'Ya', value: 'yes'}, {name: 'Tidak', value:'no'}];
   formForceUpdate: FormGroup;
   
