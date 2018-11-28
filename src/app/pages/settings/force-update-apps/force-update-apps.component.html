@@ -14,11 +14,21 @@
 
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Pilih Aplikasi" formControlName="appsName">
+              <mat-select placeholder="Aplikasi" formControlName="appsName">
                 <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formForceUpdate.controls['appsName'].hasError('required') && formForceUpdate.controls['appsName'].touched">
                 Nama Aplikasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-select placeholder="Operation System" formControlName="os">
+                <mat-option *ngFor="let item of listOs" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formForceUpdate.controls['os'].hasError('required') && formForceUpdate.controls['os'].touched">
+                Operation System harus diisi
               </mat-error>
             </mat-form-field>
           </div>

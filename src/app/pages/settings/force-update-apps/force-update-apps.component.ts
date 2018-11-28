@@ -10,7 +10,11 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
   styleUrls: ['./force-update-apps.component.scss']
 })
 export class ForceUpdateAppsComponent {
-  listApps: any[] = [{ name: 'Aplikasi Consumer', value: 'consumer'}, { name: 'Aplikasi Retailer', value: 'retailer' }];
+  listApps: any[] = [{ name: 'Consumer', value: 'customer'}, { name: 'Retailer', value: 'retailer' }];
+  listOs: any[] = [
+    { name: 'Android', value: 'android' },
+    // { name: 'ios', value: 'ios' }
+  ]
   yesOrNo: any[] = [{name:'Ya', value: 'yes'}, {name: 'Tidak', value:'no'}];
   formForceUpdate: FormGroup;
   
@@ -29,7 +33,8 @@ export class ForceUpdateAppsComponent {
       title: ["", Validators.required],
       notifNewVersion: ["yes", Validators.required],
       notifMessage: ["", Validators.required],
-      forceUpdate: ["yes", Validators.required]
+      forceUpdate: ["yes", Validators.required],
+      os: ["", Validators.required],
     })
   }
 
@@ -52,6 +57,7 @@ export class ForceUpdateAppsComponent {
         force_update: this.formForceUpdate.controls['forceUpdate'].value === 'yes' ? 1 : 0,
         sort_notif: this.formForceUpdate.controls['title'].value,
         notif: this.formForceUpdate.controls['notifMessage'].value,
+        os: this.formForceUpdate.controls['os'].value,
       }
 
       this.accessServices.forceUpdate(body).subscribe(
