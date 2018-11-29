@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { PaguyubanService } from 'app/services/user-management/paguyuban.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
+
+export function checkPassword(): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    return { 'notSame': true }
+  };
+}
 
 @Component({
   selector: 'app-paguyuban-create',
@@ -80,7 +86,7 @@ export class PaguyubanCreateComponent {
       group_name: ["", Validators.required],
       username: ["", Validators.required],
       password: ["", Validators.required],
-      password_confirmation: ["", Validators.required],
+      password_confirmation: ["", [Validators.required]],
     });
 
     this.wilayah = this.formBuilder.group({
@@ -106,6 +112,18 @@ export class PaguyubanCreateComponent {
     this.verticalStepperStep2.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.verticalStepperStep2, this.verticalStepperStep2Errors);
     });
+
+    this.verticalStepperStep1.valueChanges.debounceTime(300).subscribe(res => {
+      if (res.password_confirmation) { 
+        if (res.password !== res.password_confirmation) {
+          this.verticalStepperStep1.controls['password_confirmation'].setValidators(checkPassword());
+          this.verticalStepperStep1.controls['password_confirmation'].updateValueAndValidity();
+        } else {
+          this.verticalStepperStep1.controls['password_confirmation'].clearValidators();
+          this.verticalStepperStep1.controls['password_confirmation'].updateValueAndValidity();
+        }
+      }
+    })
 
     this.initArea();
   }
