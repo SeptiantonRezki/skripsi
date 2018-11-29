@@ -61,6 +61,9 @@
                 <mat-error *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
                   Konfirmasi kata sandi harus diisi.
                 </mat-error>
+                <mat-error *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
+                  Konfirmasi kata sandi tidak sesuai.
+                </mat-error>
               </mat-form-field>
             </div>
 
