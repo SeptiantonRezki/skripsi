@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { AccessService } from 'app/services/settings/access.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-force-update-apps',
@@ -17,24 +18,68 @@ export class ForceUpdateAppsComponent {
   ]
   yesOrNo: any[] = [{name:'Ya', value: 'yes'}, {name: 'Tidak', value:'no'}];
   formForceUpdate: FormGroup;
+
+  listVersionConsumer: any[];
+  listVersionRetailer: any[];
+  lastVersionConsumer: any;
+  lastVersionRetailer: any;
+
+  id: any;
+  onLoad: Boolean;
+
+  permission: any;
+  roles: PagesName = new PagesName();
   
   constructor(
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private accessServices: AccessService
   ) { 
+    this.onLoad = true;
 
+    this.permission = this.roles.getRoles('principal.forceupdate');
+    console.log(this.permission);
   }
 
   ngOnInit() {
-    this.formForceUpdate = this.formBuilder.group({
-      appsName: ["", Validators.required],
-      version: ["", Validators.required],
-      title: ["", Validators.required],
-      notifNewVersion: ["yes", Validators.required],
-      notifMessage: ["", Validators.required],
-      forceUpdate: ["yes", Validators.required],
-      os: ["", Validators.required],
+    
+    this.accessServices.listVersion().subscribe(res => {
+      this.listVersionRetailer = res[0].data;
+      this.listVersionConsumer = res[1].data;
+      
+      this.lastVersionRetailer = this.listVersionRetailer.length > 0 ? parseFloat(this.listVersionRetailer[0]['version']) : 0;
+      this.lastVersionConsumer = this.listVersionConsumer.length > 0 ? parseFloat(this.listVersionConsumer[0]['version']) : 0;
+
+      this.formForceUpdate = this.formBuilder.group({
+        appsName: ["", Validators.required],
+        version: ["", Validators.required],
+        title: ["", Validators.required],
+        notifNewVersion: ["yes", Validators.required],
+        notifMessage: ["", Validators.required],
+        forceUpdate: ["yes", Validators.required],
+        os: ["", Validators.required],
+      })
+
+      this.formForceUpdate.valueChanges.debounceTime(200).subscribe(val => {
+        if (val.appsName === 'retailer') {
+          this.formForceUpdate.controls['version'].clearValidators();
+          this.formForceUpdate.controls['version'].updateValueAndValidity();
+
+          this.formForceUpdate.controls['version'].setValidators([Validators.required, Validators.min(this.lastVersionRetailer)])
+          this.formForceUpdate.controls['version'].updateValueAndValidity();
+        }
+
+        if (val.appsName === 'customer') {
+          this.formForceUpdate.controls['version'].clearValidators();
+          this.formForceUpdate.controls['version'].updateValueAndValidity();
+
+          this.formForceUpdate.controls['version'].setValidators([Validators.required, Validators.min(this.lastVersionConsumer)])
+          this.formForceUpdate.controls['version'].updateValueAndValidity();
+        }
+      })
+
+      if (!this.permission.buat) { this.formForceUpdate.disable() };
+      this.onLoad = false;
     })
   }
 
@@ -73,6 +118,31 @@ export class ForceUpdateAppsComponent {
       this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu! '});
       commonFormValidator.validateAllFields(this.formForceUpdate);
     }
+  }
+
+  revertVersion(item) {
+    this.id = item.id;
+    let data = {
+      titleDialog: "Hapus Versi Aplikasi",
+      captionDialog: `Apakah anda yakin untuk menghapus versi ${item.version} pada aplikasi ${item.name}?`,
+      confirmCallback: this.confirmRevert.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmRevert() {
+    this.accessServices.revertVersion({ version_id: this.id }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Versi berhasil dihapus" });
+
+        this.ngOnInit();
+      },
+      err => {
+        // this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
   }
 
 }

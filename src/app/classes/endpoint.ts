@@ -199,6 +199,8 @@ export class Endpoint {
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         force_update: `${AYO_API}/api/${type_api}/force-update`,
+        list_version: `${AYO_API}/api/${type_api}/force-update`,
+        revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`
       },
       tnc: {
         get: `${AYO_API}/api/${type_api}/content/content?type=terms-conditions`,

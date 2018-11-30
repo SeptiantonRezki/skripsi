@@ -59,4 +59,14 @@ export class AccessService extends BaseService{
     const url = this.getUrl(this.namespace, 'force_update');
     return this.postApi(url, body);
   }
+
+  listVersion(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_version");
+    return this.getApi(url);
+  }
+
+  revertVersion(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'revert_version', context);
+    return this.deleteApi(url);
+  }
 }

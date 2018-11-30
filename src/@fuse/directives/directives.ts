@@ -7,6 +7,7 @@ import {
   FuseMatSidenavTogglerDirective
 } from "./fuse-mat-sidenav/fuse-mat-sidenav.directive";
 import { NumericOnlyDirective } from "./numeric-only";
+import { DecimalNumberDirective } from "./decimal-number";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { NumericOnlyDirective } from "./numeric-only";
     FuseMatSidenavHelperDirective,
     FuseMatSidenavTogglerDirective,
     FusePerfectScrollbarDirective,
-    NumericOnlyDirective
+    NumericOnlyDirective,
+    DecimalNumberDirective
   ],
   imports: [],
   exports: [
@@ -22,7 +24,8 @@ import { NumericOnlyDirective } from "./numeric-only";
     FuseMatSidenavHelperDirective,
     FuseMatSidenavTogglerDirective,
     FusePerfectScrollbarDirective,
-    NumericOnlyDirective
+    NumericOnlyDirective,
+    DecimalNumberDirective
   ]
 })
 export class FuseDirectivesModule {}
