@@ -71,7 +71,7 @@ export class PagesName {
       "/settings/access/edit/": "principal.akses.ubah",
       "/settings/access/detail/": "principal.akses.lihat",
       "/settings/account": "principal.ubahpassword.lihat",
-      "/settings/force-update-apps": "principal.forceupdate.buat"
+      "/settings/force-update-apps": "principal.forceupdate.lihat"
     }
     return PAGES[name];
   }
