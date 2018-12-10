@@ -28,7 +28,9 @@ export class TemplateEditComponent {
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
-    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" }
+    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
+    { name: "Angka", value: "numeric", icon: "dialpad" },
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" }
   ];
 
   @ViewChild("autosize")

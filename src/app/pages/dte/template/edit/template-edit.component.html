@@ -161,7 +161,19 @@
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image'">
+                <ng-container *ngIf="item.get('typeSelection').value['value'] == 'date'">
+                  <mat-form-field fxFlex="40" class="question is-light">
+                    <input matInput type="text" value="Pilihan Tanggal" disabled>
+                    <mat-icon matSuffix>date_range</mat-icon>
+                  </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item.get('typeSelection').value['value'] == 'numeric'">
+                  <mat-form-field fxFlex="40" class="question is-light">
+                    <input matInput type="text" value="Angka" disabled>
+                    <mat-icon matSuffix>dialpad</mat-icon>
+                  </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date'" >
                   <div fxFlex="100" fxLayout="column">
                     <div formArrayName="additional" *ngFor="let additional of item.get('additional')['controls']; let j=index;">
                       <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
