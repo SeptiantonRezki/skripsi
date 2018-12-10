@@ -11,7 +11,7 @@ import { TradeCreateComponent } from "./trade/create/trade-create.component";
 import { TradeEditComponent } from "./trade/edit/trade-edit.component";
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
 import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedule-program-create.component";
-import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
+import { ScheduleProgramDetailComponent } from "./schedule-program/detail/schedule-program-detail.component";
 import { AudienceIndexComponent } from "./audience/index/audience-index.component";
 import { AudienceCreateComponent } from "./audience/create/audience-create.component";
 import { AudienceEditComponent } from "./audience/edit/audience-edit.component";
@@ -54,6 +54,7 @@ import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { NgxMatSelectSearchModule } from "../../../../node_modules/ngx-mat-select-search";
 import { NgxCurrencyModule } from "ngx-currency";
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
+import { ScheduleProgramEditComponent } from './schedule-program/edit/schedule-program-edit.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -118,6 +119,7 @@ export const MY_FORMATS = {
     ScheduleProgramIndexComponent,
     ScheduleProgramCreateComponent,
     ScheduleProgramEditComponent,
+    ScheduleProgramDetailComponent,
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent,
@@ -134,6 +136,7 @@ export const MY_FORMATS = {
     ScheduleProgramIndexComponent,
     ScheduleProgramCreateComponent,
     ScheduleProgramEditComponent,
+    ScheduleProgramDetailComponent,
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent

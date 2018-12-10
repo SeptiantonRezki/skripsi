@@ -61,6 +61,7 @@ export class PagesName {
       "/dte/trade-program/detail": "principal.tradeprogram.lihat",
       "/dte/schedule-trade-program": "principal.scheduleprogram.lihat",
       "/dte/schedule-trade-program/create": "principal.scheduleprogram.buat",
+      "/dte/schedule-trade-program/edit/": "principal.scheduleprogram.ubah",
       "/dte/schedule-trade-program/detail/": "principal.scheduleprogram.lihat",
       "/dte/audience": "principal.audience.lihat",
       "/dte/audience/create": "principal.audience.buat",

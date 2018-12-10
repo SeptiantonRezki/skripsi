@@ -160,7 +160,8 @@ export class Endpoint {
         list_tp: `${AYO_API}/api/${type_api}/creator?page=all`,
         list_template: `${AYO_API}/api/${type_api}/template?page=all`,
         list_audience: `${AYO_API}/api/${type_api}/audience/show/${context.audience_id}`,
-        export: `${AYO_API}/api/${type_api}/scheduler/export`
+        export: `${AYO_API}/api/${type_api}/scheduler/export`,
+        update_tanggal: `${AYO_API}/api/${type_api}/scheduler/${context.schedule_tp_id}/update-date`
       },
       audience: {
         get: `${AYO_API}/api/${type_api}/audience`,

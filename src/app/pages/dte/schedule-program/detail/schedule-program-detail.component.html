@@ -1,0 +1,115 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detil Pengatur Jadwal Trade Program'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+      <form autocomplete="off">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Detil Pengatur Jadwal Trade Program</h2>
+        </div>
+        <div class="ayo-middle py-24" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang" [value]="dataScheduler['name']"
+                name="name" disabled>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select [value]="dataScheduler['trade_creator_id']" placeholder="Trade Program" name="trade_creator_id"
+                disabled>
+                <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="py-8" *ngIf="dataScheduler['audience']">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Audience</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Audience / Grup" [value]="dataScheduler['audience'].name"
+                  disabled>
+                <button mat-button matTooltip="Lihat daftar audience" (click)="openListAudience(dataScheduler['audience'])"
+                  matSuffix mat-icon-button>
+                  <mat-icon class="s-24">view_list</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="py-8">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Estimasi Budget</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Permintaan Dana" [value]="dataScheduler['budget_request'] | rupiahFormater"
+                  disabled>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Dana Trade Program" [value]="dataScheduler['budget_trade_program'] | rupiahFormater"
+                  disabled>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
+
+            <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Template Tugas</strong>
+              </h3>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="22%" class="is-light form-primary">
+                <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
+                  disabled>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="22%" class="is-light form-primary">
+                <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
+                  disabled>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                  disabled>
+                <mat-icon matSuffix>date_range</mat-icon>
+              </mat-form-field>
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                  disabled>
+                <mat-icon matSuffix>date_range</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] !== 'publish'"
+          fxLayout="row" fxLayoutGap="20px">
+          <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+            REJECT
+          </button> -->
+
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+            SETUJUI
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

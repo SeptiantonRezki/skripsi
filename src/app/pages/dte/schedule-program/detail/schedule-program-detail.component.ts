@@ -1,22 +1,21 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ReplaySubject, Subject, Observable } from 'rxjs';
-import { MatSelect, DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DateAdapter, MatDialogConfig, MatDialog, MatSelect } from '@angular/material';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
-import * as moment from 'moment';
-import { commonFormValidator } from 'app/classes/commonFormValidator';
-import { takeUntil } from 'rxjs/operators';
 import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
+import * as moment from 'moment';
+import { takeUntil } from 'rxjs/operators';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
-  selector: 'app-schedule-program-edit',
-  templateUrl: './schedule-program-edit.component.html',
-  styleUrls: ['./schedule-program-edit.component.scss']
+  selector: 'app-schedule-program-detail',
+  templateUrl: './schedule-program-detail.component.html',
+  styleUrls: ['./schedule-program-detail.component.scss']
 })
-export class ScheduleProgramEditComponent {
-
+export class ScheduleProgramDetailComponent {
   idScheduler: any;
   dataScheduler: any;
   dialogRef: any;
@@ -49,18 +48,6 @@ export class ScheduleProgramEditComponent {
   valueChange: Boolean;
   saveData: Boolean;
 
-  @HostListener('window:beforeunload')
-  canDeactivate(): Observable<boolean> | boolean {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
-    if (this.valueChange && !this.saveData) {
-      return false;
-    }
-
-    return true;
-  }
-
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -91,39 +78,15 @@ export class ScheduleProgramEditComponent {
   }
 
   ngOnInit() {
-
-    this.formSchedule = this.formBuilder.group({
-      trade_creator_id: ["", Validators.required],
-      task_templates: this.formBuilder.array([], Validators.required),
-    })
-
     this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
       this.dataScheduler = res; 
       this.onLoad = false;
+    })
 
-      // if (res.status_berjalan !== 'no') {
-      //   let status = res.status_berjalan === 'yes' ? 'sudah berjalan' : (res.status_berjalan === 'expired' ? 'sudah berakhir' : '');
-      //   this.dialogService.openSnackBar({ message: `Tidak dapat mengubah tanggal penjadwalan karena status ${status}.` });
-      //   this.router.navigate(['dte', 'schedule-trade-program']);
-      // }
-      
-      this.formSchedule.controls['trade_creator_id'].setValue(res.trade_creator_id);
-      
-      let task_templates = this.formSchedule.controls['task_templates'] as FormArray;
-      res.templates.map(item => {
-        return task_templates.push(this.formBuilder.group({
-          coin_approved: [item.coin_approved],
-          coin_delivered: [item.coin_delivered],
-          end_date: [item.end_date, Validators.required],
-          start_date: [item.start_date, Validators.required],
-          trade_scheduler_template_id: [item.trade_scheduler_template_id],
-          task_template_name: [item.task_template_name]
-        }))
-      })
-
-      let tradeProgram = this.listTradeProgram.filter(item => item.id == res.trade_creator_id)[0];
-      this.minDate = tradeProgram['start_date'];
-      this.maxStartDateTemplate = tradeProgram['end_date'];
+    this.formSchedule = this.formBuilder.group({
+      name: ["", Validators.required],
+      trade_creator_id: ["", Validators.required],
+      task_templates: this.formBuilder.array([this.createTaskTemplate()], Validators.required),
     })
 
     this.formSchedule.valueChanges.subscribe(() => {
@@ -146,7 +109,6 @@ export class ScheduleProgramEditComponent {
         this.filteringTask();
       });
   }
-
 
   filteringTP() {
     if (!this.listTradeProgram) {
@@ -184,6 +146,29 @@ export class ScheduleProgramEditComponent {
     );
   }
 
+  createTaskTemplate(): FormGroup {
+    return this.formBuilder.group({
+      task_template_id: ["", Validators.required],
+      coin_delivered: ["", [Validators.required, Validators.min(0)]],
+      coin_approved: ["", [Validators.required, Validators.min(0)]],
+      start_date: ["", Validators.required],
+      end_date: ["", Validators.required],
+      repeated: ["by-weekly", Validators.required],
+      is_backup: [1, Validators.required],
+      notif: [1, Validators.required]
+    })
+  }
+
+  addTaskTemplate() {
+    let template = this.formSchedule.get('task_templates') as FormArray;
+    template.push(this.createTaskTemplate())
+  }
+
+  deleteTaskTemplate(idx) {
+    let template = this.formSchedule.get('task_templates') as FormArray;
+    template.removeAt(idx);
+  }
+
   getTradeProgram() {
     let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
     let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
@@ -210,6 +195,74 @@ export class ScheduleProgramEditComponent {
     template.at(idx).get('notif').enable();
   }
 
+  submitUpdate() {
+    if (this.formSchedule.valid) {
+      this.saveData = !this.saveData;
+      // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
+      // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
+      
+      let body = {
+        name: this.formSchedule.get('name').value,
+        trade_creator_id: this.formSchedule.get('trade_creator_id').value,
+        task_templates: this.formSchedule.get('task_templates').value.map(item => {
+          // let template = item.task_template_id['id'];
+          // if (!template) return this.dialogService.openSnackBar({ message: `Data Template Tugas "${item.task_template_id}" tidak tersedia, mohon lakukan pencarian kembali!` })
+
+          return {
+            task_template_id: item.task_template_id,
+            coin_delivered: item.coin_delivered,
+            coin_approved: item.coin_approved,
+            start_date: this.convertDate(item.start_date),
+            end_date: this.convertDate(item.end_date),
+            repeated: item.repeated,
+            is_backup: 0,
+            notif: item.is_backup === 1 ? item.notif : 0
+          }
+        })
+      }
+
+      let foundUndefined = body['task_templates'].some(item => item === undefined)
+      if(!foundUndefined) {
+        this.scheduleTradeProgramService.create(body).subscribe(
+          res => {
+            this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+            this.router.navigate(['dte', 'schedule-trade-program']);
+          },
+          err => {
+            console.log(err.error.message);
+          }
+        )
+      }
+    } else {
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+    }
+  }
+
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
+  }
+
+  submit() {
+    let body = {
+      _method: 'PUT',
+      status_scheduler: 'publish'
+    }
+
+    this.scheduleTradeProgramService.put(body, {schedule_tp_id: this.idScheduler}).subscribe(
+      res => {
+        this.dialogService.openSnackBar({ message: 'Status Berhasil diubah' });
+        this.router.navigate(['dte', 'schedule-trade-program']);
+      },
+      err => {
+        console.log(err.error.message)
+      }
+    )
+  }
+
   openListAudience(item) {
     const dialogConfig = new MatDialogConfig();
 
@@ -222,43 +275,4 @@ export class ScheduleProgramEditComponent {
 
     this.dialogRef.afterClosed().subscribe(response => { })
   }
-
-  submit() {
-    if (this.formSchedule.valid) {
-      this.saveData = true;
-
-      let body = {
-        trade_creator_id: this.formSchedule.get('trade_creator_id').value,
-        task_templates: this.formSchedule.get('task_templates').value.map(item => {
-          return {
-            start_date: this.convertDate(item.start_date),
-            end_date: this.convertDate(item.end_date),
-            trade_scheduler_template_id: item.trade_scheduler_template_id
-          }
-        })
-      }
-
-      this.scheduleTradeProgramService.putDate(body, { schedule_tp_id: this.idScheduler }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({ message: 'Data berhasil diubah' });
-          this.router.navigate(['dte', 'schedule-trade-program']);
-        },
-        err => {
-          console.log(err.error.message);
-        }
-      )
-    } else {
-      this.dialogService.openSnackBar({ msg: 'Silakan lengkapi data terlebih dahulu.' });
-      commonFormValidator.validateAllFields(this.formSchedule);
-    }
-  }
-
-  convertDate(param: Date) {
-    if (param) {
-      return moment(param).format('YYYY-MM-DD');
-    }
-
-    return "";
-  }
-
 }
