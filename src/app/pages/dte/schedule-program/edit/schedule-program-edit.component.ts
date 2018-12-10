@@ -101,11 +101,11 @@ export class ScheduleProgramEditComponent {
       this.dataScheduler = res; 
       this.onLoad = false;
 
-      // if (res.status_berjalan !== 'no') {
-      //   let status = res.status_berjalan === 'yes' ? 'sudah berjalan' : (res.status_berjalan === 'expired' ? 'sudah berakhir' : '');
-      //   this.dialogService.openSnackBar({ message: `Tidak dapat mengubah tanggal penjadwalan karena status ${status}.` });
-      //   this.router.navigate(['dte', 'schedule-trade-program']);
-      // }
+      if (res.status_berjalan !== 'no') {
+        let status = res.status_berjalan === 'yes' ? 'sudah berjalan' : (res.status_berjalan === 'expired' ? 'sudah berakhir' : '');
+        this.dialogService.openSnackBar({ message: `Tidak dapat mengubah tanggal penjadwalan karena status ${status}.` });
+        this.router.navigate(['dte', 'schedule-trade-program']);
+      }
       
       this.formSchedule.controls['trade_creator_id'].setValue(res.trade_creator_id);
       
