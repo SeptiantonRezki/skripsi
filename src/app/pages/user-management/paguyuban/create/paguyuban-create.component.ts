@@ -30,6 +30,7 @@ export class PaguyubanCreateComponent {
   listAdminPrincipal: Array<any>;
   submitting: Boolean;
 
+  detailAreaSelected: any[];
   listLevelArea: any[];
   list: any;
 
@@ -125,6 +126,12 @@ export class PaguyubanCreateComponent {
       }
     })
 
+    this.paguyubanService.getParentArea({ parent: 2384 }).subscribe(res => {
+      this.detailAreaSelected = res.data;
+
+      this.initFormGroup();
+    })
+
     this.initArea();
   }
 
@@ -169,6 +176,41 @@ export class PaguyubanCreateComponent {
       }
       this.getAudienceArea(level_desc, item.id);
     });
+  }
+
+  initFormGroup() {
+    this.detailAreaSelected.map(item => {
+      let level_desc = '';
+      switch (item.level_desc.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          break
+        case 'division':
+          level_desc = 'region';
+          break;
+        case 'region':
+          level_desc = 'area';
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          break;
+        case 'district':
+          level_desc = 'territory';
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+
+    this.wilayah.controls['national'].setValue(this.getArea('national'));
+    this.wilayah.controls['zone'].setValue(this.getArea('division'));
+    this.wilayah.controls['region'].setValue(this.getArea('region'));
+    this.wilayah.controls['area'].setValue(this.getArea('area'));
+    this.wilayah.controls['salespoint'].setValue(this.getArea('salespoint'));
+    this.wilayah.controls['district'].setValue(this.getArea('district'));
+    this.wilayah.controls['territory'].setValue(this.getArea('teritory'));
   }
 
   getAudienceArea(selection, id) {
@@ -274,6 +316,10 @@ export class PaguyubanCreateComponent {
       default:
         break;
     }
+  }
+
+  getArea(selection) {
+    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
   selectionChange(event) {
