@@ -53,7 +53,8 @@ export class TncCreateComponent {
     this.formTnc = this.formBuilder.group({
       title: ["", Validators.required],
       body: ["", Validators.required],
-      user: ["", Validators.required]
+      user: ["", Validators.required],
+      is_notif: [false] 
     });
 
     this.formTnc.valueChanges.subscribe(() => {
@@ -71,7 +72,8 @@ export class TncCreateComponent {
         title: this.formTnc.get("title").value,
         body: this.formTnc.get("body").value,
         user: this.formTnc.get("user").value,
-        type: "terms-conditions"
+        type: "terms-conditions",
+        is_notif: this.formTnc.get('is_notif').value === true ? 1 : 0,
       };
 
       this.tncService.create(body).subscribe(

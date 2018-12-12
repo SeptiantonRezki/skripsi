@@ -45,6 +45,8 @@
           <!-- <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPageGroup.get('body').hasError('required')">
                   Isi Halaman harus diisi
                 </mat-error> -->
+          <br>
+          <mat-checkbox formControlName="is_notif">Kirim push notification?</mat-checkbox>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
