@@ -56,7 +56,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terkahir Masuk" prop="last_login">
+        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{(row.last_login | date:'dd/MM/yyyy HH:mm') || '-'}}
           </ng-template>
