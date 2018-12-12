@@ -78,7 +78,7 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/user/wholesaler`,
         put: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`

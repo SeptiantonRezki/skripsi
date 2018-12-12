@@ -23,7 +23,6 @@ export class WholesalerCreateComponent{
 
   submitting: Boolean;
 
-  detailAreaSelected: any[];
   listLevelArea: any[];
   list: any;
 
@@ -133,12 +132,6 @@ export class WholesalerCreateComponent{
       }
     })
 
-    this.wholesalerService.getParentArea({ parent: 2384 }).subscribe(res => {
-      this.detailAreaSelected = res.data;
-
-      this.initFormGroup();
-    })
-
     this.initArea();
   }
 
@@ -183,41 +176,6 @@ export class WholesalerCreateComponent{
       }
       this.getAudienceArea(level_desc, item.id);
     });
-  }
-
-  initFormGroup() {
-    this.detailAreaSelected.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
-
-    this.verticalStepperStep3.controls['national'].setValue(this.getArea('national'));
-    this.verticalStepperStep3.controls['zone'].setValue(this.getArea('division'));
-    this.verticalStepperStep3.controls['region'].setValue(this.getArea('region'));
-    this.verticalStepperStep3.controls['area'].setValue(this.getArea('area'));
-    this.verticalStepperStep3.controls['salespoint'].setValue(this.getArea('salespoint'));
-    this.verticalStepperStep3.controls['district'].setValue(this.getArea('district'));
-    this.verticalStepperStep3.controls['territory'].setValue(this.getArea('teritory'));
   }
 
   getAudienceArea(selection, id) {
@@ -323,10 +281,6 @@ export class WholesalerCreateComponent{
       default:
         break;
     }
-  }
-
-  getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
     
   selectionChange(event) {
