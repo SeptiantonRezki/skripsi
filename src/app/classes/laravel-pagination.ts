@@ -19,7 +19,7 @@ export class Page {
     this.page = 1;
     this.total = 0;
     this.sort = null;
-    this.sort_type = "asc";
+    this.sort_type = "desc";
     this.search = "";
     this.filter = "";
     this.status = "";

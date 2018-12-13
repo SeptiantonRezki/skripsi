@@ -247,8 +247,8 @@ export class CustomerIndexComponent {
   getCustomerList() {
     // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     // this.pagination.area = areaSelected[areaSelected.length-1].value;
-    this.pagination.sort = "fullname";
-    this.pagination.sort_type = "asc";
+    // this.pagination.sort = "fullname";
+    // this.pagination.sort_type = "asc";
       
     this.loadingIndicator = true;
     this.customerService.get(this.pagination).subscribe(

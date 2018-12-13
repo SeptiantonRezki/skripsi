@@ -65,8 +65,8 @@ export class ProgramComponent {
   }
 
   getTrade() {
-    this.paginationTP.sort = 'name';
-    this.paginationTP.sort_type = 'asc';
+    // this.paginationTP.sort = 'name';
+    // this.paginationTP.sort_type = 'asc';
 
     this.showLoadingBar = true;
     this.coinService.getProgram(this.paginationTP).subscribe(

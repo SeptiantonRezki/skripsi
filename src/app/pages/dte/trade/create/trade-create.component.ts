@@ -25,6 +25,7 @@ export class TradeCreateComponent {
   validComboDrag: boolean;
   valueChange: Boolean;
   saveData: Boolean;
+  statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -70,7 +71,8 @@ export class TradeCreateComponent {
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       budget: ['', [Validators.required, Validators.min(0)]],
-      coin_expiry_date: ['', Validators.required]
+      coin_expiry_date: ['', Validators.required],
+      status: ['publish', Validators.required]
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -108,7 +110,8 @@ export class TradeCreateComponent {
         start_date: this.convertDate(this.formTradeProgram.get('start_date').value),
         end_date: this.convertDate(this.formTradeProgram.get('end_date').value),
         budget: this.formTradeProgram.get('budget').value,
-        coin_expiry_date: this.convertDate(this.formTradeProgram.get('coin_expiry_date').value)
+        coin_expiry_date: this.convertDate(this.formTradeProgram.get('coin_expiry_date').value),
+        status: this.formTradeProgram.get('status').value,
       }
 
       fd.append('name', body.name);
@@ -116,6 +119,7 @@ export class TradeCreateComponent {
       fd.append('end_date', body.end_date);
       fd.append('budget', body.budget);
       fd.append('coin_expiry_date', body.coin_expiry_date);
+      fd.append('status', body.status);
       if (this.files) fd.append('image', this.files);
   
       this.tradeProgramService.create(fd).subscribe(

@@ -278,7 +278,8 @@ export class TradeIndexComponent {
           return {
             ...item,
             image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
-            status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive'
+            status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
+            status_publish: item.status
           }
         });
         
@@ -308,7 +309,8 @@ export class TradeIndexComponent {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
-          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive'
+          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
+          status_publish: item.status
         }
       });
 
@@ -330,7 +332,8 @@ export class TradeIndexComponent {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
-          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive'
+          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
+          status_publish: item.status
         }
       });
 
@@ -350,7 +353,8 @@ export class TradeIndexComponent {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
-          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive'
+          status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date &&  moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
+          status_publish: item.status
         }
       });
       

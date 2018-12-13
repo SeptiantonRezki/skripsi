@@ -55,7 +55,7 @@
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
         [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'date', dir: 'desc'}]">
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

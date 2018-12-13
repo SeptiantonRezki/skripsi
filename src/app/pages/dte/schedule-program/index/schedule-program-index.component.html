@@ -70,26 +70,26 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column [sortable]="false" name="Nama" prop="scheduler_name">
+        <ngx-datatable-column [sortable]="false" name="Nama" prop="scheduler_name" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]">{{row.scheduler_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Trade Program" prop="creator_name"></ngx-datatable-column>
+        <ngx-datatable-column [sortable]="false" name="Trade Program" prop="creator_name" [flexGrow]="3"></ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Periode" prop="start_date">
+        <ngx-datatable-column [sortable]="false" name="Periode" prop="start_date" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}} <br>s/d<br> {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Audience / Grup" prop="audience_name"></ngx-datatable-column>
+        <ngx-datatable-column [sortable]="false" name="Audience / Grup" prop="audience_name" [flexGrow]="3"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="75" [sortable]="false" name="Status" prop="status_scheduler">
+        <ngx-datatable-column [width]="85" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              <p class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
                 [ngClass]="row.status_scheduler == 'publish' ? 'mat-green-800-bg' : 'mat-yellow-900-bg'">
                 {{row.status_scheduler}}
               </p>
@@ -97,7 +97,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="165" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button type="button" mat-icon-button color="" matTooltip="Lihat" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]">

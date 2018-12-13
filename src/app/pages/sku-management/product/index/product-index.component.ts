@@ -64,8 +64,8 @@ export class ProductIndexComponent {
   }
 
   getProducts() {
-    this.pagination.sort = 'name';
-    this.pagination.sort_type = 'asc';
+    // this.pagination.sort = 'name';
+    // this.pagination.sort_type = 'asc';
     this.productService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);

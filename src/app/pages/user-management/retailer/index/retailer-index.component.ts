@@ -252,8 +252,8 @@ export class RetailerIndexComponent {
   getRetailerList() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length-1].value;
-    this.pagination.sort = "name";
-    this.pagination.sort_type = "asc";
+    // this.pagination.sort = "name";
+    // this.pagination.sort_type = "asc";
       
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
