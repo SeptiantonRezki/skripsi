@@ -61,6 +61,7 @@ import { AccountService } from "./services/settings/account.service";
 import { GoogleAnalyticsService } from "./services/google-analytics.service";
 import { NavigationService } from "./services/navigation.service";
 import { CustomerService } from "./services/user-management/customer.service";
+import { GeneralService } from "./services/general.service";
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { CustomerService } from "./services/user-management/customer.service";
     GoogleAnalyticsService,
     NonAuthGuard,
     NavigationService,
+    GeneralService,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

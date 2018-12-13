@@ -242,6 +242,9 @@ export class Endpoint {
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+      },
+      general: {
+        support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

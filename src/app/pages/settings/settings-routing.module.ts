@@ -8,6 +8,7 @@ import { ChangePasswordIndexComponent } from "./change-password/index/change-pas
 import { ListMenuResolver } from "../../resolver/settings.resolver";
 import { PageGuard } from "app/classes/auth.guard";
 import { ForceUpdateAppsComponent } from "./force-update-apps/force-update-apps.component";
+import { SupportComponent } from "./support/support.component";
 
 const routes: Routes = [
   {
@@ -65,6 +66,13 @@ const routes: Routes = [
       breadcrumbs: brConfig.settings.force_update
     },
     canActivate: [PageGuard]
+  },
+  {
+    path: "support",
+    component: SupportComponent,
+    data: {
+      breadcrumbs: brConfig.settings.support
+    }
   }
 ];
 
