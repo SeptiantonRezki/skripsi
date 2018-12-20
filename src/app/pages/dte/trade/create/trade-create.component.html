@@ -5,11 +5,18 @@
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <h2 class="">Buat Trade Program</h2>
-      </div>
-      <br>
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Buat Trade Program</h2>
+          <div>
+            <mat-form-field [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let item of statusTP" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <br>
         <div class="ayo-middle" fxLayout="column">
           <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
             [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
@@ -91,12 +98,12 @@
             </mat-form-field>
           </div>
         </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
       </form>
-      <div class="confirm pt-24 pb-24" fxLayout="row">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-          SIMPAN
-        </button>
-      </div>
     </div>
   </div>
 </div>

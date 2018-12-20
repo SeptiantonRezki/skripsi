@@ -10,12 +10,13 @@ import { TradeEditComponent } from "./trade/edit/trade-edit.component";
 import { AudienceEditComponent } from "./audience/edit/audience-edit.component";
 import { AudienceCreateComponent } from "./audience/create/audience-create.component";
 import { AudienceIndexComponent } from "./audience/index/audience-index.component";
-import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
+import { ScheduleProgramDetailComponent } from "./schedule-program/detail/schedule-program-detail.component";
 import { ScheduleProgramCreateComponent } from "./schedule-program/create/schedule-program-create.component";
 import { ScheduleProgramIndexComponent } from "./schedule-program/index/schedule-program-index.component";
 import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, ListRetailerResolver } from "../../resolver/dte.resolver";
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { PageGuard } from "app/classes/auth.guard";
+import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
 
 const routes: Routes = [
   {
@@ -115,8 +116,21 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "schedule-trade-program/detail/:id",
+    path: "schedule-trade-program/edit/:id",
     component: ScheduleProgramEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.scheduleProgram.edit
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "schedule-trade-program/detail/:id",
+    component: ScheduleProgramDetailComponent,
     data: {
       breadcrumbs: brConfig.dte.scheduleProgram.edit
     },

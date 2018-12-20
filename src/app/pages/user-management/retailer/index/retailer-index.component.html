@@ -82,8 +82,7 @@
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
         [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
-        (select)="onSelect($event)">
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
         <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
             <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -108,15 +107,21 @@
           </ng-template> -->
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode Agen" prop="code" summary-template="activeCell"></ngx-datatable-column>
-        <ngx-datatable-column name="Classification" prop="classification" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Kode Agen" prop="code" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama Toko" prop="wholesaler_name" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}</ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Kode Toko" prop="wholesaler_code" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}</ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Classification" prop="classification" summary-template="activeCell"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="active_status">
+        <ngx-datatable-column [width]="120" name="Status" prop="active_status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              <p class="status text-truncate h6 p-4 status-order"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{ row.status }}
+                {{ row.status_indo.toUpperCase() }}
               </p>
             </div>
           </ng-template>

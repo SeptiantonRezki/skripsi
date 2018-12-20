@@ -21,7 +21,7 @@ export class RetailerEditComponent {
   listStatus: any[] = [
     { name: "Status Aktif", value: "active" },
     { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Tidak terdaftar", value: "not-registered" }
+    { name: "Status Belum terdaftar", value: "not-registered" }
   ];
 
   listType: any[] = [

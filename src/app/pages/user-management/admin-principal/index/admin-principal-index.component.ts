@@ -73,8 +73,8 @@ export class AdminPrincipalIndexComponent {
   }
 
   getAdminList() {
-    this.pagination.sort = "fullname";
-    this.pagination.sort_type = "asc";
+    // this.pagination.sort = "fullname";
+    // this.pagination.sort_type = "asc";
     
     this.adminPrincipalService.get(this.pagination).subscribe(
       res => {

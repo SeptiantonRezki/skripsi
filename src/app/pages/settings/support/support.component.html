@@ -1,0 +1,59 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Bantuan'"></page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="row" fxLayoutAlign="start start">
+      <div fxFlex="30" fxLayout="column">
+        <mat-list class="pt-0">
+          <mat-list-item (click)="openPanel('kontak')">
+            <span [class]="panel === 'kontak' ? 'red-700-fg pl-8' : 'pl-8'">Kontak</span>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+          <mat-list-item *ngFor="let item of listHelp" (click)="openDynamicPanel(item)">
+            <!-- <img mat-list-icon [src]="item.image_url" /> -->
+            <span [class]="(panel.title === item.title ? 'red-700-fg pl-8' : 'pl-8')">{{item.title}}</span>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div fxFlex="70">
+        <div class="bantuan-content">
+          <div fxLayout="column" fxLayoutAlign="center center" *ngIf="panel === 'kontak'">
+            <h3 class=""><strong>Butuh Bantuan Lain?</strong></h3>
+            <div class="h6">Tim Customer Service kami siap melayani anda secara langsung</div>
+            <div class="text-bold">Senin - Jumat ( 08:00 - 17:00 )</div>
+
+            <div class="pt-64" fxLayout="row wrap" fxLayoutAlign="start center" fxLayout.lt-md="column" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px">
+              <div class="rectangle p-24" fxLayout="row wrap" fxLayoutAlign="center center">
+                <div fxFlex="30">
+                  <img mat-list-icon src="assets/images/ayo/bantuan/customer-service.png" srcset="assets/images/ayo/bantuan/customer-service@2x.png 2x" />
+                </div>
+                <div fxFlex="70" fxLayout="column">
+                  <div class="text-bold">Melalui Telepon</div>
+                  <div class="">0804-1000-234</div>
+                  <div class="h6">Biaya ditanggung penelpon</div>
+                </div>
+              </div>
+
+              <div class="rectangle p-24" fxLayout="row wrap" fxLayoutAlign="center center">
+                <div fxFlex="30">
+                  <img mat-list-icon src="assets/images/ayo/bantuan/whatsapp.png" srcset="assets/images/ayo/bantuan/whatsapp@2x.png 2x" />
+                </div>
+                <div fxFlex="70" fxLayout="column">
+                  <div class="text-bold">Melalui Whatsapp</div>
+                  <div class="">0819-06000-234</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" *ngIf="panel !== 'kontak'">
+            <h3 class=""><strong>{{panel.title}}</strong></h3>
+            <div class="pt-24" [innerHtml]="panel.body" style="text-align: justify"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detil Pengatur Jadwal Trade Program'"></page-content-header>
+  <page-content-header [contentTitle]="'Ubah Pengatur Jadwal Trade Program'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
-      <form autocomplete="off">
+      <form autocomplete="off" [formGroup]="formSchedule">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Detil Pengatur Jadwal Trade Program</h2>
+          <h2 class="">Ubah Pengatur Jadwal Trade Program</h2>
         </div>
         <div class="ayo-middle py-24" fxLayout="column">
           <div fxLayout="row">
@@ -64,49 +64,79 @@
             </div>
           </div>
 
-          <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
+          <div class="py-24" formArrayName="task_templates" *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
 
             <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
                 <strong>Template Tugas</strong>
               </h3>
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
-              </mat-form-field>
+            <div [formGroupName]="i">
+              <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Template Tugas" [value]="item.controls['task_template_name'].value" disabled>
+                </mat-form-field>
 
-              <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
-                  disabled>
-              </mat-form-field>
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.controls['coin_delivered'].value" placeholder="Nilai Coin Tugas Terkirim"
+                    disabled>
+                </mat-form-field>
 
-              <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
-                  disabled>
-              </mat-form-field>
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
-                  disabled>
-                <mat-icon matSuffix>date_range</mat-icon>
-              </mat-form-field>
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
-                  disabled>
-                <mat-icon matSuffix>date_range</mat-icon>
-              </mat-form-field>
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.controls['coin_approved'].value" placeholder="Nilai Coin Tugas Disetujui"
+                    disabled>
+                </mat-form-field>
+                <!-- <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field> -->
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date" [min]="minDate"
+                    [max]="maxStartDateTemplate" placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
+                  <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
+                    Tanggal Mulai harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
+                    Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="dari">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #dari></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
+                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate"
+                    readonly>
+                  <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
+                    Tanggal Berakhir harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
+                    Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="sampai">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #sampai></mat-datepicker>
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] !== 'publish'"
-          fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             REJECT
           </button> -->
 
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-            SETUJUI
+            SIMPAN
           </button>
         </div>
       </form>

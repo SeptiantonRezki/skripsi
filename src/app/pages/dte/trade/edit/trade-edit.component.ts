@@ -30,6 +30,7 @@ export class TradeEditComponent {
   saveData: Boolean;
 
   isDetail: Boolean;
+  statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -85,7 +86,8 @@ export class TradeEditComponent {
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       budget: ['', [Validators.required, Validators.min(0)]],
-      coin_expiry_date: ['', Validators.required]
+      coin_expiry_date: ['', Validators.required],
+      status: ['', Validators.required]
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -97,7 +99,8 @@ export class TradeEditComponent {
       start_date: this.detailFormTrade.start_date,
       end_date: this.detailFormTrade.end_date,
       budget: this.detailFormTrade.budget,
-      coin_expiry_date: this.detailFormTrade.coin_expiry_date
+      coin_expiry_date: this.detailFormTrade.coin_expiry_date,
+      status: this.detailFormTrade.status_publish
     })
 
     if (this.detailFormTrade.status === 'active') {
@@ -148,6 +151,7 @@ export class TradeEditComponent {
         end_date: this.convertDate(this.formTradeProgram.get('end_date').value),
         budget: this.formTradeProgram.get('budget').value,
         coin_expiry_date: this.convertDate(this.formTradeProgram.get('coin_expiry_date').value),
+        status: this.formTradeProgram.get('status').value,
       }
 
       fd.append('_method', body._method);
@@ -156,6 +160,7 @@ export class TradeEditComponent {
       fd.append('end_date', body.end_date);
       fd.append('budget', body.budget);
       fd.append('coin_expiry_date', body.coin_expiry_date);
+      fd.append('status', body.status);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.put(fd, { trade_program_id: this.detailFormTrade.id }).subscribe(

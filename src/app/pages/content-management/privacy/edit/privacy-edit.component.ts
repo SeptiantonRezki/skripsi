@@ -58,7 +58,8 @@ export class PrivacyEditComponent {
     this.formPrivacy = this.formBuilder.group({
       title: ["", Validators.required],
       body: ["", Validators.required],
-      user: ["", Validators.required]
+      user: ["", Validators.required],
+      is_notif: [false] 
     });
 
     this.formPrivacy.valueChanges.subscribe(() => {
@@ -68,7 +69,8 @@ export class PrivacyEditComponent {
     this.formPrivacy.setValue({
       title: this.detailPrivacy.title,
       user: this.detailPrivacy.user,
-      body: this.detailPrivacy.body
+      body: this.detailPrivacy.body,
+      is_notif: false
     })
   }
 
@@ -83,7 +85,8 @@ export class PrivacyEditComponent {
         title: this.formPrivacy.get("title").value,
         body: this.formPrivacy.get("body").value,
         user: this.formPrivacy.get("user").value,
-        type: "privacy-policy"
+        type: "privacy-policy",
+        is_notif: this.formPrivacy.get('is_notif').value === true ? 1 : 0,
       };
 
       this.privacyService.put(body, { content_id: this.detailPrivacy.id }).subscribe(

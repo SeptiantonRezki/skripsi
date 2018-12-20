@@ -73,8 +73,8 @@ export class ScheduleProgramIndexComponent {
   }
 
   getListScheduler() {
-    this.pagination.sort = 'scheduler_name';
-    this.pagination.sort_type = 'asc';
+    // this.pagination.sort = 'scheduler_name';
+    // this.pagination.sort_type = 'asc';
     this.scheduleTradeProgramService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);

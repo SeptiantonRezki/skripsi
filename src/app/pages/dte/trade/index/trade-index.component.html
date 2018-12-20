@@ -79,7 +79,7 @@
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
         [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -128,6 +128,17 @@
         <ngx-datatable-column name="Tanggal Kadaluarsa Coin" prop="coin_expiry_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" prop="status_publish" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
+                [ngClass]="row.status_publish === 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{row.status_publish === 'publish' ? 'Diterbitkan' : 'Tidak Diterbitkan'}}
+              </p>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 

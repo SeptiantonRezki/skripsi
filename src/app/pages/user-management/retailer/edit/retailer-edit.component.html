@@ -50,7 +50,7 @@
               <!-- <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
                 <input matInput value="+62" readonly>
               </mat-form-field> -->
-              <mat-form-field fxFlex.xs="70" class="form-primary">
+              <mat-form-field fxFlex.xs="70" class="is-light form-primary">
                 <input matInput placeholder="Nomor Ponsel" formControlName="phone" type="text" min="0">
               </mat-form-field>
             </div>
@@ -158,6 +158,44 @@
               Internal Classification harus diisi
             </mat-error>
           </mat-form-field>
+
+          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3>Daftar Consumer</h3>
+          </div>
+
+          <div class="table-wrapper" style="box-shadow: none !important; border: 1px solid #e3e3e3;">
+            <ngx-datatable
+              class="material"
+              [rows]="detailRetailer?.customers"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="5">
+              <ngx-datatable-column name="Nama Consumer" prop="fullname"></ngx-datatable-column>
+              <ngx-datatable-column name="Nomor Ponsel" prop="phone">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.phone || '-'}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Email" prop="email">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.email || '-'}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Kota" [sortable]="false" prop="city">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.city?.name || '-'}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Provinsi" [sortable]="false" prop="province">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.province?.name || '-'}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+
           <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
   
               <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -229,8 +267,8 @@
                 <button mat-stroked-button>Reset Password</button>
               </div> -->
 
-          <div *ngIf="!isDetail" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+          <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+            <button *ngIf="!isDetail" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>
           </div>

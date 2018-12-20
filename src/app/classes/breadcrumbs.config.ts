@@ -911,6 +911,13 @@ export const brConfig = {
         url: "",
         name: "Pemberitahuan Aplikasi"
       }
+    ],
+    support: [
+      {
+        type: "current",
+        url: "",
+        name: "Bantuan"
+      }
     ]
   },
   admin: {
