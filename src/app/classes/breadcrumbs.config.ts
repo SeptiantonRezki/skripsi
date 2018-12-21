@@ -916,7 +916,7 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Bantuan"
+        name: "Informasi"
       }
     ]
   },
