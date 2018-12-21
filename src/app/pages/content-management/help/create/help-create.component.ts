@@ -73,6 +73,7 @@ export class HelpCreateComponent {
       body.append('title', this.formHelp.get("title").value);
       body.append('body', this.formHelp.get("body").value);
       body.append('user', this.formHelp.get("user").value);
+      body.append('is_notif', '0');
       body.append('type', 'help');
       body.append('image', this.files);
 

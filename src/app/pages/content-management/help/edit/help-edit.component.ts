@@ -86,6 +86,7 @@ export class HelpEditComponent {
       body.append('body', this.formHelp.get("body").value);
       body.append('user', this.formHelp.get("user").value);
       body.append('type', 'help');
+      body.append('is_notif', '0');
       if (this.files) body.append('image', this.files);
 
       this.helpService.put(body, { content_id: this.detailHelp.id }).subscribe(

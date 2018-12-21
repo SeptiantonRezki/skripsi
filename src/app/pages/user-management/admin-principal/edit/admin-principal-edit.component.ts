@@ -318,7 +318,7 @@ export class AdminPrincipalEditComponent {
   }
 
   getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0];
   }
 
   submit() {
