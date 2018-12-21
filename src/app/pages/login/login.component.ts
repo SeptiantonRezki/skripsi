@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { commonFormValidator } from "../../classes/commonFormValidator";
 import { DialogService } from "../../services/dialog.service";
 import { CookieService } from "ngx-cookie-service";
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: "login",
@@ -56,12 +57,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.userlogin = this.cookieService.getAll();
-
+    
     try {
-      this.username = this.userlogin['username'];
-      this.password = this.userlogin['password'];
+      let decryptedUN = CryptoJS.AES.decrypt(this.userlogin['_udxtrn'], 'dxtr-asia.sampoerna');
+      let decryptedPW = CryptoJS.AES.decrypt(this.userlogin['_pdxstr'], 'dxtr-asia.sampoerna');
 
-      if(this.userlogin['username']) {
+      this.username = decryptedUN.toString(CryptoJS.enc.Utf8);
+      this.password = decryptedPW.toString(CryptoJS.enc.Utf8);
+
+      if(this.userlogin['_udxtrn']) {
         this.rememberMe.setValue(true);
       }
     } catch (error) {
@@ -101,12 +105,17 @@ export class LoginComponent implements OnInit {
               this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
             }
 
+            let encValUsername = CryptoJS.AES.encrypt(this.loginForm.get("username").value, "dxtr-asia.sampoerna").toString();
+            let encValPassword = CryptoJS.AES.encrypt(this.loginForm.get("password").value, "dxtr-asia.sampoerna").toString();
+
             if(this.rememberMe.value) {
-              this.cookieService.set('username', this.loginForm.get("username").value);
-              this.cookieService.set('password', this.loginForm.get("password").value);
+
+              this.cookieService.set('_udxtrn', encValUsername);
+              this.cookieService.set('_pdxstr', encValPassword);
+
             } else {
-              this.cookieService.delete('username');
-              this.cookieService.delete('password');
+              this.cookieService.delete('_udxtrn');
+              this.cookieService.delete('_pdxstr');
             }
           });
         },
