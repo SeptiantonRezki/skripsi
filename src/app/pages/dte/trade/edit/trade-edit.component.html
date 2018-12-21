@@ -19,7 +19,7 @@
         <br>
         <div class="ayo-middle" fxLayout="column">
           <div class="message-box warning" *ngIf="detailFormTrade.status === 'active'">
-            Data tidak bisa diubah, karena Trade Program sedang berjalan.
+            Trade Program sedang berjalan.
           </div>
           <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16" [(validDrag)]="validComboDrag" [(invalidDrag)]="isDetail"
             [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" [fileDropDisabled]="isDetail">
@@ -105,8 +105,8 @@
           </div>
         </div>
         <div  *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row">
-          <button mat-raised-button type="button" [disabled]="detailFormTrade.status === 'active'" class="confirmation-button"
-            fxFlex="20" (click)="submit()">
+          <button mat-raised-button type="button" class="confirmation-button"
+            fxFlex="20" (click)="detailFormTrade?.status === 'active' ? updateStatus() : submit()">
             SIMPAN
           </button>
         </div>

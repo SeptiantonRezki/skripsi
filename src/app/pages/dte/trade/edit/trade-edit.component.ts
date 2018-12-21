@@ -107,6 +107,8 @@ export class TradeEditComponent {
       this.formTradeProgram.disable();
     }
 
+    this.formTradeProgram.controls['status'].enable();
+
     this.formTradeProgram.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
@@ -176,6 +178,31 @@ export class TradeEditComponent {
       this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
       commonFormValidator.validateAllFields(this.formTradeProgram);
     }
+  }
+
+  updateStatus() {
+    this.saveData = !this.saveData;
+    let formTradeProgram = this.formTradeProgram.getRawValue();
+    
+    let body = {
+      _method: 'PUT',
+      name: formTradeProgram.name,
+      start_date: this.convertDate(formTradeProgram.start_date),
+      end_date: this.convertDate(formTradeProgram.end_date),
+      budget: formTradeProgram.budget,
+      coin_expiry_date: this.convertDate(formTradeProgram.coin_expiry_date),
+      status: formTradeProgram.status
+    }
+
+    this.tradeProgramService.put(body, { trade_program_id: this.detailFormTrade.id }).subscribe(
+      res => {
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' });
+        this.router.navigate(['dte', 'trade-program']);
+      },
+      err => {
+        console.log(err.error.message);
+      }
+    )
   }
 
   convertDate(param: Date) {
