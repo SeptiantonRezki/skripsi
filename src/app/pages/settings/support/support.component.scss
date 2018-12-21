@@ -10,10 +10,15 @@
 
 :host {
   .bantuan-content {
-    height: 500px;
-    overflow-y: auto;
+    height: 550px;
     border-left: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 20px;
+    padding: 20px 0px 20px 20px;
+  }
+
+  .dynamic {
+    height: 450px;
+    overflow-y: auto;
+    margin-top: 24px;
   }
 
   .rectangle {
