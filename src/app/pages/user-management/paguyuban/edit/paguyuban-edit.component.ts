@@ -35,6 +35,7 @@ export class PaguyubanEditComponent {
   showConfirmPassword = false;
 
   isDetail: Boolean;
+  firstInit: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -74,8 +75,9 @@ export class PaguyubanEditComponent {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
-    this.listAdminPrincipal = this.activatedRoute.snapshot.data["listAdminPrincipal"].data;
+    // this.listAdminPrincipal = this.activatedRoute.snapshot.data["listAdminPrincipal"].data;
     this.detailPaguyuban = this.dataService.getFromStorage("detail_paguyuban");
+    this.firstInit = true;
   }
 
   ngOnInit() {
@@ -103,6 +105,20 @@ export class PaguyubanEditComponent {
       this.detailAreaSelected = res.data;
 
       this.setDetailPaguyuban();
+    })
+
+    let areas = [];
+    let value = this.formPaguyuban.getRawValue();
+    value = Object.entries(value).map(([key, value]) => ({key, value}));
+
+    this.typeArea.map(type => {
+      const filteredValue = value.filter(item => item.key === type && item.value);
+      if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
+    })
+
+    this.paguyubanService.getListAdminPrincipal({ area: _.last(areas)}).subscribe(obj => {
+      this.listAdminPrincipal = obj.data;
+      this.firstInit = false;
     })
   }
 
@@ -290,6 +306,13 @@ export class PaguyubanEditComponent {
     
       default:
         break;
+    }
+
+    if (!this.firstInit) {
+      this.paguyubanService.getListAdminPrincipal({ area: id}).subscribe(obj => {
+        this.listAdminPrincipal = obj.data;
+        this.formPaguyuban.controls['principal_id'].setValue('');
+      })
     }
   }
 

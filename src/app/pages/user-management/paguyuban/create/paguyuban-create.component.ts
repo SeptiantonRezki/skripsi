@@ -77,7 +77,7 @@ export class PaguyubanCreateComponent {
       territory: []
     }
 
-    this.listAdminPrincipal = this.activatedRoute.snapshot.data["listAdminPrincipal"].data;
+    this.listAdminPrincipal = [];
   }
 
   ngOnInit() {
@@ -99,6 +99,22 @@ export class PaguyubanCreateComponent {
       territory: [""],
       // latitude: [""],
       // longitude: [""]
+    })
+
+    this.wilayah.valueChanges.debounceTime(300).subscribe(res => {
+      let areas = [];
+      let value = this.wilayah.getRawValue();
+      value = Object.entries(value).map(([key, value]) => ({key, value}));
+
+      this.typeArea.map(type => {
+        const filteredValue = value.filter(item => item.key === type && item.value);
+        if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
+      })
+
+      this.paguyubanService.getListAdminPrincipal({ area: _.last(areas)}).subscribe(obj => {
+        this.listAdminPrincipal = obj.data;
+        this.verticalStepperStep2.controls['principal_id'].setValue('');
+      })
     })
 
     this.verticalStepperStep2 = this.formBuilder.group({

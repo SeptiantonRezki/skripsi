@@ -56,8 +56,8 @@ export class PaguyubanService extends BaseService {
     return this.getApi(url);
   }
 
-  getListAdminPrincipal(): Observable<any> {
+  getListAdminPrincipal(queryParams): Observable<any> {
     const url = this.getUrl(this.namespace, "list_principal");
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 }
