@@ -130,7 +130,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.paguyuban.edit
     },
     resolve: {
-      listAdminPrincipal: ListAdminPrincipalResolver
+      // listAdminPrincipal: ListAdminPrincipalResolver
     },
     canActivate: [PageGuard]
   },
@@ -141,7 +141,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.paguyuban.edit
     },
     resolve: {
-      listAdminPrincipal: ListAdminPrincipalResolver
+      // listAdminPrincipal: ListAdminPrincipalResolver
     },
     canActivate: [PageGuard]
   },
@@ -152,7 +152,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.paguyuban.detail
     },
     resolve: {
-      listAdminPrincipal: ListAdminPrincipalResolver
+      // listAdminPrincipal: ListAdminPrincipalResolver
     },
     canActivate: [PageGuard]
   },

@@ -33,6 +33,6 @@ export class ListLevelAreaResolver implements Resolve<any>{
 export class ListAdminPrincipalResolver implements Resolve<any> {
   constructor(private paguyubanService: PaguyubanService){}
   resolve(): Observable<any> {
-    return this.paguyubanService.getListAdminPrincipal();
+    return this.paguyubanService.getListAdminPrincipal({});
   }
 }
