@@ -101,20 +101,21 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column [width]="100" name="Kode Agen" prop="code" summary-template="activeCell"></ngx-datatable-column>
         <ngx-datatable-column name="Nama Pemilik" prop="owner">
           <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directEdit(row)">{{row.owner}} </a>
           </ng-template> -->
         </ngx-datatable-column>
+        
+        <ngx-datatable-column [width]="100" name="Classification" prop="classification" summary-template="activeCell"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Kode Agen" prop="code" summary-template="activeCell"></ngx-datatable-column>
-        <ngx-datatable-column name="Nama Toko" prop="wholesaler_name" summary-template="activeCell">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}</ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column [width]="100" name="Kode Toko" prop="wholesaler_code" summary-template="activeCell">
+        <ngx-datatable-column [width]="100" name="Kode WS" prop="wholesaler_code" summary-template="activeCell">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}</ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="100" name="Classification" prop="classification" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama WS" prop="wholesaler_name" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}</ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="120" name="Status" prop="active_status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
