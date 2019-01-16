@@ -211,7 +211,7 @@ export class AudienceEditComponent {
     }
     // filter the banks
     this.filteredScheduler.next(
-      this.listScheduler.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.listScheduler.filter(item => item.scheduler_name.toLowerCase().indexOf(search) > -1)
     );
   }
 
