@@ -116,9 +116,14 @@ export class PaguyubanEditComponent {
       if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
     })
 
-    this.paguyubanService.getListAdminPrincipal({ area: _.last(areas)}).subscribe(obj => {
+    this.paguyubanService.getListAdminPrincipal({ area: this.detailPaguyuban.area_id}).subscribe(obj => {
       this.listAdminPrincipal = obj.data;
       this.firstInit = false;
+      
+      let valid = _.contains(this.listAdminPrincipal.map(obj => obj["id"]), this.detailPaguyuban.principal_id);
+      if (valid) {
+        this.formPaguyuban.controls['principal_id'].setValue(this.detailPaguyuban.principal_id);
+      }
     })
   }
 
@@ -191,7 +196,7 @@ export class PaguyubanEditComponent {
     this.formPaguyuban.controls['fullname'].setValue(this.detailPaguyuban['paguyuban'].fullname);
     this.formPaguyuban.controls['group_name'].setValue(this.detailPaguyuban.name);
     this.formPaguyuban.controls['username'].setValue(this.detailPaguyuban['paguyuban'].username);
-    this.formPaguyuban.controls['principal_id'].setValue(this.detailPaguyuban.principal_id);
+    // this.formPaguyuban.controls['principal_id'].setValue(this.detailPaguyuban.principal_id);
     this.formPaguyuban.controls['status'].setValue(this.detailPaguyuban['paguyuban'].status);
     this.formPaguyuban.controls['national'].setValue(this.getArea('national'));
     this.formPaguyuban.controls['zone'].setValue(this.getArea('division'));
