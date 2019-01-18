@@ -47,9 +47,9 @@
               </div>
             </div>
           </div>
-          <div fxLayout="row wrap" fxLayoutAlign="start center" *ngIf="panel !== 'kontak'">
+          <div class="" fxLayout="row wrap" fxLayoutAlign="start center" *ngIf="panel !== 'kontak'">
             <h3 class=""><strong>{{panel.title}}</strong></h3>
-            <div class="pt-24" [innerHtml]="panel.body" style="text-align: justify"></div>
+            <div class="dynamic" [innerHtml]="panel.body" style="text-align: justify"></div>
           </div>
         </div>
       </div>
