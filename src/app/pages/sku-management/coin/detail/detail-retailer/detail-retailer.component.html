@@ -30,39 +30,39 @@
           <mat-form-field fxFlex.xs="70" class="is-light">
             <input matInput placeholder="Nomor Ponsel" formControlName="phone" type="text">
           </mat-form-field>
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
 
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formDetailRetailer.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formDetailRetailer.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formDetailRetailer.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formDetailRetailer.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formDetailRetailer.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="Territory" formControlName="territory">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
