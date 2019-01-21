@@ -63,47 +63,47 @@
             </div>
           </div>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
 
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formPaguyuban.get('national').value, listLevelArea)}}">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formPaguyuban.get('zone').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formPaguyuban.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formPaguyuban.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formPaguyuban.get('region').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formPaguyuban.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formPaguyuban.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formPaguyuban.get('area').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formPaguyuban.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formPaguyuban.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formPaguyuban.get('salespoint').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formPaguyuban.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formPaguyuban.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formPaguyuban.get('district').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formPaguyuban.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formPaguyuban.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formPaguyuban.get('territory').value, list['territory'])}}">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div fxFlex="100" fxLayout="row" class="pb-24">
-            <mat-form-field fxFlex="40" class="is-light">
+          <div fxFlex="100" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16 pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
+              <mat-form-field fxFlex="31%" class="is-light">
               <mat-select formControlName="principal_id" placeholder="Admin HMS">
                 <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
               </mat-select>

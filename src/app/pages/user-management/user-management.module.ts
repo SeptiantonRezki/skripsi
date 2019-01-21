@@ -19,7 +19,9 @@ import {
   MatSelectModule,
   MatStepperModule,
   MatProgressBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatTabsModule,
+  MatTooltipModule
 } from "@angular/material";
 
 import { AdminPrincipalEditComponent } from "./admin-principal/edit/admin-principal-edit.component";
@@ -61,7 +63,9 @@ import { CustomerDetailComponent } from "./customer/detail/customer-detail.compo
     MatSelectModule,
     MatStepperModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatTooltipModule
   ],
   exports: [
     FieldForceIndexComponent,

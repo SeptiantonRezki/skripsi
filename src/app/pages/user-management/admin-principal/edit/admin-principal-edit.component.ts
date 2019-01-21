@@ -6,6 +6,7 @@ import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import * as _ from 'underscore';
+import { MatTabChangeEvent } from "@angular/material";
 
 @Component({
   selector: "app-admin-principal-edit",
@@ -357,6 +358,19 @@ export class AdminPrincipalEditComponent {
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formAdmin);
+    }
+  }
+
+  setSelectedTab(tabChangeEvent: MatTabChangeEvent) {
+    // this.selectedTab = tabChangeEvent.index;
+  }
+
+  getToolTipData(value, array) {
+    if (value && array.length){
+      let msg = array.filter(item => item.id === value)[0]['name'];
+      return msg;
+    } else {
+      return "";
     }
   }
 }

@@ -370,4 +370,12 @@ export class PaguyubanEditComponent {
     }
   }
 
+  getToolTipData(value, array) {
+    if (value && array.length){
+      let msg = array.filter(item => item.id === value)[0]['name'];
+      return msg;
+    } else {
+      return "";
+    }
+  }
 }

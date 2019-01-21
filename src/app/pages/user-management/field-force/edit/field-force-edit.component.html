@@ -24,58 +24,58 @@
             <input matInput placeholder="Username" type="text" formControlName="username">
           </mat-form-field>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
 
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formFF.get('national').value, listLevelArea)}}">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['national'].hasError('required') && formFF.controls['national'].touched">
                 National harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFF.get('zone').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formFF.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formFF.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['zone'].hasError('required') && formFF.controls['zone'].touched">
                 Zone harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFF.get('region').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formFF.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formFF.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['region'].hasError('required') && formFF.controls['region'].touched">
                 Regional harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFF.get('area').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formFF.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formFF.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['area'].hasError('required') && formFF.controls['area'].touched">
                 Area harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFF.get('salespoint').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formFF.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formFF.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['salespoint'].hasError('required') && formFF.controls['salespoint'].touched">
                 Salespoint harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFF.get('district').value)">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formFF.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formFF.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['district'].hasError('required') && formFF.controls['district'].touched">
                 Distrik harus diisi
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory">
+            <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formFF.get('territory').value, list['territory'])}}">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formFF.controls['territory'].hasError('required') && formFF.controls['territory'].touched">
