@@ -192,6 +192,7 @@ export class AdminPrincipalEditComponent {
     this.formAdmin.controls['district'].setValue(this.getArea('district'));
     this.formAdmin.controls['territory'].setValue(this.getArea('teritory'));
 
+    this.formAdmin.controls['username'].disable();
 
     if (this.isDetail) this.formAdmin.disable();
 
