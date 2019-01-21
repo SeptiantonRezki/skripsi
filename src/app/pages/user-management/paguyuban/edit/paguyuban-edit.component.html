@@ -105,7 +105,7 @@
           <div fxFlex="100" fxLayout="row" class="pb-24">
             <mat-form-field fxFlex="40" class="is-light">
               <mat-select formControlName="principal_id" placeholder="Admin HMS">
-                <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.fullname}}</mat-option>
+                <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formPaguyuban.controls['principal_id'].hasError('required') && formPaguyuban.controls['principal_id'].touched ">
                 Admin HMS harus diisi.

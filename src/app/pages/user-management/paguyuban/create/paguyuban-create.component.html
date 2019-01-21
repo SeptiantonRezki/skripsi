@@ -145,7 +145,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <mat-select placeholder="Admin HMS" formControlName="principal_id">
-                  <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.fullname}}</mat-option>
+                  <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep2.controls['principal_id'].hasError('required') && verticalStepperStep2.controls['principal_id'].touched">
                   Admin HMS harus diisi

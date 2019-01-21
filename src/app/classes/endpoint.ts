@@ -100,7 +100,7 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
         delete_multiple: `${AYO_API}/api/${type_api}/user/paguyuban/delete/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_principal: `${AYO_API}/api/${type_api}/user/principal?page=all`,
+        list_principal: `${AYO_API}/api/general/principal?page=all`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
