@@ -372,8 +372,40 @@ export class PaguyubanEditComponent {
 
   getToolTipData(value, array) {
     if (value && array.length){
-      let msg = array.filter(item => item.id === value)[0]['name'];
-      return msg;
+      let msg = array.filter(item => item.id === value)[0];
+      let name = "";
+
+      if (msg.name === "all") {
+        switch (msg.level_desc) {
+          case "national":
+            name = "Semua Zona";
+            break;
+        
+          case "division":
+            name = "Semua Regional";
+            break;
+
+          case "region":
+            name = "Semua Area";
+            break;
+
+          case "area":
+            name = "Semua Salespoint";
+            break;
+
+          case "salespoint":
+            name = "Semua District";
+            break;
+
+          case "district":
+            name = "Semua Territory";
+            break;
+        }
+        
+        return name;
+      }
+
+      return msg.name;
     } else {
       return "";
     }
