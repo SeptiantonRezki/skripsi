@@ -7,6 +7,53 @@
     padding: 20px;
     cursor: pointer;
   }
+
+  .image-sku {
+    float: left;
+    box-shadow: 0 0 1px black;
+    /** Interesting part starts here */
+    font-size: 0;
+    text-align: center;
+    width: 210px;
+    height: 210px;
+    padding: 10px;
+  }
+
+  .image-sku img {
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .image-sku:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+
+  .image-sku-review {
+    float: left;
+    box-shadow: 0 0 1px black;
+    /** Interesting part starts here */
+    font-size: 0;
+    text-align: center;
+    width: 210px;
+    height: 210px;
+  }
+
+  .loading {
+    position: fixed;
+    left: 0px;
+    top: 1px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url("../../../../../assets/images/ayo/loading.svg") center
+      no-repeat;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 }
 
 :host /deep/ .mat-input-element:disabled {

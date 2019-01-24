@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 
@@ -12,6 +12,7 @@ import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDial
 import * as moment from "moment";
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "./dialog/scan-barcode-dialog.component";
+import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: "app-product-create",
@@ -36,10 +37,14 @@ export class ProductCreateComponent {
   files: File;
   validComboDrag: boolean;
 
+  imageSku: any;
+  imageSkuConverted: any;
+
   formProductGroup: FormGroup;
   formProductErrors: any;
 
   dialogRef: any;
+  showLoading: Boolean;
 
   keyUp = new Subject<string>();
   statusProduk: any[] = [
@@ -235,9 +240,15 @@ export class ProductCreateComponent {
     );
   }
 
-  submit(): void {
+  async submit() {
     if (this.formProductGroup.valid && (this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
+
+      this.showLoading = true;
+      await html2canvas(document.querySelector("#imageConverted"), { scale: 3 }).then(canvas => {
+        this.imageSkuConverted = this.convertCanvasToImage(canvas);
+        this.showLoading = false;
+      });
 
       let aliasChip = this.formProductGroup.get("alias").value.map(item => {
         return item.alias;
@@ -246,7 +257,7 @@ export class ProductCreateComponent {
       let body = {
         name: this.formProductGroup.get("name").value,
         alias: aliasChip,
-        image: this.files,
+        image: this.imageSkuConverted,
         brand_id: this.formProductGroup.get("brand").value,
         category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
         // sub_category_id: this.formProductGroup.get("subCategory").value,
@@ -326,5 +337,27 @@ export class ProductCreateComponent {
     }
 
     return "";
+  }
+
+  changeImage(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file:File = inputValue;
+    var myReader:FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageSku = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+    
+    return image.src;
   }
 }

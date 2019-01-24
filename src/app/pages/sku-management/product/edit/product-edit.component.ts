@@ -12,6 +12,7 @@ import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDial
 import * as moment from "moment";
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "../create/dialog/scan-barcode-dialog.component";
+import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-product-edit',
@@ -40,6 +41,10 @@ export class ProductEditComponent {
 
   files: File;
   validComboDrag: boolean;
+
+  imageSku: any;
+  imageSkuConverted: any;
+  showLoading: Boolean;
 
   formProductGroup: FormGroup;
   formProductErrors: any;
@@ -286,7 +291,7 @@ export class ProductEditComponent {
     );
   }
 
-  submit(): void {
+  async submit() {
     if ((this.formProductGroup.valid && this.files === undefined) || (this.formProductGroup.valid && this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
 
@@ -294,10 +299,18 @@ export class ProductEditComponent {
         return item.alias;
       });
 
+      if (this.files) {
+        this.showLoading = true;
+        await html2canvas(document.querySelector("#imageConverted"), { scale: 3 }).then(canvas => {
+          this.imageSkuConverted = this.convertCanvasToImage(canvas);
+          this.showLoading = false;
+        });
+      }
+
       let body = {
         name: this.formProductGroup.get("name").value,
         alias: aliasChip,
-        image: this.files,
+        image: this.imageSkuConverted,
         brand_id: this.formProductGroup.get("brand").value,
         category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
         // sub_category_id: this.formProductGroup.get("subCategory").value,
@@ -310,7 +323,8 @@ export class ProductEditComponent {
       let fd = new FormData();
       fd.append("_method", "PUT");
       fd.append("name", body.name);
-      fd.append("barcode", body.barcode);
+      
+      if (body.barcode) fd.append("barcode", body.barcode);
       
       if (this.files) fd.append("image", body.image);
 
@@ -380,6 +394,28 @@ export class ProductEditComponent {
     }
 
     return "";
+  }
+
+  changeImage(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file:File = inputValue;
+    var myReader:FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageSku = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+    
+    return image.src;
   }
 
 }

@@ -8,7 +8,8 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
 
       <form autocomplete="off" [formGroup]="formProductGroup" (keydown.enter)="$event.preventDefault();">
-        <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+        <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
+        <div class="loading" *ngIf="showLoading"></div>
         <mat-tab-group>
           <mat-tab label="Informasi Produk">
             <div class="ayo-middle p-24" fxLayout="column">
@@ -142,7 +143,7 @@
           <mat-tab label="Gambar Produk">
             <div class="ayo-middle p-24" style="height: 480px;" fxLayout="column">
               <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" [accept]="'image/*'"
-                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+                [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="changeImage($event)">
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                   <br>
@@ -159,7 +160,10 @@
                     <div class="delete">
                       <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
                     </div>
-                    <div class="previewIcon" [ngfBackground]="files"></div>
+                    <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
+                    <div id="imageConverted" class="image-sku">
+                      <img id="image" [src]='imageSku'/>
+                    </div>
                   </div>
                 </div>
               </div>
