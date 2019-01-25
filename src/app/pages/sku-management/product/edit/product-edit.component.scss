@@ -43,6 +43,20 @@
     height: 210px;
   }
 
+  .image-sku-review img {
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .image-sku-review:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+
   .loading {
     position: fixed;
     left: 0px;
