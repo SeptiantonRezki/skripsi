@@ -219,7 +219,8 @@ export class AdminPrincipalEditComponent {
     switch (selection) {
       case 'zone':
           this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
+            // this.list[selection] = res.filter(item => item.name !== 'all');
+            this.list[selection] = res;
           });
 
           this.formAdmin.get('region').setValue('');
@@ -237,7 +238,8 @@ export class AdminPrincipalEditComponent {
           item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              // this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res;
             });
           } else {
             this.list[selection] = []
@@ -257,7 +259,8 @@ export class AdminPrincipalEditComponent {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              // this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res;
             });
           } else {
             this.list[selection] = []
@@ -275,7 +278,8 @@ export class AdminPrincipalEditComponent {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              // this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res;
             });
           } else {
             this.list[selection] = []
@@ -291,7 +295,8 @@ export class AdminPrincipalEditComponent {
           item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              // this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res;
             });
           } else {
             this.list[selection] = []
@@ -305,7 +310,8 @@ export class AdminPrincipalEditComponent {
           item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              // this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res;
             });
           } else {
             this.list[selection] = []

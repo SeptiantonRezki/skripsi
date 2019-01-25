@@ -65,7 +65,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)">
-                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['zone'].hasError('required') && wilayah.controls['zone'].touched">
                   Zone harus diisi
@@ -73,7 +73,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', wilayah.get('region').value)">
-                  <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['region'].hasError('required') && wilayah.controls['region'].touched">
                   Regional harus diisi
@@ -81,7 +81,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)">
-                  <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['area'].hasError('required') && wilayah.controls['area'].touched">
                   Area harus diisi
@@ -89,7 +89,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)">
-                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['salespoint'].hasError('required') && wilayah.controls['salespoint'].touched">
                   Salespoint harus diisi
@@ -97,7 +97,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)">
-                  <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['district'].hasError('required') && wilayah.controls['district'].touched">
                   Distrik harus diisi
@@ -105,7 +105,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Territory" formControlName="territory">
-                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="wilayah.controls['territory'].hasError('required') && wilayah.controls['territory'].touched">
                   Territori harus diisi
