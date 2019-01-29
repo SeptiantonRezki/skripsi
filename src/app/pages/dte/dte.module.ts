@@ -55,6 +55,7 @@ import { NgxMatSelectSearchModule } from "../../../../node_modules/ngx-mat-selec
 import { NgxCurrencyModule } from "ngx-currency";
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { ScheduleProgramEditComponent } from './schedule-program/edit/schedule-program-edit.component';
+import { ImportAudienceDialogComponent } from "./audience/import/import-audience-dialog.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -124,7 +125,8 @@ export const MY_FORMATS = {
     AudienceCreateComponent,
     AudienceEditComponent,
     UploadImageComponent,
-    ListAudienceDialogComponent
+    ListAudienceDialogComponent,
+    ImportAudienceDialogComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -156,6 +158,6 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
   ],
-  entryComponents: [UploadImageComponent, ListAudienceDialogComponent]
+  entryComponents: [UploadImageComponent, ListAudienceDialogComponent, ImportAudienceDialogComponent]
 })
 export class DteModule {}

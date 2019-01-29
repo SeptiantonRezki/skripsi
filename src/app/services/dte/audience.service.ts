@@ -73,4 +73,9 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
   }
+
+  importExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "import");
+    return this.postApi(url, body);
+  }
 }

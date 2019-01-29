@@ -6,12 +6,13 @@ import { DataService } from '../../../../services/data.service';
 import { AudienceService } from '../../../../services/dte/audience.service';
 import { DialogService } from '../../../../services/dialog.service';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { MatSelect } from '@angular/material';
+import { MatSelect, MatDialogConfig, MatDialog } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { Page } from '../../../../classes/laravel-pagination';
 import * as _ from 'underscore';
+import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.component';
 
 @Component({
   selector: 'app-audience-create',
@@ -36,6 +37,7 @@ export class AudienceCreateComponent {
   searchRetailer = new Subject<string>();
 
   valueChange: Boolean;
+  dialogRef: any;
 
   listLevelArea: any[];
   list: any;
@@ -73,7 +75,8 @@ export class AudienceCreateComponent {
     private dataService: DataService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    private rupiahFormater: RupiahFormaterPipe
+    private rupiahFormater: RupiahFormaterPipe,
+    private dialog: MatDialog
   ) { 
     this.saveData = false;
     this.rows = [];
@@ -578,6 +581,24 @@ export class AudienceCreateComponent {
       
       return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
+  }
+
+  importAudience() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { password: 'P@ssw0rd' };
+
+    this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
   }
 
 }

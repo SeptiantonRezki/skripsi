@@ -6,11 +6,12 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
-import { MatSelect } from '@angular/material';
+import { MatSelect, MatDialogConfig, MatDialog } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { Page } from 'app/classes/laravel-pagination';
 import * as _ from "underscore";
+import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.component';
 
 @Component({
   selector: 'app-audience-edit',
@@ -38,6 +39,7 @@ export class AudienceEditComponent {
 
   valueChange: Boolean;
   saveData: Boolean;
+  dialogRef: any;
 
   listLevelArea: any[];
   list: any;
@@ -75,7 +77,8 @@ export class AudienceEditComponent {
     private dataService: DataService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    private rupiahFormater: RupiahFormaterPipe
+    private rupiahFormater: RupiahFormaterPipe,
+    private dialog: MatDialog
   ) { 
     this.saveData = false;
     this.rows = [];
@@ -636,6 +639,24 @@ export class AudienceEditComponent {
     } else {
       return this.dialogService.openSnackBar({ message: 'Belum ada Audience yang dipilih!' });
     }
+  }
+
+  importAudience() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { password: 'P@ssw0rd' };
+
+    this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
   }
 
 }
