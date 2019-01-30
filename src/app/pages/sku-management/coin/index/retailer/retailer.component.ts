@@ -35,6 +35,8 @@ export class RetailerComponent {
 
   keyUp = new Subject<string>();
 
+  offsetPagination: any;
+
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -251,6 +253,16 @@ export class RetailerComponent {
     // this.pagination.sort = 'name';
     // this.pagination.sort_type = 'asc';
 
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+
     this.showLoadingBar = true;
     this.coinService.getRetailer(this.pagination).subscribe(
       res => {
@@ -271,14 +283,13 @@ export class RetailerComponent {
     );
   }
 
-
-
   getRetailerByArea() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
-    this.table.offset = 0;
     this.pagination.area = areaSelected[areaSelected.length-1].value;
     // this.pagination.sort = 'name';
     // this.pagination.sort_type = 'asc';
+
+    this.offsetPagination = 0;
 
     this.loadingIndicator = true;
     this.coinService.getRetailer(this.pagination).subscribe(
@@ -296,8 +307,15 @@ export class RetailerComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.coinService.getRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -312,7 +330,9 @@ export class RetailerComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.coinService.getRetailer(this.pagination).subscribe(
       res => {
@@ -328,9 +348,16 @@ export class RetailerComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.coinService.getRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

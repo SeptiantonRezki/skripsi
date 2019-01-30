@@ -17,8 +17,11 @@ export class CoinIndexComponent {
 
   selectedTab: any;
 
-  constructor() { 
-    this.selectedTab = 0;
+  constructor(
+    private dataService: DataService
+  ) { 
+    const selectedTab = dataService.getFromStorage("selected_tab");
+    this.selectedTab = selectedTab ? selectedTab : 0;
   }
 
   ngOnInit() {
@@ -26,7 +29,12 @@ export class CoinIndexComponent {
   }
 
   setSelectedTab(tabChangeEvent: MatTabChangeEvent) {
+    window.localStorage.removeItem("page");
+    window.localStorage.removeItem("sort");
+    window.localStorage.removeItem("sort_type");
+    
     this.selectedTab = tabChangeEvent.index;
+    this.dataService.setToStorage("selected_tab", this.selectedTab);
   }
 
 }

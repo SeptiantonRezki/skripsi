@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <ngx-datatable class="material" [rows]="rowsTP" [loadingIndicator]="loadingIndicatorTP" [columnMode]="'force'"
+    <ngx-datatable class="material" [rows]="rowsTP" [loadingIndicator]="loadingIndicatorTP" [columnMode]="'force'" [offset]="offsetPagination"
       [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderableTP"
       [count]="paginationTP.total" [limit]="paginationTP.per_page" [externalPaging]="true" [externalSorting]="true"
       (page)="setPageTP($event)" (sort)="onSortTP($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">

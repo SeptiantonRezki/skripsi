@@ -41,6 +41,8 @@ export class WholesalerIndexComponent {
   permission: any;
   roles: PagesName = new PagesName();
 
+  offsetPagination: any;
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -257,6 +259,16 @@ export class WholesalerIndexComponent {
     this.pagination.area = areaSelected[areaSelected.length-1].value;
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
+
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
       
     this.loadingIndicator = true;
     this.wholesalerService.get(this.pagination).subscribe(
@@ -283,8 +295,15 @@ export class WholesalerIndexComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.wholesalerService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -299,7 +318,9 @@ export class WholesalerIndexComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.wholesalerService.get(this.pagination).subscribe(
       res => {
@@ -315,11 +336,16 @@ export class WholesalerIndexComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.wholesalerService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

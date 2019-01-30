@@ -33,6 +33,8 @@ export class NewsIndexComponent {
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
+  offsetPagination: any;
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -68,8 +70,19 @@ export class NewsIndexComponent {
   }
 
   getListNews() {
-    this.pagination.sort = "date";
-    this.pagination.sort_type = "desc";
+    // this.pagination.sort = "date";
+    // this.pagination.sort_type = "desc";
+
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type || "desc";
+    this.pagination.sort = sort || "date";
+
+    this.offsetPagination = page ? (page - 1) : 0;
+    
     this.newsService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -85,8 +98,15 @@ export class NewsIndexComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.newsService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -104,7 +124,9 @@ export class NewsIndexComponent {
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.newsService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -117,13 +139,21 @@ export class NewsIndexComponent {
     if (!this.formFilter.get('start_date').value && this.formFilter.get('end_date').value) return this.dialogService.openSnackBar({ message: 'Dari tanggal harus diisi!' });
     if (this.formFilter.get('start_date').value && !this.formFilter.get('end_date').value) return this.dialogService.openSnackBar({ message: 'Sampai tanggal harus diisi!' });
 
-    this.loadingIndicator = true;
-    this.table.offset = 0;
-    this.pagination.search = string;
-    this.pagination.page = 1;
     this.pagination['category_id'] = this.formFilter.get('category_id').value === 'all' ? '' : this.formFilter.get('category_id').value;
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
+
+    this.loadingIndicator = true;
+    this.pagination.search = string;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.newsService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

@@ -59,7 +59,6 @@ export class CustomerDetailComponent {
         });
 
         this.formCustomer.disable();
-        console.log(this.formCustomer.getRawValue())
       },
       err => {
         this.router.navigate(['/user-management', 'customer']);

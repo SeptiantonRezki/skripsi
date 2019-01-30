@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Admin'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']" [queryParams]="queryParams">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
@@ -24,9 +24,9 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
         (select)="onSelect($event)">
 

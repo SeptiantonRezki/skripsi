@@ -26,12 +26,12 @@ export class AdminPrincipalIndexComponent {
   pagination: Page = new Page();
   onLoad: boolean;
 
+  offsetPagination: Number = null;
+
   keyUp = new Subject<string>();
 
-  @ViewChild("activeCell")
-  @ViewChild(DatatableComponent)
-  table: DatatableComponent;
-  activeCellTemp: TemplateRef<any>;
+  @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
+  @ViewChild('table') table: DatatableComponent;
 
   permission: any;
   roles: PagesName = new PagesName();
@@ -61,25 +61,25 @@ export class AdminPrincipalIndexComponent {
   }
 
   ngOnInit() {
-    // this._fuseSplashScreenService.show();
-    // this.http.get("api/ayo-b2b-user").subscribe((contacts: any) => {
-    //   this.rows = contacts;
-    //   this.loadingIndicator = false;
-    // });
-    // setTimeout(() => {
-    //     this._fuseSplashScreenService.hide();
-    // }, 3000);
     this.getAdminList();
   }
 
   getAdminList() {
-    // this.pagination.sort = "fullname";
-    // this.pagination.sort_type = "asc";
-    
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+
     this.adminPrincipalService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
+
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -96,8 +96,15 @@ export class AdminPrincipalIndexComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.adminPrincipalService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -112,7 +119,9 @@ export class AdminPrincipalIndexComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.adminPrincipalService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -123,11 +132,16 @@ export class AdminPrincipalIndexComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.adminPrincipalService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

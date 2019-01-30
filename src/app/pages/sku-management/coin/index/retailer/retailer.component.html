@@ -70,7 +70,7 @@
         </div>
       </form>
     </div>
-    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
       [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
       [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
       (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)">

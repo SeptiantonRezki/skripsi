@@ -8,6 +8,7 @@ import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-t
 import { DateAdapter } from '@angular/material';
 import * as moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-schedule-program-index',
@@ -41,11 +42,14 @@ export class ScheduleProgramIndexComponent {
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
+  offsetPagination: any;
+
   constructor(
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private adapter: DateAdapter<any>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dataService: DataService
   ) {
     this.adapter.setLocale("id");
     this.rows = [];
@@ -74,8 +78,16 @@ export class ScheduleProgramIndexComponent {
   }
 
   getListScheduler() {
-    // this.pagination.sort = 'scheduler_name';
-    // this.pagination.sort_type = 'asc';
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+
     this.scheduleTradeProgramService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -91,8 +103,15 @@ export class ScheduleProgramIndexComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.scheduleTradeProgramService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -110,7 +129,9 @@ export class ScheduleProgramIndexComponent {
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.scheduleTradeProgramService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -121,9 +142,17 @@ export class ScheduleProgramIndexComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
+
     this.pagination.filter = this.convertDate(this.formFilter.get('start_date').value) || this.convertDate(this.formFilter.get('end_date').value) ? this.formFilter.get('filter').value : '';
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);

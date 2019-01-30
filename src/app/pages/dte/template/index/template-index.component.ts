@@ -25,6 +25,7 @@ export class TemplateIndexComponent {
   pagination: Page = new Page();
   endPoint: Endpoint = new Endpoint();
   onLoad: boolean;
+  offsetPagination: any;
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -64,6 +65,16 @@ export class TemplateIndexComponent {
   }
 
   getTemplateTask() {
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+    
     this.templateTaskService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -90,8 +101,15 @@ export class TemplateIndexComponent {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -112,7 +130,9 @@ export class TemplateIndexComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log(this.pagination)
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -129,9 +149,16 @@ export class TemplateIndexComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

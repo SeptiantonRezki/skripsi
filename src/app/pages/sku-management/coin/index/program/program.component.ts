@@ -30,6 +30,8 @@ export class ProgramComponent {
 
   keyUpTP = new Subject<string>();
 
+  offsetPagination: any;
+
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -68,6 +70,16 @@ export class ProgramComponent {
     // this.paginationTP.sort = 'name';
     // this.paginationTP.sort_type = 'asc';
 
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.paginationTP.page = page;
+    this.paginationTP.sort_type = sort_type;
+    this.paginationTP.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+
     this.showLoadingBar = true;
     this.coinService.getProgram(this.paginationTP).subscribe(
       res => {
@@ -89,8 +101,15 @@ export class ProgramComponent {
   }
 
   setPageTP(pageInfo) {
+    this.offsetPagination = pageInfo.offset;      
     this.loadingIndicatorTP = true;
-    this.paginationTP.page = pageInfo.offset + 1;
+
+    if (this.paginationTP['search']) {
+      this.paginationTP.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.paginationTP.page = this.dataService.getFromStorage("page");
+    }
 
     this.coinService.getProgram(this.paginationTP).subscribe(res => {
       Page.renderPagination(this.paginationTP, res);
@@ -105,7 +124,9 @@ export class ProgramComponent {
     this.paginationTP.page = 1;
     this.loadingIndicatorTP = true;
 
-    console.log("check pagination", this.paginationTP);
+    this.dataService.setToStorage("page", this.paginationTP.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.coinService.getProgram(this.paginationTP).subscribe(
       res => {
@@ -121,9 +142,16 @@ export class ProgramComponent {
 
   updateFilterTP(string) {
     this.loadingIndicatorTP = true;
-    this.table.offset = 0;
     this.paginationTP.search = string;
-    this.paginationTP.page = 1;
+
+    if (string) {
+      this.paginationTP.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.paginationTP.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.coinService.getProgram(this.paginationTP).subscribe(res => {
       Page.renderPagination(this.paginationTP, res);
