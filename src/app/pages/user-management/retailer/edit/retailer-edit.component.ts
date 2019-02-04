@@ -219,8 +219,6 @@ export class RetailerEditComponent {
     });
 
     if (this.isDetail) this.formRetailer.disable();
-    
-    this.formRetailer.get("phone").disable();
   }
 
   getAudienceArea(selection, id) {
