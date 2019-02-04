@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../import-coin/import-coin.component';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-schedule-program-detail',
@@ -50,6 +51,9 @@ export class ScheduleProgramDetailComponent {
   valueChange: Boolean;
   saveData: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -59,6 +63,9 @@ export class ScheduleProgramDetailComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService
   ) { 
+    this.permission = this.roles.getRoles('principal.importcoin');
+    console.log(this.permission);
+
     activatedRoute.url.subscribe(param => {
       this.idScheduler = param[2].path;
     })

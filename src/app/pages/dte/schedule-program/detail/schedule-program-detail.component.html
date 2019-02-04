@@ -10,11 +10,11 @@
         <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
           <h2>Detil Pengatur Jadwal Trade Program</h2>
           <div>
-            <button mat-button style="border: 1px solid; margin-right: 10px" (click)="export()">
+            <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px" (click)="export()">
               <mat-icon>arrow_upward</mat-icon>
               EXPORT COIN
             </button>
-            <button mat-button style="border: 1px solid" (click)="import()">
+            <button *ngIf="permission?.buat" mat-button style="border: 1px solid" (click)="import()">
               <mat-icon>arrow_downward</mat-icon>
               IMPORT COIN
             </button>
