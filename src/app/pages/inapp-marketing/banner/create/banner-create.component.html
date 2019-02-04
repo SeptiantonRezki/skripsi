@@ -208,7 +208,9 @@
                 <div class="banner-image-template-selected">
                   <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class" [title]="bannerSelected.name">
                     <img [src]="bannerSelected.image" style="height: 190px; width: 390px" [alt]="bannerSelected.name">
-                    <img *ngIf="bannerSelected.product" [src]="bannerSelected.product" class="product">
+                    <div *ngIf="bannerSelected.product" class="image-sku">
+                      <img [src]="bannerSelected.product" class="">
+                    </div>
                     <div class="title">{{bannerSelected.title}}</div>
                     <div [class]="'button ' + bannerSelected.button_class">{{bannerSelected.button_text}}</div>
                   </div>
