@@ -44,19 +44,23 @@
             </mat-error>
           </mat-form-field>
 
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <!-- <small>Nomor Ponsel</small> -->
+          <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+            <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
+          </mat-form-field>
+
+          <div *ngIf="!isDetail" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <small>Nomor Ponsel</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-              <!-- <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
+              <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
                 <input matInput value="+62" readonly>
-              </mat-form-field> -->
-              <mat-form-field fxFlex.xs="70" class="is-light form-primary">
-                <input matInput placeholder="Nomor Ponsel" formControlName="phone" type="text" min="0">
+              </mat-form-field>
+              <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
+                <input matInput formControlName="phone" type="tel">
               </mat-form-field>
             </div>
-            <!-- <mat-error *ngIf="formRetailer.controls['phone'].hasError('required') && formRetailer.controls['phone'].touched ">
+            <mat-error *ngIf="formRetailer.controls['phone'].hasError('required') && formRetailer.controls['phone'].touched ">
               Nomor ponsel harus diisi.
-            </mat-error> -->
+            </mat-error>
           </div>
 
           <!-- <mat-form-field fxFlex="100" class="is-light">

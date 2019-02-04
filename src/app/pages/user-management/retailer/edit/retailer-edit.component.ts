@@ -92,7 +92,7 @@ export class RetailerEditComponent {
   }
 
   ngOnInit() {
-    
+    let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
       name: ["", Validators.required],
@@ -134,6 +134,15 @@ export class RetailerEditComponent {
 
       this.initArea();
       this.initFormGroup();
+
+      this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+        if(res.match(regex)) {
+          if(res.substring(0, 1) == '0'){
+            let phone = res.substring(1);
+            this.formRetailer.get('phone').setValue(phone, { emitEvent: false });
+          }
+        }
+      })
     })
   }
 
@@ -203,7 +212,7 @@ export class RetailerEditComponent {
       address: this.detailRetailer.address,
       business_code: this.detailRetailer.code,
       owner: this.detailRetailer.owner,
-      phone: this.detailRetailer.phone,
+      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
       status: this.detailRetailer.status,
       latitude: this.detailRetailer.latitude,
       longitude: this.detailRetailer.longitude,
@@ -356,7 +365,7 @@ export class RetailerEditComponent {
         address: this.formRetailer.get("address").value,
         business_code: this.formRetailer.get("business_code").value,
         owner: this.formRetailer.get("owner").value,
-        phone: this.formRetailer.getRawValue()["phone"],
+        phone: `+62${this.formRetailer.getRawValue()["phone"]}`,
         status: this.formRetailer.get("status").value,
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value,
