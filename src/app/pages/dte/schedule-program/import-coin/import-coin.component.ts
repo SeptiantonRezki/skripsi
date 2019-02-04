@@ -1,28 +1,32 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
-import { AudienceService } from 'app/services/dte/audience.service';
+import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
 
 @Component({
-  templateUrl: './import-audience-dialog.component.html',
-  styleUrls: ['./import-audience-dialog.component.scss'],
+  templateUrl: './import-coin.component.html',
+  styleUrls: ['./import-coin.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ImportAudienceDialogComponent {
+export class ImportCoinComponent {
 
   files: File;
   validComboDrag: boolean;
+  show: Boolean;
 
   uploading: Boolean;
   rows: any[];
 
   constructor(
-    public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
+    public dialogRef: MatDialogRef<ImportCoinComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any,
     public dialog: MatDialog,
     private dialogService: DialogService,
-    private audienceService: AudienceService
+    private scheduleTradeProgramService: ScheduleTradeProgramService
   ) { 
-    this.uploading = false;
+    if (data){
+      this.show = true;
+    }
   }
 
   ngOnInit() {
@@ -36,7 +40,7 @@ export class ImportAudienceDialogComponent {
 
     fd.append('file', this.files);
     this.uploading = true;
-    this.audienceService.importExcel(fd).subscribe(
+    this.scheduleTradeProgramService.previewExcel(fd).subscribe(
       res => {
         this.rows = res;
         this.uploading = false;
@@ -53,8 +57,16 @@ export class ImportAudienceDialogComponent {
 
   submit() {
     if (this.files) {
-      const res = this.rows.map(item => { return { id: item.id } });
-      this.dialogRef.close(res);
+      const res = { 
+        coins: this.rows
+      };
+
+      this.uploading = true;
+      this.scheduleTradeProgramService.storeExcel(res).subscribe(res => {
+        this.uploading = false;
+        this.dialogRef.close(res);
+      })
+      
     } else {
       this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb'})
     }

@@ -9,6 +9,7 @@ import { Subject, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { ImportCoinComponent } from '../import-coin/import-coin.component';
 
 @Component({
   selector: 'app-schedule-program-detail',
@@ -23,6 +24,7 @@ export class ScheduleProgramDetailComponent {
   listTradeProgram: Array<any>;
   listTemplateTask: Array<any>;
   onLoad: Boolean = true;
+  showLoading: Boolean;
 
   formSchedule: FormGroup;
   formScheduleError: any;
@@ -274,5 +276,47 @@ export class ScheduleProgramDetailComponent {
     this.dialogRef = this.dialog.open(ListAudienceDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => { })
+  }
+
+  export() {
+    
+    const body = {
+      trade_scheduler_id: this.dataScheduler.id,
+      trade_creator_id: this.dataScheduler.trade_creator_id
+    }
+
+    this.showLoading = true;
+    this.scheduleTradeProgramService.downloadExcel(body).subscribe(res => {
+      // window.open(res.data, "_blank");
+      const link = document.createElement('a');
+      link.target = '_blank';
+      link.href = res.data;
+      link.setAttribute('visibility', 'hidden');
+      link.click();
+      this.showLoading = false;
+      // console.log(res);
+    })
+  }
+
+  import() {
+
+    if (this.dataScheduler.status_berjalan === "expired") {
+      return this.dialogService.openSnackBar({ message: `Tidak dapat adjust coin karna status scheduler trade program telah ${this.dataScheduler.status_berjalan}` });
+    }
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'adjustment-coin-dialog';
+    dialogConfig.data = this.dataScheduler;;
+
+    this.dialogRef = this.dialog.open(ImportCoinComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => { 
+      if (response) {
+        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+      }
+    })
   }
 }

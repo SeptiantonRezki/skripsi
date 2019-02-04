@@ -4,20 +4,31 @@
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
-    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+    <div class="loading" *ngIf="showLoading"></div>
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Detil Pengatur Jadwal Trade Program</h2>
+        <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
+          <h2>Detil Pengatur Jadwal Trade Program</h2>
+          <div>
+            <button mat-button style="border: 1px solid; margin-right: 10px" (click)="export()">
+              <mat-icon>arrow_upward</mat-icon>
+              EXPORT COIN
+            </button>
+            <button mat-button style="border: 1px solid" (click)="import()">
+              <mat-icon>arrow_downward</mat-icon>
+              IMPORT COIN
+            </button>
+          </div>
         </div>
         <div class="ayo-middle py-24" fxLayout="column">
-          <div fxLayout="row">
+          <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang" [value]="dataScheduler['name']"
                 name="name" disabled>
             </mat-form-field>
           </div>
 
-          <div fxLayout="row">
+          <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select [value]="dataScheduler['trade_creator_id']" placeholder="Trade Program" name="trade_creator_id"
                 disabled>
@@ -26,7 +37,7 @@
             </mat-form-field>
           </div>
 
-          <div class="py-8" *ngIf="dataScheduler['audience']">
+          <div class="py-8 px-24" *ngIf="dataScheduler['audience']">
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
@@ -45,7 +56,7 @@
             </div>
           </div>
 
-          <div class="py-8">
+          <div class="py-8 px-24">
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
@@ -66,12 +77,14 @@
 
           <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
 
-            <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>Template Tugas</strong>
-              </h3>
+            <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
+              <h3 class="">Template Tugas</h3>
+              <!-- <button mat-button type="button" (click)="export(item)">
+                <mat-icon>arrow_upward</mat-icon>
+                EXPORT
+              </button> -->
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
                 <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
               </mat-form-field>
@@ -99,7 +112,7 @@
           </div>
         </div>
 
-        <div class="confirm pt-24 pb-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] !== 'publish'"
+        <div class="confirm p-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] !== 'publish'"
           fxLayout="row" fxLayoutGap="20px">
           <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             REJECT

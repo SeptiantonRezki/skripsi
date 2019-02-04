@@ -63,4 +63,19 @@ export class ScheduleTradeProgramService extends BaseService {
     const url = this.getUrl(this.namespace, 'list_audience', context);
     return this.getApi(url, queryParams);
   }
+
+  previewExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'csv_preview');
+    return this.postApi(url, body);
+  }
+  
+  storeExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'csv_store');
+    return this.postApi(url, body);
+  }
+
+  downloadExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'csv_download');
+    return this.postApi(url, body);
+  }
 }
