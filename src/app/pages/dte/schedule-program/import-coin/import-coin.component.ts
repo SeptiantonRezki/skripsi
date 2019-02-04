@@ -24,6 +24,7 @@ export class ImportCoinComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService
   ) { 
+    this.rows = [];
     if (data){
       this.show = true;
     }
