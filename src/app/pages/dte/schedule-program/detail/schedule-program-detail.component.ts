@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DateAdapter, MatDialogConfig, MatDialog, MatSelect } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -45,6 +45,7 @@ export class ScheduleProgramDetailComponent {
   public filterTask: FormControl = new FormControl();
   public filteredTask: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
   
@@ -295,11 +296,14 @@ export class ScheduleProgramDetailComponent {
     this.showLoading = true;
     this.scheduleTradeProgramService.downloadExcel(body).subscribe(res => {
       // window.open(res.data, "_blank");
-      const link = document.createElement('a');
-      link.target = '_blank';
-      link.href = res.data;
-      link.setAttribute('visibility', 'hidden');
-      link.click();
+      // const link = document.createElement('a');
+      // link.target = '_blank';
+      // link.href = res.data;
+      // link.setAttribute('visibility', 'hidden');
+      // link.click();
+      
+      this.downloadLink.nativeElement.href = res.data;
+      this.downloadLink.nativeElement.click();
       this.showLoading = false;
       // console.log(res);
     })

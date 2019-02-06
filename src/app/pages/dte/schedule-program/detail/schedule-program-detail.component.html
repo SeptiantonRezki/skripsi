@@ -14,6 +14,7 @@
               <mat-icon>arrow_upward</mat-icon>
               EXPORT COIN
             </button>
+            <a #downloadLink></a>
             <button *ngIf="permission?.buat" mat-button style="border: 1px solid" (click)="import()">
               <mat-icon>arrow_downward</mat-icon>
               IMPORT COIN

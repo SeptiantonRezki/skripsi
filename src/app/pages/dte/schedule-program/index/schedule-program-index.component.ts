@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
@@ -37,6 +37,7 @@ export class ScheduleProgramIndexComponent {
   permission: any;
   roles: PagesName = new PagesName();
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -165,13 +166,16 @@ export class ScheduleProgramIndexComponent {
     this.showLoading = true;
     this.scheduleTradeProgramService.export({ trade_scheduler_id: id }).subscribe(res => {
       // window.open(res.data, "_blank");
-      const link = document.createElement('a');
-      link.target = '_blank';
-      link.href = res.data;
-      link.setAttribute('visibility', 'hidden');
-      link.click();
-      this.showLoading = false;
+      // const link = document.createElement('a');
+      // link.target = '_blank';
+      // link.href = res.data;
+      // link.setAttribute('visibility', 'hidden');
+      // link.click();
       // console.log(res);
+
+      this.downloadLink.nativeElement.href = res.data;
+      this.downloadLink.nativeElement.click();
+      this.showLoading = false;
     })
   }
 
