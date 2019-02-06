@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 
@@ -66,6 +66,7 @@ export class ProductEditComponent {
   public filterSubCategory: FormControl = new FormControl();
   public filteredSubCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  @ViewChild('screen') screen: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
@@ -301,7 +302,7 @@ export class ProductEditComponent {
 
       if (this.files) {
         this.showLoading = true;
-        await html2canvas(document.querySelector("#imageConverted"), { scale: 3 }).then(canvas => {
+        await html2canvas(this.screen.nativeElement, { scale: 3 }).then(canvas => {
           this.imageSkuConverted = this.convertCanvasToImage(canvas);
           this.showLoading = false;
         });

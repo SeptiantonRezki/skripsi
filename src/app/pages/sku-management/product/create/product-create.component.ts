@@ -63,6 +63,7 @@ export class ProductCreateComponent {
   public filterSubCategory: FormControl = new FormControl();
   public filteredSubCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  @ViewChild('screen') screen: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
@@ -245,7 +246,7 @@ export class ProductCreateComponent {
       this.loadingIndicator = true;
 
       this.showLoading = true;
-      await html2canvas(document.querySelector("#imageConverted"), { scale: 3 }).then(canvas => {
+      await html2canvas(this.screen.nativeElement, { scale: 3 }).then(canvas => {
         this.imageSkuConverted = this.convertCanvasToImage(canvas);
         this.showLoading = false;
       });
