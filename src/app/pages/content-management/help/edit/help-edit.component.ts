@@ -21,7 +21,7 @@ export class HelpEditComponent {
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
     { name: "Retailer", value: "retailer" },
-    // { name: "Paguyuban", value: "paguyuban" },
+    { name: "Principal", value: "principal" },
     { name: "Customer", value: "customer" }
   ];
 
