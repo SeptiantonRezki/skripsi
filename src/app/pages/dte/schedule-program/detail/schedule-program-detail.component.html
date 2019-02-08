@@ -4,12 +4,11 @@
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
-    <div class="loading" *ngIf="showLoading"></div>
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off">
         <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
           <h2>Detil Pengatur Jadwal Trade Program</h2>
-          <div>
+          <div *ngIf="dataScheduler['audience']">
             <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px" (click)="export()">
               <mat-icon>arrow_upward</mat-icon>
               EXPORT COIN

@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../import-coin/import-coin.component';
 import { PagesName } from 'app/classes/pages-name';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-schedule-program-detail',
@@ -62,7 +63,8 @@ export class ScheduleProgramDetailComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private scheduleTradeProgramService: ScheduleTradeProgramService
+    private scheduleTradeProgramService: ScheduleTradeProgramService,
+    private dataService: DataService
   ) { 
     this.permission = this.roles.getRoles('principal.importcoin');
     console.log(this.permission);
@@ -293,7 +295,7 @@ export class ScheduleProgramDetailComponent {
       trade_creator_id: this.dataScheduler.trade_creator_id
     }
 
-    this.showLoading = true;
+    this.dataService.showLoading(true);
     this.scheduleTradeProgramService.downloadExcel(body).subscribe(res => {
       // window.open(res.data, "_blank");
       // const link = document.createElement('a');
@@ -304,8 +306,10 @@ export class ScheduleProgramDetailComponent {
       
       this.downloadLink.nativeElement.href = res.data;
       this.downloadLink.nativeElement.click();
-      this.showLoading = false;
+      this.dataService.showLoading(false);
       // console.log(res);
+    }, err => {
+      this.dataService.showLoading(false);
     })
   }
 
