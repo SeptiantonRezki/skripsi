@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { FuseConfigService } from '@fuse/services/config.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { DataService } from 'app/services/data.service';
 
 @Component({
     selector     : 'fuse-main',
@@ -18,6 +19,7 @@ export class FuseMainComponent implements OnDestroy
     onConfigChanged: Subscription;
     fuseSettings: any;
     navigation: any;
+    showLoading: Boolean;
 
     @HostBinding('attr.fuse-layout-mode') layoutMode;
 
@@ -26,6 +28,7 @@ export class FuseMainComponent implements OnDestroy
         private _elementRef: ElementRef,
         private fuseConfig: FuseConfigService,
         private platform: Platform,
+        private dataService: DataService,
         @Inject(DOCUMENT) private document: any
     )
     {
@@ -44,6 +47,12 @@ export class FuseMainComponent implements OnDestroy
         }
 
         this.navigation = navigation;
+    }
+
+    ngOnInit() {
+        this.dataService.change.subscribe(res => {
+            this.showLoading = res;
+        })
     }
 
     ngOnDestroy()

@@ -192,7 +192,7 @@ export class ScheduleProgramIndexComponent {
   }
   
   export(id) {
-    this.showLoading = true;
+    this.dataService.showLoading(true);
     this.scheduleTradeProgramService.export({ trade_scheduler_id: id }).subscribe(res => {
       // window.open(res.data, "_blank");
       // const link = document.createElement('a');
@@ -204,7 +204,7 @@ export class ScheduleProgramIndexComponent {
 
       this.downloadLink.nativeElement.href = res.data;
       this.downloadLink.nativeElement.click();
-      this.showLoading = false;
+      this.dataService.showLoading(false);
     })
   }
 

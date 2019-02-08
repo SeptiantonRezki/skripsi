@@ -18,7 +18,6 @@
     </mat-toolbar>
   
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-      <div class="loading" *ngIf="uploading"></div>
       <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept=".xlsx, .xls"
         [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="preview($event)">
         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">

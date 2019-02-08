@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   templateUrl: './import-coin.component.html',
@@ -22,7 +23,8 @@ export class ImportCoinComponent {
     @Inject(MAT_DIALOG_DATA) data: any,
     public dialog: MatDialog,
     private dialogService: DialogService,
-    private scheduleTradeProgramService: ScheduleTradeProgramService
+    private scheduleTradeProgramService: ScheduleTradeProgramService,
+    private dataService: DataService
   ) { 
     this.rows = [];
     if (data){
@@ -40,14 +42,14 @@ export class ImportCoinComponent {
     let fd = new FormData();
 
     fd.append('file', this.files);
-    this.uploading = true;
+    this.dataService.showLoading(true);
     this.scheduleTradeProgramService.previewExcel(fd).subscribe(
       res => {
         this.rows = res;
-        this.uploading = false;
+        this.dataService.showLoading(false);
       },
       err => {
-        this.uploading = false;
+        this.dataService.showLoading(false);
         this.files = undefined;
         
         if (err.status === 404 || err.status === 500)
@@ -62,9 +64,9 @@ export class ImportCoinComponent {
         coins: this.rows
       };
 
-      this.uploading = true;
+      this.dataService.showLoading(true);
       this.scheduleTradeProgramService.storeExcel(res).subscribe(res => {
-        this.uploading = false;
+        this.dataService.showLoading(false);
         this.dialogRef.close(res);
       })
       

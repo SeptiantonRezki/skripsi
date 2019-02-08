@@ -1,7 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class DataService {
+
+    show: any;
+    @Output() change: EventEmitter<boolean> = new EventEmitter();
+
+    showLoading(show) {
+        this.show = show;
+        this.change.emit(this.show);
+    }
     
     setAuthorization(authorization) {
         let auth = JSON.stringify(authorization);

@@ -45,9 +45,9 @@
 
         <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="name-container pl-8 pt-8 pb-8 pr-0">
-              <img class="product-image" *ngIf="row.image_url" [src]="row.image_url">
-              <img class="product-image" *ngIf="!row.image_url" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+            <div class="name-container m-8 product-image">
+              <img class="" *ngIf="row.image_url" [src]="row.image_url">
+              <img class="" *ngIf="!row.image_url" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
             </div>
           </ng-template>
         </ngx-datatable-column>

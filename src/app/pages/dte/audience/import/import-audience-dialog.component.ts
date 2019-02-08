@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   templateUrl: './import-audience-dialog.component.html',
@@ -20,9 +21,10 @@ export class ImportAudienceDialogComponent {
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
-    private audienceService: AudienceService
+    private audienceService: AudienceService,
+    private dataService: DataService
   ) { 
-    this.uploading = false;
+    this.dataService.showLoading(false);
   }
 
   ngOnInit() {
@@ -35,14 +37,14 @@ export class ImportAudienceDialogComponent {
     let fd = new FormData();
 
     fd.append('file', this.files);
-    this.uploading = true;
+    this.dataService.showLoading(true);
     this.audienceService.importExcel(fd).subscribe(
       res => {
         this.rows = res;
-        this.uploading = false;
+        this.dataService.showLoading(false);
       },
       err => {
-        this.uploading = false;
+        this.dataService.showLoading(false);
         this.files = undefined;
         
         if (err.status === 404 || err.status === 500)

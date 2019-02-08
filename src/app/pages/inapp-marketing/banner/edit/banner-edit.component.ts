@@ -411,10 +411,10 @@ export class BannerEditComponent {
     if ((this.formBannerGroup.valid && this.bannerSelected == undefined) || (this.formBannerGroup.valid && this.bannerSelected)) {
 
       if (this.bannerSelected) {
-        this.showLoading = true;
+        this.dataService.showLoading(true);
         await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
           this.imageConverted = this.convertCanvasToImage(canvas);
-          this.showLoading = false;
+          this.dataService.showLoading(false);
         });
       }
 

@@ -13,6 +13,7 @@ import * as moment from "moment";
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "../create/dialog/scan-barcode-dialog.component";
 import * as html2canvas from 'html2canvas';
+import { DataService } from "app/services/data.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -80,6 +81,7 @@ export class ProductEditComponent {
     private dialogService: DialogService,
     private productService: ProductService,
     private dialog: MatDialog,
+    private dataService: DataService
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -301,10 +303,10 @@ export class ProductEditComponent {
       });
 
       if (this.files) {
-        this.showLoading = true;
+        this.dataService.showLoading(true);
         await html2canvas(this.screen.nativeElement, { scale: 3 }).then(canvas => {
           this.imageSkuConverted = this.convertCanvasToImage(canvas);
-          this.showLoading = false;
+          this.dataService.showLoading(false);
         });
       }
 

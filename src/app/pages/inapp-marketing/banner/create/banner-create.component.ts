@@ -351,10 +351,10 @@ export class BannerCreateComponent {
   async submit(status?: string) {
     if (this.formBannerGroup.valid && this.bannerSelected) {
 
-      this.showLoading = true;
+      this.dataService.showLoading(true);
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
-        this.showLoading = false;
+        this.dataService.showLoading(false);
       });
 
       let areas = [];

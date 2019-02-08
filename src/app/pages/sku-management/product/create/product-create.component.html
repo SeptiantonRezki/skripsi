@@ -9,7 +9,6 @@
 
       <form autocomplete="off" [formGroup]="formProductGroup" (keydown.enter)="$event.preventDefault();">
         <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
-        <div class="loading" *ngIf="showLoading"></div>
         <mat-tab-group>
           <mat-tab label="Informasi Produk">
             <div class="ayo-middle p-24" fxLayout="column">
