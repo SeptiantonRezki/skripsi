@@ -181,8 +181,14 @@ export class ScheduleProgramCreateComponent {
       start_date: ["", Validators.required],
       end_date: ["", Validators.required],
       repeated: ["by-weekly", Validators.required],
-      is_backup: [1, Validators.required],
-      notif: [1, Validators.required]
+      is_notif: [1, Validators.required],
+      notif: [1, Validators.required],
+      is_backup: [false, Validators.required],
+      task_template_id_backup: [{ value: "", disabled: true }],
+      coin_delivered_backup: [{ value: "", disabled: true }],
+      coin_approved_backup: [{ value: "", disabled: true }],
+      start_date_backup: [{ value: "", disabled: true }],
+      end_date_backup: [{ value: "", disabled: true }]
     })
   }
 
@@ -269,7 +275,7 @@ export class ScheduleProgramCreateComponent {
   changeValue(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (template.at(idx).get('is_backup').value === 0)
+    if (template.at(idx).get('is_notif').value === 0)
       template.at(idx).get('notif').disable();
     else
     template.at(idx).get('notif').enable();
@@ -281,6 +287,48 @@ export class ScheduleProgramCreateComponent {
     if (this.setMaxDate(template.at(idx).get('start_date').value, idx) < template.at(idx).get('end_date').value) {
       template.at(idx).get('end_date').setValue('');
     }
+  }
+
+  backupTask(evnt, idx) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(idx);
+
+    if (evnt.checked) {
+      template.enable();
+      
+      template.get('task_template_id_backup').setValidators(Validators.required);
+      template.get('coin_delivered_backup').setValidators([Validators.required, Validators.min(0)]);
+      template.get('coin_approved_backup').setValidators([Validators.required, Validators.min(0)]);
+      template.get('start_date_backup').setValidators(Validators.required);
+      template.get('end_date_backup').setValidators(Validators.required);
+      
+      template.updateValueAndValidity();
+
+      let value = template.value;
+      template.get('task_template_id_backup').setValue(value.task_template_id ? value.task_template_id : "");
+      template.get('coin_delivered_backup').setValue(value.coin_delivered ? value.coin_delivered : "");
+      template.get('coin_approved_backup').setValue(value.coin_approved ? value.coin_approved : "");
+
+      if (value.start_date && value.end_date) this.setStartEndDateBackup(value, idx);
+
+    } else {
+      template.get('task_template_id_backup').disable();
+      template.get('coin_delivered_backup').disable();
+      template.get('coin_approved_backup').disable();
+      template.get('start_date_backup').disable();
+      template.get('end_date_backup').disable();
+    }
+  }
+
+  setStartEndDateBackup(value, idx) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(idx);
+
+    const start_date_backup = moment(value.end_date).subtract(1, 'days');
+    const end_date_backup = value.end_date;
+
+    template.get('start_date_backup').setValue(this.convertDate(start_date_backup.toDate()));
+    template.get('end_date_backup').setValue(this.convertDate(end_date_backup));
   }
 
   submit() {
@@ -297,14 +345,11 @@ export class ScheduleProgramCreateComponent {
           // if (!template) return this.dialogService.openSnackBar({ message: `Data Template Tugas "${item.task_template_id}" tidak tersedia, mohon lakukan pencarian kembali!` })
 
           return {
-            task_template_id: item.task_template_id,
-            coin_delivered: item.coin_delivered,
-            coin_approved: item.coin_approved,
+            ...item,
+            is_backup: item.is_backup ? 1 : 0,
+            notif: item.is_notif === 1 ? item.notif : 0,
             start_date: this.convertDate(item.start_date),
-            end_date: this.convertDate(item.end_date),
-            repeated: item.repeated,
-            is_backup: 0,
-            notif: item.is_backup === 1 ? item.notif : 0
+            end_date: this.convertDate(item.end_date)
           }
         })
       }

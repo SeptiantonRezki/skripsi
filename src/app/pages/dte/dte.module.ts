@@ -32,7 +32,8 @@ import {
   MatDatepickerModule,
   MatAutocompleteModule,
   MatRadioModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatDividerModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
@@ -109,6 +110,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatProgressBarModule,
     NgxMatSelectSearchModule,
+    MatDividerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   declarations: [

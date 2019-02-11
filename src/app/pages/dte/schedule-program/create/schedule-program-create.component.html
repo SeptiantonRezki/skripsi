@@ -4,13 +4,13 @@
   <!-- / HEADER -->
 
   <div class="content p-24">
-    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off" [formGroup]="formSchedule">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="">Buat Pengatur Jadwal Trade Program</h2>
         </div>
         <div class="ayo-middle py-24" fxLayout="column">
-          <div fxLayout="row">
+          <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Pengatur Jadwal Program Dagang">
               <mat-error *ngIf="formSchedule.controls['name'].hasError('required') && formSchedule.controls['name'].touched">
@@ -19,7 +19,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row">
+          <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <!-- <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
                 formControlName="trade_creator_id" [matAutocomplete]="tradeProgram">
@@ -45,15 +45,14 @@
             </mat-form-field>
           </div>
 
-          <div class="py-24" formArrayName="task_templates" *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
+          <div class="" formArrayName="task_templates" *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
+            <div class="py-24" [formGroupName]="i">
+              <div class="px-24 template-task" fxLayout="row" fxLayoutAlign="space-between end">
+                <h3 class="">Template Tugas</h3>
+                <h3><mat-slide-toggle formControlName="is_backup" (change)="backupTask($event, i)">Backup Task?</mat-slide-toggle></h3>
+              </div>
 
-            <div class="py-2" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>Template Tugas</strong>
-              </h3>
-            </div>
-            <div [formGroupName]="i">
-              <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <!-- <input matInput type="text" placeholder="Pilih Template Tugas" (keyup)="searchTemplateTask.next({value: $event.target.value, index: i})"
                     formControlName="task_template_id" [matAutocomplete]="templateTugas">
@@ -108,13 +107,13 @@
                     Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="dari">
-                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #dari></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate"
+                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate" (dateChange)="setStartEndDateBackup(item.value, i)"
                     readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
@@ -123,12 +122,65 @@
                     Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="sampai">
-                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #sampai></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="pb-16">
+
+              <div *ngIf="item.controls['is_backup'].value">
+                <mat-divider style="border-top-style: dashed"></mat-divider>
+                <h3 class="px-24 text-bold">Backup Task</h3>
+                <mat-divider style="border-top-style: dashed"></mat-divider>
+                
+                <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <mat-select formControlName="task_template_id_backup" placeholder="Pilih Template Tugas (Backup)" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterTask" [placeholderLabel]="'Cari Template Tugas...'"
+                        [noEntriesFoundLabel]="'Tidak ada Template Tugas yang ditemukan'"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredTask | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="item.controls['task_template_id_backup'].hasError('required') && item.controls['task_template_id_backup'].touched">
+                      Template Tugas harus diisi
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="22%" class="is-light form-primary">
+                    <input matInput type="number" min="0" formControlName="coin_delivered_backup" placeholder="Nilai Coin Tugas Terkirim (Backup)"
+                      numericOnly>
+                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered_backup'].hasError('required') && item.controls['coin_delivered_backup'].touched">
+                      Nilai Coin Tugas Terkirim harus diisi
+                    </mat-error>
+                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered_backup'].hasError('min') && item.controls['coin_delivered_backup'].touched">
+                      Nilai Coin Tugas Terkirim tidak boleh kurang dari 0
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="22%" class="is-light form-primary">
+                    <input matInput type="number" min="0" formControlName="coin_approved_backup" placeholder="Nilai Coin Tugas Disetujui (Backup)"
+                      numericOnly>
+                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved_backup'].hasError('required') && item.controls['coin_approved_backup'].touched">
+                      Nilai Coin Tugas Disetujui harus diisi
+                    </mat-error>
+                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved_backup'].hasError('min') && item.controls['coin_approved_backup'].touched">
+                      Nilai Coin Tugas Disetujui tidak boleh kurang dari 0
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput type="text" [value]="item.controls['start_date_backup'].value | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                      disabled>
+                    <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="47%" class="is-light form-primary">
+                    <input matInput type="text" [value]="item.controls['end_date_backup'].value | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                      disabled>
+                    <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="px-24">
                 <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
                   <h3 class="">
                     <strong>Pengulangan Tugas</strong>
@@ -141,30 +193,30 @@
                   </mat-radio-button>
                 </mat-radio-group>
               </div>
-              <div class="pb-16" fxLayout="column">
+              <div class="px-24" fxLayout="column">
                 <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
                   <h3 class="">
                     <strong>Notifikasi Tambahan</strong>
                   </h3>
                 </div>
-                <mat-radio-group formControlName="is_backup" (change)="changeValue(i)">
+                <mat-radio-group formControlName="is_notif" (change)="changeValue(i)">
                   <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification" [value]="item.value">
                     {{item.name}}&nbsp;&nbsp;
                   </mat-radio-button>
                 </mat-radio-group>
-                <mat-radio-group *ngIf="item.get('is_backup').value === 1" formControlName="notif">
+                <mat-radio-group *ngIf="item.get('is_notif').value === 1" formControlName="notif">
                   <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAddNotif" [value]="item.value">
                     {{item.name}}
                   </mat-radio-button>
                 </mat-radio-group>
               </div>
-              <div class="confirm" fxLayout="row" fxLayoutGap="20px">
+              <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
                 <button mat-raised-button *ngIf="i === formSchedule.get('task_templates')['controls'].length - 1" type="button"
-                  (click)="addTaskTemplate()" fxFlex="10">
+                  (click)="addTaskTemplate()" fxFlex="15">
                   <mat-icon class="secondary-text">add</mat-icon> Tambah
                 </button>
                 <button mat-stroked-button *ngIf="formSchedule.get('task_templates')['controls'].length != 1" type="button"
-                  color="primary" (click)="deleteTaskTemplate(i)" fxFlex="10">
+                  color="primary" (click)="deleteTaskTemplate(i)" fxFlex="15">
                   <mat-icon class="">delete</mat-icon> Hapus
                 </button>
               </div>
@@ -172,7 +224,7 @@
           </div>
         </div>
 
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             SIMPAN
           </button>

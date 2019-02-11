@@ -77,37 +77,70 @@
 
           <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
 
-            <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
-              <h3 class="">Template Tugas</h3>
-              <!-- <button mat-button type="button" (click)="export(item)">
-                <mat-icon>arrow_upward</mat-icon>
-                EXPORT
-              </button> -->
+            <div>
+              <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
+                <h3 class="">Template Tugas</h3>
+                <!-- <button mat-button type="button" (click)="export(item)">
+                  <mat-icon>arrow_upward</mat-icon>
+                  EXPORT
+                </button> -->
+              </div>
+              <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
+                    disabled>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
+                    disabled>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+                <mat-form-field fxFlex="47%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+              </div>
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
-              </mat-form-field>
+            <div *ngIf="item.backup">
+              <mat-divider style="border-top-style: dashed"></mat-divider>
+              <h3 class="px-24 text-bold">Backup Task</h3>
+              <mat-divider style="border-top-style: dashed"></mat-divider>
+                
+              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Template Tugas (Backup)" [value]="item.backup?.name" disabled>
+                </mat-form-field>
 
-              <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
-                  disabled>
-              </mat-form-field>
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.backup?.coin_delivered" placeholder="Nilai Coin Tugas Terkirim (Backup)"
+                    disabled>
+                </mat-form-field>
 
-              <mat-form-field fxFlex="22%" class="is-light form-primary">
-                <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
-                  disabled>
-              </mat-form-field>
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
-                  disabled>
-                <mat-icon matSuffix>date_range</mat-icon>
-              </mat-form-field>
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
-                  disabled>
-                <mat-icon matSuffix>date_range</mat-icon>
-              </mat-form-field>
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.backup?.coin_approved" placeholder="Nilai Coin Tugas Disetujui (Backup)"
+                    disabled>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.backup?.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai (Backup)"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+                <mat-form-field fxFlex="47%" class="is-light form-primary">
+                  <input matInput type="text" [value]="item.backup?.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir (Backup)"
+                    disabled>
+                  <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>

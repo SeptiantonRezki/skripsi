@@ -3,7 +3,8 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl
+  FormControl,
+  FormArray
 } from "@angular/forms";
 
 export class commonFormValidator {
@@ -40,7 +41,32 @@ export class commonFormValidator {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup) {
         this.validateAllFields(control);
+      } else if (control instanceof FormArray) {
+        if (control.controls.length > 0) this.validateFormArray(control);
       }
     });
+  }
+
+  public static validateFormArray(formArray: FormArray) {
+    for (let control of formArray.controls) {
+      if (control instanceof FormControl) {
+        // is a FormControl
+        control.markAsTouched({ onlySelf: true });
+      }
+      if (control instanceof FormGroup) {
+        // is a FormGroup
+        this.validateAllFields(control);
+      }
+      if (control instanceof FormArray) {
+        // is a FormArray
+        if (control.controls.length > 0) this.validateFormArray(control);
+      }
+    }
+  }
+
+  public static validateFormControl(formControl: FormControl) {
+    if (formControl instanceof FormControl) {
+      formControl.markAsTouched({ onlySelf: true });
+    }
   }
 }
