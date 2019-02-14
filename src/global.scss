@@ -23,12 +23,12 @@
 }
 
 .form-primary .mat-form-field-underline .mat-form-field-ripple {
-  background-color: map-get($colors, primary-red) !important;
+  background-color: map-get($colors, confirmation-button) !important;
 }
 
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
 .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: map-get($colors, primary-red) !important;
+  background-color: map-get($colors, confirmation-button) !important;
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-label,

@@ -1,14 +1,15 @@
 @import "src/@fuse/scss/fuse";
 @import "src/variable.scss";
 @import "src/backgroundslide.scss";
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
 :host {
   #ayoLogin {
     width: 100%;
     position: relative;
     z-index: 1;
-    background: url('/assets/images/ayo/login-bg.jpg') no-repeat center center;
+    background: url("/assets/images/ayo/Dev_Copy@2x.jpg") no-repeat center
+      center;
     background-size: cover;
 
     .lgn-container {
@@ -115,7 +116,7 @@
         .txt-ayo {
           height: 20px;
           width: 496px;
-          color: #FFFFFF;
+          color: #ffffff;
           font-family: "Proxima Nova";
           font-size: 17px;
           line-height: 20px;
@@ -131,6 +132,18 @@
         color: $primary-red;
         text-align: center;
       }
+    }
+
+    .badge {
+      padding: 24px 48px;
+      background-image: linear-gradient(-1deg, #e1e1e1 0%, #ffffff 100%);
+      font-size: 40px !important;
+      border-radius: 20px 0px 0px 20px;
+      color: #003872;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      font-weight: bold;
     }
   }
 }
