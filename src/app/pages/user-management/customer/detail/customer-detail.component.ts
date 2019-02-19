@@ -17,7 +17,8 @@ export class CustomerDetailComponent {
   detailCustomer: any;
   listStatus: any[] = [
     { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" }
+    { name: "Status Non Aktif", value: "inactive" },
+    { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
 
   listLevelArea: any[];
