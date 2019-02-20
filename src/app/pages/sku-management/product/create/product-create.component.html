@@ -159,7 +159,7 @@
                     <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
                   </div>
                   <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
-                  <div id="imageConverted" #screen class="image-sku">
+                  <div class="image-sku">
                     <img id="image" [src]='imageSku'/>
                   </div>
                 </div>
@@ -169,5 +169,11 @@
         </mat-tab-group>
       </form>
     </div>
+  </div>
+
+
+  <!-- Generate HTML to canvas-->
+  <div style="position: absolute; z-index: -2; top: 0; margin-left: -300px;" id="imageConverted" #screen class="image-sku">
+    <img id="image" [src]='imageSku'/>
   </div>
 </div>
