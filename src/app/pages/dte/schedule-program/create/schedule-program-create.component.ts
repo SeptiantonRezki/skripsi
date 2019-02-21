@@ -180,6 +180,7 @@ export class ScheduleProgramCreateComponent {
       coin_approved: ["", [Validators.required, Validators.min(0)]],
       start_date: ["", Validators.required],
       end_date: ["", Validators.required],
+      min_end_date: [""],
       repeated: ["by-weekly", Validators.required],
       is_notif: [1, Validators.required],
       notif: [1, Validators.required],
@@ -254,7 +255,16 @@ export class ScheduleProgramCreateComponent {
   // }
 
   setMinDate(idx) {
-    let template = this.formSchedule.get('task_templates') as FormArray;
+    const template = this.formSchedule.get('task_templates') as FormArray;
+    const is_backup = template.at(idx).get('is_backup').value;
+    
+    const start_date = template.at(idx).get('start_date').value;
+
+    if (is_backup)
+      template.at(idx).get('min_end_date').setValue(moment(start_date).add(2, 'days'));
+    else 
+      template.at(idx).get('min_end_date').setValue(start_date);
+    
     template.at(idx).get('end_date').setValue('');
   }
 
@@ -293,8 +303,11 @@ export class ScheduleProgramCreateComponent {
     const templates = this.formSchedule.get('task_templates') as FormArray;
     const template = templates.at(idx);
 
+    const start_date = template.get('start_date').value;
+
     if (evnt.checked) {
       template.enable();
+      template.get('min_end_date').setValue(moment(start_date).add(2, 'days'));
       
       template.get('task_template_id_backup').setValidators(Validators.required);
       template.get('coin_delivered_backup').setValidators([Validators.required, Validators.min(0)]);
@@ -312,6 +325,8 @@ export class ScheduleProgramCreateComponent {
       if (value.start_date && value.end_date) this.setStartEndDateBackup(value, idx);
 
     } else {
+      template.get('min_end_date').setValue(start_date);
+
       template.get('task_template_id_backup').disable();
       template.get('coin_delivered_backup').disable();
       template.get('coin_approved_backup').disable();

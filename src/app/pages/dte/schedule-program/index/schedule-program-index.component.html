@@ -54,7 +54,7 @@
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
+        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="auto" [offset]="offsetPagination"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
@@ -77,9 +77,9 @@
 
         <ngx-datatable-column [sortable]="false" name="Trade Program" prop="creator_name" [flexGrow]="3"></ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Periode" prop="start_date" [flexGrow]="3">
+        <ngx-datatable-column [width]="200" [sortable]="false" name="Periode" prop="start_date" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.start_date | date:'dd/MM/yyyy'}} <br>s/d<br> {{row.end_date | date:'dd/MM/yyyy'}}
+            {{row.start_date | dateToMoment}} s/d {{row.end_date | dateToMoment}}
           </ng-template>
         </ngx-datatable-column>
 

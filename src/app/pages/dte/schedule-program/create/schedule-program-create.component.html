@@ -113,7 +113,7 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate" (dateChange)="setStartEndDateBackup(item.value, i)"
+                    placeholder="Tanggal Berakhir" [min]="item.get('min_end_date').value" [max]="maxStartDateTemplate" (dateChange)="setStartEndDateBackup(item.value, i)"
                     readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
@@ -169,12 +169,12 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <input matInput type="text" [value]="item.controls['start_date_backup'].value | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                    <input matInput type="text" [value]="item.controls['start_date_backup'].value | dateToMoment" placeholder="Tanggal Mulai"
                       disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
                   <mat-form-field fxFlex="47%" class="is-light form-primary">
-                    <input matInput type="text" [value]="item.controls['end_date_backup'].value | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                    <input matInput type="text" [value]="item.controls['end_date_backup'].value | dateToMoment" placeholder="Tanggal Berakhir"
                       disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
