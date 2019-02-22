@@ -20,6 +20,9 @@ export class FuseMainComponent implements OnDestroy
     fuseSettings: any;
     navigation: any;
     showLoading: Boolean;
+    showProgress: Boolean;
+
+    progress: any;
 
     @HostBinding('attr.fuse-layout-mode') layoutMode;
 
@@ -51,8 +54,11 @@ export class FuseMainComponent implements OnDestroy
 
     ngOnInit() {
         this.dataService.change.subscribe(res => {
-            this.showLoading = res;
-        })
+            this.showLoading = res['show'] || res;
+            this.progress = res['progress'] || undefined;
+
+            console.log(this.progress);
+        });
     }
 
     ngOnDestroy()

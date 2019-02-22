@@ -191,21 +191,45 @@ export class ScheduleProgramIndexComponent {
     });
   }
   
-  export(id) {
-    this.dataService.showLoading(true);
-    this.scheduleTradeProgramService.export({ trade_scheduler_id: id }).subscribe(res => {
-      // window.open(res.data, "_blank");
-      // const link = document.createElement('a');
-      // link.target = '_blank';
-      // link.href = res.data;
-      // link.setAttribute('visibility', 'hidden');
-      // link.click();
-      // console.log(res);
+  async export(item) {
+    const length = 100 / item.trade_scheduler_templates.length;
+    let current_progress = 0;
 
-      this.downloadLink.nativeElement.href = res.data;
-      this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-    })
+    this.dataService.showLoading({ show: true });
+    this.dataService.setProgress({ progress: current_progress.toFixed(0) });
+
+    let response: any = { rand: "" };
+
+    for (const {val, index} of item.trade_scheduler_templates.map((val, index) => ({ val, index }))) {
+
+      let params = { 
+        trade_scheduler_id: item.id, 
+        last: (index+1) === item.trade_scheduler_templates.length ? 'true' : 'false', 
+        rand: response.rand, 
+        trade_scheduler_template_id: val.id
+      }
+
+      try {
+        response = await this.scheduleTradeProgramService.export(params).toPromise(); 
+
+        current_progress = current_progress === 0 ? length : current_progress + length;
+        this.dataService.setProgress({ progress: current_progress.toFixed(0) });
+
+      } catch (error) {
+        this.dataService.showLoading(false);
+        throw error;
+      } 
+    }
+    
+    this.dataService.setProgress({ progress: 100 });
+
+    if (response.data && response.status) {
+      setTimeout(() => {
+        this.downloadLink.nativeElement.href = response.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      }, 1000);
+    }
   }
 
   convertDate(param?: Date) {

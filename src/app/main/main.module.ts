@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material';
+import {ProgressBarModule} from "angular-progress-bar";
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseNavigationModule, FuseSearchBarModule, FuseShortcutsModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
@@ -22,6 +23,7 @@ import { FuseMainComponent } from './main.component';
         RouterModule,
 
         MatSidenavModule,
+        ProgressBarModule,
 
         FuseSharedModule,
 

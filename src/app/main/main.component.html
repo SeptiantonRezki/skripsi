@@ -59,4 +59,8 @@
     <!-- / QUICK PANEL -->
 
 </mat-sidenav-container>
-<div class="loading" *ngIf="showLoading"></div>
+<div class="loading" *ngIf="showLoading">
+    <div *ngIf="progress" style="position: relative; top: 60%;" fxLayout="column" fxLayoutAlign="center center">
+        <progress-bar style="width: 600px;" [progress]="progress" [color]="'#dc1e2d'"></progress-bar>
+    </div>
+</div>
