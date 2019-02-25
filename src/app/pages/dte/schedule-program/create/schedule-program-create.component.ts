@@ -314,6 +314,9 @@ export class ScheduleProgramCreateComponent {
       template.get('coin_approved_backup').setValidators([Validators.required, Validators.min(0)]);
       template.get('start_date_backup').setValidators(Validators.required);
       template.get('end_date_backup').setValidators(Validators.required);
+
+      template.get('is_notif').setValue(0);
+      template.get('is_notif').disable();
       
       template.updateValueAndValidity();
 
@@ -326,6 +329,8 @@ export class ScheduleProgramCreateComponent {
 
     } else {
       template.get('min_end_date').setValue(start_date);
+      
+      template.get('is_notif').enable();
 
       template.get('task_template_id_backup').disable();
       template.get('coin_delivered_backup').disable();
