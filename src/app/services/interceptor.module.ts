@@ -12,12 +12,13 @@ import { DataService } from "./data.service";
 import { Observable } from "rxjs/Rx";
 import { Router } from "@angular/router";
 import { DialogService } from "./dialog.service";
+import { MatDialog } from "@angular/material";
 
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
   private authenticationService: AuthenticationService;
   private refreshTokenObserver: Observable<any>;
-  constructor(private injector: Injector, private router: Router) {
+  constructor(private injector: Injector, private router: Router, private matDialog: MatDialog) {
     // this.refreshTokenObserver = Observable.defer(() => {
     //   return this.injector.get(AuthenticationService).postRefreshToken();
     // }).share();
@@ -70,6 +71,7 @@ export class BaseInterceptor implements HttpInterceptor {
         if (err.error === "Tidak ada otorisasi") {
           window.localStorage.clear();
           this.router.navigate(["login"]);
+          this.matDialog.closeAll();
           this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
         }
 
