@@ -11,6 +11,7 @@
     "build:qa": "ng build --configuration=qa",
     "build:monolith": "ng build --configuration=monolith",
     "build:training": "ng build --configuration=training",
+    "build:microservices": "ng build --configuration=microservices",
     "build:dev": "ng build"
   },
   "private": true,

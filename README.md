@@ -17,6 +17,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 * Run `npm run build:dev` to build the project with Development Server.
 * Run `npm run build:training` to build the project with Training Server.
 * Run `npm run build:monolith` to build the project with Monolith Server.
+* Run `npm run build:microservices` to build the project with Microservices Server.
 
 The build artifacts will be stored in the `dist/` directory.
 
