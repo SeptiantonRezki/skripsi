@@ -3,7 +3,7 @@
   <div class="content" fxLayout="column" fxLayoutAlign="center center">
 
     <div class="error-code" style="margin-bottom: 50px;">
-      <img src="assets/images/ayo/AYO_SRC_(Master).png" srcset="assets/images/ayo/AYO_SRC_(Master)@2x.png 2x" />
+      <img [src]="environment?.image" [srcset]="environment?.image_2x" />
     </div>
     <div class="error-code">401</div>
 

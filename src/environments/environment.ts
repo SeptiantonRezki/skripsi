@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: true,
+  server: "https://ayo-api.dxtr.asia",
+  label: "DEVELOPMENT",
+  show_label: true,
+  image: "assets/images/ayo/icon/dev.png",
+  image_2x: "assets/images/ayo/icon/dev@2x.png 2x"
 };
 
 /*

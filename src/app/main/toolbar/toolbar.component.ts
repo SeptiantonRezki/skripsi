@@ -8,6 +8,7 @@ import { FuseSidebarService } from "@fuse/components/sidebar/sidebar.service";
 import { navigation } from "../../navigation/navigation";
 import { DataService } from "../../services/data.service";
 import { AuthenticationService } from "../../services/authentication.service";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "fuse-toolbar",
@@ -23,6 +24,7 @@ export class FuseToolbarComponent {
   noNav: boolean;
   navigation: any;
   profile: any;
+  environment: any;
 
   constructor(
     private router: Router,
@@ -91,6 +93,7 @@ export class FuseToolbarComponent {
 
     this.navigation = navigation;
     this.profile = this.dataService.getFromStorage("profile") || null;
+    this.environment = environment;
   }
 
   toggleSidebarOpened(key) {

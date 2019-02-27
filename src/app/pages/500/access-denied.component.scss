@@ -1,5 +1,5 @@
 @import "src/@fuse/scss/fuse";
-@import "src/variable.scss";
+@import "src/scss/variable/variable.scss";
 
 :host {
   #error-404 {
@@ -30,7 +30,7 @@
         line-height: 56px;
         margin: 48px auto 16px auto;
         padding: 16px;
-        background: #FFFFFF;
+        background: #ffffff;
         @include mat-elevation(1);
 
         input {

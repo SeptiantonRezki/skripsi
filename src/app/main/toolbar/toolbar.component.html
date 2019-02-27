@@ -21,10 +21,8 @@
 
     </div>
 
-    <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-
-      DEVELOPMENT
-
+    <div *ngIf="environment?.show_label" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+      {{ environment?.label }}  
     </div>
 
     <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">

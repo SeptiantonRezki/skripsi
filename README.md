@@ -12,7 +12,13 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+* Run `npm run build:prod` to build the project with Production Server.
+* Run `npm run build:qa` to build the project with QA Server.
+* Run `npm run build:dev` to build the project with Development Server.
+* Run `npm run build:training` to build the project with Training Server.
+* Run `npm run build:monolith` to build the project with Monolith Server.
+
+The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 

@@ -1,20 +1,21 @@
-<ul class="cb-slideshow">
+<!-- <ul class="cb-slideshow">
   <li><span></span></li>
   <li><span></span></li>
   <li><span></span></li>
   <li><span></span></li>
   <li><span></span></li>
   <li><span></span></li>
-</ul>
+</ul> -->
 <div id="ayoLogin" fxLayout="column" fxLayoutAlign="center center">
-  <div class="badge">
-    DEVELOPMENT
+  <div class="tra" *ngIf="environment?.show_label">
+    <div class="bg-tra"></div>
+    <div class="text-tra">{{ environment?.label }}</div>
   </div>
   <div class="login-bg" fxLayout="row">
     <div class="lgn-container" fxFlex="420px" fxFlex.lt-md="80%">
       <div class="lgn-box">
         <div class="top">
-          <img src="assets/images/ayo/icon/dev.png" srcset="assets/images/ayo/dev@2x.png 2x" />
+          <img [src]="environment?.image" [srcset]="environment?.image_2x" />
           <div class="title">Masuk ke Akun Anda</div>
         </div>
         <div class="middle-form">

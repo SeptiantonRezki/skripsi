@@ -10,6 +10,7 @@ import {
   ActivatedRoute,
   Params
 } from "../../../../node_modules/@angular/router";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "app-reset-password",
@@ -24,6 +25,8 @@ export class ResetPasswordComponent implements OnInit {
 
   showPassword = false;
   showConfirmPassword = false;
+
+  environment: any;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -54,6 +57,8 @@ export class ResetPasswordComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(res => {
       this.email = res['email'];
     })
+
+    this.environment = environment;
   }
 
   ngOnInit() {

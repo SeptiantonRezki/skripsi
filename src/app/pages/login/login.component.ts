@@ -10,6 +10,7 @@ import { commonFormValidator } from "../../classes/commonFormValidator";
 import { DialogService } from "../../services/dialog.service";
 import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from 'crypto-js';
+import { environment } from "environments/environment";
 
 @Component({
   selector: "login",
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
   username: any;
   password: any;
   userlogin: any;
+  environment: any;
 
   showPassword = false;
 
@@ -53,6 +55,8 @@ export class LoginComponent implements OnInit {
 
     this.submitting = false;
     this.rememberMe.setValue(false);
+
+    this.environment = environment;
   }
 
   ngOnInit() {

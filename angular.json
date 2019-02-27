@@ -37,7 +37,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/ayo-principal",
-            "index": "src/index.html",
+            "index": "src/public/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -47,7 +47,7 @@
             ],
             "styles": [
               "src/assets/fonts/proxima-fontface/stylesheet.css",
-              "src/styles.scss",
+              "src/scss/styles/styles.scss",
               "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
               "node_modules/froala-editor/css/froala_style.min.css",
               "node_modules/font-awesome/css/font-awesome.css"
@@ -59,10 +59,96 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/public/index.html",
+                  "with": "src/public/index.prod.html"
+                }
+              ],
+              "styles": [
+                "src/assets/fonts/proxima-fontface/stylesheet.css",
+                "src/scss/styles/styles.prod.scss",
+                "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                "node_modules/froala-editor/css/froala_style.min.css",
+                "node_modules/font-awesome/css/font-awesome.css"
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "monolith": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.monolith.ts"
+                },
+                {
+                  "replace": "src/public/index.html",
+                  "with": "src/public/index.prod.html"
+                }
+              ],
+              "styles": [
+                "src/assets/fonts/proxima-fontface/stylesheet.css",
+                "src/scss/styles/styles.prod.scss",
+                "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                "node_modules/froala-editor/css/froala_style.min.css",
+                "node_modules/font-awesome/css/font-awesome.css"
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "training": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.training.ts"
+                },
+                {
+                  "replace": "src/public/index.html",
+                  "with": "src/public/index.training.html"
+                }
+              ],
+              "styles": [
+                "src/assets/fonts/proxima-fontface/stylesheet.css",
+                "src/scss/styles/styles.training.scss",
+                "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                "node_modules/froala-editor/css/froala_style.min.css",
+                "node_modules/font-awesome/css/font-awesome.css"
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -83,6 +169,15 @@
           "configurations": {
             "production": {
               "browserTarget": "ayo-principal:build:production"
+            },
+            "qa": {
+              "browserTarget": "ayo-principal:build:qa"
+            },
+            "monolith": {
+              "browserTarget": "ayo-principal:build:monolith"
+            },
+            "training": {
+              "browserTarget": "ayo-principal:build:training"
             }
           }
         },
@@ -100,7 +195,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.scss"
+              "src/scss/styles/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -136,6 +231,15 @@
           "configurations": {
             "production": {
               "devServerTarget": "ayo-principal:serve:production"
+            },
+            "qa": {
+              "devServerTarget": "ayo-principal:serve:qa"
+            },
+            "monolith": {
+              "devServerTarget": "ayo-principal:serve:monolith"
+            },
+            "training": {
+              "devServerTarget": "ayo-principal:serve:training"
             }
           }
         },

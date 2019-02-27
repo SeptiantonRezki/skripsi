@@ -1,7 +1,7 @@
-@import "./variable.scss";
+@import "../variable/variable.training.scss";
 
 // .nav .nav-item .nav-link.active {
-//   background-color: map-get($colors, primary-red);
+//   background-color: map-get($colors, confirmation-button);
 // }
 .nav .nav-item .nav-link {
   &.active {
@@ -24,6 +24,23 @@
 
 .form-primary .mat-form-field-underline .mat-form-field-ripple {
   background-color: map-get($colors, confirmation-button) !important;
+}
+
+fuse-navbar .navbar-vertical .navbar-header {
+  background-color: map-get($colors, primary-red) !important;
+}
+
+fuse-main
+  > .mat-sidenav-container
+  > .mat-sidenav-content
+  #fuse-main-content
+  .toolbar-main,
+fuse-main
+  > .mat-sidenav-container
+  > .mat-drawer-content
+  #fuse-main-content
+  .toolbar-main {
+  background-color: map-get($colors, primary-red) !important;
 }
 
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
@@ -122,7 +139,7 @@
           animation: query 0.5s infinite cubic-bezier(0.39, 0.575, 0.565, 1);
           transition: -webkit-transform 0.15s linear;
           transition: transform 0.15s linear;
-          background-color: map-get($colors, primary-red) !important;
+          background-color: map-get($colors, confirmation-button) !important;
           position: absolute;
           left: 0;
           top: 0;
@@ -273,10 +290,10 @@ mat-form-field.radius-select {
 
   &.red {
     .mat-form-field-infix {
-      border-color: map-get($colors, primary-red);
+      border-color: map-get($colors, confirmation-button);
 
       .mat-select-value-text {
-        color: map-get($colors, primary-red);
+        color: map-get($colors, confirmation-button);
         font-size: 0.8em;
       }
     }
@@ -978,3 +995,172 @@ a {
 //   position: absolute;
 //   top: -99999999px;
 // }
+
+#ayoLogin {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  background: url("/assets/images/ayo/Demo_Copy@2x.jpg") no-repeat center center;
+  background-size: cover;
+
+  .lgn-container {
+    text-align: center;
+    place-content: center center;
+    /* align-items: start; */
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+
+    .lgn-box {
+      // height: 620px;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      padding-top: 38px;
+      padding-bottom: 38px;
+      box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.33);
+
+      .top {
+        .title {
+          padding-top: 30px;
+          font-size: 14px;
+        }
+      }
+
+      .middle-form {
+        margin: 0 50px;
+        padding-top: 20px;
+
+        form {
+          div.label {
+            text-align: left;
+            position: relative;
+            top: 15px; // font-weight: bold;
+            font-size: 14px;
+          }
+
+          mat-form-field {
+            width: 100%;
+          }
+        }
+
+        .remember-forgot-password {
+          padding-top: 20px;
+        }
+
+        a.forgot-password {
+          color: $primary-red;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 24px;
+        }
+
+        .remember-me {
+          font-size: 14px;
+        }
+
+        .login-button {
+          margin-top: 30px;
+          text-align: center;
+
+          button {
+            background: $primary-red;
+            color: #fff;
+            display: block;
+            width: 100%;
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+
+    &.text-container {
+      text-align: left;
+      color: #fff;
+      padding-left: 50px;
+      min-width: calc(100% - 800px);
+
+      h2 {
+        font-size: 21px; // font-weight: bold;
+        padding: 0 0 0;
+        margin: 0 0 10px;
+        letter-spacing: 0.5px;
+      }
+
+      h1 {
+        font-size: 64px;
+        font-weight: bold;
+        line-height: 77px;
+        padding: 0 0 0;
+        margin: 0 0 15px;
+        letter-spacing: 1px;
+        font-family: "Proxima Nova";
+      }
+
+      p {
+        font-size: 18px;
+        line-height: 25px;
+
+        .mat-icon {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
+      }
+
+      .txt-ayo {
+        height: 20px;
+        width: 496px;
+        color: #ffffff;
+        font-family: "Proxima Nova";
+        font-size: 17px;
+        line-height: 20px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  p.createaccount {
+    margin: 30px 0 0;
+
+    a {
+      color: $primary-red;
+      text-align: center;
+    }
+  }
+
+  .badge {
+    padding: 24px 48px;
+    background-image: linear-gradient(-1deg, #e1e1e1 0%, #ffffff 100%);
+    font-size: 40px !important;
+    border-radius: 20px 0px 0px 20px;
+    color: #1d3700;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    font-weight: bold;
+  }
+
+  .bg-tra {
+    position: absolute;
+    top: 40px;
+    right: -30px;
+    width: 400px;
+    height: 100px;
+    border-radius: 15px;
+    -webkit-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+    background-image: linear-gradient(-1deg, #e1e1e1 0%, #ffffff 100%);
+  }
+
+  .text-tra {
+    position: absolute;
+    right: 80px;
+    top: 65px;
+    font-size: 40px;
+    color: #1d3700;
+    font-weight: bold;
+  }
+}

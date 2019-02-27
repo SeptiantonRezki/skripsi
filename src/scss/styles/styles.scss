@@ -1,0 +1,22 @@
+@import "src/@fuse/scss/core";
+@import "../globals/global.scss";
+@import "../variable/variable.scss";
+
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("../../assets/fonts/proxima-fontface/ProximaNova-Regular.woff")
+    format("woff");
+}
+
+@import "~@angular/material/theming";
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$custom-typography: mat-typography-config(
+  $font-family: "Proxima Nova"
+);
+$primary: mat-palette($mat-red, 800);
+$accent: mat-palette($mat-red, 600);
+$theme: mat-light-theme($primary, $accent);
+// Override the typography in the core CSS.
+@include mat-core($custom-typography);
+@include angular-material-theme($theme);

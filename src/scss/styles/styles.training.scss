@@ -1,17 +1,18 @@
-@import "./variable.scss";
-// Import Fuse core library
-@import "@fuse/scss/core";
-@import "./global.scss";
+@import "src/@fuse/scss/core";
+@import "../globals/global.training.scss";
+@import "../variable/variable.training.scss";
 
 @font-face {
-  font-family: 'Proxima Nova';
-  src: url('./assets/fonts/proxima-fontface/ProximaNova-Regular.woff') format('woff');
+  font-family: "Proxima Nova";
+  src: url("../../assets/fonts/proxima-fontface/ProximaNova-Regular.woff")
+    format("woff");
 }
 
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.
-$custom-typography: mat-typography-config($font-family: 'Proxima Nova'
+$custom-typography: mat-typography-config(
+  $font-family: "Proxima Nova"
 );
 $primary: mat-palette($mat-red, 800);
 $accent: mat-palette($mat-red, 600);

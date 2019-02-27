@@ -10,6 +10,7 @@ import {
   ActivatedRoute,
   Params
 } from "../../../../node_modules/@angular/router";
+import { environment } from "environments/environment";
 
 @Component({
   selector: "app-forgot-password",
@@ -19,6 +20,8 @@ import {
 export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
   forgotPasswordFormErrors: any;
+
+  environment: any;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -38,6 +41,8 @@ export class ForgotPasswordComponent implements OnInit {
     this.forgotPasswordFormErrors = {
       email: {}
     };
+
+    this.environment = environment;
   }
 
   ngOnInit() {
