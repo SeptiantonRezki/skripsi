@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { DialogService } from "app/services/dialog.service";
 import { LandingPageService } from "app/services/inapp-marketing/landing-page.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: "app-landing-page-create",
@@ -21,7 +21,7 @@ export class LandingPageCreateComponent {
   ];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

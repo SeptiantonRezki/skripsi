@@ -7,7 +7,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 
 import * as _ from 'underscore';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-notification-create',
@@ -38,7 +38,7 @@ export class NotificationCreateComponent {
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

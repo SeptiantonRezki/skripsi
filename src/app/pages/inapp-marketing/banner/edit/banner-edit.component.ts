@@ -10,7 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
 import * as html2canvas from 'html2canvas';
 import * as _ from 'underscore';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-banner-edit',
@@ -56,7 +56,7 @@ export class BannerEditComponent {
 
   isDetail: Boolean;
 
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private activatedRoute: ActivatedRoute,

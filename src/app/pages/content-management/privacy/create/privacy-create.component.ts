@@ -4,7 +4,7 @@ import { Router } from '../../../../../../node_modules/@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PrivacyService } from 'app/services/content-management/privacy.service';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-privacy-create',
@@ -25,7 +25,7 @@ export class PrivacyCreateComponent {
   ];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -5,7 +5,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { PrivacyService } from 'app/services/content-management/privacy.service';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-privacy-edit',
@@ -27,7 +27,7 @@ export class PrivacyEditComponent {
   ];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

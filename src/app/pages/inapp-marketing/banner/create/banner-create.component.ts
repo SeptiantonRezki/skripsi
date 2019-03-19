@@ -10,7 +10,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
 import * as html2canvas from 'html2canvas';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-banner-create',
@@ -52,7 +52,7 @@ export class BannerCreateComponent {
   formBannerGroup: FormGroup;
   formBannerErrors: any;
 
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private activatedRoute: ActivatedRoute,

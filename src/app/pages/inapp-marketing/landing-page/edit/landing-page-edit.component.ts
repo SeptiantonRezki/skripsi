@@ -5,7 +5,7 @@ import { DataService } from "app/services/data.service";
 import { LandingPageService } from "app/services/inapp-marketing/landing-page.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { commonFormValidator } from "app/classes/commonFormValidator";
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: "app-landing-page-edit",
@@ -25,7 +25,7 @@ export class LandingPageEditComponent {
   ];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -5,7 +5,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { TncService } from '../../../../services/content-management/tnc.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-tnc-edit',
@@ -27,7 +27,7 @@ export class TncEditComponent {
   ];
 
   files: File;
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,

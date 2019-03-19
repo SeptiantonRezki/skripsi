@@ -5,7 +5,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { HelpService } from 'app/services/content-management/help.service';
 import { DataService } from '../../../../services/data.service';
-import { Option } from 'app/classes/config';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-help-edit',
@@ -29,7 +29,7 @@ export class HelpEditComponent {
   files: File;
   validComboDrag: Boolean;
   
-  public options: Object = Option.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG;
 
   constructor(
     private formBuilder: FormBuilder,
