@@ -279,13 +279,17 @@ export class PaguyubanIndexComponent {
     this.paguyubanService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
-        this.rows = res.data.map(item => { return {
-          ...item,
-          paguyuban: item.users.filter(item => item.type === "paguyuban")[0],
-          principal_id: item.users.filter(item => item.type === "principal")[0]['id'],
-          area: item.areas[0]['name'],
-          area_id: item.areas[0]['id']
-        }});
+        this.rows = res.data.map(item => {
+          const principal = item.users.filter(item => item.type === "principal");
+          const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
+          return {
+            ...item,
+            paguyuban: paguyuban,
+            principal_id: principal.length > 0 ? principal[0]['id'] : "",
+            area: item.areas[0]['name'],
+            area_id: item.areas[0]['id']
+          }
+        });
         
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -317,13 +321,17 @@ export class PaguyubanIndexComponent {
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => { return {
-        ...item,
-        paguyuban: item.users.filter(item => item.type === "paguyuban")[0],
-        principal_id: item.users.filter(item => item.type === "principal")[0]['id'],
-        area: item.areas[0]['name'],
-        area_id: item.areas[0]['id']
-      }});
+      this.rows = res.data.map(item => {
+        const principal = item.users.filter(item => item.type === "principal");
+        const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
+        return {
+          ...item,
+          paguyuban: paguyuban,
+          principal_id: principal.length > 0 ? principal[0]['id'] : "",
+          area: item.areas[0]['name'],
+          area_id: item.areas[0]['id']
+        }
+      });
 
       this.loadingIndicator = false;
     });
@@ -341,13 +349,17 @@ export class PaguyubanIndexComponent {
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => { return {
-        ...item,
-        paguyuban: item.users.filter(item => item.type === "paguyuban")[0],
-        principal_id: item.users.filter(item => item.type === "principal")[0]['id'],
-        area: item.areas[0]['name'],
-        area_id: item.areas[0]['id']
-      }});
+      this.rows = res.data.map(item => {
+        const principal = item.users.filter(item => item.type === "principal");
+        const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
+        return {
+          ...item,
+          paguyuban: paguyuban,
+          principal_id: principal.length > 0 ? principal[0]['id'] : "",
+          area: item.areas[0]['name'],
+          area_id: item.areas[0]['id']
+        }
+      });
 
       this.loadingIndicator = false;
     });
@@ -368,13 +380,17 @@ export class PaguyubanIndexComponent {
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => { return {
-        ...item,
-        paguyuban: item.users.filter(item => item.type === "paguyuban")[0],
-        principal_id: item.users.filter(item => item.type === "principal")[0]['id'],
-        area: item.areas[0]['name'],
-        area_id: item.areas[0]['id']
-      }});
+      this.rows = res.data.map(item => {
+        const principal = item.users.filter(item => item.type === "principal");
+        const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
+        return {
+          ...item,
+          paguyuban: paguyuban,
+          principal_id: principal.length > 0 ? principal[0]['id'] : "",
+          area: item.areas[0]['name'],
+          area_id: item.areas[0]['id']
+        }
+      });
 
       this.loadingIndicator = false;
     });
