@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { formatCurrency } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +13,7 @@ import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { Page } from '../../../../classes/laravel-pagination';
 import * as _ from 'underscore';
 import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-audience-create',
@@ -47,10 +48,12 @@ export class AudienceCreateComponent {
   loadingIndicator: Boolean;
   reorderable = true;
   saveData: Boolean;
+  exportTemplate: Boolean;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
@@ -59,6 +62,10 @@ export class AudienceCreateComponent {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
+    if (this.exportTemplate) {
+      return true;
+    }
+
     if (this.valueChange && !this.saveData || (this.selected.length > 0 && !this.saveData))
       return false;
 
@@ -78,6 +85,7 @@ export class AudienceCreateComponent {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog
   ) { 
+    this.exportTemplate = false;
     this.saveData = false;
     this.rows = [];
     this.formAudienceError = {
@@ -455,16 +463,6 @@ export class AudienceCreateComponent {
   // }
 
   searchingRetailer(res) {
-    // let queries = res;
-    // this.queries = {
-    //   national: 1,
-    //   division:  parseInt(queries['zone']) === parseInt("1") ? '' : queries['zone'],
-    //   region:  parseInt(queries['region']) === parseInt(queries['zone']) ? '' : queries['region'],
-    //   area:  parseInt(queries['area']) === parseInt(queries['region']) ? '' : queries['area'],
-    //   salespoint:  parseInt(queries['salespoint']) === parseInt(queries['area']) ? '' : queries['salespoint'],
-    //   district:  parseInt(queries['district']) === parseInt(queries['salespoint']) ? '' : queries['district'],
-    //   teritory:  parseInt(queries['territory']) === parseInt(queries['district']) ? '' : queries['territory'],
-    // }
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
     let area_id = areaSelected[areaSelected.length-1].value;
 
@@ -474,15 +472,7 @@ export class AudienceCreateComponent {
     this.audienceService.getListRetailer(this.pagination).subscribe(
       res => {
         this.rows = res['data'];
-        // this.selected = [];
         this.loadingIndicator = false;
-
-        // if (res['data'].length === 0) {
-        //   this.loadingIndicator = false;
-        //   return this.rows = [];
-        // }
-
-        // this.appendRows(res['data'], res['next_page_url']);
       },
       err => {
         console.log(err.error.message);
@@ -537,9 +527,7 @@ export class AudienceCreateComponent {
         
         let body = {
           name: this.formAudience.get('name').value,
-          trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
-          // min: limit ? this.formAudience.get('min').value : '',
-          // max: limit ? this.formAudience.get('max').value : ''
+          trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
         }
 
         if (this.formAudience.get('type').value !== 'pick-all') {
@@ -599,6 +587,13 @@ export class AudienceCreateComponent {
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });
+  }
+
+  exportAudience() {
+    this.exportTemplate = true;
+    this.downloadLink.nativeElement.href = `${environment.server}/storage/import_audience/template_import_audiece.xls`;
+    this.downloadLink.nativeElement.click();
+    this.exportTemplate = false;
   }
 
 }

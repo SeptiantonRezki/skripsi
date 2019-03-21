@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +12,7 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { Page } from 'app/classes/laravel-pagination';
 import * as _ from "underscore";
 import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-audience-edit',
@@ -49,10 +50,12 @@ export class AudienceEditComponent {
   pagination: Page = new Page();
   pageAccess = [];
   isDetail: Boolean;
+  exportTemplate: Boolean;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
 
@@ -62,10 +65,13 @@ export class AudienceEditComponent {
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
     if (this.isDetail) return true;
+    if (this.exportTemplate) return true;
 
     if ((this.valueChange && !this.saveData) || (this.selected.length !== this.detailAudience.total_audiences && !this.saveData)) {
       return false;
     }
+
+    console.log(this.downloadLink);
 
     return true;
   }
@@ -80,6 +86,7 @@ export class AudienceEditComponent {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog
   ) { 
+    this.exportTemplate = false;
     this.saveData = false;
     this.rows = [];
 
@@ -657,6 +664,13 @@ export class AudienceEditComponent {
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });
+  }
+
+  exportAudience() {
+    this.exportTemplate = true;
+    this.downloadLink.nativeElement.href = `${environment.server}/storage/import_audience/template_import_audiece.xls`;
+    this.downloadLink.nativeElement.click();
+    this.exportTemplate = false;
   }
 
 }

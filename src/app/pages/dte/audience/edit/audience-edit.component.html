@@ -67,39 +67,6 @@
           </div>
         </form>
       </div>
-
-      <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="21px" fxLayoutGap.lt-md="0px">
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Nasional"
-                formControlName="national">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Divisi"
-                formControlName="division">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Wilayah"
-                formControlName="region">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Area"
-                formControlName="area">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Distrik"
-                formControlName="district">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="15%" class="is-light form-primary">
-              <input matInput type="text" (keyup)="searchRetailer.next($event.target.value)" placeholder="Kode Teritori"
-                formControlName="teritory">
-            </mat-form-field>
-          </div> -->
-
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
@@ -166,6 +133,9 @@
         <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
           <mat-icon>arrow_downward</mat-icon> Import XLS
         </button>
+        <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
+          <mat-icon>arrow_upward</mat-icon> Export Template
+        </button>
       </div>
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <ngx-datatable class="material" [rows]="rows" [selected]="selected" [columnMode]="'force'" [headerHeight]="48"
@@ -214,4 +184,5 @@
       </button>
     </div>
   </div>
+  <a #downloadLink></a>
 </div>
