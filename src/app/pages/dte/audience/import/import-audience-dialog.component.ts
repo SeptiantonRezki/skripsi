@@ -16,6 +16,7 @@ export class ImportAudienceDialogComponent {
 
   uploading: Boolean;
   rows: any[];
+  validData: any[];
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -24,6 +25,7 @@ export class ImportAudienceDialogComponent {
     private audienceService: AudienceService,
     private dataService: DataService
   ) { 
+    this.rows = [];
     this.dataService.showLoading(false);
   }
 
@@ -41,6 +43,7 @@ export class ImportAudienceDialogComponent {
     this.audienceService.importExcel(fd).subscribe(
       res => {
         this.rows = res;
+        this.validData = (res || []).filter(item => item.is_valid).length;
         this.dataService.showLoading(false);
       },
       err => {
@@ -54,11 +57,12 @@ export class ImportAudienceDialogComponent {
   }
 
   submit() {
-    if (this.files) {
-      const res = this.rows.map(item => { return { id: item.id } });
+    const rows = this.rows.filter(item => item.is_valid);
+    if (rows.length > 0) {
+      const res = rows.map(item => { return { id: item.id } });
       this.dialogRef.close(res);
     } else {
-      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb'})
+      this.dialogService.openSnackBar({ message: "Semua row tidak valid "});
     }
   }
 
