@@ -124,7 +124,7 @@ export class ScheduleProgramIndexComponent {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
-    this.pagination.filter = this.formFilter.get('filter').value;
+    this.pagination['type'] = this.formFilter.get('filter').value;
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
     this.loadingIndicator = true;
@@ -153,7 +153,7 @@ export class ScheduleProgramIndexComponent {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.pagination.filter = this.convertDate(this.formFilter.get('start_date').value) || this.convertDate(this.formFilter.get('end_date').value) ? this.formFilter.get('filter').value : '';
+    this.pagination['type'] = this.convertDate(this.formFilter.get('start_date').value) || this.convertDate(this.formFilter.get('end_date').value) ? this.formFilter.get('filter').value : '';
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
 
