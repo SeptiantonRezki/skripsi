@@ -99,7 +99,7 @@ export class RetailerEditComponent {
       address: ["", Validators.required],
       business_code: ["", Validators.required],
       owner: ["", Validators.required],
-      phone: ["", Validators.required],
+      phone: [""],
       status: ["", Validators.required],
       national: ["", Validators.required],
       zone: ["", Validators.required],
