@@ -185,6 +185,7 @@ export class ScheduleProgramCreateComponent {
       is_notif: [1, Validators.required],
       notif: [1, Validators.required],
       is_backup: [false, Validators.required],
+      is_verification: [false, Validators.required],
       task_template_id_backup: [{ value: "", disabled: true }],
       coin_delivered_backup: [{ value: "", disabled: true }],
       coin_approved_backup: [{ value: "", disabled: true }],
@@ -317,6 +318,9 @@ export class ScheduleProgramCreateComponent {
 
       template.get('is_notif').setValue(0);
       template.get('is_notif').disable();
+
+      template.get('is_verification').setValue(false);
+      template.get('is_verification').disable();
       
       template.updateValueAndValidity();
 
@@ -330,6 +334,7 @@ export class ScheduleProgramCreateComponent {
     } else {
       template.get('min_end_date').setValue(start_date);
       
+      template.get('is_verification').enable();
       template.get('is_notif').enable();
 
       template.get('task_template_id_backup').disable();
@@ -351,6 +356,12 @@ export class ScheduleProgramCreateComponent {
     template.get('end_date_backup').setValue(this.convertDate(end_date_backup));
   }
 
+  verfication(event, idx) {
+    if (event.checked) {
+      this.backupTask({ checked: false }, idx);
+    }
+  }
+
   submit() {
     if (this.formSchedule.valid) {
       this.saveData = true;
@@ -367,6 +378,7 @@ export class ScheduleProgramCreateComponent {
           return {
             ...item,
             is_backup: item.is_backup ? 1 : 0,
+            is_verification: item.is_verification ? 1 : 0,
             notif: item.is_notif === 1 ? item.notif : 0,
             start_date: this.convertDate(item.start_date),
             end_date: this.convertDate(item.end_date)
