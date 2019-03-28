@@ -107,9 +107,10 @@ export class FieldForceEditComponent {
     this.formFF.controls['username'].setValue(this.detailFF.username);
     this.formFF.controls['status'].setValue(this.detailFF.status);
 
-    await this.detailFF.area_code.map(async (item, index) => {
-      const response = await this.fieldforceService.getParentArea({ parent: item }).toPromise();
+    for (const {val, index} of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
+      const response = await this.fieldforceService.getParentArea({ parent: val }).toPromise();
       let wilayah = this.formFF.controls['wilayah'] as FormArray;
+
       wilayah.push(this.formBuilder.group({
         national: [this.getArea(response, 'national'), Validators.required],
         zone: [this.getArea(response, 'division'), Validators.required],
@@ -134,7 +135,7 @@ export class FieldForceEditComponent {
         this.onLoad = false;
         if (this.isDetail) this.formFF.disable();
       }
-    })
+    }
   }
 
   createWilayah(): FormGroup {
@@ -161,6 +162,7 @@ export class FieldForceEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
+          console.log(wilayah.at(index));
           wilayah.at(index).get('national').disable();
           break
         case 'division':
