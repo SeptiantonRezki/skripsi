@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  server: "https://api.qa.src.id",
+  server: "https://api.qa.micro.src.id",
   label: "MONOLITH QA",
   show_label: false,
   image: "assets/images/ayo/AYO_SRC_(Master).png",
