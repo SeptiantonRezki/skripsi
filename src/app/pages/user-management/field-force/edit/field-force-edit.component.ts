@@ -162,6 +162,7 @@ export class FieldForceEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
+          console.log(wilayah.at(index));
           wilayah.at(index).get('national').disable();
           break
         case 'division':
