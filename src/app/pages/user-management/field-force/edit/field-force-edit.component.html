@@ -3,12 +3,12 @@
   <page-content-header [contentTitle]="'Field Force Detail'">
   </page-content-header>
   <!-- / HEADER -->
-  <div class="content p-24" *ngIf="!onLoad">
-    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+  <div class="content" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0 m-24" fxLayout="column">
 
       <form [formGroup]="formFF">
-        <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-          <h3>Detil Field Force</h3>
+        <div class="ayo-top px-24" fxLayout="row" fxLayoutAlign="space-between center">
+          <h3 class="font-weight-700">Detil Field Force</h3>
           <mat-form-field [class]="formFF.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
@@ -17,74 +17,84 @@
         </div>
         <div class="ayo-middle pt-24" fxLayout="column">
 
-          <mat-form-field fxFlex="100" class="is-light">
+          <mat-form-field fxFlex="100" class="is-light px-24">
             <input matInput placeholder="Nama" type="text" formControlName="fullname">
           </mat-form-field>
-          <mat-form-field fxFlex="100" class="is-light">
+          <mat-form-field fxFlex="100" class="is-light px-24">
             <input matInput placeholder="Username" type="text" formControlName="username">
           </mat-form-field>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
-
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formFF.get('national').value, listLevelArea)}}">
-                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['national'].hasError('required') && formFF.controls['national'].touched">
-                National harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formFF.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formFF.get('zone').value)">
-                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['zone'].hasError('required') && formFF.controls['zone'].touched">
-                Zone harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formFF.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formFF.get('region').value)">
-                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['region'].hasError('required') && formFF.controls['region'].touched">
-                Regional harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formFF.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formFF.get('area').value)">
-                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['area'].hasError('required') && formFF.controls['area'].touched">
-                Area harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formFF.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formFF.get('salespoint').value)">
-                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['salespoint'].hasError('required') && formFF.controls['salespoint'].touched">
-                Salespoint harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formFF.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formFF.get('district').value)">
-                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['district'].hasError('required') && formFF.controls['district'].touched">
-                Distrik harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formFF.get('territory').value, list['territory'])}}">
-                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formFF.controls['territory'].hasError('required') && formFF.controls['territory'].touched">
-                Territori harus diisi
-              </mat-error>
-            </mat-form-field>
+          <div class="" formArrayName="wilayah" *ngFor="let wil of formFF.get('wilayah')['controls']; let i = index;">
+            <div [formGroupName]="i">
+              <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex="50"><h3 class="">Geotree {{i+1}}</h3></div>
+                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                  <button *ngIf="formFF.get('wilayah').value.length === 1" mat-raised-button type="button" (click)="addWilayah(i)"><mat-icon>add</mat-icon></button>
+                  <button *ngIf="formFF.get('wilayah').value.length === 2" mat-raised-button color="primary" type="button" (click)="deleteWilayah(i)"><mat-icon>delete</mat-icon></button>
+                </div>
+              </div>
+              <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
+                    <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                    National harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}" (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
+                    Zone harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}" (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
+                    Regional harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}" (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                    Area harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}" (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                    Salespoint harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}" (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                    Distrik harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
+                    <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
+                    Territori harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
           </div>
 
-          <div *ngIf="!isDetail">
+          <div *ngIf="!isDetail" class="px-24">
             <div fxLayout="row" class="pt-16" fxLayoutAlign="start center">
               <h2 class="">Ubah Kata Sandi Baru</h2>
             </div>
@@ -113,7 +123,7 @@
             </div>
           </div>
 
-          <div *ngIf="!isDetail" class="confirm btn-confirm py-48" fxLayout="row" fxLayoutGap="25px">
+          <div *ngIf="!isDetail" class="confirm btn-confirm px-24 py-48" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>

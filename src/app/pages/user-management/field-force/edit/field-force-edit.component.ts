@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { FieldForceService } from 'app/services/user-management/field-force.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-field-force-edit',
@@ -17,6 +18,7 @@ export class FieldForceEditComponent {
   onLoad: Boolean;
   showPassword = false;
   showConfirmPassword = false;
+  indexDelete: any;
 
   detailFF: any;
   listStatus: any[] = [
@@ -84,13 +86,7 @@ export class FieldForceEditComponent {
       fullname: [""],
       username: [""],
       status: ["", Validators.required],
-      national: ["", Validators.required],
-      zone: ["", Validators.required],
-      salespoint: ["", Validators.required],
-      region: ["", Validators.required],
-      area: ["", Validators.required],
-      district: ["", Validators.required],
-      territory: ["", Validators.required],
+      wilayah: this.formBuilder.array([], Validators.required),
       password: [""],
       password_confirmation: [""],
     });
@@ -99,55 +95,98 @@ export class FieldForceEditComponent {
       commonFormValidator.parseFormChanged(this.formFF, this.formdataErrors);
     });
 
-    this.fieldforceService.getParentArea({ parent: this.detailFF.area_code[0] }).subscribe(res => {
-      this.detailAreaSelected = res.data;
-      this.onLoad = false;
-
-      this.initArea();
-      this.initFormGroup();
-    })
-
     this.formFF.get('fullname').disable();
     this.formFF.get('username').disable();
+
+    this.setDetail();
   }
 
-  initArea() {
+  async setDetail() {
+    
+    this.formFF.controls['fullname'].setValue(this.detailFF.fullname);
+    this.formFF.controls['username'].setValue(this.detailFF.username);
+    this.formFF.controls['status'].setValue(this.detailFF.status);
+
+    await this.detailFF.area_code.map(async (item, index) => {
+      const response = await this.fieldforceService.getParentArea({ parent: item }).toPromise();
+      let wilayah = this.formFF.controls['wilayah'] as FormArray;
+      wilayah.push(this.formBuilder.group({
+        national: [this.getArea(response, 'national'), Validators.required],
+        zone: [this.getArea(response, 'division'), Validators.required],
+        region: [this.getArea(response, 'region'), Validators.required],
+        area: [this.getArea(response, 'area'), Validators.required],
+        salespoint: [this.getArea(response, 'salespoint'), Validators.required],
+        district: [this.getArea(response, 'district'), Validators.required],
+        territory: [this.getArea(response, 'teritory'), Validators.required],
+        list_national: this.formBuilder.array(this.listLevelArea),
+        list_zone: this.formBuilder.array([]),
+        list_region: this.formBuilder.array([]),
+        list_area: this.formBuilder.array([]),
+        list_salespoint: this.formBuilder.array([]),
+        list_district: this.formBuilder.array([]),
+        list_territory: this.formBuilder.array([])
+      }))
+
+      this.initArea(index);
+      this.initFormGroup(response, index);
+
+      if (this.detailFF.area_code.length === (index+1)) {
+        this.onLoad = false;
+        if (this.isDetail) this.formFF.disable();
+      }
+    })
+  }
+
+  createWilayah(): FormGroup {
+    return this.formBuilder.group({
+      national: [1, Validators.required],
+      zone: ["", Validators.required],
+      salespoint: ["", Validators.required],
+      region: ["", Validators.required],
+      area: ["", Validators.required],
+      district: ["", Validators.required],
+      territory: ["", Validators.required],
+      list_national: this.formBuilder.array(this.listLevelArea),
+      list_zone: this.formBuilder.array([]),
+      list_region: this.formBuilder.array([]),
+      list_area: this.formBuilder.array([]),
+      list_salespoint: this.formBuilder.array([]),
+      list_district: this.formBuilder.array([]),
+      list_territory: this.formBuilder.array([])
+    })
+  }
+
+  initArea(index) {
+    let wilayah = this.formFF.controls['wilayah'] as FormArray;
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          this.formFF.get('national').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('national').disable();
           break
         case 'division':
-          this.formFF.get('zone').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('zone').disable();
           break;
         case 'region':
-          this.formFF.get('region').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('region').disable();
           break;
         case 'area':
-          this.formFF.get('area').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('area').disable();
           break;
         case 'salespoint':
-          this.formFF.get('salespoint').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('salespoint').disable();
           break;
         case 'district':
-          this.formFF.get('district').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('district').disable();
           break;
         case 'territory':
-          this.formFF.get('territory').disable();
-          // this.formFF.get('national').setValue(item.id);
+          wilayah.at(index).get('territory').disable();
           break;
       }
     })
   }
 
-  initFormGroup() {
-    this.detailAreaSelected.map(item => {
+  initFormGroup(response, index) {
+    response.data.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
         case 'national':
@@ -169,125 +208,158 @@ export class FieldForceEditComponent {
           level_desc = 'territory';
           break;
       }
-      this.getAudienceArea(level_desc, item.id);
+      this.generataList(level_desc, item.id, index, 'render');
     });
-
-    this.formFF.setValue({
-      fullname: this.detailFF.fullname,
-      username: this.detailFF.username,
-      status: this.detailFF.status,
-      national: this.getArea('national'),
-      zone: this.getArea('division'),
-      region: this.getArea('region'),
-      area: this.getArea('area'),
-      salespoint: this.getArea('salespoint'),
-      district: this.getArea('district'),
-      territory: this.getArea('teritory'),
-      password: "",
-      password_confirmation: "",
-    });
-
-    if (this.isDetail) this.formFF.disable();
   }
 
-  getAudienceArea(selection, id) {
+  async generataList(selection, id, index, type) {
     let item: any;
+    let wilayah = this.formFF.controls['wilayah'] as FormArray;
     switch (selection) {
       case 'zone':
-          this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
+          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+
+          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+            list.push(this.formBuilder.group(item));
           });
 
-          this.formFF.get('region').setValue('');
-          this.formFF.get('area').setValue('');
-          this.formFF.get('salespoint').setValue('');
-          this.formFF.get('district').setValue('');
-          this.formFF.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('region').setValue(null);
+            wilayah.at(index).get('area').setValue('');
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            this.clearFormArray(wilayah.at(index).get('list_region') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_area') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+          }
         break;
       case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+          item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+              list.push(this.formBuilder.group(item));
             });
           } else {
-            this.list[selection] = []
+            wilayah.at(index).get(`list_${selection}`).setValue([]);
           }
 
-          this.formFF.get('region').setValue('');
-          this.formFF.get('area').setValue('');
-          this.formFF.get('salespoint').setValue('');
-          this.formFF.get('district').setValue('');
-          this.formFF.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('region').setValue('');
+            wilayah.at(index).get('area').setValue('');
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            this.clearFormArray(wilayah.at(index).get('list_area') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+          }
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+          item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+              list.push(this.formBuilder.group(item));
             });
           } else {
-            this.list[selection] = []
+            wilayah.at(index).get(`list_${selection}`).setValue([]);
           }
 
-          this.formFF.get('area').setValue('');
-          this.formFF.get('salespoint').setValue('');
-          this.formFF.get('district').setValue('');
-          this.formFF.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('area').setValue('');
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+          }
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+          item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+              list.push(this.formBuilder.group(item));
             });
           } else {
-            this.list[selection] = []
+            wilayah.at(index).get(`list_${selection}`).setValue([]);
           }
 
-          this.formFF.get('salespoint').setValue('');
-          this.formFF.get('district').setValue('');
-          this.formFF.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
+            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+          }
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+          item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+              list.push(this.formBuilder.group(item));
             });
           } else {
-            this.list[selection] = []
+            wilayah.at(index).get(`list_${selection}`).setValue([]);
           }
 
-          this.formFF.get('district').setValue('');
-          this.formFF.get('territory').setValue('');
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+          }
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
-            this.fieldforceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+              list.push(this.formBuilder.group(item));
             });
           } else {
-            this.list[selection] = []
+            wilayah.at(index).get(`list_${selection}`).setValue([]);
           }
 
-          this.formFF.get('territory').setValue('');
+          if (type !== 'render') {
+            wilayah.at(index).get('territory').setValue('');
+          }
         break;
     
       default:
@@ -295,33 +367,19 @@ export class FieldForceEditComponent {
     }
   }
 
-  getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  getArea(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
   submit() {
-
     if (this.formFF.valid) {  
-
-      // fullname: this.detailFF.fullname,
-      // username: this.detailFF.username,
-      // status: this.detailFF.status,
-      // national: this.getArea('national'),
-      // zone: this.getArea('division'),
-      // region: this.getArea('region'),
-      // area: this.getArea('area'),
-      // salespoint: this.getArea('salespoint'),
-      // district: this.getArea('district'),
-      // territory: this.getArea('teritory'),
-      // password: [""],
-      // password_confirmation: [""],
-
+      let wilayah = this.formFF.controls['wilayah'] as FormArray;
 
       let body = {
         _method: "PUT",
         username: this.formFF.get("username").value,
         name: this.formFF.get("fullname").value,
-        areas: [this.formFF.get('territory').value],
+        areas: wilayah.value.map(item => item.territory),
         status: this.formFF.get("status").value
       };
 
@@ -353,6 +411,36 @@ export class FieldForceEditComponent {
     } else {
       return "";
     }
+  }
+
+  addWilayah(idx) {
+    let wilayah = this.formFF.controls['wilayah'] as FormArray;
+    if (wilayah.length < 2) {
+      wilayah.push(this.createWilayah());
+      this.initArea(1);
+      this.generataList('zone', 1, 1, 'render');
+    }
+  }
+
+  deleteWilayah(idx) {
+    this.indexDelete = idx;
+    let data = {
+      titleDialog: "Hapus Geotree",
+      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx+1} ?`,
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    let wilayah = this.formFF.controls['wilayah'] as FormArray;
+    wilayah.removeAt(this.indexDelete);
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  clearFormArray = (formArray: FormArray) => {
+    formArray = this.formBuilder.array([]);
   }
 
 }
