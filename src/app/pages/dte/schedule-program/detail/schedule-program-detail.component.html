@@ -79,11 +79,12 @@
 
             <div>
               <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
-                <h3 class="">Template Tugas</h3>
-                <!-- <button mat-button type="button" (click)="export(item)">
-                  <mat-icon>arrow_upward</mat-icon>
-                  EXPORT
-                </button> -->
+                <div fxFlex="50">
+                  <h3 class="">Template Tugas</h3>
+                </div>
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <h3><mat-slide-toggle disabled [checked]="item.is_verification">Push to FF?</mat-slide-toggle></h3>
+                </div>
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
