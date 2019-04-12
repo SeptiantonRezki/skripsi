@@ -162,7 +162,6 @@ export class FieldForceEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          console.log(wilayah.at(index));
           wilayah.at(index).get('national').disable();
           break
         case 'division':
@@ -417,11 +416,11 @@ export class FieldForceEditComponent {
 
   addWilayah(idx) {
     let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    if (wilayah.length < 2) {
-      wilayah.push(this.createWilayah());
-      this.initArea(1);
-      this.generataList('zone', 1, 1, 'render');
-    }
+    // if (wilayah.length < 2) {
+    wilayah.push(this.createWilayah());
+    this.initArea(1);
+    this.generataList('zone', 1, 1, 'render');
+    // }
   }
 
   deleteWilayah(idx) {
