@@ -21,7 +21,7 @@ export class RetailerEditComponent {
   listStatus: any[] = [
     { name: "Status Aktif", value: "active" },
     { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Belum terdaftar", value: "not-registered" }
+    // { name: "Status Belum terdaftar", value: "not-registered" }
   ];
 
   listType: any[] = [
@@ -119,13 +119,16 @@ export class RetailerEditComponent {
 
     // this.setDetailRetailer();
     
-    if(this.detailRetailer.status === 'not-registered'){
+    if (this.detailRetailer.status === 'not-registered'){
       this.formRetailer.get('status').disable();
-    }else{
       this.listStatus = [
         { name: "Status Aktif", value: "active" },
-        { name: "Status Non Aktif", value: "inactive" }
+        { name: "Status Non Aktif", value: "inactive" },
+        { name: "Status Belum terdaftar", value: "not-registered" }
       ];
+    } else if (this.detailRetailer.status === 'active') {
+      this.formRetailer.controls['phone'].setValidators(Validators.required);
+      this.formRetailer.updateValueAndValidity();
     }
     this.onLoad = true;
     this.retailerService.getParentArea({ parent: this.detailRetailer.area_id[0] }).subscribe(res => {
@@ -365,7 +368,7 @@ export class RetailerEditComponent {
         address: this.formRetailer.get("address").value,
         business_code: this.formRetailer.get("business_code").value,
         owner: this.formRetailer.get("owner").value,
-        phone: `+62${this.formRetailer.getRawValue()["phone"]}`,
+        phone: this.formRetailer.getRawValue()["phone"] ? `+62${this.formRetailer.getRawValue()["phone"]}` : '',
         status: this.formRetailer.get("status").value,
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value,
