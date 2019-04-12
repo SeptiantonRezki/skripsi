@@ -29,8 +29,8 @@
               <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxFlex="50"><h3 class="">Geotree {{i+1}}</h3></div>
                 <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                  <button *ngIf="formFF.get('wilayah').value.length === 1" mat-raised-button type="button" (click)="addWilayah(i)"><mat-icon>add</mat-icon></button>
-                  <button *ngIf="formFF.get('wilayah').value.length === 2" mat-raised-button color="primary" type="button" (click)="deleteWilayah(i)"><mat-icon>delete</mat-icon></button>
+                  <button *ngIf="formFF.get('wilayah').value.length === 1 || i === (formFF.get('wilayah').value.length - 1)" mat-raised-button type="button" (click)="addWilayah(i)"><mat-icon>add</mat-icon></button>
+                  <button *ngIf="formFF.get('wilayah').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteWilayah(i)"><mat-icon>delete</mat-icon></button>
                 </div>
               </div>
               <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
