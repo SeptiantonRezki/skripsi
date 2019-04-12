@@ -151,8 +151,15 @@
             REJECT
           </button> -->
 
-          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
             SETUJUI
+          </button>
+        </div>
+
+        <div class="confirm p-24" *ngIf="dataScheduler['status_scheduler'] === 'publish'"
+          fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit('unpublish')" fxFlex="20">
+            UNPUBLISH
           </button>
         </div>
       </form>

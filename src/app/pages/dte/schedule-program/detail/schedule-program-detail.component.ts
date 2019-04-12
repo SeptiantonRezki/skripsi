@@ -258,10 +258,10 @@ export class ScheduleProgramDetailComponent {
     return "";
   }
 
-  submit() {
+  submit(param) {
     let body = {
       _method: 'PUT',
-      status_scheduler: 'publish'
+      status_scheduler: param
     }
 
     this.scheduleTradeProgramService.put(body, {schedule_tp_id: this.idScheduler}).subscribe(
