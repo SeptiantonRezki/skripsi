@@ -32,7 +32,7 @@
 
                 <!-- TOOLBAR: Below -->
                 <ng-container *ngIf="fuseSettings.layout.toolbar === 'below'">
-                    <fuse-toolbar class="below toolbar-main"></fuse-toolbar>
+                    <fuse-toolbar class="below toolbar-main" [ngStyle]="{'background-image': 'url(' + environment?.backgroundImage  + ')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}"></fuse-toolbar>
                 </ng-container>
                 <!-- / TOOLBAR: Below -->
 

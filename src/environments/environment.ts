@@ -8,7 +8,8 @@ export const environment = {
   label: "DEVELOPMENT",
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
-  image_2x: "assets/images/ayo/icon/dev@2x.png 2x"
+  image_2x: "assets/images/ayo/icon/dev@2x.png 2x",
+  backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg"
 };
 
 /*

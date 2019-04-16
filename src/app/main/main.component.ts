@@ -7,6 +7,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 
 import { navigation } from 'app/navigation/navigation';
 import { DataService } from 'app/services/data.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector     : 'fuse-main',
@@ -21,6 +22,7 @@ export class FuseMainComponent implements OnDestroy
     navigation: any;
     showLoading: Boolean;
     showProgress: Boolean;
+    environment: any;
 
     progress: any;
 
@@ -50,6 +52,7 @@ export class FuseMainComponent implements OnDestroy
         }
 
         this.navigation = navigation;
+        this.environment = environment;
     }
 
     ngOnInit() {
