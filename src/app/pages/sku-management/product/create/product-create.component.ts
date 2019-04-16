@@ -191,6 +191,7 @@ export class ProductCreateComponent {
       category: ["", Validators.required],
       subCategory: [""],
       barcode: [""],
+      is_promo_src: [false],
       // otherSubCategory: ["", Validators.required],
       packaging: ["", Validators.required],
       // convertion: ["", [Validators.min(0)]]
@@ -267,6 +268,7 @@ export class ProductCreateComponent {
         barcode: this.formProductGroup.get("barcode").value,
         packaging_id: this.formProductGroup.get("packaging").value,
         status: this.formProductGroup.get("status").value,
+        is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
         // convertion: this.formProductGroup.get("convertion").value
       };
 
@@ -280,6 +282,7 @@ export class ProductCreateComponent {
       // fd.append("sub_category_id", body.sub_category_id);
       fd.append("packaging_id", body.packaging_id);
       fd.append("status", body.status);
+      fd.append("is_promo_src", body.is_promo_src);
       // fd.append("convertion", body.convertion);
 
       body.alias.map(item => {

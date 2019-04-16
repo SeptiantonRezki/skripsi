@@ -131,7 +131,9 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/product/product/${context.product_id}`,
         list_brand: `${AYO_API}/api/general/product/brand?page=all`,
         list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${context.parent_id}`,
-        list_packaging: `${AYO_API}/api/${type_api}/product/packaging?page=all`
+        list_packaging: `${AYO_API}/api/${type_api}/product/packaging?page=all`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
       template_task: {
         get: `${AYO_API}/api/${type_api}/template`,

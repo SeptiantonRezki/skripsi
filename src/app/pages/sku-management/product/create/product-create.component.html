@@ -137,6 +137,44 @@
                   {{item.name}}
                 </mat-radio-button>
               </mat-radio-group>
+              <mat-checkbox formControlName="is_promo_src">Promo SRC</mat-checkbox>
+              <div *ngIf="formProductGroup.get('is_promo_src').value" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formProductGroup.get('national').value, listLevelArea)}}">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formProductGroup.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formProductGroup.get('zone').value)">
+                    <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formProductGroup.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formProductGroup.get('region').value)">
+                    <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formProductGroup.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formProductGroup.get('area').value)">
+                    <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formProductGroup.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formProductGroup.get('salespoint').value)">
+                    <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formProductGroup.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formProductGroup.get('district').value)">
+                    <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formProductGroup.get('territory').value, list['territory'])}}">
+                    <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
           </mat-tab>
           <mat-tab label="Gambar Produk">

@@ -50,4 +50,14 @@ export class ProductService extends BaseService {
     const url = this.getUrl(this.namespace, "list_packaging");
     return this.getApi(url);
   }
+
+  getListOtherChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
+  }
+
+  getParentArea(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "parent", context);
+    return this.getApi(url);
+  }
 }
