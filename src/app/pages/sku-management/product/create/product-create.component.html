@@ -11,93 +11,67 @@
         <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
         <mat-tab-group>
           <mat-tab label="Informasi Produk">
-            <div class="ayo-middle p-24" fxLayout="column">
-              <!-- <div class="button-row">
-                <button type="button" mat-raised-button (click)="openDialog()">
-                  <mat-icon>horizontal_split</mat-icon> SCAN BARCODE
-                </button>
-              </div> -->
-              <div class="button" (click)="openDialog()">
-                <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                  <mat-icon class="secondary-text">horizontal_split</mat-icon>
-                  <span class="h5 text-center">SCAN BARCODE</span>
+            <div class="ayo-middle" fxLayout="column">
+              <div class="p-24" fxLayout="column">
+                <!-- <div class="button-row">
+                  <button type="button" mat-raised-button (click)="openDialog()">
+                    <mat-icon>horizontal_split</mat-icon> SCAN BARCODE
+                  </button>
+                </div> -->
+                <div class="button" (click)="openDialog()">
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                    <mat-icon class="secondary-text">horizontal_split</mat-icon>
+                    <span class="h5 text-center">SCAN BARCODE</span>
+                  </div>
                 </div>
-              </div>
-              <br>
+                <br>
 
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" placeholder="Nama Produk" formControlName="name">
-                <mat-error *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
-                  Nama Produk harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" placeholder="Barcode" formControlName="barcode" readonly>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <!-- <mat-select placeholder="Perusahaan" formControlName="brand">
-                  <mat-option [value]="item.id" *ngFor="let item of listBrand">
-                    {{item.name}}
-                  </mat-option>
-                </mat-select> -->
-                <mat-select formControlName="brand" placeholder="Perusahaan" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterBrand" [placeholderLabel]="'Cari Perusahaan...'"
-                    [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"></ngx-mat-select-search>
-                  <mat-option *ngFor="let item of filteredBrand | async" [value]="item.id">
-                    {{item.name}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="formProductGroup.controls['brand'].hasError('required') && formProductGroup.controls['brand'].touched">
-                  Perusahaan harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-chip-list #chipList>
-                  <mat-chip color="primary" *ngFor="let item of formProductGroup.get('alias')['controls']; let i = index;"
-                    [selectable]="selectable" [removable]="removable" (removed)="removeAlias(i)">
-                    {{item.get('alias').value}}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                  </mat-chip>
-                  <input matInput placeholder="Nama Lain Produk" type="text" [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                    (matChipInputTokenEnd)="addAlias($event)">
-                </mat-chip-list>
-                <mat-error *ngIf="formProductGroup.controls['alias'].hasError('required') && formProductGroup.controls['alias'].touched">
-                  Nama Lain Produk harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select formControlName="category" placeholder="Kategori Produk" #singleSelect (selectionChange)="selectionChange($event)">
-                  <ngx-mat-select-search [formControl]="filterCategory" [placeholderLabel]="'Cari Kategori...'"
-                    [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"></ngx-mat-select-search>
-                  <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
-                    {{item.name}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
-                  Kategori Produk harus diisi
-                </mat-error>
-              </mat-form-field>
-              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
-
-                <!-- <mat-form-field fxFlex="68" class="is-light form-primary">
-                  <mat-select placeholder="Sub Kategori" formControlName="subCategory" (selectionChange)="selectionChangeSub($event)">
-                    <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field> -->
-                <!-- <mat-form-field fxFlex="30" class="is-light form-primary">
-                  <mat-select placeholder="Sub Kategori Lainnya" formControlName="otherSubCategory">
-                    <mat-option [value]="item.id" *ngFor="let item of listOtherSubCategory">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field> -->
-                <!-- (selectionChange)="selectionChangeSub($event)" -->
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select placeholder="Sub Kategori" formControlName="subCategory">
-                    <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
+                  <input matInput type="text" placeholder="Nama Produk" formControlName="name">
+                  <mat-error *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
+                    Nama Produk harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Barcode" formControlName="barcode" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <!-- <mat-select placeholder="Perusahaan" formControlName="brand">
+                    <mat-option [value]="item.id" *ngFor="let item of listBrand">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select> -->
+                  <mat-select formControlName="brand" placeholder="Perusahaan" #singleSelect>
+                    <ngx-mat-select-search [formControl]="filterBrand" [placeholderLabel]="'Cari Perusahaan...'"
+                      [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of filteredBrand | async" [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formProductGroup.controls['brand'].hasError('required') && formProductGroup.controls['brand'].touched">
+                    Perusahaan harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-chip-list #chipList>
+                    <mat-chip color="primary" *ngFor="let item of formProductGroup.get('alias')['controls']; let i = index;"
+                      [selectable]="selectable" [removable]="removable" (removed)="removeAlias(i)">
+                      {{item.get('alias').value}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input matInput placeholder="Nama Lain Produk" type="text" [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                      (matChipInputTokenEnd)="addAlias($event)">
+                  </mat-chip-list>
+                  <mat-error *ngIf="formProductGroup.controls['alias'].hasError('required') && formProductGroup.controls['alias'].touched">
+                    Nama Lain Produk harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select formControlName="category" placeholder="Kategori Produk" #singleSelect (selectionChange)="selectionChange($event)">
+                    <ngx-mat-select-search [formControl]="filterCategory" [placeholderLabel]="'Cari Kategori...'"
+                      [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
@@ -105,75 +79,138 @@
                     Kategori Produk harus diisi
                   </mat-error>
                 </mat-form-field>
-                <!-- <mat-select formControlName="subCategory" placeholder="Sub Kategori" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterSubCategory" [placeholderLabel]="'Cari Sub Kategori...'"
-                    [noEntriesFoundLabel]="'Tidak ada sub kategory yang ditemukan'"></ngx-mat-select-search>
-                  <mat-option *ngFor="let item of filteredSubCategory | async" [value]="item.id">
-                    {{item.name}}
-                  </mat-option>
-                </mat-select> -->
-              </div>
-              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
+                <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
 
-                <mat-form-field fxFlex="50" class="is-light form-primary">
-                  <mat-select placeholder="UOM" formControlName="packaging">
-                    <mat-option [value]="item.id" *ngFor="let item of listPackaging">
+                  <!-- <mat-form-field fxFlex="68" class="is-light form-primary">
+                    <mat-select placeholder="Sub Kategori" formControlName="subCategory" (selectionChange)="selectionChangeSub($event)">
+                      <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <!-- <mat-form-field fxFlex="30" class="is-light form-primary">
+                    <mat-select placeholder="Sub Kategori Lainnya" formControlName="otherSubCategory">
+                      <mat-option [value]="item.id" *ngFor="let item of listOtherSubCategory">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <!-- (selectionChange)="selectionChangeSub($event)" -->
+                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <mat-select placeholder="Sub Kategori" formControlName="subCategory">
+                      <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
+                      Kategori Produk harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- <mat-select formControlName="subCategory" placeholder="Sub Kategori" #singleSelect>
+                    <ngx-mat-select-search [formControl]="filterSubCategory" [placeholderLabel]="'Cari Sub Kategori...'"
+                      [noEntriesFoundLabel]="'Tidak ada sub kategory yang ditemukan'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of filteredSubCategory | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="formProductGroup.controls['packaging'].hasError('required') && formProductGroup.controls['packaging'].touched">
-                    Nama UOM harus diisi
-                  </mat-error>
-                </mat-form-field>
-                <!-- <mat-form-field fxFlex="25" class="is-light form-primary">
-                  <input matInput type="number" formControlName="convertion" placeholder="Konversi">
-                </mat-form-field> -->
+                  </mat-select> -->
+                </div>
+                <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
+
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select placeholder="UOM" formControlName="packaging">
+                      <mat-option [value]="item.id" *ngFor="let item of listPackaging">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formProductGroup.controls['packaging'].hasError('required') && formProductGroup.controls['packaging'].touched">
+                      Nama UOM harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- <mat-form-field fxFlex="25" class="is-light form-primary">
+                    <input matInput type="number" formControlName="convertion" placeholder="Konversi">
+                  </mat-form-field> -->
+                </div>
+                <div class="pt-16">
+                  <strong>Status Produk</strong>
+                </div>
+                <mat-radio-group formControlName="status" class="radio-group pb-16">
+                  <mat-radio-button class="radio-button" *ngFor="let item of statusProduk" [value]="item.status">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+                <div class="py-16">
+                  <strong>Jenis Produk</strong>
+                </div>
+                <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox>
               </div>
-              <div class="pt-16">
-                <strong>Status Produk</strong>
-              </div>
-              <mat-radio-group formControlName="status" class="radio-group pb-16">
-                <mat-radio-button class="radio-button" *ngFor="let item of statusProduk" [value]="item.status">
-                  {{item.name}}
-                </mat-radio-button>
-              </mat-radio-group>
-              <mat-checkbox formControlName="is_promo_src">Promo SRC</mat-checkbox>
-              <div *ngIf="formProductGroup.get('is_promo_src').value" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formProductGroup.get('national').value, listLevelArea)}}">
-                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formProductGroup.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formProductGroup.get('zone').value)">
-                    <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formProductGroup.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formProductGroup.get('region').value)">
-                    <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formProductGroup.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formProductGroup.get('area').value)">
-                    <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formProductGroup.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formProductGroup.get('salespoint').value)">
-                    <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formProductGroup.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formProductGroup.get('district').value)">
-                    <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formProductGroup.get('territory').value, list['territory'])}}">
-                    <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+              <div class="" formArrayName="areas" *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex="50"><h3 class="">Geotree {{i+1}}</h3></div>
+                    <!-- <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                      <button *ngIf="formProductGroup.get('areas').value.length === 1 || i === (formProductGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea(i)"><mat-icon>add</mat-icon></button>
+                      <button *ngIf="formProductGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)"><mat-icon>delete</mat-icon></button>
+                    </div> -->
+                  </div>
+                  <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
+                        <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                        National harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}" (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
+                        Zone harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}" (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
+                        Regional harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}" (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                        Area harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}" (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                        Salespoint harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}" (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                        Distrik harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="31%" class="is-light form-primary">
+                      <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
+                        <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
+                        Territori harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
           </mat-tab>
