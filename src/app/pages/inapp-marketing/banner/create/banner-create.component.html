@@ -4,9 +4,9 @@
   <!-- / HEADER -->
 
   <div class="content p-24">
-    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off" [formGroup]="formBannerGroup">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
           <h2 class="">Buat Spanduk</h2>
           <div>
             <mat-form-field [class]="formBannerGroup.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
@@ -17,12 +17,12 @@
           </div>
         </div>
         <div class="ayo-middle" fxLayout="column">
-          <div class="" fxLayout="row" fxLayoutAlign="start center">
+          <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
               <strong>Informasi Spanduk</strong>
             </h3>
           </div>
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16 px-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
 
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Spanduk">
@@ -31,7 +31,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="row" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="20%" class="is-light form-primary">
               <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="from" placeholder="Dari"
                 (dateChange)="setMinDate()">
@@ -55,89 +55,15 @@
               <mat-datepicker #sampai></mat-datepicker>
             </mat-form-field>
           </div>
-          <div class="" fxLayout="row" fxLayoutAlign="start center">
+          <!-- <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
               <strong>Audience</strong>
             </h3>
-          </div>
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
-
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
-                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['national'].hasError('required') && formBannerGroup.controls['national'].touched">
-                National harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formBannerGroup.get('zone').value)">
-                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua Zona' :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['zone'].hasError('required') && formBannerGroup.controls['zone'].touched">
-                Zone harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formBannerGroup.get('region').value)">
-                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                  Regional'
-                  :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['region'].hasError('required') && formBannerGroup.controls['region'].touched">
-                Regional harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formBannerGroup.get('area').value)">
-                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua Area'
-                  :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['area'].hasError('required') && formBannerGroup.controls['area'].touched">
-                Area harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formBannerGroup.get('salespoint').value)">
-                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                  Salespoint'
-                  :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['salespoint'].hasError('required') && formBannerGroup.controls['salespoint'].touched">
-                Salespoint harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formBannerGroup.get('district').value)">
-                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                  District'
-                  :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['district'].hasError('required') && formBannerGroup.controls['district'].touched">
-                Distrik harus diisi
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory">
-                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                  Territori'
-                  :
-                  item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formBannerGroup.controls['territory'].hasError('required') && formBannerGroup.controls['territory'].touched">
-                Territori harus diisi
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+          </div> -->
+          <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center">
             <span class="text-bold">Pilih Template Iklan</span>
           </div>
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <div fxFlex="45" class="pb-24" *ngFor="let item of templateBannerList">
               <span>{{item.name}}</span>
               <div [ngClass]="{'selected-banner': bannerSelected?.id === item.id, 'banner-image-template' : bannerSelected?.id !== item.id }"
@@ -150,15 +76,17 @@
               </div>
             </div>
           </div>
-          <div *ngIf="bannerSelected" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
-            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-            (fileChange)="changeImage($event)">
-            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-              <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
-              <br>
-              <span matPrefix>Tarik gambar spanduk iklan Anda kesini /
-                <strong>Pilih File</strong> berdimensi 410p x 210p.</span>
-              <span matPrefix>Besar file maksimal 2mb</span>
+          <div class="px-24">
+            <div *ngIf="bannerSelected" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
+              [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+              (fileChange)="changeImage($event)">
+              <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                <br>
+                <span matPrefix>Tarik gambar spanduk iklan Anda kesini /
+                  <strong>Pilih File</strong> berdimensi 410p x 210p.</span>
+                <span matPrefix>Besar file maksimal 2mb</span>
+              </div>
             </div>
           </div>
           <!-- <div class="pt-48 pb-16">
@@ -171,7 +99,7 @@
               </div>
             </div>
           </div> -->
-          <div *ngIf="bannerSelected" class="pt-16" formGroupName="banner_selected">
+          <div *ngIf="bannerSelected" class="pt-16 px-24" formGroupName="banner_selected">
             <div *ngIf="bannerSelected['id'] !== 6">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -201,8 +129,7 @@
             <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
               <span class="text-bold">Contoh Tampilan Spanduk</span>
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-              *ngIf="bannerSelected">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="bannerSelected">
               <div fxFlex="45">
                 <div class="banner-image-template-selected">
                   <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class" [title]="bannerSelected.name">
@@ -217,7 +144,105 @@
               </div>
             </div>
           </div>
-          <div class="pb-24">
+          <div class="pb-16 px-24">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Grup Pengguna</strong>
+            </div>
+            <mat-radio-group formControlName="user_group" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          
+          <!-- Consumer -->
+          <div *ngIf="formBannerGroup.get('user_group').value === 'customer'">
+            <!-- <div class="pb-2 px-24" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Tipe Consumer</strong>
+            </div>
+            <div class="pb-24 px-24">
+              <div fxLayout="row" *ngFor="let item of listSmoker; let i = index">
+                <mat-checkbox class="example-margin m-4" (change)="onChangeCheckbox($event)" [checked]="formBannerGroup.get('is_smoker').value.indexOf(item.value) > -1" [value]="item.value">{{item.name}}</mat-checkbox>
+              </div>
+            </div> -->
+
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
+                    <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formBannerGroup.controls['is_smoker'].hasError('required') && formBannerGroup.controls['is_smoker'].touched">
+                    Tipe Consumer harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- <div *ngIf="!customAge" class="pb-16 px-24">
+              <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">Batasan Umur</strong>
+              </div>
+              <mat-radio-group formControlName="age_consumer" class="radio-group">
+                <mat-radio-button class="radio-button" *ngFor="let item of listAge" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div> -->
+
+            <div class="pb-16 px-24">
+              <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">Batasan Umur</strong>
+              </div>
+              <div class="" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="15" class="is-light form-primary">
+                  <input matInput type="number" formControlName="age_consumer_from" placeholder="Dari">
+                  <mat-error *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('required') && formBannerGroup.controls['age_consumer_from'].touched">
+                    Dari harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('min') && formBannerGroup.get('age_consumer_from').touched">
+                    Tidak boleh kurang dari {{formBannerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="15" class="is-light form-primary">
+                  <input matInput type="number" formControlName="age_consumer_to" placeholder="Sampai">
+                  <mat-error *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('required') && formBannerGroup.controls['age_consumer_to'].touched">
+                    Sampai harus diisi
+                  </mat-error>
+                  <mat-error *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('min') && formBannerGroup.get('age_consumer_to').touched">
+                    Tidak boleh kurang dari minimal batasan umur yg telah di isi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="pb-16 px-24">
+              <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">Jenis Kelamin</strong>
+              </div>
+              <mat-radio-group formControlName="gender" class="radio-group">
+                <mat-radio-button class="radio-button" *ngFor="let item of listGender" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="px-24">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="content_type" placeholder="Tipe Konten" (selectionChange)="contentType(formBannerGroup.get('content_type').value)">
+                  <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formBannerGroup.controls['content_type'].hasError('required') && formBannerGroup.controls['title'].touched">
+                  Tipe Konten harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Static Page -->
+          <div class="pb-24 px-24" *ngIf="formBannerGroup.get('content_type').value === 'static_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
@@ -226,7 +251,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
@@ -234,46 +259,160 @@
               Isi Halaman harus diisi
             </mat-error>
           </div>
+          
+          <!-- Landing Page -->
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
+                  <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
 
+          <!-- iframe -->
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'iframe'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                <mat-error *ngIf="formBannerGroup.controls['url_iframe'].hasError('required') && formBannerGroup.controls['url_iframe'].touched">
+                  URL harus diisi
+                </mat-error>
+                <mat-error *ngIf="formBannerGroup.controls['url_iframe'].invalid && formBannerGroup.get('url_iframe').value !== ''">
+                  URL tidak valid
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
 
-          <div class="pb-16">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>Promo</strong>
-              </h3>
+          <!-- image -->
+          <div class="pb-16" *ngIf="formBannerGroup.get('content_type').value === 'image'" fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="30" class="px-24 inline-block">
+              <div
+                ngfDrop
+                selectable       = "1"
+                [(validDrag)]    = "validComboDrag"
+                [(file)]        = "imageContentType"
+                accept           = "image/*"
+                class            = "well my-drop-zone"
+                [class.invalid-drag] = "validComboDrag===false"
+                [class.valid-drag]   = "validComboDrag"
+                (fileChange) = "imagesContentType($event)"
+              >
+                Tarik gambar kesini atau <strong>pilih file</strong>
+              </div>
+            </div>
+            <div *ngIf="imageContentType">
+              <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage()">Lihat gambar</span> <mat-icon matTooltip="Hapus gambar" class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted" matchipremove="" role="img" aria-hidden="true">cancel</mat-icon></div>
+            </div>
+          </div>
+
+          <!-- Retailer -->
+          <div *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
+            <div class="pb-16 px-24">
+              <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">Batasan Umur</strong>
+              </div>
+              <mat-radio-group formControlName="age" class="radio-group">
+                <mat-radio-button class="radio-button" *ngFor="let item of listAge" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="pb-16 px-24" *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
+              <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">Tipe Retailer</strong>
+              </div>
+              <mat-radio-group formControlName="group_type" class="radio-group">
+                <mat-radio-button class="radio-button" *ngFor="let item of listUserGroupType" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="pb-16 px-24">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Promo</strong>
             </div>
             <mat-radio-group formControlName="promo" class="radio-group">
               <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
               <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
             </mat-radio-group>
           </div>
-          <div class="pb-16">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>Grup Pengguna</strong>
-              </h3>
+          <div class="" formArrayName="areas" *ngFor="let wil of formBannerGroup.get('areas')['controls']; let i = index;">
+            <div [formGroupName]="i">
+              <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex="50"><h3 class="">&nbsp;</h3></div>
+                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                  <button *ngIf="formBannerGroup.get('areas').value.length === 1 || i === (formBannerGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea()"><mat-icon>add</mat-icon></button>
+                  <button *ngIf="formBannerGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)"><mat-icon>delete</mat-icon></button>
+                </div>
+              </div>
+              <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
+                    <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                    National harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}" (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
+                    Zone harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}" (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
+                    Regional harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}" (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                    Area harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}" (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                    Salespoint harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}" (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
+                    <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                    Distrik harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
+                    <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
+                    Territori harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
-            <mat-radio-group formControlName="user_group" class="radio-group">
-              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
-                {{item.name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div class="pb-16">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>Batasan Umur</strong>
-              </h3>
-            </div>
-            <mat-radio-group formControlName="age" class="radio-group">
-              <mat-radio-button class="radio-button" *ngFor="let item of listAge" [value]="item.value">
-                {{item.name}}
-              </mat-radio-button>
-            </mat-radio-group>
           </div>
         </div>
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" (click)="submit('draft')" fxFlex="20">
             SIMPAN SEBAGAI DRAF
           </button>

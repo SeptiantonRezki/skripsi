@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { BannerService } from '../../../../services/inapp-marketing/banner.service';
@@ -11,6 +11,7 @@ import { TemplateBanner } from 'app/classes/banner-template';
 import * as html2canvas from 'html2canvas';
 import * as _ from 'underscore';
 import { Config } from 'app/classes/config';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'app-banner-edit',
@@ -29,6 +30,7 @@ export class BannerEditComponent {
   list_district: any[];
   list_territory: any[];
   detailBanner: any;
+  indexDelete: any;
 
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
@@ -37,7 +39,13 @@ export class BannerEditComponent {
   minDate: any;
   listStatus: any[] = [{name: 'Status Aktif', value: 'publish'}, {name: 'Status Non Aktif', value: 'draft'}];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua Umur", value: "18-" }];
+  listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
+  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+  listLandingPage: any[] = [];
+  // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+  listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
+  listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -46,15 +54,19 @@ export class BannerEditComponent {
   detailAreaSelected: any;
 
   files: File;
+  imageContentType: File;
+  imageContentTypeBase64: any;
   image: any;
   validComboDrag: boolean;
 
   statusChange: Boolean;
+  customAge: Boolean;
 
   formBannerGroup: FormGroup;
   formBannerErrors: any;
 
   isDetail: Boolean;
+  imageContentTypeFromDetail: any;
 
   public options: Object = Config.FROALA_CONFIG;
 
@@ -65,12 +77,20 @@ export class BannerEditComponent {
     private dataService: DataService,
     private bannerService: BannerService,
     private adapter: DateAdapter<any>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _lightbox: Lightbox
   ) { 
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.customAge = false;
     // this.validComboDrag = true;
+
+    if (this.detailBanner.user_group === 'retailer') {
+      this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+    } else {
+      this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+    }
 
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
@@ -115,15 +135,18 @@ export class BannerEditComponent {
       body: ["", Validators.required],
       status: ["", Validators.required],
       user_group: ["retailer", Validators.required],
-      age: ["18+", Validators.required],
+      age: ["18+"],
+      areas: this.formBuilder.array([]),
+      content_type: ["static_page", Validators.required],
+      group_type: ["src"],
+      landing_page: ["belanja"],
+      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      // is_smoker: this.formBuilder.array([]),
+      is_smoker: ["both"],
+      gender: ["both"],
+      age_consumer_from: [""],
+      age_consumer_to: [""],
       promo: ["yes", Validators.required],
-      national: [1, Validators.required],
-      zone: [""],
-      salespoint: [""],
-      region: [""],
-      area: [""],
-      district: [""],
-      territory: [""],
       banner_selected: this.formBuilder.group({
         "id": [""],
         "name": [""],
@@ -140,22 +163,86 @@ export class BannerEditComponent {
       commonFormValidator.parseFormChanged(this.formBannerGroup, this.formBannerErrors);
     })
 
+    this.setMinDate();
+    this.getDetails();
+
     this.formBannerGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'retailer') {
-        this.formBannerGroup.controls['age'].disable();
-        this.formBannerGroup.controls['age'].setValue('18+');
+        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+        this.formBannerGroup.controls['age_consumer_from'].disable();
+        this.formBannerGroup.controls['age_consumer_to'].disable();
       } else {
-        this.formBannerGroup.controls['age'].enable();
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        
+        if (!this.isDetail) {
+          this.formBannerGroup.controls['age_consumer_from'].enable();
+          this.formBannerGroup.controls['age_consumer_to'].enable();
+        }
+      }
+
+      this.formBannerGroup.controls['landing_page'].setValue('');
+    });
+
+    this.formBannerGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
+      // const yes = res.find(item => item === 'yes');
+      // const no = res.find(item => item === 'no');
+
+      // if (yes && no) {
+      //   this.customAge = false;
+      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
+      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
+      //   this.formBannerGroup.updateValueAndValidity();
+      //   console.log('yes & no');
+      // } else if (yes && !no) {
+      //   this.customAge = true;
+      //   this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
+      //   this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
+      //   this.formBannerGroup.updateValueAndValidity();
+      //   console.log('yes only');
+      // } else if (!yes && no) {
+      //   this.customAge = false;
+      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
+      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
+      //   this.formBannerGroup.updateValueAndValidity();
+      //   console.log('no only');
+      // } else {
+      //   this.customAge = false;
+      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
+      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
+      //   this.formBannerGroup.updateValueAndValidity();
+      // }
+
+      if (!this.isDetail) {
+        this.formBannerGroup.controls['age_consumer_from'].setValue('');
+        this.formBannerGroup.controls['age_consumer_to'].setValue('');
+
+        if (res === 'yes') {
+          this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
+          this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
+          this.formBannerGroup.updateValueAndValidity();
+        } else {
+          this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(0)]);
+          this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
+          this.formBannerGroup.updateValueAndValidity();
+        }
       }
     })
 
-    this.setMinDate();
-    this.initArea();
+    this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
+      this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
+      this.formBannerGroup.updateValueAndValidity();
+    })
+
+    // this.formBannerGroup.controls['url_iframe'].disable();
+
+    this.formBannerGroup.controls['content_type'].valueChanges.debounceTime(50).subscribe(res => {
+      if (res === 'iframe') {
+        this.formBannerGroup.controls['url_iframe'].enable();
+      }
+    })
 
     this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] }).subscribe(res => {
       this.detailAreaSelected = res.data;
-
-      this.initFormGroup();
     })
 
     this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
@@ -167,43 +254,214 @@ export class BannerEditComponent {
     })
   }
 
-  initArea() {
+  async getDetails() {
+    this.formBannerGroup.get('name').setValue(this.detailBanner.name);
+    this.formBannerGroup.get('from').setValue(this.detailBanner.from);
+    this.formBannerGroup.get('to').setValue(this.detailBanner.to);
+    this.formBannerGroup.get('enable').setValue(this.detailBanner.enable);
+    this.formBannerGroup.get('user_group').setValue(this.detailBanner.user_group);
+    this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
+    this.formBannerGroup.get('status').setValue(this.detailBanner.status);
+    this.formBannerGroup.get('content_type').setValue(this.detailBanner.target_page.type);
+
+    if (this.detailBanner.user_group === 'retailer') {
+      this.formBannerGroup.get('age').setValue(this.detailBanner.age);
+      
+      const group_type = this.detailBanner.areas.map(item => item.pivot.type)[0];
+      this.formBannerGroup.get('group_type').setValue(group_type);
+    }
+
+    if (this.detailBanner.user_group === 'customer') {
+      this.formBannerGroup.get('gender').setValue(this.detailBanner.gender || 'both');
+      this.formBannerGroup.get('age_consumer_from').setValue(this.detailBanner.age_from);
+      this.formBannerGroup.get('age_consumer_to').setValue(this.detailBanner.age_to);
+      this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
+
+      this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
+      this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
+      this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
+      this.formBannerGroup.updateValueAndValidity();
+    }
+
+    if (this.detailBanner.target_page.type === 'static_page') {
+      this.formBannerGroup.get('title').setValue(this.detailBanner.title);
+      this.formBannerGroup.get('body').setValue(this.detailBanner.body);
+    } else {
+      this.formBannerGroup.get('title').disable();
+      this.formBannerGroup.get('body').disable();
+    }
+
+    if (this.detailBanner.target_page.type === 'landing_page') {
+      this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+    }
+
+    if (this.detailBanner.target_page.type === 'iframe') {
+      this.formBannerGroup.get('url_iframe').enable();
+      this.formBannerGroup.get('url_iframe').setValue(this.detailBanner.target_page.url);
+    } else {
+      this.formBannerGroup.controls['url_iframe'].disable();
+    }
+
+    if (this.detailBanner.target_page.type === 'image') {
+      this.imageContentTypeFromDetail = this.detailBanner.target_page.url;
+    }
+
+    for (const {val, index} of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
+      const response = await this.bannerService.getParentArea({ parent: val.id }).toPromise();
+      let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+
+      wilayah.push(this.formBuilder.group({
+        national: [this.getArea(response, 'national'), Validators.required],
+        zone: [this.getArea(response, 'division')],
+        region: [this.getArea(response, 'region')],
+        area: [this.getArea(response, 'area')],
+        salespoint: [this.getArea(response, 'salespoint')],
+        district: [this.getArea(response, 'district')],
+        territory: [this.getArea(response, 'teritory')],
+        list_national: this.formBuilder.array(this.listLevelArea),
+        list_zone: this.formBuilder.array([]),
+        list_region: this.formBuilder.array([]),
+        list_area: this.formBuilder.array([]),
+        list_salespoint: this.formBuilder.array([]),
+        list_district: this.formBuilder.array([]),
+        list_territory: this.formBuilder.array([])
+      }))
+
+      this.initArea(index);
+      this.initFormGroup(response, index);
+
+      if (this.detailBanner.areas.length === (index+1)) {
+        this.onLoad = false;
+      }
+    }
+
+    // if (this.detailProduct.areas.length === 0) {
+    //   this.addArea();
+    // }
+
+    setTimeout(() => {
+      this.onLoad = false;  
+    }, 500);
+
+    if (this.isDetail) this.formBannerGroup.disable();
+  }
+
+  // initFormGroup() {
+  //   this.detailAreaSelected.map(item => {
+  //     let level_desc = '';
+  //     switch (item.level_desc.trim()) {
+  //       case 'national':
+  //         level_desc = 'zone';
+  //         break
+  //       case 'division':
+  //         level_desc = 'region';
+  //         break;
+  //       case 'region':
+  //         level_desc = 'area';
+  //         break;
+  //       case 'area':
+  //         level_desc = 'salespoint';
+  //         break;
+  //       case 'salespoint':
+  //         level_desc = 'district';
+  //         break;
+  //       case 'district':
+  //         level_desc = 'territory';
+  //         break;
+  //     }
+  //     this.getAudienceArea(level_desc, item.id);
+  //   });
+
+  //   this.formBannerGroup.get('name').setValue(this.detailBanner.name);
+  //   this.formBannerGroup.get('from').setValue(this.detailBanner.from);
+  //   this.formBannerGroup.get('to').setValue(this.detailBanner.to);
+  //   this.formBannerGroup.get('enable').setValue(this.detailBanner.enable);
+  //   this.formBannerGroup.get('title').setValue(this.detailBanner.title);
+  //   this.formBannerGroup.get('body').setValue(this.detailBanner.body);
+  //   this.formBannerGroup.get('user_group').setValue(this.detailBanner.user_group);
+  //   this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
+  //   this.formBannerGroup.get('age').setValue(this.detailBanner.age);
+  //   this.formBannerGroup.get('status').setValue(this.detailBanner.status);
+
+  //   this.formBannerGroup.get('zone').setValue(this.getArea('division'));
+  //   this.formBannerGroup.get('region').setValue(this.getArea('region'));
+  //   this.formBannerGroup.get('area').setValue(this.getArea('area'));
+  //   this.formBannerGroup.get('salespoint').setValue(this.getArea('salespoint'));
+  //   this.formBannerGroup.get('district').setValue(this.getArea('district'));
+  //   this.formBannerGroup.get('territory').setValue(this.getArea('teritory'));
+
+  //   if (this.isDetail) this.formBannerGroup.disable();
+  // }
+
+  createArea(): FormGroup {
+    return this.formBuilder.group({
+      national: [1, Validators.required],
+      zone: [""],
+      salespoint: [""],
+      region: [""],
+      area: [""],
+      district: [""],
+      territory: [""],
+      list_national: this.formBuilder.array(this.listLevelArea),
+      list_zone: this.formBuilder.array([]),
+      list_region: this.formBuilder.array([]),
+      list_area: this.formBuilder.array([]),
+      list_salespoint: this.formBuilder.array([]),
+      list_district: this.formBuilder.array([]),
+      list_territory: this.formBuilder.array([])
+    })
+  }
+
+  addArea() {
+    let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+    wilayah.push(this.createArea());
+    const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
+    this.initArea(index);
+    this.generataList('zone', 1, index, 'render');
+  }
+
+  deleteArea(idx) {
+    this.indexDelete = idx;
+    let data = {
+      titleDialog: "Hapus Geotree",
+      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx+1} ?`,
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  initArea(index) {
+    let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          this.formBannerGroup.get('national').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('national').disable();
           break
         case 'division':
-          this.formBannerGroup.get('zone').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('zone').disable();
           break;
         case 'region':
-          this.formBannerGroup.get('region').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('region').disable();
           break;
         case 'area':
-          this.formBannerGroup.get('area').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('area').disable();
           break;
         case 'salespoint':
-          this.formBannerGroup.get('salespoint').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('salespoint').disable();
           break;
         case 'district':
-          this.formBannerGroup.get('district').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('district').disable();
           break;
         case 'territory':
-          this.formBannerGroup.get('territory').disable();
-          // this.formBannerGroup.get('national').setValue(item.id);
+          wilayah.at(index).get('territory').disable();
           break;
       }
     })
   }
 
-  initFormGroup() {
-    this.detailAreaSelected.map(item => {
+  initFormGroup(response, index) {
+    response.data.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
         case 'national':
@@ -225,128 +483,164 @@ export class BannerEditComponent {
           level_desc = 'territory';
           break;
       }
-      this.getAudienceArea(level_desc, item.id);
+      this.generataList(level_desc, item.id, index, 'render');
     });
-
-    this.formBannerGroup.get('name').setValue(this.detailBanner.name);
-    this.formBannerGroup.get('from').setValue(this.detailBanner.from);
-    this.formBannerGroup.get('to').setValue(this.detailBanner.to);
-    this.formBannerGroup.get('enable').setValue(this.detailBanner.enable);
-    this.formBannerGroup.get('title').setValue(this.detailBanner.title);
-    this.formBannerGroup.get('body').setValue(this.detailBanner.body);
-    this.formBannerGroup.get('user_group').setValue(this.detailBanner.user_group);
-    this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
-    this.formBannerGroup.get('age').setValue(this.detailBanner.age);
-    this.formBannerGroup.get('status').setValue(this.detailBanner.status);
-
-    this.formBannerGroup.get('zone').setValue(this.getArea('division'));
-    this.formBannerGroup.get('region').setValue(this.getArea('region'));
-    this.formBannerGroup.get('area').setValue(this.getArea('area'));
-    this.formBannerGroup.get('salespoint').setValue(this.getArea('salespoint'));
-    this.formBannerGroup.get('district').setValue(this.getArea('district'));
-    this.formBannerGroup.get('territory').setValue(this.getArea('teritory'));
-
-    if (this.isDetail) this.formBannerGroup.disable();
   }
 
-  getAudienceArea(selection, id) {
+  async generataList(selection, id, index, type) {
     let item: any;
+    let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
     switch (selection) {
       case 'zone':
-          this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
+        const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+        let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+        
+        while (list.length > 0) {
+          list.removeAt(list.length - 1);
+        }
 
-          this.formBannerGroup.get('region').setValue('');
-          this.formBannerGroup.get('area').setValue('');
-          this.formBannerGroup.get('salespoint').setValue('');
-          this.formBannerGroup.get('district').setValue('');
-          this.formBannerGroup.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        _.clone(response || []).map(item => {
+          list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }));
+        });
+
+        if (type !== 'render') {
+          wilayah.at(index).get('region').setValue(null);
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
+
+          this.clearFormArray(index, 'list_region');
+          this.clearFormArray(index, 'list_area');
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
+          item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
+          if (item.name !== 'Semua Zone') {
+            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response || []).map(item => {
+              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
             });
-          } else {
-            this.list[selection] = []
           }
 
-          this.formBannerGroup.get('region').setValue('');
-          this.formBannerGroup.get('area').setValue('');
-          this.formBannerGroup.get('salespoint').setValue('');
-          this.formBannerGroup.get('district').setValue('');
-          this.formBannerGroup.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('region').setValue('');
+            wilayah.at(index).get('area').setValue('');
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            if (item.name === 'Semua Zone') {
+              this.clearFormArray(index, 'list_region');  
+            }
+            this.clearFormArray(index, 'list_area');
+            this.clearFormArray(index, 'list_salespoint');
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
+          }
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
+          item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
+          if (item.name !== 'Semua Regional') {
+            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response || []).map(item => {
+              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
             });
-          } else {
-            this.list[selection] = []
           }
 
-          this.formBannerGroup.get('area').setValue('');
-          this.formBannerGroup.get('salespoint').setValue('');
-          this.formBannerGroup.get('district').setValue('');
-          this.formBannerGroup.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('area').setValue('');
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            if (item.name === 'Semua Regional') {
+              this.clearFormArray(index, 'list_area');  
+            }
+            this.clearFormArray(index, 'list_salespoint');
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
+          }
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
+          item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+          if (item.name !== 'Semua Area') {
+            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response || []).map(item => {
+              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
             });
-          } else {
-            this.list[selection] = []
           }
 
-          this.formBannerGroup.get('salespoint').setValue('');
-          this.formBannerGroup.get('district').setValue('');
-          this.formBannerGroup.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('salespoint').setValue('');
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            if (item.name === 'Semua Area') {
+              this.clearFormArray(index, 'list_salespoint');  
+            }
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
+          }
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
+          item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
+          if (item.name !== 'Semua Salespoint') {
+            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response || []).map(item => {
+              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
             });
-          } else {
-            this.list[selection] = []
           }
 
-          this.formBannerGroup.get('district').setValue('');
-          this.formBannerGroup.get('territory').setValue('');
-          this.list['territory'] = [];
+          if (type !== 'render') {
+            wilayah.at(index).get('district').setValue('');
+            wilayah.at(index).get('territory').setValue('');
+
+            if (item.name === 'Semua Salespoint') {
+              this.clearFormArray(index, 'list_district');  
+            }
+            this.clearFormArray(index, 'list_territory');
+          }
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.bannerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
+        item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
+          if (item.name !== 'Semua District') {
+            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+            while (list.length > 0) {
+              list.removeAt(list.length - 1);
+            }
+            _.clone(response || []).map(item => {
+              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
             });
-          } else {
-            this.list[selection] = []
           }
 
-          this.formBannerGroup.get('territory').setValue('');
+          if (type !== 'render') {
+            wilayah.at(index).get('territory').setValue('');
+            
+            if (item.name === 'Semua District') {
+              this.clearFormArray(index, 'list_territory');  
+            }
+          }
         break;
     
       default:
@@ -354,8 +648,22 @@ export class BannerEditComponent {
     }
   }
 
-  getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  getArea(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  }
+
+  confirmDelete() {
+    let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+    wilayah.removeAt(this.indexDelete);
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  clearFormArray = (index, selection) => {
+    let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+    let list = wilayah.at(index).get(selection) as FormArray;
+    while (list.length > 0) {
+      list.removeAt(list.length - 1);
+    }
   }
 
   removeImage(): void {
@@ -399,6 +707,7 @@ export class BannerEditComponent {
   }
 
   async submit(status?: string) {
+    console.log(this.formBannerGroup)
     if ((this.formBannerGroup.valid && this.bannerSelected == undefined) || (this.formBannerGroup.valid && this.bannerSelected)) {
 
       if (this.bannerSelected) {
@@ -409,9 +718,10 @@ export class BannerEditComponent {
         });
       }
 
-      let areas = [];
-      let value = this.formBannerGroup.getRawValue();
-      value = Object.entries(value).map(([key, value]) => ({key, value}));
+      let body = {
+        user_group: this.formBannerGroup.get('user_group').value,
+        content_type: this.formBannerGroup.get('content_type').value
+      }
 
       let fd = new FormData();
       fd.append('_method', 'PUT');
@@ -419,25 +729,86 @@ export class BannerEditComponent {
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
       fd.append('enable', this.formBannerGroup.get('enable').value);
-      fd.append('target_page[type]', 'static_page');
       fd.append('status', this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status);
-      fd.append('title', this.formBannerGroup.get('title').value);
-      fd.append('body', this.formBannerGroup.get('body').value);
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
       fd.append('promo', this.formBannerGroup.get('promo').value);
-      fd.append('age', this.formBannerGroup.get('age').disabled ? "18+" : this.formBannerGroup.get('age').value);
-      fd.append('static_page', 'yes');
+      fd.append('content_type', body.content_type);
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
       }
 
-      this.typeArea.map(type => {
-        const filteredValue = value.filter(item => item.key === type && item.value);
-        if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value))
-      })
+      if (body.content_type === 'static_page') {
+        fd.append('title', this.formBannerGroup.get('title').value);
+        fd.append('body', this.formBannerGroup.get('body').value);
+      } else if (body.content_type === 'landing_page') {
+        fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
+      } else if (body.content_type === 'iframe') {
+        fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+      } else if (body.content_type === 'image') {
+        if (this.imageContentTypeFromDetail) {
+          if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
+        } else {
+          if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
+          else return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
+        }
+      } else {
+
+      }
+
+      if (body.user_group === 'retailer') {
+        fd.append('age', this.formBannerGroup.get('age').value);
+      }
       
-      fd.append('areas[]', _.last(areas));
+      if (body.user_group === 'customer') {
+        fd.append('gender', this.formBannerGroup.get('gender').value);
+        fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
+        fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+        fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+      }
+
+      let _areas = [];
+      let areas = [];
+      let value = this.formBannerGroup.getRawValue();
+
+      value.areas.map(item => {
+        let obj = Object.entries(item).map(([key, value]) => ({key, value}))
+        for (const val of this.typeArea) {
+          const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+          if (filteredValue.length > 0) _areas.push(...filteredValue)
+        }
+
+        areas.push(_.last(_areas));
+        _areas = [];
+      })
+
+      let same = this.findDuplicate(areas.map(item => item.value));
+      if (same.length > 0) {
+        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!"});
+      }
+
+      areas.map(item => {
+        if (body.user_group === 'retailer') {
+          if (this.formBannerGroup.controls['group_type'].value === 'src') {
+            fd.append("areas[src][]", item.value);
+          } else {
+            fd.append("areas[ws_downline][]", item.value);
+          }
+        } else {
+          fd.append("areas[]", item.value);
+        }
+      })
+
+      if (this.bannerSelected) {
+        fd.append('image', this.imageConverted);
+      }
+
+      // this.typeArea.map(type => {
+      //   const filteredValue = value.filter(item => item.key === type && item.value);
+      //   if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value))
+      // })
+      
+      // fd.append('areas[]', _.last(areas));
       // areas.map(item => {
       //   fd.append('areas[]', item)
       // })
@@ -474,6 +845,94 @@ export class BannerEditComponent {
     image.src = canvas.toDataURL("image/jpeg");
     
     return image.src;
+  }
+
+  contentType(value) {
+    if (this.imageContentTypeBase64 && this.imageContentType) {
+      this.imageContentType = undefined;
+      this.imageContentTypeBase64 = undefined;
+    }
+
+    if (value !== 'static_page') {
+      this.formBannerGroup.controls['title'].setValue('');
+      this.formBannerGroup.controls['body'].setValue('');
+      this.formBannerGroup.controls['title'].disable();
+      this.formBannerGroup.controls['body'].disable();
+    } else {
+      this.formBannerGroup.controls['title'].enable();
+      this.formBannerGroup.controls['body'].enable();
+    }
+
+    if (value === 'iframe') {
+      this.formBannerGroup.controls['url_iframe'].enable();
+    } else {
+      this.formBannerGroup.controls['url_iframe'].setValue('');
+      this.formBannerGroup.controls['url_iframe'].disable();
+    }
+
+    if (value === 'landing_page') {
+      this.formBannerGroup.controls['landing_page'].setValue('');
+    }
+  }
+  
+  onChangeCheckbox(event) {
+    const isSmoker = this.formBannerGroup.get('is_smoker') as FormArray;
+
+    if (event.checked) {
+      isSmoker.push(new FormControl(event.source.value))
+    } else {
+      const i = isSmoker.controls.findIndex(x => x.value === event.source.value);
+      isSmoker.removeAt(i);
+    }
+  }
+
+  getToolTipData(value, array) {
+    if (value && array.length){
+      let msg = array.filter(item => item.id === value)[0]['name'];
+      return msg;
+    } else {
+      return "";
+    }
+  }
+
+  findDuplicate(array) {
+    var object = {};
+    var result = [];
+
+    array.forEach(function (item) {
+      if(!object[item])
+          object[item] = 0;
+        object[item] += 1;
+    })
+
+    for (var prop in object) {
+       if(object[prop] >= 2) {
+           result.push(prop);
+       }
+    }
+
+    return result;
+  }
+
+  imagesContentType(image) {
+    var file:File = image;
+    var myReader:FileReader = new FileReader();
+  
+    myReader.onloadend = (e) => {
+      this.imageContentTypeBase64 = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  previewImage() {
+    let album = {
+      src: this.imageContentTypeBase64 ? this.imageContentTypeBase64 : this.detailBanner.target_page.url,
+      caption: '',
+      thumb: this.imageContentTypeBase64 ? this.imageContentTypeBase64 : this.detailBanner.target_page.url
+    };
+
+    this._lightbox.open([album], 0);
   }
 
 }

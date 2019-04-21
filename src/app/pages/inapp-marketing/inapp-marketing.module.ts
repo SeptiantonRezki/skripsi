@@ -37,6 +37,7 @@ import {
 
 import { ngfModule } from "angular-file";
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
+import { LightboxModule } from 'ngx-lightbox';
 
 export const MY_FORMATS = {
   parse: {
@@ -71,7 +72,8 @@ export const MY_FORMATS = {
     MatRadioModule,
     ngfModule,
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    LightboxModule
   ],
   declarations: [
     BannerIndexComponent,
