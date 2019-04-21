@@ -298,14 +298,17 @@ export class NotificationCreateComponent {
         body['static_page_body'] = this.formNotification.get("static_page_body").value;
       }
 
+      this.dataService.showLoading(true);
       this.notificationService.create(body).subscribe(
         res => {
           this.router.navigate(["notifications"]);
           this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+          this.dataService.showLoading(false);
         },
         err => {
           // this.dialogService.openSnackBar({ message: err.error.message });
           // this.loadingIndicator = false;
+          this.dataService.showLoading(false);
         }
       );
     } else {
