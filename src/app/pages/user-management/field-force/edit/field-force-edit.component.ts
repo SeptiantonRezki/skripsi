@@ -236,11 +236,11 @@ export class FieldForceEditComponent {
             wilayah.at(index).get('district').setValue('');
             wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(wilayah.at(index).get('list_region') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_area') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+            this.clearFormArray(index, 'list_region');
+            this.clearFormArray(index, 'list_area');
+            this.clearFormArray(index, 'list_salespoint');
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
           }
         break;
       case 'region':
@@ -265,10 +265,10 @@ export class FieldForceEditComponent {
             wilayah.at(index).get('district').setValue('');
             wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(wilayah.at(index).get('list_area') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+            this.clearFormArray(index, 'list_area');
+            this.clearFormArray(index, 'list_salespoint');
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
           }
         break;
       case 'area':
@@ -292,9 +292,9 @@ export class FieldForceEditComponent {
             wilayah.at(index).get('district').setValue('');
             wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(wilayah.at(index).get('list_salespoint') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+            this.clearFormArray(index, 'list_salespoint');
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
           }
         break;
       case 'salespoint':
@@ -317,8 +317,8 @@ export class FieldForceEditComponent {
             wilayah.at(index).get('district').setValue('');
             wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(wilayah.at(index).get('list_district') as FormArray);
-            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+            this.clearFormArray(index, 'list_district');
+            this.clearFormArray(index, 'list_territory');
           }
         break;
       case 'district':
@@ -340,7 +340,7 @@ export class FieldForceEditComponent {
             wilayah.at(index).get('district').setValue('');
             wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(wilayah.at(index).get('list_territory') as FormArray);
+            this.clearFormArray(index, 'list_territory');
           }
         break;
       case 'territory':
@@ -440,8 +440,12 @@ export class FieldForceEditComponent {
     this.dialogService.brodcastCloseConfirmation();
   }
 
-  clearFormArray = (formArray: FormArray) => {
-    formArray = this.formBuilder.array([]);
+  clearFormArray = (index, selection) => {
+    let wilayah = this.formFF.controls['wilayah'] as FormArray;
+    let list = wilayah.at(index).get(selection) as FormArray;
+    while (list.length > 0) {
+      list.removeAt(list.length - 1);
+    }
   }
 
 }
