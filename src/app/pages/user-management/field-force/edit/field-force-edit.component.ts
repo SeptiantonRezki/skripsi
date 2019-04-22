@@ -414,12 +414,13 @@ export class FieldForceEditComponent {
     }
   }
 
-  addWilayah(idx) {
+  addWilayah() {
     let wilayah = this.formFF.controls['wilayah'] as FormArray;
     // if (wilayah.length < 2) {
     wilayah.push(this.createWilayah());
-    this.initArea(1);
-    this.generataList('zone', 1, 1, 'render');
+    const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
+    this.initArea(index);
+    this.generataList('zone', 1, index, 'render');
     // }
   }
 
