@@ -145,7 +145,7 @@
           </div>
         </div>
 
-        <div class="confirm p-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] !== 'publish'"
+        <div class="confirm p-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] === 'draft'"
           fxLayout="row" fxLayoutGap="20px">
           <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             REJECT
