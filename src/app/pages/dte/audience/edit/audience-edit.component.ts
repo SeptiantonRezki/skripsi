@@ -666,11 +666,22 @@ export class AudienceEditComponent {
     });
   }
 
-  exportAudience() {
+  async exportAudience() {
     this.exportTemplate = true;
-    this.downloadLink.nativeElement.href = `${environment.server}/storage/import_audience/template_import_audiece.xls`;
-    this.downloadLink.nativeElement.click();
-    this.exportTemplate = false;
+    const body = {
+      retailer_id: this.selected.length > 0 ? this.selected.map(item => item.id) : []
+    }
+    
+    try {
+      const response = await this.audienceService.exportExcel(body).toPromise();
+      this.downloadLink.nativeElement.href = response.data;
+      this.downloadLink.nativeElement.click();
+      this.exportTemplate = false;
+      
+    } catch (error) {
+      this.exportTemplate = false;
+      throw error;
+    }
   }
 
 }
