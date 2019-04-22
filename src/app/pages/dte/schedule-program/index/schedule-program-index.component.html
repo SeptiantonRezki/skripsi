@@ -88,8 +88,13 @@
         <ngx-datatable-column [width]="85" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
-                [ngClass]="row.status_scheduler == 'publish' ? 'mat-green-800-bg' : 'mat-yellow-900-bg'">
+              <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'publish'">
+                {{row.status_scheduler}}
+              </p>
+              <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg" style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'draft'">
+                {{row.status_scheduler}}
+              </p>
+              <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'unpublish'">
                 {{row.status_scheduler}}
               </p>
             </div>
