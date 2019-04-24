@@ -18,10 +18,13 @@ import {
   MatStepperModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
-  MatRadioModule
+  MatRadioModule,
+  MatTooltipModule
 } from "@angular/material";
 
+import { ngfModule } from "angular-file";
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
+import { LightboxModule } from "ngx-lightbox";
 
 @NgModule({
   imports: [
@@ -41,6 +44,9 @@ import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
+    MatTooltipModule,
+    ngfModule,
+    LightboxModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
   ],

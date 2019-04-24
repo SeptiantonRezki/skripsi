@@ -77,7 +77,7 @@ export class RetailerEditComponent {
         "id": 1,
         "parent_id": null,
         "code": "SLSNTL      ",
-        "name": "Sales National"
+        "name": "SLSNTL"
       }
     ];
 

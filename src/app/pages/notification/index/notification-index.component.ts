@@ -62,7 +62,7 @@ export class NotificationIndexComponent {
   }
 
   getNotifList() {
-    this.pagination.sort = 'title';
+    this.pagination.sort = 'created_at';
     this.notificationService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
