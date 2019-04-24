@@ -248,7 +248,7 @@
                 <mat-select formControlName="content_type" placeholder="Tipe Konten" (selectionChange)="contentType(formBannerGroup.get('content_type').value)">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="formBannerGroup.controls['content_type'].hasError('required') && formBannerGroup.controls['title'].touched">
+                <mat-error *ngIf="formBannerGroup.controls['content_type'].hasError('required') && formBannerGroup.controls['content_type'].touched">
                   Tipe Konten harus diisi
                 </mat-error>
               </mat-form-field>
