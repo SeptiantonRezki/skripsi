@@ -22,6 +22,34 @@
   color: white !important;
 }
 
+.timepicker {
+  .timepicker__header {
+    background-color: map-get($colors, primary-red) !important;
+  }
+
+  .clock-face__clock-hand {
+    background-color: map-get($colors, primary-red) !important;
+
+    &::after {
+      background-color: map-get($colors, primary-red) !important;
+    }
+
+    &::before {
+      border-color: map-get($colors, primary-red) !important;
+    }
+  }
+
+  .clock-face__number {
+    > span.active {
+      background-color: map-get($colors, primary-red) !important;
+    }
+  }
+
+  button:not(.timepicker-dial__item) {
+    color: map-get($colors, primary-red) !important;
+  }
+}
+
 .form-primary .mat-form-field-underline .mat-form-field-ripple {
   background-color: map-get($colors, confirmation-button) !important;
 }
