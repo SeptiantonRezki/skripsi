@@ -669,7 +669,40 @@ export const brConfig = {
         url: "",
         name: "Ubah Notifikasi"
       }
-    ]
+    ],
+    popup: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pop-up Notifikasi"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/popup-notification",
+          name: "Pop-up Notifikasi"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Pop-up Notifikasi"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/popup-notification",
+          name: "Pop-up Notifikasi"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Pop-up Notifikasi"
+        }
+      ],
+    }
   },
   contentManagement: {
     tnc: {

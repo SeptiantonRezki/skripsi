@@ -245,7 +245,12 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        get_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
+        show_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
+        create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
+        update_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
+        delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
       },
       general: {
         support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`

@@ -40,4 +40,29 @@ export class NotificationService extends BaseService {
     const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
   }
+
+  getPopup(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_popup');
+    return this.getApi(url, queryParams);
+  }
+
+  getById(queryParams?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show_popup', context);
+    return this.getApi(url, queryParams);
+  }
+
+  createPopup(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_popup');
+    return this.postApi(url, body);
+  }
+
+  updatePopup(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update_popup', context);
+    return this.postApi(url, body);
+  }
+
+  deletePopup(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_popup', context);
+    return this.deleteApi(url);
+  }
 }

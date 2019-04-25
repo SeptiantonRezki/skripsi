@@ -6,6 +6,9 @@ import { NotificationIndexComponent } from "./index/notification-index.component
 import { NotificationCreateComponent } from "./create/notification-create.component";
 
 import { PageGuard } from "app/classes/auth.guard";
+import { PopupNotificationIndexComponent } from "../popup-notification/index/popup-notification-index.component";
+import { PopupNotificationCreateComponent } from "../popup-notification/create/popup-notification-create.component";
+import { PopupNotificationEditComponent } from "../popup-notification/edit/popup-notification-edit.component";
 
 const routes: Routes = [
   // {
@@ -29,7 +32,31 @@ const routes: Routes = [
       breadcrumbs: brConfig.notification.create
     },
     canActivate: [PageGuard]
-  }
+  },
+  {
+    path: "popup-notification",
+    component: PopupNotificationIndexComponent,
+    data: {
+      breadcrumbs: brConfig.notification.popup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "popup-notification/create",
+    component: PopupNotificationCreateComponent,
+    data: {
+      breadcrumbs: brConfig.notification.popup.create
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "popup-notification/edit",
+    component: PopupNotificationEditComponent,
+    data: {
+      breadcrumbs: brConfig.notification.popup.edit
+    },
+    canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
