@@ -109,7 +109,7 @@ export class PopupNotificationCreateComponent {
       body: ["", Validators.required],
       user_group: ["", Validators.required],
       areas: this.formBuilder.array([]),
-      content_type: ["static_page", Validators.required],
+      content_type: ["static-page", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
@@ -122,7 +122,7 @@ export class PopupNotificationCreateComponent {
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
@@ -137,7 +137,7 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['body'].disable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
 
-        if (this.formPopupGroup.controls['content_type'].value === 'static_page') {
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
 
@@ -147,17 +147,17 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
 
-        if (this.formPopupGroup.controls['content_type'].value === 'static_page') {
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
 
-        if (this.formPopupGroup.controls['content_type'].value === 'landing_page') {
+        if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
           this.formPopupGroup.controls['landing_page'].enable();
         }
 
@@ -167,16 +167,16 @@ export class PopupNotificationCreateComponent {
       }
       
       if (res === 'retailer') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
 
-        if (this.formPopupGroup.controls['content_type'].value === 'static_page') {
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
 
-        if (this.formPopupGroup.controls['content_type'].value === 'landing_page') {
+        if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
           this.formPopupGroup.controls['landing_page'].enable();
         }
 
@@ -525,7 +525,7 @@ export class PopupNotificationCreateComponent {
   }
 
   contentType(value) {
-    if (value === 'static_page') {
+    if (value === 'static-page') {
       this.formPopupGroup.controls['body'].enable();
     } else {
       this.formPopupGroup.controls['body'].setValue('');
@@ -539,7 +539,7 @@ export class PopupNotificationCreateComponent {
       this.formPopupGroup.controls['url_iframe'].disable();
     }
 
-    if (value === 'landing_page') {
+    if (value === 'landing-page') {
       this.formPopupGroup.controls['landing_page'].enable();
     } else {
       this.formPopupGroup.controls['landing_page'].setValue('');
@@ -580,9 +580,9 @@ export class PopupNotificationCreateComponent {
         body['gender'] = this.formPopupGroup.get('gender').value;
       }
 
-      if (body.action === 'static_page') {
+      if (body.action === 'static-page') {
         body['action_data'] = this.formPopupGroup.get('body').value;
-      } else if (body.action === 'landing_page') {
+      } else if (body.action === 'landing-page') {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
       } else if (body.action === 'iframe') {
         body['action_data'] = this.formPopupGroup.get('url_iframe').value;

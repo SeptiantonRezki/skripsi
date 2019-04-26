@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-popup-notification-index',
@@ -30,6 +31,9 @@ export class PopupNotificationIndexComponent {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
 
+  roles: PagesName = new PagesName();
+  permission: any;
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -38,6 +42,9 @@ export class PopupNotificationIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+
+    this.permission = this.roles.getRoles('principal.popupnotification');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()

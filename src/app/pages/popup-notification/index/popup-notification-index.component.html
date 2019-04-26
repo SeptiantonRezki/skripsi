@@ -25,7 +25,7 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Judul Notifikasi" prop="title">
+        <ngx-datatable-column name="Judul Popup Notifikasi" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
             {{row.title}}
@@ -51,6 +51,21 @@
             </div>
           </ng-template>
         </ngx-datatable-column> -->
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Detail Popup Notifikasi" [routerLink]="['/notifications', 'popup-notification', 'detail', row.id]">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Popup Notifikasi" [routerLink]="['/notifications', 'popup-notification', 'edit', row.id]">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus Popup Notifikasi" (click)="deletePopup(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>
