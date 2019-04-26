@@ -50,7 +50,15 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "popup-notification/edit",
+    path: "popup-notification/edit/:id",
+    component: PopupNotificationEditComponent,
+    data: {
+      breadcrumbs: brConfig.notification.popup.edit
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "popup-notification/detail/:id",
     component: PopupNotificationEditComponent,
     data: {
       breadcrumbs: brConfig.notification.popup.edit

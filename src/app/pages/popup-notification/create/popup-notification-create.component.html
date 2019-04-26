@@ -161,7 +161,7 @@
           </div>
 
           <!-- Static Page -->
-          <div class="pb-24 px-24" *ngIf="formPopupGroup.get('content_type').value === 'static_page'">
+          <div class="pb-24 px-24" *ngIf="formPopupGroup.get('content_type').value === 'static-page'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
@@ -172,7 +172,7 @@
           </div>
           
           <!-- Landing Page -->
-          <div class="px-24" *ngIf="formPopupGroup.get('content_type').value === 'landing_page' && formPopupGroup.get('user_group').value !== 'wholesaler'">
+          <div class="px-24" *ngIf="formPopupGroup.get('content_type').value === 'landing-page' && formPopupGroup.get('user_group').value !== 'wholesaler'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
