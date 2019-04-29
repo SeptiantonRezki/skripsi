@@ -137,16 +137,18 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
-        this.formPopupGroup.controls['url_iframe'].setValue('');
-        this.formPopupGroup.controls['body'].setValue('');
         this.formPopupGroup.controls['date_ws_downline'].setValue('');
 
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
         this.formPopupGroup.controls['landing_page'].disable();
-        this.formPopupGroup.controls['url_iframe'].disable();
-        this.formPopupGroup.controls['body'].disable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
+
+        // this.formPopupGroup.controls['body'].setValue('');
+        this.formPopupGroup.controls['body'].disable();
+
+        // this.formPopupGroup.controls['url_iframe'].setValue('');
+        this.formPopupGroup.controls['url_iframe'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -200,14 +202,18 @@ export class PopupNotificationEditComponent {
         }
       }
 
-      this.formPopupGroup.controls['landing_page'].setValue('');
+      if (!this.onLoad) {
+        this.formPopupGroup.controls['landing_page'].setValue('');
+      }
     });
 
-    this.formPopupGroup.controls['user_group'].setValue('wholesaler');
+    // this.formPopupGroup.controls['user_group'].setValue('wholesaler');
 
     this.formPopupGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
-      this.formPopupGroup.controls['age_consumer_from'].setValue('');
-      this.formPopupGroup.controls['age_consumer_to'].setValue('');
+      if (!this.onLoad) {
+        this.formPopupGroup.controls['age_consumer_from'].setValue('');
+        this.formPopupGroup.controls['age_consumer_to'].setValue('');
+      }
 
       if (res === 'yes') {
         this.formPopupGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
@@ -231,11 +237,13 @@ export class PopupNotificationEditComponent {
     })
 
     this.formPopupGroup.controls['group_type'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'downline') {
-        this.formPopupGroup.controls['date_ws_downline'].enable();
-      } else {
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].disable();
+      if (!this.onLoad) {
+        if (res === 'downline') {
+          this.formPopupGroup.controls['date_ws_downline'].enable();
+        } else {
+          this.formPopupGroup.controls['date_ws_downline'].setValue('');
+          this.formPopupGroup.controls['date_ws_downline'].disable();
+        }
       }
     })
 
@@ -261,7 +269,7 @@ export class PopupNotificationEditComponent {
 
       if (response.type === 'retailer') {
         const group_type = response.areas.map(item => item.pivot.type)[0];
-        this.formPopupGroup.get('group_type').setValue(group_type);
+        this.formPopupGroup.get('group_type').setValue(response.retailer_type);
 
         if (group_type === 'downline') {
           const date_ws_downline = moment(response.date_ws_downline);
@@ -271,10 +279,19 @@ export class PopupNotificationEditComponent {
       }
 
       if (response.type === 'customer') {
+        let smoker_type = '';
+        if (response.smoker_type === 'smoker') {
+          smoker_type = 'yes';
+        } else if (response.smoker_type === 'no-smoker') {
+          smoker_type = 'no';
+        } else {
+          smoker_type = 'both';
+        }
+
         this.formPopupGroup.get('gender').setValue(response.gender || 'both');
         this.formPopupGroup.get('age_consumer_from').setValue(response.age_from);
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
-        this.formPopupGroup.get('is_smoker').setValue(response.smoker_type || 'both');
+        this.formPopupGroup.get('is_smoker').setValue(smoker_type);
       }
 
       if (response.action === 'static-page') {
@@ -314,6 +331,10 @@ export class PopupNotificationEditComponent {
 
         this.initArea(index);
         this.initFormGroup(response, index);
+      }
+
+      if (response.areas.length === 0) {
+        this.addArea();
       }
 
       // if (this.detailProduct.areas.length === 0) {
@@ -651,17 +672,21 @@ export class PopupNotificationEditComponent {
 
   submit() {
     console.log(this.formPopupGroup);
-    if (this.formPopupGroup.valid && this.files) {
+    if ((this.formPopupGroup.valid && this.imageConverted === undefined) || (this.formPopupGroup.valid && this.imageConverted)) {
 
       this.dataService.showLoading(true);
 
       let body = {
+        _method: 'PUT',
         title: this.formPopupGroup.get('title').value,
         type: this.formPopupGroup.get('user_group').value,
         action: this.formPopupGroup.get('content_type').value,
-        image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+      }
+
+      if (this.imageConverted) {
+        body['image'] = this.imageConverted;
       }
 
       if (body.type === 'retailer') {
@@ -677,7 +702,17 @@ export class PopupNotificationEditComponent {
       }
 
       if (body.type === 'customer') {
-        body['smoker_type'] = this.formPopupGroup.get('is_smoker').value;
+        let smoker_type = '';
+        let is_smoker = this.formPopupGroup.get('is_smoker').value;
+        if (is_smoker === 'yes') {
+          smoker_type = 'smoker';
+        } else if (is_smoker === 'no') {
+          smoker_type = 'no-smoker';
+        } else {
+          smoker_type = 'both';
+        }
+
+        body['smoker_type'] = smoker_type;
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
@@ -722,7 +757,7 @@ export class PopupNotificationEditComponent {
         body['area_id'] = areas.map(item => item.value);
       }
       
-      this.notificationService.createPopup(body).subscribe(
+      this.notificationService.updatePopup(body, { popup_notif_id: this.idPopup }).subscribe(
         res => {
           this.dataService.showLoading(false);
           this.router.navigate(["notifications", "popup-notification"]);
@@ -787,11 +822,11 @@ export class PopupNotificationEditComponent {
     return result;
   }
 
-  previewImage() {
+  previewImage(data) {
     let album = {
-      src: this.imageConverted,
+      src: data,
       caption: '',
-      thumb: this.imageConverted
+      thumb: data
     };
 
     this._lightbox.open([album], 0);

@@ -134,4 +134,26 @@ export class PopupNotificationIndexComponent {
     this.router.navigate(['notifications', 'popup-notification', 'edit', param.id]);
   }
 
+  deletePopup(id) {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Popup Notifikasi",
+      captionDialog: "Apakah anda yakin untuk menghapus popup notifikasi ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.notificationService.deletePopup({ popup_notif_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getNotifList();
+
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
+    });
+  }
+
 }

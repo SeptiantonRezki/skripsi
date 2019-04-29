@@ -84,11 +84,11 @@
               </div>
               <div fxFlex="45">
                 <div *ngIf="files">
-                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage()">Lihat gambar popup notifikasi</span> <mat-icon (click)="removeImage()" matTooltip="Hapus gambar" class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted" matchipremove="" role="img" aria-hidden="true">cancel</mat-icon></div>
+                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage(imageConverted)">Lihat gambar popup notifikasi</span> <mat-icon (click)="removeImage()" matTooltip="Hapus gambar" class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted" matchipremove="" role="img" aria-hidden="true">cancel</mat-icon></div>
                 </div>
-                <!-- <div *ngIf="detailBanner.target_page.type === 'image' && !imageContentType">
-                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage()">Lihat gambar</span></div>
-                </div> -->
+                <div *ngIf="detailPopup?.image_url && !imageConverted">
+                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage(detailPopup?.image_url)">Lihat gambar popup notifikasi</span></div>
+                </div>
               </div>
             </div>
           </div>
