@@ -109,7 +109,7 @@ export class PopupNotificationCreateComponent {
       body: ["", Validators.required],
       user_group: ["", Validators.required],
       areas: this.formBuilder.array([]),
-      content_type: ["static-page", Validators.required],
+      content_type: ["iframe", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
@@ -122,7 +122,7 @@ export class PopupNotificationCreateComponent {
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
