@@ -681,7 +681,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/popup-notification",
+          url: "/notifications/popup-notification",
           name: "Pop-up Notifikasi"
         },
         {
@@ -693,7 +693,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/popup-notification",
+          url: "/notifications/popup-notification",
           name: "Pop-up Notifikasi"
         },
         {
