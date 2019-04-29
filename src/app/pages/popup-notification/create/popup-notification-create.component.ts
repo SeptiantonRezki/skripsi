@@ -574,7 +574,17 @@ export class PopupNotificationCreateComponent {
       }
 
       if (body.type === 'customer') {
-        body['smoker_type'] = this.formPopupGroup.get('is_smoker').value;
+        let smoker_type = '';
+        let is_smoker = this.formPopupGroup.get('is_smoker').value;
+        if (is_smoker === 'yes') {
+          smoker_type = 'smoker';
+        } else if (is_smoker === 'no') {
+          smoker_type = 'no-smoker';
+        } else {
+          smoker_type = 'both';
+        }
+
+        body['smoker_type'] = smoker_type;
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
