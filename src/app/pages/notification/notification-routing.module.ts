@@ -11,13 +11,13 @@ import { PopupNotificationCreateComponent } from "../popup-notification/create/p
 import { PopupNotificationEditComponent } from "../popup-notification/edit/popup-notification-edit.component";
 
 const routes: Routes = [
-  // {
-  //   path: "",
-  //   redirectTo: "notifications",
-  //   pathMatch: "full"
-  // },
   {
     path: "",
+    redirectTo: "push-notification",
+    pathMatch: "full"
+  },
+  {
+    path: "push-notification",
     component: NotificationIndexComponent,
     pathMatch: "full",
     data: {
@@ -26,7 +26,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "create",
+    path: "push-notification/create",
     component: NotificationCreateComponent,
     data: {
       breadcrumbs: brConfig.notification.create
