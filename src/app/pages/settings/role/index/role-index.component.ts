@@ -165,7 +165,7 @@ export class RoleIndexComponent {
   }
 
   confirmDelete() {
-    this.accessService.delete({ page_id: this.id }).subscribe(
+    this.accessService.delete({ role_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data berhasil dihapus" });
