@@ -134,10 +134,7 @@ export class BannerCreateComponent {
         "name": [""],
         "image": [""],
         "title": [""],
-        "button_text": [""],
-        "class": [""],
-        "button_class": [""],
-        "product": [""]
+        "class": [""]
       })
     })
 
@@ -512,13 +509,8 @@ export class BannerCreateComponent {
   
     myReader.onloadend = (e) => {
       this.image = myReader.result;
-      if (this.bannerSelected['id'] === 5) {
-        this.bannerSelected['product'] = this.image
-        this.formBannerGroup.get('banner_selected').get('product').setValue(this.image);
-      } else {
-        this.bannerSelected['image'] = this.image;
-        this.formBannerGroup.get('banner_selected').get('image').setValue(this.image);
-      }
+      this.bannerSelected['image'] = this.image;
+      this.formBannerGroup.get('banner_selected').get('image').setValue(this.image);
     }
 
     myReader.readAsDataURL(file);
