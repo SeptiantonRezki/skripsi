@@ -70,15 +70,13 @@
                 <div [ngClass]="{'selected-banner': bannerSelected?.id === item.id, 'banner-image-template' : bannerSelected?.id !== item.id }"
                   (click)="selectBannerTemplate(item)">
                   <div [class]="'banner-image-custom ' + item.class" [title]="item.name" [style.background-image]="'url(' + item.image + ')'">
-                    <img *ngIf="item.product" [src]="item.product" class="product">
                     <div class="title">{{item.title}}</div>
-                    <div [class]="'button ' + item.button_class">{{item.button_text}}</div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="px-24">
-              <div *ngIf="bannerSelected" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
+              <div *ngIf="bannerSelected && bannerSelected?.id === 6" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
                 [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
                 (fileChange)="changeImage($event)">
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
@@ -97,25 +95,6 @@
                     <input matInput type="text" formControlName="title" placeholder="Tulisan Utama / Teks Utama / Isi Promosi">
                   </mat-form-field>
                 </div>
-                <div fxLayout="row">
-                  <mat-form-field fxFlex="45" class="is-light form-primary">
-                    <input matInput type="text" formControlName="button_text" placeholder="Tulisan Pada Tombol">
-                  </mat-form-field>
-                </div>
-                <div fxLayout="row">
-                  <mat-form-field fxFlex="45" class="is-light form-primary">
-                    <mat-select formControlName="button_class" placeholder="Warna Tombol">
-                      <mat-select-trigger>
-                        <div fxLayout="row" fxLayoutAlign="start center">
-                          <span [ngClass]="{'red-circle-button': bannerSelected.button_class === 'red', 'white-circle-button': bannerSelected.button_class === 'white'}"></span>{{bannerSelected.button_class
-                          === 'red' ? 'Merah' : 'Putih'}}
-                        </div>
-                      </mat-select-trigger>
-                      <mat-option value="red">Merah</mat-option>
-                      <mat-option value="white">Putih</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
               </div>
               <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
                 <span class="text-bold">Contoh Tampilan Spanduk</span>
@@ -126,11 +105,7 @@
                   <div class="banner-image-template-selected">
                     <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class" [title]="bannerSelected.name">
                       <img [src]="bannerSelected.image" style="height: 190px; width: 390px" [alt]="bannerSelected.name">
-                      <div *ngIf="bannerSelected.product" class="image-sku">
-                        <img [src]="bannerSelected.product" class="">
-                      </div>
                       <div class="title">{{bannerSelected.title}}</div>
-                      <div [class]="'button ' + bannerSelected.button_class">{{bannerSelected.button_text}}</div>
                     </div>
                   </div>
                 </div>
