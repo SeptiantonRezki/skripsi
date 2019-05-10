@@ -282,7 +282,7 @@ export class PopupNotificationEditComponent {
         let smoker_type = '';
         if (response.smoker_type === 'smoker') {
           smoker_type = 'yes';
-        } else if (response.smoker_type === 'no-smoker') {
+        } else if (response.smoker_type === 'non-smoker') {
           smoker_type = 'no';
         } else {
           smoker_type = 'both';
@@ -707,7 +707,7 @@ export class PopupNotificationEditComponent {
         if (is_smoker === 'yes') {
           smoker_type = 'smoker';
         } else if (is_smoker === 'no') {
-          smoker_type = 'no-smoker';
+          smoker_type = 'non-smoker';
         } else {
           smoker_type = 'both';
         }
