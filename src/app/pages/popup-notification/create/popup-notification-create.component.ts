@@ -579,7 +579,7 @@ export class PopupNotificationCreateComponent {
         if (is_smoker === 'yes') {
           smoker_type = 'smoker';
         } else if (is_smoker === 'no') {
-          smoker_type = 'no-smoker';
+          smoker_type = 'non-smoker';
         } else {
           smoker_type = 'both';
         }
