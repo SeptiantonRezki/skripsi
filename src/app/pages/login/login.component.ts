@@ -11,6 +11,7 @@ import { DialogService } from "../../services/dialog.service";
 import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from 'crypto-js';
 import { environment } from "environments/environment";
+import { IdleService } from "../../services/idle.service";
 
 @Component({
   selector: "login",
@@ -38,7 +39,8 @@ export class LoginComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private userIdle: IdleService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -101,6 +103,7 @@ export class LoginComponent implements OnInit {
           this.dataService.setAuthorization(res);
           this.authenticationService.getProfileDetail().subscribe(profile => {
             if (profile.status == "active") {
+              this.userIdle.startWatching();
               this.dataService.setToStorage("profile", profile);
               this.router.navigate(["dashboard"]);
               this.submitting = false;

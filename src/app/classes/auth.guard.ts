@@ -10,6 +10,7 @@ import { AuthenticationService } from "../services/authentication.service";
 import { DataService } from "../services/data.service";
 import * as _ from 'underscore';
 import { PagesName } from "./pages-name";
+import { IdleService } from "../services/idle.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,7 +18,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private dataService: DataService
+    private dataService: DataService,
+    private userIdle: IdleService
   ) {}
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     
@@ -64,7 +66,8 @@ export class PageGuard implements CanActivate {
 
   constructor(
     private router: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    private userIdle: IdleService
   ) {
   }
 
@@ -86,11 +89,13 @@ export class PageGuard implements CanActivate {
     let role = this.dataService.getFromStorage("profile")['roles'][0]['permissions'];
     if (state.url !== '/dashboard' && state.url !== 'my-profile' && state.url !== '/shop' && state.url !== '/content') {
       let allow = _.contains(role, this.pageName.getPages(paramsId ? `${withParams}/` : state.url));
-      if (allow)
+      this.userIdle.onHitEvent();
+      if (allow){
         return true;
-      else
+      }else{
         this.router.navigate(['access-denied']);
-
+      }
+      
       return false;
     }
     return true;
