@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   server: "https://training-api.dxtr.asia",
+  server_service: "http://user.ayo-micro.dxtr.asia/",
   label: "TRAINING",
   show_label: true,
   image: "assets/images/ayo/icon/training.png",

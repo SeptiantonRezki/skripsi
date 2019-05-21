@@ -12,6 +12,7 @@
 import { environment } from '../../environments/environment';
 
 const AYO_API = environment.server;
+const AYO_API_SERVICE = environment.server_service;
 const type_api = "principal";
 
 export class Endpoint {
@@ -35,37 +36,37 @@ export class Endpoint {
       //   detail: `${AYO_API}/api/${API_VERSION}/pages/${context.page_id}`
       // }
       authentication: {
-        verify_isms: `${AYO_API}/api/source/customer/${context.business_code}/${context.phone}`,
-        store_user: `${AYO_API}/api/${type_api}/user`,
+        verify_isms: `${AYO_API_SERVICE}/api/source/customer/${context.business_code}/${context.phone}`,
+        store_user: `${AYO_API_SERVICE}/api/${type_api}/user`,
         //login: `${AYO_API}/oauth/token` ,
-        login: `${AYO_API}/api/${type_api}/token`,
-        verify_code: `${AYO_API}/api/general/otp/verify-account`,
-        me: `${AYO_API}/oauth/user`,
-        resend_otp: `${AYO_API}/api/general/otp/send`,
-        reset_password: `${AYO_API}/oauth/password/reset`,
-        change_password: `${AYO_API}/oauth/password/forgot`,
-        change_password_edit_profile: `${AYO_API}/oauth/password/change`,
-        logout: `${AYO_API}/oauth/token/revoke`,
-        check_token: `${AYO_API}/oauth/check/token`,
+        login: `${AYO_API_SERVICE}/api/${type_api}/token`,
+        verify_code: `${AYO_API_SERVICE}/api/general/otp/verify-account`,
+        me: `${AYO_API_SERVICE}/oauth/user`,
+        resend_otp: `${AYO_API_SERVICE}/api/general/otp/send`,
+        reset_password: `${AYO_API_SERVICE}/oauth/password/reset`,
+        change_password: `${AYO_API_SERVICE}/oauth/password/forgot`,
+        change_password_edit_profile: `${AYO_API_SERVICE}/oauth/password/change`,
+        logout: `${AYO_API_SERVICE}/oauth/token/revoke`,
+        check_token: `${AYO_API_SERVICE}/oauth/check/token`,
       },
       admin_principal: {
-        get: `${AYO_API}/api/${type_api}/user/principal`,
-        create: `${AYO_API}/api/${type_api}/user/principal`,
-        put: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/principal/${context.principal_id}`,
-        delete_multiple: `${AYO_API}/api/${type_api}/user/principal/inactive/multiple`,
+        get: `${AYO_API_SERVICE}/api/${type_api}/user/principal`,
+        create: `${AYO_API_SERVICE}/api/${type_api}/user/principal`,
+        put: `${AYO_API_SERVICE}/api/${type_api}/user/principal/${context.principal_id}`,
+        delete: `${AYO_API_SERVICE}/api/${type_api}/user/principal/${context.principal_id}`,
+        delete_multiple: `${AYO_API_SERVICE}/api/${type_api}/user/principal/inactive/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_role: `${AYO_API}/api/${type_api}/user/role?page=all`,
-        list_role_nolimit: `${AYO_API}/api/${type_api}/user/role/list`,
+        list_role_nolimit: `${AYO_API_SERVICE}/api/${type_api}/user/role/list`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       field_force: {
-        get: `${AYO_API}/api/${type_api}/user/field-force`,
-        create: `${AYO_API}/api/${type_api}/user/field-force`,
-        put: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
+        get: `${AYO_API_SERVICE}/api/${type_api}/user/field-force`,
+        create: `${AYO_API_SERVICE}/api/${type_api}/user/field-force`,
+        put: `${AYO_API_SERVICE}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
+        delete: `${AYO_API_SERVICE}/api/${type_api}/user/field-force/${context.fieldforce_id}`,
         parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
@@ -82,10 +83,10 @@ export class Endpoint {
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       retailer: {
-        get: `${AYO_API}/api/${type_api}/user/retailer`,
-        create: `${AYO_API}/api/${type_api}/user/retailer`,
-        put: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/retailer/${context.retailer_id}`,
+        get: `${AYO_API_SERVICE}/api/${type_api}/user/retailer`,
+        create: `${AYO_API_SERVICE}/api/${type_api}/user/retailer`,
+        put: `${AYO_API_SERVICE}/api/${type_api}/user/retailer/${context.retailer_id}`,
+        delete: `${AYO_API_SERVICE}/api/${type_api}/user/retailer/${context.retailer_id}`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
@@ -104,8 +105,8 @@ export class Endpoint {
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       customer: {
-        get: `${AYO_API}/api/${type_api}/user/customer`,
-        detail: `${AYO_API}/api/${type_api}/user/customer/${context.customer_id}`
+        get: `${AYO_API_SERVICE}/api/${type_api}/user/customer`,
+        detail: `${AYO_API_SERVICE}/api/${type_api}/user/customer/${context.customer_id}`
       },
       banner: {
         get: `${AYO_API}/api/${type_api}/content/banner`,
@@ -195,12 +196,12 @@ export class Endpoint {
         delete: `${AYO_API}/api/${type_api}/rssfeed/category/${context.category_id}`
       },
       role: {
-        get: `${AYO_API}/api/${type_api}/user/role`,
-        detail: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
-        create: `${AYO_API}/api/${type_api}/user/role`,
-        put: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/role/${context.role_id}`,
-        list_menu: `${AYO_API}/api/${type_api}/user/role/available_permissions`,
+        get: `${AYO_API_SERVICE}/api/${type_api}/user/role`,
+        detail: `${AYO_API_SERVICE}/api/${type_api}/user/role/${context.role_id}`,
+        create: `${AYO_API_SERVICE}/api/${type_api}/user/role`,
+        put: `${AYO_API_SERVICE}/api/${type_api}/user/role/${context.role_id}`,
+        delete: `${AYO_API_SERVICE}/api/${type_api}/user/role/${context.role_id}`,
+        list_menu: `${AYO_API_SERVICE}/api/${type_api}/user/role/available_permissions`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
