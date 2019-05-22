@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material';
 import * as moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
+import { IdleService } from 'app/services/idle.service';
 
 @Component({
   selector: 'app-schedule-program-index',
@@ -49,7 +50,8 @@ export class ScheduleProgramIndexComponent {
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private dataService: DataService
+    private dataService: DataService,
+    private userIdle: IdleService
   ) {
     this.adapter.setLocale("id");
     this.rows = [];
@@ -210,6 +212,7 @@ export class ScheduleProgramIndexComponent {
       }
 
       try {
+        this.userIdle.onHitEvent();
         response = await this.scheduleTradeProgramService.export(params).toPromise(); 
 
         current_progress = current_progress === 0 ? length : current_progress + length;

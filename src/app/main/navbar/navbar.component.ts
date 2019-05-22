@@ -96,7 +96,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       this.getNav();
       this.userIdle.startWatching();
       this.userIdle.onTimerStart().subscribe(count => {
-        console.log(count)
+        // console.log(count)
       });
       this.userIdle.onTimeout().subscribe(() => {
         this.authenticationService.doLogout({}).subscribe(res => {
