@@ -98,13 +98,13 @@ export class NotificationCreateComponent {
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'retailer') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
-        this.formNotification.controls['landing_page_value'].disable();
+        // this.formNotification.controls['landing_page_value'].disable();
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-        this.formNotification.controls['landing_page_value'].enable();
+        // this.formNotification.controls['landing_page_value'].enable();
       }
 
-      this.formNotification.controls['landing_page_value'].setValue('');
+      this.contentType(this.formNotification.controls['content_type'].value);
     });
 
     this.formNotification.controls['user_group'].setValue('retailer');
