@@ -63,6 +63,9 @@ import { NavigationService } from "./services/navigation.service";
 import { CustomerService } from "./services/user-management/customer.service";
 import { GeneralService } from "./services/general.service";
 
+import { UserIdleModule } from 'angular-user-idle';
+import { IdleService } from "./services/idle.service";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +88,8 @@ import { GeneralService } from "./services/general.service";
       passThruUnknownUrl: true
     }),
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    UserIdleModule.forRoot({idle: 1140, timeout: 60, ping: 60})
   ],
   providers: [
     AuthenticationService,
@@ -120,6 +124,7 @@ import { GeneralService } from "./services/general.service";
     NonAuthGuard,
     NavigationService,
     GeneralService,
+    IdleService,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

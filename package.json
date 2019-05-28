@@ -45,6 +45,7 @@
     "angular-froala-wysiwyg": "^2.8.4-1",
     "angular-in-memory-web-api": "0.6.0",
     "angular-progress-bar": "^1.0.9",
+    "angular-user-idle": "^2.1.2",
     "chart.js": "^2.7.3",
     "classlist.js": "1.1.20150312",
     "core-js": "^2.5.4",

@@ -4,7 +4,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  HostListener
 } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 
@@ -18,6 +19,8 @@ import { FuseNavigationService } from "@fuse/components/navigation/navigation.se
 import { FuseSidebarComponent } from "@fuse/components/sidebar/sidebar.component";
 import { NavigationService } from "app/services/navigation.service";
 import { DataService } from "app/services/data.service";
+import { AuthenticationService } from "app/services/authentication.service";
+import { IdleService } from 'app/services/idle.service';
 
 @Component({
   selector: "fuse-navbar",
@@ -27,7 +30,8 @@ import { DataService } from "app/services/data.service";
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy {
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
-
+  
+  
   @ViewChild(FusePerfectScrollbarDirective)
   set directive(theDirective: FusePerfectScrollbarDirective) {
     if (!theDirective) {
@@ -56,7 +60,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private navigationService: FuseNavigationService,
     private router: Router,
     private navService: NavigationService,
-    private dataService: DataService
+    private dataService: DataService,
+    private userIdle: IdleService,
+    private authenticationService: AuthenticationService
   ) {
     // Navigation data
     // this.navigation = navigation;
@@ -64,7 +70,17 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     // Default layout
     this.layout = "vertical";
   }
-
+  @HostListener('document:click', ['$event'])
+  documentClick(event: Event): void
+  {
+      this.userIdle.onHitEvent();
+  }
+  @HostListener('document:keydown', ['$event']) 
+  onKeydownHandler(event: KeyboardEvent) {
+      if (event.key === "Enter" || event.key === "Tab") {
+        this.userIdle.onHitEvent();
+      }
+  }
   ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -77,7 +93,35 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     let session = this.dataService.getAuthorization();
 
     if (session) {
-      return this.getNav();
+      this.getNav();
+      this.userIdle.startWatching();
+      this.userIdle.onTimerStart().subscribe(count => {
+        // console.log(count)
+      });
+      this.userIdle.onTimeout().subscribe(() => {
+        this.authenticationService.doLogout({}).subscribe(res => {
+          if (res.status) {
+            window.localStorage.clear();
+            this.userIdle.stopWatching();
+            this.router.navigate(["/login"]);
+          }
+        });
+      });
+
+      // window.setInterval(() => { 
+      //   let body = {
+      //     refresh_token: session.refresh_token
+      //   };
+      //   this.authenticationService.refreshToken(body).subscribe(
+      //     res => {
+      //       res.expires_in = session.expires_in;
+      //       this.dataService.setAuthorization(res);
+      //     },
+      //     err => {
+      //       console.log(err);
+      //     }
+      //   );
+      // }, (session.expires_in * ((600-100)*1000)));
     }
   }
 
