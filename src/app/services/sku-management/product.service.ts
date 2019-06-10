@@ -47,17 +47,17 @@ export class ProductService extends BaseService {
   }
 
   getListPackaging(): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_packaging");
+    const url = this.getUrl("general", "list_packaging");
     return this.getApi(url);
   }
 
   getListOtherChildren(context): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_other_children", context);
+    const url = this.getUrl("general", "list_other_children", context);
     return this.getApi(url);
   }
 
   getParentArea(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "parent", context);
+    const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
   }
 }

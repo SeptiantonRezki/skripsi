@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 
 import { FuseConfigService } from "@fuse/services/config.service";
-import { fuseAnimations } from "@fuse/animations";
 import { AuthenticationService } from "../../services/authentication.service";
 import { DataService } from "../../services/data.service";
 import { Router } from "@angular/router";
@@ -12,6 +11,8 @@ import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from 'crypto-js';
 import { environment } from "environments/environment";
 import { IdleService } from "../../services/idle.service";
+import { GeneralService } from "app/services/general.service";
+import * as _ from 'underscore';
 
 @Component({
   selector: "login",
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private cookieService: CookieService,
-    private userIdle: IdleService
+    private userIdle: IdleService,
+    private generalService: GeneralService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -101,9 +103,12 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(body).subscribe(
         res => {
           this.dataService.setAuthorization(res);
-          this.authenticationService.getProfileDetail().subscribe(profile => {
+          this.authenticationService.getProfileDetail().subscribe(async profile => {
             if (profile.status == "active") {
               this.userIdle.startWatching();
+              const area_id = profile['area_id'];
+              const areaType = await this.generalService.getParentArea({ parent: _.last(area_id)}).toPromise().catch(err => { this.submitting = false; throw err; });
+              profile['area_type'] = areaType;
               this.dataService.setToStorage("profile", profile);
               this.router.navigate(["dashboard"]);
               this.submitting = false;

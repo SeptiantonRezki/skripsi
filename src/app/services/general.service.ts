@@ -57,4 +57,24 @@ export class GeneralService extends BaseService{
     const url = this.generateUrl(this.namespace, "permissions");
     return this.getApi(url);
   }
+
+  getParentArea(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "parent", context);
+    return this.getApi(url);
+  }
+
+  getListLevel(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_level");
+    return this.getApi(url);
+  }
+
+  getListChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_children", context);
+    return this.getApi(url);
+  }
+
+  getListOtherChildren(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
+  }
 }

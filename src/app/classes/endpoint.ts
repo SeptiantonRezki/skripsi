@@ -57,40 +57,25 @@ export class Endpoint {
         delete_multiple: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal/inactive/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_role: `${AYO_API}/api/${type_api}/user/role?page=all`,
-        list_role_nolimit: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/role/list`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_role_nolimit: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/role/list`
       },
       field_force: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force`,
         create: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force`,
         put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
-        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`
       },
       wholesaler: {
         get: `${AYO_API}/api/${type_api}/user/wholesaler`,
         create: `${AYO_API}/api/${type_api}/user/wholesaler`,
         put: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`
       },
       retailer: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer`,
         create: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer`,
         put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
-        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`
       },
       paguyuban: {
         get: `${AYO_API}/api/${type_api}/user/paguyuban`,
@@ -100,9 +85,6 @@ export class Endpoint {
         delete_multiple: `${AYO_API}/api/${type_api}/user/paguyuban/delete/multiple`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_principal: `${AYO_API}/api/general/principal?page=all`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       customer: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/customer`,
@@ -113,10 +95,6 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/content/banner`,
         put: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
         delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       landingPage: {
         get: `${AYO_API}/api/${type_api}/content/static-page`,
@@ -133,7 +111,6 @@ export class Endpoint {
         list_brand: `${AYO_API}/api/general/product/brand?page=all`,
         list_category: `${AYO_API}/api/${type_api}/product/category?parent_id=${context.parent_id}`,
         list_packaging: `${AYO_API}/api/${type_api}/product/packaging?page=all`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
       template_task: {
@@ -146,10 +123,7 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/creator`,
         create: `${AYO_API}/api/${type_api}/creator`,
         put: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
-        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`
       },
       schedule_trade_program: {
         get: `${AYO_API}/api/${type_api}/scheduler`,
@@ -177,9 +151,6 @@ export class Endpoint {
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         list_retailer_selected: `${AYO_API}/api/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         import: `${AYO_API}/api/${type_api}/audience/import`,
         export: `${AYO_API}/api/${type_api}/audience/export`
       },
@@ -202,9 +173,6 @@ export class Endpoint {
         put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         list_menu: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/role/available_permissions`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         force_update: `${AYO_API}/api/${type_api}/force-update`,
         list_version: `${AYO_API}/api/${type_api}/force-update`,
         revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`
@@ -232,9 +200,6 @@ export class Endpoint {
         program: `${AYO_API}/api/${type_api}/coin?type=program`,
         detail_retailer: `${AYO_API}/api/${type_api}/coin/retailer/${context.retailer_id}`,
         detail_program: `${AYO_API}/api/${type_api}/coin/program/${context.trade_program_id}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         flush: `${AYO_API}/api/principal/coin`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
@@ -245,10 +210,6 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/notification`,
         create: `${AYO_API}/api/${type_api}/notification`,
         delete: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         get_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         show_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
@@ -257,7 +218,11 @@ export class Endpoint {
       },
       general: {
         support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
-        permissions: `${AYO_API_SERVICE}/api/v1/user/principal/permission`
+        permissions: `${AYO_API_SERVICE}/api/v1/user/principal/permission`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

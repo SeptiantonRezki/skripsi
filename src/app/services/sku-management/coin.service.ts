@@ -21,17 +21,17 @@ export class CoinService extends BaseService {
   }
 
   getListLevel(): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_level");
+    const url = this.getUrl("general", "list_level");
     return this.getApi(url);
   }
 
   getListChildren(context): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_children", context);
+    const url = this.getUrl("general", "list_children", context);
     return this.getApi(url);
   }
 
   getListOtherChildren(context): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_other_children", context);
+    const url = this.getUrl("general", "list_other_children", context);
     return this.getApi(url);
   }
 
@@ -51,7 +51,7 @@ export class CoinService extends BaseService {
   }
 
   getParentArea(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "parent", context);
+    const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
   }
 }
