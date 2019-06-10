@@ -21,6 +21,7 @@ import { NavigationService } from "app/services/navigation.service";
 import { DataService } from "app/services/data.service";
 import { AuthenticationService } from "app/services/authentication.service";
 import { IdleService } from 'app/services/idle.service';
+import { GeneralService } from "app/services/general.service";
 
 @Component({
   selector: "fuse-navbar",
@@ -62,7 +63,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private navService: NavigationService,
     private dataService: DataService,
     private userIdle: IdleService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private generalService: GeneralService
   ) {
     // Navigation data
     // this.navigation = navigation;
@@ -81,7 +83,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         this.userIdle.onHitEvent();
       }
   }
-  ngOnInit() {
+  async ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.sidebarService.getSidebar("navbar")) {
@@ -93,6 +95,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     let session = this.dataService.getAuthorization();
 
     if (session) {
+      const response = await this.generalService.getPermissions().toPromise();
+      this.dataService.setToStorage("permissions", response.data);
       this.getNav();
       this.userIdle.startWatching();
       this.userIdle.onTimerStart().subscribe(count => {

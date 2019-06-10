@@ -82,7 +82,7 @@ export class PagesName {
   }
 
   getRoles(name) {
-    const permission = JSON.parse(localStorage.getItem('profile'))['roles'][0]['permissions'];
+    const permission = JSON.parse(localStorage.getItem('permissions'));
     if (!permission) return;
 
     let query = name.toLowerCase();

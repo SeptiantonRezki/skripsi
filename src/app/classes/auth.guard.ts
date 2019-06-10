@@ -86,7 +86,7 @@ export class PageGuard implements CanActivate {
 
     this.previousPath = currentRoutePath;
 
-    let role = this.dataService.getFromStorage("profile")['roles'][0]['permissions'];
+    let role = this.dataService.getFromStorage("permissions");
     if (state.url !== '/dashboard' && state.url !== 'my-profile' && state.url !== '/shop' && state.url !== '/content') {
       let allow = _.contains(role, this.pageName.getPages(paramsId ? `${withParams}/` : state.url));
       this.userIdle.onHitEvent();

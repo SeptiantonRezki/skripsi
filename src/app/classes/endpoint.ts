@@ -239,7 +239,7 @@ export class Endpoint {
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
       menu: {
-        get: `${AYO_API}/api/${type_api}/menu`
+        get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/menu`
       },
       notification: {
         get: `${AYO_API}/api/${type_api}/notification`,
@@ -256,7 +256,8 @@ export class Endpoint {
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
       },
       general: {
-        support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`
+        support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
+        permissions: `${AYO_API_SERVICE}/api/v1/user/principal/permission`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

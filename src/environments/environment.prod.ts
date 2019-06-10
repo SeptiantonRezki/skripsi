@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   server: "https://api.src.id",
-  server_service: "http://user.ayo-micro.dxtr.asia/",
+  server_service: "http://user.ayo-micro.dxtr.asia",
   label: "PRODUCTION",
   show_label: false,
   image: "assets/images/ayo/AYO_SRC_(Master).png",
