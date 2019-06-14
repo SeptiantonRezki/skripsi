@@ -43,6 +43,7 @@ export class AdminPrincipalEditComponent {
     private adminPrincipalService: AdminPrincipalService
   ) {
     this.activatedRoute.url.subscribe(param => {
+      this.isDetail = param[1].path === 'detail' ? true : false;
       this.principal_id = param[2].path;
     });
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
@@ -72,10 +73,6 @@ export class AdminPrincipalEditComponent {
     };
 
     this.listRole = this.activatedRoute.snapshot.data["listRole"].data;
-
-    activatedRoute.url.subscribe(params => {
-      this.isDetail = params[1].path === 'detail' ? true : false;
-    })
   }
 
   async ngOnInit() {
@@ -103,10 +100,6 @@ export class AdminPrincipalEditComponent {
       const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
       this.detailAreaSelected = parent.data;
       this.setDetailAdminPrincipal();
-  
-      this.formAdmin.valueChanges.subscribe(() => {
-        commonFormValidator.parseFormChanged(this.formAdmin, this.formdataErrors);
-      });
     } catch (error) {
       if (error.status === 404) {
         this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
@@ -114,6 +107,10 @@ export class AdminPrincipalEditComponent {
       }
       throw error;
     }
+  
+    this.formAdmin.valueChanges.subscribe(() => {
+      commonFormValidator.parseFormChanged(this.formAdmin, this.formdataErrors);
+    });
   }
 
   setDetailAdminPrincipal() {

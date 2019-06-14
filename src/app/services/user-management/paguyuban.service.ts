@@ -16,6 +16,11 @@ export class PaguyubanService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getDetailById(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail", context);
+    return this.getApi(url, queryParams);
+  }
+
   create(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "create");
     return this.postApi(url, body);

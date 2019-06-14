@@ -2,11 +2,11 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Paguyuban'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','paguyuban','create']">
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','paguyuban','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
-      <button style="min-width: 170px;" *ngIf="selected.length > 0" mat-raised-button type="button" class="is-danger"
+      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button" class="is-danger"
         (click)="deleteAllPaguyuban()">HAPUS</button>
     </div>
   </page-content-header>
