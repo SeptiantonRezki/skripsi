@@ -112,7 +112,7 @@ export class PaguyubanCreateComponent {
       })
 
       this.paguyubanService.getListAdminPrincipal({ area: _.last(areas)}).subscribe(obj => {
-        this.listAdminPrincipal = obj.data;
+        this.listAdminPrincipal = obj;
         this.verticalStepperStep2.controls['principal_id'].setValue('');
       })
     })
@@ -192,7 +192,7 @@ export class PaguyubanCreateComponent {
     switch (selection) {
       case 'zone':
           this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }});
           });
 
           this.wilayah.get('region').setValue('');
@@ -208,9 +208,9 @@ export class PaguyubanCreateComponent {
         break;
       case 'region':
           item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Zone') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -228,9 +228,9 @@ export class PaguyubanCreateComponent {
         break;
       case 'area':
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Regional') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Area' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -246,9 +246,9 @@ export class PaguyubanCreateComponent {
         break;
       case 'salespoint':
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Area') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -262,9 +262,9 @@ export class PaguyubanCreateComponent {
         break;
       case 'district':
           item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Salespoint') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua District' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -276,9 +276,9 @@ export class PaguyubanCreateComponent {
         break;
       case 'territory':
           item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua District') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }});
             });
           } else {
             this.list[selection] = []

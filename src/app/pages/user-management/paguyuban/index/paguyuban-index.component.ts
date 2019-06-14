@@ -286,7 +286,7 @@ export class PaguyubanIndexComponent {
             ...item,
             paguyuban: paguyuban,
             principal_id: principal.length > 0 ? principal[0]['id'] : "",
-            area: item.areas[0]['name'],
+            area: item.areas[0]['code'],
             area_id: item.areas[0]['id']
           }
         });
@@ -328,7 +328,7 @@ export class PaguyubanIndexComponent {
           ...item,
           paguyuban: paguyuban,
           principal_id: principal.length > 0 ? principal[0]['id'] : "",
-          area: item.areas[0]['name'],
+          area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
       });
@@ -356,7 +356,7 @@ export class PaguyubanIndexComponent {
           ...item,
           paguyuban: paguyuban,
           principal_id: principal.length > 0 ? principal[0]['id'] : "",
-          area: item.areas[0]['name'],
+          area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
       });
@@ -387,7 +387,7 @@ export class PaguyubanIndexComponent {
           ...item,
           paguyuban: paguyuban,
           principal_id: principal.length > 0 ? principal[0]['id'] : "",
-          area: item.areas[0]['name'],
+          area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
       });

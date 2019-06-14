@@ -31,6 +31,7 @@ import { ConfirmationDialogComponent } from "./shared/confirmation-dialog/confir
 import { ToastInformationComponent } from "./shared/toast-information-dialog/toast-information.component";
 
 // internal service
+import { NgProgressModule, NgProgressInterceptor } from 'ngx-progressbar';
 import { BaseInterceptor } from "./services/interceptor.module";
 import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
@@ -89,7 +90,8 @@ import { IdleService } from "./services/idle.service";
     }),
     MatDialogModule,
     MatSnackBarModule,
-    UserIdleModule.forRoot({idle: 1140, timeout: 60, ping: 60})
+    UserIdleModule.forRoot({idle: 1140, timeout: 60, ping: 60}),
+    NgProgressModule
   ],
   providers: [
     AuthenticationService,
@@ -124,7 +126,8 @@ import { IdleService } from "./services/idle.service";
     NonAuthGuard,
     NavigationService,
     GeneralService,
-    IdleService,
+    IdleService,,
+    { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

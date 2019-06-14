@@ -36,6 +36,7 @@ export class PaguyubanEditComponent {
 
   isDetail: Boolean;
   firstInit: Boolean;
+  submitting: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,8 +117,8 @@ export class PaguyubanEditComponent {
       if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
     })
 
-    this.paguyubanService.getListAdminPrincipal({ area: this.detailPaguyuban.area_id}).subscribe(obj => {
-      this.listAdminPrincipal = obj.data;
+    this.paguyubanService.getListAdminPrincipal({ area: this.detailPaguyuban.area_id }).subscribe(obj => {
+      this.listAdminPrincipal = obj;
       this.firstInit = false;
       
       let valid = _.contains(this.listAdminPrincipal.map(obj => obj["id"]), this.detailPaguyuban.principal_id);
@@ -137,31 +138,24 @@ export class PaguyubanEditComponent {
       switch (item.type.trim()) {
         case 'national':
           this.formPaguyuban.get('national').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break
         case 'division':
           this.formPaguyuban.get('zone').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
         case 'region':
           this.formPaguyuban.get('region').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
         case 'area':
           this.formPaguyuban.get('area').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
         case 'salespoint':
           this.formPaguyuban.get('salespoint').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
         case 'district':
           this.formPaguyuban.get('district').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
         case 'territory':
           this.formPaguyuban.get('territory').disable();
-          // this.formPaguyuban.get('national').setValue(item.id);
           break;
       }
     })
@@ -196,7 +190,6 @@ export class PaguyubanEditComponent {
     this.formPaguyuban.controls['fullname'].setValue(this.detailPaguyuban['paguyuban'].fullname);
     this.formPaguyuban.controls['group_name'].setValue(this.detailPaguyuban.name);
     this.formPaguyuban.controls['username'].setValue(this.detailPaguyuban['paguyuban'].username);
-    // this.formPaguyuban.controls['principal_id'].setValue(this.detailPaguyuban.principal_id);
     this.formPaguyuban.controls['status'].setValue(this.detailPaguyuban['paguyuban'].status);
     this.formPaguyuban.controls['national'].setValue(this.getArea('national'));
     this.formPaguyuban.controls['zone'].setValue(this.getArea('division'));
@@ -214,7 +207,7 @@ export class PaguyubanEditComponent {
     switch (selection) {
       case 'zone':
           this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }});
           });
 
           this.formPaguyuban.get('region').setValue('');
@@ -230,9 +223,9 @@ export class PaguyubanEditComponent {
         break;
       case 'region':
           item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Zone') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -250,9 +243,9 @@ export class PaguyubanEditComponent {
         break;
       case 'area':
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Regional') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Area' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -268,9 +261,9 @@ export class PaguyubanEditComponent {
         break;
       case 'salespoint':
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Area') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -284,9 +277,9 @@ export class PaguyubanEditComponent {
         break;
       case 'district':
           item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua Salespoint') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua District' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -298,9 +291,9 @@ export class PaguyubanEditComponent {
         break;
       case 'territory':
           item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
+          if (item.name !== 'Semua District') {
             this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.filter(item => item.name !== 'all');
+              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }});
             });
           } else {
             this.list[selection] = []
@@ -314,8 +307,8 @@ export class PaguyubanEditComponent {
     }
 
     if (!this.firstInit) {
-      this.paguyubanService.getListAdminPrincipal({ area: id}).subscribe(obj => {
-        this.listAdminPrincipal = obj.data;
+      this.paguyubanService.getListAdminPrincipal({ area: id }).subscribe(obj => {
+        this.listAdminPrincipal = obj;
         this.formPaguyuban.controls['principal_id'].setValue('');
       })
     }
@@ -352,17 +345,17 @@ export class PaguyubanEditComponent {
       else if (!body['password'] && body['password_confirmation']) return this.dialogService.openSnackBar({ message: 'Kata Sandi harus diisi!' });
       else if (body['password'] !== body['password_confirmation']) return this.dialogService.openSnackBar({ message: 'Konfirmasi Kata Sandi tidak sesuai!'});
 
-      this.paguyubanService
-        .put(body, { paguyuban_id: this.detailPaguyuban.id })
-        .subscribe(
+      this.submitting = true;
+      this.paguyubanService.put(body, { paguyuban_id: this.detailPaguyuban.id }).subscribe(
           res => {
             this.dialogService.openSnackBar({
               message: "Data berhasil diubah"
             });
             this.router.navigate(["user-management", "paguyuban"]);
             window.localStorage.removeItem("detail_paguyuban");
+            this.submitting = false;
           },
-          err => {}
+          err => { this.submitting = false; }
         );
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });

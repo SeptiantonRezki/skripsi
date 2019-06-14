@@ -67,10 +67,10 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`
       },
       wholesaler: {
-        get: `${AYO_API}/api/${type_api}/user/wholesaler`,
-        create: `${AYO_API}/api/${type_api}/user/wholesaler`,
-        put: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/wholesaler/${context.wholesaler_id}`
+        get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/wholesaler`,
+        create: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/wholesaler`,
+        put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/wholesaler/${context.wholesaler_id}`,
+        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/wholesaler/${context.wholesaler_id}`
       },
       retailer: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer`,
@@ -79,13 +79,11 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`
       },
       paguyuban: {
-        get: `${AYO_API}/api/${type_api}/user/paguyuban`,
-        create: `${AYO_API}/api/${type_api}/user/paguyuban`,
-        put: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
-        delete: `${AYO_API}/api/${type_api}/user/paguyuban/${context.paguyuban_id}`,
-        delete_multiple: `${AYO_API}/api/${type_api}/user/paguyuban/delete/multiple`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_principal: `${AYO_API}/api/general/principal?page=all`,
+        get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/paguyuban`,
+        create: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/paguyuban`,
+        put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/paguyuban/${context.paguyuban_id}`,
+        delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/paguyuban/${context.paguyuban_id}`,
+        delete_multiple: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/paguyuban/delete/multiple`,
       },
       customer: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/customer`,
@@ -221,9 +219,11 @@ export class Endpoint {
         support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
         permissions: `${AYO_API_SERVICE}/api/v1/user/principal/permission`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        parent_by_code: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
         list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        list_principal: `${AYO_API_SERVICE}/api/v1/user/general/user/principal?page=all`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

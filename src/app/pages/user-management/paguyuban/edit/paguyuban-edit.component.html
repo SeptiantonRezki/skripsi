@@ -115,7 +115,12 @@
 
           <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-              SIMPAN
+              <ng-container *ngIf="!submitting">
+                SIMPAN
+              </ng-container>
+              <ng-container *ngIf="submitting">
+                <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+              </ng-container>
             </button>
           </div>
 
