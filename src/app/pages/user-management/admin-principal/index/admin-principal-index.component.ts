@@ -210,12 +210,12 @@ export class AdminPrincipalIndexComponent {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["user-management", "admin-principal", "edit"]);
+    // this.dataService.setToStorage("detail_admin_principal", param);
+    this.router.navigate(["user-management", "admin-principal", "edit", param.id]);
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["user-management", "admin-principal", "detail"]);
+    // this.dataService.setToStorage("detail_admin_principal", param);
+    this.router.navigate(["user-management", "admin-principal", "detail", param.id]);
   }
 }

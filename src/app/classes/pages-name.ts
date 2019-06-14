@@ -3,8 +3,8 @@ export class PagesName {
     const PAGES = {
       "/user-management/admin-principal": "principal.adminprincipal.lihat",
       "/user-management/admin-principal/create": "principal.adminprincipal.buat",
-      "/user-management/admin-principal/edit": "principal.adminprincipal.ubah",
-      "/user-management/admin-principal/detail": "principal.adminprincipal.lihat",
+      "/user-management/admin-principal/edit/": "principal.adminprincipal.ubah",
+      "/user-management/admin-principal/detail/": "principal.adminprincipal.lihat",
       "/user-management/field-force": "principal.fieldforce.lihat",
       "/user-management/field-force/create": "principal.fieldforce.buat",
       "/user-management/field-force/edit": "principal.fieldforce.ubah",

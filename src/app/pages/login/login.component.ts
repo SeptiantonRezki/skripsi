@@ -108,7 +108,7 @@ export class LoginComponent implements OnInit {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
               const areaType = await this.generalService.getParentArea({ parent: _.last(area_id)}).toPromise().catch(err => { this.submitting = false; throw err; });
-              profile['area_type'] = areaType;
+              profile['area_type'] = areaType.data;
               this.dataService.setToStorage("profile", profile);
               this.router.navigate(["dashboard"]);
               this.submitting = false;

@@ -51,6 +51,7 @@ export class Endpoint {
       },
       admin_principal: {
         get: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal`,
+        detail: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         create: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal`,
         put: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API_SERVICE}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,

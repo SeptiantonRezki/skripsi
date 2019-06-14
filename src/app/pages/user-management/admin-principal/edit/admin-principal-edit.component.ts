@@ -32,6 +32,7 @@ export class AdminPrincipalEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
+  principal_id: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +42,9 @@ export class AdminPrincipalEditComponent {
     private dataService: DataService,
     private adminPrincipalService: AdminPrincipalService
   ) {
+    this.activatedRoute.url.subscribe(param => {
+      this.principal_id = param[2].path;
+    });
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
     this.listLevelArea = [
       {
@@ -68,14 +72,13 @@ export class AdminPrincipalEditComponent {
     };
 
     this.listRole = this.activatedRoute.snapshot.data["listRole"].data;
-    this.detailAdminPrincipal = this.dataService.getFromStorage("detail_admin_principal");
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.formAdmin = this.formBuilder.group({
       name: ["", Validators.required],
       username: [""],
@@ -93,27 +96,27 @@ export class AdminPrincipalEditComponent {
       territory: [""]
     });
 
-    this.formAdmin.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(this.formAdmin, this.formdataErrors);
-    });
-    this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).subscribe(res => {
-      this.detailAreaSelected = res.data;
+    try {
+      const response = await this.adminPrincipalService.getDetailById({ principal_id: this.principal_id }).toPromise();
+      this.detailAdminPrincipal = response;
 
+      const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
+      this.detailAreaSelected = parent.data;
       this.setDetailAdminPrincipal();
-    })
+  
+      this.formAdmin.valueChanges.subscribe(() => {
+        commonFormValidator.parseFormChanged(this.formAdmin, this.formdataErrors);
+      });
+    } catch (error) {
+      if (error.status === 404) {
+        this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+        this.router.navigate(["user-management", "admin-principal"]);
+      }
+      throw error;
+    }
   }
 
   setDetailAdminPrincipal() {
-    // this.formAdmin.setValue({
-    //   name: this.detailAdminPrincipal.fullname,
-    //   username: this.detailAdminPrincipal.username,
-    //   email: this.detailAdminPrincipal.email,
-    //   role: this.detailAdminPrincipal.role_id,
-    //   status: this.detailAdminPrincipal.status,
-    //   password: "",
-    //   confirmation_password: ""
-    // });
-
     this.initArea();
     this.initFormGroup();
   }
@@ -123,31 +126,24 @@ export class AdminPrincipalEditComponent {
       switch (item.type.trim()) {
         case 'national':
           this.formAdmin.get('national').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break
         case 'division':
           this.formAdmin.get('zone').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
         case 'region':
           this.formAdmin.get('region').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
         case 'area':
           this.formAdmin.get('area').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
         case 'salespoint':
           this.formAdmin.get('salespoint').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
         case 'district':
           this.formAdmin.get('district').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
         case 'territory':
           this.formAdmin.get('territory').disable();
-          // this.formAdmin.get('national').setValue(item.id);
           break;
       }
     })
@@ -193,25 +189,7 @@ export class AdminPrincipalEditComponent {
     this.formAdmin.controls['territory'].setValue(this.getArea('teritory'));
 
     this.formAdmin.controls['username'].disable();
-
     if (this.isDetail) this.formAdmin.disable();
-
-    // this.formAdmin.setValue({
-    //   name: this.detailAdminPrincipal.fullname,
-    //   username: this.detailAdminPrincipal.username,
-    //   email: this.detailAdminPrincipal.email,
-    //   role: this.detailAdminPrincipal.role_id,
-    //   status: this.detailAdminPrincipal.status,
-    //   password: "",
-    //   confirmation_password: "",
-    //   national: this.getArea('national'),
-    //   zone: this.getArea('division'),
-    //   region: this.getArea('region'),
-    //   area: this.getArea('area'),
-    //   salespoint: this.getArea('salespoint'),
-    //   district: this.getArea('district'),
-    //   territory: this.getArea('teritory'),
-    // });
   }
 
   getAudienceArea(selection, id) {
@@ -219,7 +197,6 @@ export class AdminPrincipalEditComponent {
     switch (selection) {
       case 'zone':
           this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            // this.list[selection] = res.filter(item => item.name !== 'all');
             this.list[selection] = res;
           });
 
@@ -238,7 +215,6 @@ export class AdminPrincipalEditComponent {
           item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              // this.list[selection] = res.filter(item => item.name !== 'all');
               this.list[selection] = res;
             });
           } else {
@@ -259,7 +235,6 @@ export class AdminPrincipalEditComponent {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              // this.list[selection] = res.filter(item => item.name !== 'all');
               this.list[selection] = res;
             });
           } else {
@@ -278,7 +253,6 @@ export class AdminPrincipalEditComponent {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              // this.list[selection] = res.filter(item => item.name !== 'all');
               this.list[selection] = res;
             });
           } else {
@@ -295,7 +269,6 @@ export class AdminPrincipalEditComponent {
           item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              // this.list[selection] = res.filter(item => item.name !== 'all');
               this.list[selection] = res;
             });
           } else {
@@ -310,7 +283,6 @@ export class AdminPrincipalEditComponent {
           item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
           if (item.name !== 'all') {
             this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              // this.list[selection] = res.filter(item => item.name !== 'all');
               this.list[selection] = res;
             });
           } else {
@@ -350,18 +322,17 @@ export class AdminPrincipalEditComponent {
         area_id: _.last(areas)
       };
 
-      this.adminPrincipalService
-        .put(body, { principal_id: this.detailAdminPrincipal.id })
-        .subscribe(
-          res => {
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Diubah"
-            });
-            this.router.navigate(["user-management", "admin-principal"]);
-            window.localStorage.removeItem("detail_admin_principal");
-          },
-          err => {}
-        );
+      this.dataService.showLoading(true);
+      this.adminPrincipalService.put(body, { principal_id: this.detailAdminPrincipal.id }).subscribe(
+        res => {
+          this.dialogService.openSnackBar({
+            message: "Data Berhasil Diubah"
+          });
+          this.router.navigate(["user-management", "admin-principal"]);
+          this.dataService.showLoading(false);
+        },
+        err => { this.dataService.showLoading(false); }
+      );
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formAdmin);

@@ -53,7 +53,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "admin-principal/edit",
+    path: "admin-principal/edit/:id",
     component: AdminPrincipalEditComponent,
     data: {
       breadcrumbs: brConfig.adminprincipal.edit
@@ -64,7 +64,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "admin-principal/detail",
+    path: "admin-principal/detail/:id",
     component: AdminPrincipalEditComponent,
     data: {
       breadcrumbs: brConfig.adminprincipal.detail

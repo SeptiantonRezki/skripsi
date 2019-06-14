@@ -2,13 +2,11 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Admin'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
-      <button style="min-width: 170px;" *ngIf="selected.length > 0" mat-raised-button type="button" class="is-danger"
-        (click)="deleteAllUser()">NON
-        AKTIFKAN</button>
+      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button" class="is-danger" (click)="deleteAllUser()">NON AKTIFKAN</button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -33,12 +31,12 @@
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+            <mat-checkbox [disabled]="!permission?.hapus" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [disabled]="!permission?.hapus" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
