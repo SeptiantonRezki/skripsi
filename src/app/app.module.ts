@@ -126,7 +126,7 @@ import { IdleService } from "./services/idle.service";
     NonAuthGuard,
     NavigationService,
     GeneralService,
-    IdleService,,
+    IdleService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
