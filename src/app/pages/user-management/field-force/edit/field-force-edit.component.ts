@@ -108,7 +108,7 @@ export class FieldForceEditComponent {
     this.formFF.controls['status'].setValue(this.detailFF.status);
 
     for (const {val, index} of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
-      const response = await this.fieldforceService.getParentArea({ parent: val }).toPromise();
+      const response = await this.fieldforceService.getParentByCode({ parent: val }).toPromise();
       let wilayah = this.formFF.controls['wilayah'] as FormArray;
 
       wilayah.push(this.formBuilder.group({

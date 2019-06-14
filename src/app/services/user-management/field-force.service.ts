@@ -36,6 +36,11 @@ export class FieldForceService extends BaseService {
     return this.getApi(url);
   }
 
+  getParentByCode(context?): Observable<any> {
+    const url = this.getUrl("general", "parent_by_code", context);
+    return this.getApi(url);
+  }
+
   getListLevel(): Observable<any> {
     const url = this.getUrl("general", "list_level");
     return this.getApi(url);
