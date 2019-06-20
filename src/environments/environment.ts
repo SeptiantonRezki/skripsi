@@ -13,6 +13,15 @@ export const environment = {
   backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg"
 };
 
+export const server = {
+  user: "user",
+  business: "business"
+}
+
+export const serviceServer = (server) => {
+  return `http://${server}.ayo-micro.dxtr.asia`;
+}
+
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
