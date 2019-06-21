@@ -49,4 +49,9 @@ export class BannerService extends BaseService {
     const url = this.getUrl("general", "list_other_children", context);
     return this.getApi(url);
   }
+
+  getListWallet(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_wallet");
+    return this.getApi(url);
+  }
 }
