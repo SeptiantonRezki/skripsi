@@ -221,11 +221,11 @@ export class Endpoint {
       general: {
         support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        parent_by_code: `${AYO_API}/api/general/area/get_parent/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
+        parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
+        list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
+        list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         list_principal: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/user/principal?page=all`,
       }
     };
