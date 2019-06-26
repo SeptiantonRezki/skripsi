@@ -32,7 +32,7 @@ export class WholesalerService extends BaseService {
   }
 
   getParentArea(context?): Observable<any> {
-    const url = this.getUrl("general", "parent", context);
+    const url = this.getUrl("general", "parent_by_code", context);
     return this.getApi(url);
   }
 

@@ -308,8 +308,10 @@ export class WholesalerCreateComponent{
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: '0' + this.verticalStepperStep2.get("phone").value,
-        areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
+        phone: '+62' + this.verticalStepperStep2.get("phone").value,
+        // areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
+        areas: [this.verticalStepperStep3.get('territory').value],
+        type: "wholesaler"
       };
 
       this.wholesalerService.create(body).subscribe(

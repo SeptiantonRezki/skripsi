@@ -18,9 +18,9 @@ export class WholesalerEditComponent{
 
   detailWholesaler: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "A" },
-    { name: "Status Non Aktif", value: "I" },
-    { name: "Status Belum Terdaftar", value: "P" }
+    { name: "Status Aktif", value: "active" },
+    { name: "Status Non Aktif", value: "inactive" },
+    { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
 
   listLevelArea: any[];
@@ -106,7 +106,7 @@ export class WholesalerEditComponent{
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
 
-    this.wholesalerService.getParentArea({ parent: this.detailWholesaler.area_code }).subscribe(res => {
+    this.wholesalerService.getParentArea({ parent: this.detailWholesaler.area_code[0] }).subscribe(res => {
       this.detailAreaSelected = res.data;
       this.onLoad = false;
 
@@ -190,7 +190,7 @@ export class WholesalerEditComponent{
       address: this.detailWholesaler.address,
       code: this.detailWholesaler.code,
       owner: this.detailWholesaler.owner,
-      phone: (this.detailWholesaler.phone) ? (this.isDetail ? `+62${parseInt(this.detailWholesaler.phone)}` : parseInt(this.detailWholesaler.phone)) : '',
+      phone: (this.detailWholesaler.phone) ? (this.isDetail ? `+62${parseInt(this.detailWholesaler.phone)}` : parseInt(this.detailWholesaler.phone.split("+62")[1])) : '',
       status: this.detailWholesaler.status,
       national: this.getArea('national'),
       zone: this.getArea('division'),
