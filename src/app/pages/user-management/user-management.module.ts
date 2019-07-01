@@ -47,6 +47,10 @@ import {
 } from "../../resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
+// import { AdminPrincipalAuditLogComponent } from './admin-principal/edit/admin-principal-audit-log/admin-principal-audit-log.component';
+import { PartnershipCreateComponent } from "./principal-partnership/create/partnership-create.component";
+import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
+import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 
 @NgModule({
   imports: [
@@ -103,14 +107,18 @@ import { CustomerDetailComponent } from "./customer/detail/customer-detail.compo
     RetailerCreateComponent,
     RetailerEditComponent,
     CustomerIndexComponent,
-    CustomerDetailComponent
+    CustomerDetailComponent,
+    // AdminPrincipalAuditLogComponent,
+    PartnershipCreateComponent,
+    PartnershipIndexComponent,
+    PartnershipEditComponent
   ],
   providers: [
     ListRoleAdminResolver,
-    ListLevelFFResolver, 
+    ListLevelFFResolver,
     ListLevelAreaResolver,
     ListAdminPrincipalResolver,
     PageGuard
   ]
 })
-export class UserManagementModule {}
+export class UserManagementModule { }

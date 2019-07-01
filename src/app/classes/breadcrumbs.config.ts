@@ -266,6 +266,51 @@ export const brConfig = {
       }
     ]
   },
+  partnership: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Daftar Principal Partnership"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/user-management/principal-partnership",
+        name: "Daftar Principal Partnership"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Principal Partnership"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/principal-partnership",
+        name: "Daftar Principal Partnership"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Principal Partnership"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/principal-partnership",
+        name: "Daftar Principal Partnership"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Principal Partnership"
+      }
+    ]
+  },
   inappMarketing: {
     banner: {
       index: [
@@ -1084,5 +1129,235 @@ export const brConfig = {
         }
       ]
     }
-  }
+  },
+  analytics: {
+    user_database: {
+      user_onboarding: [
+        {
+          type: "parent",
+          url: "/dashboard",
+          name: "AYO SRC User Database"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "User Onboarding"
+        }
+      ],
+      user_onboarding_register_src: [
+        {
+          type: "parent",
+          url: "/dashboard",
+          name: "AYO SRC User Database"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/user-onboarding",
+          name: "User Onboarding"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Register SRC"
+        }
+      ],
+      user_onboarding_register_user: [
+        {
+          type: "parent",
+          url: "/dashboard",
+          name: "AYO SRC User Database"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/user-onboarding",
+          name: "User Onboarding"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Register User"
+        }
+      ]
+    },
+    b2b_platform: {
+      transaction_report: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Transaction Report"
+        }
+      ],
+      brand_performance: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Brand Performance"
+        }
+      ],
+      brand_performance_detail: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/brand-performance",
+          name: "Brand Performance"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
+        }
+      ],
+      loyalty_management: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Loyalty Management"
+        }
+      ],
+      register_src_trend: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "Transaction Report"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Register SRC in AYO SRC (Trend)"
+        }
+      ],
+      top10_category: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "Transaction Report"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Top 10 Category (Revenue)"
+        }
+      ],
+      top5_ws: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "Transaction Report"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Top 5 Wholesaler"
+        }
+      ],
+      bottom5_ws: [
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "B2B Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/transaction-report",
+          name: "Transaction Report"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Bottom 5 Wholesaler"
+        }
+      ]
+    },
+    b2c_platform: {
+      consumer: [
+        {
+          type: "parent",
+          url: "/dashboard/consumer-demographic",
+          name: "B2C Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Consumer Demographic"
+        }
+      ],
+      refferal: [
+        {
+          type: "parent",
+          url: "/dashboard/consumer-demographic",
+          name: "B2C Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Referral Code"
+        }
+      ],
+      top5_referral: [
+        {
+          type: "parent",
+          url: "/dashboard/consumer-demographic",
+          name: "B2C Platform"
+        },
+        {
+          type: "parent",
+          url: "/dashboard/refferal-code",
+          name: "Referral Code"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Top 5 Referral Code"
+        }
+      ]
+    },
+    dte_platform: {
+      dte_performance: [
+        {
+          type: "parent",
+          url: "/dashboard/dte-performance",
+          name: "DTE Platform"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "DTE Performance"
+        }
+      ]
+    }
+  },
 };

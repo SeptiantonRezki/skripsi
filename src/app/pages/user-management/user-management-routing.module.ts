@@ -26,6 +26,9 @@ import {
 } from "app/resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
+import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
+import { PartnershipCreateComponent } from "./principal-partnership/create/partnership-create.component";
+import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 
 const routes: Routes = [
   {
@@ -239,10 +242,42 @@ const routes: Routes = [
     },
     canActivate: [PageGuard]
   },
+  {
+    path: "principal-partnership",
+    component: PartnershipIndexComponent,
+    data: {
+      breadcrumbs: brConfig.partnership.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "principal-partnership/create",
+    component: PartnershipCreateComponent,
+    data: {
+      breadcrumbs: brConfig.partnership.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "principal-partnership/edit",
+    component: PartnershipEditComponent,
+    data: {
+      breadcrumbs: brConfig.partnership.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "principal-partnership/detail",
+    component: PartnershipEditComponent,
+    data: {
+      breadcrumbs: brConfig.partnership.detail
+    },
+    // canActivate: [PageGuard]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class UserManagementRoutingModule {}
+export class UserManagementRoutingModule { }

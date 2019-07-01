@@ -28,7 +28,7 @@ export class AudienceEditComponent {
 
   listScheduler: Array<any>;
   rows: any[];
-  listType: any[] = [{ name: 'Batasi Audience', value: 'limit'}, { name: 'Pilih Semua', value: 'pick-all' }];
+  listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }];
 
   selected = [];
   area: Array<any>;
@@ -85,7 +85,7 @@ export class AudienceEditComponent {
     private audienceService: AudienceService,
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog
-  ) { 
+  ) {
     this.exportTemplate = false;
     this.saveData = false;
     this.rows = [];
@@ -101,7 +101,7 @@ export class AudienceEditComponent {
       max: {},
       trade_scheduler_id: {}
     }
-    
+
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
@@ -122,17 +122,17 @@ export class AudienceEditComponent {
     }
 
     this.searchRetailer.debounceTime(500)
-    .flatMap(search => {
-      return Observable.of(search).delay(500);
-    })
-    .subscribe(res => {
-      // this.searchingRetailer();
-    })
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(res => {
+        // this.searchingRetailer();
+      })
     this.area = dataService.getDecryptedProfile()['area_type'];
     this.detailAudience = dataService.getFromStorage('detail_audience');
 
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => 
-      item.status_audience === null || 
+    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item =>
+      item.status_audience === null ||
       item.trade_audience_group_id === this.detailAudience.id
     );
 
@@ -171,16 +171,16 @@ export class AudienceEditComponent {
 
     this.formAudience.controls['type'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
-        this.formAudience.get('min').disable({emitEvent: false});
-        this.formAudience.get('max').disable({emitEvent: false});
+        this.formAudience.get('min').disable({ emitEvent: false });
+        this.formAudience.get('max').disable({ emitEvent: false });
 
         // this.formFilter.disable({emitEvent: false});
         // this.getRetailer();
       } else {
-        this.formAudience.get('min').enable({emitEvent: false});
-        this.formAudience.get('max').enable({emitEvent: false});
+        this.formAudience.get('min').enable({ emitEvent: false });
+        this.formAudience.get('max').enable({ emitEvent: false });
 
-        this.formFilter.enable({emitEvent: false});
+        this.formFilter.enable({ emitEvent: false });
       }
     })
 
@@ -272,102 +272,102 @@ export class AudienceEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
+        this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
+        });
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'region':
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
           this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
             this.list[selection] = res;
           });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('region').setValue('');
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
-        break;
-      case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
-
-          this.formFilter.get('region').setValue('');
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['territory'] = [];
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['territory'] = [];
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.audienceService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('territory').setValue('');
+        this.formFilter.get('territory').setValue('');
         break;
-    
+
       default:
         break;
     }
@@ -405,14 +405,12 @@ export class AudienceEditComponent {
     }
   }
 
-
-
   getRetailer() {
     this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
-    let area_id = areaSelected[areaSelected.length-1].value;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length - 1].value;
 
     this.loadingIndicator = true;
     this.pagination.area = area_id;
@@ -470,8 +468,8 @@ export class AudienceEditComponent {
   }
 
   searchingRetailer(res) {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
-    let area_id = areaSelected[areaSelected.length-1].value;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length - 1].value;
 
     this.loadingIndicator = true;
 
@@ -499,7 +497,6 @@ export class AudienceEditComponent {
     } else {
       this.selected = []
     }
-
   }
 
   onSelect({ selected }) {
@@ -520,20 +517,20 @@ export class AudienceEditComponent {
       const min = this.formAudience.get('min').value;
       const max = this.formAudience.get('max').value;
 
-      if (limit && selectedRetailer < min) 
+      if (limit && selectedRetailer < min)
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
-      else if (limit && selectedRetailer > max) 
+      else if (limit && selectedRetailer > max)
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebih dari ${max} Audience` });
-      
+
       let budget = {
         total_retailer: limit ? this.selected.length : this.pagination.total,
         trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
       }
 
       this.audienceService.validateBudget(budget).subscribe(res => {
-        if (res.selisih < 0) 
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!`})
-        
+        if (res.selisih < 0)
+          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+
         let body = {
           _method: 'PUT',
           name: this.formAudience.get('name').value,
@@ -547,7 +544,7 @@ export class AudienceEditComponent {
           body['retailer_id'] = this.selected.map(item => item.id);
           body['min'] = this.formAudience.get('min').value;
           body['max'] = this.formAudience.get('max').value;
-          
+
         } else {
           body['area_id'] = this.pagination.area;
 
@@ -561,9 +558,9 @@ export class AudienceEditComponent {
         }
 
         this.saveData = !this.saveData;
-        this.audienceService.put(body, {audience_id: this.detailAudience.id}).subscribe(
+        this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah'})
+            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
             this.router.navigate(['dte', 'audience']);
             window.localStorage.removeItem('detail_audience');
           },
@@ -583,7 +580,7 @@ export class AudienceEditComponent {
     }
   }
 
-  updateAudience(){
+  updateAudience() {
     if (this.selected.length > 0) {
       let audience = this.formAudience.getRawValue();
       let budget = {
@@ -596,15 +593,15 @@ export class AudienceEditComponent {
       const min = audience['min'];
       const max = audience['max'];
 
-      if (limit && selectedRetailer < min) 
+      if (limit && selectedRetailer < min)
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
-      else if (limit && selectedRetailer > max) 
+      else if (limit && selectedRetailer > max)
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience` });
 
       this.audienceService.validateBudget(budget).subscribe(res => {
-        if (res.selisih < 0) 
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!`})
-        
+        if (res.selisih < 0)
+          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+
         let body = {
           _method: 'PUT',
           name: audience['name'],
@@ -617,7 +614,7 @@ export class AudienceEditComponent {
           body['retailer_id'] = this.selected.map(item => item.id);
           body['min'] = audience.min;
           body['max'] = audience.max;
-          
+
         } else {
           body['area_id'] = this.pagination.area;
 
@@ -631,9 +628,9 @@ export class AudienceEditComponent {
         }
 
         this.saveData = !this.saveData;
-        this.audienceService.put(body, {audience_id: this.detailAudience.id}).subscribe(
+        this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah'})
+            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
             this.router.navigate(['dte', 'audience']);
             window.localStorage.removeItem('detail_audience');
           },
@@ -671,13 +668,13 @@ export class AudienceEditComponent {
     const body = {
       retailer_id: this.selected.length > 0 ? this.selected.map(item => item.id) : []
     }
-    
+
     try {
       const response = await this.audienceService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       this.exportTemplate = false;
-      
+
     } catch (error) {
       this.exportTemplate = false;
       throw error;

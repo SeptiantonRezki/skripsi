@@ -86,6 +86,30 @@ export const navigation = [
         type: "item",
         icon: "store",
         url: "/user-management/retailer"
+      },
+      {
+        id: "paguyuban",
+        title: "Paguyuban",
+        translate: "Paguyuban",
+        type: "item",
+        icon: "account_balance",
+        url: "/user-management/paguyuban"
+      },
+      {
+        id: "consumer",
+        title: "Consumer",
+        translate: "Consumer",
+        type: "item",
+        icon: "person",
+        url: "/user-management/customer"
+      },
+      {
+        id: "principal-partnership",
+        title: "Principal Partnership",
+        translate: "Principal Partnership",
+        type: "item",
+        icon: "domain",
+        url: "/user-management/principal-partnership"
       }
       //   {
       //     id: "consumer",

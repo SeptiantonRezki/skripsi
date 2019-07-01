@@ -1,0 +1,39 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="isDetail ? 'Detail Principal Partnership' : 'Ubah Principal Partnership'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Principal Partnership</h2>
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formPrincipal">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Grup">
+              <mat-error
+                *ngIf="formPrincipal.controls['name'].hasError('required') && formPrincipal.controls['name'].touched">
+                Nama Grup harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button *ngIf="!formPrincipal.disabled" type="button" class="confirmation-button"
+        (click)="submit()" fxFlex="20">
+        SIMPAN
+      </button>
+      <button mat-raised-button *ngIf="formPrincipal.disabled" type="button" class="confirmation-button"
+        (click)="updatePrincipalPartnership()" fxFlex="20">
+        SIMPAN
+      </button>
+    </div>
+  </div>
+  <a #downloadLink></a>
+</div>
