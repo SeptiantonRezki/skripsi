@@ -48,7 +48,7 @@ export class Endpoint {
         reset_password: `${AYO_API_SERVICE(SERVER.user)}/oauth/password/reset`,
         change_password: `${AYO_API_SERVICE(SERVER.user)}/oauth/password/forgot`,
         change_password_edit_profile: `${AYO_API_SERVICE(SERVER.user)}/oauth/password/change`,
-        logout: `${AYO_API_SERVICE(SERVER.user)}/oauth/token/revoke`,
+        logout: `${AYO_API_SERVICE(SERVER.auth)}/api/v1/auth/remove-token`,
         check_token: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/token`,
       },
       admin_principal: {
@@ -69,15 +69,16 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`
       },
       wholesaler: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/by-area?type=wholesaler`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/wholesaler/store`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/store`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/update/${context.wholesaler_id}`,
+        // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`
       },
       retailer: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/by-area?type=retailer`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/retailer/store`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/store`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/update/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
         consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`
       },
@@ -223,10 +224,11 @@ export class Endpoint {
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
+        get_business: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/get/${context.business_id}`,
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
-        list_principal: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/user/principal?page=all`,
+        list_principal: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/user/principal?page=all`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

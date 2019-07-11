@@ -23,7 +23,7 @@ export class WholesalerService extends BaseService {
 
   put(body?, context?): Observable<any> {
     const url = this.getUrl(this.namespace, "put", context);
-    return this.postApi(url, body);
+    return this.putApi(url, body);
   }
 
   delete(context): Observable<any> {
@@ -48,6 +48,11 @@ export class WholesalerService extends BaseService {
 
   getListOtherChildren(context): Observable<any> {
     const url = this.getUrl("general", "list_other_children", context);
+    return this.getApi(url);
+  }
+
+  getBusinessDetail(context?): Observable<any> {
+    const url = this.getUrl("general", "get_business", context);
     return this.getApi(url);
   }
 }

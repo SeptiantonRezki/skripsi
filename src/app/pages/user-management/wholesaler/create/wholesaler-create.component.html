@@ -19,21 +19,24 @@
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Nama" formControlName="name">
-                <mat-error *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
                   Nama Toko harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Alamat Toko" formControlName="address">
-                <mat-error *ngIf="verticalStepperStep1.controls['address'].hasError('required') && verticalStepperStep1.controls['address'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['address'].hasError('required') && verticalStepperStep1.controls['address'].touched ">
                   Alamat Toko harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Kode Agen" formControlName="business_code">
-                <mat-error *ngIf="verticalStepperStep1.controls['business_code'].hasError('required') && verticalStepperStep1.controls['business_code'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['business_code'].hasError('required') && verticalStepperStep1.controls['business_code'].touched ">
                   Kode Agen harus diisi.
                 </mat-error>
               </mat-form-field>
@@ -59,7 +62,8 @@
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
-                <mat-error *ngIf="verticalStepperStep2.controls['owner'].hasError('required') && verticalStepperStep2.controls['owner'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['owner'].hasError('required') && verticalStepperStep2.controls['owner'].touched ">
                   Nama Pemilik harus diisi.
                 </mat-error>
               </mat-form-field>
@@ -74,7 +78,8 @@
                     <input matInput formControlName="phone" type="tel" min="0">
                   </mat-form-field>
                 </div>
-                <mat-error *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
                   Nomor ponsel harus diisi.
                 </mat-error>
               </div>
@@ -108,47 +113,58 @@
                 <mat-select placeholder="National" formControlName="national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['national'].hasError('required') && verticalStepperStep3.controls['national'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['national'].hasError('required') && verticalStepperStep3.controls['national'].touched">
                   National harus diisi
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', verticalStepperStep3.get('zone').value)">
+                <mat-select placeholder="Zone" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', verticalStepperStep3.get('zone').value)">
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['zone'].hasError('required') && verticalStepperStep3.controls['zone'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['zone'].hasError('required') && verticalStepperStep3.controls['zone'].touched">
                   Zone harus diisi
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', verticalStepperStep3.get('region').value)">
+                <mat-select placeholder="Regional" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', verticalStepperStep3.get('region').value)">
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['region'].hasError('required') && verticalStepperStep3.controls['region'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['region'].hasError('required') && verticalStepperStep3.controls['region'].touched">
                   Regional harus diisi
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', verticalStepperStep3.get('area').value)">
+                <mat-select placeholder="Area" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', verticalStepperStep3.get('area').value)">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched">
                   Area harus diisi
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', verticalStepperStep3.get('salespoint').value)">
+                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', verticalStepperStep3.get('salespoint').value)">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['salespoint'].hasError('required') && verticalStepperStep3.controls['salespoint'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['salespoint'].hasError('required') && verticalStepperStep3.controls['salespoint'].touched">
                   Salespoint harus diisi
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', verticalStepperStep3.get('district').value)">
+                <mat-select placeholder="District" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', verticalStepperStep3.get('district').value)">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['district'].hasError('required') && verticalStepperStep3.controls['district'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['district'].hasError('required') && verticalStepperStep3.controls['district'].touched">
                   Distrik harus diisi
                 </mat-error>
               </mat-form-field>
@@ -156,7 +172,8 @@
                 <mat-select placeholder="Territory" formControlName="territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep3.controls['territory'].hasError('required') && verticalStepperStep3.controls['territory'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep3.controls['territory'].hasError('required') && verticalStepperStep3.controls['territory'].touched">
                   Territori harus diisi
                 </mat-error>
               </mat-form-field>

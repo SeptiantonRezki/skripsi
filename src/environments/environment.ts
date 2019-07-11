@@ -16,7 +16,8 @@ export const environment = {
 export const server = {
   user: "user",
   business: "business",
-  area: "area"
+  area: "area",
+  auth: "auth"
 }
 
 export const serviceServer = (server) => {
