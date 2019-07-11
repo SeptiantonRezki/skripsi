@@ -31,8 +31,13 @@ export class RetailerService extends BaseService {
     return this.deleteApi(url);
   }
 
+  getConsumerList(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "consumer_list", context);
+    return this.getApi(url);
+  }
+
   getParentArea(context?): Observable<any> {
-    const url = this.getUrl("general", "parent", context);
+    const url = this.getUrl("general", "parent_by_code", context);
     return this.getApi(url);
   }
 

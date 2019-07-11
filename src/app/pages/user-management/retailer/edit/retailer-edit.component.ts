@@ -91,7 +91,7 @@ export class RetailerEditComponent {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -119,6 +119,15 @@ export class RetailerEditComponent {
 
     // this.setDetailRetailer();
 
+    try {
+      if (this.detailRetailer.refferal_code) {
+        const response = await this.retailerService.getConsumerList({ referral_code: this.detailRetailer.refferal_code }).toPromise();
+        this.detailRetailer["customers"] = response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+
     if (this.detailRetailer.status === 'not-registered') {
       this.formRetailer.get('status').disable();
       this.listStatus = [
@@ -131,7 +140,6 @@ export class RetailerEditComponent {
       this.formRetailer.updateValueAndValidity();
     }
     this.onLoad = true;
-    console.log('detailRetailer', this.detailRetailer);
     this.retailerService.getParentArea({ parent: this.detailRetailer.area[0].area_id }).subscribe(res => {
       this.detailAreaSelected = res.data;
       this.onLoad = false;

@@ -63,12 +63,6 @@
             </mat-error>
           </div>
 
-          <!-- <mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Area" formControlName="area">
-              <mat-error *ngIf="formRetailer.controls['area'].hasError('required') && formRetailer.controls['area'].touched ">
-                Area harus diisi.
-              </mat-error>
-            </mat-form-field> -->
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -143,17 +137,6 @@
             </mat-error>
           </mat-form-field>
 
-
-          <!-- <mat-form-field fxFlex="100" class="is-light">
-            <mat-select placeholder="Tipe Retailer" formControlName="type">
-              <mat-option *ngFor="let item of listType" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="formRetailer.controls['type'].hasError('required') && formRetailer.controls['type'].touched ">
-              Tipe Retailer harus diisi
-            </mat-error>
-          </mat-form-field> -->
-
-
           <mat-form-field fxFlex="100" class="is-light">
             <mat-select placeholder="Internal Classification" formControlName="InternalClassification">
               <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
@@ -189,88 +172,16 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Kota" [sortable]="false" prop="city">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                  <div class="name-container">{{row.city?.name || '-'}}</div>
+                  <div class="name-container">{{row.city_name || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Provinsi" [sortable]="false" prop="province">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                  <div class="name-container">{{row.province?.name || '-'}}</div>
+                  <div class="name-container">{{row.province_name || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
             </ngx-datatable>
           </div>
-
-          <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-  
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
-                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['national'].hasError('required') && formRetailer.controls['national'].touched">
-                  National harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formRetailer.get('zone').value)">
-                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['zone'].hasError('required') && formRetailer.controls['zone'].touched">
-                  Zone harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formRetailer.get('region').value)">
-                  <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['region'].hasError('required') && formRetailer.controls['region'].touched">
-                  Regional harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formRetailer.get('area').value)">
-                  <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['area'].hasError('required') && formRetailer.controls['area'].touched">
-                  Area harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formRetailer.get('salespoint').value)">
-                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['salespoint'].hasError('required') && formRetailer.controls['salespoint'].touched">
-                  Salespoint harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formRetailer.get('district').value)">
-                  <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['district'].hasError('required') && formRetailer.controls['district'].touched">
-                  Distrik harus diisi
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory">
-                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="formRetailer.controls['territory'].hasError('required') && formRetailer.controls['territory'].touched">
-                  Territori harus diisi
-                </mat-error>
-              </mat-form-field>
-            </div> -->
-
-          <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput placeholder="Kata Sandi Baru" type="password" formControlName="password">
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light">
-                <input matInput placeholder="Konfirmasi Kata Sandi" type="password" formControlName="confirmation_password">
-              </mat-form-field> -->
-
-          <!-- <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
-                <button mat-stroked-button>Reset Password</button>
-              </div> -->
-
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
