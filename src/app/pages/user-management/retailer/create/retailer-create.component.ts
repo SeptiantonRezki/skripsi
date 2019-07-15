@@ -336,6 +336,18 @@ export class RetailerCreateComponent{
 
     step4() {
       commonFormValidator.validateAllFields(this.verticalStepperStep4);
+      if (this.verticalStepperStep1.controls['business_code'].invalid) {
+        this.dialogService.openSnackBar({ message: "Informasi Toko Kode Agen Wajib Diisi." });
+      }
+    }
+
+    classificationSelectionChange(event) {
+      if (event.value === 'NON-SRC') {
+        this.verticalStepperStep1.controls['business_code'].setValue("");
+        this.verticalStepperStep1.controls['business_code'].disable();
+      } else {
+        this.verticalStepperStep1.controls['business_code'].enable();
+      }
     }
   
     submit() {

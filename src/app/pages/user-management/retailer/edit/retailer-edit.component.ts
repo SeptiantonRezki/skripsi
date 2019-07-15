@@ -227,7 +227,7 @@ export class RetailerEditComponent {
     this.formRetailer.setValue({
       name: this.detailRetailer.name,
       address: this.detailRetailer.address,
-      business_code: this.detailRetailer.code,
+      business_code: this.detailRetailer.classification === 'SRC' ? this.detailRetailer.code : "",
       owner: this.detailRetailer.owner,
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
       status: this.detailRetailer.status,
@@ -244,7 +244,9 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
     });
 
-    console.log(this.formRetailer);
+    if (this.detailRetailer.classification === 'NON-SRC') {
+      this.formRetailer.controls['business_code'].disable();
+    }
 
     if (this.isDetail) this.formRetailer.disable();
   }
@@ -376,6 +378,16 @@ export class RetailerEditComponent {
   //   // console.log(this.formRetailer.get('status').value);
   // }
 
+
+  classificationSelectionChange(event) {
+    if (event.value === 'NON-SRC') {
+      this.formRetailer.controls['business_code'].setValue("");
+      this.formRetailer.controls['business_code'].disable();
+    } else {
+      this.formRetailer.controls['business_code'].enable();
+    }
+  }
+
   submit() {
     if (this.formRetailer.valid) {
       let body = {
@@ -392,6 +404,8 @@ export class RetailerEditComponent {
         type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value
       };
+
+      console.log(body);
 
       this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
         res => {

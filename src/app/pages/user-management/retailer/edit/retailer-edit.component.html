@@ -138,7 +138,7 @@
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <mat-select placeholder="Internal Classification" formControlName="InternalClassification">
+            <mat-select placeholder="Internal Classification" formControlName="InternalClassification" (selectionChange)="classificationSelectionChange($event)">
               <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRetailer.controls['InternalClassification'].hasError('required') && formRetailer.controls['InternalClassification'].touched ">
