@@ -9,7 +9,7 @@
       <form [formGroup]="formWs">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
           <h3>Detil Wholesaler</h3>
-          <mat-form-field [class]="formWs.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+          <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
             </mat-select>

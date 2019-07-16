@@ -116,13 +116,13 @@
 
         <ngx-datatable-column name="Kode WS" prop="code" summary-template="activeCell"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" prop="status" headerClass="textright">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
-            <div class="name-container pl-12">
-              <mat-icon *ngIf="row.status === 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
-              <mat-icon *ngIf="row.status === 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
-              <mat-icon *ngIf="row.status === 'not-registered'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+        <ngx-datatable-column [width]="120" name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4 status-order"
+                [ngClass]="row.status == 'A' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{ row.status_indo.toUpperCase() }}
+              </p>
             </div>
           </ng-template>
         </ngx-datatable-column>

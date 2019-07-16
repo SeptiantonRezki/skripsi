@@ -18,9 +18,9 @@ export class WholesalerEditComponent {
 
   detailWholesaler: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Belum Terdaftar", value: "not-registered" }
+    { name: "Status Aktif", value: "A" },
+    { name: "Status Non Aktif", value: "I" },
+    { name: "Status Belum Terdaftar", value: "P" }
   ];
 
   listLevelArea: any[];
@@ -106,7 +106,7 @@ export class WholesalerEditComponent {
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
     console.log(this.detailWholesaler);
-    this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area && this.detailWholesaler.area.length > 0) ? this.detailWholesaler.area[0].area_id : null }).subscribe(res => {
+    this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area && this.detailWholesaler.area.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
       this.detailAreaSelected = res.data;
       this.onLoad = false;
 

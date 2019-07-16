@@ -140,7 +140,7 @@ export class RetailerEditComponent {
       this.formRetailer.updateValueAndValidity();
     }
     this.onLoad = true;
-    this.retailerService.getParentArea({ parent: this.detailRetailer.area[0].area_id }).subscribe(res => {
+    this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
       this.detailAreaSelected = res.data;
       this.onLoad = false;
 
