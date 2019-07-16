@@ -158,16 +158,16 @@ export class Endpoint {
         export: `${AYO_API}/api/${type_api}/audience/export`
       },
       news: {
-        get: `${AYO_API}/api/${type_api}/newsfeed`,
-        put: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
-        delete: `${AYO_API}/api/${type_api}/newsfeed/${context.news_id}`,
-        list_category: `${AYO_API}/api/${type_api}/rssfeed/category?page=all`
+        get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
+        put: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed/${context.news_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed/${context.news_id}`,
+        list_category: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/rssfeed/category?page=all`
       },
       news_category: {
-        get: `${AYO_API}/api/${type_api}/rssfeed/category`,
-        create: `${AYO_API}/api/${type_api}/rssfeed/category`,
-        put: `${AYO_API}/api/${type_api}/rssfeed/category/${context.category_id}`,
-        delete: `${AYO_API}/api/${type_api}/rssfeed/category/${context.category_id}`
+        get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/rssfeed/category`,
+        create: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/rssfeed/category`,
+        put: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/rssfeed/category/${context.category_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/rssfeed/category/${context.category_id}`
       },
       role: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role`,
