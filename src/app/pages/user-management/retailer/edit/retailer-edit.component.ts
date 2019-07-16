@@ -380,8 +380,8 @@ export class RetailerEditComponent {
         phone: this.formRetailer.getRawValue()["phone"] ? `+62${this.formRetailer.getRawValue()["phone"]}` : '',
         status: this.formRetailer.get("status").value,
         areas: [this.formRetailer.get("territory").value],
-        latitude: this.formRetailer.get("latitude").value,
-        longitude: this.formRetailer.get("longitude").value,
+        latitude: this.formRetailer.get("latitude").value ? this.formRetailer.get("latitude").value : null,
+        longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value
       };

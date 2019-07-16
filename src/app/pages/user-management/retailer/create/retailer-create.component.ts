@@ -349,8 +349,8 @@ export class RetailerCreateComponent{
           owner: this.verticalStepperStep2.get("owner").value,
           phone: '+62' + this.verticalStepperStep2.get("phone").value,
           areas: [this.verticalStepperStep3.get("territory").value],
-          latitude: this.verticalStepperStep3.get("latitude").value,
-          longitude: this.verticalStepperStep3.get("longitude").value,
+          latitude: this.verticalStepperStep3.get("latitude").value ? this.verticalStepperStep3.get("latitude").value : null,
+          longitude: this.verticalStepperStep3.get("longitude").value ?  this.verticalStepperStep3.get("longitude").value : null,
           type: "General Trade",
           InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
         };
