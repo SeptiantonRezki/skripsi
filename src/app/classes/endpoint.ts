@@ -70,7 +70,7 @@ export class Endpoint {
       },
       wholesaler: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/store`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
@@ -79,7 +79,7 @@ export class Endpoint {
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/store`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
         consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`
