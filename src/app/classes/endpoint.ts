@@ -71,7 +71,8 @@ export class Endpoint {
       wholesaler: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/store`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/update/${context.wholesaler_id}`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`
       },

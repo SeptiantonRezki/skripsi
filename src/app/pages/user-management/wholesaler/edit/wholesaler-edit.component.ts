@@ -105,22 +105,26 @@ export class WholesalerEditComponent {
     this.formWs.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
-    console.log(this.detailWholesaler);
-    this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area && this.detailWholesaler.area.length > 0) ? this.detailWholesaler.area[0].area_id : null }).subscribe(res => {
-      this.detailAreaSelected = res.data;
-      this.onLoad = false;
+    this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
+      this.detailWholesaler = resWS.data;
+      console.log('wsss', this.detailWholesaler);
 
-      this.initArea();
-      this.initFormGroup();
-      this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
-        if (res.match(regex)) {
-          if (res.substring(0, 1) == '0') {
-            let phone = res.substring(1);
-            this.formWs.get('phone').setValue(phone, { emitEvent: false });
+      this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
+        this.detailAreaSelected = res.data;
+        this.onLoad = false;
+
+        this.initArea();
+        this.initFormGroup();
+        this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+          if (res.match(regex)) {
+            if (res.substring(0, 1) == '0') {
+              let phone = res.substring(1);
+              this.formWs.get('phone').setValue(phone, { emitEvent: false });
+            }
           }
-        }
+        })
       })
-    })
+    });
   }
 
   initArea() {
@@ -183,7 +187,6 @@ export class WholesalerEditComponent {
       }
       this.getAudienceArea(level_desc, item.id);
     });
-
     this.formWs.setValue({
       name: this.detailWholesaler.name,
       address: this.detailWholesaler.address,
