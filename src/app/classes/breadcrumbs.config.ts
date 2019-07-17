@@ -683,6 +683,15 @@ export const brConfig = {
       ]
     }
   },
+  dte_automation: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "DTE Automation"
+      }
+    ]
+  },
   notification: {
     index: [
       {

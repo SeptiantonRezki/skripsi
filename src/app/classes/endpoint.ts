@@ -161,6 +161,10 @@ export class Endpoint {
         import: `${AYO_API}/api/${type_api}/audience/import`,
         export: `${AYO_API}/api/${type_api}/audience/export`
       },
+      dte_automation: {
+        list_audience_groups: `${AYO_API}/api/principal/automation/list-audience`,
+        list_trade_program: `${AYO_API}/api/principal/automation/list-trade-program`
+      },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
         put: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed/${context.news_id}`,

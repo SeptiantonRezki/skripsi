@@ -44,6 +44,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "dte-automation",
+    loadChildren: "./pages/dte-automation/dteautomation.module#DTEAutomationModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "notifications",
     loadChildren: "./pages/notification/notification.module#NotificationModule",
     canActivate: [AuthGuard]
