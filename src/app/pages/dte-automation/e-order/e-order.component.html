@@ -25,19 +25,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <!-- <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput placeholder="Pilih Grup Audience" [matAutocomplete]="auto" formControlName="name">
-            </mat-form-field>
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngIf="isLoading" class="is-loading">
-                <mat-spinner diameter="50"></mat-spinner>
-              </mat-option>
-              <ng-container *ngIf="!isLoading">
-                <mat-option *ngFor="let audience of filteredAudience | async" [value]="audience">
-                  <span>{{ audience.name }}</span>
-                </mat-option>
-              </ng-container>
-            </mat-autocomplete> -->
           </div>
 
           <h3 class="text-bold">Buat Audience Baru</h3>
@@ -211,8 +198,14 @@
         </mat-form-field>
       </div>
       <div fxLayout="row">
-        <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput type="text" placeholder="Trade Program">
+        <mat-form-field fxFlex="45" class="is-light form-primary">
+          <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram>
+            <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
+              [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+            <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">
+              {{item.name}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </div>

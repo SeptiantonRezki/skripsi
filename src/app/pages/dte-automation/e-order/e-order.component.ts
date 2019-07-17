@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
-import { takeUntil, switchMap, debounceTime, tap, finalize, map } from "rxjs/operators";
+import { takeUntil, switchMap, debounceTime, tap, finalize, map, take } from "rxjs/operators";
 import { MatSelect, MatDialog, MatDialogConfig } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
@@ -50,9 +50,13 @@ export class EOrderComponent implements OnInit {
   exportTemplate: Boolean;
   dummyAudience: any[] = [{ id: 1, name: "Audience Sampoerna" }, { id: 2, name: "Audience Phillip Morris" }];
   filteredAudience: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  audienceGroups: any[];
+  tradePrograms: any[];
 
   public filterScheduler: FormControl = new FormControl();
   public filterAudience: FormControl = new FormControl();
+  public filterTradeProgram: FormControl = new FormControl();
 
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
@@ -215,18 +219,82 @@ export class EOrderComponent implements OnInit {
 
 
     this.audienceTradeProgramService.getAudienceGroups().subscribe(res => {
-      console.log('res list audience groups', res);
+      this.audienceGroups = res.data.slice();
       this.filteredAudience.next((res && res.data) ? res.data.slice() : []);
     });
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
       console.log('res list trade programs', res);
+      this.tradePrograms = res.data.slice();
+      this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
     });
+
+    this.filterAudience
+      .valueChanges
+      .pipe(
+        takeUntil(this._onDestroy)
+      )
+      .subscribe(() => {
+        this._filterAudience()
+      });
+    this.filterTradeProgram
+      .valueChanges
+      .pipe(
+        takeUntil(this._onDestroy)
+      )
+      .subscribe(() => {
+        this._filterTradeProgram();
+      })
+
+    this.setInitialValue();
   }
 
-  _filterAudience(value: any): any {
-    let filterValue = !value.name ? value.toLowerCase() : value.name.toLowerCase();
-    let updatedAudience = this.dummyAudience.filter(aud => aud.name.toLowerCase().indexOf(filterValue) > -1);
-    return updatedAudience;
+  protected setInitialValue() {
+    this.filteredAudience
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        // setting the compareWith property to a comparison function
+        // triggers initializing the selection according to the initial value of
+        // the form control (i.e. _initializeSelection())
+        // this needs to be done after the filteredBanks are loaded initially
+        // and after the mat-option elements are available
+        this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id === b.id;
+      });
+  }
+
+  _filterAudience() {
+    if (!this.audienceGroups) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterAudience.value;
+    if (!search) {
+      this.filteredAudience.next(this.audienceGroups.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredAudience.next(
+      this.audienceGroups.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  _filterTradeProgram() {
+    if (!this.tradePrograms) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterTradeProgram.value;
+    if (!search) {
+      this.filteredTradeProgram.next(this.tradePrograms.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredTradeProgram.next(
+      this.tradePrograms.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   getRetailer() {
