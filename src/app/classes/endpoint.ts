@@ -77,8 +77,9 @@ export class Endpoint {
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/store`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/update/${context.retailer_id}`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
         consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`
       },

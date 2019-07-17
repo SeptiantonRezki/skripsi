@@ -21,7 +21,7 @@ export class RetailerEditComponent {
   listStatus: any[] = [
     { name: "Status Aktif", value: "active" },
     { name: "Status Non Aktif", value: "inactive" },
-    // { name: "Status Belum terdaftar", value: "passive" }
+    { name: "Status Belum terdaftar", value: "passive" }
   ];
 
   listType: any[] = [
@@ -64,7 +64,6 @@ export class RetailerEditComponent {
       // type: {},
       InternalClassification: {}
     };
-
     this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
 
@@ -117,49 +116,55 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
 
-    // this.setDetailRetailer();
+    this.retailerService.show({ retailer_id: this.dataService.getFromStorage("id_retailer") }).subscribe(async res => {
 
-    try {
-      if (this.detailRetailer.refferal_code) {
-        const response = await this.retailerService.getConsumerList({ referral_code: this.detailRetailer.refferal_code }).toPromise();
-        this.detailRetailer["customers"] = response.data;
-      }
-    } catch (error) {
-      throw error;
-    }
-
-    if (this.detailRetailer.status === 'not-registered') {
-      this.formRetailer.get('status').disable();
-      this.listStatus = [
-        { name: "Status Aktif", value: "active" },
-        { name: "Status Non Aktif", value: "inactive" },
-        { name: "Status Belum terdaftar", value: "not-registered" }
-      ];
-    } else if (this.detailRetailer.status === 'active') {
-      this.formRetailer.controls['phone'].setValidators(Validators.required);
-      this.formRetailer.updateValueAndValidity();
-    }
-    this.onLoad = true;
-    this.retailerService.getParentArea({ parent: this.detailRetailer.area[0].area_id }).subscribe(res => {
-      this.detailAreaSelected = res.data;
-      this.onLoad = false;
-
-      this.initArea();
-      this.initFormGroup();
-
-      this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
-        if (res.match(regex)) {
-          if (res.substring(0, 1) == '0') {
-            let phone = res.substring(1);
-            this.formRetailer.get('phone').setValue(phone, { emitEvent: false });
-          }
+      // console.log('show', res);
+      this.detailRetailer = res.data;
+      console.log('detail_retailer', this.detailRetailer);
+      // this.setDetailRetailer();
+      try {
+        if (this.detailRetailer.refferal_code) {
+          const response = await this.retailerService.getConsumerList({ referral_code: this.detailRetailer.refferal_code }).toPromise();
+          this.detailRetailer["customers"] = response.data;
         }
+      } catch (error) {
+        throw error;
+      }
+
+      if (this.detailRetailer.status === 'not-registered') {
+        this.formRetailer.get('status').disable();
+        this.listStatus = [
+          { name: "Status Aktif", value: "active" },
+          { name: "Status Non Aktif", value: "inactive" },
+          { name: "Status Belum terdaftar", value: "not-registered" }
+        ];
+      } else if (this.detailRetailer.status === 'active') {
+        this.formRetailer.controls['phone'].setValidators(Validators.required);
+        this.formRetailer.updateValueAndValidity();
+      }
+      this.onLoad = true;
+      this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
+        this.detailAreaSelected = res.data;
+        this.onLoad = false;
+
+        this.initArea();
+        this.initFormGroup();
+
+        this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+          if (res.match(regex)) {
+            if (res.substring(0, 1) == '0') {
+              let phone = res.substring(1);
+              this.formRetailer.get('phone').setValue(phone, { emitEvent: false });
+            }
+          }
+        })
       })
-    })
+    });
   }
 
   initArea() {
     this.areaFromLogin.map(item => {
+      console.log('item', item);
       switch (item.type.trim()) {
         case 'national':
           this.formRetailer.get('national').disable();
@@ -218,7 +223,7 @@ export class RetailerEditComponent {
       }
       this.getAudienceArea(level_desc, item.id);
     });
-
+    console.log(this.detailRetailer.phone);
     this.formRetailer.setValue({
       name: this.detailRetailer.name,
       address: this.detailRetailer.address,
@@ -238,6 +243,8 @@ export class RetailerEditComponent {
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
     });
+
+    console.log(this.formRetailer);
 
     if (this.isDetail) this.formRetailer.disable();
   }
