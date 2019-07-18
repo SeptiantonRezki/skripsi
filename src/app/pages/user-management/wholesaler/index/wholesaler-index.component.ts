@@ -153,110 +153,110 @@ export class WholesalerIndexComponent {
     let item: any;
     switch (selection) {
       case 'zone':
+        this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
+        });
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'region':
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
           this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
             this.list[selection] = res;
           });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('region').setValue('');
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
-        break;
-      case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
-
-          this.formFilter.get('region').setValue('');
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-          this.list['territory'] = [];
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['territory'] = [];
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formFilter.get('territory').setValue('');
+        this.formFilter.get('territory').setValue('');
         break;
-    
+
       default:
         break;
     }
   }
 
   getWholesalerList() {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({key, value})).filter(item => item.value !== "");
-    this.pagination.area = areaSelected[areaSelected.length-1].value;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
 
@@ -269,7 +269,7 @@ export class WholesalerIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-      
+
     this.loadingIndicator = true;
     this.wholesalerService.get(this.pagination).subscribe(
       res => {
@@ -295,7 +295,7 @@ export class WholesalerIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -380,12 +380,14 @@ export class WholesalerIndexComponent {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage("detail_wholesaler", param);
+    // this.dataService.setToStorage("detail_wholesaler", param);
+    this.dataService.setToStorage("id_wholesaler", param.id);
     this.router.navigate(["user-management", "wholesaler", "edit"]);
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_wholesaler", param);
+    // this.dataService.setToStorage("detail_wholesaler", param);
+    this.dataService.setToStorage("id_wholesaler", param.id);
     this.router.navigate(["user-management", "wholesaler", "detail"]);
   }
 }

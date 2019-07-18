@@ -60,7 +60,7 @@ export class BaseService {
     }
     this.clean(request);
     let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
-    return this.http.post(url, request, requestConfig);
+    return this.http.post(url, request, { ...requestConfig, headers });
 
   }
 
@@ -70,12 +70,12 @@ export class BaseService {
 
   protected putApi(url, request) {
     let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
-    return this.http.put(url, request);
+    return this.http.put(url, request, { headers });
   }
 
   protected deleteApi(url, request: any = null) {
     let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
-    return this.http.request('delete', url, { body: request });
+    return this.http.request('delete', url, { body: request, headers });
   }
 
   protected extractData(res: HttpResponse<any>) {
