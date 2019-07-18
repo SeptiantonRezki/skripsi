@@ -17,6 +17,7 @@ import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, 
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { PageGuard } from "app/classes/auth.guard";
 import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
+import { AudienceTradeProgramComponent } from "./automation/audience-trade-program.component";
 
 const routes: Routes = [
   {
@@ -186,6 +187,18 @@ const routes: Routes = [
     },
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
+  },
+  {
+    path: "automation",
+    component: AudienceTradeProgramComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.detail
+    },
+    resolve: {
+      listScheduler: ListSchedulerResolver,
+    },
+    canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
   }
 ];
 

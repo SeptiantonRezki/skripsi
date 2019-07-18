@@ -680,17 +680,15 @@ export const brConfig = {
           url: "",
           name: "Detail Audience"
         }
+      ],
+      automation: [
+        {
+          type: "current",
+          url: "",
+          name: "DTE Automation"
+        }
       ]
     }
-  },
-  dte_automation: {
-    index: [
-      {
-        type: "current",
-        url: "",
-        name: "DTE Automation"
-      }
-    ]
   },
   notification: {
     index: [

@@ -244,21 +244,6 @@ export class EOrderComponent implements OnInit {
       .subscribe(() => {
         this._filterTradeProgram();
       })
-
-    this.setInitialValue();
-  }
-
-  protected setInitialValue() {
-    this.filteredAudience
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        // setting the compareWith property to a comparison function
-        // triggers initializing the selection according to the initial value of
-        // the form control (i.e. _initializeSelection())
-        // this needs to be done after the filteredBanks are loaded initially
-        // and after the mat-option elements are available
-        this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id === b.id;
-      });
   }
 
   _filterAudience() {
