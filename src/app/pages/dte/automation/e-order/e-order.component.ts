@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, Inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { takeUntil, switchMap, debounceTime, tap, finalize, map, take } from "rxjs/operators";
-import { MatSelect, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatSelect, MatDialog, MatDialogConfig, MatChipInputEvent, MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
@@ -11,6 +11,8 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { ImportAudienceDialogComponent } from 'app/pages/dte/audience/import/import-audience-dialog.component';
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-eorder',
@@ -18,6 +20,15 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
   styleUrls: ['./e-order.component.scss']
 })
 export class EOrderComponent implements OnInit {
+  // For chips
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  skus: any[] = [];
+  skuSelected: any;
+
   formEOrder: FormGroup;
   formEOrderError: any;
   showLoadingBar: Boolean;
@@ -28,7 +39,7 @@ export class EOrderComponent implements OnInit {
   rows: any[];
   listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }];
 
-  selected = [];
+  selectedRows = [];
   area: Array<any>;
   queries: any;
   data = [];
@@ -43,6 +54,7 @@ export class EOrderComponent implements OnInit {
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
+  formTemp: FormGroup;
 
   loadingIndicator: Boolean;
   reorderable = true;
@@ -51,17 +63,25 @@ export class EOrderComponent implements OnInit {
   dummyAudience: any[] = [{ id: 1, name: "Audience Sampoerna" }, { id: 2, name: "Audience Phillip Morris" }];
   filteredAudience: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  filteredSku: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   audienceGroups: any[];
   tradePrograms: any[];
+  skuList: any[];
 
   public filterScheduler: FormControl = new FormControl();
   public filterAudience: FormControl = new FormControl();
   public filterTradeProgram: FormControl = new FormControl();
+  public filterSku: FormControl = new FormControl();
 
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  @ViewChild('skuInput') skuInput: ElementRef;
+  @ViewChild('myContainer') myContainer: ElementRef;
+  @Input() automationType: string;
+
   private _onDestroy = new Subject<void>();
 
   @HostListener('window:beforeunload')
@@ -73,7 +93,7 @@ export class EOrderComponent implements OnInit {
       return true;
     }
 
-    if (this.valueChange && !this.saveData || (this.selected.length > 0 && !this.saveData))
+    if (this.valueChange && !this.saveData || (this.selectedRows.length > 0 && !this.saveData))
       return false;
 
     // if (this.selected.length > 0)
@@ -91,7 +111,7 @@ export class EOrderComponent implements OnInit {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog,
     private audienceService: AudienceService,
-    private audienceTradeProgramService: AudienceTradeProgramService
+    private audienceTradeProgramService: AudienceTradeProgramService,
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -147,8 +167,8 @@ export class EOrderComponent implements OnInit {
 
     this.formEOrder = this.formBuilder.group({
       name: [""],
-      min: ["", [Validators.required, Validators.min(0)]],
-      max: ["", [Validators.required, Validators.min(0)]],
+      min: [""],
+      max: [""],
       type: ["limit"],
       // national: [""],
       // division: [""],
@@ -156,10 +176,7 @@ export class EOrderComponent implements OnInit {
       // area: [""],
       // district: [""],
       // teritory: [""],
-      trade_scheduler_id: ["", Validators.required],
-      startDate: [new Date(), Validators.required],
-      endDate: [new Date(), Validators.required],
-      coin_reward: [0, Validators.required]
+      trade_scheduler_id: [""],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -170,7 +187,16 @@ export class EOrderComponent implements OnInit {
       salespoint: [""],
       district: [""],
       territory: [""]
-    })
+    });
+
+    this.formTemp = this.formBuilder.group({
+      sku: [""],
+      startDate: [moment.now(), Validators.required],
+      endDate: [moment.now(), Validators.required],
+      coin_reward: [0, Validators.required],
+      coin_max: [0],
+      trade_program_id: [null, Validators.required]
+    });
 
     this.initArea();
     this.getRetailer();
@@ -209,16 +235,8 @@ export class EOrderComponent implements OnInit {
         this.filteringScheduler();
       });
 
-    // this.filteredAudience = this.formEOrder.get('name')
-    //   .valueChanges
-    //   .pipe(
-    //     debounceTime(300),
-    //     // tap(() => this.isLoading = true),
-    //     map(value => this._filterAudience(value)),
-    //   );
-
-
     this.audienceTradeProgramService.getAudienceGroups().subscribe(res => {
+      console.log('list audience group!', res);
       this.audienceGroups = res.data.slice();
       this.filteredAudience.next((res && res.data) ? res.data.slice() : []);
     });
@@ -228,6 +246,11 @@ export class EOrderComponent implements OnInit {
       this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
     });
 
+    // getting all List Data DTE Automation
+    // this.audienceTradeProgramService.get().subscribe(res => {
+    //   console.log('res get all automation', res);
+    // });
+
     this.filterAudience
       .valueChanges
       .pipe(
@@ -236,6 +259,7 @@ export class EOrderComponent implements OnInit {
       .subscribe(() => {
         this._filterAudience()
       });
+
     this.filterTradeProgram
       .valueChanges
       .pipe(
@@ -243,7 +267,67 @@ export class EOrderComponent implements OnInit {
       )
       .subscribe(() => {
         this._filterTradeProgram();
-      })
+      });
+
+    this.formTemp
+      .get('sku')
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.isLoading = true),
+        switchMap(value => {
+          if (value == null || value == "") {
+            this.isLoading = false;
+            return [];
+          }
+          return this.audienceTradeProgramService.getListSku({ search: value })
+            .pipe(
+              finalize(() => this.isLoading = false)
+            )
+        })
+      ).subscribe(res => {
+        this.filteredSku.next(res.data);
+      });
+  }
+
+  add(event: MatChipInputEvent): void {
+    // Add fruit only when MatAutocomplete is not open
+    // To make sure this does not conflict with OptionSelected Event
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
+
+      // Add our fruit
+      if ((value || '').trim()) {
+        this.skus.push();
+      }
+
+      // Reset the input value
+      if (input) {
+        input.value = '';
+      }
+      this.formTemp.get("sku").setValue(null);
+    }
+  }
+
+  remove(sku: string): void {
+    const index = this.skus.indexOf(sku);
+
+    if (index >= 0) {
+      this.skus.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    let index = this.skus.findIndex(sku => {
+      return sku === event.option.value.sku_id;
+    });
+
+    if (index < 0) {
+      this.skus.push(event.option.value.sku_id);
+    }
+    this.skuInput.nativeElement.value = '';
+    this.formTemp.get("sku").setValue(null);
   }
 
   _filterAudience() {
@@ -258,9 +342,9 @@ export class EOrderComponent implements OnInit {
     } else {
       search = search.toLowerCase();
     }
-    // filter the banks
+    // filter the audiences
     this.filteredAudience.next(
-      this.audienceGroups.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+      this.audienceGroups.filter(audience => audience.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -276,10 +360,74 @@ export class EOrderComponent implements OnInit {
     } else {
       search = search.toLowerCase();
     }
-    // filter the banks
+    // filter the trades
     this.filteredTradeProgram.next(
-      this.tradePrograms.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+      this.tradePrograms.filter(trade => trade.name.toLowerCase().indexOf(search) > -1)
     );
+  }
+
+  submit() {
+    console.log(this.formEOrder.valid, this.formTemp.valid, this.pagination);
+    if (this.formEOrder.valid && this.formTemp.valid) {
+      let body = {
+        sku_id: this.skus,
+        type: this.automationType,
+        start_date: this.formTemp.get("startDate").value,
+        end_date: this.formTemp.get("endDate").value,
+        coin_reward: this.formTemp.get("coin_reward").value,
+        coin_max: this.formTemp.get("coin_max").value,
+        trade_creator_id: this.formTemp.get("trade_program_id").value,
+        min: this.formEOrder.get("min").value,
+        max: this.formEOrder.get("max").value,
+        area_id: this.pagination.area,
+        total_transaksi: 0,
+        trade_audience_group_id: this.formEOrder.get('name').value
+      };
+
+      switch (this.automationType) {
+        case 'coupon':
+          delete body.sku_id;
+          break;
+      }
+
+      if (this.formEOrder.get('type').value !== 'pick-all') {
+        body['retailer_id'] = this.selectedRows.map(item => item.id);
+        body['min'] = this.formEOrder.get('min').value;
+        body['max'] = this.formEOrder.get('max').value;
+      } else {
+        body['area_id'] = this.pagination.area;
+
+        if (this.pagination.area !== 1) {
+          body['min'] = 1;
+          body['max'] = this.pagination.total;
+        } else {
+          body['min'] = "";
+          body['max'] = "";
+        }
+      }
+      console.log(body);
+      // this.audienceTradeProgramService.create(body).subscribe(res => {
+      //   console.log('res created', res);
+      //   if (res && res.status) {
+      //     this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+      //     this._resetForm();
+      //   }
+      // });
+    }
+  }
+
+  _resetForm() {
+    window.scrollTo(0, 0);
+    this.skus = [];
+    this.selectedRows = [];
+    this.formTemp.get("coin_reward").setValue(0);
+    this.formTemp.get("coin_max").setValue(0);
+    this.formEOrder.get("min").setValue(0);
+    this.formEOrder.get("max").setValue(0);
+    this.formTemp.get("trade_program_id").setValue("");
+    this.formEOrder.get("name").setValue("");
+    this.formTemp.get("startDate").setValue(null);
+    this.formTemp.get("endDate").setValue(null);
   }
 
   getRetailer() {
@@ -324,10 +472,6 @@ export class EOrderComponent implements OnInit {
 
       this.loadingIndicator = false;
     });
-  }
-
-  selectFn() {
-    console.log('jalan')
   }
 
   appendRows(rows, next) {
@@ -443,7 +587,7 @@ export class EOrderComponent implements OnInit {
             this.list[selection] = res;
           });
         } else {
-          this.list[selection] = []
+          this.list[selection] = [];
         }
 
         this.formFilter.get('region').setValue('');
@@ -543,16 +687,15 @@ export class EOrderComponent implements OnInit {
 
   changeValue() {
     if (this.formEOrder.get('type').value === 'pick-all') {
-      this.selected = this.rows;
+      this.selectedRows = this.rows;
     } else {
-      this.selected = []
+      this.selectedRows = []
     }
-
   }
 
   onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+    this.selectedRows.splice(0, this.selectedRows.length);
+    this.selectedRows.push(...selected);
   }
 
   getRows(id) {

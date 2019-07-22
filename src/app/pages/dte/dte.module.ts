@@ -33,7 +33,9 @@ import {
   MatAutocompleteModule,
   MatRadioModule,
   MatProgressBarModule,
-  MatDividerModule
+  MatDividerModule,
+  MatProgressSpinnerModule,
+  MatChipsModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
@@ -113,6 +115,8 @@ export const MY_FORMATS = {
     MatProgressBarModule,
     NgxMatSelectSearchModule,
     MatDividerModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   declarations: [

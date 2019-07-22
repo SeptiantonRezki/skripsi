@@ -7,13 +7,16 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
         <mat-tab label="e-Order">
-          <app-eorder *ngIf="selectedTab === 0"></app-eorder>
+          <app-eorder *ngIf="selectedTab === 0" [automationType]="'e-order'"></app-eorder>
         </mat-tab>
         <mat-tab label="Digital Coupon">
-          <app-eorder *ngIf="selectedTab === 1"></app-eorder>
+          <app-eorder *ngIf="selectedTab === 1" [automationType]="'coupon'"></app-eorder>
         </mat-tab>
         <mat-tab label="Referral Code">
-          <app-eorder *ngIf="selectedTab === 2"></app-eorder>
+          <app-eorder *ngIf="selectedTab === 2" [automationType]="'referral_code'"></app-eorder>
+        </mat-tab>
+        <mat-tab label="POS">
+          <app-eorder *ngIf="selectedTab === 3" [automationType]="'pos'"></app-eorder>
         </mat-tab>
       </mat-tab-group>
     </div>

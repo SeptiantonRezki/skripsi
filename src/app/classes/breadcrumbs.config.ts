@@ -680,8 +680,10 @@ export const brConfig = {
           url: "",
           name: "Detail Audience"
         }
-      ],
-      automation: [
+      ]
+    },
+    automation: {
+      index: [
         {
           type: "current",
           url: "",

@@ -192,12 +192,12 @@ const routes: Routes = [
     path: "automation",
     component: AudienceTradeProgramComponent,
     data: {
-      breadcrumbs: brConfig.dte.audience.detail
+      breadcrumbs: brConfig.dte.automation.index
     },
     resolve: {
       listScheduler: ListSchedulerResolver,
     },
-    canDeactivate: [PendingChangesGuard],
+    // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   }
 ];
