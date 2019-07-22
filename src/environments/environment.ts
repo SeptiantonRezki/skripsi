@@ -18,7 +18,9 @@ export const server = {
   business: "business",
   area: "area",
   auth: "auth",
-  newsfeed: "newsfeed"
+  newsfeed: "newsfeed",
+  banner: "banner",
+  content: "content"
 }
 
 export const serviceServer = (server) => {

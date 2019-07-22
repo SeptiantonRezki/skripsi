@@ -96,10 +96,10 @@ export class Endpoint {
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer/${context.customer_id}`
       },
       banner: {
-        get: `${AYO_API}/api/${type_api}/content/banner`,
-        create: `${AYO_API}/api/${type_api}/content/banner`,
-        put: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/banner/${context.banner_id}`,
+        get: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
+        create: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
+        put: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/${context.banner_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/${context.banner_id}`,
       },
       landingPage: {
         get: `${AYO_API}/api/${type_api}/content/static-page`,
