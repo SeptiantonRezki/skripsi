@@ -160,6 +160,7 @@ export class EOrderComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('automationType', this.automationType);
     this.showLoadingBar = true;
     setTimeout(() => {
       this.showLoadingBar = false;
@@ -167,6 +168,7 @@ export class EOrderComponent implements OnInit {
 
     this.formEOrder = this.formBuilder.group({
       name: [""],
+      audienceName: [""],
       min: [""],
       max: [""],
       type: ["limit"],
@@ -195,7 +197,8 @@ export class EOrderComponent implements OnInit {
       endDate: [moment.now(), Validators.required],
       coin_reward: [0, Validators.required],
       coin_max: [0],
-      trade_program_id: [null, Validators.required]
+      trade_program_id: [null, Validators.required],
+      transaction_total: [0]
     });
 
     this.initArea();
@@ -380,12 +383,14 @@ export class EOrderComponent implements OnInit {
         min: this.formEOrder.get("min").value,
         max: this.formEOrder.get("max").value,
         area_id: this.pagination.area,
-        total_transaksi: 0,
-        trade_audience_group_id: this.formEOrder.get('name').value
+        total_transaksi: this.formTemp.get('transaction_total').value,
+        trade_audience_group_id: this.formEOrder.get('name').value,
+        name: this.formEOrder.get('audienceName').value
       };
 
       switch (this.automationType) {
         case 'coupon':
+        case 'referral_code':
           delete body.sku_id;
           break;
       }
@@ -405,19 +410,16 @@ export class EOrderComponent implements OnInit {
           body['max'] = "";
         }
       }
-      console.log(body);
-      // this.audienceTradeProgramService.create(body).subscribe(res => {
-      //   console.log('res created', res);
-      //   if (res && res.status) {
-      //     this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
-      //     this._resetForm();
-      //   }
-      // });
+      this.audienceTradeProgramService.create(body).subscribe(res => {
+        if (res && res.status) {
+          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          this._resetForm();
+        }
+      });
     }
   }
 
   _resetForm() {
-    window.scrollTo(0, 0);
     this.skus = [];
     this.selectedRows = [];
     this.formTemp.get("coin_reward").setValue(0);
@@ -428,6 +430,7 @@ export class EOrderComponent implements OnInit {
     this.formEOrder.get("name").setValue("");
     this.formTemp.get("startDate").setValue(null);
     this.formTemp.get("endDate").setValue(null);
+    this.formTemp.get("transaction_total").setValue(0);
   }
 
   getRetailer() {
