@@ -16,4 +16,14 @@ export class Config {
     enter: "ENTER_BR",
     toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote'],
   }
+
+  public static server = {
+    user: "user",
+    business: "business",
+    area: "area",
+    auth: "auth",
+    newsfeed: "newsfeed",
+    banner: "banner",
+    content: "content"
+  }
 }

@@ -13,16 +13,6 @@ export const environment = {
   backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg"
 };
 
-export const server = {
-  user: "user",
-  business: "business",
-  area: "area",
-  auth: "auth",
-  newsfeed: "newsfeed",
-  banner: "banner",
-  content: "content"
-}
-
 export const serviceServer = (server) => {
   return `http://${server}.ayo-micro.dxtr.asia`;
 }
