@@ -9,9 +9,10 @@
  * AYO Sampoerna Staging
  *
  */
-import { environment, serviceServer, server } from '../../environments/environment';
+import { environment, serviceServer } from '../../environments/environment';
+import { Config } from './config';
 
-const SERVER = server;
+const SERVER = Config.server;
 const AYO_API = environment.server;
 // const AYO_API_SERVICE = environment.server_service;
 const AYO_API_SERVICE = serviceServer;
@@ -183,22 +184,22 @@ export class Endpoint {
         revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`
       },
       tnc: {
-        get: `${AYO_API}/api/${type_api}/content/content?type=terms-conditions`,
-        create: `${AYO_API}/api/${type_api}/content/content`,
-        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=terms-conditions`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       privacy: {
-        get: `${AYO_API}/api/${type_api}/content/content?type=privacy-policy`,
-        create: `${AYO_API}/api/${type_api}/content/content`,
-        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=privacy-policy`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       help: {
-        get: `${AYO_API}/api/${type_api}/content/content?type=help`,
-        create: `${AYO_API}/api/${type_api}/content/content`,
-        put: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=help`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       coin: {
         retailer: `${AYO_API}/api/${type_api}/coin?type=retailer`,
