@@ -198,7 +198,6 @@ export class EOrderComponent implements OnInit {
       coin_reward: [0, Validators.required],
       coin_max: [0],
       trade_program_id: [null, Validators.required],
-      transaction_total: [0]
     });
 
     this.initArea();
@@ -383,7 +382,6 @@ export class EOrderComponent implements OnInit {
         min: this.formEOrder.get("min").value,
         max: this.formEOrder.get("max").value,
         area_id: this.pagination.area,
-        total_transaksi: this.formTemp.get('transaction_total').value,
         trade_audience_group_id: this.formEOrder.get('name').value,
         name: this.formEOrder.get('audienceName').value
       };
@@ -430,7 +428,6 @@ export class EOrderComponent implements OnInit {
     this.formEOrder.get("name").setValue("");
     this.formTemp.get("startDate").setValue(null);
     this.formTemp.get("endDate").setValue(null);
-    this.formTemp.get("transaction_total").setValue(0);
   }
 
   getRetailer() {

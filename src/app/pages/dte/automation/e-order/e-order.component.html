@@ -226,12 +226,6 @@
           <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi" formControlName="coin_max">
         </mat-form-field>
       </div>
-      <div fxLayout="row" *ngIf="automationType === 'e-order'">
-        <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput currencyMask min="0" type="tel" placeholder="Total Transaksi"
-            formControlName="transaction_total">
-        </mat-form-field>
-      </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="45" class="is-light form-primary">
           <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id">
