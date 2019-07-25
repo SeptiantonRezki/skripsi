@@ -149,8 +149,13 @@ export class EOrderComponent implements OnInit {
       .subscribe(res => {
         // this.searchingRetailer();
       })
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
-    this.filteredScheduler.next(this.listScheduler.slice());
+
+    // console.log('getting list Audience!');
+    // this.audienceService.getListAudience().subscribe(res => {
+    //   console.log('res getList Audience', res);
+    //   this.listScheduler = res.data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
+    //   this.filteredScheduler.next(this.listScheduler.slice());
+    // });
 
     this.area = dataService.getFromStorage('profile')['area_type'];
   }
@@ -249,9 +254,9 @@ export class EOrderComponent implements OnInit {
     });
 
     // getting all List Data DTE Automation
-    // this.audienceTradeProgramService.get().subscribe(res => {
-    //   console.log('res get all automation', res);
-    // });
+    this.audienceTradeProgramService.get().subscribe(res => {
+      console.log('res get all automation', res);
+    });
 
     this.filterAudience
       .valueChanges
@@ -327,6 +332,8 @@ export class EOrderComponent implements OnInit {
 
     if (index < 0) {
       this.skus.push(event.option.value.sku_id);
+    } else {
+      this.dialogService.openSnackBar({ message: 'SKU ID Sudah terpilih di dalam List!' });
     }
     this.skuInput.nativeElement.value = '';
     this.formTemp.get("sku").setValue(null);

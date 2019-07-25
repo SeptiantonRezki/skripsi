@@ -194,11 +194,8 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.automation.index
     },
-    resolve: {
-      listScheduler: ListSchedulerResolver,
-    },
     // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   }
 ];
 
