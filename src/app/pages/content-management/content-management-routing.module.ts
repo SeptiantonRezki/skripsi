@@ -10,6 +10,8 @@ import { PrivacyEditComponent } from "./privacy/edit/privacy-edit.component";
 import { HelpIndexComponent } from "./help/index/help-index.component";
 import { HelpCreateComponent } from "./help/create/help-create.component";
 import { HelpEditComponent } from "./help/edit/help-edit.component";
+import { ReportListComponent } from "./report-list/report-list.component";
+import { ReportDetailComponent } from "./report-list/report-detail/report-detail-wrapper.component";
 
 const routes: Routes = [
   {
@@ -79,6 +81,27 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.contentManagement.help.edit
     }
+  },
+  {
+    path: "report-list",
+    component: ReportListComponent,
+    data: {
+      breadcrumbs: brConfig.contentManagement.report_list.index
+    }
+  },
+  {
+    path: "report-list/detail/promo",
+    component: ReportDetailComponent,
+    data: {
+      breadcrumbs: brConfig.contentManagement.report_list.detail_promo
+    },
+  },
+  {
+    path: "report-list/detail/riwayat",
+    component: ReportDetailComponent,
+    data: {
+      breadcrumbs: brConfig.contentManagement.report_list.detail_riwayat
+    }
   }
 ];
 
@@ -86,4 +109,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ContentManagementRoutingModule {}
+export class ContentManagementRoutingModule { }

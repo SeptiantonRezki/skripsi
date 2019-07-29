@@ -803,6 +803,39 @@ export const brConfig = {
           name: "Ubah Bantuan"
         }
       ]
+    },
+    report_list: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Laporan"
+        }
+      ],
+      detail_promo: [
+        {
+          type: "parent",
+          url: "/content-management/report-list",
+          name: "Daftar Laporan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Promo"
+        }
+      ],
+      detail_riwayat: [
+        {
+          type: "parent",
+          url: "/content-management/report-list",
+          name: "Daftar Laporan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Promo"
+        }
+      ]
     }
   },
   newsfeedManagement: {
