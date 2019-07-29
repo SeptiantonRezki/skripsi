@@ -22,6 +22,16 @@ export class AudienceTradeProgramService extends BaseService {
     return this.postApi(url, body);
   }
 
+  put(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update', context);
+    return this.putApi(url, body);
+  }
+
+  delete(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete', context);
+    return this.deleteApi(url);
+  }
+
   getAudienceGroups(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_audience_groups");
     return this.getApi(url, queryParams);

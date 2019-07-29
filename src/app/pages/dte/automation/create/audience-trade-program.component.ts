@@ -13,8 +13,8 @@ export class AudienceTradeProgramComponent {
   constructor(
     private dataService: DataService
   ) {
-    const selectedTab = dataService.getFromStorage("selected_tab");
-    this.selectedTab = selectedTab ? selectedTab : 0;
+    // const selectedTab = dataService.getFromStorage("selected_tab");
+    this.selectedTab = 0;
   }
 
   setSelectedTab(tabChangeEvent: MatTabChangeEvent) {

@@ -13,6 +13,7 @@ import { ImportAudienceDialogComponent } from 'app/pages/dte/audience/import/imp
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import * as moment from "moment";
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
   selector: 'app-eorder',
@@ -186,6 +187,7 @@ export class EOrderComponent implements OnInit {
       // district: [""],
       // teritory: [""],
       trade_scheduler_id: [""],
+      newAudience: [false]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -253,11 +255,6 @@ export class EOrderComponent implements OnInit {
       console.log('res list trade programs', res);
       this.tradePrograms = res.data.slice();
       this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
-    });
-
-    // getting all List Data DTE Automation
-    this.audienceTradeProgramService.get().subscribe(res => {
-      console.log('res get all automation', res);
     });
 
     this.filterAudience
@@ -378,7 +375,7 @@ export class EOrderComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.formEOrder.valid, this.formTemp.valid, this.pagination);
+    this.submitting = true;
     if (this.formEOrder.valid && this.formTemp.valid) {
       let body = {
         sku_id: this.skus,
@@ -418,11 +415,32 @@ export class EOrderComponent implements OnInit {
         }
       }
       this.audienceTradeProgramService.create(body).subscribe(res => {
+        this.submitting = false;
         if (res && res.status) {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
-          this._resetForm();
+          // this._resetForm();
+          this.router.navigate(['dte', 'automation']);
         }
+      }, err => {
+        console.log('err', err);
+        this.submitting = false;
       });
+    } else {
+      this.submitting = false;
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      commonFormValidator.validateAllFields(this.formTemp);
+      commonFormValidator.validateAllFields(this.formEOrder);
+    }
+  }
+
+  isCreateAudience(event) {
+    if (event.checked) {
+      this.formEOrder.get("name").disable();
+      this.formEOrder.get("name").reset();
+      console.log('its new Audience', this.formEOrder.get("name").value)
+    } else {
+      console.log('its selecting group audience');
+      this.formEOrder.get("name").enable();
     }
   }
 

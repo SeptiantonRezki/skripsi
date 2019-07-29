@@ -689,6 +689,42 @@ export const brConfig = {
           url: "",
           name: "DTE Automation"
         }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/automation",
+          name: "DTE Automation"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat DTE Automation"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/automation",
+          name: "DTE Automation"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah DTE Automation"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/automation",
+          name: "DTE Automation"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail DTE Automation"
+        }
       ]
     }
   },

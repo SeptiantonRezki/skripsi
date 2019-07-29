@@ -60,8 +60,11 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { ScheduleProgramEditComponent } from './schedule-program/edit/schedule-program-edit.component';
 import { ImportAudienceDialogComponent } from "./audience/import/import-audience-dialog.component";
 import { ImportCoinComponent } from './schedule-program/import-coin/import-coin.component';
-import { AudienceTradeProgramComponent } from "./automation/audience-trade-program.component";
-import { EOrderComponent } from "./automation/e-order/e-order.component";
+import { AudienceTradeProgramComponent } from "./automation/create/audience-trade-program.component";
+import { EOrderComponent } from "./automation/create/e-order/e-order.component";
+import { AudienceTradeProgramIndexComponent } from './automation/index/audience-trade-program-index.component';
+import { AudienceTradeProgramEditComponent } from './automation/edit/audience-trade-program-edit.component';
+import { EOrderEditComponent } from './automation/edit/eorder-edit/eorder-edit.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -138,7 +141,10 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportCoinComponent,
     AudienceTradeProgramComponent,
-    EOrderComponent
+    EOrderComponent,
+    AudienceTradeProgramIndexComponent,
+    AudienceTradeProgramEditComponent,
+    EOrderEditComponent
   ],
   exports: [
     TemplateIndexComponent,

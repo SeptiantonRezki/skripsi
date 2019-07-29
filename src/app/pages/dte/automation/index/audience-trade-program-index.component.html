@@ -1,0 +1,88 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'DTE Automation'">
+    <button style="width: 170px" [routerLink]="['/dte','automation', 'create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">DTE Automation</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Group Audience" prop="trade_audience_group_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.trade_audience_group_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Trade Program" prop="trade_creator_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.trade_creator_name}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Type" prop="type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span *ngIf="row.type === 'e-order'">e-Order</span>
+            <span *ngIf="row.type === 'coupon'">Digital Coupon</span>
+            <span *ngIf="row.type === 'referral_code'">Referral Code</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Coin Reward" prop="coin_reward">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin_reward}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Koin per Frekuensi" prop="coin_max">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin_max}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.start_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.end_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <!-- attribut button edit harus ada permission *ngIf="permission?.ubah" -->
+              <button mat-icon-button color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <!-- attribut button hapus harus ada permission [disabled]="!permission?.hapus" -->
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteAutomation(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,9 @@ import { ListTradeProgramResolver, ListTemplateResolver, ListSchedulerResolver, 
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { PageGuard } from "app/classes/auth.guard";
 import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-program-edit.component";
-import { AudienceTradeProgramComponent } from "./automation/audience-trade-program.component";
+import { AudienceTradeProgramComponent } from "./automation/create/audience-trade-program.component";
+import { AudienceTradeProgramIndexComponent } from "./automation/index/audience-trade-program-index.component";
+import { AudienceTradeProgramEditComponent } from "./automation/edit/audience-trade-program-edit.component";
 
 const routes: Routes = [
   {
@@ -190,12 +192,39 @@ const routes: Routes = [
   },
   {
     path: "automation",
-    component: AudienceTradeProgramComponent,
+    component: AudienceTradeProgramIndexComponent,
     data: {
       breadcrumbs: brConfig.dte.automation.index
     },
     // canDeactivate: [PendingChangesGuard],
-    canActivate: [PageGuard]
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "automation/create",
+    component: AudienceTradeProgramComponent,
+    data: {
+      breadcrumbs: brConfig.dte.automation.create
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "automation/edit",
+    component: AudienceTradeProgramEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.automation.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "automation/detail",
+    component: AudienceTradeProgramEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.automation.detail
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
   }
 ];
 

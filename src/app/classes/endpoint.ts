@@ -166,7 +166,9 @@ export class Endpoint {
         list_audience_groups: `${AYO_API}/api/principal/automation/list-audience`,
         list_trade_program: `${AYO_API}/api/principal/automation/list-trade-program`,
         list_sku: `${AYO_API}/api/principal/automation/list-sku`,
-        create: `${AYO_API}/api/principal/automation`
+        create: `${AYO_API}/api/principal/automation`,
+        delete: `${AYO_API}/api/principal/automation/${context.automation_id}`,
+        update: `${AYO_API}/api/principal/automation/${context.automation_id}`
       },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,

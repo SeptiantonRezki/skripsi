@@ -27,51 +27,61 @@
             </mat-form-field>
           </div>
 
-          <h3 class="text-bold">Buat Audience Baru</h3>
-
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="audienceName" placeholder="Nama Grup">
-              <mat-error
-                *ngIf="formEOrder.controls['audienceName'].hasError('required') && formEOrder.controls['audienceName'].touched">
-                Nama Grup harus diisi
-              </mat-error>
-            </mat-form-field>
+            <mat-checkbox (change)="isCreateAudience($event)" class="mt-4 ml-4 mb-8" formControlName="newAudience">Buat
+              Audience
+              baru</mat-checkbox>
+          </div>
+          <div *ngIf="formEOrder.get('newAudience').value == true">
+            <h3 class="text-bold">Buat Audience Baru</h3>
+
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <input matInput type="text" formControlName="audienceName" placeholder="Nama Grup">
+                <mat-error
+                  *ngIf="formEOrder.controls['audienceName'].hasError('required') && formEOrder.controls['audienceName'].touched">
+                  Nama Grup harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+              <mat-radio-group formControlName="type" (change)="changeValue()">
+                <mat-radio-button class="radio-button pr-48" *ngFor="let item of listType" [value]="item.value">
+                  {{item.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div *ngIf="formEOrder.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
+              class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
+                <mat-error
+                  *ngIf="formEOrder.controls['min'].hasError('required') && formEOrder.controls['min'].touched">
+                  Audience Minimal harus diisi
+                </mat-error>
+                <mat-error *ngIf="formEOrder.controls['min'].hasError('min') && formEOrder.controls['min'].touched">
+                  Audience Minimal tidak boleh kurang dari 0
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
+                <mat-error
+                  *ngIf="formEOrder.controls['max'].hasError('required') && formEOrder.controls['max'].touched">
+                  Audience Maksimal harus diisi
+                </mat-error>
+                <mat-error *ngIf="formEOrder.controls['max'].hasError('min') && formEOrder.controls['max'].touched">
+                  Audience maksimal tidak boleh kurang dari jumlah minimal audience
+                </mat-error>
+              </mat-form-field>
+            </div>
           </div>
 
-          <div fxLayout="row">
-            <mat-radio-group formControlName="type" (change)="changeValue()">
-              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listType" [value]="item.value">
-                {{item.name}}
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div *ngIf="formEOrder.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
-            class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-            <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
-              <mat-error *ngIf="formEOrder.controls['min'].hasError('required') && formEOrder.controls['min'].touched">
-                Audience Minimal harus diisi
-              </mat-error>
-              <mat-error *ngIf="formEOrder.controls['min'].hasError('min') && formEOrder.controls['min'].touched">
-                Audience Minimal tidak boleh kurang dari 0
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
-              <mat-error *ngIf="formEOrder.controls['max'].hasError('required') && formEOrder.controls['max'].touched">
-                Audience Maksimal harus diisi
-              </mat-error>
-              <mat-error *ngIf="formEOrder.controls['max'].hasError('min') && formEOrder.controls['max'].touched">
-                Audience maksimal tidak boleh kurang dari jumlah minimal audience
-              </mat-error>
-            </mat-form-field>
-          </div>
         </form>
       </div>
-      <form [formGroup]="formFilter" autoComplete="off">
+      <form [formGroup]="formFilter" autoComplete="off" *ngIf="formEOrder.get('newAudience').value == true">
         <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
@@ -136,7 +146,7 @@
         </div>
       </form>
     </div>
-    <div class="p-0">
+    <div class="p-0" *ngIf="formEOrder.get('newAudience').value == true">
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxLayoutAlign="end center" class="p-16 export">
         <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
@@ -179,13 +189,15 @@
       <h3 class="text-bold">Durasi</h3>
       <div fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput [matDatepicker]="startPicker" placeholder="Tanggal Mulai" formControlName="startDate">
+          <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+            formControlName="startDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput [matDatepicker]="endDate" placeholder="Tanggal Berakhir" formControlName="endDate">
+          <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="Tanggal Berakhir"
+            formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
         </mat-form-field>
@@ -238,7 +250,8 @@
         </mat-form-field>
       </div>
       <div class="confirm pt-24 pb-24" fxLayout="row">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
+          [disabled]="submitting">
           SIMPAN
         </button>
       </div>
