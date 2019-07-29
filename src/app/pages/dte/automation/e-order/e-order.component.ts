@@ -28,6 +28,8 @@ export class EOrderComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   skus: any[] = [];
   skuSelected: any;
+  submitting: Boolean;
+  onLoad: Boolean;
 
   formEOrder: FormGroup;
   formEOrderError: any;

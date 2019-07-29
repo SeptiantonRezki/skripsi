@@ -177,14 +177,14 @@
     </div>
     <div class="table-wrapper" style="padding: 15px;" [formGroup]="formTemp">
       <h3 class="text-bold">Durasi</h3>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+      <div fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
           <input matInput [matDatepicker]="startPicker" placeholder="Tanggal Mulai" formControlName="startDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field fxFlex="50%" class="is-light form-primary">
+        <mat-form-field fxFlex="45%" class="is-light form-primary">
           <input matInput [matDatepicker]="endDate" placeholder="Tanggal Berakhir" formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
@@ -196,7 +196,7 @@
           <input matInput type="number" placeholder="Nilai Coin Reward" formControlName="coin_reward">
         </mat-form-field>
       </div>
-      <div fxLayout="row" *ngIf="automationType === 'e-order'">
+      <div fxLayout="row" fxFlex="95%" *ngIf="automationType === 'e-order'">
         <mat-form-field fxFlex="100" class="is-light form-primary">
           <mat-chip-list #chipList aria-label="Fruit selection">
             <mat-chip *ngFor="let sku of skus" [selectable]="selectable" [removable]="removable"
