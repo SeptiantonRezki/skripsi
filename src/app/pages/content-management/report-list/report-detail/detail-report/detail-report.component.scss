@@ -13,3 +13,7 @@
   border: 1px solid #DC1E2D;
   color: #DC1E2D;
 }
+
+:host ::ng-deep .mat-input-element:disabled {
+  color: black;
+}
