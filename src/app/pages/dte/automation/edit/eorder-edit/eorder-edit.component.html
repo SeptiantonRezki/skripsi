@@ -4,18 +4,9 @@
     <div class="table-wrapper" style="padding: 15px">
       <div class="ayo-middle pt-10" fxLayout="column">
         <form autocomplete="off" [formGroup]="formEOrder">
-          <h3 class="text-bold">Pilih Audience</h3>
-          <!-- <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Grup">
-              <mat-error
-                *ngIf="formEOrder.controls['name'].hasError('required') && formEOrder.controls['name'].touched">
-                Nama Grup harus diisi
-              </mat-error>
-            </mat-form-field>
-          </div> -->
+          <h3 class="text-bold">{{ isDetail ? 'Audience' : 'Pilih Audience' }}</h3>
 
-          <div fxLayout="row">
+          <div fxLayout="row" *ngIf="!isDetail">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="name" placeholder="Pilih Group Audience" #singleSelect>
                 <ngx-mat-select-search [formControl]="filterAudience" [placeholderLabel]="'Cari Group Audience...'"
@@ -24,6 +15,12 @@
                   {{item.name}}
                 </mat-option>
               </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" *ngIf="isDetail">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" placeholder="Group Audience" [formControl]="audienceGroupName">
             </mat-form-field>
           </div>
 
@@ -253,7 +250,7 @@
       <span style="margin-top: -20px;" class="mat-error" *ngIf="!isDetail && coinRewardInvalid">
         Nilai coin reward harus lebih tinggi dari Jumlah per Frekuensi.
       </span>
-      <div fxLayout="row">
+      <div fxLayout="row" *ngIf="!isDetail">
         <mat-form-field fxFlex="45" class="is-light form-primary">
           <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id">
             <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
@@ -264,6 +261,13 @@
           </mat-select>
         </mat-form-field>
       </div>
+
+      <div fxLayout="row" *ngIf="isDetail">
+        <mat-form-field fxFlex="45%" class="is-light form-primary">
+          <input matInput type="text" placeholder="Trade Program" [formControl]="tradeCreatorName">
+        </mat-form-field>
+      </div>
+
       <div class="confirm pt-24 pb-24" fxLayout="row" *ngIf="!isDetail">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
           [disabled]="coinRewardInvalid || submitting">

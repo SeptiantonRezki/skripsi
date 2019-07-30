@@ -211,8 +211,8 @@ export class EOrderComponent implements OnInit {
       coupon_total: this.automationType === 'coupon' ? [0, Validators.required] : [0]
     });
 
-    this.initArea();
-    this.getRetailer();
+    // this.initArea();
+    // this.getRetailer();
 
     this.formEOrder.controls['type'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
@@ -328,6 +328,11 @@ export class EOrderComponent implements OnInit {
     } else {
       this.coinRewardInvalid = false;
     }
+  }
+
+  runServiceForNewAudience() {
+    this.initArea();
+    this.getRetailer();
   }
 
   add(event: MatChipInputEvent): void {
@@ -472,6 +477,7 @@ export class EOrderComponent implements OnInit {
     if (event.checked) {
       this.formEOrder.get("name").disable();
       this.formEOrder.get("name").reset();
+      this.runServiceForNewAudience();
       console.log('its new Audience', this.formEOrder.get("name").value)
     } else {
       console.log('its selecting group audience');

@@ -78,6 +78,8 @@ export class EOrderEditComponent implements OnInit {
   public filterAudience: FormControl = new FormControl();
   public filterTradeProgram: FormControl = new FormControl();
   public filterSku: FormControl = new FormControl();
+  public tradeCreatorName: FormControl = new FormControl();
+  public audienceGroupName: FormControl = new FormControl();
 
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
@@ -171,11 +173,12 @@ export class EOrderEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('automationType', this.automationType);
-    this.showLoadingBar = true;
-    setTimeout(() => {
-      this.showLoadingBar = false;
-    }, 3000);
+    if (!this.isDetail) {
+      this.showLoadingBar = true;
+      setTimeout(() => {
+        this.showLoadingBar = false;
+      }, 3000);
+    }
 
     this.formEOrder = this.formBuilder.group({
       name: [""],
@@ -219,6 +222,13 @@ export class EOrderEditComponent implements OnInit {
       coupon_total: this.automationType === 'coupon' ? this.detailAutomation.coupon_total : 0
     });
 
+    if (this.isDetail) {
+      this.tradeCreatorName.setValue(this.detailAutomation.trade_creator_name);
+      this.audienceGroupName.setValue(this.detailAutomation.trade_audience_group_name);
+      this.tradeCreatorName.disable();
+      this.audienceGroupName.disable();
+    }
+
     this.skus = this.detailAutomation.sku_id || [];
 
     if (this.isDetail) {
@@ -226,8 +236,8 @@ export class EOrderEditComponent implements OnInit {
       this.formTemp.disable();
     }
 
-    this.initArea();
-    this.getRetailer();
+    // this.initArea();
+    // this.getRetailer();
 
     this.formEOrder.controls['type'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
@@ -263,16 +273,19 @@ export class EOrderEditComponent implements OnInit {
         this.filteringScheduler();
       });
 
-    this.audienceTradeProgramService.getAudienceGroups().subscribe(res => {
-      console.log('list audience group!', res);
-      this.audienceGroups = res.data.slice();
-      this.filteredAudience.next((res && res.data) ? res.data.slice() : []);
-    });
-    this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
-      console.log('res list trade programs', res);
-      this.tradePrograms = res.data.slice();
-      this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
-    });
+    if (!this.isDetail) {
+      this.audienceTradeProgramService.getAudienceGroups().subscribe(res => {
+        console.log('list audience group!', res);
+        this.audienceGroups = res.data.slice();
+        this.filteredAudience.next((res && res.data) ? res.data.slice() : []);
+      });
+      this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
+        console.log('res list trade programs', res);
+        this.tradePrograms = res.data.slice();
+        this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
+      });
+    }
+
 
     this.filterAudience
       .valueChanges
@@ -344,6 +357,11 @@ export class EOrderEditComponent implements OnInit {
     } else {
       this.coinRewardInvalid = false;
     }
+  }
+
+  runServiceForNewAudience() {
+    this.initArea();
+    this.getRetailer();
   }
 
   add(event: MatChipInputEvent): void {
@@ -489,6 +507,7 @@ export class EOrderEditComponent implements OnInit {
     if (event.checked) {
       this.formEOrder.get("name").disable();
       this.formEOrder.get("name").reset();
+      this.runServiceForNewAudience();
       console.log('its new Audience', this.formEOrder.get("name").value)
     } else {
       console.log('its selecting group audience');
