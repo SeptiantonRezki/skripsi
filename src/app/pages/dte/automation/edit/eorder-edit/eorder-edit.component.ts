@@ -38,6 +38,7 @@ export class EOrderEditComponent implements OnInit {
   formEOrderError: any;
   showLoadingBar: Boolean;
   isLoading: Boolean;
+  coinRewardInvalid: Boolean;
 
   listScheduler: any[];
   listRetailer: any;
@@ -201,8 +202,9 @@ export class EOrderEditComponent implements OnInit {
       startDate: [moment.now(), Validators.required],
       endDate: [moment.now(), Validators.required],
       coin_reward: [0, Validators.required],
-      coin_max: [0],
+      coin_max: [0, Validators.required],
       trade_program_id: [null, Validators.required],
+      coupon_total: this.automationType === 'coupon' ? [0, Validators.required] : [0]
     });
 
     this.formEOrder.get("name").setValue(this.detailAutomation.trade_audience_group_id);
@@ -213,7 +215,8 @@ export class EOrderEditComponent implements OnInit {
       endDate: this.detailAutomation.end_date,
       coin_reward: this.detailAutomation.coin_reward,
       coin_max: this.detailAutomation.coin_max,
-      trade_program_id: this.detailAutomation.trade_creator_id
+      trade_program_id: this.detailAutomation.trade_creator_id,
+      coupon_total: this.automationType === 'coupon' ? this.detailAutomation.coupon_total : 0
     });
 
     this.skus = this.detailAutomation.sku_id || [];
@@ -308,6 +311,39 @@ export class EOrderEditComponent implements OnInit {
       ).subscribe(res => {
         this.filteredSku.next(res.data);
       });
+
+    this.formTemp
+      .get("coin_max")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        console.log('data', data);
+        let coinMax = this.formTemp.get("coin_reward").value;
+        this.checkCoinReward(data, coinMax);
+      })
+
+    this.formTemp
+      .get("coin_reward")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        let coinReward = this.formTemp.get("coin_max").value;
+        this.checkCoinReward(coinReward, data);
+      });
+  }
+
+  checkCoinReward(coinReward, coinMax) {
+    if (!coinReward && !coinMax) {
+      this.coinRewardInvalid = false;
+    } else if (coinReward <= coinMax) {
+      this.coinRewardInvalid = true;
+    } else {
+      this.coinRewardInvalid = false;
+    }
   }
 
   add(event: MatChipInputEvent): void {
@@ -404,7 +440,8 @@ export class EOrderEditComponent implements OnInit {
         max: this.formEOrder.get("max").value,
         area_id: this.pagination.area,
         trade_audience_group_id: this.formEOrder.get('name').value,
-        name: this.formEOrder.get('audienceName').value
+        name: this.formEOrder.get('audienceName').value,
+        coupon_total: this.formTemp.get("coupon_total").value
       };
 
       switch (this.automationType) {

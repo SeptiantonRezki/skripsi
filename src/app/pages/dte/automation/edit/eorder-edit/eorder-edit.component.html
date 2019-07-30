@@ -203,9 +203,18 @@
         </mat-form-field>
       </div>
 
+      <div fxLayout="row" *ngIf="automationType === 'coupon'">
+        <mat-form-field fxFlex="45%" class="is-light form-primary">
+          <input matInput type="number" placeholder="Total Kupon" formControlName="coupon_total">
+          <mat-error>
+            Total kupon harus diisi.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
       <div fxLayout="row">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput type="number" placeholder="Nilai Coin Reward" formControlName="coin_reward">
+          <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi" formControlName="coin_reward">
         </mat-form-field>
       </div>
       <div fxLayout="row" fxFlex="95%" *ngIf="automationType === 'e-order'">
@@ -235,9 +244,15 @@
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi" formControlName="coin_max">
+          <input matInput type="number" placeholder="Nilai Coin Reward" formControlName="coin_max">
         </mat-form-field>
+        <!-- <mat-error>
+          Nilai Coin Reward harus diisi.
+        </mat-error> -->
       </div>
+      <span style="margin-top: -20px;" class="mat-error" *ngIf="!isDetail && coinRewardInvalid">
+        Nilai coin reward harus lebih tinggi dari Jumlah per Frekuensi.
+      </span>
       <div fxLayout="row">
         <mat-form-field fxFlex="45" class="is-light form-primary">
           <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id">
@@ -251,7 +266,7 @@
       </div>
       <div class="confirm pt-24 pb-24" fxLayout="row" *ngIf="!isDetail">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
-          [disabled]="submitting">
+          [disabled]="coinRewardInvalid || submitting">
           SIMPAN
         </button>
       </div>

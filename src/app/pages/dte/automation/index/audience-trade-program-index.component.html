@@ -67,12 +67,20 @@
             {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <p class="status text-truncate h6 p-4 status-order"
+              [ngClass]="row.status == 'berjalan' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+              {{ row.status.toUpperCase() }}
+            </p>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <!-- attribut button edit harus ada permission *ngIf="permission?.ubah" -->
-              <button mat-icon-button color="" (click)="directEdit(row)">
+              <button mat-icon-button color="" (click)="directEdit(row)" *ngIf="row.status !== 'berjalan'">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <!-- attribut button hapus harus ada permission [disabled]="!permission?.hapus" -->

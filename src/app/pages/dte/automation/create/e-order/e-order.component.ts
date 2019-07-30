@@ -31,6 +31,7 @@ export class EOrderComponent implements OnInit {
   skuSelected: any;
   submitting: Boolean;
   onLoad: Boolean;
+  coinRewardInvalid: Boolean;
 
   formEOrder: FormGroup;
   formEOrderError: any;
@@ -205,8 +206,9 @@ export class EOrderComponent implements OnInit {
       startDate: [moment.now(), Validators.required],
       endDate: [moment.now(), Validators.required],
       coin_reward: [0, Validators.required],
-      coin_max: [0],
+      coin_max: [0, Validators.required],
       trade_program_id: [null, Validators.required],
+      coupon_total: this.automationType === 'coupon' ? [0, Validators.required] : [0]
     });
 
     this.initArea();
@@ -294,6 +296,38 @@ export class EOrderComponent implements OnInit {
       ).subscribe(res => {
         this.filteredSku.next(res.data);
       });
+
+    this.formTemp
+      .get("coin_max")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        console.log('data', data);
+        let coinMax = this.formTemp.get("coin_reward").value;
+        this.checkCoinReward(data, coinMax);
+      })
+    this.formTemp
+      .get("coin_reward")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        let coinReward = this.formTemp.get("coin_max").value;
+        this.checkCoinReward(coinReward, data);
+      });
+  }
+
+  checkCoinReward(coinReward, coinMax) {
+    if (!coinReward && !coinMax) {
+      this.coinRewardInvalid = false;
+    } else if (coinReward <= coinMax) {
+      this.coinRewardInvalid = true;
+    } else {
+      this.coinRewardInvalid = false;
+    }
   }
 
   add(event: MatChipInputEvent): void {
@@ -389,7 +423,8 @@ export class EOrderComponent implements OnInit {
         max: this.formEOrder.get("max").value,
         area_id: this.pagination.area,
         trade_audience_group_id: this.formEOrder.get('name').value,
-        name: this.formEOrder.get('audienceName').value
+        name: this.formEOrder.get('audienceName').value,
+        coupon_total: this.formTemp.get("coupon_total").value
       };
 
       switch (this.automationType) {
