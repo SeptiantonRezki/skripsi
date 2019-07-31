@@ -18,12 +18,12 @@ export class Config {
   }
 
   public static server = {
-    user: "user",
-    business: "business",
-    area: "area",
+    user: "users",
+    business: "businesses",
+    area: "areas",
     auth: "auth",
-    newsfeed: "newsfeed",
-    banner: "banner",
-    content: "content"
+    newsfeed: "newsfeeds",
+    banner: "banners",
+    content: "contents"
   }
 }

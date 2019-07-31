@@ -9,7 +9,7 @@
     "e2e": "ng e2e",
     "build:prod": "ng build --prod",
     "build:qa": "ng build --configuration=qa",
-    "build:monolith": "ng build --configuration=monolith",
+    "build:dev-hms": "ng build --configuration=dev-hms",
     "build:training": "ng build --configuration=training",
     "build:microservices": "ng build --configuration=microservices",
     "build:dev": "ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false"
