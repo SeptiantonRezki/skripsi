@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  server: "https://api.src.id",
+  server: "https://api.dev.src.id",
   server_service: "https://api.dev.src.id",
   label: "DEVELOPMENT",
   show_label: true,
