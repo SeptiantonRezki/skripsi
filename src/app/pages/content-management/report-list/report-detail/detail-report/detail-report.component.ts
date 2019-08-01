@@ -34,11 +34,11 @@ export class DetailReportComponent implements OnInit {
   ngOnInit() {
     this.showLoadingBar = true;
     this.formPromo = this.formBuilder.group({
-      user: ["Wholesaler"],
-      promotionType: ["Undian"],
-      title: ["Gebyar Poin ibu imah"],
-      description: ["Saatnya belanja dapet poin"],
-      promotionDetail: ["Lorem ipsum dolor sit amet."],
+      user: [""],
+      promotionType: [""],
+      title: [""],
+      description: [""],
+      promotionDetail: [""],
       promoCreatedDate: [new Date()],
       promoExpiredDate: [new Date()]
     });
@@ -59,7 +59,7 @@ export class DetailReportComponent implements OnInit {
       this.detailReport = res.data;
       this.formPromo.setValue({
         user: this.detailReport.banner.user_group,
-        promotionType: "Undian",
+        promotionType: this.detailReport.banner.category,
         title: this.detailReport.banner.name,
         description: this.detailReport.banner.description,
         promotionDetail: this.detailReport.banner.information,
