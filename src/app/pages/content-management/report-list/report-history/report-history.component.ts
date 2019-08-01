@@ -9,6 +9,7 @@ import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { PagesName } from "app/classes/pages-name";
+import { ReportListService } from "app/services/content-management/report-list.service";
 
 @Component({
   selector: 'app-report-history',
@@ -41,7 +42,7 @@ export class ReportHistoryComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    // private reportHistoryService: ReportHistoryService
+    private reportListService: ReportListService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -71,19 +72,20 @@ export class ReportHistoryComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    // this.reportHistoryService.get(this.pagination).subscribe(
-    //   res => {
-    //     Page.renderPagination(this.pagination, res);
-    //     this.rows = res.data;
+    this.reportListService.getReportHistory(this.pagination).subscribe(
+      res => {
+        console.log('res', res);
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
 
-    //     this.onLoad = false;
-    //     this.loadingIndicator = false;
-    //   },
-    //   err => {
-    //     console.error(err);
-    //     this.onLoad = false;
-    //   }
-    // );
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      },
+      err => {
+        console.error(err);
+        this.onLoad = false;
+      }
+    );
   }
 
   onSelect({ selected }) {
@@ -102,11 +104,11 @@ export class ReportHistoryComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    // this.reportHistoryService.get(this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res);
-    //   this.rows = res.data;
-    //   this.loadingIndicator = false;
-    // });
+    this.reportListService.getReportHistory(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
   }
 
   onSort(event) {
@@ -119,11 +121,11 @@ export class ReportHistoryComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    // this.reportHistoryService.get(this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res);
-    //   this.rows = res.data;
-    //   this.loadingIndicator = false;
-    // });
+    this.reportListService.getReportHistory(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
   }
 
   updateFilter(string) {
@@ -139,16 +141,16 @@ export class ReportHistoryComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    // this.reportHistoryService.get(this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res);
-    //   this.rows = res.data;
-    //   this.loadingIndicator = false;
-    // });
+    this.reportListService.getReportHistory(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
   }
 
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_report_item", param);
-    this.router.navigate(["content-management", "report-list", "detail"]);
+    this.router.navigate(["content-management", "report-list", "detail", "history"]);
   }
 
 }

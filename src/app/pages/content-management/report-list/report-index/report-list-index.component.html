@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <div class="content p-24">
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-      <h1 class="pl-8">Daftar Laporan</h1>
+  <div class="content">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table" style="padding: 15px;">
+      <h1 class="pl-20">Daftar Laporan</h1>
       <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
@@ -9,57 +9,79 @@
         </mat-form-field>
       </div>
     </div>
-    <!-- <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
-        [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
-        (sort)="onSort($event)" (select)="onSelect($event)">
+    <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+      [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination"
+      [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+      (select)="onSelect($event)">
 
-        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-          </ng-template>
+      <ngx-datatable-column>
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <div class="name-container pl-8 pt-8 pb-8 pr-0">
+            <img class="banner-image" *ngIf="row.banner.image_url" [src]="row.banner.image_url">
+            <img class="banner-image" *ngIf="!row.banner.image_url"
+              [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'">
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
 
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
-          </ng-template>
-        </ngx-datatable-column>
+      <ngx-datatable-column name="Nama Promo" prop="image_url">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-name" (click)="directDetail(row)">{{ row.banner.name }}</span>
+        </ng-template>
+      </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="fullname">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
-          </ng-template>
-        </ngx-datatable-column>
+      <ngx-datatable-column name="Total Laporan" prop="report_users_count">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.report_users_count}}
+        </ng-template>
+      </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="Email" prop="email" summary-template="activeCell">
-        </ngx-datatable-column>
+      <ngx-datatable-column [width]="100" name="Status" prop="active_status">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <div class="name-container">
+            <p class="status text-truncate h6 p-4"
+              style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              [ngClass]="row.status_report == 'aktif' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+              {{row.status_report}}
+            </p>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
-          </ng-template>
-        </ngx-datatable-column>
+      <ngx-datatable-column name="Kode Toko" prop="business_code">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.banner.business_code}}
+        </ng-template>
+      </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Diubah" prop="updated_at">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.updated_at | date:'dd/MM/yyyy HH:mm'}}
-            {{row?.updated_by_name ? 'by ' + (row?.updated_by_name | toCapitalize) : '' }}
-          </ng-template>
-        </ngx-datatable-column>
+      <ngx-datatable-column name="Pengguna" prop="banner.user_group">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="text-capital">{{row.banner.user_group}}</span>
+        </ng-template>
+      </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="active_status">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="name-container">
-              <p class="status text-truncate h6 p-4"
-                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
-                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
-              </p>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable> -->
+      <ngx-datatable-column name="Tanggal Akhir Promo" prop="expiredDate">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.banner.to | date:'dd/MM/yyyy'}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Action" prop="action">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <div fxLayout="column" style="padding: 10px 10px 10px 0;">
+            <button mat-button
+              style="margin-bottom: 10px;border: 1px solid #D0021B;background-color: #D0021B;color: white"
+              (click)="rejectReport(row.id)">
+              TOLAK
+            </button>
+            <button mat-button style="border: 1px solid #D0021B; color: #D0021B;background-color: transparent;"
+              matTooltip="Hapus" (click)="deleteReport(row.id)">
+              HAPUS
+            </button>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </div>

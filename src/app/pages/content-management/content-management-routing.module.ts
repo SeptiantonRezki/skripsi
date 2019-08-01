@@ -97,10 +97,10 @@ const routes: Routes = [
     },
   },
   {
-    path: "report-list/detail/riwayat",
+    path: "report-list/detail/history",
     component: ReportDetailComponent,
     data: {
-      breadcrumbs: brConfig.contentManagement.report_list.detail_riwayat
+      breadcrumbs: brConfig.contentManagement.report_list.detail_history
     }
   }
 ];

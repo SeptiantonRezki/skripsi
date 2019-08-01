@@ -232,7 +232,76 @@ export class Endpoint {
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
-        list_principal: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/user/principal?page=all`
+        list_principal: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/user/principal?page=all`,
+        // support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
+        area: `${AYO_API}/api/general/area?page=all&level_desc=area&sort=id`,
+        trade_program: `${AYO_API}/api/general/analytic/trade-program`,
+        scheduler: `${AYO_API}/api/general/analytic/scheduler`,
+        task: `${AYO_API}/api/general/analytic/task-template`,
+        wholesaler: `${AYO_API}/api/general/analytic/wholesaler`,
+        sku: `${AYO_API}/api/`,
+        category_product: `${AYO_API}/api/general/analytic/category-product`,
+        unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`
+      },
+      user_onboarding: {
+        register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,
+        register_user_detail: `${AYO_API}/api/${type_api}/analytics/register-user-detail`,
+        register_user_chart: `${AYO_API}/api/${type_api}/analytics/register-user-chart`,
+        register_user_vs: `${AYO_API}/api/${type_api}/analytics/register-user-vs`,
+        register_src: `${AYO_API}/api/${type_api}/analytics/register-src`,
+        register_src_trend: `${AYO_API}/api/${type_api}/analytics/register-src-trend`,
+        refferal_code_usage: `${AYO_API}/api/${type_api}/analytics/refferal-code-usage`
+      },
+      consumer_demographic: {
+        gender: `${AYO_API}/api/${type_api}/analytics/b2c/demographic-gender`,
+        gender_percentage: `${AYO_API}/api/${type_api}/analytics/b2c/demographic-smoking`,
+        age: `${AYO_API}/api/${type_api}/analytics/b2c/demographic-age`
+      },
+      referral_code: {
+        refferal_code_inputted: `${AYO_API}/api/${type_api}/analytics/b2c/refferal-code-inputted`,
+        refferal_code_top5: `${AYO_API}/api/${type_api}/analytics/b2c/refferal-code-top5`,
+        refferal_code_top5_detail: `${AYO_API}/api/${type_api}/analytics/b2c/refferal-code-top5-detail`
+      },
+      dte_performance: {
+        performance: `${AYO_API}/api/${type_api}/analytics/dte/performance`,
+        performance_vs: `${AYO_API}/api/${type_api}/analytics/dte/performance-vs`,
+        submission_time: `${AYO_API}/api/${type_api}/analytics/dte/submission-time`,
+        submission_completion: `${AYO_API}/api/${type_api}/analytics/dte/submission-completion`
+      },
+      transaction_report: {
+        transaction_overview: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-overview`,
+        transaction_top10: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-top10-category`,
+        transaction_top10_detail: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-top10-category-detail`,
+        transaction_5_ws: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-top-bottom-5ws`,
+        transaction_5_ws_detail: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-top-bottom-5ws-detail`,
+        transaction_trend: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-trend`,
+        transaction_trend_detail: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-trend-detail`,
+        transaction_register_src: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-register-src`,
+        transaction_peak_hour: `${AYO_API}/api/${type_api}/analytics/b2b/transaction-peak-hour`
+      },
+      brand_performance: {
+        industry_size_chart: `${AYO_API}/api/${type_api}/analytics/b2b/brand-industry`,
+        share_of_market: `${AYO_API}/api/${type_api}/analytics/b2b/brand-company`,
+        sku_penetration: `${AYO_API}/api/${type_api}/analytics/b2b/brand-sku`,
+        industry_size_trend: `${AYO_API}/api/${type_api}/analytics/b2b/brand-trend-industry`,
+        share_of_market_trend: `${AYO_API}/api/${type_api}/analytics/b2b/brand-trend-company`,
+        sku_penetration_trend: `${AYO_API}/api/${type_api}/analytics/b2b/brand-trend-sku`,
+        industry_size_detail: `${AYO_API}/api/${type_api}/analytics/b2b/brand-industry-detail`,
+        share_of_market_detail: `${AYO_API}/api/${type_api}/analytics/b2b/brand-company-detail`,
+        sku_penetration_detail: `${AYO_API}/api/${type_api}/analytics/b2b/brand-sku-detail`
+      },
+      principal_partnership: {
+        get: `${AYO_API}/api/principal/user/principal-partnership`,
+        create: `${AYO_API}/api/principal/user/principal-partnership`,
+        put: `${AYO_API}/api/principal/user/principal-partnership/${context.principal_partnership_id}`,
+        delete: `${AYO_API}/api/principal/user/principal-partnership/${context.principal_partnership_id}`
+      },
+      report_list: {
+        get_report: `${AYO_API}/api/principal/report`,
+        get_history: `${AYO_API}/api/principal/report/history/list`,
+        update: `${AYO_API}/api/principal/report/${context.report_id}`,
+        show: `${AYO_API}/api/principal/report/${context.report_id}`,
+        detail: `${AYO_API}/api/principal/report/detail/${context.report_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

@@ -1,0 +1,13 @@
+:host ::ng-deep .text-capital {
+  text-transform: capitalize;
+}
+
+:host ::ng-deep .label-rejected {
+  background-color: #B4B4B4;
+  color: #fff;
+}
+
+:host ::ng-deep .label-deleted {
+  background-color: #D0021B;
+  color: #fff;
+}

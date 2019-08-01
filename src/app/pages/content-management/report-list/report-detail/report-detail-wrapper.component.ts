@@ -16,8 +16,9 @@ export class ReportDetailComponent implements OnInit {
     private dataService: DataService,
     private router: Router
   ) {
-    const selectedTab = dataService.getFromStorage("selected_tab");
-    this.selectedTab = selectedTab ? selectedTab : 0;
+    // const selectedTab = dataService.getFromStorage("selected_tab");
+    // this.selectedTab = selectedTab ? selectedTab : 0;
+    this.selectedTab = 0;
   }
 
   ngOnInit() {

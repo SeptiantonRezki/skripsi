@@ -1,3 +1,34 @@
-<p>
-  reporter-list works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <div fxLayout="row">
+    <h2 class="pl-20">Daftar Pelapor 356</h2>
+  </div>
+  <div class="p-0">
+    <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+      [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination"
+      [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+      (select)="onSelect($event)">
+
+      <ngx-datatable-column name="Nama Pelapor" prop="user_name">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span>{{row.user_name}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Jenis Laporan" prop="reasons">
+        <ng-template ngx-datatable-cell-template let-row="row" let-rowIndex="rowIndex" let-value="value">
+          <span *ngIf="!row.other_status">{{row.reasons}}</span>
+          <p *ngIf="row.other_status" style="color: #4A90E2;text-decoration:underline;cursor: pointer;"
+            (click)="collapsingRow(rowIndex)">Lainnya</p>
+          <p *ngIf="row.other_status && row.collapsed">{{ row.reasons }}</p>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Tanggal Lapor" prop="created_at">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.created_at | date:'dd/MM/yyyy HH:mm'}}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>

@@ -1,19 +1,25 @@
 <!-- https://d1fcivyo6xvcac.cloudfront.net/2019/06/28/80HPBihl9QPaVUDM3WBZ5f0sGYOyz5jxM12pXBcQ.jpeg -->
+<mat-progress-bar *ngIf="showLoadingBar" class="loading-bar" mode="indeterminate"></mat-progress-bar>
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <div class="content p-24">
+  <div class="content p-24" *ngIf="!onLoad">
     <div fxLayout="row wrap">
       <div fxFlex="80">
         <div class="banner-image-template-selected">
           <div id="banner" [class]="'banner-image-custom-selected'">
-            <img
-              [src]="'https://d1fcivyo6xvcac.cloudfront.net/2019/06/28/80HPBihl9QPaVUDM3WBZ5f0sGYOyz5jxM12pXBcQ.jpeg'"
-              style="height: 190px; width: 390px;border-radius: 15px;" alt="ini banner promo">
+            <img class="banner-image" *ngIf="detailReport.banner.image_url" [src]="detailReport.banner.image_url"
+              style="height: 190px; width: 390px;border-radius: 15px;">
+            <img class="banner-image" *ngIf="!detailReport.banner.image_url"
+              [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'"
+              style="height: 190px; width: 390px;border-radius: 15px;">
           </div>
         </div>
       </div>
       <div fxFlex="20" fxLayoutAlign="flex-end">
-        <div class="box-detail-status-red">
+        <div *ngIf="detailReport.banner.status != 'publish'" class="box-detail-status-red">
           Status Non Aktif
+        </div>
+        <div *ngIf="detailReport.banner.status == 'publish'" class="box-detail-status-green">
+          Status Aktif
         </div>
       </div>
     </div>
@@ -28,64 +34,91 @@
           </thead>
           <tbody>
             <tr>
-              <td style="font-size: 24px;color: #DC1E2D;"><span style="border-bottom: 1px solid #DC1E2D;">BOG828</span>
+              <td style="font-size: 24px;color: #DC1E2D;"><span
+                  style="border-bottom: 1px solid #DC1E2D;">{{ detailReport.banner.business_code }}</span>
               </td>
-              <td style="font-size: 24px;">356</td>
+              <td style="font-size: 24px;">{{ detailReport.report_users_count }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <form [formGroup]="formPromo">
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45" class="is-light">
-          <input matInput placeholder="Pengguna" type="text" formControlName="user">
-        </mat-form-field>
-      </div>
+    <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="70px">
+      <form [formGroup]="formPromo" fxFlex="40">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Pengguna" type="text" formControlName="user"
+              style="text-transform: capitalize;">
+          </mat-form-field>
+        </div>
 
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45" class="is-light">
-          <input matInput placeholder="Tipe Promosi" type="text" formControlName="promotionType">
-        </mat-form-field>
-      </div>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45" class="is-light">
-          <input matInput placeholder="Judul" type="text" formControlName="title">
-        </mat-form-field>
-      </div>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45" class="is-light">
-          <input matInput placeholder="Penjelasan Singkat" type="text" formControlName="description">
-        </mat-form-field>
-      </div>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45" class="is-light">
-          <input matInput placeholder="Detail Promosi" type="text" formControlName="promotionDetail">
-        </mat-form-field>
-      </div>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45%" class="is-light">
-          <input matInput [matDatepicker]="createdPicker" placeholder="Tanggal Promosi dibuat"
-            formControlName="promoCreatedDate">
-          <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
-          <mat-datepicker #createdPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45%" class="is-light">
-          <input matInput [matDatepicker]="expiredPicker" placeholder="Tanggal Promosi berakhir"
-            formControlName="promoExpiredDate">
-          <mat-datepicker-toggle matSuffix [for]="expiredPicker"></mat-datepicker-toggle>
-          <mat-datepicker #expiredPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </form>
-    <div fxLayout="row">
-      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Tipe Promosi" type="text" formControlName="promotionType">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Judul" type="text" formControlName="title">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Penjelasan Singkat" type="text" formControlName="description">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Detail Promosi" type="text" formControlName="promotionDetail">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput [matDatepicker]="createdPicker" placeholder="Tanggal Promosi dibuat"
+              formControlName="promoCreatedDate">
+            <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
+            <mat-datepicker #createdPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput [matDatepicker]="expiredPicker" placeholder="Tanggal Promosi berakhir"
+              formControlName="promoExpiredDate">
+            <mat-datepicker-toggle matSuffix [for]="expiredPicker"></mat-datepicker-toggle>
+            <mat-datepicker #expiredPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </form>
+      <form [formGroup]="formRiwayat" fxFlex="50" *ngIf="isHistory">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Tindakan" type="text" formControlName="actionPromo">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput placeholder="Admin" type="text" formControlName="promoAdmin">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="100" class="is-light">
+            <input matInput [matDatepicker]="actionDatePicker" placeholder="Tanggal Tindakan"
+              formControlName="actionDate">
+            <mat-datepicker-toggle matSuffix [for]="actionDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #actionDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isHistory">
+      <button mat-raised-button type="button" class="delete-button" fxFlex="20" (click)="deleteReport(detailReport.id)"
+        [disabled]="(detailReport.status == 'rejected' || detailReport.status == 'deleted')">
         HAPUS
       </button>
-      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20">
-        SIMPAN
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
+        (click)="rejectReport(detailReport.id)"
+        [disabled]="(detailReport.status == 'rejected' || detailReport.status == 'deleted')">
+        TOLAK
       </button>
     </div>
   </div>

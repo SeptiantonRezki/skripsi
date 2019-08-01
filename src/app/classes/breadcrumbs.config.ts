@@ -824,7 +824,7 @@ export const brConfig = {
           name: "Detail Promo"
         }
       ],
-      detail_riwayat: [
+      detail_history: [
         {
           type: "parent",
           url: "/content-management/report-list",
