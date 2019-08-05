@@ -1,3 +1,8 @@
 :host {
-
+  .nav-link {
+      > .nav-link-badge{
+          background-color: #fff;
+          color: #000;
+      }
+  }
 }
