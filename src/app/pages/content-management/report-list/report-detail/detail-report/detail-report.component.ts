@@ -58,7 +58,7 @@ export class DetailReportComponent implements OnInit {
       console.log('detail', this.detailReport, res.data);
       this.detailReport = res.data;
       this.formPromo.setValue({
-        user: this.detailReport.banner.user_group,
+        user: this.detailReport.banner.pembuat,
         promotionType: this.detailReport.banner.category,
         title: this.detailReport.banner.name,
         description: this.detailReport.banner.description,
@@ -69,8 +69,8 @@ export class DetailReportComponent implements OnInit {
       if (this.isHistory) {
         this.formRiwayat.setValue({
           actionPromo: this.detailReport.status === 'rejected' ? "Ditolak" : "Dihapus",
-          promoAdmin: this.detailReport.banner.user_admin,
-          actionDate: this.detailReport.status === 'rejected' ? this.detailReport.rejected_at : this.detailReport.deleted_at
+          promoAdmin: this.detailReport.banner.user_admin ? this.detailReport.banner.user_admin : "-",
+          actionDate: this.detailReport.updated_at
         });
       }
       this.onLoad = false;
