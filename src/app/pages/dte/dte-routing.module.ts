@@ -197,7 +197,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.automation.index
     },
     // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "automation/create",
@@ -206,7 +206,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.automation.create
     },
     // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "automation/edit",
@@ -215,7 +215,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.automation.edit
     },
     // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "automation/detail",
@@ -224,7 +224,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.automation.detail
     },
     // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   }
 ];
 

@@ -46,7 +46,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     private formBuilder: FormBuilder,
   ) {
     this.onLoad = true;
-    this.permission = this.roles.getRoles('principal.automation');
+    this.permission = this.roles.getRoles('principal.dteautomation');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
