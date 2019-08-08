@@ -369,7 +369,10 @@ export class EOrderComponent implements OnInit {
     });
 
     if (index < 0) {
-      this.skus.push(event.option.value.sku_id);
+      this.skus.push({
+        sku_id: event.option.value.sku_id,
+        name: event.option.value.name
+      });
     } else {
       this.dialogService.openSnackBar({ message: 'SKU ID Sudah terpilih di dalam List!' });
     }
@@ -417,7 +420,7 @@ export class EOrderComponent implements OnInit {
     this.submitting = true;
     if (this.formEOrder.valid && this.formTemp.valid) {
       let body = {
-        sku_id: this.skus,
+        sku_id: this.skus.map(sku => sku.sku_id),
         type: this.automationType,
         start_date: this.formTemp.get("startDate").value,
         end_date: this.formTemp.get("endDate").value,

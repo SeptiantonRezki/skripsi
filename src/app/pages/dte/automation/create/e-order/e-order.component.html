@@ -213,7 +213,7 @@
           <mat-chip-list #chipList aria-label="Fruit selection">
             <mat-chip *ngFor="let sku of skus" [selectable]="selectable" [removable]="removable"
               (removed)="remove(sku)">
-              SKU: {{sku}}
+              {{sku.name}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input #skuInput matInput placeholder="Cari SKU yang ditargetkan" [matChipInputFor]="chipList"
@@ -228,7 +228,7 @@
           </mat-option>
           <ng-container *ngIf="!isLoading">
             <mat-option *ngFor="let sku of filteredSku | async" [value]="sku">
-              <span>SKU: {{sku.sku_id}} | {{ sku.name }}</span>
+              <span>{{ sku.barcode }} | {{ sku.name }}</span>
             </mat-option>
           </ng-container>
         </mat-autocomplete>
