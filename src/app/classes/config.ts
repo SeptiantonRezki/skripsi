@@ -22,8 +22,8 @@ export class Config {
     business: "businesses",
     area: "areas",
     auth: "auth",
-    newsfeed: "newsfeeds",
+    newsfeed: "newsfeed",
     banner: "banner",
-    content: "contents"
+    content: "contentstatic"
   }
 }
