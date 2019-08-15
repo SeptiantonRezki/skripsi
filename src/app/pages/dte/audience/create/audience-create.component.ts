@@ -119,7 +119,7 @@ export class AudienceCreateComponent {
         return Observable.of(search).delay(500);
       })
       .subscribe(res => {
-        // this.searchingRetailer();
+        this.searchingRetailer(res);
       })
     console.log(activatedRoute.snapshot.data);
     this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
@@ -197,6 +197,7 @@ export class AudienceCreateComponent {
   }
 
   getRetailer() {
+    this.dataService.showLoading(true);
     this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
@@ -211,6 +212,9 @@ export class AudienceCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     })
   }
 

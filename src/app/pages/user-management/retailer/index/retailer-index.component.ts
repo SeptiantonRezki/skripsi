@@ -252,6 +252,7 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
+    this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
@@ -275,10 +276,12 @@ export class RetailerIndexComponent {
         this.onLoad = false;
 
         this.loadingIndicator = false;
+        this.dataService.showLoading(false);
       },
       err => {
         console.error(err);
         this.onLoad = false;
+        this.dataService.showLoading(false);
       }
     );
   }
