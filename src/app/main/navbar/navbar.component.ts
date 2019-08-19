@@ -31,8 +31,8 @@ import { GeneralService } from "app/services/general.service";
 })
 export class FuseNavbarComponent implements OnInit, OnDestroy {
   private fusePerfectScrollbar: FusePerfectScrollbarDirective;
-  
-  
+
+
   @ViewChild(FusePerfectScrollbarDirective)
   set directive(theDirective: FusePerfectScrollbarDirective) {
     if (!theDirective) {
@@ -73,15 +73,14 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     this.layout = "vertical";
   }
   @HostListener('document:click', ['$event'])
-  documentClick(event: Event): void
-  {
-      this.userIdle.onHitEvent();
+  documentClick(event: Event): void {
+    this.userIdle.onHitEvent();
   }
-  @HostListener('document:keydown', ['$event']) 
+  @HostListener('document:keydown', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
-      if (event.key === "Enter" || event.key === "Tab") {
-        this.userIdle.onHitEvent();
-      }
+    if (event.key === "Enter" || event.key === "Tab") {
+      this.userIdle.onHitEvent();
+    }
   }
   async ngOnInit() {
     this.router.events.subscribe(event => {
@@ -103,13 +102,15 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         // console.log(count)
       });
       this.userIdle.onTimeout().subscribe(() => {
-        this.authenticationService.doLogout({}).subscribe(res => {
-          if (res.status) {
-            window.localStorage.clear();
-            this.userIdle.stopWatching();
-            this.router.navigate(["/login"]);
-          }
-        });
+        if (this.dataService.getFromStorage("auth")) {
+          this.authenticationService.doLogout({}).subscribe(res => {
+            if (res.status) {
+              window.localStorage.clear();
+              this.userIdle.stopWatching();
+              this.router.navigate(["/login"]);
+            }
+          });
+        }
       });
 
       // window.setInterval(() => { 
