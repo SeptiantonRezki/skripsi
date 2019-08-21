@@ -95,7 +95,7 @@ export class AudienceCreateComponent {
       trade_scheduler_id: {}
     }
     
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,
@@ -130,7 +130,7 @@ export class AudienceCreateComponent {
     // this.listRetailer = activatedRoute.snapshot.data['listRetailer'];
 
     // this.onSelect();
-    this.area = dataService.getFromStorage('profile')['area_type'];
+    this.area = dataService.getDecryptedProfile()['area_type'];
   }
 
   ngOnInit() {

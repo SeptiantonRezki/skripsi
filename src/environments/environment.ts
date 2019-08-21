@@ -17,6 +17,16 @@ export const serviceServer = (server) => {
   return `http://${server}.ayo-micro.dxtr.asia`;
 }
 
+export const server = {
+  user: "user",
+  business: "business",
+  area: "area",
+  auth: "auth",
+  newsfeed: "newsfeed",
+  banner: "banner",
+  content: "content"
+}
+
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can

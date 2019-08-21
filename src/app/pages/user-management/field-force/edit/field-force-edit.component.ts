@@ -58,7 +58,7 @@ export class FieldForceEditComponent {
     })
 
     this.detailFF = this.dataService.getFromStorage("detail_field_force");
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.listLevelArea = [
       {

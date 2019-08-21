@@ -49,7 +49,7 @@ export class CustomerIndexComponent {
     this.onLoad = true;
     this.selected = [];
 
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,

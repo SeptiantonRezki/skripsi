@@ -12,3 +12,13 @@ export const environment = {
 export const serviceServer = (server) => {
   return `https://${server}.api.dev.src.id`;
 }
+
+export const server = {
+  user: "users",
+  business: "businesses",
+  area: "areas",
+  auth: "auth",
+  newsfeed: "newsfeed",
+  banner: "banner",
+  content: "contentstatic"
+}

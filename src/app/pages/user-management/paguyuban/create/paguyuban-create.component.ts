@@ -48,7 +48,7 @@ export class PaguyubanCreateComponent {
     private dataService: DataService,
   ) {
     this.submitting = false;
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.verticalStepperStep1Errors = {
       nama: {},

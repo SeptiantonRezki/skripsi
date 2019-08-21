@@ -1,3 +1,5 @@
+import * as SJCL from "sjcl";
+
 export class PagesName {
   getPages(name) {
     const PAGES = {
@@ -82,12 +84,15 @@ export class PagesName {
   }
 
   getRoles(name) {
-    const permission = JSON.parse(localStorage.getItem('permissions'));
+    let localPerm = window.localStorage.getItem('_prmdxtrn');
+    let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
+    const permission = JSON.parse(perm);
+
     if (!permission) return;
 
     let query = name.toLowerCase();
     let filterPermission = permission.filter(item => item !== null).filter(item => item.indexOf(query) >= 0);
-    
+
     return {
       "lihat": filterPermission.filter(item => item.indexOf('lihat') >= 0)[0],
       "buat": filterPermission.filter(item => item.indexOf('buat') >= 0)[0],

@@ -32,9 +32,9 @@ export class RoleCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private router: Router
-  ) { 
+  ) {
     this.roles = this.activatedRoute.snapshot.data['menu'];
-    // this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    // this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.formRolesError = {
       name: ''
@@ -220,7 +220,7 @@ export class RoleCreateComponent {
 
   //         this.formRolesGroup.get('territory').setValue('');
   //       break;
-    
+
   //     default:
   //       break;
   //   }
@@ -228,7 +228,7 @@ export class RoleCreateComponent {
 
   submit(): void {
     if (this.formRolesGroup.status === 'VALID') {
-      
+
       // let areas = [];
       // let value = this.formRolesGroup.getRawValue();
       // value = Object.entries(value).map(([key, value]) => ({key, value}));
@@ -237,12 +237,12 @@ export class RoleCreateComponent {
       //   const filteredValue = value.filter(item => item.key === type && item.value);
       //   if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
       // })
-      
+
       let role = [];
       for (const classification of this.roles) {
         for (const menu of classification['menu']) {
           for (const values of menu['value']) {
-            if(values['status']) {
+            if (values['status']) {
               role.push(values['value'])
             }
           }
@@ -266,7 +266,7 @@ export class RoleCreateComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!'})
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' })
       commonFormValidator.validateAllFields(this.formRolesGroup);
     }
   }

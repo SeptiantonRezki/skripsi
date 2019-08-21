@@ -15,13 +15,13 @@ export class NonAuthGuard implements CanActivate {
     private router: Router,
     private authenticationService: AuthenticationService,
     private dataService: DataService
-  ) {}
+  ) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    let token = this.dataService.getAuthorization()
-      ? this.dataService.getAuthorization().access_token
+    let token = this.dataService.getDecryptedAuth()
+      ? this.dataService.getDecryptedAuth().access_token
       : null;
     if (token) {
       this.router.navigate(["dashboard"]);

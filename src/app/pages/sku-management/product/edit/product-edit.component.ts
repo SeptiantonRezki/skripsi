@@ -104,7 +104,7 @@ export class ProductEditComponent {
     this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
     this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data;
     this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data;
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.filteredCategory.next(this.listCategory.slice());
     this.filteredBrand.next(this.listBrand.slice());

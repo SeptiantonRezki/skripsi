@@ -37,7 +37,7 @@ export class BannerEditComponent {
 
   lvl: any[];
   minDate: any;
-  listStatus: any[] = [{name: 'Status Aktif', value: 'publish'}, {name: 'Status Non Aktif', value: 'draft'}];
+  listStatus: any[] = [{ name: 'Status Aktif', value: 'publish' }, { name: 'Status Non Aktif', value: 'draft' }];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
@@ -79,10 +79,10 @@ export class BannerEditComponent {
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private _lightbox: Lightbox
-  ) { 
+  ) {
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.customAge = false;
     // this.validComboDrag = true;
 
@@ -170,7 +170,7 @@ export class BannerEditComponent {
         this.formBannerGroup.controls['age_consumer_to'].disable();
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-        
+
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();
           this.formBannerGroup.controls['age_consumer_to'].enable();
@@ -263,7 +263,7 @@ export class BannerEditComponent {
 
     if (this.detailBanner.user_group === 'retailer') {
       this.formBannerGroup.get('age').setValue(this.detailBanner.age);
-      
+
       const group_type = this.detailBanner.areas.map(item => item.pivot.type)[0];
       this.formBannerGroup.get('group_type').setValue(group_type);
     }
@@ -303,7 +303,7 @@ export class BannerEditComponent {
       this.imageContentTypeFromDetail = this.detailBanner.target_page.url;
     }
 
-    for (const {val, index} of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
+    for (const { val, index } of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
       const response = await this.bannerService.getParentArea({ parent: val.id }).toPromise();
       let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
 
@@ -327,7 +327,7 @@ export class BannerEditComponent {
       this.initArea(index);
       this.initFormGroup(response, index);
 
-      if (this.detailBanner.areas.length === (index+1)) {
+      if (this.detailBanner.areas.length === (index + 1)) {
         this.onLoad = false;
       }
     }
@@ -337,7 +337,7 @@ export class BannerEditComponent {
     // }
 
     setTimeout(() => {
-      this.onLoad = false;  
+      this.onLoad = false;
     }, 500);
 
     if (this.isDetail) this.formBannerGroup.disable();
@@ -421,7 +421,7 @@ export class BannerEditComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx+1} ?`,
+      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -491,7 +491,7 @@ export class BannerEditComponent {
       case 'zone':
         const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
         let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-        
+
         while (list.length > 0) {
           list.removeAt(list.length - 1);
         }
@@ -515,131 +515,131 @@ export class BannerEditComponent {
         }
         break;
       case 'region':
-          item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Zone') {
-            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
-            });
+        item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Zone') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('region').setValue('');
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('region').setValue('');
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Zone') {
-              this.clearFormArray(index, 'list_region');  
-            }
-            this.clearFormArray(index, 'list_area');
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Zone') {
+            this.clearFormArray(index, 'list_region');
           }
+          this.clearFormArray(index, 'list_area');
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'area':
-          item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Regional') {
-            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
-            });
+        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Regional') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Regional') {
-              this.clearFormArray(index, 'list_area');  
-            }
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Regional') {
+            this.clearFormArray(index, 'list_area');
           }
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'salespoint':
-          item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Area') {
-            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
-            });
+        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Area') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Area') {
-              this.clearFormArray(index, 'list_salespoint');  
-            }
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Area') {
+            this.clearFormArray(index, 'list_salespoint');
           }
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'district':
-          item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Salespoint') {
-            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
-            });
+        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Salespoint') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Salespoint') {
-              this.clearFormArray(index, 'list_district');  
-            }
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Salespoint') {
+            this.clearFormArray(index, 'list_district');
           }
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'territory':
         item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua District') {
-            const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
-            });
+        if (item.name !== 'Semua District') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('territory').setValue('');
-            
-            if (item.name === 'Semua District') {
-              this.clearFormArray(index, 'list_territory');  
-            }
+        if (type !== 'render') {
+          wilayah.at(index).get('territory').setValue('');
+
+          if (item.name === 'Semua District') {
+            this.clearFormArray(index, 'list_territory');
           }
+        }
         break;
-    
+
       default:
         break;
     }
@@ -681,9 +681,9 @@ export class BannerEditComponent {
   }
 
   readThis(inputValue: any): void {
-    var file:File = inputValue;
-    var myReader:FileReader = new FileReader();
-  
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
     myReader.onloadend = (e) => {
       this.image = myReader.result;
       this.bannerSelected['image'] = this.image;
@@ -751,7 +751,7 @@ export class BannerEditComponent {
       if (body.user_group === 'retailer') {
         fd.append('age', this.formBannerGroup.get('age').value);
       }
-      
+
       if (body.user_group === 'customer') {
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
@@ -764,7 +764,7 @@ export class BannerEditComponent {
       let value = this.formBannerGroup.getRawValue();
 
       value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({key, value}))
+        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
         for (const val of this.typeArea) {
           const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
           if (filteredValue.length > 0) _areas.push(...filteredValue)
@@ -776,7 +776,7 @@ export class BannerEditComponent {
 
       let same = this.findDuplicate(areas.map(item => item.value));
       if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!"});
+        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
       }
 
       areas.map(item => {
@@ -799,13 +799,13 @@ export class BannerEditComponent {
       //   const filteredValue = value.filter(item => item.key === type && item.value);
       //   if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value))
       // })
-      
+
       // fd.append('areas[]', _.last(areas));
       // areas.map(item => {
       //   fd.append('areas[]', item)
       // })
-      
-      this.bannerService.put(fd, {banner_id: this.detailBanner.id}).subscribe(
+
+      this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
         res => {
           this.loadingIndicator = false;
           this.router.navigate(["advertisement", "banner"]);
@@ -835,7 +835,7 @@ export class BannerEditComponent {
   convertCanvasToImage(canvas) {
     let image = new Image();
     image.src = canvas.toDataURL("image/jpeg");
-    
+
     return image.src;
   }
 
@@ -866,7 +866,7 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['landing_page'].setValue('');
     }
   }
-  
+
   onChangeCheckbox(event) {
     const isSmoker = this.formBannerGroup.get('is_smoker') as FormArray;
 
@@ -879,7 +879,7 @@ export class BannerEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length){
+    if (value && array.length) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
@@ -892,24 +892,24 @@ export class BannerEditComponent {
     var result = [];
 
     array.forEach(function (item) {
-      if(!object[item])
-          object[item] = 0;
-        object[item] += 1;
+      if (!object[item])
+        object[item] = 0;
+      object[item] += 1;
     })
 
     for (var prop in object) {
-       if(object[prop] >= 2) {
-           result.push(prop);
-       }
+      if (object[prop] >= 2) {
+        result.push(prop);
+      }
     }
 
     return result;
   }
 
   imagesContentType(image) {
-    var file:File = image;
-    var myReader:FileReader = new FileReader();
-  
+    var file: File = image;
+    var myReader: FileReader = new FileReader();
+
     myReader.onloadend = (e) => {
       this.imageContentTypeBase64 = myReader.result;
     }

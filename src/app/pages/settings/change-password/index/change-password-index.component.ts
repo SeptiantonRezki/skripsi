@@ -20,12 +20,13 @@ export class ChangePasswordIndexComponent implements OnInit {
   showConfirmPassword = false;
 
   constructor(
-    private dataService: DataService, 
+    private dataService: DataService,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private dialogService: DialogService
   ) {
-    this.profile = this.dataService.getFromStorage("profile") || [];
+    // this.profile = this.dataService.getFromStorage("profile") || [];
+    this.profile = this.dataService.getDecryptedProfile() || [];
     this.changePasswordError = {
       old_password: {},
       password: {},
@@ -56,12 +57,12 @@ export class ChangePasswordIndexComponent implements OnInit {
       if (body.password === body.password_confirmation) {
         this.authenticationService.changePasswordEditProfile(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Kata Sandi berhasil diubah.'});
+            this.dialogService.openSnackBar({ message: 'Kata Sandi berhasil diubah.' });
             this.ngOnInit();
           }
         )
       } else {
-        this.dialogService.openSnackBar({message: "Konfirmasi kata sandi Anda tidak sesuai."});
+        this.dialogService.openSnackBar({ message: "Konfirmasi kata sandi Anda tidak sesuai." });
       }
     } else {
       commonFormValidator.validateAllFields(this.changePassword);

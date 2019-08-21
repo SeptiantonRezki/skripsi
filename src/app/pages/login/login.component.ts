@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.userlogin = this.cookieService.getAll();
-    
+
     try {
       let decryptedUN = CryptoJS.AES.decrypt(this.userlogin['_udxtrn'], 'dxtr-asia.sampoerna');
       let decryptedPW = CryptoJS.AES.decrypt(this.userlogin['_pdxstr'], 'dxtr-asia.sampoerna');
@@ -73,11 +73,11 @@ export class LoginComponent implements OnInit {
       this.username = decryptedUN.toString(CryptoJS.enc.Utf8);
       this.password = decryptedPW.toString(CryptoJS.enc.Utf8);
 
-      if(this.userlogin['_udxtrn']) {
+      if (this.userlogin['_udxtrn']) {
         this.rememberMe.setValue(true);
       }
     } catch (error) {
-      
+
     }
 
     this.loginForm = this.formBuilder.group({
@@ -107,9 +107,10 @@ export class LoginComponent implements OnInit {
             if (profile.status == "active") {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
-              const areaType = await this.generalService.getParentArea({ parent: _.last(area_id)}).toPromise().catch(err => { this.submitting = false; throw err; });
+              const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
               profile['area_type'] = areaType.data;
-              this.dataService.setToStorage("profile", profile);
+              this.dataService.setEncryptedProfile(profile);
+              // this.dataService.setToStorage("profile", profile);
               this.router.navigate(["dashboard"]);
               this.submitting = false;
             } else {
@@ -120,7 +121,7 @@ export class LoginComponent implements OnInit {
             let encValUsername = CryptoJS.AES.encrypt(this.loginForm.get("username").value, "dxtr-asia.sampoerna").toString();
             let encValPassword = CryptoJS.AES.encrypt(this.loginForm.get("password").value, "dxtr-asia.sampoerna").toString();
 
-            if(this.rememberMe.value) {
+            if (this.rememberMe.value) {
 
               this.cookieService.set('_udxtrn', encValUsername);
               this.cookieService.set('_pdxstr', encValPassword);

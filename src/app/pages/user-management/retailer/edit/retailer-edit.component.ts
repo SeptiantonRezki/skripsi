@@ -65,7 +65,7 @@ export class RetailerEditComponent {
       InternalClassification: {}
     };
     this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;

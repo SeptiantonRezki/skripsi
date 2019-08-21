@@ -46,7 +46,7 @@ export class AdminPrincipalEditComponent {
       this.isDetail = param[1].path === 'detail' ? true : false;
       this.principal_id = param[2].path;
     });
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,

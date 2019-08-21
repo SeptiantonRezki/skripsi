@@ -36,7 +36,7 @@ export class BaseInterceptor implements HttpInterceptor {
   }
 
   authenticateRequest(request: HttpRequest<any>) {
-    const token = this.injector.get(DataService).getAuthorization() ? this.injector.get(DataService).getAuthorization()["access_token"] : null;
+    const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
     if (token) {
       const duplicate = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token)
@@ -86,23 +86,23 @@ export class BaseInterceptor implements HttpInterceptor {
           // }
 
           if (err.error.errors['status']) {
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status']})
-          } else if(err.error.errors.access_lock){
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock})
+            this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+          } else if (err.error.errors.access_lock) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock })
           } else {
             let errorArray = Object.values(err.error.errors);
-            this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0]})
+            this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
           }
         }
 
         if (req.method === "PUT") {
           if (err.error.errors['status']) {
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status']})
-          } else if(err.error.errors.access_lock){
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock})
+            this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+          } else if (err.error.errors.access_lock) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock })
           } else {
             let errorArray = Object.values(err.error.errors);
-            this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0]})
+            this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
           }
         }
         return Observable.throw(err);

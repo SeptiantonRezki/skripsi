@@ -37,7 +37,7 @@ export class DetailRetailerComponent {
   ) { 
 
     this.detailRetailer = this.dataService.getFromStorage('coin_detail_retailer');
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.activatedRoute.url.subscribe(param => {
       this.id = param[2].path;

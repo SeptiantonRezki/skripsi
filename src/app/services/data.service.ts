@@ -1,4 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import * as SJCL from "sjcl";
 
 @Injectable()
 export class DataService {
@@ -16,20 +17,23 @@ export class DataService {
         this.progress = value;
         this.change.emit(this.progress);
     }
-    
+
     setAuthorization(authorization) {
         let auth = JSON.stringify(authorization);
-        window.localStorage.setItem('auth',auth);
+        // window.localStorage.setItem('auth', auth);
+        let encAuth = SJCL.encrypt("dxtr-asia.sampoerna", auth);
+        window.localStorage.setItem('_adxtrn', JSON.stringify(encAuth));
     }
-    
+
     unSetAuthorization() {
         window.localStorage.removeItem('auth');
+        window.localStorage.removeItem('_adxtrn');
     }
-    
+
     getAuthorization() {
         let auth = JSON.parse(window.localStorage.getItem('auth'));
-        if(auth){
-          return auth;
+        if (auth) {
+            return auth;
         }
         return null;
     }
@@ -42,6 +46,43 @@ export class DataService {
     getFromStorage(key) {
         let data = JSON.parse(window.localStorage.getItem(key));
         return data;
+    }
+
+    getDecryptedProfile() {
+        let data = window.localStorage.getItem("_prfdxtrn");
+        if (!data) return null;
+
+        let enc = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(data));
+        return JSON.parse(enc);
+    }
+
+    setEncryptedProfile(profile) {
+        let encryptedProfile = SJCL.encrypt("dxtr-asia.sampoerna", JSON.stringify(profile));
+
+        this.setToStorage("_prfdxtrn", encryptedProfile);
+    }
+
+    getDecryptedAuth() {
+        let data = JSON.parse(window.localStorage.getItem('_adxtrn'));
+        if (!data) return null;
+
+        let enc = SJCL.decrypt("dxtr-asia.sampoerna", data);
+
+        return JSON.parse(enc);
+    }
+
+    setEncryptedPermissions(permissions) {
+        let encryptedPermissions = SJCL.encrypt("dxtr-asia.sampoerna", JSON.stringify(permissions));
+
+        this.setToStorage("_prmdxtrn", encryptedPermissions);
+    }
+
+    getEncryptedPermissions() {
+        let data = window.localStorage.getItem("_prmdxtrn");
+        if (!data) return null;
+
+        let enc = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(data));
+        return JSON.parse(enc);
     }
 
 }

@@ -18,7 +18,7 @@ export class DteGuard implements CanActivate {
 
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) { }
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
     // if there are no pending changes, just allow deactivation; else confirm first
     return component.canDeactivate() ?
@@ -35,11 +35,11 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
   }
 
   confirm() {
-    const token = this.dataService.getAuthorization();
+    const token = this.dataService.getDecryptedAuth();
     if (!token) {
       return true;
     }
-    
+
     const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
     if (leave) {
       window.localStorage.removeItem('duplicate_template_task');

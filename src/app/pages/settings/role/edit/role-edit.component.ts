@@ -36,10 +36,10 @@ export class RoleEditComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) { 
+  ) {
     this.onLoad = true;
     this.roles = this.activatedRoute.snapshot.data['menu'];
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.formRolesError = {
       name: ''
@@ -176,102 +176,102 @@ export class RoleEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
+        this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
+        });
+
+        this.formRolesGroup.get('region').setValue('');
+        this.formRolesGroup.get('area').setValue('');
+        this.formRolesGroup.get('salespoint').setValue('');
+        this.formRolesGroup.get('district').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'region':
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
           this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
             this.list[selection] = res;
           });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formRolesGroup.get('region').setValue('');
-          this.formRolesGroup.get('area').setValue('');
-          this.formRolesGroup.get('salespoint').setValue('');
-          this.formRolesGroup.get('district').setValue('');
-          this.formRolesGroup.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
-        break;
-      case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
-
-          this.formRolesGroup.get('region').setValue('');
-          this.formRolesGroup.get('area').setValue('');
-          this.formRolesGroup.get('salespoint').setValue('');
-          this.formRolesGroup.get('district').setValue('');
-          this.formRolesGroup.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formRolesGroup.get('region').setValue('');
+        this.formRolesGroup.get('area').setValue('');
+        this.formRolesGroup.get('salespoint').setValue('');
+        this.formRolesGroup.get('district').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formRolesGroup.get('area').setValue('');
-          this.formRolesGroup.get('salespoint').setValue('');
-          this.formRolesGroup.get('district').setValue('');
-          this.formRolesGroup.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formRolesGroup.get('area').setValue('');
+        this.formRolesGroup.get('salespoint').setValue('');
+        this.formRolesGroup.get('district').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formRolesGroup.get('salespoint').setValue('');
-          this.formRolesGroup.get('district').setValue('');
-          this.formRolesGroup.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.formRolesGroup.get('salespoint').setValue('');
+        this.formRolesGroup.get('district').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formRolesGroup.get('district').setValue('');
-          this.formRolesGroup.get('territory').setValue('');
-          this.list['territory'] = [];
+        this.formRolesGroup.get('district').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
+        this.list['territory'] = [];
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res;
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.accessService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.formRolesGroup.get('territory').setValue('');
+        this.formRolesGroup.get('territory').setValue('');
         break;
-    
+
       default:
         break;
     }
@@ -283,10 +283,10 @@ export class RoleEditComponent {
 
   submit(): void {
     if (this.formRolesGroup.status === 'VALID') {
-      
+
       let areas = [];
       let value = this.formRolesGroup.getRawValue();
-      value = Object.entries(value).map(([key, value]) => ({key, value}));
+      value = Object.entries(value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
@@ -297,7 +297,7 @@ export class RoleEditComponent {
       for (const classification of this.roles) {
         for (const menu of classification['menu']) {
           for (const values of menu['value']) {
-            if(values['status']) {
+            if (values['status']) {
               role.push(values['value'])
             }
           }
@@ -321,7 +321,7 @@ export class RoleEditComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!'})
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' })
     }
   }
 

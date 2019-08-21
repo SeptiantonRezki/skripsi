@@ -9,10 +9,11 @@
  * AYO Sampoerna Staging
  *
  */
-import { environment, serviceServer } from '../../environments/environment';
+import { environment, serviceServer, server } from '../../environments/environment';
 import { Config } from './config';
 
-const SERVER = Config.server;
+// const SERVER = Config.server;
+const SERVER = server;
 const AYO_API = environment.server;
 // const AYO_API_SERVICE = environment.server_service;
 const AYO_API_SERVICE = serviceServer;

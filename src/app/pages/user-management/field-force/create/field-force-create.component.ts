@@ -54,7 +54,7 @@ export class FieldForceCreateComponent {
 
     this.listLevel = this.activatedRoute.snapshot.data["listLevel"].data;
 
-    this.area = dataService.getFromStorage('profile')['area_type'];
+    this.area = dataService.getDecryptedProfile()['area_type'];
     console.log(this.area);
 
   }

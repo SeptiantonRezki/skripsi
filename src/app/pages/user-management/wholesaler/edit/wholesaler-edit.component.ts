@@ -60,7 +60,7 @@ export class WholesalerEditComponent {
     })
 
     this.detailWholesaler = this.dataService.getFromStorage("detail_wholesaler");
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     // console.log(this.detailWholesaler);
 
     this.listLevelArea = [

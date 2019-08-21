@@ -17,13 +17,13 @@ export class Config {
     toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote'],
   }
 
-  public static server = {
-    user: "users",
-    business: "businesses",
-    area: "areas",
-    auth: "auth",
-    newsfeed: "newsfeed",
-    banner: "banner",
-    content: "contentstatic"
-  }
+  // public static server = {
+  //   user: "user",
+  //   business: "business",
+  //   area: "area",
+  //   auth: "auth",
+  //   newsfeed: "newsfeed",
+  //   banner: "banner",
+  //   content: "contentstatic"
+  // }
 }

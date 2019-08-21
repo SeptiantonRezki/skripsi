@@ -57,7 +57,7 @@ export class FieldForceIndexComponent {
     this.permission = this.roles.getRoles('principal.fieldforce');
     console.log(this.permission);
 
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,

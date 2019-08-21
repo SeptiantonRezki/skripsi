@@ -72,7 +72,7 @@ export class BannerCreateComponent {
     private _lightbox: Lightbox
   ) { 
     this.adapter.setLocale('id');
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.customAge = false;
     // this.validComboDrag = true;
 

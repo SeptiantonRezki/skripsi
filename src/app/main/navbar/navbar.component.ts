@@ -91,11 +91,12 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       }
     });
 
-    let session = this.dataService.getAuthorization();
+    let session = this.dataService.getDecryptedAuth();
 
     if (session) {
       const response = await this.generalService.getPermissions().toPromise();
-      this.dataService.setToStorage("permissions", response.data);
+      this.dataService.setEncryptedPermissions(response.data);
+      // this.dataService.setToStorage("permissions", response.data);
       this.getNav();
       this.userIdle.startWatching();
       this.userIdle.onTimerStart().subscribe(count => {

@@ -92,7 +92,9 @@ export class FuseToolbarComponent {
     });
 
     this.navigation = navigation;
-    this.profile = this.dataService.getFromStorage("profile") || null;
+    // this.profile = this.dataService.getFromStorage("profile") || null;
+    this.profile = this.dataService.getDecryptedProfile() || null;
+
     this.environment = environment;
   }
 

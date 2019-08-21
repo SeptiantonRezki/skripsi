@@ -102,7 +102,7 @@ export class AudienceEditComponent {
       trade_scheduler_id: {}
     }
     
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,
@@ -128,7 +128,7 @@ export class AudienceEditComponent {
     .subscribe(res => {
       // this.searchingRetailer();
     })
-    this.area = dataService.getFromStorage('profile')['area_type'];
+    this.area = dataService.getDecryptedProfile()['area_type'];
     this.detailAudience = dataService.getFromStorage('detail_audience');
 
     this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => 

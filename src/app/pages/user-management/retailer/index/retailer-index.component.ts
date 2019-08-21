@@ -55,7 +55,7 @@ export class RetailerIndexComponent {
     this.permission = this.roles.getRoles('principal.retailer');
     console.log(this.permission);
 
-    this.areaFromLogin = this.dataService.getFromStorage('profile')['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
       {
         "id": 1,

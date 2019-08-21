@@ -20,11 +20,11 @@ export class AuthGuard implements CanActivate {
     private authenticationService: AuthenticationService,
     private dataService: DataService,
     private userIdle: IdleService
-  ) {}
+  ) { }
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    
+
     const currentRoutePath = next.url[0].path;
-    
+
     if (this.previousPath && this.previousPath !== currentRoutePath) {
       window.localStorage.removeItem('page');
       window.localStorage.removeItem('sort');
@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
 
     this.previousPath = currentRoutePath;
 
-    let token = this.dataService.getAuthorization() ? this.dataService.getAuthorization().access_token : null;
+    let token = this.dataService.getDecryptedAuth() ? this.dataService.getDecryptedAuth().access_token : null;
     if (token) {
       return true;
     }
@@ -86,16 +86,17 @@ export class PageGuard implements CanActivate {
 
     this.previousPath = currentRoutePath;
 
-    let role = this.dataService.getFromStorage("permissions");
+    // let role = this.dataService.getFromStorage("permissions");
+    let role = this.dataService.getEncryptedPermissions();
     if (state.url !== '/dashboard' && state.url !== 'my-profile' && state.url !== '/shop' && state.url !== '/content') {
       let allow = _.contains(role, this.pageName.getPages(paramsId ? `${withParams}/` : state.url));
       this.userIdle.onHitEvent();
-      if (allow){
+      if (allow) {
         return true;
-      }else{
+      } else {
         this.router.navigate(['access-denied']);
       }
-      
+
       return false;
     }
     return true;
