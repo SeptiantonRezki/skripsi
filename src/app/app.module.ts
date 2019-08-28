@@ -90,7 +90,7 @@ import { IdleService } from "./services/idle.service";
     }),
     MatDialogModule,
     MatSnackBarModule,
-    UserIdleModule.forRoot({idle: 1140, timeout: 60, ping: 60}),
+    UserIdleModule.forRoot({ idle: 1140, timeout: 60, ping: 60 }),
     NgProgressModule
   ],
   providers: [
@@ -138,5 +138,5 @@ import { IdleService } from "./services/idle.service";
   ]
 })
 export class AppModule {
-  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) {}
+  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) { }
 }

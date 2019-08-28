@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
+import { Utils } from "app/classes/utils";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -192,7 +193,7 @@ export class WholesalerEditComponent {
       address: this.detailWholesaler.address,
       code: this.detailWholesaler.code,
       owner: this.detailWholesaler.owner,
-      phone: (this.detailWholesaler.phone) ? (this.isDetail ? `+62${parseInt(this.detailWholesaler.phone)}` : parseInt(this.detailWholesaler.phone.split("+62")[1])) : '',
+      phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.formatPhoneNumber(this.detailWholesaler.phone) : parseInt(this.detailWholesaler.phone.split("+62")[1])) : '',
       status: this.detailWholesaler.status,
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
@@ -324,7 +325,7 @@ export class WholesalerEditComponent {
         address: this.formWs.get("address").value,
         business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
-        phone: '0' + this.formWs.get("phone").value,
+        phone: '+62' + this.formWs.get("phone").value,
         areas: this.list['territory'].filter(item => item.id === this.formWs.get('territory').value).map(item => item.id),
         status: this.formWs.get("status").value
       };
