@@ -18,9 +18,9 @@ export class WholesalerEditComponent {
 
   detailWholesaler: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "A" },
-    { name: "Status Non Aktif", value: "I" },
-    { name: "Status Belum Terdaftar", value: "P" }
+    { name: "Status Aktif", value: "active" },
+    { name: "Status Non Aktif", value: "inactive" },
+    { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
 
   listLevelArea: any[];

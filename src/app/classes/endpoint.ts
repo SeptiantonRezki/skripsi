@@ -180,8 +180,8 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         list_menu: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/available_permissions`,
-        force_update: `${AYO_API}/api/${type_api}/force-update`,
-        list_version: `${AYO_API}/api/${type_api}/force-update`,
+        force_update: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
+        list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
         revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`
       },
       tnc: {
