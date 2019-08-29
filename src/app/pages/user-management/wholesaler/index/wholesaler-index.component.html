@@ -120,7 +120,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order"
-                [ngClass]="row.status == 'A' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{ row.status_indo.toUpperCase() }}
               </p>
             </div>
