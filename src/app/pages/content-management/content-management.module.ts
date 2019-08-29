@@ -26,7 +26,10 @@ import {
   MatDatepickerModule,
   MatTooltipModule,
   MatRadioModule,
-  MatTabsModule
+  MatTabsModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS
 } from "@angular/material";
 import { ngfModule } from "angular-file";
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
@@ -36,6 +39,19 @@ import { ReportHistoryComponent } from './report-list/report-history/report-hist
 import { ReportDetailComponent } from './report-list/report-detail/report-detail-wrapper.component';
 import { ReporterListComponent } from './report-list/report-detail/reporter-list/reporter-list.component';
 import { DetailReportComponent } from './report-list/report-detail/detail-report/detail-report.component';
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @NgModule({
   imports: [
@@ -57,6 +73,7 @@ import { DetailReportComponent } from './report-list/report-detail/detail-report
     MatRadioModule,
     ngfModule,
     MatTabsModule,
+    MatDatepickerModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
   ],
@@ -88,6 +105,13 @@ import { DetailReportComponent } from './report-list/report-detail/detail-report
     HelpCreateComponent,
     HelpEditComponent
   ],
-  providers: []
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ]
 })
 export class ContentManagementModule { }

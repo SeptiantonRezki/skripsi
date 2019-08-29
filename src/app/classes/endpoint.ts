@@ -297,11 +297,11 @@ export class Endpoint {
         delete: `${AYO_API}/api/principal/user/principal-partnership/${context.principal_partnership_id}`
       },
       report_list: {
-        get_report: `${AYO_API}/api/principal/report`,
-        get_history: `${AYO_API}/api/principal/report/history/list`,
-        update: `${AYO_API}/api/principal/report/${context.report_id}`,
-        show: `${AYO_API}/api/principal/report/${context.report_id}`,
-        detail: `${AYO_API}/api/principal/report/detail/${context.report_id}`
+        get_report: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report`,
+        get_history: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/history/list`,
+        update: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
+        show: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
+        detail: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/detail/${context.report_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
