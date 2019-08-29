@@ -75,6 +75,11 @@ export class BaseInterceptor implements HttpInterceptor {
           this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
         }
 
+        window.localStorage.clear();
+        this.router.navigate(["login"]);
+        this.matDialog.closeAll();
+        this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error.message}` });
+
         return Observable.throw(err);
       } else if (err.status == 403) {
         return Observable.throw(err);

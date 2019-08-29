@@ -60,7 +60,7 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         delete_multiple: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/inactive/multiple`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`, //ke service area
         list_role: `${AYO_API}/api/${type_api}/user/role?page=all`,
         list_role_nolimit: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/list`
       },
@@ -104,10 +104,10 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/${context.banner_id}`,
       },
       landingPage: {
-        get: `${AYO_API}/api/${type_api}/content/static-page`,
-        create: `${AYO_API}/api/${type_api}/content/static-page`,
-        put: `${AYO_API}/api/${type_api}/content/static-page/${context.page_id}`,
-        delete: `${AYO_API}/api/${type_api}/content/static-page/${context.page_id}`
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page/${context.page_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page/${context.page_id}`
       },
       product: {
         get: `${AYO_API}/api/${type_api}/product/product`,
@@ -224,7 +224,7 @@ export class Endpoint {
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
       },
       general: {
-        support: `${AYO_API}/api/general/content?type=help&user=principal&page=all`,
+        support: `${AYO_API_SERVICE(SERVER.content)}/api/general/content?type=help&user=principal&page=all`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
