@@ -233,7 +233,7 @@ export class Endpoint {
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
       },
       general: {
-        support: `${AYO_API_SERVICE(SERVER.content)}/api/general/content?type=help&user=principal&page=all`,
+        support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
