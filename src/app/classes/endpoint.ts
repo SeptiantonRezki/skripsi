@@ -84,7 +84,11 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
-        consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`
+        consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`,
+        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       paguyuban: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban`,
@@ -161,6 +165,9 @@ export class Endpoint {
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         list_retailer_selected: `${AYO_API}/api/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
         import: `${AYO_API}/api/${type_api}/audience/import`,
         export: `${AYO_API}/api/${type_api}/audience/export`
       },
