@@ -47,7 +47,7 @@ export class ProductService extends BaseService {
   }
 
   getListPackaging(): Observable<any> {
-    const url = this.getUrl("general", "list_packaging");
+    const url = this.getUrl(this.namespace, "list_packaging");
     return this.getApi(url);
   }
 

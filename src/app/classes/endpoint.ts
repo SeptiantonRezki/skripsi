@@ -130,7 +130,10 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/creator`,
         create: `${AYO_API}/api/${type_api}/creator`,
         put: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
-        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`
+        delete: `${AYO_API}/api/${type_api}/creator/${context.trade_program_id}`,
+        list_level: `${AYO_API}/api/general/area/get_level`,
+        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
       },
       schedule_trade_program: {
         get: `${AYO_API}/api/${type_api}/scheduler`,
