@@ -20,14 +20,16 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
                 item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
@@ -35,7 +37,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
@@ -43,7 +46,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
@@ -52,7 +56,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
@@ -70,32 +75,36 @@
         </div>
       </form>
     </div>
-    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
-      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-      [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-      (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)">
+    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+      [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+      [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
+      (select)="onSelect($event)">
 
 
       <!-- <ngx-datatable-column name="Kode Halaman" prop="kode_halaman"></ngx-datatable-column> -->
 
       <ngx-datatable-column name="Nama" prop="name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.id]" (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
+          <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.id]"
+            (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="Kode Agen" prop="code"></ngx-datatable-column>
-      <ngx-datatable-column name="Nomor Ponsel" prop="phone"></ngx-datatable-column>
+      <ngx-datatable-column name="Nomor Ponsel" prop="phone" [sortable]="false"></ngx-datatable-column>
       <ngx-datatable-column name="Total Koin" prop="coin" [sortable]="false"></ngx-datatable-column>
-      <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk">
+      <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.terakhir_masuk?.date | date:'dd/MM/yyyy HH:mm'}}
         </ng-template>
       </ngx-datatable-column>
 
       <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+          style="justify-content: center !important">
           <div class="button-row pl-8">
-            <button matTooltip="Flush Coin" type="button" mat-icon-button color="primary" (click)="flush('retailer', row)">
+            <button matTooltip="Flush Coin" type="button" mat-icon-button color="primary"
+              (click)="flush('retailer', row)">
               <mat-icon>history</mat-icon>
             </button>
           </div>

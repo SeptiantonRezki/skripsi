@@ -2,11 +2,13 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Admin'">
     <div class="button-row" fxLayout="row">
-      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','admin-principal','create']">
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/user-management','admin-principal','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
-      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button" class="is-danger" (click)="deleteAllUser()">NON AKTIFKAN</button>
+      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button"
+        class="is-danger" (click)="deleteAllUser()">NON AKTIFKAN</button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -24,19 +26,21 @@
       </div>
       <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
-        (select)="onSelect($event)">
+        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
+        [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+        (sort)="onSort($event)" (select)="onSelect($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-checkbox [disabled]="!permission?.hapus" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+            <mat-checkbox [disabled]="!permission?.hapus" [checked]="allRowsSelected"
+              (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [disabled]="!permission?.hapus" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [disabled]="!permission?.hapus" [checked]="isSelected" (change)="onCheckboxChangeFn($event)">
+            </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
@@ -46,9 +50,10 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="Email" prop="email" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Email" prop="email" summary-template="activeCell">
+        </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+        <ngx-datatable-column name="Terakhir Masuk" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
           </ng-template>
@@ -56,14 +61,16 @@
 
         <ngx-datatable-column name="Terakhir Diubah" prop="updated_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.updated_at | date:'dd/MM/yyyy HH:mm'}} {{row?.updated_by_name ? 'by ' + (row?.updated_by_name | toCapitalize) : '' }}
+            {{row.updated_at | date:'dd/MM/yyyy HH:mm'}}
+            {{row?.updated_by_name ? 'by ' + (row?.updated_by_name | toCapitalize) : '' }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="active_status">
+        <ngx-datatable-column [width]="100" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              <p class="status text-truncate h6 p-4"
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
@@ -72,7 +79,8 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
@@ -80,7 +88,8 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deleteUser(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

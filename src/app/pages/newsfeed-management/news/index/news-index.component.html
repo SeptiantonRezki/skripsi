@@ -22,7 +22,8 @@
             </mat-form-field>
           </div>
         </div>
-        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+          class="top-table p-8">
           <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
             <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
               formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
@@ -36,8 +37,8 @@
             <mat-datepicker #dari></mat-datepicker>
           </mat-form-field>
           <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
-            <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="Sampai Tanggal"
-              formControlName="end_date" readonly>
+            <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
+              placeholder="Sampai Tanggal" formControlName="end_date" readonly>
             <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('end_date').setValue('')">
               <mat-icon>close</mat-icon>
@@ -52,16 +53,18 @@
           </div>
         </div>
       </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
-        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container pl-8 pt-8 pb-8 pr-0">
               <img class="banner-image" *ngIf="row.image" [src]="row.image">
-              <img class="banner-image" *ngIf="!row.image" [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'">
+              <img class="banner-image" *ngIf="!row.image"
+                [src]="'https://i2.wp.com/www.solidcolore.com/3840/d3d3d3_background.jpg?ssl=1'">
             </div>
           </ng-template>
         </ngx-datatable-column>
@@ -74,7 +77,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kategori" prop="category_name"></ngx-datatable-column>
+        <ngx-datatable-column name="Kategori" prop="category_id"></ngx-datatable-column>
 
         <ngx-datatable-column name="Tanggal Dibuat" prop="date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -82,7 +85,8 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="name-container pl-12">
               <mat-icon *ngIf="row.status === 'publish'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
               <mat-icon *ngIf="row.status === 'unpublish'" class="active-icon mat-red-500-bg s-18">close</mat-icon>

@@ -30,14 +30,16 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
                 item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
@@ -45,7 +47,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
@@ -53,7 +56,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
@@ -62,7 +66,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
@@ -79,10 +84,11 @@
           </mat-form-field>
         </div>
       </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
-        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
         <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -107,10 +113,11 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="active_status">
+        <ngx-datatable-column [width]="100" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
+              <p class="status text-truncate h6 p-4"
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
@@ -118,14 +125,15 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+        <ngx-datatable-column name="Terakhir Masuk" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
@@ -133,7 +141,8 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deleteFf(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+              <button mat-icon-button color="primary" (click)="deleteFf(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

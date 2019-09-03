@@ -21,10 +21,11 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
-        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -34,11 +35,13 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Nama Referensi Toko" prop="refferal_name" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_name || '-'}}</ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_name || '-'}}
+          </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Kode Referensi" prop="refferal_code" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_code || '-'}}</ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_code || '-'}}
+          </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Kota" prop="city" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.city?.name}}</ng-template>
@@ -47,7 +50,8 @@
         <ngx-datatable-column [width]="100" name="Status" prop="status_indo">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              <p class="status text-truncate h6 p-4"
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status_indo == 'aktif' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{row.status_indo.toUpperCase()}}
               </p>
@@ -55,7 +59,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+        <ngx-datatable-column name="Terakhir Masuk" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{(row.last_login | date:'dd/MM/yyyy HH:mm') || '-'}}
           </ng-template>
