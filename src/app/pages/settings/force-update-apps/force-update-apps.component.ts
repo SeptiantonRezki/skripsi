@@ -4,6 +4,8 @@ import { DialogService } from 'app/services/dialog.service';
 import { AccessService } from 'app/services/settings/access.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PagesName } from 'app/classes/pages-name';
+import { forkJoin } from 'rxjs';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-force-update-apps',
@@ -11,12 +13,12 @@ import { PagesName } from 'app/classes/pages-name';
   styleUrls: ['./force-update-apps.component.scss']
 })
 export class ForceUpdateAppsComponent {
-  listApps: any[] = [{ name: 'Consumer', value: 'customer'}, { name: 'Retailer', value: 'retailer' }];
+  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }];
   listOs: any[] = [
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
   ]
-  yesOrNo: any[] = [{name:'Ya', value: 'yes'}, {name: 'Tidak', value:'no'}];
+  yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
   formForceUpdate: FormGroup;
 
   listVersionConsumer: any[];
@@ -29,12 +31,13 @@ export class ForceUpdateAppsComponent {
 
   permission: any;
   roles: PagesName = new PagesName();
-  
+
   constructor(
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private accessServices: AccessService
-  ) { 
+    private accessServices: AccessService,
+    private dataService: DataService
+  ) {
     this.onLoad = true;
 
     this.permission = this.roles.getRoles('principal.forceupdate');
@@ -42,11 +45,11 @@ export class ForceUpdateAppsComponent {
   }
 
   ngOnInit() {
-    
+
     this.accessServices.listVersion().subscribe(res => {
       this.listVersionRetailer = res[0].data;
       this.listVersionConsumer = res[1].data;
-      
+
       this.lastVersionRetailer = this.listVersionRetailer.length > 0 ? parseFloat(this.listVersionRetailer[0]['version']) : 0;
       this.lastVersionConsumer = this.listVersionConsumer.length > 0 ? parseFloat(this.listVersionConsumer[0]['version']) : 0;
 
@@ -80,7 +83,7 @@ export class ForceUpdateAppsComponent {
 
       if (!this.permission.buat) { this.formForceUpdate.disable() };
       this.onLoad = false;
-    })
+    });
   }
 
   changeValue() {
@@ -96,6 +99,7 @@ export class ForceUpdateAppsComponent {
 
   submit() {
     if (this.formForceUpdate.valid) {
+      this.dataService.showLoading(true);
       let body = {
         version: this.formForceUpdate.controls['version'].value,
         type: this.formForceUpdate.controls['appsName'].value,
@@ -105,19 +109,46 @@ export class ForceUpdateAppsComponent {
         os: this.formForceUpdate.controls['os'].value,
       }
 
-      this.accessServices.forceUpdate(body).subscribe(
-        res => {
+      this.accessServices.getForceUpdateUsers(body).subscribe(res => {
+        console.log('res', res);
+        this.paralellForceUpdates(res.data ? res.data : [], body).subscribe(res => {
+          console.log('res force updates', res);
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
           this.ngOnInit();
-        },
-        err => {
-          console.log(err)
-        }
-      )
+          this.dataService.showLoading(false);
+        }, err => {
+          this.dataService.showLoading(false);
+          console.log('err', err)
+        });
+      }, err => {
+        this.dataService.showLoading(false);
+        console.log('err', err)
+      });
+
+      // this.accessServices.forceUpdate(body).subscribe(
+      //   res => {
+      //     this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
+      //     this.ngOnInit();
+      //   },
+      //   err => {
+      //     console.log(err)
+      //   }
+      // )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu! '});
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu! ' });
       commonFormValidator.validateAllFields(this.formForceUpdate);
     }
+  }
+
+  paralellForceUpdates(users: any[], body) {
+    let joins = [];
+    users.map(user => {
+      body.users = user
+      let response = this.accessServices.forceUpdate(body);
+      joins.push(response);
+    });
+
+    return forkJoin(joins);
   }
 
   revertVersion(item) {

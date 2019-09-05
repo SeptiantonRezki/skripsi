@@ -60,12 +60,12 @@ export class BaseInterceptor implements HttpInterceptor {
         return Observable.throw(err);
       } else if (err.status == 400) {
         if (req.method == "POST") {
-          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukan salah" });
+          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
         if (req.method == "POST") {
-          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukan salah" });
+          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
         }
 
         if (err.error === "Tidak ada otorisasi") {

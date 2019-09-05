@@ -4,15 +4,20 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 import { Observable } from '../../../../node_modules/rxjs';
 
 @Injectable()
-export class AccessService extends BaseService{
+export class AccessService extends BaseService {
   public namespace = 'role';
-  constructor(http: HttpClient) { 
+  constructor(http: HttpClient) {
     super(http);
   }
 
   get(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'get');
     return this.getApi(url, queryParams);
+  }
+
+  getForceUpdateUsers(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'force_update_user');
+    return this.postApi(url, body);
   }
 
   getDetail(context?): Observable<any> {
