@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
   server: "https://dev.ayo-api.dxtr.asia",
-  server_service: "http://user.ayo-micro.dxtr.asia",
+  server_service: "http://dev.ayo-api.dxtr.asia",
   label: "DEVELOPMENT",
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
@@ -25,7 +25,8 @@ export const server = {
   auth: "auth",
   newsfeed: "newsfeed",
   banner: "banner",
-  content: "content"
+  content: "content",
+  product: "product"
 }
 
 /*
