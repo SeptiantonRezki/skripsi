@@ -20,5 +20,6 @@ export const server = {
   auth: "auth",
   newsfeed: "newsfeed",
   banner: "banner",
-  content: "contentstatic"
+  content: "contentstatic",
+  product: "product"
 }
