@@ -80,8 +80,8 @@ export class ProductIndexComponent {
 
     this.productService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -100,7 +100,7 @@ export class ProductIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -111,8 +111,8 @@ export class ProductIndexComponent {
     }
 
     this.productService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -128,8 +128,8 @@ export class ProductIndexComponent {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.productService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -148,8 +148,8 @@ export class ProductIndexComponent {
     }
 
     this.productService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }

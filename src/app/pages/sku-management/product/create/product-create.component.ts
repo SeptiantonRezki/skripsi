@@ -89,9 +89,9 @@ export class ProductCreateComponent {
     this.otherProduct = [];
     this.listSubCategory = [];
 
-    this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
-    this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data;
-    this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data;
+    this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data ? this.activatedRoute.snapshot.data["listBrand"].data.data : [];
+    this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data ? this.activatedRoute.snapshot.data["listCategory"].data.data : [];
+    this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data ? this.activatedRoute.snapshot.data["listPackaging"].data.data : [];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.filteredCategory.next(this.listCategory.slice());
@@ -251,13 +251,13 @@ export class ProductCreateComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx+1} ?`,
+      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
-  
+
   initArea(index) {
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
     this.areaFromLogin.map(item => {
@@ -321,7 +321,7 @@ export class ProductCreateComponent {
       case 'zone':
         const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
         let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-        
+
         while (list.length > 0) {
           list.removeAt(list.length - 1);
         }
@@ -345,131 +345,131 @@ export class ProductCreateComponent {
         }
         break;
       case 'region':
-          item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Zone') {
-            const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
-            });
+        item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Zone') {
+          const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('region').setValue('');
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('region').setValue('');
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Zone') {
-              this.clearFormArray(index, 'list_region');  
-            }
-            this.clearFormArray(index, 'list_area');
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Zone') {
+            this.clearFormArray(index, 'list_region');
           }
+          this.clearFormArray(index, 'list_area');
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'area':
-          item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Regional') {
-            const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
-            });
+        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Regional') {
+          const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Regional') {
-              this.clearFormArray(index, 'list_area');  
-            }
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Regional') {
+            this.clearFormArray(index, 'list_area');
           }
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'salespoint':
-          item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Area') {
-            const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
-            });
+        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Area') {
+          const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Area') {
-              this.clearFormArray(index, 'list_salespoint');  
-            }
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Area') {
+            this.clearFormArray(index, 'list_salespoint');
           }
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'district':
-          item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Salespoint') {
-            const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
-            });
+        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Salespoint') {
+          const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            if (item.name === 'Semua Salespoint') {
-              this.clearFormArray(index, 'list_district');  
-            }
-            this.clearFormArray(index, 'list_territory');
+          if (item.name === 'Semua Salespoint') {
+            this.clearFormArray(index, 'list_district');
           }
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'territory':
         item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua District') {
-            const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response || []).map(item => {
-              list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
-            });
+        if (item.name !== 'Semua District') {
+          const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response || []).map(item => {
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
+          });
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('territory').setValue('');
-            
-            if (item.name === 'Semua District') {
-              this.clearFormArray(index, 'list_territory');  
-            }
+        if (type !== 'render') {
+          wilayah.at(index).get('territory').setValue('');
+
+          if (item.name === 'Semua District') {
+            this.clearFormArray(index, 'list_territory');
           }
+        }
         break;
-    
+
       default:
         break;
     }
@@ -520,7 +520,7 @@ export class ProductCreateComponent {
   selectionChange(event: MatSelectChange): void {
     this.productService.getListCategory(event.value).subscribe(
       res => {
-        this.listSubCategory = res.data;
+        this.listSubCategory = res.data ? res.data.data : [];
       },
       err => {
         this.listSubCategory = [];
@@ -531,7 +531,7 @@ export class ProductCreateComponent {
   selectionChangeSub(event: MatSelectChange): void {
     this.productService.getListCategory(event.value).subscribe(
       res => {
-        this.listOtherSubCategory = res.data;
+        this.listOtherSubCategory = res.data ? res.data.data : [];
       },
       err => {
         this.listOtherSubCategory = [];
@@ -586,7 +586,7 @@ export class ProductCreateComponent {
         let value = this.formProductGroup.getRawValue();
 
         value.areas.map(item => {
-          let obj = Object.entries(item).map(([key, value]) => ({key, value}))
+          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
           for (const val of this.typeArea) {
             const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
             if (filteredValue) _areas.push(filteredValue)
@@ -598,7 +598,7 @@ export class ProductCreateComponent {
 
         let same = this.findDuplicate(areas.map(item => item.value));
         if (same.length > 0) {
-          return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!"});
+          return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
         }
 
         areas.map(item => {
@@ -644,12 +644,12 @@ export class ProductCreateComponent {
 
   openDialog() {
     const dialogConfig = new MatDialogConfig();
-    
+
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = { "title": "Testing" };
-    
+
     this.dialogRef = this.dialog.open(ScanBarcodeDialogComponent, dialogConfig);
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
@@ -671,8 +671,8 @@ export class ProductCreateComponent {
   }
 
   readThis(inputValue: any): void {
-    var file:File = inputValue;
-    var myReader:FileReader = new FileReader();
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
 
     myReader.onloadend = (e) => {
       this.imageSku = myReader.result;
@@ -684,7 +684,7 @@ export class ProductCreateComponent {
   convertCanvasToImage(canvas) {
     let image = new Image();
     image.src = canvas.toDataURL("image/jpeg");
-    
+
     return image.src;
   }
 
@@ -700,7 +700,7 @@ export class ProductCreateComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length){
+    if (value && array.length) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
@@ -713,15 +713,15 @@ export class ProductCreateComponent {
     var result = [];
 
     array.forEach(function (item) {
-      if(!object[item])
-          object[item] = 0;
-        object[item] += 1;
+      if (!object[item])
+        object[item] = 0;
+      object[item] += 1;
     })
 
     for (var prop in object) {
-       if(object[prop] >= 2) {
-           result.push(prop);
-       }
+      if (object[prop] >= 2) {
+        result.push(prop);
+      }
     }
 
     return result;

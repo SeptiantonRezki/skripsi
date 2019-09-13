@@ -12,6 +12,10 @@
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+      style="background-color: #585858">
+
+    </div>
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Daftar Retailer</h2>
@@ -135,6 +139,17 @@
               <p class="status text-truncate h6 p-4 status-order"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{ row.status_indo.toUpperCase() }}
+              </p>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="120" name="Akses Cashier" prop="cashier">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4 status-order"
+                [ngClass]="row.cashier == 0 ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{ row.cashier == 0 ? 'YA' : 'TIDAK' }}
               </p>
             </div>
           </ng-template>

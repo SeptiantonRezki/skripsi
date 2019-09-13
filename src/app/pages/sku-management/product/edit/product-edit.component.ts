@@ -101,9 +101,10 @@ export class ProductEditComponent {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
 
-    this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data;
-    this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data;
-    this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data;
+    this.listBrand = this.activatedRoute.snapshot.data["listBrand"].data ? this.activatedRoute.snapshot.data["listBrand"].data.data : [];
+    this.listCategory = this.activatedRoute.snapshot.data["listCategory"].data ? this.activatedRoute.snapshot.data["listCategory"].data.data : [];
+    this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data ? this.activatedRoute.snapshot.data["listPackaging"].data.data : [];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.formProductErrors = {
       name: {},
@@ -175,43 +176,44 @@ export class ProductEditComponent {
 
   getDetails() {
     this.productService.getdetail(this.idProduct).subscribe(async (res) => {
-      this.detailProduct = res;
+      this.detailProduct = res.data;
 
       let alias = this.formProductGroup.get("alias") as FormArray;
-      if (res.alias) {
-        (res.alias).map(item => {
+      if (res.data.alias) {
+        (res.data.alias).map(item => {
           alias.push(this.formBuilder.group({ alias: item.trim() }));
         });
       }
 
-      this.formProductGroup.get("name").setValue(res.name);
-      this.formProductGroup.get("barcode").setValue(res.barcode);
-      this.formProductGroup.get("brand").setValue(res.brand_id);
-      this.formProductGroup.get("packaging").setValue(res.packaging_id);
-      this.formProductGroup.get("status").setValue(res.status);
-      this.formProductGroup.get("is_promo_src").setValue(res.is_promo_src === 1 ? true : false);
+      this.formProductGroup.get("name").setValue(res.data.name);
+      this.formProductGroup.get("barcode").setValue(res.data.barcode);
+      this.formProductGroup.get("brand").setValue(res.data.brand_id);
+      this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
+      this.formProductGroup.get("status").setValue(res.data.status);
+      this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
 
-      if (res.category.parent_id) {
-        this.formProductGroup.get("category").setValue(res.category_all[0]);
+      if (res.data.category.parent_id) {
+        this.formProductGroup.get("category").setValue(res.data.category_all[0]);
         this.selectionChange();
 
-        this.formProductGroup.get("subCategory").setValue(res.category_all[1]);
+        this.formProductGroup.get("subCategory").setValue(res.data.category_all[1]);
       } else {
-        this.formProductGroup.get("category").setValue(res.category_id);
+        this.formProductGroup.get("category").setValue(res.data.category_id);
       }
 
       for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
+        console.log('hitted me');
         const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
         let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
         wilayah.push(this.formBuilder.group({
-          national: [this.getArea(response, 'national'), Validators.required],
-          zone: [this.getArea(response, 'division')],
-          region: [this.getArea(response, 'region')],
-          area: [this.getArea(response, 'area')],
-          salespoint: [this.getArea(response, 'salespoint')],
-          district: [this.getArea(response, 'district')],
-          territory: [this.getArea(response, 'teritory')],
+          national: [this.getArea(response.data, 'national'), Validators.required],
+          zone: [this.getArea(response.data, 'division')],
+          region: [this.getArea(response.data, 'region')],
+          area: [this.getArea(response.data, 'area')],
+          salespoint: [this.getArea(response.data, 'salespoint')],
+          district: [this.getArea(response.data, 'district')],
+          territory: [this.getArea(response.data, 'teritory')],
           list_national: this.formBuilder.array(this.listLevelArea),
           list_zone: this.formBuilder.array([]),
           list_region: this.formBuilder.array([]),
@@ -222,7 +224,7 @@ export class ProductEditComponent {
         }))
 
         this.initArea(index);
-        this.initFormGroup(response, index);
+        this.initFormGroup(response.data, index);
 
         if (this.detailProduct.areas.length === (index + 1)) {
           this.onLoad = false;
@@ -284,6 +286,7 @@ export class ProductEditComponent {
 
   initArea(index) {
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    console.log('area from Login', this.areaFromLogin);
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
@@ -616,7 +619,7 @@ export class ProductEditComponent {
     let category_id = this.formProductGroup.get("category").value
     this.productService.getListCategory(category_id).subscribe(
       res => {
-        this.listSubCategory = res.data;
+        this.listSubCategory = res.data ? res.data.data : [];
       },
       err => {
         this.listSubCategory = [];
@@ -627,7 +630,7 @@ export class ProductEditComponent {
   selectionChangeSub(event: MatSelectChange): void {
     this.productService.getListCategory(event.value).subscribe(
       res => {
-        this.listOtherSubCategory = res.data;
+        this.listOtherSubCategory = res.data ? res.data.data : [];
       },
       err => {
         this.listOtherSubCategory = [];
