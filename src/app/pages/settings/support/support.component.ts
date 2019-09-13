@@ -16,7 +16,7 @@ export class SupportComponent implements OnInit {
   constructor(
     private generalService: GeneralService,
     private sanitizer: DomSanitizer
-  ) { 
+  ) {
     this.panel = 'kontak';
     this.onLoad = true;
   }
