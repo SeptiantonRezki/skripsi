@@ -2,7 +2,8 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Notifikasi'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/notifications', 'push-notification', 'create']">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/notifications', 'push-notification', 'create']">
         <mat-icon>add</mat-icon>BUAT
       </button>
     </div>
@@ -25,6 +26,12 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
+        <ngx-datatable-column name="ID" prop="id">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.id}}
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Judul Notifikasi" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
@@ -33,7 +40,8 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Grup Pengguna" prop="type">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}</ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}
+          </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
 
