@@ -90,9 +90,10 @@ export class BaseInterceptor implements HttpInterceptor {
           //   return Observable.throw(err);
           // }
 
-          if (err.error.errors['status']) {
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
-          } else if (err.error.errors.access_lock) {
+          // if (err.error.errors['status']) {
+          //   this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+          // } else
+          if (err.error.errors.access_lock) {
             this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock })
           } else {
             let errorArray = Object.values(err.error.errors);
