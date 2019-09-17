@@ -157,8 +157,8 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order"
-                [ngClass]="row.cashier == 0 ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{ row.cashier == 0 ? 'YA' : 'TIDAK' }}
+                [ngClass]="row.cashier == 1 ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{ row.cashier == 0 ? 'TIDAK' : 'YA' }}
               </p>
             </div>
           </ng-template>
