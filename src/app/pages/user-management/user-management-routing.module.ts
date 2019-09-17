@@ -29,6 +29,7 @@ import { CustomerDetailComponent } from "./customer/detail/customer-detail.compo
 import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
 import { PartnershipCreateComponent } from "./principal-partnership/create/partnership-create.component";
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
+import { ImportAccessCashierDialogComponent } from "./retailer/import-access-cashier-dialog/import-access-cashier-dialog.component";
 
 const routes: Routes = [
   {

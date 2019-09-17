@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
-import { AudienceService } from 'app/services/dte/audience.service';
+import { RetailerService } from 'app/services/user-management/retailer.service';
 import { DataService } from 'app/services/data.service';
 
 @Component({
-  templateUrl: './import-audience-dialog.component.html',
-  styleUrls: ['./import-audience-dialog.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  templateUrl: './import-access-cashier-dialog.component.html',
+  styleUrls: ['./import-access-cashier-dialog.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class ImportAudienceDialogComponent {
+export class ImportAccessCashierDialogComponent {
 
   files: File;
   validComboDrag: boolean;
@@ -19,10 +19,10 @@ export class ImportAudienceDialogComponent {
   validData: any[];
 
   constructor(
-    public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
+    public dialogRef: MatDialogRef<ImportAccessCashierDialogComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
-    private audienceService: AudienceService,
+    private retailerService: RetailerService,
     private dataService: DataService
   ) {
     this.rows = [];
@@ -40,10 +40,10 @@ export class ImportAudienceDialogComponent {
 
     fd.append('file', this.files);
     this.dataService.showLoading(true);
-    this.audienceService.importExcel(fd).subscribe(
+    this.retailerService.importExcel(fd).subscribe(
       res => {
-        this.rows = res;
-        this.validData = (res || []).filter(item => item.is_valid).length;
+        this.rows = res.data;
+        this.validData = (res.data || []).filter(item => item.is_valid).length;
         this.dataService.showLoading(false);
       },
       err => {
@@ -57,10 +57,15 @@ export class ImportAudienceDialogComponent {
   }
 
   submit() {
-    const rows = this.rows.filter(item => item.is_valid);
-    if (rows.length > 0) {
-      const res = rows.map(item => { return { id: item.id } });
-      this.dialogRef.close(res);
+    if (this.rows.length > 0) {
+      const res = this.rows.map(item => { return { ...item } });
+      this.retailerService.storeAccessCashier({ flag_cashier: res }).subscribe(resp => {
+        console.log('resp', resp);
+        this.dialogRef.close(resp);
+      }, err => {
+        console.log('err', err);
+        this.dialogRef.close(null);
+      });
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }

@@ -12,6 +12,19 @@
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+      <a #downloadLink></a>
+      <button mat-raised-button type="button" color="primary">
+        Kelola Akses Kasir
+      </button>
+      <button mat-raised-button type="button" class="is-danger" (click)="import()">
+        <mat-icon>arrow_downward</mat-icon> Import XLS
+      </button>
+      <button (click)="export()" mat-raised-button type="button" class="is-danger">
+        <mat-icon>arrow_upward</mat-icon> Export XLS
+      </button>
+    </div>
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Daftar Retailer</h2>
@@ -140,14 +153,26 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column name="Terkahir Masuk" prop="last_login">
+        <<<<<<< HEAD=======<ngx-datatable-column [width]="120" name="Akses Kasir" prop="cashier">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4 status-order"
+                [ngClass]="row.cashier == 0 ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{ row.cashier == 0 ? 'YA' : 'TIDAK' }}
+              </p>
+            </div>
+          </ng-template>
+          </ngx-datatable-column>
+
+          >>>>>>> 4a63be3... CDE-1071 Flagging Active Cashier
+          <!-- <ngx-datatable-column name="Terkahir Masuk" prop="last_login">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
             </ng-template>
           </ngx-datatable-column> -->
 
-        <!-- disable delete ws -->
-        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <!-- disable delete ws -->
+          <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
               <div class="button-row pl-8">
                 <button mat-icon-button color="primary" (click)="deleteWholesaler(row.id)">
@@ -156,19 +181,19 @@
               </div>
             </ng-template>
           </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="60" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
-            <div class="button-row pl-8">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
+          <ngx-datatable-column [width]="60" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+              style="justify-content: center !important">
+              <div class="button-row pl-8">
+                <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                  <mat-icon class="secondary-text">assignment</mat-icon>
+                </button>
+                <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>

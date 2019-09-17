@@ -60,4 +60,19 @@ export class RetailerService extends BaseService {
     const url = this.getUrl("general", "list_other_children", context);
     return this.getApi(url);
   }
+
+  getAccessCashier(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_access_cashier", context);
+    return this.getBlobApi(url);
+  }
+
+  importExcel(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_access_cashier");
+    return this.multipartPost(url, body);
+  }
+
+  storeAccessCashier(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "store_access_cashier");
+    return this.postApi(url, body);
+  }
 }

@@ -88,7 +88,10 @@ export class Endpoint {
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         list_level: `${AYO_API}/api/general/area/get_level`,
         list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        export_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/export?area=${context.area_id}`,
+        import_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/preview`,
+        store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`
       },
       paguyuban: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban`,

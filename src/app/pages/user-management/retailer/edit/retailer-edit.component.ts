@@ -34,6 +34,11 @@ export class RetailerEditComponent {
     { name: "SRC", value: "SRC" }
   ];
 
+  listCashierAccess: any[] = [
+    { name: 'YA', value: 0 },
+    { name: 'TIDAK', value: 1 }
+  ];
+
   listLevelArea: any[];
   list: any;
 
