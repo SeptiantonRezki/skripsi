@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef, NgZone } from "@angular/core";
 import { Page } from "app/classes/laravel-pagination";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
@@ -8,6 +8,9 @@ import { DataService } from "app/services/data.service";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
+import { HttpErrorResponse } from "@angular/common/http";
+import { MatDialogConfig, MatDialog } from "@angular/material";
+import { ImportAccessCashierDialogComponent } from "../import-access-cashier-dialog/import-access-cashier-dialog.component";
 
 @Component({
   selector: "app-retailer-index",
@@ -23,9 +26,12 @@ export class RetailerIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
+  dialogRef: any;
+  exportAccessCashier: boolean;
 
   keyUp = new Subject<string>();
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -48,6 +54,8 @@ export class RetailerIndexComponent {
     private dataService: DataService,
     private retailerService: RetailerService,
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -389,5 +397,93 @@ export class RetailerIndexComponent {
     // this.dataService.setToStorage("detail_retailer", param);
     this.dataService.setToStorage("id_retailer", param.id);
     this.router.navigate(["user-management", "retailer", "detail"]);
+  }
+
+  async export() {
+    this.dataService.showLoading(true);
+    this.exportAccessCashier = true;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length - 1].value;
+    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1]);
+    try {
+      const response = await this.retailerService.getAccessCashier({ area_id: area_id }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.exportAccessCashier = false;
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.exportAccessCashier = false;
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { password: 'P@ssw0rd' };
+
+    this.dialogRef = this.dialog.open(ImportAccessCashierDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.getRetailerList();
+        } else {
+          this.dialogService.openSnackBar({ message: 'File gagal diimport' });
+        }
+      } else {
+        this.dialogService.openSnackBar({ message: 'File gagal diimport, terjadi kesalahan pada saat mengimport' });
+      }
+    });
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 }

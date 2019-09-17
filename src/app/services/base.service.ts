@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import * as _ from 'underscore';
+import { ResponseContentType, RequestOptions } from '@angular/http';
 @Injectable()
 export class BaseService {
   constructor(protected http: HttpClient) {
@@ -52,6 +53,12 @@ export class BaseService {
     let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
     let query = this.loopParams(params);
     return this.http.get(url, { headers: headers, params: query });
+  }
+
+  protected getBlobApi(url, params: any = null) {
+    let headers = new HttpHeaders();
+    let query = this.loopParams(params);
+    return this.http.get(url, { responseType: 'arraybuffer', headers: headers, params: query });
   }
 
   protected postApi(url, request, requestConfig?) {

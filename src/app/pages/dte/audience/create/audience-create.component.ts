@@ -604,8 +604,8 @@ export class AudienceCreateComponent {
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       this.exportTemplate = false;
-
     } catch (error) {
+      console.log('err', error);
       this.exportTemplate = false;
       throw error;
     }

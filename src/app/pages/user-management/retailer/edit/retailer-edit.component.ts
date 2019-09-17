@@ -36,7 +36,7 @@ export class RetailerEditComponent {
 
   listCashierAccess: any[] = [
     { name: 'YA', value: 0 },
-    { name: 'TIDAK', value: 0 }
+    { name: 'TIDAK', value: 1 }
   ];
 
   listLevelArea: any[];

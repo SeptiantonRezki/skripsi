@@ -21,7 +21,9 @@ import {
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatTabsModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatToolbarModule,
+  MatDialogModule
 } from "@angular/material";
 
 import { AdminPrincipalEditComponent } from "./admin-principal/edit/admin-principal-edit.component";
@@ -51,6 +53,8 @@ import { CustomerDetailComponent } from "./customer/detail/customer-detail.compo
 import { PartnershipCreateComponent } from "./principal-partnership/create/partnership-create.component";
 import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
+import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
+import { ngfModule } from "angular-file";
 
 @NgModule({
   imports: [
@@ -69,7 +73,10 @@ import { PartnershipEditComponent } from "./principal-partnership/edit/partnersh
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatToolbarModule,
+    MatDialogModule,
+    ngfModule
   ],
   exports: [
     FieldForceIndexComponent,
@@ -111,14 +118,16 @@ import { PartnershipEditComponent } from "./principal-partnership/edit/partnersh
     // AdminPrincipalAuditLogComponent,
     PartnershipCreateComponent,
     PartnershipIndexComponent,
-    PartnershipEditComponent
+    PartnershipEditComponent,
+    ImportAccessCashierDialogComponent
   ],
+  entryComponents: [ImportAccessCashierDialogComponent],
   providers: [
     ListRoleAdminResolver,
     ListLevelFFResolver,
     ListLevelAreaResolver,
     ListAdminPrincipalResolver,
     PageGuard
-  ]
+  ],
 })
 export class UserManagementModule { }
