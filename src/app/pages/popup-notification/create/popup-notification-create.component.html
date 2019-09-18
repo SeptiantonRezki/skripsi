@@ -10,17 +10,21 @@
           <h2 class="">Buat Popup Notifikasi</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
-          <div class="mt-16 pt-24 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div class="mt-16 pt-24 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px"
+            fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Popup Notifikasi">
-              <mat-error *ngIf="formPopupGroup.controls['title'].hasError('required') && formPopupGroup.controls['title'].touched">
+              <mat-error
+                *ngIf="formPopupGroup.controls['title'].hasError('required') && formPopupGroup.controls['title'].touched">
                 Judul Popup Notifikasi harus diisi
               </mat-error>
             </mat-form-field>
             <div fxFlex="45%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="80%" class="is-light form-primary">
-                <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date" placeholder="Tanggal Terbit">
-                <mat-error *ngIf="formPopupGroup.controls['date'].hasError('required') && formPopupGroup.controls['date'].touched">
+                <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
+                  placeholder="Tanggal Terbit">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['date'].hasError('required') && formPopupGroup.controls['date'].touched">
                   Tanggal Terbit harus diisi
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_terbit">
@@ -29,10 +33,12 @@
                 <mat-datepicker #tanggal_terbit></mat-datepicker>
               </mat-form-field>
               <mat-form-field fxFlex="20%" class="is-light form-primary" id="time">
-                <input matInput formControlName="time" placeholder="Waktu" [ngxTimepicker]="fullTime" [format]="24" readonly>
+                <input matInput formControlName="time" placeholder="Waktu" [ngxTimepicker]="fullTime" [format]="24"
+                  readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime></ngx-material-timepicker>
-                <mat-error *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
                   Waktu harus diisi
                 </mat-error>
               </mat-form-field>
@@ -41,13 +47,15 @@
           <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="positive_button" placeholder="Positif Button">
-              <mat-error *ngIf="formPopupGroup.controls['positive_button'].hasError('required') && formPopupGroup.controls['positive_button'].touched">
+              <mat-error
+                *ngIf="formPopupGroup.controls['positive_button'].hasError('required') && formPopupGroup.controls['positive_button'].touched">
                 Positif Button harus diisi
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="negative_button" placeholder="Negatif Button">
-              <mat-error *ngIf="formPopupGroup.controls['negative_button'].hasError('required') && formPopupGroup.controls['negative_button'].touched">
+              <mat-error
+                *ngIf="formPopupGroup.controls['negative_button'].hasError('required') && formPopupGroup.controls['negative_button'].touched">
                 Negatif Button harus diisi
               </mat-error>
             </mat-form-field>
@@ -58,8 +66,8 @@
             </h3>
           </div>
           <div class="px-24">
-            <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag"
-              [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+            <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+              accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
               (fileChange)="changeImage($event)">
               <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                 <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
@@ -77,14 +85,21 @@
                   <mat-select formControlName="user_group" placeholder="Grup Pengguna">
                     <mat-option *ngFor="let item of listUserGroup" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
-                  <mat-error *ngIf="formPopupGroup.controls['user_group'].hasError('required') && formPopupGroup.controls['user_group'].touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['user_group'].hasError('required') && formPopupGroup.controls['user_group'].touched">
                     Grup Pengguna harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
               <div fxFlex="45">
                 <div *ngIf="files">
-                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage()">Lihat gambar popup notifikasi</span> <mat-icon (click)="removeImage()" matTooltip="Hapus gambar" class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted" matchipremove="" role="img" aria-hidden="true">cancel</mat-icon></div>
+                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
+                    role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
+                      class="preview-image-content" (click)="previewImage()">Lihat gambar popup notifikasi</span>
+                    <mat-icon (click)="removeImage()" matTooltip="Hapus gambar"
+                      class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
+                      matchipremove="" role="img" aria-hidden="true">cancel</mat-icon>
+                  </div>
                 </div>
                 <!-- <div *ngIf="detailBanner.target_page.type === 'image' && !imageContentType">
                   <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content" (click)="previewImage()">Lihat gambar</span></div>
@@ -92,7 +107,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Consumer -->
           <div *ngIf="formPopupGroup.get('user_group').value === 'customer'">
 
@@ -102,7 +117,8 @@
                   <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
                     <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
-                  <mat-error *ngIf="formPopupGroup.controls['is_smoker'].hasError('required') && formPopupGroup.controls['is_smoker'].touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['is_smoker'].hasError('required') && formPopupGroup.controls['is_smoker'].touched">
                     Tipe Consumer harus diisi
                   </mat-error>
                 </mat-form-field>
@@ -116,19 +132,23 @@
               <div class="" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="20" class="is-light form-primary">
                   <input matInput type="number" formControlName="age_consumer_from" placeholder="Dari">
-                  <mat-error *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('required') && formPopupGroup.controls['age_consumer_from'].touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('required') && formPopupGroup.controls['age_consumer_from'].touched">
                     Dari harus diisi
                   </mat-error>
-                  <mat-error *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('min') && formPopupGroup.get('age_consumer_from').touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('min') && formPopupGroup.get('age_consumer_from').touched">
                     Tidak boleh kurang dari {{formPopupGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="20" class="is-light form-primary">
                   <input matInput type="number" formControlName="age_consumer_to" placeholder="Sampai">
-                  <mat-error *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('required') && formPopupGroup.controls['age_consumer_to'].touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('required') && formPopupGroup.controls['age_consumer_to'].touched">
                     Sampai harus diisi
                   </mat-error>
-                  <mat-error *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('min') && formPopupGroup.get('age_consumer_to').touched">
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('min') && formPopupGroup.get('age_consumer_to').touched">
                     Tidak boleh kurang dari minimal batasan umur yg telah di isi
                   </mat-error>
                 </mat-form-field>
@@ -150,10 +170,12 @@
           <div class="px-24">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="Tipe Konten" (selectionChange)="contentType(formPopupGroup.get('content_type').value)">
+                <mat-select formControlName="content_type" placeholder="Tipe Konten"
+                  (selectionChange)="contentType(formPopupGroup.get('content_type').value)">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="formPopupGroup.controls['content_type'].hasError('required') && formPopupGroup.controls['content_type'].touched">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['content_type'].hasError('required') && formPopupGroup.controls['content_type'].touched">
                   Tipe Konten harus diisi
                 </mat-error>
               </mat-form-field>
@@ -166,19 +188,22 @@
               <h3 class="">Isi Halaman</h3>
             </div>
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
-            <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPopupGroup.controls['body'].hasError('required') && formPopupGroup.controls['body'].touched">
+            <mat-error style="padding-top: 6px !important; font-size: .86em;"
+              *ngIf="formPopupGroup.controls['body'].hasError('required') && formPopupGroup.controls['body'].touched">
               Isi Halaman harus diisi
             </mat-error>
           </div>
-          
+
           <!-- Landing Page -->
-          <div class="px-24" *ngIf="formPopupGroup.get('content_type').value === 'landing-page' && formPopupGroup.get('user_group').value !== 'wholesaler'">
+          <div class="px-24"
+            *ngIf="formPopupGroup.get('content_type').value === 'landing-page' && formPopupGroup.get('user_group').value !== 'wholesaler'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="formPopupGroup.controls['landing_page'].hasError('required') && formPopupGroup.controls['landing_page'].touched">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['landing_page'].hasError('required') && formPopupGroup.controls['landing_page'].touched">
                   Landing Page harus diisi
                 </mat-error>
               </mat-form-field>
@@ -190,10 +215,12 @@
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
-                <mat-error *ngIf="formPopupGroup.controls['url_iframe'].hasError('required') && formPopupGroup.controls['url_iframe'].touched">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['url_iframe'].hasError('required') && formPopupGroup.controls['url_iframe'].touched">
                   URL harus diisi
                 </mat-error>
-                <mat-error *ngIf="formPopupGroup.controls['url_iframe'].invalid && formPopupGroup.get('url_iframe').value !== ''">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['url_iframe'].invalid && formPopupGroup.get('url_iframe').value !== ''">
                   URL tidak valid
                 </mat-error>
               </mat-form-field>
@@ -213,10 +240,13 @@
               </mat-radio-group>
             </div>
 
-            <div *ngIf="formPopupGroup.get('group_type').value === 'downline'" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="pb-24 px-24">
+            <div *ngIf="formPopupGroup.get('group_type').value === 'downline'" fxLayout="row" fxLayout.lt-md="column"
+              fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="pb-24 px-24">
               <mat-form-field fxFlex="30%" class="is-light form-primary">
-                <input matInput [matDatepicker]="ws_downline" (focus)="ws_downline.open()" formControlName="date_ws_downline" placeholder="Tanggal Terbit WS Downline">
-                <mat-error *ngIf="formPopupGroup.controls['date_ws_downline'].hasError('required') && formPopupGroup.controls['date_ws_downline'].touched">
+                <input matInput [matDatepicker]="ws_downline" (focus)="ws_downline.open()"
+                  formControlName="date_ws_downline" placeholder="Tanggal Terbit WS Downline">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['date_ws_downline'].hasError('required') && formPopupGroup.controls['date_ws_downline'].touched">
                   Tanggal Terbit WS Downline harus diisi
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="ws_downline">
@@ -225,17 +255,133 @@
                 <mat-datepicker #ws_downline></mat-datepicker>
               </mat-form-field>
               <mat-form-field fxFlex="10%" class="is-light form-primary" id="time">
-                <input matInput formControlName="time_ws_downline" placeholder="Waktu" [ngxTimepicker]="fullTime_downline" [format]="24" readonly>
+                <input matInput formControlName="time_ws_downline" placeholder="Waktu"
+                  [ngxTimepicker]="fullTime_downline" [format]="24" readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime_downline></ngx-material-timepicker>
-                <mat-error *ngIf="formPopupGroup.controls['time_ws_downline'].hasError('required') && formPopupGroup.controls['time_ws_downline'].touched">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['time_ws_downline'].hasError('required') && formPopupGroup.controls['time_ws_downline'].touched">
                   Waktu harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
           </div>
 
-          <div class="pt-16" formArrayName="areas" *ngFor="let wil of formPopupGroup.get('areas')['controls']; let i = index;">
+          <div [formGroup]="formFilter">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+              fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="National" formControlName="national">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Zone" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
+                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Zona' :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Regional" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
+                  <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Regional'
+                    :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Area" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
+                  <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Area'
+                    :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
+                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
+                    'Semua
+                    Salespoint'
+                    :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="District" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
+                  <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    District'
+                    :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Territory" formControlName="territory">
+                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Territori'
+                    :
+                    item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="p-0">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+              fxLayoutAlign="end center" class="p-16 export">
+              <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
+                <mat-icon>arrow_downward</mat-icon> Import XLS
+              </button>
+              <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
+                <mat-icon>arrow_upward</mat-icon> Export Template
+              </button>
+            </div>
+            <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+            <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+              [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+              [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+              (select)="onSelect($event)">
+
+              <!-- [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''" -->
+
+              <ngx-datatable-column [width]="68" *ngIf="formPopupGroup.get('type').value !== 'pick-all'"
+                [canAutoResize]="false" [sortable]="true" [draggable]="false" [resizeable]="false"
+                [headerCheckboxable]="true">
+
+                <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                  let-onCheckboxChangeFn="onCheckboxChangeFn">
+                  <mat-checkbox [checked]="isSelected" [disabled]="formPopupGroup.get('type').value === 'pick-all'"
+                    (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  {{row.code ? row.code : '-'}}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Owner" prop="owner">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  {{row.owner ? row.owner : '-'}}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Tipe" prop="type">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  {{row.type.toUpperCase()}}
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+
+          <!-- <div class="pt-16" formArrayName="areas" *ngFor="let wil of formPopupGroup.get('areas')['controls']; let i = index;">
             <div [formGroupName]="i">
               <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxFlex="50"><h3 class="">&nbsp;</h3></div>
@@ -303,7 +449,7 @@
                 </mat-form-field>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
