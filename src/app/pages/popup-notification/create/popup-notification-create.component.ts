@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
@@ -10,6 +10,9 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 import { Config } from 'app/classes/config';
 import { NotificationService } from 'app/services/notification.service';
+import { Page } from 'app/classes/laravel-pagination';
+import { Subject } from 'rxjs';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -17,7 +20,7 @@ import { NotificationService } from 'app/services/notification.service';
   styleUrls: ['./popup-notification-create.component.scss']
 })
 export class PopupNotificationCreateComponent {
-
+  formFilter: FormGroup;
   onLoad: boolean;
   loadingIndicator: boolean;
   showLoading: Boolean;
@@ -51,6 +54,19 @@ export class PopupNotificationCreateComponent {
   formPopupErrors: any;
 
   public options: Object = Config.FROALA_CONFIG;
+
+  @ViewChild("activeCell")
+  @ViewChild(DatatableComponent)
+  table: DatatableComponent;
+  activeCellTemp: TemplateRef<any>;
+
+  rows: any[];
+  selected: any[];
+  id: any[];
+  reorderable = true;
+  pagination: Page = new Page();
+
+  keyUp = new Subject<string>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -117,7 +133,18 @@ export class PopupNotificationCreateComponent {
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
-      age_consumer_to: ["", Validators.required]
+      age_consumer_to: ["", Validators.required],
+      type: ["limit"]
+    })
+
+    this.formFilter = this.formBuilder.group({
+      national: [""],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
     })
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
@@ -188,6 +215,7 @@ export class PopupNotificationCreateComponent {
           this.formPopupGroup.controls['date_ws_downline'].enable();
         }
       }
+      this.getAudience();
 
       this.formPopupGroup.controls['landing_page'].setValue('');
     });
@@ -229,6 +257,7 @@ export class PopupNotificationCreateComponent {
     })
 
     this.addArea();
+    // this.getAudience();
   }
 
   createArea(): FormGroup {
@@ -702,6 +731,15 @@ export class PopupNotificationCreateComponent {
     };
 
     this._lightbox.open([album], 0);
+  }
+
+  getAudience() {
+    this.pagination['audience'] = this.formPopupGroup.get("user_group").value;
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      console.log('res', res);
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+    }, err => console.log('err', err));
   }
 
 }

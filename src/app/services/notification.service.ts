@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class NotificationService extends BaseService {
   public namespace = 'notification';
 
-  constructor(http: HttpClient) { 
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -69,5 +69,10 @@ export class NotificationService extends BaseService {
   deletePopup(context): Observable<any> {
     const url = this.getUrl(this.namespace, 'delete_popup', context);
     return this.deleteApi(url);
+  }
+
+  getPopupAudience(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_audience");
+    return this.getApi(url, queryParams);
   }
 }

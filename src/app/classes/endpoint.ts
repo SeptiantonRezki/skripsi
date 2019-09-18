@@ -251,6 +251,7 @@ export class Endpoint {
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         update_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
+        get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
