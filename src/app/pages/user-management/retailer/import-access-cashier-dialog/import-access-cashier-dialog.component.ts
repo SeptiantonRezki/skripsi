@@ -64,6 +64,7 @@ export class ImportAccessCashierDialogComponent {
         this.dialogRef.close(resp);
       }, err => {
         console.log('err', err);
+        this.dialogService.openSnackBar({ message: "File Gagal di import, terjadi kesalahan saat melakukan upload!" });
         this.dialogRef.close(null);
       });
     } else {

@@ -468,8 +468,6 @@ export class RetailerIndexComponent {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
           this.getRetailerList();
         }
-      } else {
-        this.dialogService.openSnackBar({ message: 'File gagal diimport, terjadi kesalahan pada saat mengimport' });
       }
     });
   }
