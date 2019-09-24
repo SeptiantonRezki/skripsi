@@ -91,12 +91,13 @@ export class AdminPrincipalIndexComponent {
   }
 
   onSelect({ selected }) {
+    console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -186,7 +187,7 @@ export class AdminPrincipalIndexComponent {
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
-      this.dialogService.openSnackBar({ message: 'Tidak ada admin principal yang dipilih'})
+      this.dialogService.openSnackBar({ message: 'Tidak ada admin principal yang dipilih' })
     }
   }
 
