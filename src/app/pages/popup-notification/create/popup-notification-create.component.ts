@@ -1,9 +1,9 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { Lightbox } from 'ngx-lightbox';
 import * as moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
@@ -12,7 +12,9 @@ import { Config } from 'app/classes/config';
 import { NotificationService } from 'app/services/notification.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -27,6 +29,8 @@ export class PopupNotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   indexDelete: any;
+  dialogRef: any;
+  exportAccessCashier: Boolean;
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -52,13 +56,16 @@ export class PopupNotificationCreateComponent {
 
   formPopupGroup: FormGroup;
   formPopupErrors: any;
+  audienceSelected: any[] = [];
 
   public options: Object = Config.FROALA_CONFIG;
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  SelecectionType = SelectionType;
 
   rows: any[];
   selected: any[];
@@ -76,7 +83,8 @@ export class PopupNotificationCreateComponent {
     private notificationService: NotificationService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private _lightbox: Lightbox
+    private _lightbox: Lightbox,
+    private dialog: MatDialog
   ) {
     this.adapter.setLocale('id');
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -102,6 +110,8 @@ export class PopupNotificationCreateComponent {
         "name": "SLSNTL"
       }
     ];
+
+    this.selected = [];
 
     this.list = {
       zone: [],
@@ -134,7 +144,8 @@ export class PopupNotificationCreateComponent {
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
-      type: ["limit"]
+      type: ["limit"],
+      is_target_audience: [false]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -215,7 +226,7 @@ export class PopupNotificationCreateComponent {
           this.formPopupGroup.controls['date_ws_downline'].enable();
         }
       }
-      this.getAudience();
+      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
 
       this.formPopupGroup.controls['landing_page'].setValue('');
     });
@@ -235,11 +246,13 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required]);
         this.formPopupGroup.updateValueAndValidity();
       }
+      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
     })
 
     this.formPopupGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
       this.formPopupGroup.updateValueAndValidity();
+      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
     })
 
     this.formPopupGroup.controls['url_iframe'].disable();
@@ -254,10 +267,11 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['date_ws_downline'].setValue('');
         this.formPopupGroup.controls['date_ws_downline'].disable();
       }
+      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
     })
 
     this.addArea();
-    // this.getAudience();
+    // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
   }
 
   createArea(): FormGroup {
@@ -657,6 +671,12 @@ export class PopupNotificationCreateComponent {
       } else {
         body['area_id'] = areas.map(item => item.value);
       }
+      if (this.formPopupGroup.get("is_target_audience").value) {
+        body['target_audience'] = 1;
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      } else {
+        if (body['target_audience']) delete body['target_audience'];
+      }
 
       this.notificationService.createPopup(body).subscribe(
         res => {
@@ -735,11 +755,180 @@ export class PopupNotificationCreateComponent {
 
   getAudience() {
     this.pagination['audience'] = this.formPopupGroup.get("user_group").value;
+    if (this.formPopupGroup.get("user_group").value === 'retailer') {
+      this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+    }
+    if (this.formPopupGroup.get("user_group").value === 'customer') {
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+      delete this.pagination['retailer_type'];
+    }
+    if (this.formPopupGroup.get("user_group").value === 'customer') {
+      delete this.pagination['retailer_type'];
+      this.pagination['customer_smoking'] = this.formPopupGroup.get("is_smoker").value;
+      this.pagination['customer_gender'] = this.formPopupGroup.get("gender").value;
+      this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
+      this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
+    }
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
-      console.log('res', res);
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
+      this.audienceSelected = [];
     }, err => console.log('err', err));
   }
 
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  setPage(pageInfo) {
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  updateFilter(string) {
+    this.loadingIndicator = true;
+    this.table.offset = 0;
+    this.pagination.search = string;
+    this.pagination.page = 1;
+
+
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  displayCheck(row) {
+    return row.name !== 'Ethel Price';
+  }
+
+  onSelectAudience(event, row) {
+    console.log('onnnnnn', event);
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      this.audienceSelected.splice(index, 1);
+    } else {
+      this.audienceSelected.push(row);
+    }
+    console.log('asdasd', this.audienceSelected);
+  }
+
+  bindSelector(isSelected, row) {
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      return true;
+    }
+    return false;
+  }
+
+  isTargetAudience(event) {
+    if (event.checked) this.getAudience();
+  }
+
+  async export() {
+    this.dataService.showLoading(true);
+    let body = this.audienceSelected.map(aud => aud.id);
+    this.exportAccessCashier = true;
+    try {
+      const response = await this.notificationService.exportAudience({ selected: body, audience: this.formPopupGroup.get("user_group").value }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.exportAccessCashier = false;
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.exportAccessCashier = false;
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+
+    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.audienceSelected = this.audienceSelected.concat(response);
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
+  }
 }

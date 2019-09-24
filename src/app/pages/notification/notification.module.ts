@@ -22,7 +22,9 @@ import {
   MatProgressSpinnerModule,
   MatDatepickerModule,
   MatTooltipModule,
-  MatRadioModule
+  MatRadioModule,
+  MatDialogModule,
+  MatToolbarModule
 } from "@angular/material";
 
 import {
@@ -36,6 +38,7 @@ import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { LightboxModule } from "ngx-lightbox";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { ImportPopUpAudienceComponent } from "../popup-notification/import-pop-up-audience/import-pop-up-audience.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -51,7 +54,7 @@ export const MY_FORMATS = {
 
 @NgModule({
   imports: [
-    CommonModule, 
+    CommonModule,
     NotificationRoutingModule,
     CommonModule,
     FuseSharedModule,
@@ -72,14 +75,18 @@ export const MY_FORMATS = {
     LightboxModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    MatIconModule,
+    MatDialogModule,
+    MatToolbarModule
   ],
   declarations: [
     NotificationIndexComponent,
     NotificationCreateComponent,
     PopupNotificationIndexComponent,
     PopupNotificationCreateComponent,
-    PopupNotificationEditComponent
+    PopupNotificationEditComponent,
+    ImportPopUpAudienceComponent
   ],
   exports: [
     NotificationIndexComponent,
@@ -88,10 +95,11 @@ export const MY_FORMATS = {
     PopupNotificationCreateComponent,
     PopupNotificationEditComponent
   ],
+  entryComponents: [ImportPopUpAudienceComponent],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
   ]
 })
-export class NotificationModule {}
+export class NotificationModule { }

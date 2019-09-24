@@ -250,7 +250,9 @@ export class Endpoint {
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         update_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
-        get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`
+        get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`,
+        export_audience: `${AYO_API}/api/principal/pop-up-notification/audience/export`,
+        import_audience: `${AYO_API}/api/principal/pop-up-notification/audience/import`
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
