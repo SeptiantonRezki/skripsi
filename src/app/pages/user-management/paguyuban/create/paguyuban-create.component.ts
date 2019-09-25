@@ -8,7 +8,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 
 export function checkPassword(): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} | null => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
     return { 'notSame': true }
   };
 }
@@ -34,7 +34,7 @@ export class PaguyubanCreateComponent {
   list: any;
 
   showPassword = false;
-	showConfirmPassword = false;
+  showConfirmPassword = false;
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -87,7 +87,7 @@ export class PaguyubanCreateComponent {
       username: ["", Validators.required],
       password: ["", Validators.required],
       password_confirmation: ["", [Validators.required]],
-    });
+    }, { validators: commonFormValidator.passwordRequirement });
 
     this.wilayah = this.formBuilder.group({
       national: ["", Validators.required],
@@ -104,14 +104,14 @@ export class PaguyubanCreateComponent {
     this.wilayah.valueChanges.debounceTime(300).subscribe(res => {
       let areas = [];
       let value = this.wilayah.getRawValue();
-      value = Object.entries(value).map(([key, value]) => ({key, value}));
+      value = Object.entries(value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
         if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
       })
 
-      this.paguyubanService.getListAdminPrincipal({ area: _.last(areas)}).subscribe(obj => {
+      this.paguyubanService.getListAdminPrincipal({ area: _.last(areas) }).subscribe(obj => {
         this.listAdminPrincipal = obj;
         this.verticalStepperStep2.controls['principal_id'].setValue('');
       })
@@ -130,7 +130,7 @@ export class PaguyubanCreateComponent {
     });
 
     this.verticalStepperStep1.valueChanges.debounceTime(300).subscribe(res => {
-      if (res.password_confirmation) { 
+      if (res.password_confirmation) {
         if (res.password !== res.password_confirmation) {
           this.verticalStepperStep1.controls['password_confirmation'].setValidators(checkPassword());
           this.verticalStepperStep1.controls['password_confirmation'].updateValueAndValidity();
@@ -191,102 +191,102 @@ export class PaguyubanCreateComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }});
-          });
+        this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Zone' : item.name } });
+        });
 
-          this.wilayah.get('region').setValue('');
-          this.wilayah.get('area').setValue('');
-          this.wilayah.get('salespoint').setValue('');
-          this.wilayah.get('district').setValue('');
-          this.wilayah.get('territory').setValue('');
-          this.list['region'] = [];
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.wilayah.get('region').setValue('');
+        this.wilayah.get('area').setValue('');
+        this.wilayah.get('salespoint').setValue('');
+        this.wilayah.get('district').setValue('');
+        this.wilayah.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'region':
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Zone') {
-            this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }});
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Zone') {
+          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Regional' : item.name } });
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.wilayah.get('region').setValue('');
-          this.wilayah.get('area').setValue('');
-          this.wilayah.get('salespoint').setValue('');
-          this.wilayah.get('district').setValue('');
-          this.wilayah.get('territory').setValue('');
-          this.list['area'] = [];
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.wilayah.get('region').setValue('');
+        this.wilayah.get('area').setValue('');
+        this.wilayah.get('salespoint').setValue('');
+        this.wilayah.get('district').setValue('');
+        this.wilayah.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'area':
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Regional') {
-            this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Area' : item.name }});
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Regional') {
+          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Area' : item.name } });
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.wilayah.get('area').setValue('');
-          this.wilayah.get('salespoint').setValue('');
-          this.wilayah.get('district').setValue('');
-          this.wilayah.get('territory').setValue('');
-          this.list['salespoint'] = [];
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.wilayah.get('area').setValue('');
+        this.wilayah.get('salespoint').setValue('');
+        this.wilayah.get('district').setValue('');
+        this.wilayah.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'salespoint':
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Area') {
-            this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }});
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Area') {
+          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name } });
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.wilayah.get('salespoint').setValue('');
-          this.wilayah.get('district').setValue('');
-          this.wilayah.get('territory').setValue('');
-          this.list['district'] = [];
-          this.list['territory'] = [];
+        this.wilayah.get('salespoint').setValue('');
+        this.wilayah.get('district').setValue('');
+        this.wilayah.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
         break;
       case 'district':
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua Salespoint') {
-            this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua District' : item.name }});
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua Salespoint') {
+          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua District' : item.name } });
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.wilayah.get('district').setValue('');
-          this.wilayah.get('territory').setValue('');
-          this.list['territory'] = [];
+        this.wilayah.get('district').setValue('');
+        this.wilayah.get('territory').setValue('');
+        this.list['territory'] = [];
         break;
       case 'territory':
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-          if (item.name !== 'Semua District') {
-            this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-              this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }});
-            });
-          } else {
-            this.list[selection] = []
-          }
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'Semua District') {
+          this.paguyubanService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res.map(item => { return { ...item, name: item.name === 'all' ? 'Semua Territory' : item.name } });
+          });
+        } else {
+          this.list[selection] = []
+        }
 
-          this.wilayah.get('territory').setValue('');
+        this.wilayah.get('territory').setValue('');
         break;
-    
+
       default:
         break;
     }
@@ -303,14 +303,14 @@ export class PaguyubanCreateComponent {
   step2() {
     commonFormValidator.validateAllFields(this.verticalStepperStep2);
   }
- 
+
   submit() {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid) {
       this.submitting = true;
 
       let areas = [];
       let value = this.wilayah.getRawValue();
-      value = Object.entries(value).map(([key, value]) => ({key, value}));
+      value = Object.entries(value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
