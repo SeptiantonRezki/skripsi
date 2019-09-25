@@ -115,6 +115,7 @@ export class RetailerEditComponent {
       latitude: [""],
       longitude: [""],
       type: [""],
+      cashier: ["", Validators.required],
       InternalClassification: ["", Validators.required]
     });
     this.formRetailer.valueChanges.subscribe(() => {
@@ -247,6 +248,7 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
+      cashier: this.detailRetailer.cashier
     });
 
     if (this.detailRetailer.classification === 'NON-SRC') {
@@ -407,7 +409,8 @@ export class RetailerEditComponent {
         latitude: this.formRetailer.get("latitude").value ? this.formRetailer.get("latitude").value : null,
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: "General Trade",
-        InternalClassification: this.formRetailer.get("InternalClassification").value
+        InternalClassification: this.formRetailer.get("InternalClassification").value,
+        cashier: this.formRetailer.get("cashier").value
       };
 
       console.log(body);
