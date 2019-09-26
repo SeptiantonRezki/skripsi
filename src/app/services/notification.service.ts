@@ -78,7 +78,7 @@ export class NotificationService extends BaseService {
 
   exportAudience(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "export_audience");
-    return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
 
   importAudience(body?): Observable<any> {
