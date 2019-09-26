@@ -30,4 +30,19 @@ export class HelpService extends BaseService {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
   }
+
+  getListCategory(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "getListCategory");
+    return this.getApi(url, queryParams);
+  }
+
+  getListUser(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "getListUser");
+    return this.getApi(url, queryParams);
+  }
+
+  getShow(queryParams?: any, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "getShow", context);
+    return this.getApi(url, queryParams);
+  }
 }

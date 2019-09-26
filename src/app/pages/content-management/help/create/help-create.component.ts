@@ -17,11 +17,11 @@ export class HelpCreateComponent {
   formHelpError: any;
 
   userGroup: any[] = [
-    { name: "Field Force", value: "field-force" },
-    { name: "Wholesaler", value: "wholesaler" },
-    { name: "Retailer", value: "retailer" },
-    { name: "Principal", value: "principal" },
-    { name: "Customer", value: "customer" }
+    { name: "Please Wait...", value: "" },
+  ];
+
+  categoryGroup: any[] = [
+    { name: "Please Wait...", value: "" },
   ];
 
   files: File;
@@ -38,7 +38,9 @@ export class HelpCreateComponent {
     this.formHelpError = {
       title: {},
       body: {},
-      user: {}
+      user: {},
+      category: {},
+      otherkeyword: {}
     };
   }
 
@@ -46,12 +48,51 @@ export class HelpCreateComponent {
     this.formHelp = this.formBuilder.group({
       title: ["", Validators.required],
       body: ["", Validators.required],
-      user: ["", Validators.required]
+      user: ["", Validators.required],
+      category: ["", Validators.required],
+      otherkeyword: ["", Validators.required]
     });
 
     this.formHelp.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formHelp, this.formHelpError);
     });
+
+    this.getListCategory();
+    this.getListUser();
+  }
+
+  getListCategory() {
+    this.helpService.getListCategory().subscribe(
+      (res: any) => {
+        this.categoryGroup = res.data.map((item: any) => {
+          return (
+            { name: item.category, value: item.id }
+          );
+        });
+      },
+      err => {
+        this.categoryGroup = [];
+        console.error(err);
+      }
+    );
+  }
+
+
+  getListUser() {
+    this.helpService.getListUser().subscribe(
+      (res: any) => {
+        console.log('getListUser', res);
+        this.userGroup = res.data.map((item: any) => {
+          return (
+            { name: item, value: item }
+          );
+        });
+      },
+      err => {
+        this.userGroup = [];
+        console.error(err);
+      }
+    );
   }
 
   removeImage(): void {
@@ -64,6 +105,8 @@ export class HelpCreateComponent {
       body.append('title', this.formHelp.get("title").value);
       body.append('body', this.formHelp.get("body").value);
       body.append('user', this.formHelp.get("user").value);
+      body.append('content_category_id', this.formHelp.get("category").value);
+      body.append('keyword', this.formHelp.get("otherkeyword").value);
       body.append('is_notif', '0');
       body.append('type', 'help');
       body.append('image', this.files);
