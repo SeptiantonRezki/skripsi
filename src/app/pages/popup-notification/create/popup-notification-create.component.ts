@@ -915,6 +915,7 @@ export class PopupNotificationCreateComponent {
   }
 
   getAudience() {
+    this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.pagination['audience'] = this.formPopupGroup.get("user_group").value;
@@ -943,7 +944,11 @@ export class PopupNotificationCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.audienceSelected = [];
-    }, err => console.log('err', err));
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err', err);
+      this.dataService.showLoading(false);
+    });
   }
 
   onSelect({ selected }) {
