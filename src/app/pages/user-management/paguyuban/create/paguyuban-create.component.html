@@ -19,34 +19,43 @@
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Nama Paguyuban" formControlName="group_name">
-                <mat-error *ngIf="verticalStepperStep1.controls['group_name'].hasError('required') && verticalStepperStep1.controls['group_name'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['group_name'].hasError('required') && verticalStepperStep1.controls['group_name'].touched ">
                   Nama Paguyuban harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Nama Pengguna" formControlName="fullname">
-                <mat-error *ngIf="verticalStepperStep1.controls['fullname'].hasError('required') && verticalStepperStep1.controls['fullname'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['fullname'].hasError('required') && verticalStepperStep1.controls['fullname'].touched ">
                   Nama Pengguna harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Username" formControlName="username">
-                <mat-error *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
                   Username harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword = !showPassword">
+                <input matInput type="password" *ngIf="!showPassword" formControlName="password"
+                  placeholder="Kata Sandi">
+                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                  (click)="showPassword = !showPassword">
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
                 </button>
-                <mat-error *ngIf="verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched">
                   Kata sandi harus diisi.
+                </mat-error>
+                <mat-error *ngIf="formUser.controls['password'].hasError('notValid')">
+                  Password Not Valid, doesn't meet requirement!
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
@@ -54,14 +63,17 @@
                   placeholder="Konfirmasi kata sandi">
                 <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
                   placeholder="Konfirmasi kata sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showConfirmPassword = !showConfirmPassword">
+                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                  (click)="showConfirmPassword = !showConfirmPassword">
                   <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
                 </button>
-                <mat-error *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
                   Konfirmasi kata sandi harus diisi.
                 </mat-error>
-                <mat-error *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
+                <mat-error
+                  *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
                   Konfirmasi kata sandi tidak sesuai.
                 </mat-error>
               </mat-form-field>
@@ -89,27 +101,32 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)">
+                <mat-select placeholder="Zone" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)">
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', wilayah.get('region').value)">
+                <mat-select placeholder="Regional" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', wilayah.get('region').value)">
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)">
+                <mat-select placeholder="Area" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)">
+                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)">
+                <mat-select placeholder="District" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -147,7 +164,8 @@
                 <mat-select placeholder="Admin HMS" formControlName="principal_id">
                   <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="verticalStepperStep2.controls['principal_id'].hasError('required') && verticalStepperStep2.controls['principal_id'].touched">
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['principal_id'].hasError('required') && verticalStepperStep2.controls['principal_id'].touched">
                   Admin HMS harus diisi
                 </mat-error>
               </mat-form-field>
