@@ -123,7 +123,7 @@ export class BannerCreateComponent {
       areas: this.formBuilder.array([]),
       content_type: ["static_page", Validators.required],
       content_wallet: ["ovo", Validators.required],
-      button_text: ["", [Validators.required, Validators.maxLength(30)]],
+      button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
@@ -560,8 +560,21 @@ export class BannerCreateComponent {
     }
   }
 
+  findInvalidControls() {
+    const invalid = [];
+    const controls = this.formBannerGroup.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
   async submit(status?: string) {
-    console.log(this.formBannerGroup)
+    console.log(this.formBannerGroup);
+    let invalids = this.findInvalidControls();
+    console.log('invalid form', invalids);
     if (this.formBannerGroup.valid && this.bannerSelected) {
 
       this.dataService.showLoading(true);
