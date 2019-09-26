@@ -54,7 +54,7 @@
                   *ngIf="verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched">
                   Kata sandi harus diisi.
                 </mat-error>
-                <mat-error *ngIf="formUser.controls['password'].hasError('notValid')">
+                <mat-error *ngIf="verticalStepperStep1.controls['password'].hasError('notValid')">
                   Password Not Valid, doesn't meet requirement!
                 </mat-error>
               </mat-form-field>
