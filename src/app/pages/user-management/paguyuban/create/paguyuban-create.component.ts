@@ -85,9 +85,9 @@ export class PaguyubanCreateComponent {
       fullname: ["", Validators.required],
       group_name: ["", Validators.required],
       username: ["", Validators.required],
-      password: ["", Validators.required],
+      password: ["", [Validators.required, commonFormValidator.passwordRequirement]],
       password_confirmation: ["", [Validators.required]],
-    }, { validators: commonFormValidator.passwordRequirement });
+    });
 
     this.wilayah = this.formBuilder.group({
       national: ["", Validators.required],
