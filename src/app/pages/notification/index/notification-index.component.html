@@ -26,11 +26,11 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <!-- <ngx-datatable-column name="ID" prop="id">
+        <ngx-datatable-column name="ID" prop="id">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.id}}
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Judul Notifikasi" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
