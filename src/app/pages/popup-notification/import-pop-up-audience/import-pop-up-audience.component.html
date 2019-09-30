@@ -37,6 +37,7 @@
       <table class="table">
         <thead>
           <tr>
+            <th nowrap>ID</th>
             <th nowrap>Name</th>
             <th nowrap>Kode</th>
             <th nowrap>Owner</th>
@@ -45,6 +46,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of rows">
+            <td nowrap>
+              {{ item.id }}
+            </td>
             <td nowrap>
               {{ item.name }}
             </td>
