@@ -5,7 +5,29 @@
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
-      <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
+      <form autocomplete="off" [formGroup]="formAutomation">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
+          <h2 class="">DTE Automation</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="100%" class="is-light form-primary">
+              <mat-select placeholder="Automation" formControlName="automation">
+                <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="column">
+            <h3 class="text-bold">Durasi</h3>
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="Durasi" formControlName="automation">
+                <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <!-- <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
         <mat-tab label="e-Order">
           <app-eorder *ngIf="selectedTab === 0" [automationType]="'e-order'"></app-eorder>
         </mat-tab>
@@ -15,10 +37,7 @@
         <mat-tab label="Referral Code">
           <app-eorder *ngIf="selectedTab === 2" [automationType]="'referral_code'"></app-eorder>
         </mat-tab>
-        <!-- <mat-tab label="POS">
-          <app-eorder *ngIf="selectedTab === 3" [automationType]="'pos'"></app-eorder>
-        </mat-tab> -->
-      </mat-tab-group>
+      </mat-tab-group> -->
     </div>
   </div>
 </div>
