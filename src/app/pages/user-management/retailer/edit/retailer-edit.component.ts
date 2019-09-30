@@ -115,7 +115,7 @@ export class RetailerEditComponent {
       latitude: [""],
       longitude: [""],
       type: [""],
-      cashier: ["", Validators.required],
+      cashier: [""],
       InternalClassification: ["", Validators.required]
     });
     this.formRetailer.valueChanges.subscribe(() => {
