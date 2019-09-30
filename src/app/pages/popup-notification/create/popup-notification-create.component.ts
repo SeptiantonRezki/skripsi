@@ -71,7 +71,7 @@ export class PopupNotificationCreateComponent {
   SelecectionType = SelectionType;
 
   rows: any[];
-  selected: any[];
+  selected: any[] = [];
   id: any[];
   reorderable = true;
   pagination: Page = new Page();
@@ -165,6 +165,8 @@ export class PopupNotificationCreateComponent {
     })
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
+      this.selected.splice(0, this.selected.length);
+      this.audienceSelected = [];
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -254,13 +256,21 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required]);
         this.formPopupGroup.updateValueAndValidity();
       }
-      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formPopupGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
       this.formPopupGroup.updateValueAndValidity();
-      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formPopupGroup.controls['url_iframe'].disable();
@@ -275,7 +285,11 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['date_ws_downline'].setValue('');
         this.formPopupGroup.controls['date_ws_downline'].disable();
       }
-      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     });
 
     this.formFilter.valueChanges.subscribe(filter => {
@@ -943,7 +957,6 @@ export class PopupNotificationCreateComponent {
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
-      this.audienceSelected = [];
       this.dataService.showLoading(false);
     }, err => {
       console.log('err', err);
@@ -957,6 +970,8 @@ export class PopupNotificationCreateComponent {
   }
 
   setPage(pageInfo) {
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
@@ -971,6 +986,8 @@ export class PopupNotificationCreateComponent {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -984,7 +1001,8 @@ export class PopupNotificationCreateComponent {
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
-
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -1005,7 +1023,13 @@ export class PopupNotificationCreateComponent {
     } else {
       this.audienceSelected.push(row);
     }
+    this.onSelect({ selected: this.audienceSelected });
     console.log('asdasd', this.audienceSelected);
+  }
+
+  selectCheck(row, column, value) {
+    console.log('selectcheck', row, column, value);
+    return row.id !== null;
   }
 
   bindSelector(isSelected, row) {
@@ -1097,6 +1121,7 @@ export class PopupNotificationCreateComponent {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.audienceSelected = this.audienceSelected.concat(response);
+        this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         }
