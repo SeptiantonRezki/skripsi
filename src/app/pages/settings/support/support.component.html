@@ -1,70 +1,146 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Informasi'"></page-content-header>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Bantuan'">
+  </page-content-header>
 
-  <div class="content p-24" *ngIf="!onLoad">
-    <div class="ayo-main-wrapper mat-white-bg" fxLayout="row" fxLayoutAlign="start start">
-      <div fxFlex="30" fxLayout="column">
-        <mat-list class="pt-0">
-          <mat-list-item (click)="openPanel('kontak')">
-            <span [class]="panel === 'kontak' ? 'red-700-fg pl-8' : 'pl-8'">Kontak</span>
-            <mat-divider></mat-divider>
-          </mat-list-item>
-          <mat-list-item *ngFor="let item of listHelp" (click)="openDynamicPanel(item)">
-            <!-- <img mat-list-icon [src]="item.image_url" /> -->
-            <span [class]="(panel.title === item.title ? 'red-700-fg pl-8' : 'pl-8')">{{item.title}}</span>
-            <mat-divider></mat-divider>
-          </mat-list-item>
-        </mat-list>
-      </div>
-      <div fxFlex="70">
-        <div class="bantuan-content">
-          <div fxLayout="column" fxLayoutAlign="center center" *ngIf="panel === 'kontak'">
-            <h3 class=""><strong>Butuh Bantuan Lain?</strong></h3>
-            <div class="h6">Tim Customer Service kami siap melayani anda secara langsung</div>
-            <div class="text-bold">Senin - Jumat ( 08:00 - 17:00 )</div>
-
-            <div class="pt-64" fxLayout="row wrap" fxLayoutAlign="start center" fxLayout.lt-md="column" fxLayoutGap="20px"
-              fxLayoutGap.lt-md="0px">
-              <div class="rectangle p-24" fxLayout="row wrap" fxLayoutAlign="center center">
-                <div fxFlex="30">
-                  <img mat-list-icon src="assets/images/ayo/bantuan/customer-service.png" srcset="assets/images/ayo/bantuan/customer-service@2x.png 2x" />
-                </div>
-                <div fxFlex="70" fxLayout="column">
-                  <div class="text-bold">Melalui Telepon</div>
-                  <div class="">0804-1000-234</div>
-                  <div class="h6">Biaya ditanggung penelpon</div>
+  <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24 mb-42" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+      <mat-tab-group [selectedIndex]="selectedTab">
+        <mat-tab label="Informasi">
+          <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar *ngIf="!isListCategoryDetails">
+            <div class="help-title" fxLayout="column" fxLayoutAlign="center center">
+              <div class="title-red"><strong>Hai SAHABAT HMS</strong></div>
+              <div class="title-black"><strong>hal apa yang bisa kami bantu hari ini ?</strong></div>
+              <div class="search-container">
+                  <div class="full-width" fxLayout="row">
+                    <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
+                      <mat-icon class="search-icon">search</mat-icon>
+                    </div>
+                    <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda" aria-label="Number" matInput [formControl]="myControl"
+                      [matAutocomplete]="auto">
+                  </div>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (click)="openHelpDetails({id: option.id, type: 'search'})">
+                      {{option.title}}
+                    </mat-option>
+                  </mat-autocomplete>
+              </div>
+            </div>
+            <div class="help" fxLayout="column" fxLayoutAlign="center center" >
+              <div class="hc-title">
+                  <span>Pilih topik yang sesuai dengan pertanyaan / kendala anda</span>
+              </div>
+              <div class="help-content" fxLayout="row" fxLayoutAlign="center center" flexWrap>
+                <div *ngFor="let menuButton of menuButtons; let i = index">
+                  <mat-card class="menu-card" fxLayout="column" fxLayoutAlign="space-around center" (click)="openListCategoryDetails(menuButton)">
+                    <mat-card-header fxLayout="column" fxLayoutAlign="center center">
+                      <div class="header-image" fxLayout="column" fxLayoutAlign="center center">
+                        <img src="{{menuButton.image_url}}" alt="Help Category">
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <p class="menu-text" fxLayout="column" fxLayoutAlign="center center">
+                        {{menuButton.category}}
+                      </p>
+                    </mat-card-content>
+                  </mat-card>
                 </div>
               </div>
-
-              <div class="rectangle p-24" fxLayout="row wrap" fxLayoutAlign="center center">
-                <div fxFlex="30">
-                  <img mat-list-icon src="assets/images/ayo/bantuan/whatsapp.png" srcset="assets/images/ayo/bantuan/whatsapp@2x.png 2x" />
+            </div>
+            <div class="help-other" fxLayout="column">
+                <div class="hco-title">
+                    <span>Butuh Bantuan Lainnya ?</span>
                 </div>
-                <div fxFlex="70" fxLayout="column">
-                  <div class="text-bold">Melalui Whatsapp</div>
-                  <div class="">0811-1315-234</div>
-                  <div class="text-bold pt-4" style="font-size: 65%">* Untuk area Jawa Barat dan Jakarta</div>
+                <div class="hco-content" fxLayout="row" fxLayoutAlign="center center" flexWrap>
+                    <div *ngFor="let menuButtonOther of menuButtonOthers; let i = index" fxLayout="row" fxFlex="100">
+                      <mat-card class="menu-card" fxLayout="row" fxLayoutAlign="flex-start center" (click)="menuButtonOtherDetail(menuButtonOther)">
+                        <mat-card-header fxLayout="column" fxLayoutAlign="center center">
+                          <div class="header-image" fxLayout="column" fxLayoutAlign="center center">
+                            <img src="{{menuButtonOther.image_url}}" alt="Help Category">
+                          </div>
+                        </mat-card-header>
+                        <mat-card-content class="hco-text-layout" fxLayout="row" fxLayoutAlign="space-between center">
+                          <div class="hco-text" fxLayout="column" fxLayoutAlign="flex-start flex-start">
+                              <span>
+                                {{menuButtonOther.category}}
+                              </span>
+                              <p class="menu-text">
+                                {{menuButtonOther.title}}
+                              </p>
+                          </div>
+                          <div>
+                              <mat-icon class="menubutton-arrow">keyboard_arrow_right</mat-icon>
+                          </div>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start start" fusePerfectScrollbar *ngIf="isListCategoryDetails">
+            <div fxFlex="30" fxLayout="column">
+              <mat-list class="pt-0">
+                <mat-list-item (click)="backToPusatBantuan()">
+                  <mat-icon class="button-back">navigate_before</mat-icon>
+                  <span class="back pl-8">Kembali ke Pusat Bantuan</span>
+                  <mat-divider></mat-divider>
+                </mat-list-item>
+                <mat-list-item class="ml-20" *ngFor="let item of listCategoryDetails" (click)="openHelpDetails(item)">
+                  <!-- <img mat-list-icon [src]="item.image_url" /> -->
+                  <span [class]="selectedIndex == null ? 'selected-help pl-8' : 'pl-8'">{{item.title}}</span>
+                  <mat-divider></mat-divider>
+                </mat-list-item>
+              </mat-list>
+            </div>
+            <div fxFlex="70">
+              <div class="help-detail p-20" fxLayout="column">
+                <div class="search-container-help-detail" fxLayout="row" fxLayoutAlign="center center" fxFlexAlign="start">
+                  <div class="full-width" fxLayout="row">
+                    <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
+                      <mat-icon class="search-icon">search</mat-icon>
+                    </div>
+                    <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda" aria-label="Number" matInput [formControl]="myControl"
+                      [matAutocomplete]="auto">
+                  </div>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (click)="openHelpDetails({id: option.id, type: 'search'})">
+                      {{option.title}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </div>
-              </div>
-              <div class="rectangle p-24" fxLayout="row wrap" fxLayoutAlign="center center">
-                <div fxFlex="30">
-                  <img mat-list-icon src="assets/images/ayo/bantuan/whatsapp.png" srcset="assets/images/ayo/bantuan/whatsapp@2x.png 2x" />
+                <div *ngIf="!helpDetail" class="full-size" fxLayout="row" fxLayoutAlign="center center">
+                  <img src="assets/images/ayo/AYO_SRC_(Master).png" style="width: 160px; height: 100px; object-fit: cover; object-position: 0 0;" srcset="assets/images/ayo/AYO_SRC_(Master)@2x.png 2x" alt="Help Detail">
                 </div>
-                <div fxFlex="70" fxLayout="column">
-                  <div class="text-bold">Melalui Whatsapp</div>
-                  <div class="">0819-06000-234</div>
-                  <div class="text-bold pt-4" style="font-size: 65%">* Untuk area Jawa Tengah</div>
+                <div *ngIf="helpDetail" class="help-detail-content" fxLayout="row">
+                    <div [innerHtml]="helpDetail.body"></div>
+                </div>
+                <div *ngIf="helpDetail" class="help-detail-footer" fxLayout="column" fxFlexAlign="end"> 
+                    <span class="title">Apakah informasi ini berguna?</span>
+                    <div class="like pb-8" fxLayout="row" fxLayoutAlign="start center" (click)="like(helpDetail)">
+                        <mat-icon *ngIf="!isLike" class="thumb-up" >thumb_up</mat-icon>
+                        <mat-icon *ngIf="isLike" class="thumb-up-red" >thumb_up</mat-icon>
+                        <span class="pl-8" >{{helpDetail.likes_count}}</span>
+                    </div>
+                    <div class="unlike " fxLayout="row" fxLayoutAlign="start center" (click)="unlike(helpDetail)">
+                        <mat-icon *ngIf="!isUnlike" class="thumb-down" >thumb_down</mat-icon>
+                        <mat-icon *ngIf="isUnlike" class="thumb-down-red" >thumb_down</mat-icon>
+                        <span class="pl-8" >{{helpDetail.unlikes_count}}</span>
+                    </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="" fxLayout="column" fxLayoutAlign="start stretch" *ngIf="panel !== 'kontak'">
-            <div class="text-center"><h3 class=""><strong>{{panel.title}}</strong></h3></div>
-            <div class="dynamic" [innerHtml]="panel.body" style="text-align: justify"></div>
+        </mat-tab>
+        <mat-tab label="Pesan Bantuan">
+          <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+            <pesan-bantuan> </pesan-bantuan>
           </div>
-        </div>
-      </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </div>
-  

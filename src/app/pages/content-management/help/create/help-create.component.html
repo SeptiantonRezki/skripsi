@@ -17,7 +17,7 @@
               <br>
               <span class="text-center" matPrefix>Tarik icon kesini /
                 <strong>Pilih File</strong> <br>
-                Bantuan Icon Dimensi 100x100 piksel Format JPG, PNG, Ukuran maksimal 2mb.
+                Format JPG, PNG, Ukuran maksimal 500KB.
               </span>
             </div>
           </div>
@@ -35,7 +35,7 @@
           </div> -->
           <br>
           <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Bantuan">
               <mat-error *ngIf="formHelp.controls['title'].hasError('required') && formHelp.controls['title'].touched">
                 Judul Bantuan harus diisi
@@ -63,8 +63,27 @@
             </mat-form-field>
           </div>
           <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
+            <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
               <input matInput type="text" formControlName="otherkeyword" placeholder="Kata Kunci Lain">
+              <mat-error *ngIf="formHelp.controls['otherkeyword'].hasError('required') && formHelp.controls['otherkeyword'].touched">
+                Kata Kunci Lain harus diisi
+              </mat-error>
+            </mat-form-field> -->
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-chip-list #chipList aria-label="Keyword Selection">
+                <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
+                         [removable]="keywordRemovable" (removed)="remove(keyword)">
+                  {{keyword}}
+                  <mat-icon matChipRemove *ngIf="keywordRemovable">cancel</mat-icon>
+                </mat-chip>
+                <input matInput placeholder="Kata Kunci Lain"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes"
+                  [matChipInputAddOnBlur]="keywordAddOnBlur"
+                  (matChipInputTokenEnd)="add($event)"
+                  formControlName="otherkeyword"
+                >
+              </mat-chip-list>
               <mat-error *ngIf="formHelp.controls['otherkeyword'].hasError('required') && formHelp.controls['otherkeyword'].touched">
                 Kata Kunci Lain harus diisi
               </mat-error>
