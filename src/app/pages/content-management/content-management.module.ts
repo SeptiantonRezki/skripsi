@@ -27,6 +27,7 @@ import {
   MatTooltipModule,
   MatRadioModule,
   MatTabsModule,
+  MatChipsModule,
   DateAdapter,
   MAT_DATE_LOCALE,
   MAT_DATE_FORMATS
@@ -73,6 +74,7 @@ export const MY_FORMATS = {
     MatRadioModule,
     ngfModule,
     MatTabsModule,
+    MatChipsModule,
     MatDatepickerModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()

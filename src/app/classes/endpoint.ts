@@ -335,7 +335,16 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
         show: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
         detail: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/detail/${context.report_id}`
-      }
+      },
+      support: {
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user}`,
+        getBantuanListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-categories`,
+        getBantuanListCategoryDetails: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-help?content_category_id=${context.id}&user=${context.user}`,
+        getBantuanShowDetail: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/${context.id}`,
+        like: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/like?content_id=${context.id}`,
+        unlike: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/unlike?content_id=${context.id}`,
+        search: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/search?keyword=${context.keyword}&user=${context.user}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
