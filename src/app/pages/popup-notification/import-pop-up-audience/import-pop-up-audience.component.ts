@@ -52,6 +52,7 @@ export class ImportPopUpAudienceComponent {
           this.dataService.showLoading(false);
         } else {
           this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+          this.dataService.showLoading(false);
         }
       },
       err => {
