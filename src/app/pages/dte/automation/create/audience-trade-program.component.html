@@ -38,7 +38,7 @@
           <div class="mt-8 px-24" fxLayout="row" *ngIf="formAutomation.get('automation').value === 'coupon'">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" placeholder="Total Kupon" formControlName="coupon_total">
-              <mat-error>
+              <mat-error class="mt-8 px-24">
                 Total kupon harus diisi.
               </mat-error>
             </mat-form-field>
@@ -50,7 +50,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" placeholder="Nilai Coin Reward" formControlName="coin_max">
-              <mat-error>
+              <mat-error class="mt-8 px-24">
                 Nilai Coin Reward harus diisi.
               </mat-error>
             </mat-form-field>
@@ -58,24 +58,42 @@
           <span style="margin-top: -20px;" class="mat-error" *ngIf="coinRewardInvalid">
             Nilai coin reward harus lebih tinggi dari Jumlah per Frekuensi.
           </span>
-          <div formArrayName="skus" *ngFor="let sku of formAutomation.get('skus').controls; let i = index"
-            class="mt-8 px-24" fxFlex="90%" fxLayout="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-            <div fxFlex="100%" [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-              <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Cari Produk yang ditargetkan">
-              </mat-form-field>
-              <div class="mt-24 mb-24" fxFlex="45%">
-                <button *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%" mat-raised-button
-                  type="button">
-                  <mat-icon>add</mat-icon>
-                  Tambah Produk
-                </button>
-                <button mat-icon-button *ngIf="i > 0" color="" (click)="removeSkuProduct(i)">
-                  <mat-icon class="secondary-text">delete</mat-icon>
-                </button>
+          <ng-container *ngIf="formAutomation.get('automation').value === 'e-order'">
+            <div formArrayName="skus" *ngFor="let sku of formAutomation.get('skus').controls; let i = index"
+              class="mt-8 px-24" fxFlex="90%" fxLayout="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+              <div fxFlex="100%" [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <!-- <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Cari Produk yang ditargetkan">
+                </mat-form-field> -->
+                <mat-form-field fxFlex="45%" class="is-light form-primary" #singleSelect>
+                  <mat-select [formControl]="formAutomation.get('skus').at(i).get('formSku')"
+                    placeholder="Cari Barcode SKU yang di targetkan">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="formAutomation.get('skus').at(i).get('formFilterSku')"
+                        [placeholderLabel]="'Cari Barcode SKU yang di targetkan'"
+                        [noEntriesFoundLabel]="'SKU tidak ditemukan'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let sku of formAutomation.get('skus').at(i).get('filteredSku').value | async"
+                      [value]="sku.barcode">
+                      <span>{{ sku.barcode }} | {{ sku.name }}</span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
+                <div class="mt-24 mb-24" fxFlex="45%">
+                  <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
+                    mat-raised-button type="button">
+                    <mat-icon>add</mat-icon>
+                    Tambah Produk
+                  </button>
+                  <button mat-icon-button type="button" *ngIf="i > 0" (click)="removeSkuProduct(i)">
+                    <mat-icon class="secondary-text">delete</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </ng-container>
           <div class="mt-8 px-24" fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram
@@ -91,7 +109,7 @@
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" placeholder="Judul Tantangan" formControlName="title_challenge">
-              <mat-error>
+              <mat-error class="mt-8 px-24">
                 Judul Tantangan harus diisi.
               </mat-error>
             </mat-form-field>
@@ -99,7 +117,7 @@
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" placeholder="Deskripsi Tantangan" formControlName="description_challenge">
-              <mat-error>
+              <mat-error class="mt-8 px-24">
                 Deskripsi Tantangan harus diisi.
               </mat-error>
             </mat-form-field>
@@ -107,10 +125,16 @@
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" placeholder="Teks Pada Button" formControlName="button_text">
-              <mat-error>
+              <mat-error class="mt-8 px-24">
                 Teks Pada Button harus diisi.
               </mat-error>
             </mat-form-field>
+          </div>
+          <div class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
+              [disabled]="coinRewardInvalid || submitting">
+              SIMPAN
+            </button>
           </div>
         </div>
       </form>
