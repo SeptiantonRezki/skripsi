@@ -91,6 +91,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         });
 
         formItem.controls['formFilterSku'].value.next(bc);
+        formItem.controls['filteredSku'].value.next([{ barcode: bc }].slice());
 
         formItem
           .valueChanges
@@ -184,42 +185,6 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
-  }
-
-  updateFormSkuFromArray(barcode) {
-    const formItem = this.formBuilder.group({
-      formSku: [barcode],
-      formFilterSku: [new ReplaySubject<any[]>(1)],
-      filteredSku: [new ReplaySubject<any[]>(1)]
-    });
-
-    formItem
-      .valueChanges
-      .pipe(
-        debounceTime(300),
-        tap(() => this.searching = true),
-        switchMap(value => {
-          console.log('val', value);
-          if (value.formFilterSku == null || value.formFilterSku == "") {
-            this.searching = false;
-            return [];
-          }
-          console.log('after', value);
-          return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
-            .pipe(
-              finalize(() => this.searching = false)
-            )
-        })
-      ).subscribe(res => {
-        console.log('res', res, formItem.controls['filteredSku'].value);
-        // this.filteredSku.next(res.data);
-        formItem.controls['filteredSku'].value.next(res.data);
-        // value.next(res.data);
-        // this.litSkus.push(value);
-        // this.filteredSku.next(this.litSkus);
-      });
-
-    return formItem;
   }
 
   createFormSku() {
@@ -327,6 +292,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       console.log(body, automationType, this.formAutomation.get('skus').value);
       this.audienceTradeProgramService.put(body, { automation_id: this.detailAutomation.id }).subscribe(res => {
         this.submitting = false;
+        console.log('ressss', res);
         if (res && res.status) {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
           // this._resetForm();

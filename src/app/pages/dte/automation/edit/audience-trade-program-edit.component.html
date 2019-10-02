@@ -76,7 +76,7 @@
                     </mat-option>
                     <mat-option *ngFor="let sku of formAutomation.get('skus').at(i).get('filteredSku').value | async"
                       [value]="sku.barcode">
-                      <span>{{ sku.barcode }} | {{ sku.name }}</span>
+                      <span>{{ sku.barcode }}</span>
                     </mat-option>
                   </mat-select>
                 </mat-form-field>

@@ -26,7 +26,7 @@
 
         <ngx-datatable-column name="Trade Program" prop="trade_creator_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.trade_creator_name}}
+            <span class="row-name" (click)="directDetail(row)">{{row.trade_creator_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 

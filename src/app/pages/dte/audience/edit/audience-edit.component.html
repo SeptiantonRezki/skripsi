@@ -36,7 +36,7 @@
                   [placeholderLabel]="'Cari Jadwal Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Jadwal Trade Program yang ditemukan'"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredScheduler | async" [value]="item.id">
-                  {{item.scheduler_name}}
+                  {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
@@ -48,7 +48,7 @@
 
           <div fxLayout="row" *ngIf="formAudience.get('audience_type').value === 'challenge'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select formControlName="trade_creator_id" placeholder="Nama Trade Program" #singleSelect>
+              <mat-select formControlName="trade_creator_id" placeholder="Nama Trade Program">
                 <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">

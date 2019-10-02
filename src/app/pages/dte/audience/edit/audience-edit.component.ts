@@ -135,12 +135,12 @@ export class AudienceEditComponent {
     this.area = dataService.getDecryptedProfile()['area_type'];
     this.detailAudience = dataService.getFromStorage('detail_audience');
 
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item =>
-      item.status_audience === null ||
-      item.trade_audience_group_id === this.detailAudience.id
-    );
+    // this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item =>
+    //   item.status_audience === null ||
+    //   item.trade_audience_group_id === this.detailAudience.id
+    // );
 
-    this.filteredScheduler.next(this.listScheduler.slice());
+    // this.filteredScheduler.next(this.listScheduler.slice());
     // this.rows = activatedRoute.snapshot.data['listRetailer'];
   }
 
@@ -197,7 +197,11 @@ export class AudienceEditComponent {
       }
     })
 
-    this.getListScheduler();
+    if (this.detailAudience.type === 'mission') {
+      this.getListScheduler();
+    } else {
+      this.getTradePrograms();
+    }
 
     this.formAudience.get('audience_type')
       .valueChanges
@@ -240,17 +244,17 @@ export class AudienceEditComponent {
     this.audienceService.getListTradePrograms().subscribe(res => {
       console.log('res trade programs', res);
       this.listTradePrograms = res.data;
-      this.filteredTradeProgram.next(res.data);
+      this.filteredTradeProgram.next(this.listTradePrograms.slice());
     }, err => {
       console.log('err trade programs', err);
     });
   }
 
   getListScheduler() {
-    this.audienceService.getListScheduler().subscribe(res => {
+    this.audienceService.getListScheduler({ id: this.detailAudience.trade_scheduler_id }).subscribe(res => {
       console.log('res scheduler new', res);
       this.listScheduler = res.data;
-      this.filteredScheduler.next(res.data);
+      this.filteredScheduler.next(this.listScheduler.slice());
     }, err => {
       console.log('err list scheduler new', err);
     });
@@ -288,7 +292,7 @@ export class AudienceEditComponent {
     }
     // filter the banks
     this.filteredScheduler.next(
-      this.listScheduler.filter(item => item.scheduler_name.toLowerCase().indexOf(search) > -1)
+      this.listScheduler.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -446,8 +450,8 @@ export class AudienceEditComponent {
     // this.formAudience.get('max').setValue(this.detailAudience.max);
     this.formAudience.get('type').setValue('limit');
     this.formAudience.get('audience_type').setValue(this.detailAudience.type);
-    this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
-    this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
+    if (this.detailAudience.type === 'mission') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
+    if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
 
     if (!this.detailAudience.min) {
       this.formAudience.get('min').disable();
@@ -691,7 +695,6 @@ export class AudienceEditComponent {
           if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
         }
         console.log(this.findInvalidControls());
-
         this.saveData = !this.saveData;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           res => {
