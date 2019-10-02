@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataService } from 'app/services/data.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabChangeEvent, MatSelect } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
 import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
+import { DialogService } from 'app/services/dialog.service';
 
 @Component({
   selector: 'app-audience-trade-program-edit',
@@ -14,6 +15,7 @@ import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operator
 })
 export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   selectedTab: any;
+  submitting: Boolean;
   formAutomation: FormGroup;
   listAutomation: any[] = [
     { name: 'E-Order', value: 'e-order' },
@@ -31,15 +33,27 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   formFilterSku: FormControl = new FormControl();
   searching: Boolean = false;
   public filteredSku: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  litSkus = [];
   @ViewChild('singleSelect') singleSelect: MatSelect;
+  coinRewardInvalid: Boolean;
+  detailAutomation: any;
+  isDetail: Boolean;
 
   constructor(
     private dataService: DataService,
     private formBuilder: FormBuilder,
-    private audienceTradeProgramService: AudienceTradeProgramService
+    private audienceTradeProgramService: AudienceTradeProgramService,
+    private dialogService: DialogService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab");
     this.selectedTab = 0;
+
+    this.detailAutomation = this.dataService.getFromStorage('detail_dte_automation');
+    activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    });
   }
 
   ngOnInit() {
@@ -54,8 +68,60 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
-      skus: this.formBuilder.array([this.createFormSku()])
+      skus: this.formBuilder.array([])
     });
+
+    this.formAutomation.get("automation").setValue(this.detailAutomation.type);
+    this.formAutomation.get("startDate").setValue(this.detailAutomation.start_date);
+    this.formAutomation.get("endDate").setValue(this.detailAutomation.end_date);
+    this.formAutomation.get("coin_max").setValue(this.detailAutomation.max_frequency);
+    this.formAutomation.get("coin_reward").setValue(this.detailAutomation.coin_reward);
+    this.formAutomation.get("coupon_total").setValue(this.detailAutomation.coupon_total ? this.detailAutomation.coupon_total : 0);
+    this.formAutomation.get("trade_program_id").setValue(this.detailAutomation.trade_creator_id);
+    this.formAutomation.get("description_challenge").setValue(this.detailAutomation.description);
+    this.formAutomation.get("title_challenge").setValue(this.detailAutomation.title);
+    this.formAutomation.get("button_text").setValue(this.detailAutomation.text_button);
+    if (this.detailAutomation.type === 'e-order') {
+      let skus = this.formAutomation.get('skus') as FormArray;
+      this.detailAutomation.barcode.map(bc => {
+        const formItem = this.formBuilder.group({
+          formSku: bc,
+          formFilterSku: new ReplaySubject<any[]>(1),
+          filteredSku: new ReplaySubject<any[]>(1)
+        });
+
+        formItem.controls['formFilterSku'].value.next(bc);
+
+        formItem
+          .valueChanges
+          .pipe(
+            debounceTime(300),
+            tap(() => this.searching = true),
+            switchMap(value => {
+              console.log('val', value);
+              if (value.formFilterSku == null || value.formFilterSku == "") {
+                this.searching = false;
+                return [];
+              }
+              console.log('after', value);
+              return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+                .pipe(
+                  finalize(() => this.searching = false)
+                )
+            })
+          ).subscribe(res => {
+            console.log('res', res, formItem.controls['filteredSku'].value);
+            // this.filteredSku.next(res.data);
+            formItem.controls['filteredSku'].value.next(res.data);
+            // value.next(res.data);
+            // this.litSkus.push(value);
+            // this.filteredSku.next(this.litSkus);
+          });
+
+        skus.push(formItem);
+        console.log('skus', skus);
+      })
+    }
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
       console.log('res list trade programs', res);
@@ -70,6 +136,29 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this._filterTradeProgram();
+      });
+
+    this.formAutomation
+      .get("coin_max")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        console.log('data', data);
+        let coinMax = this.formAutomation.get("coin_reward").value;
+        this.checkCoinReward(data, coinMax);
+      });
+
+    this.formAutomation
+      .get("coin_reward")
+      .valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(data => {
+        let coinReward = this.formAutomation.get("coin_max").value;
+        this.checkCoinReward(coinReward, data);
       });
 
     this.formFilterSku
@@ -97,11 +186,76 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this._onDestroy.complete();
   }
 
-  createFormSku() {
-    return this.formBuilder.group({
-      id: [""],
-      name: [""]
+  updateFormSkuFromArray(barcode) {
+    const formItem = this.formBuilder.group({
+      formSku: [barcode],
+      formFilterSku: [new ReplaySubject<any[]>(1)],
+      filteredSku: [new ReplaySubject<any[]>(1)]
     });
+
+    formItem
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.searching = true),
+        switchMap(value => {
+          console.log('val', value);
+          if (value.formFilterSku == null || value.formFilterSku == "") {
+            this.searching = false;
+            return [];
+          }
+          console.log('after', value);
+          return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+            .pipe(
+              finalize(() => this.searching = false)
+            )
+        })
+      ).subscribe(res => {
+        console.log('res', res, formItem.controls['filteredSku'].value);
+        // this.filteredSku.next(res.data);
+        formItem.controls['filteredSku'].value.next(res.data);
+        // value.next(res.data);
+        // this.litSkus.push(value);
+        // this.filteredSku.next(this.litSkus);
+      });
+
+    return formItem;
+  }
+
+  createFormSku() {
+    const formItem = this.formBuilder.group({
+      formSku: [""],
+      formFilterSku: [new ReplaySubject<any[]>(1)],
+      filteredSku: [new ReplaySubject<any[]>(1)]
+    });
+    let value = new ReplaySubject<any[]>(1);
+
+    formItem
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.searching = true),
+        switchMap(value => {
+          console.log('val', value);
+          if (value.formFilterSku == null || value.formFilterSku == "") {
+            this.searching = false;
+            return [];
+          }
+          console.log('after', value);
+          return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+            .pipe(
+              finalize(() => this.searching = false)
+            )
+        })
+      ).subscribe(res => {
+        console.log('res', res, formItem.controls['filteredSku'].value);
+        // this.filteredSku.next(res.data);
+        formItem.controls['filteredSku'].value.next(res.data);
+        // value.next(res.data);
+        // this.litSkus.push(value);
+        // this.filteredSku.next(this.litSkus);
+      });
+    return formItem;
   }
 
   addSkuProduct() {
@@ -112,6 +266,16 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   removeSkuProduct(index) {
     this.skus = this.formAutomation.get("skus") as FormArray;
     this.skus.removeAt(index);
+  }
+
+  checkCoinReward(coinReward, coinMax) {
+    if (!coinReward && !coinMax) {
+      this.coinRewardInvalid = false;
+    } else if (coinReward <= coinMax) {
+      this.coinRewardInvalid = true;
+    } else {
+      this.coinRewardInvalid = false;
+    }
   }
 
   _filterTradeProgram() {
@@ -130,6 +294,54 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.filteredTradeProgram.next(
       this.tradePrograms.filter(trade => trade.name.toLowerCase().indexOf(search) > -1)
     );
+  }
+
+  submit() {
+    this.submitting = true;
+    let automationType = this.formAutomation.get("automation").value;
+    if (this.formAutomation.valid) {
+      let body = {
+        type: this.formAutomation.get("automation").value,
+        start_date: this.formAutomation.get("startDate").value,
+        end_date: this.formAutomation.get("endDate").value,
+        coin_reward: this.formAutomation.get("coin_reward").value,
+        max_frequency: this.formAutomation.get("coin_max").value,
+        trade_creator_id: this.formAutomation.get("trade_program_id").value,
+        title: this.formAutomation.get("title_challenge").value,
+        description: this.formAutomation.get("description_challenge").value,
+        text_button: this.formAutomation.get("button_text").value,
+        _method: 'PUT'
+      };
+
+      switch (automationType) {
+        case 'e-order':
+          let barcodes = this.formAutomation.get('skus').value;
+          body['barcode'] = barcodes.length > 0 ? barcodes.map(bc => bc.formSku) : [];
+          break;
+        case 'coupon':
+          body['coupon_total'] = this.formAutomation.get('coupon_total').value
+          break;
+        case 'referral_code':
+          break;
+      }
+      console.log(body, automationType, this.formAutomation.get('skus').value);
+      this.audienceTradeProgramService.put(body, { automation_id: this.detailAutomation.id }).subscribe(res => {
+        this.submitting = false;
+        if (res && res.status) {
+          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          // this._resetForm();
+          this.router.navigate(['dte', 'automation']);
+        }
+      }, err => {
+        console.log('err', err);
+        this.submitting = false;
+      });
+    } else {
+      this.submitting = false;
+      // this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      // commonFormValidator.validateAllFields(this.formAutomation);
+      // commonFormValidator.validateAllFields(this.formAutomation);
+    }
   }
 
   setSelectedTab(tabChangeEvent: MatTabChangeEvent) {

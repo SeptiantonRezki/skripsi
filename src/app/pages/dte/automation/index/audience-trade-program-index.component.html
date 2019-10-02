@@ -24,12 +24,6 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Group Audience" prop="trade_audience_group_name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.trade_audience_group_name}}</span>
-          </ng-template>
-        </ngx-datatable-column>
-
         <ngx-datatable-column name="Trade Program" prop="trade_creator_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.trade_creator_name}}

@@ -24,7 +24,7 @@ export class AudienceTradeProgramService extends BaseService {
 
   put(body, context): Observable<any> {
     const url = this.getUrl(this.namespace, 'update', context);
-    return this.putApi(url, body);
+    return this.postBlobApi(url, body);
   }
 
   delete(context): Observable<any> {
