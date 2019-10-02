@@ -130,7 +130,8 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div *ngIf="!isDetail" class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px"
+            fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
               [disabled]="coinRewardInvalid || submitting">
               SIMPAN

@@ -251,6 +251,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       console.log(body, automationType, this.formAutomation.get('skus').value);
       this.audienceTradeProgramService.create(body).subscribe(res => {
         this.submitting = false;
+        console.log('ressadas', res);
         if (res && res.status) {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
           // this._resetForm();

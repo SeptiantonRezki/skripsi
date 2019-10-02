@@ -180,6 +180,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       ).subscribe(res => {
         this.filteredSku.next(res.data);
       });
+
   }
 
   ngOnDestroy() {
@@ -293,11 +294,11 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       this.audienceTradeProgramService.put(body, { automation_id: this.detailAutomation.id }).subscribe(res => {
         this.submitting = false;
         console.log('ressss', res);
-        if (res && res.status) {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
-          // this._resetForm();
-          this.router.navigate(['dte', 'automation']);
-        }
+        // if (res && res.status) {
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+        // this._resetForm();
+        this.router.navigate(['dte', 'automation']);
+        // }
       }, err => {
         console.log('err', err);
         this.submitting = false;
