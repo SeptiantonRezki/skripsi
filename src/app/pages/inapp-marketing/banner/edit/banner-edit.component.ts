@@ -140,7 +140,7 @@ export class BannerEditComponent {
       areas: this.formBuilder.array([]),
       content_type: ["static_page", Validators.required],
       content_wallet: ["ovo", Validators.required],
-      button_text: ["", [Validators.required, Validators.maxLength(30)]],
+      button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
