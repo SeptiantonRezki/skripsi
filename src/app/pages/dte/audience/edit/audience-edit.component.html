@@ -13,24 +13,51 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Grup">
-              <mat-error *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
+              <mat-error
+                *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
                 Nama Grup harus diisi
               </mat-error>
             </mat-form-field>
           </div>
 
-          <div fxLayout="row">
+          <div fxLayout="row" style="margin-bottom: 10px;">
+            <mat-radio-group formControlName="audience_type">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAudienceType" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div fxLayout="row" *ngIf="formAudience.get('audience_type').value === 'mission'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="trade_scheduler_id" placeholder="Nama Pengatur Jadwal Trade Program"
                 #singleSelect>
-                <ngx-mat-select-search [formControl]="filterScheduler" [placeholderLabel]="'Cari Jadwal Trade Program...'"
+                <ngx-mat-select-search [formControl]="filterScheduler"
+                  [placeholderLabel]="'Cari Jadwal Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Jadwal Trade Program yang ditemukan'"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredScheduler | async" [value]="item.id">
                   {{item.scheduler_name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="formAudience.controls['trade_scheduler_id'].hasError('required') && formAudience.controls['trade_scheduler_id'].touched">
+              <mat-error
+                *ngIf="formAudience.controls['trade_scheduler_id'].hasError('required') && formAudience.controls['trade_scheduler_id'].touched">
                 Nama Pengatur Jadwal Trade Program harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" *ngIf="formAudience.get('audience_type').value === 'challenge'">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="trade_creator_id" placeholder="Nama Trade Program" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formAudience.controls['trade_creator_id'].hasError('required') && formAudience.controls['trade_creator_id'].touched">
+                Nama Trade Program harus diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -43,11 +70,12 @@
             </mat-radio-group>
           </div>
 
-          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16"
-            fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
+            class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
-              <mat-error *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['min'].touched">
+              <mat-error
+                *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['min'].touched">
                 Audience Minimal harus diisi
               </mat-error>
               <mat-error *ngIf="formAudience.controls['min'].hasError('min') && formAudience.controls['min'].touched">
@@ -57,7 +85,8 @@
 
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
-              <mat-error *ngIf="formAudience.controls['max'].hasError('required') && formAudience.controls['max'].touched">
+              <mat-error
+                *ngIf="formAudience.controls['max'].hasError('required') && formAudience.controls['max'].touched">
                 Audience Maksimal harus diisi
               </mat-error>
               <mat-error *ngIf="formAudience.controls['max'].hasError('min') && formAudience.controls['max'].touched">
@@ -68,7 +97,8 @@
         </form>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
-        <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+          fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
@@ -76,14 +106,16 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
                 item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
@@ -91,7 +123,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
@@ -99,7 +132,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
@@ -108,7 +142,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
@@ -128,8 +163,8 @@
     </div>
 
     <div class="p-0">
-      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center"
-        class="p-16 export">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center" class="p-16 export">
         <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
           <mat-icon>arrow_downward</mat-icon> Import XLS
         </button>
@@ -139,9 +174,10 @@
       </div>
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <ngx-datatable class="material" [rows]="rows" [selected]="selected" [columnMode]="'force'" [headerHeight]="48"
-        [footerHeight]="56" [rowHeight]="'auto'" [reorderable]="reorderable" [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false"
-        [externalSorting]="true" (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
+        [footerHeight]="56" [rowHeight]="'auto'" [reorderable]="reorderable"
+        [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''" [count]="pagination.total"
+        [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
+        (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
         [rowIdentity]="getId" (sort)="onSort($event)" fusePerfectScrollbar>
         <ngx-datatable-column [width]="68" *ngIf="formAudience.get('type').value !== 'pick-all'" [canAutoResize]="false"
           [sortable]="true" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true">
@@ -153,7 +189,8 @@
 
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" [disabled]="isDetail" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" [disabled]="isDetail" (change)="onCheckboxChangeFn($event)">
+            </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
@@ -174,12 +211,12 @@
     </div>
 
     <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button" (click)="submit()"
-        fxFlex="20">
+      <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button"
+        (click)="submit()" fxFlex="20">
         SIMPAN
       </button>
-      <button mat-raised-button *ngIf="formAudience.disabled" type="button" class="confirmation-button" (click)="updateAudience()"
-        fxFlex="20">
+      <button mat-raised-button *ngIf="formAudience.disabled" type="button" class="confirmation-button"
+        (click)="updateAudience()" fxFlex="20">
         SIMPAN
       </button>
     </div>
