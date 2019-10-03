@@ -195,11 +195,15 @@ export class AudienceCreateComponent {
         if (data === 'mission') {
           this.getListScheduler();
           this.formAudience.get("trade_scheduler_id").setValidators(Validators.required);
-          this.formAudience.get("trade_creator_id").setValidators(Validators.nullValidator);
+          this.formAudience.get("trade_creator_id").setValidators([]);
+          this.formAudience.get("trade_creator_id").clearValidators();
+          this.formAudience.get("trade_creator_id").updateValueAndValidity();
         } else {
           this.getTradePrograms();
           this.formAudience.get("trade_creator_id").setValidators(Validators.required);
-          this.formAudience.get("trade_scheduler_id").setValidators(Validators.nullValidator);
+          this.formAudience.get("trade_scheduler_id").setValidators([]);
+          this.formAudience.get("trade_scheduler_id").clearValidators();
+          this.formAudience.get("trade_scheduler_id").updateValueAndValidity();
         }
       });
 
