@@ -106,6 +106,9 @@ export class ProductEditComponent {
     this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data ? this.activatedRoute.snapshot.data["listPackaging"].data.data : [];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
+    this.filteredBrand.next(this.listBrand.slice());
+    this.filteredCategory.next(this.listCategory.slice());
+
     this.formProductErrors = {
       name: {},
       // alias: [],
@@ -191,7 +194,7 @@ export class ProductEditComponent {
       this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
       this.formProductGroup.get("status").setValue(res.data.status);
       this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
-
+      console.log(this.formProductGroup);
       if (res.data.category.parent_id) {
         this.formProductGroup.get("category").setValue(res.data.category_all[0]);
         this.selectionChange();
@@ -337,6 +340,7 @@ export class ProductEditComponent {
           level_desc = 'territory';
           break;
       }
+      console.log('init Form Group');
       this.generataList(level_desc, item.id, index, 'render');
     });
   }
@@ -344,6 +348,7 @@ export class ProductEditComponent {
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    console.log('sdasdqwedwsdbjnDWv', selection, id);
     switch (selection) {
       case 'zone':
         const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
@@ -353,7 +358,7 @@ export class ProductEditComponent {
           list.removeAt(list.length - 1);
         }
 
-        _.clone(response || []).map(item => {
+        _.clone(response.data.data || []).map(item => {
           list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }));
         });
 
@@ -379,7 +384,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
+          _.clone(response.data.data || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
           });
         }
@@ -408,7 +413,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
+          _.clone(response.data.data || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
           });
         }
@@ -435,7 +440,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
+          _.clone(response.data.data || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
           });
         }
@@ -460,7 +465,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
+          _.clone(response.data.data || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
           });
         }
@@ -483,7 +488,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
+          _.clone(response.data.data || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
           });
         }
