@@ -224,7 +224,7 @@ export class ProductEditComponent {
         }))
 
         this.initArea(index);
-        this.initFormGroup(response.data, index);
+        this.initFormGroup(response, index);
 
         if (this.detailProduct.areas.length === (index + 1)) {
           this.onLoad = false;
