@@ -358,7 +358,7 @@ export class ProductEditComponent {
           list.removeAt(list.length - 1);
         }
 
-        _.clone(response.data.data || []).map(item => {
+        _.clone(response || []).map(item => {
           list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }));
         });
 
@@ -384,7 +384,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response.data.data || []).map(item => {
+          _.clone(response || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
           });
         }
@@ -413,7 +413,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response.data.data || []).map(item => {
+          _.clone(response || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
           });
         }
@@ -440,7 +440,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response.data.data || []).map(item => {
+          _.clone(response || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
           });
         }
@@ -465,7 +465,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response.data.data || []).map(item => {
+          _.clone(response || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
           });
         }
@@ -488,7 +488,7 @@ export class ProductEditComponent {
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response.data.data || []).map(item => {
+          _.clone(response || []).map(item => {
             list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
           });
         }
