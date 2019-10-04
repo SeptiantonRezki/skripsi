@@ -13,6 +13,20 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+        <a #downloadLink></a>
+        <button mat-raised-button type="button" color="primary">
+          Kelola Akses Kasir
+        </button>
+        <button mat-raised-button type="button" class="is-danger" (click)="import()">
+          <mat-icon>arrow_downward</mat-icon> Import XLS
+        </button>
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export XLS
+        </button>
+      </div>
+
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Daftar Retailer</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
@@ -140,7 +154,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column [width]="120" name="Akses Kasir" prop="cashier">
+        <ngx-datatable-column [width]="120" name="Akses Kasir" prop="cashier">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order"
@@ -150,7 +164,8 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <<ngx-datatable-column name="Terkahir Masuk" prop="last_login">
+
+        <!-- <ngx-datatable-column name="Terkahir Masuk" prop="last_login">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
             </ng-template>
