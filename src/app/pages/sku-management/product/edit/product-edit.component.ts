@@ -106,6 +106,9 @@ export class ProductEditComponent {
     this.listPackaging = this.activatedRoute.snapshot.data["listPackaging"].data ? this.activatedRoute.snapshot.data["listPackaging"].data.data : [];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
+    this.filteredBrand.next(this.listBrand.slice());
+    this.filteredCategory.next(this.listCategory.slice());
+
     this.formProductErrors = {
       name: {},
       // alias: [],
@@ -191,7 +194,7 @@ export class ProductEditComponent {
       this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
       this.formProductGroup.get("status").setValue(res.data.status);
       this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
-
+      console.log(this.formProductGroup);
       if (res.data.category.parent_id) {
         this.formProductGroup.get("category").setValue(res.data.category_all[0]);
         this.selectionChange();
@@ -207,13 +210,13 @@ export class ProductEditComponent {
         let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
         wilayah.push(this.formBuilder.group({
-          national: [this.getArea(response.data, 'national'), Validators.required],
-          zone: [this.getArea(response.data, 'division')],
-          region: [this.getArea(response.data, 'region')],
-          area: [this.getArea(response.data, 'area')],
-          salespoint: [this.getArea(response.data, 'salespoint')],
-          district: [this.getArea(response.data, 'district')],
-          territory: [this.getArea(response.data, 'teritory')],
+          national: [this.getArea(response, 'national'), Validators.required],
+          zone: [this.getArea(response, 'division')],
+          region: [this.getArea(response, 'region')],
+          area: [this.getArea(response, 'area')],
+          salespoint: [this.getArea(response, 'salespoint')],
+          district: [this.getArea(response, 'district')],
+          territory: [this.getArea(response, 'teritory')],
           list_national: this.formBuilder.array(this.listLevelArea),
           list_zone: this.formBuilder.array([]),
           list_region: this.formBuilder.array([]),
@@ -224,7 +227,7 @@ export class ProductEditComponent {
         }))
 
         this.initArea(index);
-        this.initFormGroup(response.data, index);
+        this.initFormGroup(response, index);
 
         if (this.detailProduct.areas.length === (index + 1)) {
           this.onLoad = false;
@@ -337,6 +340,7 @@ export class ProductEditComponent {
           level_desc = 'territory';
           break;
       }
+      console.log('init Form Group');
       this.generataList(level_desc, item.id, index, 'render');
     });
   }
@@ -344,6 +348,7 @@ export class ProductEditComponent {
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    console.log('sdasdqwedwsdbjnDWv', selection, id);
     switch (selection) {
       case 'zone':
         const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();

@@ -9,8 +9,8 @@ import { BaseService } from '../base.service';
 export class AudienceService extends BaseService {
 
   public namespace = "audience";
-  
-  constructor(http: HttpClient) { 
+
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -82,5 +82,15 @@ export class AudienceService extends BaseService {
   exportExcel(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export");
     return this.postApi(url, body);
+  }
+
+  getListTradePrograms(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_trade_program");
+    return this.getApi(url, queryParams);
+  }
+
+  getListScheduler(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_scheduler");
+    return this.getApi(url, queryParams);
   }
 }

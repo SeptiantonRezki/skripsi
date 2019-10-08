@@ -170,7 +170,9 @@ export class Endpoint {
         create: `${AYO_API}/api/${type_api}/audience`,
         put: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
         delete: `${AYO_API}/api/${type_api}/audience/${context.audience_id}`,
-        list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
+        // list_scheduler: `${AYO_API}/api/${type_api}/scheduler?page=all`,
+        list_scheduler: `${AYO_API}/api/principal/scheduler/list/all`,
+        list_trade_program: `${AYO_API}/api/principal/creator/list/all`,
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         list_retailer_selected: `${AYO_API}/api/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API}/api/${type_api}/audience/count/budget`,
@@ -254,7 +256,9 @@ export class Endpoint {
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         update_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
-        get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`
+        get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`,
+        export_audience: `${AYO_API}/api/principal/pop-up-notification/audience/export`,
+        import_audience: `${AYO_API}/api/principal/pop-up-notification/audience/import`
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,

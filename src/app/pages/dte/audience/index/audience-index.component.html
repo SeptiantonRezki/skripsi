@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Audience'">
-    <button style="min-width: 170px;" [routerLink]="['/dte', 'audience', 'create']" mat-raised-button aria-label="Produk"
-      type="button">
+    <button style="min-width: 170px;" [routerLink]="['/dte', 'audience', 'create']" mat-raised-button
+      aria-label="Produk" type="button">
       <mat-icon>add</mat-icon>BUAT
     </button>
   </page-content-header>
@@ -24,10 +24,11 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
+        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+        (sort)="onSort($event)" (select)="onSelect($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -35,7 +36,8 @@
             <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template>
 
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
@@ -46,7 +48,17 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Pengaturan Jadwal" [sortable]="false" prop="trade_name"></ngx-datatable-column>
+        <ngx-datatable-column name="Nama Pengaturan Jadwal" [sortable]="false" prop="trade_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name">{{row.trade_name ? row.trade_name : '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Trade Program" [sortable]="false" prop="trade_creator_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name">{{row.trade_creator_name ? row.trade_creator_name : '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Jumlah Pengguna" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
 
@@ -65,7 +77,8 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
@@ -73,8 +86,8 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus" matTooltip="Hapus Audience Grup"
-                (click)="deleteAudience(row.id)">
+              <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
+                matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

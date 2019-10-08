@@ -1,9 +1,9 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { Lightbox } from 'ngx-lightbox';
 import * as moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
@@ -12,7 +12,12 @@ import { Config } from 'app/classes/config';
 import { NotificationService } from 'app/services/notification.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
+import { RetailerService } from 'app/services/user-management/retailer.service';
+import { CustomerService } from 'app/services/user-management/customer.service';
+import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -27,6 +32,8 @@ export class PopupNotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   indexDelete: any;
+  dialogRef: any;
+  exportAccessCashier: Boolean;
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -52,16 +59,19 @@ export class PopupNotificationCreateComponent {
 
   formPopupGroup: FormGroup;
   formPopupErrors: any;
+  audienceSelected: any[] = [];
 
   public options: Object = Config.FROALA_CONFIG;
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  SelecectionType = SelectionType;
 
   rows: any[];
-  selected: any[];
+  selected: any[] = [];
   id: any[];
   reorderable = true;
   pagination: Page = new Page();
@@ -76,7 +86,11 @@ export class PopupNotificationCreateComponent {
     private notificationService: NotificationService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private _lightbox: Lightbox
+    private _lightbox: Lightbox,
+    private dialog: MatDialog,
+    private retailerService: RetailerService,
+    private customerService: CustomerService,
+    private wholesalerService: WholesalerService,
   ) {
     this.adapter.setLocale('id');
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -102,6 +116,8 @@ export class PopupNotificationCreateComponent {
         "name": "SLSNTL"
       }
     ];
+
+    this.selected = [];
 
     this.list = {
       zone: [],
@@ -134,7 +150,8 @@ export class PopupNotificationCreateComponent {
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
-      type: ["limit"]
+      type: ["limit"],
+      is_target_audience: [false]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -148,6 +165,8 @@ export class PopupNotificationCreateComponent {
     })
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
+      this.selected.splice(0, this.selected.length);
+      this.audienceSelected = [];
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -215,7 +234,9 @@ export class PopupNotificationCreateComponent {
           this.formPopupGroup.controls['date_ws_downline'].enable();
         }
       }
-      this.getAudience();
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+      };
 
       this.formPopupGroup.controls['landing_page'].setValue('');
     });
@@ -235,11 +256,21 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required]);
         this.formPopupGroup.updateValueAndValidity();
       }
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formPopupGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
       this.formPopupGroup.updateValueAndValidity();
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formPopupGroup.controls['url_iframe'].disable();
@@ -254,10 +285,168 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['date_ws_downline'].setValue('');
         this.formPopupGroup.controls['date_ws_downline'].disable();
       }
-    })
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
+    });
+
+    this.formFilter.valueChanges.subscribe(filter => {
+      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+    });
 
     this.addArea();
-    // this.getAudience();
+    this.initFilterArea();
+    // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+  }
+
+  initFilterArea() {
+    this.areaFromLogin.map(item => {
+      let level_desc = '';
+      switch (item.type.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          this.formFilter.get('national').setValue(item.id);
+          this.formFilter.get('national').disable();
+          break
+        case 'division':
+          level_desc = 'region';
+          this.formFilter.get('zone').setValue(item.id);
+          this.formFilter.get('zone').disable();
+          break;
+        case 'region':
+          level_desc = 'area';
+          this.formFilter.get('region').setValue(item.id);
+          this.formFilter.get('region').disable();
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          this.formFilter.get('area').setValue(item.id);
+          this.formFilter.get('area').disable();
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          this.formFilter.get('salespoint').setValue(item.id);
+          this.formFilter.get('salespoint').disable();
+          break;
+        case 'district':
+          level_desc = 'territory';
+          this.formFilter.get('district').setValue(item.id);
+          this.formFilter.get('district').disable();
+          break;
+        case 'territory':
+          this.formFilter.get('territory').setValue(item.id);
+          this.formFilter.get('territory').disable();
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+  }
+
+  getAudienceArea(selection, id) {
+    let item: any;
+    switch (selection) {
+      case 'zone':
+        this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
+        });
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'region':
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'area':
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'salespoint':
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'district':
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['territory'] = [];
+        break;
+      case 'territory':
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('territory').setValue('');
+        break;
+
+      default:
+        break;
+    }
   }
 
   createArea(): FormGroup {
@@ -657,6 +846,12 @@ export class PopupNotificationCreateComponent {
       } else {
         body['area_id'] = areas.map(item => item.value);
       }
+      if (this.formPopupGroup.get("is_target_audience").value) {
+        body['target_audience'] = 1;
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      } else {
+        if (body['target_audience']) delete body['target_audience'];
+      }
 
       this.notificationService.createPopup(body).subscribe(
         res => {
@@ -734,12 +929,203 @@ export class PopupNotificationCreateComponent {
   }
 
   getAudience() {
+    this.dataService.showLoading(true);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.pagination['audience'] = this.formPopupGroup.get("user_group").value;
+    if (this.formPopupGroup.get("user_group").value === 'retailer') {
+      this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+    }
+    if (this.formPopupGroup.get("user_group").value === 'customer') {
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+      delete this.pagination['retailer_type'];
+    }
+    if (this.formPopupGroup.get("user_group").value === 'customer') {
+      delete this.pagination['retailer_type'];
+      this.pagination['customer_smoking'] = this.formPopupGroup.get("is_smoker").value;
+      this.pagination['customer_gender'] = this.formPopupGroup.get("gender").value;
+      this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
+      this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
+    }
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
-      console.log('res', res);
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
-    }, err => console.log('err', err));
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err', err);
+      this.dataService.showLoading(false);
+    });
   }
 
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  setPage(pageInfo) {
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  updateFilter(string) {
+    this.loadingIndicator = true;
+    this.table.offset = 0;
+    this.pagination.search = string;
+    this.pagination.page = 1;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  displayCheck(row) {
+    return row.name !== 'Ethel Price';
+  }
+
+  onSelectAudience(event, row) {
+    console.log('onnnnnn', event);
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      this.audienceSelected.splice(index, 1);
+    } else {
+      this.audienceSelected.push(row);
+    }
+    this.onSelect({ selected: this.audienceSelected });
+    console.log('asdasd', this.audienceSelected);
+  }
+
+  selectCheck(row, column, value) {
+    console.log('selectcheck', row, column, value);
+    return row.id !== null;
+  }
+
+  bindSelector(isSelected, row) {
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      return true;
+    }
+    return false;
+  }
+
+  isTargetAudience(event) {
+    if (event.checked) this.getAudience();
+  }
+
+  async export() {
+    if (this.audienceSelected.length === 0) {
+      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
+      return;
+    }
+    this.dataService.showLoading(true);
+    let body = this.audienceSelected.map(aud => aud.id);
+    this.exportAccessCashier = true;
+    try {
+      const response = await this.notificationService.exportAudience({ selected: body, audience: this.formPopupGroup.get("user_group").value }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xlsx`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.exportAccessCashier = false;
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.exportAccessCashier = false;
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+
+    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.audienceSelected = this.audienceSelected.concat(response);
+        this.onSelect({ selected: this.audienceSelected });
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
+  }
 }

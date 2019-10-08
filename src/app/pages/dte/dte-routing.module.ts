@@ -158,7 +158,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.audience.create
     },
     resolve: {
-      listScheduler: ListSchedulerResolver,
+      // listScheduler: ListSchedulerResolver,
       // listRetailer: ListRetailerResolver
     },
     canDeactivate: [PendingChangesGuard],
@@ -171,7 +171,7 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.audience.edit
     },
     resolve: {
-      listScheduler: ListSchedulerResolver,
+      // listScheduler: ListSchedulerResolver,
       // listRetailer: ListRetailerResolver
     },
     canDeactivate: [PendingChangesGuard],

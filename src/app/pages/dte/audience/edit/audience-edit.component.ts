@@ -27,8 +27,10 @@ export class AudienceEditComponent {
   detailAudienceSelected: any;
 
   listScheduler: Array<any>;
+  listTradePrograms: any[];
   rows: any[];
   listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }];
+  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
 
   selected = [];
   area: Array<any>;
@@ -54,6 +56,8 @@ export class AudienceEditComponent {
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterTradeProgram: FormControl = new FormControl();
+  public filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
@@ -131,12 +135,12 @@ export class AudienceEditComponent {
     this.area = dataService.getDecryptedProfile()['area_type'];
     this.detailAudience = dataService.getFromStorage('detail_audience');
 
-    this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item =>
-      item.status_audience === null ||
-      item.trade_audience_group_id === this.detailAudience.id
-    );
+    // this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item =>
+    //   item.status_audience === null ||
+    //   item.trade_audience_group_id === this.detailAudience.id
+    // );
 
-    this.filteredScheduler.next(this.listScheduler.slice());
+    // this.filteredScheduler.next(this.listScheduler.slice());
     // this.rows = activatedRoute.snapshot.data['listRetailer'];
   }
 
@@ -146,13 +150,15 @@ export class AudienceEditComponent {
       min: ["", [Validators.required, Validators.min(0)]],
       max: ["", [Validators.required, Validators.min(0)]],
       type: [""],
+      audience_type: ["mission", Validators.required],
       // national: [""],
       // division: [""],
       // region: [""],
       // area: [""],
       // district: [""],
       // teritory: [""],
-      trade_scheduler_id: ["", Validators.required],
+      trade_scheduler_id: [""],
+      trade_creator_id: [""]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -191,6 +197,27 @@ export class AudienceEditComponent {
       }
     })
 
+    if (this.detailAudience.type === 'mission') {
+      this.getListScheduler();
+    } else {
+      this.getTradePrograms();
+    }
+
+    this.formAudience.get('audience_type')
+      .valueChanges
+      .subscribe(data => {
+        console.log('audience type', data);
+        if (data === 'mission') {
+          this.getListScheduler();
+          this.formAudience.get("trade_scheduler_id").setValidators(Validators.required);
+          this.formAudience.get("trade_creator_id").setValidators(Validators.nullValidator);
+        } else {
+          this.getTradePrograms();
+          this.formAudience.get("trade_creator_id").setValidators(Validators.required);
+          this.formAudience.get("trade_scheduler_id").setValidators(Validators.nullValidator);
+        }
+      });
+
     this.formAudience.valueChanges.subscribe(() => {
       this.valueChange = true;
     })
@@ -205,6 +232,50 @@ export class AudienceEditComponent {
       .subscribe(() => {
         this.filteringScheduler();
       });
+
+    this.filterTradeProgram.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringTradeProgram();
+      });
+  }
+
+  getTradePrograms() {
+    this.audienceService.getListTradePrograms().subscribe(res => {
+      console.log('res trade programs', res);
+      this.listTradePrograms = res.data;
+      this.filteredTradeProgram.next(this.listTradePrograms.slice());
+    }, err => {
+      console.log('err trade programs', err);
+    });
+  }
+
+  getListScheduler() {
+    this.audienceService.getListScheduler({ id: this.detailAudience.trade_scheduler_id }).subscribe(res => {
+      console.log('res scheduler new', res);
+      this.listScheduler = res.data;
+      this.filteredScheduler.next(this.listScheduler.slice());
+    }, err => {
+      console.log('err list scheduler new', err);
+    });
+  }
+
+  filteringTradeProgram() {
+    if (!this.listTradePrograms) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterTradeProgram.value;
+    if (!search) {
+      this.filteredTradeProgram.next(this.listTradePrograms.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredTradeProgram.next(
+      this.listTradePrograms.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   filteringScheduler() {
@@ -221,7 +292,7 @@ export class AudienceEditComponent {
     }
     // filter the banks
     this.filteredScheduler.next(
-      this.listScheduler.filter(item => item.scheduler_name.toLowerCase().indexOf(search) > -1)
+      this.listScheduler.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -378,7 +449,9 @@ export class AudienceEditComponent {
     // this.formAudience.get('min').setValue(this.detailAudience.min);
     // this.formAudience.get('max').setValue(this.detailAudience.max);
     this.formAudience.get('type').setValue('limit');
-    this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
+    this.formAudience.get('audience_type').setValue(this.detailAudience.type);
+    if (this.detailAudience.type === 'mission') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
+    if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
 
     if (!this.detailAudience.min) {
       this.formAudience.get('min').disable();
@@ -394,7 +467,10 @@ export class AudienceEditComponent {
       this.formAudience.get('max').disable();
       this.formAudience.get('type').disable();
       this.formAudience.get('trade_scheduler_id').disable();
+      this.formAudience.get('trade_creator_id').disable();
     }
+
+    console.log('init audience', this.formAudience);
 
     // this.formFilter.disable();
 
@@ -527,14 +603,66 @@ export class AudienceEditComponent {
         trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
       }
 
-      this.audienceService.validateBudget(budget).subscribe(res => {
-        if (res.selisih < 0)
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+      if (this.formAudience.get("audience_type").value === 'mission') {
+        this.audienceService.validateBudget(budget).subscribe(res => {
+          if (res.selisih < 0)
+            return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
 
+          let body = {
+            _method: 'PUT',
+            name: this.formAudience.get('name').value,
+            trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
+            // min: limit ? this.formAudience.get('min').value : '',
+            // max: limit ? this.formAudience.get('max').value : '',
+            // retailer_id: this.selected.map(item => item.id)
+          }
+
+          if (this.formAudience.get('type').value !== 'pick-all') {
+            body['retailer_id'] = this.selected.map(item => item.id);
+            body['min'] = this.formAudience.get('min').value;
+            body['max'] = this.formAudience.get('max').value;
+
+          } else {
+            body['area_id'] = this.pagination.area;
+
+            if (this.pagination.area !== 1) {
+              body['min'] = 1;
+              body['max'] = this.pagination.total;
+            } else {
+              body['min'] = "";
+              body['max'] = "";
+            }
+          }
+
+          body['type'] = this.formAudience.get("audience_type").value;
+
+          if (body['type'] === 'mission') {
+            body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+            if (body['trade_creator_id']) delete body['trade_creator_id'];
+          } else {
+            body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+            if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+          }
+          console.log(this.findInvalidControls());
+
+          this.saveData = !this.saveData;
+          this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+            res => {
+              this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+              this.router.navigate(['dte', 'audience']);
+              window.localStorage.removeItem('detail_audience');
+            },
+            err => {
+              // this.dialogService.openSnackBar({ message: err.error.message })
+              console.log(err.error.message);
+            }
+          )
+        })
+      } else {
         let body = {
           _method: 'PUT',
           name: this.formAudience.get('name').value,
-          trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
+          trade_creator_id: this.formAudience.get('trade_creator_id').value,
           // min: limit ? this.formAudience.get('min').value : '',
           // max: limit ? this.formAudience.get('max').value : '',
           // retailer_id: this.selected.map(item => item.id)
@@ -557,6 +685,16 @@ export class AudienceEditComponent {
           }
         }
 
+        body['type'] = this.formAudience.get("audience_type").value;
+
+        if (body['type'] === 'mission') {
+          body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+          if (body['trade_creator_id']) delete body['trade_creator_id'];
+        } else {
+          body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+          if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+        }
+        console.log(this.findInvalidControls());
         this.saveData = !this.saveData;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           res => {
@@ -569,7 +707,7 @@ export class AudienceEditComponent {
             console.log(err.error.message);
           }
         )
-      })
+      }
     } else {
       commonFormValidator.validateAllFields(this.formAudience);
 
@@ -578,6 +716,17 @@ export class AudienceEditComponent {
       }
       return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
+  }
+
+  findInvalidControls() {
+    const invalid = [];
+    const controls = this.formAudience.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
   }
 
   updateAudience() {

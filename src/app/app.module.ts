@@ -73,7 +73,7 @@ import { IdleService } from "./services/idle.service";
     AppComponent,
     ErrorDialogComponent,
     ConfirmationDialogComponent,
-    ToastInformationComponent,
+    ToastInformationComponent
   ],
   imports: [
     BrowserModule,
