@@ -186,6 +186,38 @@
             </mat-error>
           </mat-form-field>
 
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput type="text" pattern="[0-9]*" inputmode="numeric" formControlName="account_number"
+                placeholder="Nomor Rekening Bank" numericOnly readonly>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Nama Bank" formControlName="bank_name" readonly>
+            </mat-form-field>
+            <!-- <mat-form-field fxFlex="100" class="is-light form-primary readonly-wrapper">
+              <mat-select formControlName="bank_name" placeholder="Nama Bank" class="readonly-block" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterBank" [placeholderLabel]="'Cari Nama Bank...'"
+                  [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'" class="readonly-block">
+                </ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredBanks | async" [value]="item.code">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Nama pada Rekening Bank" formControlName="account_name" readonly>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input matInput placeholder="Cabang" formControlName="branch" readonly>
+            </mat-form-field>
+          </div>
+
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
             <h3>Daftar Consumer</h3>
           </div>

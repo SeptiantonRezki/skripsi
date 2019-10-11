@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class GeneralService extends BaseService{
+export class GeneralService extends BaseService {
   public namespace = "general";
-  
-  constructor(http: HttpClient) { 
+
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -42,7 +42,7 @@ export class GeneralService extends BaseService{
     const url = this.generateUrl(this.namespace, "wholesaler");
     return this.getApi(url);
   }
-  
+
   getCategory(): Observable<any> {
     const url = this.generateUrl(this.namespace, "category_product");
     return this.getApi(url);
@@ -75,6 +75,11 @@ export class GeneralService extends BaseService{
 
   getListOtherChildren(context): Observable<any> {
     const url = this.getUrl(this.namespace, "list_other_children", context);
+    return this.getApi(url);
+  }
+
+  getBanks(): Observable<any> {
+    const url = this.generateUrl(this.namespace, "banks");
     return this.getApi(url);
   }
 }

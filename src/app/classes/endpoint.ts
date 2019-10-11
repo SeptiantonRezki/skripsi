@@ -76,7 +76,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/data?area=${context.area_id}`
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
@@ -273,7 +274,8 @@ export class Endpoint {
         wholesaler: `${AYO_API}/api/general/analytic/wholesaler`,
         sku: `${AYO_API}/api/`,
         category_product: `${AYO_API}/api/general/analytic/category-product`,
-        unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`
+        unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`,
+        banks: `${AYO_API}/api/v2/general/bank`
       },
       user_onboarding: {
         register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,
