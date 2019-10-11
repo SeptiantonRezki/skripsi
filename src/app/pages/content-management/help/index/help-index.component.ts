@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, HostListener, ElementRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -6,6 +6,9 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router } from '@angular/router';
 import { HelpService } from 'app/services/content-management/help.service';
+
+import { PLATFORM_ID, APP_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-help-index',
@@ -27,6 +30,7 @@ export class HelpIndexComponent {
 
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
+  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
 
@@ -34,7 +38,9 @@ export class HelpIndexComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private helpService: HelpService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -79,6 +85,7 @@ export class HelpIndexComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.scrollToTop();
 
     console.log("Select Event", selected, this.selected);
   }
@@ -91,6 +98,7 @@ export class HelpIndexComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.scrollToTop();
     });
   }
 
@@ -157,6 +165,26 @@ export class HelpIndexComponent {
         this.dialogService.openSnackBar({ message: err.error.message });
       }
     );
+  }
+
+  @HostListener('scroll', ['$event']) onScroll($event: Event): void {
+    const target = $event.srcElement as HTMLTextAreaElement;
+    console.log('....SCROLLing', this.myScrollContainer.nativeElement.scrollHeight);
+    if(target.scrollTop == 0 && this.myScrollContainer.nativeElement.scrollHeight){
+    //   this.state_.isLoadMore = false;
+    }
+  }   
+  scrollToTop() {
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('OKE SCROLLing');
+        try {
+          console.log('OKE SCROLLing2', this.myScrollContainer.nativeElement.scrollHeight);
+          this.myScrollContainer.nativeElement.scrollTop = 0;
+          document.querySelector('#target').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (err) {
+          console.log('Scrolling Error', err);
+        }
+    }
   }
 
 }
