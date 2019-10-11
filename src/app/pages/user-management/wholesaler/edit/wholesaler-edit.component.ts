@@ -1,11 +1,15 @@
-import { Component } from "@angular/core";
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { Component, ViewChild } from "@angular/core";
+import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
 import { Utils } from "app/classes/utils";
+import { ReplaySubject, Subject } from "rxjs";
+import { MatSelect } from "@angular/material";
+import { takeUntil } from "rxjs/operators";
+import { GeneralService } from "app/services/general.service";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -32,6 +36,12 @@ export class WholesalerEditComponent {
 
   isDetail: Boolean;
 
+  listBanks: any[];
+  filterBank: FormControl = new FormControl();
+  filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -39,6 +49,7 @@ export class WholesalerEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private wholesalerService: WholesalerService,
+    private generalService: GeneralService
   ) {
     this.formdataErrors = {
       name: {},
@@ -84,6 +95,7 @@ export class WholesalerEditComponent {
   }
 
   ngOnInit() {
+    // this.getBanks();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
 
@@ -100,7 +112,11 @@ export class WholesalerEditComponent {
       region: ["", Validators.required],
       area: ["", Validators.required],
       district: ["", Validators.required],
-      territory: ["", Validators.required]
+      territory: ["", Validators.required],
+      account_number: [""],
+      account_name: [""],
+      bank_name: [""],
+      branch: [""]
     });
 
     this.formWs.valueChanges.subscribe(() => {
@@ -126,6 +142,12 @@ export class WholesalerEditComponent {
         })
       })
     });
+
+    this.filterBank.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringBanks();
+      });
   }
 
   initArea() {
@@ -188,6 +210,7 @@ export class WholesalerEditComponent {
       }
       this.getAudienceArea(level_desc, item.id);
     });
+
     this.formWs.setValue({
       name: this.detailWholesaler.name,
       address: this.detailWholesaler.address,
@@ -202,9 +225,39 @@ export class WholesalerEditComponent {
       salespoint: this.getArea('salespoint') ? this.getArea('salespoint') : '',
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
+      account_number: this.detailWholesaler.bank_account_number || "-",
+      account_name: this.detailWholesaler.bank_account_name || "-",
+      bank_name: this.detailWholesaler.bank_name || "-",
+      branch: this.detailWholesaler.branch || "-"
     });
 
     if (this.isDetail) this.formWs.disable();
+  }
+
+  getBanks() {
+    this.generalService.getBanks()
+      .subscribe(res => {
+        this.listBanks = res.data;
+        this.filteredBanks.next(this.listBanks.slice());
+      }, err => console.log('err', err));
+  }
+
+  filteringBanks() {
+    if (!this.listBanks) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBank.value;
+    if (!search) {
+      this.filteredBanks.next(this.listBanks.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredBanks.next(
+      this.listBanks.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   getAudienceArea(selection, id) {

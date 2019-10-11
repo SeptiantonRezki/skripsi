@@ -1,10 +1,14 @@
-import { Component } from "@angular/core";
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { Component, ViewChild } from "@angular/core";
+import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
+import { ReplaySubject, Subject } from "rxjs";
+import { MatSelect } from "@angular/material";
+import { GeneralService } from "app/services/general.service";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-retailer-edit',
@@ -46,6 +50,11 @@ export class RetailerEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
+  listBanks: any[];
+  filterBank: FormControl = new FormControl();
+  filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +62,8 @@ export class RetailerEditComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
-    private retailerService: RetailerService
+    private retailerService: RetailerService,
+    private generalService: GeneralService
   ) {
     this.onLoad = false;
     this.formdataErrors = {
@@ -96,6 +106,7 @@ export class RetailerEditComponent {
   }
 
   async ngOnInit() {
+    // this.getBanks();
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -116,7 +127,11 @@ export class RetailerEditComponent {
       longitude: [""],
       type: [""],
       cashier: ["", Validators.required],
-      InternalClassification: ["", Validators.required]
+      InternalClassification: ["", Validators.required],
+      account_number: [""],
+      account_name: [""],
+      bank_name: [""],
+      branch: [""]
     });
     this.formRetailer.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
@@ -166,6 +181,38 @@ export class RetailerEditComponent {
         })
       })
     });
+
+    this.filterBank.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringBanks();
+      });
+  }
+
+  getBanks() {
+    this.generalService.getBanks()
+      .subscribe(res => {
+        this.listBanks = res.data;
+        this.filteredBanks.next(this.listBanks.slice());
+      }, err => console.log('err', err));
+  }
+
+  filteringBanks() {
+    if (!this.listBanks) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBank.value;
+    if (!search) {
+      this.filteredBanks.next(this.listBanks.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredBanks.next(
+      this.listBanks.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   initArea() {
@@ -248,7 +295,11 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier
+      cashier: this.detailRetailer.cashier,
+      account_number: this.detailRetailer.bank_account_number || "-",
+      account_name: this.detailRetailer.bank_account_name || "-",
+      bank_name: this.detailRetailer.bank_name || "-",
+      branch: this.detailRetailer.branch || "-"
     });
 
     if (this.detailRetailer.classification === 'NON-SRC') {
@@ -410,7 +461,7 @@ export class RetailerEditComponent {
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value,
-        cashier: this.formRetailer.get('cashier').value
+        cashier: this.formRetailer.get("cashier").value
       };
 
       console.log(body);

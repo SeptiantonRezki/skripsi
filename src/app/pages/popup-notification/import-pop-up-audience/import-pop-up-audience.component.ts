@@ -46,9 +46,14 @@ export class ImportPopUpAudienceComponent {
     this.dataService.showLoading(true);
     this.notificationService.importAudience(fd).subscribe(
       res => {
-        this.rows = res.data;
-        this.validData = (res.data || []).filter(item => item.is_valid).length;
-        this.dataService.showLoading(false);
+        if (res && res.is_valid) {
+          this.rows = res.data;
+          this.validData = (res.data || []).filter(item => item.is_valid).length;
+          this.dataService.showLoading(false);
+        } else {
+          this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+          this.dataService.showLoading(false);
+        }
       },
       err => {
         this.dataService.showLoading(false);

@@ -55,6 +55,7 @@ import { PartnershipIndexComponent } from "./principal-partnership/index/partner
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
 import { ngfModule } from "angular-file";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { ngfModule } from "angular-file";
     MatTooltipModule,
     MatToolbarModule,
     MatDialogModule,
-    ngfModule
+    ngfModule,
+    NgxMatSelectSearchModule
   ],
   exports: [
     FieldForceIndexComponent,
