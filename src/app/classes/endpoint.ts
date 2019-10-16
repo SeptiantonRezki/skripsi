@@ -264,7 +264,7 @@ export class Endpoint {
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
-        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent ? context.parent : 1}`,
         parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
         get_business: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/get/${context.business_id}`,
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,

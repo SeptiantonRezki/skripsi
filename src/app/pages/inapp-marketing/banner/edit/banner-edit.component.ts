@@ -242,7 +242,8 @@ export class BannerEditComponent {
       }
     })
 
-    this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] }).subscribe(res => {
+    console.log('get parent area', this.detailBanner.area_id[0]);
+    this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] ? this.detailBanner.area_id[0] : 1 }).subscribe(res => {
       this.detailAreaSelected = res.data;
     })
 
@@ -274,7 +275,7 @@ export class BannerEditComponent {
     if (this.detailBanner.user_group === 'retailer') {
       this.formBannerGroup.get('age').setValue(this.detailBanner.age);
 
-      const group_type = this.detailBanner.areas.map(item => item.pivot.type)[0];
+      const group_type = this.detailBanner.areas.map(item => item.type)[0];
       this.formBannerGroup.get('group_type').setValue(group_type);
     }
 
@@ -475,6 +476,7 @@ export class BannerEditComponent {
   }
 
   initFormGroup(response, index) {
+    console.log('init form group', response);
     response.data.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
@@ -504,6 +506,7 @@ export class BannerEditComponent {
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+    console.log('wilayah', wilayah);
     switch (selection) {
       case 'zone':
         const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
