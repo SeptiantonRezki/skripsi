@@ -446,7 +446,21 @@ export class RetailerEditComponent {
     }
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.formRetailer.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
   submit() {
+    console.log('invalid form field', this.findInvalidControls());
+    this.formRetailer.get("account_number").setValidators([]);
+    this.formRetailer.get("account_number").updateValueAndValidity();
     if (this.formRetailer.valid) {
       let body = {
         _method: "PUT",

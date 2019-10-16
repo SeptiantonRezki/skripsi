@@ -369,8 +369,22 @@ export class WholesalerEditComponent {
     return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.formWs.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
   submit() {
     // console.log(this.formWs);
+    console.log('invalid form field', this.findInvalidControls());
+    this.formWs.get("account_number").setValidators([]);
+    this.formWs.get("account_number").updateValueAndValidity();
     if (this.formWs.valid) {
       let body = {
         _method: "PUT",
