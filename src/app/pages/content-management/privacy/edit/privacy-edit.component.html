@@ -23,7 +23,8 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Kebijakan Privasi">
-              <mat-error *ngIf="formPrivacy.controls['title'].hasError('required') && formPrivacy.controls['title'].touched">
+              <mat-error
+                *ngIf="formPrivacy.controls['title'].hasError('required') && formPrivacy.controls['title'].touched">
                 Judul Kebijakan Privasi harus diisi
               </mat-error>
             </mat-form-field>
@@ -31,9 +32,11 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select formControlName="user" placeholder="Grup Pengguna">
-                <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
+                <mat-option *ngFor="let item of userGroup" [value]="item.value" style="text-transform: capitalize;">
+                  {{item.name}}</mat-option>
               </mat-select>
-              <mat-error *ngIf="formPrivacy.controls['user'].hasError('required') && formPrivacy.controls['user'].touched">
+              <mat-error
+                *ngIf="formPrivacy.controls['user'].hasError('required') && formPrivacy.controls['user'].touched">
                 Grup Pengguna harus diisi
               </mat-error>
             </mat-form-field>
