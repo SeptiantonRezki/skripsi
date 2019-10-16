@@ -6,6 +6,7 @@ import { TncService } from '../../../../services/content-management/tnc.service'
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { Config } from 'app/classes/config';
+import { HelpService } from 'app/services/content-management/help.service';
 
 @Component({
   selector: 'app-tnc-edit',
@@ -19,11 +20,11 @@ export class TncEditComponent {
   detailTnc: any;
 
   userGroup: any[] = [
-    { name: "Field Force", value: "field-force" },
-    { name: "Wholesaler", value: "wholesaler" },
-    { name: "Retailer", value: "retailer" },
-    // { name: "Paguyuban", value: "paguyuban" },
-    { name: "Customer", value: "customer" }
+    // { name: "Field Force", value: "field-force" },
+    // { name: "Wholesaler", value: "wholesaler" },
+    // { name: "Retailer", value: "retailer" },
+    // // { name: "Paguyuban", value: "paguyuban" },
+    // { name: "Customer", value: "customer" }
   ];
 
   files: File;
@@ -34,7 +35,8 @@ export class TncEditComponent {
     private router: Router,
     private dialogService: DialogService,
     private tncService: TncService,
-    private dataService: DataService
+    private dataService: DataService,
+    private helpService: HelpService
   ) {
     this.formTncError = {
       title: {},
@@ -50,8 +52,10 @@ export class TncEditComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
-      is_notif: [false] 
+      is_notif: [false]
     });
+
+    this.getUserGroups();
 
     this.formTnc.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formTnc, this.formTncError);
@@ -67,6 +71,23 @@ export class TncEditComponent {
 
   removeImage(): void {
     this.files = undefined;
+  }
+
+  getUserGroups() {
+    this.helpService.getListUser().subscribe(
+      (res: any) => {
+        console.log('getListUser', res);
+        this.userGroup = res.data.map((item: any) => {
+          return (
+            { name: item, value: item }
+          );
+        });
+      },
+      err => {
+        this.userGroup = [];
+        console.error(err);
+      }
+    );
   }
 
   submit(): void {
