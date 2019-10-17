@@ -15,8 +15,8 @@ export class SupportService extends BaseService {
     return this.getApi(url);
   }
 
-  getBantuanListCategory(): Observable<any> {
-    const url = this.getUrl(this.namespace, "getBantuanListCategory");
+  getBantuanListCategory(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "getBantuanListCategory",context);
     return this.getApi(url);
   }
 

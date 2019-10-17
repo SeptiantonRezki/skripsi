@@ -344,7 +344,7 @@ export class Endpoint {
       },
       support: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user}`,
-        getBantuanListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-categories`,
+        getBantuanListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-categories?user=${context.user}`,
         getBantuanListCategoryDetails: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-help?content_category_id=${context.id}&user=${context.user}`,
         getBantuanShowDetail: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/${context.id}`,
         like: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/like?content_id=${context.id}`,

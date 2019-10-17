@@ -28,11 +28,16 @@ export class HelpIndexComponent {
 
   keyUp = new Subject<string>();
 
+  userGroup: any[] = [
+    { name: "Semua Grup Pengguna", value: "" },
+  ];
+
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   @ViewChild('containerScroll') private myScrollContainer: ElementRef;
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  offsetPagination: Number = null;
 
   constructor(
     private dialogService: DialogService,
@@ -65,9 +70,12 @@ export class HelpIndexComponent {
     //     this._fuseSplashScreenService.hide();
     // }, 3000);
     this.getHelp();
+    this.getListUser();
   }
 
   getHelp() {
+    this.offsetPagination = 0;
+
     this.helpService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -90,7 +98,8 @@ export class HelpIndexComponent {
     console.log("Select Event", selected, this.selected);
   }
 
-  setPage(pageInfo) {
+  setPage(pageInfo: any) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
@@ -119,15 +128,55 @@ export class HelpIndexComponent {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = 1;
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.helpService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
     });
+  }
+
+  getListUser() {
+    this.helpService.getListUser().subscribe(
+      (res: any) => {
+        console.log('getListUser', res);
+        this.userGroup = res.data.map((item: any) => {
+          return (
+            { name: item, value: item }
+          );
+        });
+      },
+      err => {
+        this.userGroup = [];
+        console.error(err);
+      }
+    );
+  }
+
+  selectedItemFilter(event: any) {
+    let e = event.value;
+    this.pagination.user = e;
+    this.pagination.page = 1;
+    this.offsetPagination = 0;
+    this.loadingIndicator = true;
+    this.helpService.get(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        this.loadingIndicator = false;
+      }, err => {
+        console.error(err);
+    })
   }
 
   directEdit(param?: any): void {
@@ -169,16 +218,16 @@ export class HelpIndexComponent {
 
   @HostListener('scroll', ['$event']) onScroll($event: Event): void {
     const target = $event.srcElement as HTMLTextAreaElement;
-    console.log('....SCROLLing', this.myScrollContainer.nativeElement.scrollHeight);
+    // console.log('....SCROLLing', this.myScrollContainer.nativeElement.scrollHeight);
     if(target.scrollTop == 0 && this.myScrollContainer.nativeElement.scrollHeight){
     //   this.state_.isLoadMore = false;
     }
   }   
   scrollToTop() {
     if (isPlatformBrowser(this.platformId)) {
-      console.log('OKE SCROLLing');
+      // console.log('OKE SCROLLing');
         try {
-          console.log('OKE SCROLLing2', this.myScrollContainer.nativeElement.scrollHeight);
+          // console.log('OKE SCROLLing2', this.myScrollContainer.nativeElement.scrollHeight);
           this.myScrollContainer.nativeElement.scrollTop = 0;
           document.querySelector('#target').scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch (err) {

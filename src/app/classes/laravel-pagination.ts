@@ -13,6 +13,7 @@ export class Page {
   start_date: string;
   end_date: string;
   area: any;
+  user: any;
 
   constructor() {
     this.per_page = 15;
@@ -26,6 +27,7 @@ export class Page {
     this.start_date = "";
     this.end_date = "";
     this.area = null;
+    this.user = "";
   }
 
   public static renderPagination(pagination, response) {
