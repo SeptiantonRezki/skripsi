@@ -27,7 +27,7 @@ export class ScheduleProgramIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
-  statusFilter: any[] =  [
+  statusFilter: any[] = [
     { name: 'Urutkan Perhari', value: 'day' },
     { name: 'Urutkan Perbulan', value: 'mounth' },
     { name: 'Urutkan Pertahun', value: 'year' }
@@ -105,7 +105,7 @@ export class ScheduleProgramIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -192,9 +192,9 @@ export class ScheduleProgramIndexComponent {
       }
     });
   }
-  
+
   async export(item) {
-    const length = 100 / item.trade_scheduler_templates.length;
+    const length = 100 / item.trade_scheduler_templates.length === Infinity ? 0 : 100 / item.trade_scheduler_templates.length;
     let current_progress = 0;
 
     this.dataService.showLoading({ show: true });
@@ -202,18 +202,25 @@ export class ScheduleProgramIndexComponent {
 
     let response: any = { rand: "" };
 
-    for (const {val, index} of item.trade_scheduler_templates.map((val, index) => ({ val, index }))) {
+    if (item.trade_scheduler_templates.length === 0) {
+      this.dataService.setProgress({ progress: 100 });
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: "Template Jadwal Trade Program kosong" });
+      return;
+    }
 
-      let params = { 
-        trade_scheduler_id: item.id, 
-        last: (index+1) === item.trade_scheduler_templates.length ? 'true' : 'false', 
-        rand: response.rand, 
+    for (const { val, index } of item.trade_scheduler_templates.map((val, index) => ({ val, index }))) {
+
+      let params = {
+        trade_scheduler_id: item.id,
+        last: (index + 1) === item.trade_scheduler_templates.length ? 'true' : 'false',
+        rand: response.rand,
         trade_scheduler_template_id: val.id
       }
 
       try {
         this.userIdle.onHitEvent();
-        response = await this.scheduleTradeProgramService.export(params).toPromise(); 
+        response = await this.scheduleTradeProgramService.export(params).toPromise();
 
         current_progress = current_progress === 0 ? length : current_progress + length;
         this.dataService.setProgress({ progress: current_progress.toFixed(0) });
@@ -221,9 +228,9 @@ export class ScheduleProgramIndexComponent {
       } catch (error) {
         this.dataService.showLoading(false);
         throw error;
-      } 
+      }
     }
-    
+
     this.dataService.setProgress({ progress: 100 });
 
     if (response.data && response.status) {
