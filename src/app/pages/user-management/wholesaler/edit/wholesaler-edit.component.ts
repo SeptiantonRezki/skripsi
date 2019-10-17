@@ -8,7 +8,7 @@ import { WholesalerService } from "../../../../services/user-management/wholesal
 import { Utils } from "app/classes/utils";
 import { ReplaySubject, Subject } from "rxjs";
 import { MatSelect } from "@angular/material";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { GeneralService } from "app/services/general.service";
 
 @Component({
@@ -20,6 +20,8 @@ export class WholesalerEditComponent {
   formWs: FormGroup;
   formdataErrors: any;
   onLoad: Boolean;
+  formBankAccount: FormGroup;
+  formBankAccountError: any;
 
   detailWholesaler: any;
   listStatus: any[] = [
@@ -41,6 +43,7 @@ export class WholesalerEditComponent {
   filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
+  bankAccountLength: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,6 +68,13 @@ export class WholesalerEditComponent {
       salespoint: {},
       district: {},
       territory: {}
+    };
+
+    this.formBankAccountError = {
+      account_name: {},
+      account_number: {},
+      bank_name: {},
+      branch: {}
     };
 
     this.activatedRoute.url.subscribe(params => {
@@ -95,7 +105,7 @@ export class WholesalerEditComponent {
   }
 
   ngOnInit() {
-    // this.getBanks();
+    this.getBanks();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
 
@@ -113,6 +123,9 @@ export class WholesalerEditComponent {
       area: ["", Validators.required],
       district: ["", Validators.required],
       territory: ["", Validators.required],
+    });
+
+    this.formBankAccount = this.formBuilder.group({
       account_number: [""],
       account_name: [""],
       bank_name: [""],
@@ -142,6 +155,17 @@ export class WholesalerEditComponent {
         })
       })
     });
+
+    this.formBankAccount
+      .valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(res => {
+        let total = 0;
+        Object.keys(res).map(frm => {
+          total += (res[frm] ? res[frm].length : "".length);
+        });
+        this.bankAccountLength = total;
+      });
 
     this.filterBank.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -185,6 +209,35 @@ export class WholesalerEditComponent {
     })
   }
 
+  bindFormBankAccountValidator() {
+    if (this.bankAccountLength > 0) {
+      this.formBankAccount.get("account_number").setValidators(Validators.required);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators(Validators.required);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators(Validators.required);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators(Validators.required);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    } else {
+      this.formBankAccount.get("account_number").setValidators([]);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators([]);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators([]);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators([]);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    }
+  }
+
+  clearBankName() {
+    this.formBankAccount.get('bank_name').setValue(null);
+    this.bindFormBankAccountValidator();
+  }
+
   initFormGroup() {
     this.detailAreaSelected.map(item => {
       let level_desc = '';
@@ -225,13 +278,19 @@ export class WholesalerEditComponent {
       salespoint: this.getArea('salespoint') ? this.getArea('salespoint') : '',
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
-      account_number: this.detailWholesaler.bank_account_number || "-",
-      account_name: this.detailWholesaler.bank_account_name || "-",
-      bank_name: this.detailWholesaler.bank_name || "-",
-      branch: this.detailWholesaler.branch || "-"
     });
 
-    if (this.isDetail) this.formWs.disable();
+    this.formBankAccount.setValue({
+      account_number: this.detailWholesaler.bank_account_number,
+      account_name: this.detailWholesaler.bank_account_name,
+      bank_name: this.detailWholesaler.bank_name,
+      branch: this.detailWholesaler.branch
+    });
+
+    if (this.isDetail) {
+      this.formWs.disable();
+      this.formBankAccount.disable();
+    }
   }
 
   getBanks() {
@@ -369,9 +428,22 @@ export class WholesalerEditComponent {
     return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    let controls = this.formWs.controls;
+    controls = { ...controls, ...this.formBankAccount.controls };
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
   submit() {
     // console.log(this.formWs);
-    if (this.formWs.valid) {
+    console.log('invalid form field', this.findInvalidControls());
+    if (this.formWs.valid && this.formBankAccount.valid) {
       let body = {
         _method: "PUT",
         name: this.formWs.get("name").value,
@@ -380,7 +452,11 @@ export class WholesalerEditComponent {
         owner: this.formWs.get("owner").value,
         phone: '+62' + this.formWs.get("phone").value,
         areas: this.list['territory'].filter(item => item.id === this.formWs.get('territory').value).map(item => item.id),
-        status: this.formWs.get("status").value
+        status: this.formWs.get("status").value,
+        bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
+        bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
+        bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
+        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value
       };
       this.wholesalerService
         .put(body, { wholesaler_id: this.detailWholesaler.id })
