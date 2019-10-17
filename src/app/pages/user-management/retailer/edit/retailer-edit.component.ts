@@ -8,7 +8,7 @@ import { RetailerService } from "../../../../services/user-management/retailer.s
 import { ReplaySubject, Subject } from "rxjs";
 import { MatSelect } from "@angular/material";
 import { GeneralService } from "app/services/general.service";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 
 @Component({
   selector: 'app-retailer-edit',
@@ -20,6 +20,8 @@ export class RetailerEditComponent {
   formRetailer: FormGroup;
   formdataErrors: any;
   onLoad: Boolean;
+  formBankAccount: FormGroup;
+  formBankAccountError: any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -55,6 +57,7 @@ export class RetailerEditComponent {
   filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
+  bankAccountLength: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -79,6 +82,14 @@ export class RetailerEditComponent {
       // type: {},
       InternalClassification: {}
     };
+
+    this.formBankAccountError = {
+      account_number: {},
+      account_name: {},
+      bank_name: {},
+      branch: {}
+    };
+
     this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
@@ -106,7 +117,7 @@ export class RetailerEditComponent {
   }
 
   async ngOnInit() {
-    // this.getBanks();
+    this.getBanks();
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -128,11 +139,15 @@ export class RetailerEditComponent {
       type: [""],
       cashier: ["", Validators.required],
       InternalClassification: ["", Validators.required],
+    });
+
+    this.formBankAccount = this.formBuilder.group({
       account_number: [""],
       account_name: [""],
       bank_name: [""],
       branch: [""]
     });
+
     this.formRetailer.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
@@ -181,6 +196,17 @@ export class RetailerEditComponent {
         })
       })
     });
+
+    this.formBankAccount
+      .valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(res => {
+        let total = 0;
+        Object.keys(res).map(frm => {
+          total += (res[frm] ? res[frm].length : "".length);
+        });
+        this.bankAccountLength = total;
+      });
 
     this.filterBank.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -295,18 +321,24 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier,
-      account_number: this.detailRetailer.bank_account_number || "-",
-      account_name: this.detailRetailer.bank_account_name || "-",
-      bank_name: this.detailRetailer.bank_name || "-",
-      branch: this.detailRetailer.branch || "-"
+      cashier: this.detailRetailer.cashier
+    });
+
+    this.formBankAccount.setValue({
+      account_number: this.detailRetailer.bank_account_number,
+      account_name: this.detailRetailer.bank_account_name,
+      bank_name: this.detailRetailer.bank_name,
+      branch: this.detailRetailer.branch
     });
 
     if (this.detailRetailer.classification === 'NON-SRC') {
       this.formRetailer.controls['business_code'].disable();
     }
 
-    if (this.isDetail) this.formRetailer.disable();
+    if (this.isDetail) {
+      this.formRetailer.disable();
+      this.formBankAccount.disable();
+    }
   }
 
   getAudienceArea(selection, id) {
@@ -457,10 +489,37 @@ export class RetailerEditComponent {
     return invalid;
   }
 
+  bindFormBankAccountValidator() {
+    if (this.bankAccountLength > 0) {
+      this.formBankAccount.get("account_number").setValidators(Validators.required);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators(Validators.required);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators(Validators.required);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators(Validators.required);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    } else {
+      this.formBankAccount.get("account_number").setValidators([]);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators([]);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators([]);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators([]);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    }
+  }
+
+  clearBankName() {
+    this.formBankAccount.get('bank_name').setValue(null);
+    this.bindFormBankAccountValidator();
+  }
+
   submit() {
     console.log('invalid form field', this.findInvalidControls());
-    this.formRetailer.get("account_number").setValidators([]);
-    this.formRetailer.get("account_number").updateValueAndValidity();
     if (this.formRetailer.valid) {
       let body = {
         _method: "PUT",
@@ -475,7 +534,11 @@ export class RetailerEditComponent {
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value,
-        cashier: this.formRetailer.get("cashier").value
+        cashier: this.formRetailer.get("cashier").value,
+        bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
+        bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
+        bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
+        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value
       };
 
       console.log(body);
