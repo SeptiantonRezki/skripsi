@@ -241,7 +241,7 @@ export class AudienceEditComponent {
   }
 
   getTradePrograms() {
-    this.audienceService.getListTradePrograms().subscribe(res => {
+    this.audienceService.getListTradePrograms({ id: this.detailAudience.trade_creator_id }).subscribe(res => {
       console.log('res trade programs', res);
       this.listTradePrograms = res.data;
       this.filteredTradeProgram.next(this.listTradePrograms.slice());
@@ -468,6 +468,7 @@ export class AudienceEditComponent {
       this.formAudience.get('type').disable();
       this.formAudience.get('trade_scheduler_id').disable();
       this.formAudience.get('trade_creator_id').disable();
+      this.formAudience.get('audience_type').disable();
     }
 
     console.log('init audience', this.formAudience);
