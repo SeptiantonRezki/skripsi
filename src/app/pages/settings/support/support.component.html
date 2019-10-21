@@ -9,9 +9,9 @@
   <div class="content p-24 mb-42" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
-      <mat-tab-group [selectedIndex]="selectedTab">
+      <mat-tab-group [selectedIndex]="selectedTab" *ngIf="!isListCategoryDetails">
         <mat-tab label="Informasi">
-          <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar *ngIf="!isListCategoryDetails">
+          <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
             <div class="help-title" fxLayout="column" fxLayoutAlign="center center">
               <div class="title-red"><strong>Hai SAHABAT HMS</strong></div>
               <div class="title-black"><strong>hal apa yang bisa kami bantu hari ini ?</strong></div>
@@ -22,10 +22,14 @@
                     </div>
                     <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda" aria-label="Number" matInput [formControl]="myControl"
                       [matAutocomplete]="auto">
+                    <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()" *ngIf="myControl.value">
+                      <mat-icon class="cancel-icon">delete</mat-icon>
+                    </div>
                   </div>
                   <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (click)="openHelpDetails({id: option.id, type: 'search'})">
-                      {{option.title}}
+                        <span *ngIf="isFound">{{option.title}}</span>
+                        <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.</span>
                     </mat-option>
                   </mat-autocomplete>
               </div>
@@ -36,7 +40,7 @@
               </div>
               <div class="help-content" fxLayout="row" fxLayoutAlign="center center" flexWrap>
                 <div *ngFor="let menuButton of menuButtons; let i = index">
-                  <mat-card class="menu-card" fxLayout="column" fxLayoutAlign="space-around center" (click)="openListCategoryDetails(menuButton)">
+                  <mat-card class="menu-card" fxLayout="column" fxLayoutAlign="space-around center" (click)="openListCategoryDetails(menuButton, i)">
                     <mat-card-header fxLayout="column" fxLayoutAlign="center center">
                       <div class="header-image" fxLayout="column" fxLayoutAlign="center center">
                         <img src="{{menuButton.image_url}}" alt="Help Category">
@@ -81,59 +85,6 @@
                   </div>
             </div>
           </div>
-          <div fxLayout="row" fxLayoutAlign="start start" fusePerfectScrollbar *ngIf="isListCategoryDetails">
-            <div fxFlex="30" fxLayout="column">
-              <mat-list class="pt-0">
-                <mat-list-item (click)="backToPusatBantuan()">
-                  <mat-icon class="button-back">navigate_before</mat-icon>
-                  <span class="back pl-8">Kembali ke Pusat Bantuan</span>
-                  <mat-divider></mat-divider>
-                </mat-list-item>
-                <mat-list-item class="ml-20" *ngFor="let item of listCategoryDetails" (click)="openHelpDetails(item)">
-                  <!-- <img mat-list-icon [src]="item.image_url" /> -->
-                  <span [class]="selectedIndex == null ? 'selected-help pl-8' : 'pl-8'">{{item.title}}</span>
-                  <mat-divider></mat-divider>
-                </mat-list-item>
-              </mat-list>
-            </div>
-            <div fxFlex="70">
-              <div class="help-detail p-20" fxLayout="column">
-                <div class="search-container-help-detail" fxLayout="row" fxLayoutAlign="center center" fxFlexAlign="start">
-                  <div class="full-width" fxLayout="row">
-                    <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
-                      <mat-icon class="search-icon">search</mat-icon>
-                    </div>
-                    <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda" aria-label="Number" matInput [formControl]="myControl"
-                      [matAutocomplete]="auto">
-                  </div>
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (click)="openHelpDetails({id: option.id, type: 'search'})">
-                      {{option.title}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </div>
-                <div *ngIf="!helpDetail" class="full-size" fxLayout="row" fxLayoutAlign="center center">
-                  <img src="assets/images/ayo/AYO_SRC_(Master).png" style="width: 160px; height: 100px; object-fit: cover; object-position: 0 0;" srcset="assets/images/ayo/AYO_SRC_(Master)@2x.png 2x" alt="Help Detail">
-                </div>
-                <div *ngIf="helpDetail" class="help-detail-content" fxLayout="row">
-                    <div [innerHtml]="helpDetail.body"></div>
-                </div>
-                <div *ngIf="helpDetail" class="help-detail-footer" fxLayout="column" fxFlexAlign="end"> 
-                    <span class="title">Apakah informasi ini berguna?</span>
-                    <div class="like pb-8" fxLayout="row" fxLayoutAlign="start center" (click)="like(helpDetail)">
-                        <mat-icon *ngIf="!isLike" class="thumb-up" >thumb_up</mat-icon>
-                        <mat-icon *ngIf="isLike" class="thumb-up-red" >thumb_up</mat-icon>
-                        <span class="pl-8" >{{helpDetail.likes_count}}</span>
-                    </div>
-                    <div class="unlike " fxLayout="row" fxLayoutAlign="start center" (click)="unlike(helpDetail)">
-                        <mat-icon *ngIf="!isUnlike" class="thumb-down" >thumb_down</mat-icon>
-                        <mat-icon *ngIf="isUnlike" class="thumb-down-red" >thumb_down</mat-icon>
-                        <span class="pl-8" >{{helpDetail.unlikes_count}}</span>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </mat-tab>
         <mat-tab label="Pesan Bantuan">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
@@ -141,6 +92,80 @@
           </div>
         </mat-tab>
       </mat-tab-group>
+
+      <!-- DETAIL -->
+      <div fxLayout="row" fxLayoutAlign="start start" fusePerfectScrollbar *ngIf="isListCategoryDetails">
+          <div fxFlex="30" fxLayout="column">
+            <mat-list class="pt-0">
+              <mat-list-item class="mb-20" (click)="backToPusatBantuan()">
+                <mat-icon class="button-back">navigate_before</mat-icon>
+                <span class="back pl-8">Kembali ke Homepage Bantuan</span>
+                <mat-divider></mat-divider>
+              </mat-list-item>
+              <mat-list-item class="ml-20" *ngFor="let item of menuButtons; let i = index" (click)="openListCategoryDetails(item, i)">
+                <img mat-list-icon [src]="item.image_url" />
+                <span [class]="selectedIndex == i ? 'selected-help pl-8' : 'pl-8'">{{item.category}}</span>
+                <!-- <mat-divider></mat-divider> -->
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <div fxFlex="70">
+            <div class="help-detail p-20" fxLayout="column">
+              <div class="search-container-help-detail" fxLayout="row" fxLayoutAlign="center center" fxFlexAlign="start">
+                <div class="full-width" fxLayout="row">
+                  <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
+                    <mat-icon class="search-icon">search</mat-icon>
+                  </div>
+                  <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda" aria-label="Number" matInput [formControl]="myControl"
+                    [matAutocomplete]="auto">
+                  <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()" *ngIf="myControl.value">
+                    <mat-icon class="cancel-icon">delete</mat-icon>
+                  </div>
+                </div>
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title" (click)="openHelpDetails({id: option.id, type: 'search'})">
+                      <span *ngIf="isFound">{{option.title}}</span>
+                      <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.</span>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+              <div *ngIf="!helpDetail && listCategoryDetails"> 
+                <div class="bold-title" fxLayout="row" fxLayoutAlign="center center">
+                  <span>Pilih salah satu dari beberapa topik yang sesuai dengan kendala / pertanyaan Anda</span>
+                </div>
+                <mat-list class="pt-0">
+                  <mat-list-item *ngFor="let item of listCategoryDetails" (click)="openHelpDetails(item); deleteSearch();">
+                    <span class="pl-8">{{item.title}}</span>
+                    <mat-divider></mat-divider>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+              <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-content" fxLayout="column" fxLayoutAlign="start start">
+                  <div [innerHtml]="helpDetail.body"></div>
+                  <div class="py-24" *ngIf="helpDetail.image_url">
+                    <img class="previewIcon" [src]="helpDetail.image_url">
+                  </div>
+              </div>
+              <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-footer mt-20" fxLayout="column"> 
+                  <span class="title">Apakah informasi ini berguna?</span>
+                  <div class="like pb-8" fxLayout="row" fxLayoutAlign="start center" (click)="like(helpDetail)">
+                      <mat-icon *ngIf="!isLike" class="thumb-up" >thumb_up</mat-icon>
+                      <mat-icon *ngIf="isLike" class="thumb-up-red" >thumb_up</mat-icon>
+                      <span class="pl-8" >{{helpDetail.likes_count}}</span>
+                  </div>
+                  <div class="unlike " fxLayout="row" fxLayoutAlign="start center" (click)="unlike(helpDetail)">
+                      <mat-icon *ngIf="!isUnlike" class="thumb-down" >thumb_down</mat-icon>
+                      <mat-icon *ngIf="isUnlike" class="thumb-down-red" >thumb_down</mat-icon>
+                      <span class="pl-8" >{{helpDetail.unlikes_count}}</span>
+                  </div>
+                  <div class="help-next mt-20 mb-20" (click)="onHelpNext()" fxLayout="column" fxLayoutAlign="start start">
+                    <span>Butuh bantuan lebih lanjut mengenai hal ini?</span>
+                    <span>Tim Digital Care AYOSRC siap membantu anda</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
     </div>
   </div>
 </div>
