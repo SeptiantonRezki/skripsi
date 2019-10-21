@@ -240,12 +240,17 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       switch (automationType) {
         case 'e-order':
           let barcodes = this.formAutomation.get('skus').value;
-          body['barcode'] = barcodes.length > 0 ? barcodes.map(bc => bc.formSku) : [];
+          body['barcode'] = barcodes.map(bc => bc.formSku);
+          if (barcodes.length === 1 && barcodes[0].formSku === "") {
+            delete body['barcode'];
+          }
           break;
         case 'coupon':
           body['coupon_total'] = this.formAutomation.get('coupon_total').value
+          if (body['barcode']) delete body['barcode'];
           break;
         case 'referral_code':
+          if (body['barcode']) delete body['barcode'];
           break;
       }
       console.log(body, automationType, this.formAutomation.get('skus').value);
