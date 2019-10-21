@@ -26,6 +26,7 @@ export class HelpEditComponent {
   keywordAddOnBlur: boolean = true;
   readonly keywordSeparatorKeysCodes: number[] = [ENTER, COMMA];
   keywords: string[] = [];
+  isValidFile: boolean;
 
   userGroup: any[] = [
     { name: "Please Wait...", value: "" },
@@ -54,6 +55,7 @@ export class HelpEditComponent {
       category: {},
       // otherkeyword: {},
     };
+    this.isValidFile = true;
 
     this.detailHelp = this.dataService.getFromStorage('detail_help');
   }
@@ -151,7 +153,8 @@ export class HelpEditComponent {
           // otherkeyword: res.data.keyword,
           body: res.data.body,
         });
-        this.keywords = JSON.parse(res.data.keyword);
+
+        this.keywords = res.data.keyword? JSON.parse(res.data.keyword):[];
       },
       err => {
         console.error(err);
@@ -161,10 +164,22 @@ export class HelpEditComponent {
 
   removeImage(): void {
     this.files = undefined;
+    this.isValidFile = true;
+  }
+
+  onFilesChange() {
+    setTimeout(() => {
+      console.log('this.files', this.files);
+      if(this.files.size > 500000){
+        this.isValidFile = false;
+      } else {
+        this.isValidFile = true;
+      }
+    }, 500);
   }
 
   submit(): void {
-    if (this.formHelp.valid || this.formHelp.valid && this.files && this.files.size < 500000) {
+    if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
       let body = new FormData();
       body.append('_method', 'PUT');
       body.append('title', this.formHelp.get("title").value);

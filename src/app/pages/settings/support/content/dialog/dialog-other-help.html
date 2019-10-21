@@ -4,7 +4,7 @@
     <span class="description">
       {{data.description}}
     </span>
-    <span class="target">{{data.target}}</span>
+    <span class="target mb-20" *ngIf="data.target">{{data.target}}</span>
     <button class="ok-button" mat-button color="primary-red" (click)="onClose()">OK</button>
   </div>
 </div>

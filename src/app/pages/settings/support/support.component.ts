@@ -31,6 +31,7 @@ export class SupportComponent implements OnInit {
   isLoading: boolean;
   myControl = new FormControl();
   selectedIndex: any;
+  isFound: boolean;
 
   constructor(
     private supportService: SupportService,
@@ -49,6 +50,7 @@ export class SupportComponent implements OnInit {
     this.searchData = [];
     this.isLoading = false;
     this.selectedIndex = -1;
+    this.isFound = false;
   }
 
   ngOnInit() {
@@ -91,7 +93,18 @@ export class SupportComponent implements OnInit {
       return this.supportService.search({keyword: value, user: 'principal'}).pipe(
         map((option: any) => {
           console.log('option', option);
-        return option.data;
+          if (option.data.length > 0){
+            this.isFound = true;
+            return option.data;
+          } else {
+            this.isFound = false;
+            return [{
+              id: null,
+              title: "",
+              text: "HASIL PENCARIAN untuk \"" + value + "\" tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.",
+              value: value
+            }];
+          }
         })
       );
   }
@@ -107,9 +120,17 @@ export class SupportComponent implements OnInit {
     return this.filteredOptions;
   }
 
-  openListCategoryDetails(param: any) {
+  openListCategoryDetails(param: any, index?: number) {
+    if(index !== undefined){
+      if(this.selectedIndex !== index) this.listCategoryDetails = [];
+      this.selectedIndex = index;
+    } else {
+      this.selectedIndex = 0;
+    }
     this.onLoadDetail = true;
     this.isListCategoryDetails = true;
+    this.helpDetail = null;
+    
     this.supportService.getBantuanListCategoryDetails({ id: param.id, user: 'principal' }).subscribe((res: any) => {
       this.listCategoryDetails = res.data;
       this.onLoadDetail = false;
@@ -117,23 +138,22 @@ export class SupportComponent implements OnInit {
   }
 
   openHelpDetails(val: any) {
-    if(val.type == 'search'){
+    if (val.id !== null) {
       this.onLoadDetail = true;
       this.isListCategoryDetails = true;
+      this.supportService.getBantuanShowDetail({ id: val.id }).subscribe((res: any) => {
+        this.helpDetail = res.data;
+        this.isLike = res.data.help_status == 1;
+        this.isUnlike = res.data.help_status == 2;
+        this.listCategoryDetails = null;
+        this.onLoadDetail = false;
+        this.menuButtons.map((item: any, i: number) => {
+          if(res.data.content_category_id == item.id){
+            this.selectedIndex = i;
+          }
+        });
+      }, err => console.log('err getBantuanListCategoryDetails', err));
     }
-    // this.selectedIndex = val.idx;
-    this.supportService.getBantuanShowDetail({ id: val.id }).subscribe((res: any) => {
-      this.helpDetail = res.data;
-      this.isLike = res.data.help_status == 1;
-      this.isUnlike = res.data.help_status == 2;
-      if(val.type == 'search'){
-        this.listCategoryDetails = [{
-          id: res.data.id,
-          title: res.data.title,
-        }]
-      }
-      this.onLoadDetail = false;
-    }, err => console.log('err getBantuanListCategoryDetails', err));
   }
 
   backToPusatBantuan() {
@@ -171,13 +191,21 @@ export class SupportComponent implements OnInit {
     }
   }
 
+  onHelpNext() {
+    this.openDialogChat();
+  }
+
+  deleteSearch() {
+    this.myControl.setValue('');
+  }
+
   menuButtonOtherDetail(item: any) {
     if (item.category == 'Telepon') {
       this.openDialogTelepon();
     } else if (item.category == 'E-Mail') {
       this.openDialogEmail();
     } else {
-
+      this.openDialogChat();
     }
   }
 
@@ -206,4 +234,18 @@ export class SupportComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+
+  openDialogChat(): void {
+    const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { target: '', description: 'Fitur ini akan segera tersedia untuk anda. Nantikan kehadiran fitur ini segera eksklusif hanya untuk pengguna AYOSRC'};
+    const dialogRef = this.dialog.open(DialogOtherHelp, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
 }
