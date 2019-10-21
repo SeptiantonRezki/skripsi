@@ -83,7 +83,7 @@
                 <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
                 <div class="mt-24 mb-24" fxFlex="45%">
                   <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
-                    mat-raised-button type="button">
+                    mat-raised-button type="button" [disabled]="isDetail">
                     <mat-icon>add</mat-icon>
                     Tambah Produk
                   </button>
