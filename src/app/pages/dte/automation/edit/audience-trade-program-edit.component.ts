@@ -181,6 +181,10 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         this.filteredSku.next(res.data);
       });
 
+
+    if (this.isDetail) {
+      this.formAutomation.disable();
+    }
   }
 
   ngOnDestroy() {
