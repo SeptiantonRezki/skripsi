@@ -11,7 +11,7 @@
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-            accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+            accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (filesChange)="onFilesChange()">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
@@ -27,7 +27,16 @@
                 <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
               </div>
               <div class="previewIcon" [ngfBackground]="files"></div>
+              <mat-error class="pt-8" *ngIf="!isValidFile">
+                  Ukuran icon tidak boleh melebihi 500KB!
+              </mat-error>
             </div>
+          </div>
+          <div class="py-24" *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)<0">
+              <mat-error class="pt-8" *ngIf="!isValidFile" (click)="removeImage()" fxLayout="row"  fxLayoutAlign="start center">
+                  <span>Format gambar tidak didukung! Hapus </span>
+                  <mat-icon style="cursor: pointer;" (click)="removeImage()">delete</mat-icon>
+              </mat-error>
           </div>
 
           <!-- <div *ngIf="!files && detailCatalogue.image_url">
