@@ -51,7 +51,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.selectedTab = 0;
 
     this.detailAutomation = this.dataService.getFromStorage('detail_dte_automation');
-    if (this.detailAutomation.barcode === null || this.detailAutomation.barcode === undefined) this.detailAutomation.barcode = [];
+
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
@@ -71,6 +71,12 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       button_text: ["", Validators.required],
       skus: this.formBuilder.array([])
     });
+
+    if (this.detailAutomation.type === 'e-order' && this.detailAutomation.barcode.length === 0) {
+      console.log('is empty create one');
+      let skus = this.formAutomation.get('skus') as FormArray;
+      skus.push(this.createFormSku());
+    }
 
     this.formAutomation.get("automation").setValue(this.detailAutomation.type);
     this.formAutomation.get("startDate").setValue(this.detailAutomation.start_date);
@@ -287,8 +293,9 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       switch (automationType) {
         case 'e-order':
           let barcodes = this.formAutomation.get('skus').value;
-          if (barcodes.length > 0) {
-            body['barcode'] = barcodes.map(bc => bc.formSku);
+          body['barcode'] = barcodes.map(bc => bc.formSku);
+          if (barcodes.length === 1 && barcodes[0].formSku === "") {
+            delete body['barcode'];
           }
           break;
         case 'coupon':
