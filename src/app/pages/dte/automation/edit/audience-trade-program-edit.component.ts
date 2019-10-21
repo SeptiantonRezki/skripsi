@@ -51,6 +51,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.selectedTab = 0;
 
     this.detailAutomation = this.dataService.getFromStorage('detail_dte_automation');
+    if (this.detailAutomation.barcode === null || this.detailAutomation.barcode === undefined) this.detailAutomation.barcode = [];
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
@@ -286,12 +287,16 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       switch (automationType) {
         case 'e-order':
           let barcodes = this.formAutomation.get('skus').value;
-          body['barcode'] = barcodes.length > 0 ? barcodes.map(bc => bc.formSku) : [];
+          if (barcodes.length > 0) {
+            body['barcode'] = barcodes.map(bc => bc.formSku);
+          }
           break;
         case 'coupon':
           body['coupon_total'] = this.formAutomation.get('coupon_total').value
+          if (body['barcode']) delete body['barcode'];
           break;
         case 'referral_code':
+          if (body['barcode']) delete body['barcode'];
           break;
       }
       console.log(body, automationType, this.formAutomation.get('skus').value);
