@@ -53,7 +53,7 @@ export class SupportComponent implements OnInit {
 
   ngOnInit() {
 
-    this.supportService.getBantuanListCategory().subscribe((res: any) => {
+    this.supportService.getBantuanListCategory({ user: 'principal' }).subscribe((res: any) => {
       this.menuButtons = res.data;
       this.onLoad = false;
     })
@@ -88,7 +88,7 @@ export class SupportComponent implements OnInit {
   }
 
   private _filter(value: string) {
-      return this.supportService.search({keyword: value, user: 'wholesaler'}).pipe(
+      return this.supportService.search({keyword: value, user: 'principal'}).pipe(
         map((option: any) => {
           console.log('option', option);
         return option.data;
@@ -99,7 +99,7 @@ export class SupportComponent implements OnInit {
   searchHelp(value: any){
     // clearTimeout(this.delayTimer);
     // this.delayTimer = setTimeout(function() {
-      this.supportService.search({keyword: value, user: 'wholesaler'}).subscribe((res: any) => {
+      this.supportService.search({keyword: value, user: 'principal'}).subscribe((res: any) => {
         this.searchData = res.data;
         this.filteredOptions = res.data;
       }, (err: any) => console.log('err search', err));
@@ -110,7 +110,7 @@ export class SupportComponent implements OnInit {
   openListCategoryDetails(param: any) {
     this.onLoadDetail = true;
     this.isListCategoryDetails = true;
-    this.supportService.getBantuanListCategoryDetails({ id: param.id, user: 'wholesaler' }).subscribe((res: any) => {
+    this.supportService.getBantuanListCategoryDetails({ id: param.id, user: 'principal' }).subscribe((res: any) => {
       this.listCategoryDetails = res.data;
       this.onLoadDetail = false;
     }, err => console.log('err getBantuanListCategoryDetails', err));
