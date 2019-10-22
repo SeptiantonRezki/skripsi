@@ -72,7 +72,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       skus: this.formBuilder.array([])
     });
 
-    if (this.detailAutomation.type === 'e-order' && this.detailAutomation.barcode.length === 0) {
+    if (this.detailAutomation.type === 'e-order' && (!this.detailAutomation.barcode || this.detailAutomation.barcode.length === 0)) {
       console.log('is empty create one');
       let skus = this.formAutomation.get('skus') as FormArray;
       skus.push(this.createFormSku());
@@ -90,45 +90,47 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.formAutomation.get("button_text").setValue(this.detailAutomation.text_button);
     if (this.detailAutomation.type === 'e-order') {
       let skus = this.formAutomation.get('skus') as FormArray;
-      this.detailAutomation.barcode.map(bc => {
-        const formItem = this.formBuilder.group({
-          formSku: bc,
-          formFilterSku: new ReplaySubject<any[]>(1),
-          filteredSku: new ReplaySubject<any[]>(1)
-        });
-
-        formItem.controls['formFilterSku'].value.next(bc);
-        formItem.controls['filteredSku'].value.next([{ barcode: bc }].slice());
-
-        formItem
-          .valueChanges
-          .pipe(
-            debounceTime(300),
-            tap(() => this.searching = true),
-            switchMap(value => {
-              console.log('val', value);
-              if (value.formFilterSku == null || value.formFilterSku == "") {
-                this.searching = false;
-                return [];
-              }
-              console.log('after', value);
-              return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
-                .pipe(
-                  finalize(() => this.searching = false)
-                )
-            })
-          ).subscribe(res => {
-            console.log('res', res, formItem.controls['filteredSku'].value);
-            // this.filteredSku.next(res.data);
-            formItem.controls['filteredSku'].value.next(res.data);
-            // value.next(res.data);
-            // this.litSkus.push(value);
-            // this.filteredSku.next(this.litSkus);
+      if (this.detailAutomation.barcode) {
+        this.detailAutomation.barcode.map(bc => {
+          const formItem = this.formBuilder.group({
+            formSku: bc,
+            formFilterSku: new ReplaySubject<any[]>(1),
+            filteredSku: new ReplaySubject<any[]>(1)
           });
 
-        skus.push(formItem);
-        console.log('skus', skus);
-      })
+          formItem.controls['formFilterSku'].value.next(bc);
+          formItem.controls['filteredSku'].value.next([{ barcode: bc }].slice());
+
+          formItem
+            .valueChanges
+            .pipe(
+              debounceTime(300),
+              tap(() => this.searching = true),
+              switchMap(value => {
+                console.log('val', value);
+                if (value.formFilterSku == null || value.formFilterSku == "") {
+                  this.searching = false;
+                  return [];
+                }
+                console.log('after', value);
+                return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+                  .pipe(
+                    finalize(() => this.searching = false)
+                  )
+              })
+            ).subscribe(res => {
+              console.log('res', res, formItem.controls['filteredSku'].value);
+              // this.filteredSku.next(res.data);
+              formItem.controls['filteredSku'].value.next(res.data);
+              // value.next(res.data);
+              // this.litSkus.push(value);
+              // this.filteredSku.next(this.litSkus);
+            });
+
+          skus.push(formItem);
+          console.log('skus', skus);
+        })
+      }
     }
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
