@@ -74,16 +74,16 @@ export class TemplateIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-    
+
     this.templateTaskService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data.map(item => {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data.map(item => {
           return {
             ...item,
             image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
           }
-        });
+        }) : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -101,7 +101,7 @@ export class TemplateIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -112,13 +112,13 @@ export class TemplateIndexComponent {
     }
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -135,13 +135,13 @@ export class TemplateIndexComponent {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -161,13 +161,13 @@ export class TemplateIndexComponent {
     }
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
