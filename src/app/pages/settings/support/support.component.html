@@ -9,7 +9,7 @@
   <div class="content p-24 mb-42" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
-      <mat-tab-group [selectedIndex]="selectedTab" *ngIf="!isListCategoryDetails">
+      <mat-tab-group [selectedIndex]="selectedTab" *ngIf="!isListCategoryDetails" (selectedIndexChange)="selectedTabChange($event)" >
         <mat-tab label="Informasi">
           <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
             <div class="help-title" fxLayout="column" fxLayoutAlign="center center">
@@ -88,7 +88,10 @@
         </mat-tab>
         <mat-tab label="Pesan Bantuan">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
-            <pesan-bantuan> </pesan-bantuan>
+            <!-- <pesan-bantuan> </pesan-bantuan> -->
+            <div class="full-size" style="min-height: 700px;" fxLayout="row" fxLayoutAlign="center center">
+              <img src="assets/images/ayo/AYO_SRC_(Master).png" style="width: 160px; height: 100px; object-fit: cover; object-position: 0 0;" srcset="assets/images/ayo/AYO_SRC_(Master)@2x.png 2x" alt="Help Detail">
+            </div> 
           </div>
         </mat-tab>
       </mat-tab-group>

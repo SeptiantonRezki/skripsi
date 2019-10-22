@@ -1,0 +1,21 @@
+.previewIcon {
+  height: 310px !important;
+  width: auto !important;
+  border-radius: 0 !important;
+  background-size: contain !important;
+  border: none !important;
+  margin-left: 30px;
+}
+
+.delete {
+  margin-top: 0 !important;
+  margin-bottom: -16px !important;
+  margin-left: 0 !important;
+}
+
+.delete:hover {
+  cursor: pointer;
+  mat-icon {
+    color: #DC1E2D;
+  }
+}

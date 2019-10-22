@@ -13,6 +13,7 @@ import { DialogOtherHelp } from './content/dialog/dialog-other-help';
 })
 export class SupportComponent implements OnInit {
 
+  selected = new FormControl(0);
   onLoad: Boolean;
   listHelp: any[];
   detailTnc: any;
@@ -32,6 +33,7 @@ export class SupportComponent implements OnInit {
   myControl = new FormControl();
   selectedIndex: any;
   isFound: boolean;
+  selectedTab: Number;
 
   constructor(
     private supportService: SupportService,
@@ -51,6 +53,7 @@ export class SupportComponent implements OnInit {
     this.isLoading = false;
     this.selectedIndex = -1;
     this.isFound = false;
+    this.selectedTab = 0;
   }
 
   ngOnInit() {
@@ -235,7 +238,7 @@ export class SupportComponent implements OnInit {
     });
   }
 
-  openDialogChat(): void {
+  openDialogChat(e?: any): void {
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -244,8 +247,19 @@ export class SupportComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogOtherHelp, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      console.log('The dialog was closed '+ e, this.selectedTab);
+      if(e == 'tab'){
+        this.selectedTab = 0;
+      }
+      console.log('The dialog was closed after'+ this.selectedTab, this.selectedTab);
     });
+  }
+
+  selectedTabChange(index: number) {
+    this.selectedTab = index;
+    if(index == 1){
+      this.openDialogChat('tab');
+    }
   }
 
 }

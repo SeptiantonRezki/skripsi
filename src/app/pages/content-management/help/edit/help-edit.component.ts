@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { FormGroup, FormBuilder, Validators } from '../../../../../../node_modules/@angular/forms';
 import { Router } from '../../../../../../node_modules/@angular/router';
 import { DialogService } from 'app/services/dialog.service';
@@ -16,6 +16,7 @@ import { Config } from 'app/classes/config';
 })
 export class HelpEditComponent {
 
+  @ViewChild('chipList') chipList: MatChipList;
   formHelp: FormGroup;
   formHelpError: any;
   detailHelp: any;
@@ -72,6 +73,10 @@ export class HelpEditComponent {
     this.formHelp.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formHelp, this.formHelpError);
     });
+
+    this.formHelp.get('otherkeyword').statusChanges.subscribe(
+      status => { console.log('STATUS', status); this.chipList.errorState = status === 'INVALID' }
+    );
 
     this.getShow();
     this.getListCategory();
@@ -170,7 +175,7 @@ export class HelpEditComponent {
   onFilesChange() {
     setTimeout(() => {
       console.log('this.files', this.files);
-      if(this.files.size > 500000){
+      if(this.files.size > 2000000){
         this.isValidFile = false;
       } else {
         this.isValidFile = true;
@@ -208,8 +213,8 @@ export class HelpEditComponent {
       let msg;
       if (this.formHelp.invalid)
         msg = "Silahkan lengkapi data terlebih dahulu!";
-        else if (this.files && this.files.size >= 500000)
-          msg = "Ukuran icon tidak boleh melebihi 500KB!";
+      else if (this.files && this.files.size >= 2000000)
+        msg = "Ukuran gambar tidak boleh melebihi 2MB!";
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formHelp);

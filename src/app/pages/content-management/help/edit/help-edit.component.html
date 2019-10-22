@@ -15,9 +15,9 @@
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
-              <span class="text-center" matPrefix>Tarik icon kesini /
+              <span class="text-center" matPrefix>Tarik gambar kesini /
                 <strong>Pilih File</strong> <br>
-                Format JPG, PNG, Ukuran maksimal 500KB.
+                Format JPG, PNG, Ukuran maksimal 2MB.
               </span>
             </div>
           </div>
@@ -28,7 +28,7 @@
               </div>
               <div class="previewIcon" [ngfBackground]="files"></div>
               <mat-error class="pt-8" *ngIf="!isValidFile">
-                  Ukuran icon tidak boleh melebihi 500KB!
+                  Ukuran icon tidak boleh melebihi 2MB!
               </mat-error>
             </div>
           </div>
@@ -47,7 +47,7 @@
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Bantuan">
               <mat-error *ngIf="formHelp.controls['title'].hasError('required') && formHelp.controls['title'].touched">
-                Judul Bantuan harus diisi
+                Judul Bantuan Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -57,7 +57,7 @@
                 <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formHelp.controls['user'].hasError('required') && formHelp.controls['user'].touched">
-                Grup Pengguna harus diisi
+                Grup Pengguna Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -66,34 +66,26 @@
               <mat-select formControlName="category" placeholder="Kategori">
                 <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
-              <mat-error *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
-                Kategori harus diisi
+              <mat-error
+                *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
+                Kategori Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row">
-            <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="text" formControlName="otherkeyword" placeholder="Kata Kunci Lain">
-              <mat-error *ngIf="formHelp.controls['otherkeyword'].hasError('required') && formHelp.controls['otherkeyword'].touched">
-                Kata Kunci Lain harus diisi
-              </mat-error>
-            </mat-form-field> -->
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-chip-list #chipList aria-label="Keyword Selection">
+              <mat-chip-list #chipList aria-label="Keyword Selection" formControlName="otherkeyword">
                 <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
                          [removable]="keywordRemovable" (removed)="remove(keyword)">
                   {{keyword}}
                   <mat-icon matChipRemove *ngIf="keywordRemovable">cancel</mat-icon>
                 </mat-chip>
-                <input matInput placeholder="Kata Kunci Lain"
-                  [matChipInputFor]="chipList"
-                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes"
-                  [matChipInputAddOnBlur]="keywordAddOnBlur"
-                  (matChipInputTokenEnd)="add($event)"
-                >
+                <input matInput placeholder="Kata Kunci Lain" [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes" [matChipInputAddOnBlur]="keywordAddOnBlur"
+                  (matChipInputTokenEnd)="add($event)" required>
               </mat-chip-list>
-              <mat-error *ngIf="keywords.length > 0">
-                Kata Kunci Lain harus diisi
+              <mat-error *ngIf="keywords.length == 0">
+                Kata Kunci Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -101,9 +93,9 @@
             <h3 class="">Konten Bantuan</h3>
           </div>
           <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
-          <!-- <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPageGroup.get('body').hasError('required')">
-                    Isi Halaman harus diisi
-                  </mat-error> -->
+          <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formHelp.controls['body'].hasError('required') && formHelp.controls['body'].touched">
+            Konten Bantuan Wajib Diisi
+          </mat-error>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
