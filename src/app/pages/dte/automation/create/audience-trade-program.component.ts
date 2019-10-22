@@ -83,17 +83,17 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         this._filterTradeProgram();
       });
 
-    this.formAutomation
-      .get("coin_max")
-      .valueChanges
-      .pipe(
-        debounceTime(300)
-      )
-      .subscribe(data => {
-        console.log('data', data);
-        let coinMax = this.formAutomation.get("coin_reward").value;
-        this.checkCoinReward(data, coinMax);
-      });
+    // this.formAutomation
+    //   .get("coin_max")
+    //   .valueChanges
+    //   .pipe(
+    //     debounceTime(300)
+    //   )
+    //   .subscribe(data => {
+    //     console.log('data', data);
+    //     let coinMax = this.formAutomation.get("coin_reward").value;
+    //     this.checkCoinReward(data, coinMax);
+    //   });
 
     this.formAutomation
       .get("coin_reward")

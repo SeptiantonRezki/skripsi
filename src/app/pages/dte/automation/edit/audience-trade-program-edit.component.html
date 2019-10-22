@@ -49,15 +49,15 @@
                 formControlName="coin_reward">
             </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Nilai Coin Reward" formControlName="coin_max">
+              <input matInput type="number" placeholder="Jumlah Frekuensi" formControlName="coin_max">
               <mat-error class="mt-8 px-24">
-                Nilai Coin Reward harus diisi.
+                Jumlah Frekuensi harus diisi.
               </mat-error>
             </mat-form-field>
           </div>
-          <span style="margin-top: -20px;" class="mat-error" *ngIf="coinRewardInvalid">
+          <!-- <span style="margin-top: -20px;" class="mat-error" *ngIf="coinRewardInvalid">
             Nilai coin reward harus lebih tinggi dari Jumlah per Frekuensi.
-          </span>
+          </span> -->
           <ng-container *ngIf="formAutomation.get('automation').value === 'e-order'">
             <div formArrayName="skus" *ngFor="let sku of formAutomation.get('skus').controls; let i = index"
               class="mt-8 px-24" fxFlex="90%" fxLayout="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -133,7 +133,7 @@
           <div *ngIf="!isDetail" class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px"
             fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
-              [disabled]="coinRewardInvalid || submitting">
+              [disabled]="submitting">
               SIMPAN
             </button>
           </div>
