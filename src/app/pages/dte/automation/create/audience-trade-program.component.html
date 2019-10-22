@@ -27,6 +27,10 @@
                   {{item.name}}
                 </mat-option>
               </mat-select>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['trade_program_id'].hasError('required') && formAutomation.controls['trade_program_id'].touched">
+                Trade Program harus diisi.
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row">

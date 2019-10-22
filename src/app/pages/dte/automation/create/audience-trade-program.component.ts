@@ -61,7 +61,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       coin_max: [null, Validators.required],
       coin_reward: [null, Validators.required],
       coupon_total: [null],
-      trade_program_id: [""],
+      trade_program_id: [null, Validators.required],
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
@@ -294,7 +294,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       this.maxDateTradeProgram = this.tradeSelected.end_date;
       this.minDateTradeProgram = this.tradeSelected.start_date;
     }
-    console.log(this.formAutomation.get("endDate").errors, this.formAutomation.get("startDate").errors);
   }
 
 }
