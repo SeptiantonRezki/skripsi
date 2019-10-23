@@ -1,24 +1,176 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="onDetail ? 'Detail DTE Automation': 'Ubah DTE Automation'">
+  <page-content-header [contentTitle]="'DTE Automation'">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
-      <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
-        <mat-tab label="e-Order" [disabled]="(onDetail && automationType !== 'e-order')">
-          <app-eorder-edit *ngIf="selectedTab === 0" [automationType]="'e-order'">
-          </app-eorder-edit>
-        </mat-tab>
-        <mat-tab label="Digital Coupon" [disabled]="(onDetail && automationType !== 'coupon')">
-          <app-eorder-edit *ngIf="selectedTab === 1" [automationType]="'coupon'">
-          </app-eorder-edit>
-        </mat-tab>
-        <mat-tab label="Referral Code" [disabled]="(onDetail && automationType !== 'referral_code')">
-          <app-eorder-edit *ngIf="selectedTab === 2" [automationType]="'referral_code'">
-          </app-eorder-edit>
-        </mat-tab>
-      </mat-tab-group>
+      <form autocomplete="off" [formGroup]="formAutomation">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
+          <h2 class="">DTE Automation</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="Automation" formControlName="automation">
+                <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id"
+                (selectionChange)="onSelectingTradeProgram($event)">
+                <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['trade_program_id'].hasError('required') && formAutomation.controls['trade_program_id'].touched">
+                Trade Program harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row">
+            <h3 class="text-bold">Durasi</h3>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+                formControlName="startDate" [max]="maxDateTradeProgram" [min]="minDateTradeProgram">
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['startDate'].hasError('required') && formAutomation.controls['startDate'].touched">
+                Tanggal awal harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="Tanggal Berakhir"
+                formControlName="endDate" [max]="maxDateTradeProgram" [min]="minDateTradeProgram">
+              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+              <mat-datepicker #endDate></mat-datepicker>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['endDate'].hasError('required') && formAutomation.controls['endDate'].touched">
+                Tanggal berakhir harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row" *ngIf="formAutomation.get('automation').value === 'coupon'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" placeholder="Total Kupon" formControlName="coupon_total">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['coupon_total'].hasError('required') && formAutomation.controls['coupon_total'].touched">
+                Total kupon harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi"
+                formControlName="coin_reward">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['coin_reward'].hasError('required') && formAutomation.controls['coin_reward'].touched">
+                Jumlah Coin Reward per Frekuensi harus diisi.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" placeholder="Jumlah Frekuensi" formControlName="coin_max">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['coin_max'].hasError('required') && formAutomation.controls['coin_max'].touched">
+                Jumlah Frekuensi harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <span style="margin-top: -20px;" class="mat-error" *ngIf="coinRewardInvalid">
+            Nilai coin reward harus lebih tinggi dari Jumlah per Frekuensi.
+          </span> -->
+          <ng-container *ngIf="formAutomation.get('automation').value === 'e-order'">
+            <div formArrayName="skus" *ngFor="let sku of formAutomation.get('skus').controls; let i = index"
+              class="mt-8 px-24" fxFlex="90%" fxLayout="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+              <div fxFlex="100%" [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <!-- <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput type="text" placeholder="Cari Produk yang ditargetkan">
+                  </mat-form-field> -->
+                <mat-form-field fxFlex="45%" class="is-light form-primary" #singleSelect>
+                  <mat-select [formControl]="formAutomation.get('skus').at(i).get('formSku')"
+                    placeholder="Cari Barcode SKU yang di targetkan">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="formAutomation.get('skus').at(i).get('formFilterSku')"
+                        [placeholderLabel]="'Cari Barcode SKU yang di targetkan'"
+                        [noEntriesFoundLabel]="'SKU tidak ditemukan'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let sku of formAutomation.get('skus').at(i).get('filteredSku').value | async"
+                      [value]="sku.barcode">
+                      <span>{{ sku.barcode }}</span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
+                <div class="mt-24 mb-24" fxFlex="45%">
+                  <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
+                    mat-raised-button type="button" [disabled]="isDetail">
+                    <mat-icon>add</mat-icon>
+                    Tambah Produk
+                  </button>
+                  <button mat-icon-button type="button" *ngIf="i > 0" (click)="removeSkuProduct(i)">
+                    <mat-icon class="secondary-text">delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" placeholder="Judul Tantangan" formControlName="title_challenge">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['title_challenge'].hasError('required') && formAutomation.controls['title_challenge'].touched">
+                Judul Tantangan harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" placeholder="Deskripsi Tantangan" formControlName="description_challenge">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['description_challenge'].hasError('required') && formAutomation.controls['description_challenge'].touched">
+                Deskripsi Tantangan harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" placeholder="Teks Pada Button" formControlName="button_text">
+              <mat-error class="mt-8 px-24"
+                *ngIf="formAutomation.controls['button_text'].hasError('required') && formAutomation.controls['button_text'].touched">
+                Teks Pada Button harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div *ngIf="!isDetail" class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px"
+            fxLayoutGap.lt-md="0px">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
+              [disabled]="submitting">
+              SIMPAN
+            </button>
+          </div>
+        </div>
+      </form>
+      <!-- <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
+          <mat-tab label="e-Order">
+            <app-eorder *ngIf="selectedTab === 0" [automationType]="'e-order'"></app-eorder>
+          </mat-tab>
+          <mat-tab label="Digital Coupon">
+            <app-eorder *ngIf="selectedTab === 1" [automationType]="'coupon'"></app-eorder>
+          </mat-tab>
+          <mat-tab label="Referral Code">
+            <app-eorder *ngIf="selectedTab === 2" [automationType]="'referral_code'"></app-eorder>
+          </mat-tab>
+        </mat-tab-group> -->
     </div>
   </div>
 </div>

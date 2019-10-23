@@ -69,4 +69,24 @@ export class commonFormValidator {
       formControl.markAsTouched({ onlySelf: true });
     }
   }
+
+  public static passwordRequirement(control: AbstractControl) {
+    const password: string = control.value;
+    console.log('password value');
+    if (control.value && control.value.length > 0) {
+      if (password.match(/[a-z]/g) && password.match(
+        /[A-Z]/g) && password.match(
+          /[0-9]/g) && password.length >= 8) {
+        console.log('ist oke 2?');
+        return null;
+      } else {
+        // control.setErrors({ notValid: true });
+        console.log('control', control);
+        return { notValid: true };
+      }
+    } else {
+      console.log('ist oke ?');
+      return null;
+    }
+  }
 }
