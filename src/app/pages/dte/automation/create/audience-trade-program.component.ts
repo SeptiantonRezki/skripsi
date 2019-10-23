@@ -7,6 +7,7 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
 import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { DialogService } from 'app/services/dialog.service';
 import { Router } from '@angular/router';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
   selector: 'app-audience-trade-program',
@@ -37,6 +38,10 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
   @ViewChild('singleSelect') singleSelect: MatSelect;
   coinRewardInvalid: Boolean;
 
+  tradeSelected: any;
+  maxDateTradeProgram: any;
+  minDateTradeProgram: any;
+
   constructor(
     private dataService: DataService,
     private formBuilder: FormBuilder,
@@ -51,12 +56,12 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
-      startDate: [new Date(), Validators.required],
-      endDate: [new Date(), Validators.required],
-      coin_max: [0, Validators.required],
-      coin_reward: [0, Validators.required],
-      coupon_total: [0],
-      trade_program_id: [""],
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required],
+      coin_max: [null, Validators.required],
+      coin_reward: [null, Validators.required],
+      coupon_total: [null],
+      trade_program_id: [null, Validators.required],
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
@@ -78,17 +83,17 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         this._filterTradeProgram();
       });
 
-    this.formAutomation
-      .get("coin_max")
-      .valueChanges
-      .pipe(
-        debounceTime(300)
-      )
-      .subscribe(data => {
-        console.log('data', data);
-        let coinMax = this.formAutomation.get("coin_reward").value;
-        this.checkCoinReward(data, coinMax);
-      });
+    // this.formAutomation
+    //   .get("coin_max")
+    //   .valueChanges
+    //   .pipe(
+    //     debounceTime(300)
+    //   )
+    //   .subscribe(data => {
+    //     console.log('data', data);
+    //     let coinMax = this.formAutomation.get("coin_reward").value;
+    //     this.checkCoinReward(data, coinMax);
+    //   });
 
     this.formAutomation
       .get("coin_reward")
@@ -268,8 +273,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       });
     } else {
       this.submitting = false;
-      // this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
-      // commonFormValidator.validateAllFields(this.formAutomation);
+      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      commonFormValidator.validateAllFields(this.formAutomation);
       // commonFormValidator.validateAllFields(this.formAutomation);
     }
   }
@@ -281,6 +286,14 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
 
     this.selectedTab = tabChangeEvent.index;
     this.dataService.setToStorage("selected_tab", this.selectedTab);
+  }
+
+  onSelectingTradeProgram(event) {
+    this.tradeSelected = this.tradePrograms.find((value: any) => value.id === event.value);
+    if (this.tradeSelected) {
+      this.maxDateTradeProgram = this.tradeSelected.end_date;
+      this.minDateTradeProgram = this.tradeSelected.start_date;
+    }
   }
 
 }
