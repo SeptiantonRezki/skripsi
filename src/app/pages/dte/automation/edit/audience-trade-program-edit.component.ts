@@ -138,7 +138,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
+    this.audienceTradeProgramService.getTradePrograms({ id: this.detailAutomation.trade_creator_id }).subscribe(res => {
       console.log('res list trade programs', res);
       this.tradePrograms = res.data.slice();
       this.filteredTradeProgram.next((res && res.data) ? res.data.slice() : []);
