@@ -1,3 +1,11 @@
 :host /deep/ .mat-input-element:disabled {
   color: rgba(0, 0, 0, 1) !important;
 }
+
+:host /deep/ .readonly-wrapper {
+  cursor: not-allowed;
+}
+
+:host /deep/ .readonly-wrapper .readonly-block {
+  pointer-events: none;
+}

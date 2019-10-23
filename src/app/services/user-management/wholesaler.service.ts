@@ -60,4 +60,9 @@ export class WholesalerService extends BaseService {
     const url = this.getUrl("general", "get_business", context);
     return this.getApi(url);
   }
+
+  exportWholesaler(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export", context);
+    return this.getBlobApi(url);
+  }
 }

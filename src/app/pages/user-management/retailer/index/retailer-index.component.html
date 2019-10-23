@@ -26,20 +26,6 @@
       </button>
     </div>
     <div class="table-wrapper">
-      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-        style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
-        <a #downloadLink></a>
-        <button mat-raised-button type="button" color="primary">
-          Kelola Akses Kasir
-        </button>
-        <button mat-raised-button type="button" class="is-danger" (click)="import()">
-          <mat-icon>arrow_downward</mat-icon> Import XLS
-        </button>
-        <button (click)="export()" mat-raised-button type="button" class="is-danger">
-          <mat-icon>arrow_upward</mat-icon> Export XLS
-        </button>
-      </div>
-
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Daftar Retailer</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">

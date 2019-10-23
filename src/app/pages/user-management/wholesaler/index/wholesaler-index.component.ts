@@ -9,6 +9,7 @@ import { WholesalerService } from "../../../../services/user-management/wholesal
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-wholesaler-index",
@@ -389,5 +390,65 @@ export class WholesalerIndexComponent {
     // this.dataService.setToStorage("detail_wholesaler", param);
     this.dataService.setToStorage("id_wholesaler", param.id);
     this.router.navigate(["user-management", "wholesaler", "detail"]);
+  }
+
+  async export() {
+    this.dataService.showLoading(true);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let area_id = areaSelected[areaSelected.length - 1].value;
+    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1]);
+    try {
+      const response = await this.wholesalerService.exportWholesaler({ area_id: area_id }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Wholesaler_${new Date().toLocaleString()}.xlsx`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 }

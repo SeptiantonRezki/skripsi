@@ -98,7 +98,7 @@ export class PopupNotificationCreateComponent {
     // this.minDate = moment();
     // this.validComboDrag = true;
 
-    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Ubah Profil", value: "profil_saya" }];
 
     this.formPopupErrors = {
       name: '',

@@ -63,6 +63,61 @@
             </mat-error>
           </div>
 
+          <div [formGroup]="formBankAccount">
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <input matInput type="text" maxlength="16" pattern="[0-9]*" inputmode="numeric"
+                  formControlName="account_number" placeholder="Nomor Rekening Bank" numericOnly
+                  (keyup)="bindFormBankAccountValidator()">
+              </mat-form-field>
+              <mat-error
+                *ngIf="formBankAccount.controls['account_number'].hasError('required') && formBankAccount.controls['account_number'].touched">
+                Nomor Rekening harus diisi.
+              </mat-error>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <mat-select formControlName="bank_name" placeholder="Nama Bank" #singleSelect
+                  (selectionChange)="bindFormBankAccountValidator()">
+                  <ngx-mat-select-search [formControl]="filterBank" [placeholderLabel]="'Cari Nama Bank...'"
+                    [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'">
+                  </ngx-mat-select-search>
+                  <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error
+                *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
+                Nama Bank harus diisi.
+              </mat-error>
+              <div fxFlex="2" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
+                <button mat-icon-button color="" (click)="clearBankName()">
+                  <mat-icon class="secondary-text">close</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <input matInput placeholder="Nama pada Rekening Bank" formControlName="account_name"
+                  (keyup)="bindFormBankAccountValidator()">
+              </mat-form-field>
+              <mat-error
+                *ngIf="formBankAccount.controls['account_name'].hasError('required') && formBankAccount.controls['account_name'].touched">
+                Nama pada Rekening Bank harus diisi.
+              </mat-error>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <input matInput placeholder="Cabang" formControlName="branch" (keyup)="bindFormBankAccountValidator()">
+              </mat-form-field>
+              <mat-error
+                *ngIf="formBankAccount.controls['branch'].hasError('required') && formBankAccount.controls['branch'].touched">
+                Cabang Bank harus diisi.
+              </mat-error>
+            </div>
+          </div>
+
           <!-- <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Area" formControlName="area_code">
                 <mat-error *ngIf="formWs.controls['area_code'].hasError('required') && formWs.controls['area_code'].touched ">

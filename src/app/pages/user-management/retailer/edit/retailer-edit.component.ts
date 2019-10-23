@@ -1,10 +1,14 @@
-import { Component } from "@angular/core";
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { Component, ViewChild } from "@angular/core";
+import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
+import { ReplaySubject, Subject } from "rxjs";
+import { MatSelect } from "@angular/material";
+import { GeneralService } from "app/services/general.service";
+import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 
 @Component({
   selector: 'app-retailer-edit',
@@ -16,6 +20,8 @@ export class RetailerEditComponent {
   formRetailer: FormGroup;
   formdataErrors: any;
   onLoad: Boolean;
+  formBankAccount: FormGroup;
+  formBankAccountError: any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -46,6 +52,12 @@ export class RetailerEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
+  listBanks: any[];
+  filterBank: FormControl = new FormControl();
+  filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+  private _onDestroy = new Subject<void>();
+  bankAccountLength: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +65,8 @@ export class RetailerEditComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
-    private retailerService: RetailerService
+    private retailerService: RetailerService,
+    private generalService: GeneralService
   ) {
     this.onLoad = false;
     this.formdataErrors = {
@@ -69,6 +82,14 @@ export class RetailerEditComponent {
       // type: {},
       InternalClassification: {}
     };
+
+    this.formBankAccountError = {
+      account_number: {},
+      account_name: {},
+      bank_name: {},
+      branch: {}
+    };
+
     this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
@@ -96,6 +117,7 @@ export class RetailerEditComponent {
   }
 
   async ngOnInit() {
+    this.getBanks();
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -116,8 +138,16 @@ export class RetailerEditComponent {
       longitude: [""],
       type: [""],
       cashier: ["", Validators.required],
-      InternalClassification: ["", Validators.required]
+      InternalClassification: ["", Validators.required],
     });
+
+    this.formBankAccount = this.formBuilder.group({
+      account_number: [""],
+      account_name: [""],
+      bank_name: [""],
+      branch: [""]
+    });
+
     this.formRetailer.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
@@ -166,6 +196,49 @@ export class RetailerEditComponent {
         })
       })
     });
+
+    this.formBankAccount
+      .valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(res => {
+        let total = 0;
+        Object.keys(res).map(frm => {
+          total += (res[frm] ? res[frm].length : "".length);
+        });
+        this.bankAccountLength = total;
+      });
+
+    this.filterBank.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringBanks();
+      });
+  }
+
+  getBanks() {
+    this.generalService.getBanks()
+      .subscribe(res => {
+        this.listBanks = res.data;
+        this.filteredBanks.next(this.listBanks.slice());
+      }, err => console.log('err', err));
+  }
+
+  filteringBanks() {
+    if (!this.listBanks) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBank.value;
+    if (!search) {
+      this.filteredBanks.next(this.listBanks.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredBanks.next(
+      this.listBanks.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   initArea() {
@@ -251,11 +324,21 @@ export class RetailerEditComponent {
       cashier: this.detailRetailer.cashier
     });
 
+    this.formBankAccount.setValue({
+      account_number: this.detailRetailer.bank_account_number,
+      account_name: this.detailRetailer.bank_account_name,
+      bank_name: this.detailRetailer.bank_name,
+      branch: this.detailRetailer.branch
+    });
+
     if (this.detailRetailer.classification === 'NON-SRC') {
       this.formRetailer.controls['business_code'].disable();
     }
 
-    if (this.isDetail) this.formRetailer.disable();
+    if (this.isDetail) {
+      this.formRetailer.disable();
+      this.formBankAccount.disable();
+    }
   }
 
   getAudienceArea(selection, id) {
@@ -395,7 +478,48 @@ export class RetailerEditComponent {
     }
   }
 
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.formRetailer.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
+  bindFormBankAccountValidator() {
+    if (this.bankAccountLength > 0) {
+      this.formBankAccount.get("account_number").setValidators(Validators.required);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators(Validators.required);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators(Validators.required);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators(Validators.required);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    } else {
+      this.formBankAccount.get("account_number").setValidators([]);
+      this.formBankAccount.get("account_number").updateValueAndValidity();
+      this.formBankAccount.get("account_name").setValidators([]);
+      this.formBankAccount.get("account_name").updateValueAndValidity();
+      this.formBankAccount.get("bank_name").setValidators([]);
+      this.formBankAccount.get("bank_name").updateValueAndValidity();
+      this.formBankAccount.get("branch").setValidators([]);
+      this.formBankAccount.get("branch").updateValueAndValidity();
+      commonFormValidator.validateAllFields(this.formBankAccount);
+    }
+  }
+
+  clearBankName() {
+    this.formBankAccount.get('bank_name').setValue(null);
+    this.bindFormBankAccountValidator();
+  }
+
   submit() {
+    console.log('invalid form field', this.findInvalidControls());
     if (this.formRetailer.valid) {
       let body = {
         _method: "PUT",
@@ -410,7 +534,11 @@ export class RetailerEditComponent {
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: "General Trade",
         InternalClassification: this.formRetailer.get("InternalClassification").value,
-        cashier: this.formRetailer.get("cashier").value
+        cashier: this.formRetailer.get("cashier").value,
+        bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
+        bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
+        bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
+        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value
       };
 
       console.log(body);
