@@ -238,11 +238,11 @@ export class Endpoint {
         getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       coin: {
-        retailer: `${AYO_API_SERVICE(SERVER.task)}/api/v1/coin/${type_api}/coin?type=retailer`,
-        program: `${AYO_API_SERVICE(SERVER.task)}/api/v1/coin/${type_api}/coin?type=program`,
-        detail_retailer: `${AYO_API_SERVICE(SERVER.task)}/api/v1/coin/${type_api}/coin/retailer/${context.retailer_id}`,
-        detail_program: `${AYO_API_SERVICE(SERVER.task)}/api/v1/coin/${type_api}/coin/program/${context.trade_program_id}`,
-        flush: `${AYO_API_SERVICE(SERVER.task)}/api/v1/coin/principal/coin`,
+        retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=retailer`,
+        program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=program`,
+        detail_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/retailer/${context.retailer_id}`,
+        detail_program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/program/${context.trade_program_id}`,
+        flush: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin`,
         parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
       },
       menu: {
