@@ -1,10 +1,21 @@
+.image-layout {
+  height: 213px !important;
+  width: 413px !important;
+  border-radius: 6px !important;
+  background-color: #ffffff !important;
+  border: 2px solid white !important;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35) !important;
+  margin-left: 30px !important;
+  padding: 10px !important;
+}
+
 .previewIcon {
-  height: 310px !important;
-  width: auto !important;
-  border-radius: 0 !important;
-  background-size: contain !important;
+  width: 390px !important;
+  height: 190px !important;
+  background-size: cover !important;
   border: none !important;
-  margin-left: 30px;
+  padding: 0 !important;
+  max-width: none !important;
 }
 
 .delete {

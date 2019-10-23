@@ -67,7 +67,6 @@ export class HelpCreateComponent {
 
     this.formHelp.valueChanges.subscribe((k) => {
       commonFormValidator.parseFormChanged(this.formHelp, this.formHelpError);
-      console.log('STATUS K ', k);
     });
 
     this.formHelp.get('otherkeyword').statusChanges.subscribe(
@@ -88,6 +87,12 @@ export class HelpCreateComponent {
     // Reset the input value
     if (input) {
       input.value = '';
+      if(this.keywords.length > 0) {
+        this.formHelp.get('otherkeyword').setValue(value);
+        this.chipList.errorState = false;
+      } else {
+        this.chipList.errorState = true;
+      }
     }
   }
 
@@ -118,7 +123,6 @@ export class HelpCreateComponent {
   getListUser() {
     this.helpService.getListUser().subscribe(
       (res: any) => {
-        console.log('getListUser', res);
         this.userGroup = res.data.map((item: any) => {
           return (
             { name: item, value: item }
@@ -139,8 +143,7 @@ export class HelpCreateComponent {
 
   onFilesChange() {
     setTimeout(() => {
-      console.log('this.files', this.files);
-      if(this.files.size > 2000000){
+      if(this.files.size > 500000){
         this.isValidFile = false;
       } else {
         this.isValidFile = true;
@@ -150,7 +153,6 @@ export class HelpCreateComponent {
 
   submit(): void {
     if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
-      console.log("Files", this.files);
         let body = new FormData();
         body.append('title', this.formHelp.get("title").value);
         body.append('body', this.formHelp.get("body").value);
@@ -177,8 +179,8 @@ export class HelpCreateComponent {
       let msg;
       if (this.formHelp.invalid)
         msg = "Silahkan lengkapi data terlebih dahulu!";
-      else if (this.files && this.files.size >= 2000000)
-        msg = "Ukuran gambar tidak boleh melebihi 2MB!";
+      else if (this.files && this.files.size >= 500000)
+        msg = "Ukuran gambar tidak boleh melebihi 500KB!";
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formHelp);

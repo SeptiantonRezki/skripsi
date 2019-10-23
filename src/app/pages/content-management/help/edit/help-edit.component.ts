@@ -54,7 +54,7 @@ export class HelpEditComponent {
       body: {},
       user: {},
       category: {},
-      // otherkeyword: {},
+      otherkeyword: {},
     };
     this.isValidFile = true;
 
@@ -67,28 +67,22 @@ export class HelpEditComponent {
       body: ["", Validators.required],
       user: ["", Validators.required],
       category: ["", Validators.required],
-      // otherkeyword: ["", Validators.required]
+      otherkeyword: ["", Validators.required]
     });
 
     this.formHelp.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formHelp, this.formHelpError);
     });
 
-    this.formHelp.get('otherkeyword').statusChanges.subscribe(
-      status => { console.log('STATUS', status); this.chipList.errorState = status === 'INVALID' }
-    );
-
     this.getShow();
     this.getListCategory();
     this.getListUser();
 
-    // this.formHelp.setValue({
-    //   title: this.detailHelp.title,
-    //   // body: this.detailHelp.body,
-    //   user: this.detailHelp.user,
-    //   category: this.detailHelp.category,
-    //   // otherkeyword: this.detailHelp.otherkeyword
-    // })
+    this.formHelp.get('otherkeyword').statusChanges.subscribe(
+      status => {
+          this.chipList.errorState = status === 'INVALID';
+      }
+    );
   }
 
   add(event: MatChipInputEvent): void {
@@ -101,6 +95,12 @@ export class HelpEditComponent {
     // Reset the input value
     if (input) {
       input.value = '';
+      if(this.keywords.length > 0) {
+        this.formHelp.get('otherkeyword').setValue(value);
+        this.chipList.errorState = false;
+      } else {
+        this.chipList.errorState = true;
+      }
     }
   }
 
@@ -132,7 +132,6 @@ export class HelpEditComponent {
   getListUser() {
     this.helpService.getListUser().subscribe(
       (res: any) => {
-        console.log('getListUser', res);
         this.userGroup = res.data.map((item: any) => {
           return (
             { name: item, value: item }
@@ -149,13 +148,12 @@ export class HelpEditComponent {
   getShow(){
     this.helpService.getShow(null, { content_id: this.detailHelp.id }).subscribe(
       (res: any) => {
-        console.log('getShow', res);
         this.detailHelp.image_url = res.data.image_url;
         this.formHelp.setValue({
           title: res.data.title,
           user: this.detailHelp.user,
           category: res.data.content_category_id,
-          // otherkeyword: res.data.keyword,
+          otherkeyword: res.data.keyword? (JSON.parse(res.data.keyword).length > 0 ? res.data.keyword: "") : "",
           body: res.data.body,
         });
 
@@ -174,8 +172,7 @@ export class HelpEditComponent {
 
   onFilesChange() {
     setTimeout(() => {
-      console.log('this.files', this.files);
-      if(this.files.size > 2000000){
+      if(this.files.size > 500000){
         this.isValidFile = false;
       } else {
         this.isValidFile = true;
@@ -184,40 +181,45 @@ export class HelpEditComponent {
   }
 
   submit(): void {
-    if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
-      let body = new FormData();
-      body.append('_method', 'PUT');
-      body.append('title', this.formHelp.get("title").value);
-      body.append('body', this.formHelp.get("body").value);
-      body.append('user', this.formHelp.get("user").value);
-      body.append('content_category_id', this.formHelp.get("category").value);
-      // body.append('keyword', this.formHelp.get("otherkeyword").value);
-      body.append('keyword', JSON.stringify(this.keywords));
-      body.append('type', 'help');
-      body.append('is_notif', '0');
-      if (this.files) body.append('image', this.files);
+    if(this.keywords.length == 0) {
+      this.formHelp.get('otherkeyword').setValue('');
+    }
+    else {
+      if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
+        let body = new FormData();
+        body.append('_method', 'PUT');
+        body.append('title', this.formHelp.get("title").value);
+        body.append('body', this.formHelp.get("body").value);
+        body.append('user', this.formHelp.get("user").value);
+        body.append('content_category_id', this.formHelp.get("category").value);
+        // body.append('keyword', this.formHelp.get("otherkeyword").value);
+        body.append('keyword', JSON.stringify(this.keywords));
+        body.append('type', 'help');
+        body.append('is_notif', '0');
+        if (this.files) body.append('image', this.files);
 
-      this.helpService.put(body, { content_id: this.detailHelp.id }).subscribe(
-        res => {
-          // this.loadingIndicator = false;
-          this.router.navigate(["content-management", "help"]);
-          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-          window.localStorage.removeItem('detail_help');
-        },
-        err => {
-          this.dialogService.openSnackBar({ message: err.error.message });
-          // this.loadingIndicator = false;
-        }
-      );
-    } else {
-      let msg;
-      if (this.formHelp.invalid)
-        msg = "Silahkan lengkapi data terlebih dahulu!";
-      else if (this.files && this.files.size >= 2000000)
-        msg = "Ukuran gambar tidak boleh melebihi 2MB!";
+        this.helpService.put(body, { content_id: this.detailHelp.id }).subscribe(
+          res => {
+            // this.loadingIndicator = false;
+            this.router.navigate(["content-management", "help"]);
+            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+            window.localStorage.removeItem('detail_help');
+          },
+          err => {
+            this.dialogService.openSnackBar({ message: err.error.message });
+            // this.loadingIndicator = false;
+          }
+        );
+      } else {
+        let msg;
+        if (this.formHelp.invalid)
+          msg = "Silahkan lengkapi data terlebih dahulu!";
+        else if (this.files && this.files.size >= 500000)
+          msg = "Ukuran gambar tidak boleh melebihi 500KB!";
 
-      this.dialogService.openSnackBar({ message: msg });
-      commonFormValidator.validateAllFields(this.formHelp);
+        this.dialogService.openSnackBar({ message: msg });
+        commonFormValidator.validateAllFields(this.formHelp);
+      }
     }
   }
 

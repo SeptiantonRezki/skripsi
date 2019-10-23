@@ -17,7 +17,7 @@
               <br>
               <span class="text-center" matPrefix>Tarik gambar kesini /
                 <strong>Pilih File</strong> <br>
-                Format JPG, PNG, Ukuran maksimal 2MB.
+                Format JPG, PNG, Ukuran maksimal 500KB.
               </span>
             </div>
           </div>
@@ -26,9 +26,11 @@
               <div class="delete">
                 <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
               </div>
-              <div class="previewIcon" [ngfBackground]="files"></div>
+              <div class="image-layout">
+                <div class="previewIcon" [ngfBackground]="files"></div>
+              </div>
               <mat-error class="pt-8" *ngIf="!isValidFile">
-                  Ukuran icon tidak boleh melebihi 2MB!
+                  Ukuran gambar tidak boleh melebihi 500KB!
               </mat-error>
             </div>
           </div>
@@ -40,7 +42,12 @@
           </div>
 
           <div class="py-24" *ngIf="!files && detailHelp.image_url">
-            <img class="previewIcon" [src]="detailHelp.image_url">
+            <div class="delete">
+              <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+            </div>
+            <div class="image-layout">
+              <img class="previewIcon" [src]="detailHelp.image_url">
+            </div>
           </div>
           <br>
           <div fxLayout="row">
@@ -74,7 +81,7 @@
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-chip-list #chipList aria-label="Keyword Selection" formControlName="otherkeyword">
+              <mat-chip-list #chipList aria-label="Keyword Selection">
                 <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
                          [removable]="keywordRemovable" (removed)="remove(keyword)">
                   {{keyword}}

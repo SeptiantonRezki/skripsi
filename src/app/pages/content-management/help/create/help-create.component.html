@@ -17,7 +17,7 @@
               <br>
               <span class="text-center" matPrefix>Tarik gambar kesini /
                 <strong>Pilih File</strong> <br>
-                Format JPG, PNG, Ukuran maksimal 2MB.
+                Format JPG, PNG, Ukuran maksimal 500KB.
               </span>
             </div>
           </div>
@@ -28,7 +28,7 @@
               </div>
               <div class="previewIcon" [ngfBackground]="files"></div>
               <mat-error class="pt-8" *ngIf="!isValidFile">
-                  Ukuran icon tidak boleh melebihi 2MB!
+                  Ukuran gambar tidak boleh melebihi 500KB!
               </mat-error>
             </div>
           </div>
@@ -74,7 +74,7 @@
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-chip-list #chipList aria-label="Keyword Selection" formControlName="otherkeyword">
+              <mat-chip-list #chipList aria-label="Keyword Selection">
                 <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
                          [removable]="keywordRemovable" (removed)="remove(keyword)">
                   {{keyword}}
