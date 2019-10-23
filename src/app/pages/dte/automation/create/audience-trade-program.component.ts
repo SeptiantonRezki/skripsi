@@ -246,8 +246,22 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         case 'e-order':
           let barcodes = this.formAutomation.get('skus').value;
           body['barcode'] = barcodes.map(bc => bc.formSku);
-          if (barcodes.length === 1 && barcodes[0].formSku === "") {
-            delete body['barcode'];
+          // if (barcodes.length === 1 && barcodes[0].formSku === "") {
+          //   delete body['barcode'];
+          // }
+          if (barcodes && barcodes.length > 0) {
+            let bcsFiltered = barcodes.filter(val => {
+              console.log('filtering...', val, val.formSku === undefined);
+              return val.formSku && val.formSku !== ""
+            });
+            console.log('bcsFiltered', bcsFiltered, barcodes);
+            if (bcsFiltered.length > 0) {
+              body['barcode'] = bcsFiltered;
+            }
+
+            if (bcsFiltered.length === 0) {
+              delete body['barcode'];
+            }
           }
           break;
         case 'coupon':
