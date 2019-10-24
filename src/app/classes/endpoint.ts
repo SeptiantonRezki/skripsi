@@ -60,7 +60,7 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
         delete_multiple: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/inactive/multiple`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`, //ke service area
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent ? context.parent : 1}`, //ke service area
         list_role: `${AYO_API}/api/${type_api}/user/role?page=all`,
         list_role_nolimit: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/list`
       },
@@ -86,10 +86,10 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
         consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
+        list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
+        list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         export_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/export?area=${context.area_id}`,
         import_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/preview`,
         store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`
@@ -110,10 +110,10 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
         put: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/${context.banner_id}`,
         delete: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/${context.banner_id}`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
+        list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
+        list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         list_wallet: `${AYO_API}/api/v2/general/wallet`
       },
       landingPage: {
@@ -145,9 +145,9 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator/${context.trade_program_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator/${context.trade_program_id}`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`
+        list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
+        list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`
       },
       schedule_trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/scheduler`,
@@ -177,9 +177,9 @@ export class Endpoint {
         list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
         list_retailer_selected: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/count/budget`,
-        list_level: `${AYO_API}/api/general/area/get_level`,
-        list_children: `${AYO_API}/api/general/area/get_children/${context.level_desc}`,
-        list_other_children: `${AYO_API}/api/general/area/get_children_id/${context.parent_id}`,
+        list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
+        list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         import: `${AYO_API}/api/${type_api}/audience/import`,
         export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/export`
       },
@@ -243,7 +243,7 @@ export class Endpoint {
         detail_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/retailer/${context.retailer_id}`,
         detail_program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/program/${context.trade_program_id}`,
         flush: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin`,
-        parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
+        parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent ? context.parent : 1}`,
       },
       menu: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/menu`
