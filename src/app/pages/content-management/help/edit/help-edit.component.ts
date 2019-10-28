@@ -185,6 +185,9 @@ export class HelpEditComponent {
       this.formHelp.get('otherkeyword').setValue('');
     }
     else {
+      if(this.keywords.length > 0) {
+        this.formHelp.get('otherkeyword').setValue(this.keywords);
+      }
       if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
         let body = new FormData();
         body.append('_method', 'PUT');

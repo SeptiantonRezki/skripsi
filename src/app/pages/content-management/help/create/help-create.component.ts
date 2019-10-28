@@ -152,41 +152,46 @@ export class HelpCreateComponent {
   }
 
   submit(): void {
-    if(this.keywords.length > 0) {
-      this.formHelp.get('otherkeyword').setValue(this.keywords);
+    if(this.keywords.length == 0) {
+      this.formHelp.get('otherkeyword').setValue('');
     }
-    if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
-        let body = new FormData();
-        body.append('title', this.formHelp.get("title").value);
-        body.append('body', this.formHelp.get("body").value);
-        body.append('user', this.formHelp.get("user").value);
-        body.append('content_category_id', this.formHelp.get("category").value);
-        // body.append('keyword', this.formHelp.get("otherkeyword").value);
-        body.append('keyword', JSON.stringify(this.keywords));
-        body.append('is_notif', '0');
-        body.append('type', 'help');
-        if (this.files) body.append('image', this.files);
+    else {
+      if(this.keywords.length > 0) {
+        this.formHelp.get('otherkeyword').setValue(this.keywords);
+      }
+      if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
+          let body = new FormData();
+          body.append('title', this.formHelp.get("title").value);
+          body.append('body', this.formHelp.get("body").value);
+          body.append('user', this.formHelp.get("user").value);
+          body.append('content_category_id', this.formHelp.get("category").value);
+          // body.append('keyword', this.formHelp.get("otherkeyword").value);
+          body.append('keyword', JSON.stringify(this.keywords));
+          body.append('is_notif', '0');
+          body.append('type', 'help');
+          if (this.files) body.append('image', this.files);
 
-        this.helpService.create(body).subscribe(
-          res => {
-            // this.loadingIndicator = false;
-            this.router.navigate(["content-management", "help"]);
-            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-          },
-          err => {
-            this.dialogService.openSnackBar({ message: err.error.message });
-            // this.loadingIndicator = false;
-          }
-        );
-    } else {
-      let msg;
-      if (this.formHelp.invalid)
-        msg = "Silahkan lengkapi data terlebih dahulu!";
-      else if (this.files && this.files.size >= 500000)
-        msg = "Ukuran gambar tidak boleh melebihi 500KB!";
+          this.helpService.create(body).subscribe(
+            res => {
+              // this.loadingIndicator = false;
+              this.router.navigate(["content-management", "help"]);
+              this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+            },
+            err => {
+              this.dialogService.openSnackBar({ message: err.error.message });
+              // this.loadingIndicator = false;
+            }
+          );
+      } else {
+        let msg;
+        if (this.formHelp.invalid)
+          msg = "Silahkan lengkapi data terlebih dahulu!";
+        else if (this.files && this.files.size >= 500000)
+          msg = "Ukuran gambar tidak boleh melebihi 500KB!";
 
-      this.dialogService.openSnackBar({ message: msg });
-      commonFormValidator.validateAllFields(this.formHelp);
+        this.dialogService.openSnackBar({ message: msg });
+        commonFormValidator.validateAllFields(this.formHelp);
+      }
     }
   }
 
