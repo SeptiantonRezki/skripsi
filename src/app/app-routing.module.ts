@@ -55,6 +55,12 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "manajemen-template-pesan",
+    loadChildren:
+      "./pages/template-message-management/template-message-management.module#TemplateMessageManagementModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "newsfeed-management",
     loadChildren:
       "./pages/newsfeed-management/newsfeed-management.module#NewsfeedManagementModule",

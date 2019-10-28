@@ -334,6 +334,12 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
         show: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/${context.report_id}`,
         detail: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/detail/${context.report_id}`
+      },
+      template_message: {
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

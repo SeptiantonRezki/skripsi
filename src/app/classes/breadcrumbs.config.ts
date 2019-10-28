@@ -1072,7 +1072,7 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Informasi"
+        name: "Bantuan"
       }
     ]
   },
@@ -1403,6 +1403,17 @@ export const brConfig = {
           name: "DTE Performance"
         }
       ]
+    }
+  },
+  templateMessageManagement: {
+    templateMessage: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: " Manajemen Template Pesan"
+        }
+      ],
     }
   },
 };

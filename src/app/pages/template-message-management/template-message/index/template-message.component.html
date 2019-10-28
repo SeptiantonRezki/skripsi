@@ -1,0 +1,96 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Template Pesan'">
+    </page-content-header>
+  
+    <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+      <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+    </div>
+    <div class="content p-24 mb-42" *ngIf="!onLoad">
+      <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+        <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+        <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTabChange($event)">
+            <mat-tab label="Wholesaler">
+              <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+                <div class="header">
+                  <span class="header-text">Daftar Template Pesan</span>
+                </div>
+                <div class="content mt-20" fxLayout="column">
+                  <div class="mb-20" *ngFor="let item of wholesalerTemplates; let i = index">
+                    <div class="content-title" fxLayout="row" fxLayoutAlign="start start">
+                        <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}:</label>
+                        <!-- <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}: <span *ngIf="indexOnEdit !== i && item.title" class="ml-8" >{{item.title}}</span></label> -->
+                        <input matInput class="title-text ml-8" placeholder="Judul Template Pesan" value="" [(ngModel)]="item.title" (blur)="onBlur(item, i, 'wholesaler')">
+                        <div class="title-edit" (click)="onEdit(item, i, 'wholesaler')">
+                          <mat-icon >edit</mat-icon>
+                          <!-- <mat-icon *ngIf="indexOnEdit !== i">edit</mat-icon>
+                          <mat-icon *ngIf="indexOnEdit == i">check</mat-icon> -->
+                        </div>
+                    </div>
+                    <div class="content-body" fxLayout="row" fxLayoutAlign="start start">
+                      <div class="body-layout">
+                        <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body" wrap="soft" (blur)="onBlur(item, i, 'wholesaler')"></textarea>
+                      </div>
+                      <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                        <mat-icon (click)="onDeleteTemplate(item, i, 'wholesaler')">delete</mat-icon>
+                      </div>
+                    </div> 
+                    <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan harus diisi!</mat-error>
+                  </div>
+                </div>
+                <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
+                  <button mat-button class="add" (click)="addTemplate('wholesaler')">
+                    <mat-icon class="secondary-text">add</mat-icon>
+                    Tambah Pesan
+                  </button>
+                  <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('wholesaler')">
+                    SIMPAN
+                  </button>
+                  <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span><mat-icon class="success">check</mat-icon></div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Retailer">
+                <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+                  <div class="header">
+                    <span class="header-text">Daftar Template Pesan</span>
+                  </div>
+                  <div class="content mt-20" fxLayout="column">
+                    <div class="mb-20" *ngFor="let item of retailerTemplates; let i = index">
+                      <div class="content-title" fxLayout="row" fxLayoutAlign="start start">
+                          <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}:</label>
+                          <!-- <label class="title-label" (click)="onEdit(item, i)">Template Pesan {{i+1}}: <span *ngIf="indexOnEdit !== i && item.title" class="ml-8" >{{item.title}}</span></label> -->
+                          <input matInput class="title-text ml-8" placeholder="Judul Template Pesan" value="" [(ngModel)]="item.title" (blur)="onBlur(item, i, 'retailer')">
+                          <div class="title-edit" (click)="onEdit(item, i, 'retailer')">
+                              <mat-icon >edit</mat-icon>
+                            <!-- <mat-icon *ngIf="indexOnEdit !== i">edit</mat-icon>
+                            <mat-icon *ngIf="indexOnEdit == i">check</mat-icon> -->
+                          </div>
+                      </div>
+                      <div class="content-body" fxLayout="row" fxLayoutAlign="start start">
+                        <div class="body-layout">
+                          <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body" wrap="soft" (blur)="onBlur(item, i, 'retailer')"></textarea>
+                        </div>
+                        <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                          <mat-icon (click)="onDeleteTemplate(item, i, 'retailer')">delete</mat-icon>
+                        </div>
+                      </div> 
+                      <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan harus diisi!</mat-error>
+                    </div>
+                  </div>
+                  <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
+                    <button mat-button class="add" (click)="addTemplate('retailer')">
+                      <mat-icon class="secondary-text">add</mat-icon>
+                      Tambah Pesan
+                    </button>
+                    <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('retailer')">
+                      SIMPAN
+                    </button>
+                    <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span><mat-icon class="success">check</mat-icon></div>
+                  </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+</div>
