@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
 import { DataService } from 'app/services/data.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   templateUrl: './import-coin.component.html',
@@ -10,7 +11,7 @@ import { DataService } from 'app/services/data.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ImportCoinComponent {
-
+  textReason: FormControl = new FormControl();
   files: File;
   validComboDrag: boolean;
   show: Boolean;
@@ -25,9 +26,9 @@ export class ImportCoinComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private dataService: DataService
-  ) { 
+  ) {
     this.rows = [];
-    if (data){
+    if (data) {
       this.show = true;
     }
   }
@@ -51,17 +52,18 @@ export class ImportCoinComponent {
       err => {
         this.dataService.showLoading(false);
         this.files = undefined;
-        
+
         if (err.status === 404 || err.status === 500)
-        this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda."})
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
       }
     )
   }
 
   submit() {
     if (this.files) {
-      const res = { 
-        coins: this.rows
+      const res = {
+        coins: this.rows,
+        reason: this.textReason.value
       };
 
       this.dataService.showLoading(true);
@@ -69,9 +71,9 @@ export class ImportCoinComponent {
         this.dataService.showLoading(false);
         this.dialogRef.close(res);
       })
-      
+
     } else {
-      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb'})
+      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
     }
   }
 

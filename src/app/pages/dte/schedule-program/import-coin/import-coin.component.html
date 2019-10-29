@@ -18,8 +18,9 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept=".xlsx, .xls"
-      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="preview($event)">
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
@@ -76,11 +77,18 @@
   </div>
 
   <div class="border-top">
-    <div class="p-16">
-      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-        fxFlex="1 0 auto">
-        <button type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files || rows.length === 0">Kirim</button>
-        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()" [disabled]="uploading">Batal</button>
+    <div fxLayout="row" style="margin-left: 16px;margin-top: 5px;">
+      <mat-form-field fxFlex="50" class="is-light form-primary">
+        <textarea matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="p-8">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="!files || rows.length === 0">Kirim</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">Batal</button>
       </div>
     </div>
   </div>

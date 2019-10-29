@@ -35,10 +35,10 @@ export class ScheduleProgramDetailComponent {
   maxDateTemplate: any;
 
   listAudience: Array<any>;
-  
+
   listReminder: Array<any> = [{ name: 'Tiap Minggu', value: 'by-weekly' }, { name: 'Tiap 2 Minggu', value: 'bi-weekly' }, { name: 'Tidak Ada', value: 'none' }];
   listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-  listAddNotif: Array<any> = [{ name: 'H+1', value: 1}, { name: 'H+2', value: 2}, { name: 'H+3', value: 3}];
+  listAddNotif: Array<any> = [{ name: 'H+1', value: 1 }, { name: 'H+2', value: 2 }, { name: 'H+3', value: 3 }];
 
   public filterTP: FormControl = new FormControl();
   public filteredTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -49,7 +49,7 @@ export class ScheduleProgramDetailComponent {
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
-  
+
   valueChange: Boolean;
   saveData: Boolean;
 
@@ -65,7 +65,7 @@ export class ScheduleProgramDetailComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private dataService: DataService
-  ) { 
+  ) {
     this.permission = this.roles.getRoles('principal.importcoin');
     console.log(this.permission);
 
@@ -91,7 +91,7 @@ export class ScheduleProgramDetailComponent {
 
   ngOnInit() {
     this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
-      this.dataScheduler = res; 
+      this.dataScheduler = res;
       this.onLoad = false;
     })
 
@@ -184,7 +184,7 @@ export class ScheduleProgramDetailComponent {
   getTradeProgram() {
     let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
     let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
-    
+
     this.minDate = tradeProgram['start_date'];
     this.maxStartDateTemplate = tradeProgram['end_date'];
   }
@@ -201,10 +201,10 @@ export class ScheduleProgramDetailComponent {
   changeValue(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (template.at(idx).get('is_backup').value === 0) 
+    if (template.at(idx).get('is_backup').value === 0)
       template.at(idx).get('notif').disable();
-    else 
-    template.at(idx).get('notif').enable();
+    else
+      template.at(idx).get('notif').enable();
   }
 
   submitUpdate() {
@@ -212,7 +212,7 @@ export class ScheduleProgramDetailComponent {
       this.saveData = !this.saveData;
       // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
       // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
-      
+
       let body = {
         name: this.formSchedule.get('name').value,
         trade_creator_id: this.formSchedule.get('trade_creator_id').value,
@@ -234,7 +234,7 @@ export class ScheduleProgramDetailComponent {
       }
 
       let foundUndefined = body['task_templates'].some(item => item === undefined)
-      if(!foundUndefined) {
+      if (!foundUndefined) {
         this.scheduleTradeProgramService.create(body).subscribe(
           res => {
             this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
@@ -264,7 +264,7 @@ export class ScheduleProgramDetailComponent {
       status_scheduler: param
     }
 
-    this.scheduleTradeProgramService.put(body, {schedule_tp_id: this.idScheduler}).subscribe(
+    this.scheduleTradeProgramService.put(body, { schedule_tp_id: this.idScheduler }).subscribe(
       res => {
         this.dialogService.openSnackBar({ message: 'Status Berhasil diubah' });
         this.router.navigate(['dte', 'schedule-trade-program']);
@@ -289,7 +289,7 @@ export class ScheduleProgramDetailComponent {
   }
 
   export() {
-    
+
     const body = {
       trade_scheduler_id: this.dataScheduler.id,
       trade_creator_id: this.dataScheduler.trade_creator_id
@@ -303,7 +303,7 @@ export class ScheduleProgramDetailComponent {
       // link.href = res.data;
       // link.setAttribute('visibility', 'hidden');
       // link.click();
-      
+
       this.downloadLink.nativeElement.href = res.data;
       this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
@@ -328,7 +328,7 @@ export class ScheduleProgramDetailComponent {
 
     this.dialogRef = this.dialog.open(ImportCoinComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { 
+    this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
       }
