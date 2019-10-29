@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Bantuan'">
+  <page-content-header [contentTitle]="'Buat Topik Bantuan'">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formHelp">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
-          <h2 class="">Buat Bantuan</h2>
+          <h2 class="">Buat Topik Bantuan</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
@@ -45,7 +45,7 @@
           <br>
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="title" placeholder="Judul Bantuan">
+              <input matInput type="text" formControlName="title" placeholder="Judul Topik Bantuan">
               <mat-error *ngIf="formHelp.controls['title'].hasError('required') && formHelp.controls['title'].touched">
                 Judul Bantuan Wajib Diisi
               </mat-error>
