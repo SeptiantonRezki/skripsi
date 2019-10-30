@@ -127,9 +127,11 @@ export class TemplateMessageComponent {
     }
   }
 
-  async deleteTemplates(body: FormData) {
+  async deleteTemplates(body: FormData, user: string) {
     return await this.tms.delete(body).subscribe((res) => {
         console.log('deleted');
+        if(user == "wholesaler") this.deleteListWholesaler = [];
+        if(user == "retailer") this.deleteListRetailer = [];
     });
   }
 
@@ -144,7 +146,7 @@ export class TemplateMessageComponent {
             bodyDelete.append('ids['+i+']', item.id);
           });
           await Promise.all(deleteReady).then(async () => {
-            await this.deleteTemplates(bodyDelete);
+            await this.deleteTemplates(bodyDelete, user);
           });
         }
         let templateReady = await this.wholesalerTemplates.map((item: any, i: number) => {
@@ -163,11 +165,18 @@ export class TemplateMessageComponent {
             await this.tms.create(bodySave).subscribe((res: any) => {
               this.indexOnEdit = -1;
               this.isSaved = true;
+              this.onLoad = true;
+              this.tms.get().subscribe((res: any) => {
+                this.wholesalerTemplates = res.data.wholesaler;
+                this.retailerTemplates = res.data.retailer;
+                this.onLoad = false;
+              });
               setTimeout(() => {
                 this.isSaved = false
               }, 1500);
             });
           } else {
+            this.onLoad = false;
             alert('Lengkapi bagian template yang masih kosong!')
           }
         });
@@ -179,7 +188,7 @@ export class TemplateMessageComponent {
           bodyDelete.append('ids['+i+']', item.id);
         });
         await Promise.all(deleteReady).then(async () => {
-          await this.deleteTemplates(bodyDelete);
+          await this.deleteTemplates(bodyDelete, user);
         });
       }
       let templateReady = await this.retailerTemplates.map((item: any, i: number) => {
@@ -198,11 +207,18 @@ export class TemplateMessageComponent {
           await this.tms.create(bodySave).subscribe((res: any) => {
             this.indexOnEdit = -1;
             this.isSaved = true;
+            this.onLoad = true;
+            this.tms.get().subscribe((res: any) => {
+              this.wholesalerTemplates = res.data.wholesaler;
+              this.retailerTemplates = res.data.retailer;
+              this.onLoad = false;
+            });
             setTimeout(() => {
               this.isSaved = false
             }, 1500);
           });
         } else {
+          this.onLoad = false;
           alert('Lengkapi bagian template yang masih kosong!')
         }
       });
