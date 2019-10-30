@@ -78,8 +78,8 @@ export class ScheduleProgramCreateComponent {
   ) {
     this.saveData = false;
     this.adapter.setLocale("id");
-    this.listTemplateTask = this.activatedRoute.snapshot.data["listTemplate"].data.data;
-    this.listTradeProgram = this.activatedRoute.snapshot.data["listTradeProgram"].data.data;
+    this.listTemplateTask = this.activatedRoute.snapshot.data["listTemplate"].data;
+    this.listTradeProgram = this.activatedRoute.snapshot.data["listTradeProgram"].data;
 
     this.formScheduleError = {
       name: {},
