@@ -41,7 +41,7 @@ import { ReportDetailComponent } from './report-list/report-detail/report-detail
 import { ReporterListComponent } from './report-list/report-detail/reporter-list/reporter-list.component';
 import { DetailReportComponent } from './report-list/report-detail/detail-report/detail-report.component';
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
-import { SafeHtmlPipe } from "app/classes/safe-html";
+import { PipesModule } from "app/pipe/pipes.module";
 
 export const MY_FORMATS = {
   parse: {
@@ -57,6 +57,7 @@ export const MY_FORMATS = {
 
 @NgModule({
   imports: [
+    PipesModule,
     CommonModule,
     ContentManagementRoutingModule,
     FuseSharedModule,
@@ -81,7 +82,6 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot()
   ],
   declarations: [
-    SafeHtmlPipe,
     TncIndexComponent,
     TncCreateComponent,
     TncEditComponent,
@@ -107,7 +107,7 @@ export const MY_FORMATS = {
     PrivacyEditComponent,
     HelpIndexComponent,
     HelpCreateComponent,
-    HelpEditComponent
+    HelpEditComponent,
   ],
   providers: [
     {
