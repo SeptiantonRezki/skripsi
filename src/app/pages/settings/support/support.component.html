@@ -144,7 +144,7 @@
                 </mat-list>
               </div>
               <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-content" fxLayout="column" fxLayoutAlign="start start">
-                  <div [innerHtml]="helpDetail.body"></div>
+                  <div [innerHtml]="helpDetail.body | safeHtml"></div>
                   <div class="py-24" *ngIf="helpDetail.image_url">
                     <a href="{{helpDetail.image_url}}" target="_blank">
                       <div class="image-layout">

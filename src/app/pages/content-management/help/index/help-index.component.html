@@ -31,9 +31,9 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [offset]="offsetPagination">
 
-        <ngx-datatable-column [width]="200" name="Judul" prop="title">
+        <ngx-datatable-column [width]="200" name="Judul Topik" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)">{{row.title}}</span>
+            <span class="row-name" (click)="directEdit(row, 'preview')">{{row.title}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="200" name="Grup Pengguna" prop="user"></ngx-datatable-column>
@@ -50,7 +50,7 @@
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row, 'edit')">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deletePage(row.id)">

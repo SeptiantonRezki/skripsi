@@ -12,7 +12,7 @@ import { Config } from 'app/classes/config';
 @Component({
   selector: 'app-help-edit',
   templateUrl: './help-edit.component.html',
-  styleUrls: ['./help-edit.component.scss']
+  styleUrls: ['./help-edit.component.scss'],
 })
 export class HelpEditComponent {
 
@@ -28,6 +28,7 @@ export class HelpEditComponent {
   readonly keywordSeparatorKeysCodes: number[] = [ENTER, COMMA];
   keywords: string[] = [];
   isValidFile: boolean;
+  isPreview: boolean;
 
   userGroup: any[] = [
     { name: "Please Wait...", value: "" },
@@ -57,8 +58,17 @@ export class HelpEditComponent {
       otherkeyword: {},
     };
     this.isValidFile = true;
+    this.isPreview = true;
 
     this.detailHelp = this.dataService.getFromStorage('detail_help');
+    if (this.detailHelp.opsiDetail !== undefined) {
+      if (this.detailHelp.opsiDetail == "preview") {
+        this.isPreview = true;
+      } else {
+        this.isPreview = false;
+      }
+    }
+        
   }
 
   ngOnInit() {
@@ -83,6 +93,7 @@ export class HelpEditComponent {
           this.chipList.errorState = status === 'INVALID';
       }
     );
+
   }
 
   add(event: MatChipInputEvent): void {

@@ -5,7 +5,7 @@
   background-color: #ffffff !important;
   border: 2px solid white !important;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35) !important;
-  margin-left: 30px !important;
+  margin-left: 30px;
   padding: 10px !important;
 }
 
@@ -29,4 +29,9 @@
   mat-icon {
     color: #DC1E2D;
   }
+}
+
+.layout-preview-content {
+  border: 2px dashed #ddd;
+  padding: 15px;
 }

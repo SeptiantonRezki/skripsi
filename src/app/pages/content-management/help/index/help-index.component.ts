@@ -179,10 +179,15 @@ export class HelpIndexComponent {
     })
   }
 
-  directEdit(param?: any): void {
+  directEdit(param?: any, opsi?: string): void {
     // let navigationExtras: NavigationExtras = {
     //   queryParams: param
     // }
+    if (opsi == "preview") {
+      param.opsiDetail = "preview";
+    } else {
+      param.opsiDetail = "edit";
+    }
     this.dataService.setToStorage("detail_help", param);
     this.router.navigate(["content-management", "help", "edit"]);
   }

@@ -35,6 +35,7 @@ import { ForceUpdateAppsComponent } from './force-update-apps/force-update-apps.
 import { SupportComponent } from './support/support.component';
 import { PesanBantuan, } from "./support/content/pesan-bantuan/pesan-bantuan";
 import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
+import { SafeHtmlPipe } from "app/classes/safe-html";
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
     MatAutocompleteModule,
   ],
   declarations: [
+    SafeHtmlPipe,
     RoleIndexComponent,
     RoleCreateComponent,
     RoleEditComponent,

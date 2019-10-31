@@ -41,6 +41,7 @@ import { ReportDetailComponent } from './report-list/report-detail/report-detail
 import { ReporterListComponent } from './report-list/report-detail/reporter-list/reporter-list.component';
 import { DetailReportComponent } from './report-list/report-detail/detail-report/detail-report.component';
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { SafeHtmlPipe } from "app/classes/safe-html";
 
 export const MY_FORMATS = {
   parse: {
@@ -80,6 +81,7 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot()
   ],
   declarations: [
+    SafeHtmlPipe,
     TncIndexComponent,
     TncCreateComponent,
     TncEditComponent,
