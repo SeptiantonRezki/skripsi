@@ -25,16 +25,9 @@
             *ngIf="formNotification.controls['body'].hasError('required') && formNotification.controls['body'].touched">
             Konten Notifikasi harus diisi
           </mat-error>
-          <div class="" formArrayName="areas"
+          <!-- <div class="" formArrayName="areas"
             *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
             <div [formGroupName]="i">
-              <!-- <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
-                <div fxFlex="50"><h3 class="">&nbsp;</h3></div>
-                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                  <button *ngIf="formNotification.get('areas').value.length === 1 || i === (formNotification.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea()"><mat-icon>add</mat-icon></button>
-                  <button *ngIf="formNotification.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)"><mat-icon>delete</mat-icon></button>
-                </div>
-              </div> -->
               <div class="py-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
                 fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -116,7 +109,7 @@
                 </mat-form-field>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="pb-16">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
