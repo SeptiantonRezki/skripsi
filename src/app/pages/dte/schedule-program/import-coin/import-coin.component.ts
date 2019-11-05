@@ -25,9 +25,9 @@ export class ImportCoinComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private dataService: DataService
-  ) { 
+  ) {
     this.rows = [];
-    if (data){
+    if (data) {
       this.show = true;
     }
   }
@@ -45,22 +45,22 @@ export class ImportCoinComponent {
     this.dataService.showLoading(true);
     this.scheduleTradeProgramService.previewExcel(fd).subscribe(
       res => {
-        this.rows = res;
+        this.rows = res.data;
         this.dataService.showLoading(false);
       },
       err => {
         this.dataService.showLoading(false);
         this.files = undefined;
-        
+
         if (err.status === 404 || err.status === 500)
-        this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda."})
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
       }
     )
   }
 
   submit() {
     if (this.files) {
-      const res = { 
+      const res = {
         coins: this.rows
       };
 
@@ -69,9 +69,9 @@ export class ImportCoinComponent {
         this.dataService.showLoading(false);
         this.dialogRef.close(res);
       })
-      
+
     } else {
-      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb'})
+      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
     }
   }
 
