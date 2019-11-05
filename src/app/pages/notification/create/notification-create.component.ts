@@ -754,7 +754,8 @@ export class NotificationCreateComponent {
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
-      this.pagination['age'] = this.formNotification.get("age").value;
+      let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+      this.pagination['age'] = age;
     }
     else {
       if (this.pagination['age']) delete this.pagination['age'];
