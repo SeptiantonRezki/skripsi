@@ -122,7 +122,8 @@ export class NotificationCreateComponent {
       static_page_body: ["", Validators.required],
       landing_page_value: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
-      areas: this.formBuilder.array([])
+      areas: this.formBuilder.array([]),
+      is_target_audience: [false]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -139,20 +140,26 @@ export class NotificationCreateComponent {
       if (res === 'retailer') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         // this.formNotification.controls['landing_page_value'].disable();
-        this.getAudience();
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
-        this.getAudience();
       }
 
-      this.selected = [];
+      if (this.formNotification.get("is_target_audience").value === true) {
+        this.getAudience();
+      };
+
+      this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
       this.contentType(this.formNotification.controls['content_type'].value);
     });
 
     this.formNotification.controls['age'].valueChanges.debounceTime(50).subscribe(res => {
-      this.getAudience();
+      if (this.formNotification.get("is_target_audience").value === true) {
+        this.getAudience();
+      };
+      this.selected.splice(0, this.selected.length);
+      this.audienceSelected = [];
     });
 
     this.formNotification.controls['user_group'].setValue('retailer');
@@ -163,7 +170,9 @@ export class NotificationCreateComponent {
     });
 
     this.formFilter.valueChanges.subscribe(filter => {
-      this.getAudience();
+      if (this.formNotification.get("is_target_audience").value === true) {
+        this.getAudience();
+      };
     });
 
     this.addArea();
@@ -646,8 +655,12 @@ export class NotificationCreateComponent {
         }
       }
 
-      body['target_audience'] = 1;
-      body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      if (this.formNotification.get("is_target_audience").value) {
+        body['target_audience'] = 1;
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      } else {
+        if (body['target_audience']) delete body['target_audience'];
+      }
 
       this.dataService.showLoading(true);
       this.notificationService.create(body).subscribe(
