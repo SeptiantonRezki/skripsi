@@ -146,6 +146,8 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
 
+      this.selected = [];
+      this.audienceSelected = [];
       this.contentType(this.formNotification.controls['content_type'].value);
     });
 
@@ -880,7 +882,7 @@ export class NotificationCreateComponent {
     this.dataService.showLoading(true);
     let body = this.audienceSelected.map(aud => aud.id);
     let age = null
-    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value
+    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
     else {
       if (age) age = null
     }
