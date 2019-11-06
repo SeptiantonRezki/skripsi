@@ -239,7 +239,8 @@ export class Endpoint {
         getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       coin: {
-        retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=retailer`,
+        // retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=retailer`,
+        retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/get-business-coin`,
         program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=program`,
         detail_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/retailer/${context.retailer_id}`,
         detail_program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/program/${context.trade_program_id}`,
