@@ -36,26 +36,27 @@ export class TradeCreateComponent {
       return false;
     }
 
-    if (this.files) {
+    if (this.files && !this.saveData) {
+      console.log('deactivate you have file');
       return false;
     }
 
     return true;
   }
-  
+
   constructor(
     private router: Router,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private tradeProgramService: TradeProgramService
-  ) { 
+  ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
     this.minDate = moment();
     this.minExpireDate = moment();
     this.saveData = false;
-    
+
     this.formTradeProgramError = {
       name: {},
       start_date: {},
@@ -121,7 +122,7 @@ export class TradeCreateComponent {
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
       if (this.files) fd.append('image', this.files);
-  
+
       this.tradeProgramService.create(fd).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
