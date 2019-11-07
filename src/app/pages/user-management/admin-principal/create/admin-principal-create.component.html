@@ -123,7 +123,7 @@
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Territory" formControlName="territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Territory' : item.name + ' - ' + item.id}}</mat-option>
+                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah.controls['territory'].hasError('required') && wilayah.controls['territory'].touched">
@@ -213,7 +213,7 @@
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="Territory" formControlName="territory">
                   <mat-option *ngFor="let item of list2['territory']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Territory' : item.name + ' - ' + item.id}}</mat-option>
+                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['territory'].hasError('required') && wilayah_2.controls['territory'].touched">
