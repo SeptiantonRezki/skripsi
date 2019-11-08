@@ -322,7 +322,7 @@ export class BannerEditComponent {
     }
 
     for (const { val, index } of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
-      const response = await this.bannerService.getParentArea({ parent: val.id }).toPromise();
+      const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
       let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
 
       wilayah.push(this.formBuilder.group({
