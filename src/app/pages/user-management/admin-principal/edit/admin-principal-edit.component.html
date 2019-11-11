@@ -47,7 +47,7 @@
               </button>
             </div>
 
-            <div fxLayout="row" fxLayoutGap="25px" *ngIf="first_geotree">
+            <!-- <div fxLayout="row" fxLayoutGap="25px" *ngIf="first_geotree">
               <h2>Area</h2>
               <div *ngIf="!two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                 <button mat-icon-button color="" matTooltip="Tambah Area" (click)="setArea2(false)">
@@ -57,6 +57,20 @@
               <div *ngIf="first_geotree && !two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                 <button mat-icon-button color="" matTooltip="Hapus Area 1" (click)="setArea1(true)">
                   <mat-icon class="secondary-text">close</mat-icon>
+                </button>
+              </div>
+            </div> -->
+            <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="first_geotree">
+              <div fxFlex="50">
+                <h3 class="">Area 1</h3>
+              </div>
+              <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <button mat-raised-button type="button" (click)="setArea2(false)" *ngIf="!two_geotree">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-raised-button color="primary" type="button" (click)="setArea1(true)">
+                  <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
@@ -118,11 +132,25 @@
             </div>
             <div
               *ngIf="(detailAdminPrincipal && detailAdminPrincipal.area_id && detailAdminPrincipal.area_id.length > 1) || two_geotree">
-              <div fxLayout="row" fxLayoutGap="25px">
+              <!-- <div fxLayout="row" fxLayoutGap="25px">
                 <h2>Area 2</h2>
                 <div *ngIf="two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                   <button mat-icon-button color="" matTooltip="Hapus Area 2" (click)="setArea2(true)">
                     <mat-icon class="secondary-text">close</mat-icon>
+                  </button>
+                </div>
+              </div> -->
+              <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="two_geotree">
+                <div fxFlex="50">
+                  <h3 class="">Area 2</h3>
+                </div>
+                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                  fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                  <button mat-raised-button type="button" (click)="setArea1(false)" *ngIf="!first_geotree">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-raised-button color="primary" type="button" (click)="setArea2(true)">
+                    <mat-icon>delete</mat-icon>
                   </button>
                 </div>
               </div>

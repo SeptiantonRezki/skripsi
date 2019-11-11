@@ -635,7 +635,7 @@ export class AdminPrincipalEditComponent {
       }
     } else {
       try {
-        const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
+        const parent = await this.adminPrincipalService.getParentArea({ parent: 1 }).toPromise();
         this.detailAreaSelected = parent.data;
 
         this.initArea();
