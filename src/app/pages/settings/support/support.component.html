@@ -138,7 +138,7 @@
               </div>
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title"
-                  (click)="openHelpDetails({id: option.id, type: 'search'})">
+                  (click)="openHelpDetails({id: option.id, type: 'search'})" [disabled]="option.disabled">
                   <span *ngIf="isFound">{{option.title}}</span>
                   <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk <span
                       style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim Digital
