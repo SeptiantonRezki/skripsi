@@ -39,16 +39,29 @@
               </mat-error>
             </mat-form-field>
 
-            <div fxLayout="row" fxLayoutGap="25px">
+            <div *ngIf="!first_geotree && !two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+              <button mat-raised-button color="" matTooltip="Tambah Area" (click)="setArea1(false)">
+                <span>
+                  Tambah Area
+                </span>
+              </button>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="25px" *ngIf="first_geotree">
               <h2>Area</h2>
               <div *ngIf="!two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                 <button mat-icon-button color="" matTooltip="Tambah Area" (click)="setArea2(false)">
                   <mat-icon class="secondary-text">add</mat-icon>
                 </button>
               </div>
+              <div *ngIf="first_geotree && !two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                <button mat-icon-button color="" matTooltip="Hapus Area 1" (click)="setArea1(true)">
+                  <mat-icon class="secondary-text">close</mat-icon>
+                </button>
+              </div>
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-              fxLayoutAlign="space-between stretch">
+            <div *ngIf="first_geotree" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="National" formControlName="national"
                   matTooltip="{{getToolTipData(formAdmin.get('national').value, listLevelArea)}}">
@@ -187,7 +200,6 @@
                 SIMPAN
               </button>
             </div>
-
           </div>
         </form>
       </div>

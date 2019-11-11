@@ -37,6 +37,7 @@ export class AdminPrincipalEditComponent {
   isDetail: Boolean;
   principal_id: any;
   two_geotree: Boolean;
+  first_geotree: Boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -119,10 +120,11 @@ export class AdminPrincipalEditComponent {
     try {
       const response = await this.adminPrincipalService.getDetailById({ principal_id: this.principal_id }).toPromise();
       this.detailAdminPrincipal = response;
-      console.log('detail_admin principal', response);
 
       const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
       this.detailAreaSelected = parent.data;
+      if (this.detailAdminPrincipal.area_id[0]) this.first_geotree = true;
+      console.log('this frist', this.first_geotree);
 
       console.log('dtail', response.area);
       if (response && response.area_id && response.area_id.length > 1) {
@@ -523,7 +525,8 @@ export class AdminPrincipalEditComponent {
         if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
       })
 
-      let area_id = [_.last(areas)];
+      let area_id = [];
+      if (this.first_geotree) area_id.unshift(_.last(areas));
       if (this.two_geotree) area_id.push(_.last(areas2));
 
       let body = {
@@ -535,6 +538,8 @@ export class AdminPrincipalEditComponent {
         status: this.formAdmin.get("status").value,
         area_id: area_id
       };
+
+      if (!this.first_geotree && !this.two_geotree) delete body['area_id'];
 
       this.dataService.showLoading(true);
       this.adminPrincipalService.put(body, { principal_id: this.detailAdminPrincipal.id }).subscribe(
@@ -602,7 +607,7 @@ export class AdminPrincipalEditComponent {
     this.two_geotree = isRemove ? false : true;
     if (isRemove) {
       console.log('is remove', isRemove);
-      if (this.detailAdminPrincipal.area_id && this.detailAdminPrincipal.area_id.length > 1) {
+      if (this.detailAdminPrincipal.area_id && this.detailAdminPrincipal.area_id.length > 0) {
         this.detailAdminPrincipal.area_id.pop();
       }
     } else {
@@ -612,6 +617,29 @@ export class AdminPrincipalEditComponent {
 
         this.initArea2();
         this.initFormGroup2();
+      } catch (error) {
+        if (error.status === 404) {
+          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.router.navigate(["user-management", "admin-principal"]);
+        }
+        throw error;
+      }
+    }
+  }
+
+  async setArea1(isRemove) {
+    this.first_geotree = isRemove ? false : true;
+    if (isRemove) {
+      if (this.detailAdminPrincipal.area_id && this.detailAdminPrincipal.area_id.length > 0) {
+        this.detailAdminPrincipal.area_id.shift();
+      }
+    } else {
+      try {
+        const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
+        this.detailAreaSelected = parent.data;
+
+        this.initArea();
+        this.initFormGroup();
       } catch (error) {
         if (error.status === 404) {
           this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
