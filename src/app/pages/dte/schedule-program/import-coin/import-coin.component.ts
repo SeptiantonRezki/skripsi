@@ -18,6 +18,7 @@ export class ImportCoinComponent {
 
   uploading: Boolean;
   rows: any[];
+  isValid: Boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ImportCoinComponent>,
@@ -52,7 +53,8 @@ export class ImportCoinComponent {
     this.dataService.showLoading(true);
     this.scheduleTradeProgramService.previewExcel(fd).subscribe(
       res => {
-        this.rows = res;
+        this.rows = res.data;
+        this.isValid = res.isValid;
         this.dataService.showLoading(false);
       },
       err => {
@@ -81,6 +83,10 @@ export class ImportCoinComponent {
     } else {
       this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
     }
+  }
+
+  setRedIfDuplicate(item) {
+    if (item.flag) return '#C62728';
   }
 
 }
