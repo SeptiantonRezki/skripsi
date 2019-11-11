@@ -105,7 +105,8 @@ export class SupportComponent implements OnInit {
             id: null,
             title: "",
             text: "HASIL PENCARIAN untuk \"" + value + "\" tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.",
-            value: value
+            value: value,
+            disabled: true
           }];
         }
       })
@@ -156,6 +157,8 @@ export class SupportComponent implements OnInit {
           }
         });
       }, err => console.log('err getBantuanListCategoryDetails', err));
+    } else {
+      return;
     }
   }
 
