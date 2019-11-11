@@ -39,9 +39,14 @@
               </mat-error>
             </mat-form-field>
 
-            <div class="h2"
-              *ngIf="detailAdminPrincipal && detailAdminPrincipal.area_id && detailAdminPrincipal.area_id.length > 1">
-              Area 1</div>
+            <div fxLayout="row" fxLayoutGap="25px">
+              <h2>Area</h2>
+              <div *ngIf="!two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                <button mat-icon-button color="" matTooltip="Tambah Area" (click)="setArea2(false)">
+                  <mat-icon class="secondary-text">add</mat-icon>
+                </button>
+              </div>
+            </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               fxLayoutAlign="space-between stretch">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -99,8 +104,15 @@
               </mat-form-field>
             </div>
             <div
-              *ngIf="detailAdminPrincipal && detailAdminPrincipal.area_id && detailAdminPrincipal.area_id.length > 1">
-              <div class="h2">Area 2</div>
+              *ngIf="(detailAdminPrincipal && detailAdminPrincipal.area_id && detailAdminPrincipal.area_id.length > 1) || two_geotree">
+              <div fxLayout="row" fxLayoutGap="25px">
+                <h2>Area 2</h2>
+                <div *ngIf="two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                  <button mat-icon-button color="" matTooltip="Hapus Area 2" (click)="setArea2(true)">
+                    <mat-icon class="secondary-text">close</mat-icon>
+                  </button>
+                </div>
+              </div>
               <div [formGroup]="formArea2" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">

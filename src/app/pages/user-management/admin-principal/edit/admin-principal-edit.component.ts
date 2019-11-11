@@ -32,10 +32,11 @@ export class AdminPrincipalEditComponent {
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
   detailAreaSelected: any[];
-  detailAreaSelected2: any[];
+  detailAreaSelected2: any[] = [1];
 
   isDetail: Boolean;
   principal_id: any;
+  two_geotree: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -118,6 +119,7 @@ export class AdminPrincipalEditComponent {
     try {
       const response = await this.adminPrincipalService.getDetailById({ principal_id: this.principal_id }).toPromise();
       this.detailAdminPrincipal = response;
+      console.log('detail_admin principal', response);
 
       const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
       this.detailAreaSelected = parent.data;
@@ -126,6 +128,7 @@ export class AdminPrincipalEditComponent {
       if (response && response.area_id && response.area_id.length > 1) {
         const parent2ndArea = await this.adminPrincipalService.getParentArea({ parent: response.area_id[1] }).toPromise();
         this.detailAreaSelected2 = parent2ndArea.data;
+        this.two_geotree = true;
       }
       this.setDetailAdminPrincipal();
     } catch (error) {
@@ -520,6 +523,9 @@ export class AdminPrincipalEditComponent {
         if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
       })
 
+      let area_id = [_.last(areas)];
+      if (this.two_geotree) area_id.push(_.last(areas2));
+
       let body = {
         _method: "PUT",
         name: this.formAdmin.get("name").value,
@@ -527,7 +533,7 @@ export class AdminPrincipalEditComponent {
         email: this.formAdmin.get("email").value,
         role_id: this.formAdmin.get("role").value,
         status: this.formAdmin.get("status").value,
-        area_id: [_.last(areas), _.last(areas2)]
+        area_id: area_id
       };
 
       this.dataService.showLoading(true);
@@ -589,6 +595,30 @@ export class AdminPrincipalEditComponent {
       return msg.name;
     } else {
       return "";
+    }
+  }
+
+  async setArea2(isRemove) {
+    this.two_geotree = isRemove ? false : true;
+    if (isRemove) {
+      console.log('is remove', isRemove);
+      if (this.detailAdminPrincipal.area_id && this.detailAdminPrincipal.area_id.length > 1) {
+        this.detailAdminPrincipal.area_id.pop();
+      }
+    } else {
+      try {
+        const parent2ndArea = await this.adminPrincipalService.getParentArea({ parent: 1 }).toPromise();
+        this.detailAreaSelected2 = parent2ndArea.data;
+
+        this.initArea2();
+        this.initFormGroup2();
+      } catch (error) {
+        if (error.status === 404) {
+          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.router.navigate(["user-management", "admin-principal"]);
+        }
+        throw error;
+      }
     }
   }
 }
