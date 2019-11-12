@@ -181,7 +181,7 @@ export class Endpoint {
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
-        import: `${AYO_API}/api/${type_api}/audience/import`,
+        import: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/import`,
         export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/export`
       },
       dte_automation: {
