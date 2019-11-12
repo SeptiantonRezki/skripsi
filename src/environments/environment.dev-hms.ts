@@ -21,5 +21,8 @@ export const server = {
   newsfeed: "newsfeed",
   banner: "banner",
   content: "contentstatic",
-  product: "product"
+  product: "product",
+  task: "task",
+  submission: "submission",
+  coin: "coin"
 }
