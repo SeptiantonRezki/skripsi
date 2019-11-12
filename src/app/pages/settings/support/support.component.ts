@@ -86,7 +86,7 @@ export class SupportComponent implements OnInit {
       },
       {
         category: 'E-Mail',
-        title: 'ayosrc@src.id',
+        title: 'csayosrc@src.id',
         image_url: 'assets/images/ayo/bantuan/kontak-email2x.png'
       }
     ];
