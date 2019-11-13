@@ -53,8 +53,8 @@ export class ImportCoinComponent {
     this.dataService.showLoading(true);
     this.scheduleTradeProgramService.previewExcel(fd).subscribe(
       res => {
-        this.rows = res.data;
-        this.isValid = res.isValid;
+        this.rows = res;
+        // this.isValid = res.isValid;
         this.dataService.showLoading(false);
       },
       err => {
