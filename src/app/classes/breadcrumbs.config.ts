@@ -866,31 +866,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Bantuan"
+          name: "Manajemen Bantuan"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/content-management/help",
-          name: "Bantuan"
+          name: "Manajemen Bantuan"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Bantuan"
+          name: "Buat Topik Bantuan"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/content-management/help",
-          name: "Bantuan"
+          name: "Manajemen Bantuan"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Bantuan"
+          name: "Ubah Topik Bantuan"
         }
       ]
     },

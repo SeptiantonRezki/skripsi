@@ -1,23 +1,26 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Bantuan'">
+  <page-content-header *ngIf="!isPreview" [contentTitle]="'Ubah Topik Bantuan'">
+  </page-content-header>
+  <page-content-header *ngIf="isPreview" [contentTitle]="'Detail Topik Bantuan'">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formHelp">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
-          <h2 class="">Ubah Bantuan</h2>
+          <h2 *ngIf="!isPreview" class="">Ubah Topik Bantuan</h2>
+          <h2 *ngIf="isPreview">Detail Topik Bantuan</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
-          <div ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-            accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+          <div *ngIf="!isPreview" ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+            accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (filesChange)="onFilesChange()">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
-              <span class="text-center" matPrefix>Tarik icon kesini /
+              <span class="text-center" matPrefix>Tarik gambar kesini /
                 <strong>Pilih File</strong> <br>
-                Bantuan Icon Dimensi 100x100 piksel Format JPG, PNG, Ukuran maksimal 2mb.
+                Format JPG, PNG, Ukuran maksimal 500KB.
               </span>
             </div>
           </div>
@@ -26,41 +29,102 @@
               <div class="delete">
                 <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
               </div>
-              <div class="previewIcon" [ngfBackground]="files"></div>
+              <div class="image-layout">
+                <div class="previewIcon" [ngfBackground]="files"></div>
+              </div>
+              <mat-error class="pt-8" *ngIf="!isValidFile">
+                  Ukuran gambar tidak boleh melebihi 500KB!
+              </mat-error>
             </div>
+          </div>
+          <div class="py-24" *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)<0">
+              <mat-error class="pt-8" *ngIf="!isValidFile" (click)="removeImage()" fxLayout="row"  fxLayoutAlign="start center">
+                  <span>Format gambar tidak didukung! Hapus </span>
+                  <mat-icon style="cursor: pointer;" (click)="removeImage()">delete</mat-icon>
+              </mat-error>
           </div>
 
           <div class="py-24" *ngIf="!files && detailHelp.image_url">
-            <img class="previewIcon" [src]="detailHelp.image_url">
+            <div *ngIf="!isPreview" class="delete">
+              <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+            </div>
+            <div *ngIf="isPreview" class="image-layout ml-0">
+              <img class="previewIcon" [src]="detailHelp.image_url">
+            </div>
+            <div *ngIf="!isPreview" class="image-layout">
+              <img class="previewIcon" [src]="detailHelp.image_url">
+            </div>
           </div>
           <br>
           <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="text" formControlName="title" placeholder="Judul Bantuan">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input *ngIf="!isPreview" matInput type="text" formControlName="title" placeholder="Judul Topik Bantuan">
+              <input *ngIf="isPreview" matInput type="text" formControlName="title" placeholder="Judul Topik Bantuan" readonly>
               <mat-error *ngIf="formHelp.controls['title'].hasError('required') && formHelp.controls['title'].touched">
-                Judul Bantuan harus diisi
+                Judul Bantuan Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="user" placeholder="Grup Pengguna">
+              <mat-select *ngIf="!isPreview" formControlName="user" placeholder="Grup Pengguna">
                 <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
+              <input *ngIf="isPreview" matInput type="text" formControlName="user" placeholder="Grup Pengguna" readonly>
               <mat-error *ngIf="formHelp.controls['user'].hasError('required') && formHelp.controls['user'].touched">
-                Grup Pengguna harus diisi
+                Grup Pengguna Wajib Diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select *ngIf="!isPreview" formControlName="category" placeholder="Kategori">
+                <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <input *ngIf="isPreview" matInput type="text" formControlName="category" placeholder="Kategori" readonly>
+              <mat-error
+                *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
+                Kategori Wajib Diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-chip-list *ngIf="!isPreview" #chipList aria-label="Keyword Selection">
+                <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
+                         [removable]="keywordRemovable" (removed)="remove(keyword)">
+                  {{keyword}}
+                  <mat-icon matChipRemove *ngIf="keywordRemovable">cancel</mat-icon>
+                </mat-chip>
+                <input matInput placeholder="Kata Kunci Lain" [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes" [matChipInputAddOnBlur]="keywordAddOnBlur"
+                  (matChipInputTokenEnd)="add($event)" required>
+              </mat-chip-list>
+
+              <mat-chip-list *ngIf="isPreview" #chipList aria-label="Keyword Selection">
+                <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
+                         [removable]="keywordRemovable" (removed)="remove(keyword)">
+                  {{keyword}}
+                </mat-chip>
+                <input matInput placeholder="Kata Kunci Lain" [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes" [matChipInputAddOnBlur]="keywordAddOnBlur"
+                (matChipInputTokenEnd)="add($event)" required readonly>
+              </mat-chip-list>
+              <mat-error *ngIf="keywords.length == 0">
+                Kata Kunci Wajib Diisi
               </mat-error>
             </mat-form-field>
           </div>
           <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">Konten Bantuan</h3>
           </div>
-          <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
-          <!-- <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formPageGroup.get('body').hasError('required')">
-                    Isi Halaman harus diisi
-                  </mat-error> -->
+          <textarea *ngIf="!isPreview" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+          <div *ngIf="isPreview" class="layout-preview-content" [innerHtml]="detailHelp.body | safeHtml"></div>
+          <mat-error style="padding-top: 6px !important; font-size: .86em;" *ngIf="formHelp.controls['body'].hasError('required') && formHelp.controls['body'].touched">
+            Konten Bantuan Wajib Diisi
+          </mat-error>
         </div>
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isPreview">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
             SIMPAN
           </button>

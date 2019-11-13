@@ -7,9 +7,9 @@
   </page-content-header>
   <!-- / HEADER -->
 
-  <div class="content p-24" *ngIf="!onLoad">
+  <div id="target" #containerScroll (scroll)="onScroll($event)" class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="pl-12 pr-20 pt-8">
         <h2 class="pl-8">Daftar Bantuan</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
@@ -18,23 +18,39 @@
           </mat-form-field>
         </div>
       </div>
+      <div fxLayout="row" fxLayoutAlign="space-between start" class="pl-20 pr-20 pl-8 pb-20 bb-separator">
+        <div class="filter-user-group p-12">
+          <mat-select placeholder="Semua Grup Pengguna" (selectionChange)="selectedItemFilter($event)" >
+            <mat-option [value]="" selected>Semua Grup Pengguna</mat-option>
+            <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [offset]="offsetPagination">
 
-        <ngx-datatable-column [width]="200" name="Judul" prop="title">
+        <ngx-datatable-column [width]="200" name="Judul Topik" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)">{{row.title}}</span>
+            <span class="row-name" (click)="directEdit(row, 'preview')">{{row.title}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="400" name="Grup Pengguna" prop="user"></ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Grup Pengguna" prop="user"></ngx-datatable-column>
         <!-- <ngx-datatable-column name="Halaman Tujuan" prop="slug"></ngx-datatable-column> -->
+
+        <ngx-datatable-column [width]="100" name="Likes" prop="likes_count"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Dislikes" prop="unlikes_count"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Perubahan Terakhir" prop="updated_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" >{{row.updated_at | date:'dd MMM yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row, 'edit')">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deletePage(row.id)">

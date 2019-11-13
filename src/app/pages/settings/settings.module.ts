@@ -18,7 +18,13 @@ import {
   MatSlideToggleModule,
   MatDividerModule,
   MatRadioModule,
-  MatListModule
+  MatListModule,
+  MatCardModule,
+  MatDialogModule,
+  MatToolbarModule,
+  MatProgressSpinnerModule,
+  MatTabsModule,
+  MatAutocompleteModule,
 } from "@angular/material";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
@@ -27,6 +33,9 @@ import { ListMenuResolver } from "../../resolver/settings.resolver";
 import { PageGuard } from "app/classes/auth.guard";
 import { ForceUpdateAppsComponent } from './force-update-apps/force-update-apps.component';
 import { SupportComponent } from './support/support.component';
+import { PesanBantuan, } from "./support/content/pesan-bantuan/pesan-bantuan";
+import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
+import { PipesModule } from "app/pipe/pipes.module";
 
 @NgModule({
   imports: [
@@ -46,7 +55,14 @@ import { SupportComponent } from './support/support.component';
     MatFormFieldModule,
     MatDividerModule,
     MatRadioModule,
-    MatListModule
+    MatListModule,
+    MatCardModule,
+    MatDialogModule,
+    MatToolbarModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatAutocompleteModule,
+    PipesModule,
   ],
   declarations: [
     RoleIndexComponent,
@@ -54,7 +70,9 @@ import { SupportComponent } from './support/support.component';
     RoleEditComponent,
     ChangePasswordIndexComponent,
     ForceUpdateAppsComponent,
-    SupportComponent
+    SupportComponent,
+    PesanBantuan,
+    DialogOtherHelp
   ],
   exports: [
     RoleIndexComponent,
@@ -62,8 +80,10 @@ import { SupportComponent } from './support/support.component';
     RoleEditComponent,
     ChangePasswordIndexComponent,
     ForceUpdateAppsComponent,
-    SupportComponent
+    SupportComponent,
+    PesanBantuan
   ],
-  providers: [ListMenuResolver, PageGuard]
+  providers: [ListMenuResolver, PageGuard],
+  entryComponents: [DialogOtherHelp]
 })
 export class SettingsModule {}

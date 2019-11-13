@@ -1,0 +1,37 @@
+.image-layout {
+  height: 213px !important;
+  width: 413px !important;
+  border-radius: 6px !important;
+  background-color: #ffffff !important;
+  border: 2px solid white !important;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35) !important;
+  margin-left: 30px;
+  padding: 10px !important;
+}
+
+.previewIcon {
+  width: 390px !important;
+  height: 190px !important;
+  background-size: cover !important;
+  border: none !important;
+  padding: 0 !important;
+  max-width: none !important;
+}
+
+.delete {
+  margin-top: 0 !important;
+  margin-bottom: -16px !important;
+  margin-left: 0 !important;
+}
+
+.delete:hover {
+  cursor: pointer;
+  mat-icon {
+    color: #DC1E2D;
+  }
+}
+
+.layout-preview-content {
+  border: 2px dashed #ddd;
+  padding: 15px;
+}
