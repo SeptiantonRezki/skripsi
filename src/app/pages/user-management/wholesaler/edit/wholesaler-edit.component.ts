@@ -22,6 +22,7 @@ export class WholesalerEditComponent {
   onLoad: Boolean;
   formBankAccount: FormGroup;
   formBankAccountError: any;
+  frmTotalBranch: FormControl = new FormControl();
 
   detailWholesaler: any;
   listStatus: any[] = [
@@ -123,6 +124,7 @@ export class WholesalerEditComponent {
       area: ["", Validators.required],
       district: ["", Validators.required],
       territory: ["", Validators.required],
+      branchShop: [false],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -278,7 +280,10 @@ export class WholesalerEditComponent {
       salespoint: this.getArea('salespoint') ? this.getArea('salespoint') : '',
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
+      branchShop: this.detailWholesaler.branchShop ? this.detailWholesaler.branchShop : false,
     });
+
+    this.frmTotalBranch.setValue(this.detailWholesaler.totalBranch ? this.detailWholesaler.totalBranch : 0);
 
     this.formBankAccount.setValue({
       account_number: this.detailWholesaler.bank_account_number,
