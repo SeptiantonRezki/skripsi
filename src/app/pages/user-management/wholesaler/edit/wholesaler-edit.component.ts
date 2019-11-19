@@ -280,10 +280,10 @@ export class WholesalerEditComponent {
       salespoint: this.getArea('salespoint') ? this.getArea('salespoint') : '',
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
-      branchShop: this.detailWholesaler.branchShop ? this.detailWholesaler.branchShop : false,
+      branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
     });
 
-    this.frmTotalBranch.setValue(this.detailWholesaler.totalBranch ? this.detailWholesaler.totalBranch : 0);
+    this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
 
     this.formBankAccount.setValue({
       account_number: this.detailWholesaler.bank_account_number,
@@ -461,7 +461,9 @@ export class WholesalerEditComponent {
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
-        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value
+        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
+        has_branch: this.formWs.get("branchShop").value === true ? 1 : 0,
+        total_branch: this.frmTotalBranch.value
       };
       this.wholesalerService
         .put(body, { wholesaler_id: this.detailWholesaler.id })
