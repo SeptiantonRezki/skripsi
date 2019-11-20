@@ -32,10 +32,10 @@ export class ScheduleProgramEditComponent {
   maxDateTemplate: any;
 
   listAudience: Array<any>;
-  
+
   listReminder: Array<any> = [{ name: 'Tiap Minggu', value: 'by-weekly' }, { name: 'Tiap 2 Minggu', value: 'bi-weekly' }, { name: 'Tidak Ada', value: 'none' }];
   listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-  listAddNotif: Array<any> = [{ name: 'H+1', value: 1}, { name: 'H+2', value: 2}, { name: 'H+3', value: 3}];
+  listAddNotif: Array<any> = [{ name: 'H+1', value: 1 }, { name: 'H+2', value: 2 }, { name: 'H+3', value: 3 }];
 
   public filterTP: FormControl = new FormControl();
   public filteredTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -45,7 +45,7 @@ export class ScheduleProgramEditComponent {
 
   @ViewChild('singleSelect') singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
-  
+
   valueChange: Boolean;
   saveData: Boolean;
 
@@ -69,7 +69,7 @@ export class ScheduleProgramEditComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService
-  ) { 
+  ) {
     activatedRoute.url.subscribe(param => {
       this.idScheduler = param[2].path;
     })
@@ -98,7 +98,7 @@ export class ScheduleProgramEditComponent {
     })
 
     this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
-      this.dataScheduler = res; 
+      this.dataScheduler = res;
       this.onLoad = false;
 
       if (res.status_berjalan !== 'no') {
@@ -106,9 +106,9 @@ export class ScheduleProgramEditComponent {
         this.dialogService.openSnackBar({ message: `Tidak dapat mengubah tanggal penjadwalan karena status ${status}.` });
         this.router.navigate(['dte', 'schedule-trade-program']);
       }
-      
+
       this.formSchedule.controls['trade_creator_id'].setValue(res.trade_creator_id);
-      
+
       let task_templates = this.formSchedule.controls['task_templates'] as FormArray;
       res.templates.map(item => {
         return task_templates.push(this.formBuilder.group({
@@ -187,7 +187,7 @@ export class ScheduleProgramEditComponent {
   getTradeProgram() {
     let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
     let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
-    
+
     this.minDate = tradeProgram['start_date'];
     this.maxStartDateTemplate = tradeProgram['end_date'];
   }
@@ -204,10 +204,10 @@ export class ScheduleProgramEditComponent {
   changeValue(idx) {
     let template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (template.at(idx).get('is_backup').value === 0) 
+    if (template.at(idx).get('is_backup').value === 0)
       template.at(idx).get('notif').disable();
-    else 
-    template.at(idx).get('notif').enable();
+    else
+      template.at(idx).get('notif').enable();
   }
 
   openListAudience(item) {

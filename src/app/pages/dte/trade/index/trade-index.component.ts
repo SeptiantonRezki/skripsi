@@ -285,15 +285,15 @@ export class TradeIndexComponent {
 
     this.tradeProgramService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data.map(item => {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data.map(item => {
           return {
             ...item,
             image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
             status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date && moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
             status_publish: item.status
           }
-        });
+        }) : [];
 
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -323,15 +323,15 @@ export class TradeIndexComponent {
     }
 
     this.tradeProgramService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
           status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date && moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
           status_publish: item.status
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -348,15 +348,15 @@ export class TradeIndexComponent {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.tradeProgramService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
           status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date && moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
           status_publish: item.status
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -376,15 +376,15 @@ export class TradeIndexComponent {
     }
 
     this.tradeProgramService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data.map(item => {
         return {
           ...item,
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null,
           status: moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") >= item.start_date && moment(this.dateNow).format("YYYY-MM-DD HH:mm:ss") <= item.end_date ? 'active' : 'inactive',
           status_publish: item.status
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });

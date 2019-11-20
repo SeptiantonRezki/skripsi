@@ -493,7 +493,7 @@ export class AudienceEditComponent {
     this.pagination.area = area_id;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
-    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.pagination.page = 1;
 
@@ -506,7 +506,7 @@ export class AudienceEditComponent {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
 
       this.rows = res.data;
@@ -520,7 +520,7 @@ export class AudienceEditComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, this.pagination).subscribe(res => {
+    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 

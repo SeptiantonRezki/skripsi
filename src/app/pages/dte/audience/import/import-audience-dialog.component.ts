@@ -42,8 +42,8 @@ export class ImportAudienceDialogComponent {
     this.dataService.showLoading(true);
     this.audienceService.importExcel(fd).subscribe(
       res => {
-        this.rows = res;
-        this.validData = (res || []).filter(item => item.is_valid).length;
+        this.rows = res.data;
+        this.validData = (res.data || []).filter(item => item.is_valid).length;
         this.dataService.showLoading(false);
       },
       err => {

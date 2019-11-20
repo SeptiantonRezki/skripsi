@@ -324,6 +324,7 @@ export class BannerCreateComponent {
     switch (selection) {
       case 'zone':
         const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+        console.log('zone response', response);
         let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
 
         while (list.length > 0) {

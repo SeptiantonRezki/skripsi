@@ -134,7 +134,6 @@ export class SupportComponent implements OnInit {
     this.onLoadDetail = true;
     this.isListCategoryDetails = true;
     this.helpDetail = null;
-
     this.supportService.getBantuanListCategoryDetails({ id: param.id, user: 'principal' }).subscribe((res: any) => {
       this.listCategoryDetails = res.data;
       this.onLoadDetail = false;

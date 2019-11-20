@@ -364,6 +364,7 @@ export class AudienceCreateComponent {
   }
 
   initArea() {
+    console.log('areaform login', this.areaFromLogin);
     this.areaFromLogin.map(item => {
       let level_desc = '';
       switch (item.type.trim()) {

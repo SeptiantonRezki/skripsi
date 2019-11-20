@@ -29,7 +29,7 @@ export class ScheduleProgramCreateComponent {
   listAudience: Array<any>;
   listReminder: Array<any> = [{ name: 'Ada', value: 'by-weekly' }, { name: 'Tidak Ada', value: 'none' }];
   listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-  listAddNotif: Array<any> = [{ name: 'H+1', value: 1}, { name: 'H+2', value: 2}, { name: 'H+3', value: 3}];
+  listAddNotif: Array<any> = [{ name: 'H+1', value: 1 }, { name: 'H+2', value: 2 }, { name: 'H+3', value: 3 }];
 
   filteredTpOptions: Observable<string[]>;
   filteredTemplateOptions: Observable<string[]>;
@@ -258,14 +258,14 @@ export class ScheduleProgramCreateComponent {
   setMinDate(idx) {
     const template = this.formSchedule.get('task_templates') as FormArray;
     const is_backup = template.at(idx).get('is_backup').value;
-    
+
     const start_date = template.at(idx).get('start_date').value;
 
     if (is_backup)
       template.at(idx).get('min_end_date').setValue(moment(start_date).add(2, 'days'));
-    else 
+    else
       template.at(idx).get('min_end_date').setValue(start_date);
-    
+
     template.at(idx).get('end_date').setValue('');
   }
 
@@ -289,7 +289,7 @@ export class ScheduleProgramCreateComponent {
     if (template.at(idx).get('is_notif').value === 0)
       template.at(idx).get('notif').disable();
     else
-    template.at(idx).get('notif').enable();
+      template.at(idx).get('notif').enable();
   }
 
   getRepeated(idx) {
@@ -309,7 +309,7 @@ export class ScheduleProgramCreateComponent {
     if (evnt.checked) {
       template.enable();
       template.get('min_end_date').setValue(moment(start_date).add(2, 'days'));
-      
+
       template.get('task_template_id_backup').setValidators(Validators.required);
       template.get('coin_delivered_backup').setValidators([Validators.required, Validators.min(0)]);
       template.get('coin_approved_backup').setValidators([Validators.required, Validators.min(0)]);
@@ -321,7 +321,7 @@ export class ScheduleProgramCreateComponent {
 
       template.get('is_verification').setValue(false);
       template.get('is_verification').disable();
-      
+
       template.updateValueAndValidity();
 
       let value = template.value;
@@ -333,7 +333,7 @@ export class ScheduleProgramCreateComponent {
 
     } else {
       template.get('min_end_date').setValue(start_date);
-      
+
       template.get('is_verification').enable();
       template.get('is_notif').enable();
 
@@ -387,7 +387,7 @@ export class ScheduleProgramCreateComponent {
       }
 
       let foundUndefined = body['task_templates'].some(item => item === undefined)
-      if(!foundUndefined) {
+      if (!foundUndefined) {
         this.scheduleTradeProgramService.create(body).subscribe(
           res => {
             this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });

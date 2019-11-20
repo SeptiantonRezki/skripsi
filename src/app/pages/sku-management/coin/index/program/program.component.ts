@@ -42,7 +42,7 @@ export class ProgramComponent {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private coinService: CoinService
-  ) { 
+  ) {
     this.onLoadTP = true;
 
     const selectedTab = this.dataService.getFromStorage('setSelectedTabCoin');
@@ -83,8 +83,8 @@ export class ProgramComponent {
     this.showLoadingBar = true;
     this.coinService.getProgram(this.paginationTP).subscribe(
       res => {
-        Page.renderPagination(this.paginationTP, res);
-        this.rowsTP = res.data;
+        Page.renderPagination(this.paginationTP, res.data);
+        this.rowsTP = res.data ? res.data.data : [];
 
         setTimeout(() => {
           this.onLoadTP = false;
@@ -101,7 +101,7 @@ export class ProgramComponent {
   }
 
   setPageTP(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicatorTP = true;
 
     if (this.paginationTP['search']) {
@@ -112,8 +112,8 @@ export class ProgramComponent {
     }
 
     this.coinService.getProgram(this.paginationTP).subscribe(res => {
-      Page.renderPagination(this.paginationTP, res);
-      this.rowsTP = res.data;
+      Page.renderPagination(this.paginationTP, res.data);
+      this.rowsTP = res.data ? res.data.data : [];
       this.loadingIndicatorTP = false;
     });
   }
@@ -130,8 +130,8 @@ export class ProgramComponent {
 
     this.coinService.getProgram(this.paginationTP).subscribe(
       res => {
-        Page.renderPagination(this.paginationTP, res);
-        this.rowsTP = res.data;
+        Page.renderPagination(this.paginationTP, res.data);
+        this.rowsTP = res.data ? res.data.data : [];
         this.loadingIndicatorTP = false;
       },
       err => {
@@ -154,8 +154,8 @@ export class ProgramComponent {
     }
 
     this.coinService.getProgram(this.paginationTP).subscribe(res => {
-      Page.renderPagination(this.paginationTP, res);
-      this.rowsTP = res.data;
+      Page.renderPagination(this.paginationTP, res.data);
+      this.rowsTP = res.data ? res.data.data : [];
       this.loadingIndicatorTP = false;
     });
   }
@@ -165,7 +165,7 @@ export class ProgramComponent {
     this.retailer_id = item.id;
     let data = {
       titleDialog: "Flush Coin",
-      captionDialog: "Anda akan menghapus semua coin di "+ item.name +". Coin yang terhapus tidak akan bisa dikembalikan.",
+      captionDialog: "Anda akan menghapus semua coin di " + item.name + ". Coin yang terhapus tidak akan bisa dikembalikan.",
       confirmCallback: this.confirmFlush.bind(this),
       buttonText: ["Ok", "Batal"]
     };
@@ -177,9 +177,9 @@ export class ProgramComponent {
       type: this.type
     }
 
-    if (this.type === 'retailer') 
+    if (this.type === 'retailer')
       body['retailer_id'] = this.retailer_id;
-    else 
+    else
       body['trade_program_id'] = this.retailer_id;
 
     this.coinService.flush(body).subscribe(

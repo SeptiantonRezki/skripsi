@@ -210,13 +210,13 @@ export class ProductEditComponent {
         let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
         wilayah.push(this.formBuilder.group({
-          national: [this.getArea(response.data, 'national'), Validators.required],
-          zone: [this.getArea(response.data, 'division')],
-          region: [this.getArea(response.data, 'region')],
-          area: [this.getArea(response.data, 'area')],
-          salespoint: [this.getArea(response.data, 'salespoint')],
-          district: [this.getArea(response.data, 'district')],
-          territory: [this.getArea(response.data, 'teritory')],
+          national: [this.getArea(response, 'national'), Validators.required],
+          zone: [this.getArea(response, 'division')],
+          region: [this.getArea(response, 'region')],
+          area: [this.getArea(response, 'area')],
+          salespoint: [this.getArea(response, 'salespoint')],
+          district: [this.getArea(response, 'district')],
+          territory: [this.getArea(response, 'teritory')],
           list_national: this.formBuilder.array(this.listLevelArea),
           list_zone: this.formBuilder.array([]),
           list_region: this.formBuilder.array([]),
@@ -227,7 +227,7 @@ export class ProductEditComponent {
         }))
 
         this.initArea(index);
-        this.initFormGroup(response.data, index);
+        this.initFormGroup(response, index);
 
         if (this.detailProduct.areas.length === (index + 1)) {
           this.onLoad = false;

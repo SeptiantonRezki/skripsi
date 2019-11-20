@@ -86,4 +86,4 @@ import { PipesModule } from "app/pipe/pipes.module";
   providers: [ListMenuResolver, PageGuard],
   entryComponents: [DialogOtherHelp]
 })
-export class SettingsModule {}
+export class SettingsModule { }

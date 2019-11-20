@@ -37,7 +37,7 @@ export class HelpCreateComponent {
 
   files: File;
   validComboDrag: Boolean;
-  
+
   public options: Object = Config.FROALA_CONFIG;
 
   constructor(
@@ -87,7 +87,7 @@ export class HelpCreateComponent {
     // Reset the input value
     if (input) {
       input.value = '';
-      if(this.keywords.length > 0) {
+      if (this.keywords.length > 0) {
         this.formHelp.get('otherkeyword').setValue(value);
         this.chipList.errorState = false;
       } else {
@@ -143,7 +143,7 @@ export class HelpCreateComponent {
 
   onFilesChange() {
     setTimeout(() => {
-      if(this.files.size > 500000){
+      if (this.files.size > 500000) {
         this.isValidFile = false;
       } else {
         this.isValidFile = true;
@@ -152,36 +152,36 @@ export class HelpCreateComponent {
   }
 
   submit(): void {
-    if(this.keywords.length == 0) {
+    if (this.keywords.length == 0) {
       this.formHelp.get('otherkeyword').setValue('');
     }
     else {
-      if(this.keywords.length > 0) {
+      if (this.keywords.length > 0) {
         this.formHelp.get('otherkeyword').setValue(this.keywords);
       }
       if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
-          let body = new FormData();
-          body.append('title', this.formHelp.get("title").value);
-          body.append('body', this.formHelp.get("body").value);
-          body.append('user', this.formHelp.get("user").value);
-          body.append('content_category_id', this.formHelp.get("category").value);
-          // body.append('keyword', this.formHelp.get("otherkeyword").value);
-          body.append('keyword', JSON.stringify(this.keywords));
-          body.append('is_notif', '0');
-          body.append('type', 'help');
-          if (this.files) body.append('image', this.files);
+        let body = new FormData();
+        body.append('title', this.formHelp.get("title").value);
+        body.append('body', this.formHelp.get("body").value);
+        body.append('user', this.formHelp.get("user").value);
+        body.append('content_category_id', this.formHelp.get("category").value);
+        // body.append('keyword', this.formHelp.get("otherkeyword").value);
+        body.append('keyword', JSON.stringify(this.keywords));
+        body.append('is_notif', '0');
+        body.append('type', 'help');
+        if (this.files) body.append('image', this.files);
 
-          this.helpService.create(body).subscribe(
-            res => {
-              // this.loadingIndicator = false;
-              this.router.navigate(["content-management", "help"]);
-              this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-            },
-            err => {
-              this.dialogService.openSnackBar({ message: err.error.message });
-              // this.loadingIndicator = false;
-            }
-          );
+        this.helpService.create(body).subscribe(
+          res => {
+            // this.loadingIndicator = false;
+            this.router.navigate(["content-management", "help"]);
+            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+          },
+          err => {
+            this.dialogService.openSnackBar({ message: err.error.message });
+            // this.loadingIndicator = false;
+          }
+        );
       } else {
         let msg;
         if (this.formHelp.invalid)

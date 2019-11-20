@@ -176,7 +176,7 @@ export class HelpIndexComponent {
         this.loadingIndicator = false;
       }, err => {
         console.error(err);
-    })
+      })
   }
 
   directEdit(param?: any, opsi?: string): void {
@@ -224,20 +224,20 @@ export class HelpIndexComponent {
   @HostListener('scroll', ['$event']) onScroll($event: Event): void {
     const target = $event.srcElement as HTMLTextAreaElement;
     // console.log('....SCROLLing', this.myScrollContainer.nativeElement.scrollHeight);
-    if(target.scrollTop == 0 && this.myScrollContainer.nativeElement.scrollHeight){
-    //   this.state_.isLoadMore = false;
+    if (target.scrollTop == 0 && this.myScrollContainer.nativeElement.scrollHeight) {
+      //   this.state_.isLoadMore = false;
     }
-  }   
+  }
   scrollToTop() {
     if (isPlatformBrowser(this.platformId)) {
       // console.log('OKE SCROLLing');
-        try {
-          // console.log('OKE SCROLLing2', this.myScrollContainer.nativeElement.scrollHeight);
-          this.myScrollContainer.nativeElement.scrollTop = 0;
-          document.querySelector('#target').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } catch (err) {
-          console.log('Scrolling Error', err);
-        }
+      try {
+        // console.log('OKE SCROLLing2', this.myScrollContainer.nativeElement.scrollHeight);
+        this.myScrollContainer.nativeElement.scrollTop = 0;
+        document.querySelector('#target').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (err) {
+        console.log('Scrolling Error', err);
+      }
     }
   }
 

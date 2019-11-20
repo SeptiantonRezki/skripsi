@@ -40,7 +40,7 @@ export class HelpEditComponent {
 
   files: File;
   validComboDrag: Boolean;
-  
+
   public options: Object = Config.FROALA_CONFIG;
 
   constructor(
@@ -68,7 +68,7 @@ export class HelpEditComponent {
         this.isPreview = false;
       }
     }
-        
+
   }
 
   ngOnInit() {
@@ -90,7 +90,7 @@ export class HelpEditComponent {
 
     this.formHelp.get('otherkeyword').statusChanges.subscribe(
       status => {
-          this.chipList.errorState = status === 'INVALID';
+        this.chipList.errorState = status === 'INVALID';
       }
     );
 
@@ -106,7 +106,7 @@ export class HelpEditComponent {
     // Reset the input value
     if (input) {
       input.value = '';
-      if(this.keywords.length > 0) {
+      if (this.keywords.length > 0) {
         this.formHelp.get('otherkeyword').setValue(value);
         this.chipList.errorState = false;
       } else {
@@ -122,7 +122,7 @@ export class HelpEditComponent {
       this.keywords.splice(index, 1);
     }
   }
-  
+
   getListCategory() {
     this.helpService.getListCategory().subscribe(
       (res: any) => {
@@ -156,7 +156,7 @@ export class HelpEditComponent {
     );
   }
 
-  getShow(){
+  getShow() {
     this.helpService.getShow(null, { content_id: this.detailHelp.id }).subscribe(
       (res: any) => {
         this.detailHelp.image_url = res.data.image_url;
@@ -164,11 +164,11 @@ export class HelpEditComponent {
           title: res.data.title,
           user: this.detailHelp.user,
           category: res.data.content_category_id,
-          otherkeyword: res.data.keyword? (JSON.parse(res.data.keyword).length > 0 ? res.data.keyword: "") : "",
+          otherkeyword: res.data.keyword ? (JSON.parse(res.data.keyword).length > 0 ? res.data.keyword : "") : "",
           body: res.data.body,
         });
 
-        this.keywords = res.data.keyword? JSON.parse(res.data.keyword):[];
+        this.keywords = res.data.keyword ? JSON.parse(res.data.keyword) : [];
       },
       err => {
         console.error(err);
@@ -183,7 +183,7 @@ export class HelpEditComponent {
 
   onFilesChange() {
     setTimeout(() => {
-      if(this.files.size > 500000){
+      if (this.files.size > 500000) {
         this.isValidFile = false;
       } else {
         this.isValidFile = true;
@@ -192,11 +192,11 @@ export class HelpEditComponent {
   }
 
   submit(): void {
-    if(this.keywords.length == 0) {
+    if (this.keywords.length == 0) {
       this.formHelp.get('otherkeyword').setValue('');
     }
     else {
-      if(this.keywords.length > 0) {
+      if (this.keywords.length > 0) {
         this.formHelp.get('otherkeyword').setValue(this.keywords);
       }
       if (this.formHelp.valid && !this.files || this.formHelp.valid && this.files && this.files.size < 500000) {
