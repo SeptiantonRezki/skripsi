@@ -400,7 +400,7 @@ export class WholesalerIndexComponent {
     try {
       const response = await this.wholesalerService.exportWholesaler({ area_id: area_id }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Wholesaler_${new Date().toLocaleString()}.xlsx`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Wholesaler_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
