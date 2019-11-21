@@ -13,6 +13,7 @@ import { environment } from "environments/environment";
 import { IdleService } from "../../services/idle.service";
 import { GeneralService } from "app/services/general.service";
 import * as _ from 'underscore';
+import { forkJoin } from "rxjs";
 
 @Component({
   selector: "login",
@@ -107,12 +108,19 @@ export class LoginComponent implements OnInit {
             if (profile.status == "active") {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
-              const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
-              profile['area_type'] = areaType.data;
-              this.dataService.setEncryptedProfile(profile);
-              // this.dataService.setToStorage("profile", profile);
-              this.router.navigate(["dashboard"]);
-              this.submitting = false;
+              // const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
+              this.getAreasAsync(area_id).subscribe(res => {
+                let area_type = res ? res.map(r => r.data) : [];
+                profile['area_type'] = area_type[0] ? area_type[0] : [];
+                profile['areas'] = area_type;
+
+                this.dataService.setEncryptedProfile(profile);
+                this.router.navigate(["dashboard"]);
+                this.submitting = false;
+              }, err => {
+                console.log('err', err);
+                this.submitting = false;
+              })
             } else {
               this.dataService.unSetAuthorization();
               this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
@@ -139,5 +147,15 @@ export class LoginComponent implements OnInit {
     } else {
       commonFormValidator.validateAllFields(this.loginForm);
     }
+  }
+
+  getAreasAsync(area_id = []) {
+    let areas = [];
+    area_id.map(area => {
+      let response = this.generalService.getParentArea({ parent: area });
+      areas.push(response);
+    });
+
+    return forkJoin(areas);
   }
 }

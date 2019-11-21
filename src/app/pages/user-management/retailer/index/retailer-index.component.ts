@@ -40,6 +40,7 @@ export class RetailerIndexComponent {
   listLevelArea: any[];
   list: any;
   areaFromLogin;
+  area_id_list = [];
   formFilter: FormGroup;
   filterArea: Boolean;
 
@@ -63,7 +64,9 @@ export class RetailerIndexComponent {
     this.permission = this.roles.getRoles('principal.retailer');
     console.log(this.permission);
 
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
+    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    console.log('asdas', this.dataService.getDecryptedProfile());
     this.listLevelArea = [
       {
         "id": 1,
@@ -112,45 +115,47 @@ export class RetailerIndexComponent {
   }
 
   initArea() {
-    this.areaFromLogin.map(item => {
-      let level_desc = '';
-      switch (item.type.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          this.formFilter.get('national').setValue(item.id);
-          this.formFilter.get('national').disable();
-          break
-        case 'division':
-          level_desc = 'region';
-          this.formFilter.get('zone').setValue(item.id);
-          this.formFilter.get('zone').disable();
-          break;
-        case 'region':
-          level_desc = 'area';
-          this.formFilter.get('region').setValue(item.id);
-          this.formFilter.get('region').disable();
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          this.formFilter.get('area').setValue(item.id);
-          this.formFilter.get('area').disable();
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          this.formFilter.get('salespoint').setValue(item.id);
-          this.formFilter.get('salespoint').disable();
-          break;
-        case 'district':
-          level_desc = 'territory';
-          this.formFilter.get('district').setValue(item.id);
-          this.formFilter.get('district').disable();
-          break;
-        case 'territory':
-          this.formFilter.get('territory').setValue(item.id);
-          this.formFilter.get('territory').disable();
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
+    this.areaFromLogin.map(area_types => {
+      area_types.map((item, index) => {
+        let level_desc = '';
+        switch (item.type.trim()) {
+          case 'national':
+            level_desc = 'zone';
+            this.formFilter.get('national').setValue(item.id);
+            this.formFilter.get('national').disable();
+            break
+          case 'division':
+            level_desc = 'region';
+            this.formFilter.get('zone').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('zone').disable();
+            break;
+          case 'region':
+            level_desc = 'area';
+            this.formFilter.get('region').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('region').disable();
+            break;
+          case 'area':
+            level_desc = 'salespoint';
+            this.formFilter.get('area').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('area').disable();
+            break;
+          case 'salespoint':
+            level_desc = 'district';
+            this.formFilter.get('salespoint').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('salespoint').disable();
+            break;
+          case 'district':
+            level_desc = 'territory';
+            this.formFilter.get('district').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('district').disable();
+            break;
+          case 'territory':
+            this.formFilter.get('territory').setValue(item.id);
+            if (index !== area_types.length - 1) this.formFilter.get('territory').disable();
+            break;
+        }
+        this.getAudienceArea(level_desc, item.id);
+      });
     });
   }
 
@@ -159,6 +164,7 @@ export class RetailerIndexComponent {
     switch (selection) {
       case 'zone':
         this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           this.list[selection] = res;
         });
 
@@ -177,6 +183,7 @@ export class RetailerIndexComponent {
         item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
           this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[selection] = res;
           });
         } else {
@@ -197,6 +204,7 @@ export class RetailerIndexComponent {
         item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
           this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[selection] = res;
           });
         } else {
@@ -215,6 +223,7 @@ export class RetailerIndexComponent {
         item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
           this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[selection] = res;
           });
         } else {
@@ -231,6 +240,7 @@ export class RetailerIndexComponent {
         item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
           this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[selection] = res;
           });
         } else {
@@ -245,6 +255,7 @@ export class RetailerIndexComponent {
         item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
           this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[selection] = res;
           });
         } else {
@@ -257,6 +268,12 @@ export class RetailerIndexComponent {
       default:
         break;
     }
+  }
+
+  filteringGeotree(areaList) {
+    let filteredArea = areaList.slice(1, areaList.length).filter(ar => this.area_id_list.includes(Number(ar.id)));
+    if (areaList && areaList[0]) filteredArea.unshift(areaList[0]);
+    return filteredArea.length > 1 ? filteredArea : areaList;
   }
 
   getRetailerList() {
