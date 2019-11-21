@@ -1,4 +1,4 @@
-import { Component,} from '@angular/core';
+import { Component, } from '@angular/core';
 @Component({
   selector: 'pesan-bantuan',
   templateUrl: './pesan-bantuan.html',
@@ -7,7 +7,6 @@ import { Component,} from '@angular/core';
 export class PesanBantuan {
 
   constructor(
-  ){}
+  ) { }
 
 }
-

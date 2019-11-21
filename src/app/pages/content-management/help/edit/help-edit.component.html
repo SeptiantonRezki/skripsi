@@ -119,40 +119,6 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="category" placeholder="Kategori">
-                <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error
-                *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
-                Kategori harus diisi
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div fxLayout="row">
-            <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="text" formControlName="otherkeyword" placeholder="Kata Kunci Lain">
-              <mat-error *ngIf="formHelp.controls['otherkeyword'].hasError('required') && formHelp.controls['otherkeyword'].touched">
-                Kata Kunci Lain harus diisi
-              </mat-error>
-            </mat-form-field> -->
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-chip-list #chipList aria-label="Keyword Selection">
-                <mat-chip *ngFor="let keyword of keywords" [selectable]="keywordSelectable"
-                  [removable]="keywordRemovable" (removed)="remove(keyword)">
-                  {{keyword}}
-                  <mat-icon matChipRemove *ngIf="keywordRemovable">cancel</mat-icon>
-                </mat-chip>
-                <input matInput placeholder="Kata Kunci Lain" [matChipInputFor]="chipList"
-                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes" [matChipInputAddOnBlur]="keywordAddOnBlur"
-                  (matChipInputTokenEnd)="add($event)">
-              </mat-chip-list>
-              <mat-error *ngIf="keywords.length > 0">
-                Kata Kunci Lain harus diisi
-              </mat-error>
-            </mat-form-field>
-          </div>
           <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">Konten Bantuan</h3>
           </div>

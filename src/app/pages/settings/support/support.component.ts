@@ -134,6 +134,7 @@ export class SupportComponent implements OnInit {
     this.onLoadDetail = true;
     this.isListCategoryDetails = true;
     this.helpDetail = null;
+
     this.supportService.getBantuanListCategoryDetails({ id: param.id, user: 'principal' }).subscribe((res: any) => {
       this.listCategoryDetails = res.data;
       this.onLoadDetail = false;
@@ -245,7 +246,7 @@ export class SupportComponent implements OnInit {
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { target: '', description: 'Fitur ini akan segera tersedia untuk anda. Nantikan kehadiran fitur ini eksklusif untuk pengguna AYO SRC' };
+    dialogConfig.data = { target: '', description: 'Fitur ini akan segera tersedia untuk anda. Nantikan kehadiran fitur ini eksklusif untuk pengguna AYOSRC' };
     const dialogRef = this.dialog.open(DialogOtherHelp, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {

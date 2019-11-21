@@ -89,15 +89,6 @@
                     </mat-card-content>
                   </mat-card>
                 </div>
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title"
-                    (click)="openHelpDetails({id: option.id, type: 'search'})">
-                    <span *ngIf="isFound">{{option.title}}</span>
-                    <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk <span
-                        style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim Digital
-                      Care untuk pertanyaan ini.</span>
-                  </mat-option>
-                </mat-autocomplete>
               </div>
             </div>
           </div>
@@ -143,37 +134,6 @@
                 <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()"
                   *ngIf="myControl.value">
                   <mat-icon class="cancel-icon">delete</mat-icon>
-                </div>
-                <mat-list class="pt-0">
-                  <mat-list-item *ngFor="let item of listCategoryDetails"
-                    (click)="openHelpDetails(item); deleteSearch();">
-                    <span class="pl-8">{{item.title}}</span>
-                    <mat-divider></mat-divider>
-                  </mat-list-item>
-                </mat-list>
-              </div>
-              <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-content" fxLayout="column"
-                fxLayoutAlign="start start">
-                <div [innerHtml]="helpDetail.body"></div>
-                <div class="py-24" *ngIf="helpDetail.image_url">
-                  <img class="previewIcon" [src]="helpDetail.image_url">
-                </div>
-              </div>
-              <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-footer mt-20" fxLayout="column">
-                <span class="title">Apakah informasi ini berguna?</span>
-                <div class="like pb-8" fxLayout="row" fxLayoutAlign="start center" (click)="like(helpDetail)">
-                  <mat-icon *ngIf="!isLike" class="thumb-up">thumb_up</mat-icon>
-                  <mat-icon *ngIf="isLike" class="thumb-up-red">thumb_up</mat-icon>
-                  <span class="pl-8">{{helpDetail.likes_count}}</span>
-                </div>
-                <div class="unlike " fxLayout="row" fxLayoutAlign="start center" (click)="unlike(helpDetail)">
-                  <mat-icon *ngIf="!isUnlike" class="thumb-down">thumb_down</mat-icon>
-                  <mat-icon *ngIf="isUnlike" class="thumb-down-red">thumb_down</mat-icon>
-                  <span class="pl-8">{{helpDetail.unlikes_count}}</span>
-                </div>
-                <div class="help-next mt-20 mb-20" (click)="onHelpNext()" fxLayout="column" fxLayoutAlign="start start">
-                  <span>Butuh bantuan lebih lanjut mengenai hal ini?</span>
-                  <span>Tim Digital Care AYOSRC siap membantu anda</span>
                 </div>
               </div>
               <mat-autocomplete #auto="matAutocomplete">

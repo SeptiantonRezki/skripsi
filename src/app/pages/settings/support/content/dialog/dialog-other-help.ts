@@ -12,10 +12,10 @@ export class DialogOtherHelp {
   constructor(
     public dialogRef: MatDialogRef<DialogOtherHelp>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ){
+  ) {
   }
 
   onClose(): void {
-      this.dialogRef.close();
+    this.dialogRef.close();
   }
 }
