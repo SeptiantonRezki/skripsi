@@ -246,7 +246,7 @@ export class SupportComponent implements OnInit {
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { target: '', description: 'Fitur ini akan segera tersedia untuk anda. Nantikan kehadiran fitur ini eksklusif untuk pengguna AYOSRC' };
+    dialogConfig.data = { target: '', description: 'Fitur ini akan segera tersedia untuk anda. Nantikan kehadiran fitur ini eksklusif untuk pengguna AYO SRC' };
     const dialogRef = this.dialog.open(DialogOtherHelp, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
