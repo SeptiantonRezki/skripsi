@@ -462,9 +462,13 @@ export class WholesalerEditComponent {
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
-        has_branch: this.formWs.get("branchShop").value === true ? 1 : 0,
-        total_branch: this.frmTotalBranch.value
       };
+
+      if (this.formWs.get("branchShop").value === true) {
+        body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
+        body['total_branch'] = this.frmTotalBranch.value
+      }
+
       this.wholesalerService
         .put(body, { wholesaler_id: this.detailWholesaler.id })
         .subscribe(
