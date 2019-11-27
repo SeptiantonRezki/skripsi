@@ -272,8 +272,8 @@ export class RetailerIndexComponent {
 
   filteringGeotree(areaList) {
     let filteredArea = areaList.slice(1, areaList.length).filter(ar => this.area_id_list.includes(Number(ar.id)));
-    if (areaList && areaList[0]) filteredArea.unshift(areaList[0]);
-    return filteredArea.length > 1 ? filteredArea : areaList;
+    // if (areaList && areaList[0]) filteredArea.unshift(areaList[0]);
+    return filteredArea.length > 0 ? filteredArea : areaList;
   }
 
   getRetailerList() {
