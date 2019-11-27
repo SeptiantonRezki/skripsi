@@ -58,7 +58,7 @@
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Salespoint" formControlName="salespoint"
               (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
-              <mat-option *ngFor="let item of filterGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
                 :
@@ -68,7 +68,7 @@
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="District" formControlName="district"
               (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
-              <mat-option *ngFor="let item of filterGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
                 item.name}}</mat-option>
@@ -76,7 +76,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Territory" formControlName="territory">
-              <mat-option *ngFor="let item of filterGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
                 item.name}}</mat-option>
