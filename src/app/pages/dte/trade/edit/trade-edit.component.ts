@@ -43,13 +43,13 @@ export class TradeEditComponent {
       return false;
     }
 
-    if (this.files) {
+    if (this.files && !this.saveData) {
       return false;
     }
 
     return true;
   }
-  
+
   constructor(
     private router: Router,
     private adapter: DateAdapter<any>,
@@ -58,13 +58,13 @@ export class TradeEditComponent {
     private dataService: DataService,
     private tradeProgramService: TradeProgramService,
     private activatedRoute: ActivatedRoute
-  ) { 
+  ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
     this.minDate = moment();
     this.minExpireDate = moment();
     this.saveData = false;
-    
+
     this.formTradeProgramError = {
       name: {},
       start_date: {},
@@ -123,7 +123,7 @@ export class TradeEditComponent {
     if (!init) {
       this.formTradeProgram.get("end_date").setValue("");
     }
-    
+
     this.minDate = this.formTradeProgram.get("start_date").value;
   }
 
@@ -183,7 +183,7 @@ export class TradeEditComponent {
   updateStatus() {
     this.saveData = !this.saveData;
     let formTradeProgram = this.formTradeProgram.getRawValue();
-    
+
     let body = {
       _method: 'PUT',
       name: formTradeProgram.name,
