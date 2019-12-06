@@ -11,6 +11,7 @@ import { PagesName } from "app/classes/pages-name";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ImportAccessCashierDialogComponent } from "../import-access-cashier-dialog/import-access-cashier-dialog.component";
+import { GeotreeService } from "app/services/geotree.service";
 
 @Component({
   selector: "app-retailer-index",
@@ -56,6 +57,7 @@ export class RetailerIndexComponent {
     private retailerService: RetailerService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private geotreeService: GeotreeService
 
   ) {
     this.onLoad = true;
@@ -115,6 +117,7 @@ export class RetailerIndexComponent {
   }
 
   initArea() {
+    this.geotreeService.getFilter2Geotree(this.areaFromLogin);
     this.areaFromLogin.map(area_types => {
       area_types.map((item, index) => {
         let level_desc = '';
