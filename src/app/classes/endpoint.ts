@@ -161,7 +161,7 @@ export class Endpoint {
         list_audience: `${AYO_API}/api/${type_api}/audience/show/${context.audience_id}`,
         export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/scheduler/export`,
         update_tanggal: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/scheduler/${context.schedule_tp_id}/update-date`,
-        csv_preview: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/adjustment/coin/preview`,
+        csv_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/adjustment/coin/preview`,
         csv_store: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/adjustment/coin/import`,
         csv_download: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/adjustment/coin/download`
       },
