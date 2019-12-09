@@ -117,49 +117,172 @@ export class RetailerIndexComponent {
   }
 
   initArea() {
-    this.geotreeService.getFilter2Geotree(this.areaFromLogin);
-    this.areaFromLogin.map(area_types => {
-      area_types.map((item, index) => {
+    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+    this.geotreeService.getFilter2Geotree(areas);
+    let sameArea = this.geotreeService.diffLevelStarted;
+    let areasDisabled = this.geotreeService.disableArea(sameArea);
+    let lastLevelDisabled = null;
+
+
+    if (this.areaFromLogin && this.areaFromLogin.length > 0) {
+      this.areaFromLogin[0].map(item => {
+        // console.log('area', item, sameArea);
         let level_desc = '';
         switch (item.type.trim()) {
           case 'national':
             level_desc = 'zone';
-            this.formFilter.get('national').setValue(item.id);
+            this.formFilter.get('national').setValue(1);
             this.formFilter.get('national').disable();
+            //     if (this.formFilter.get('').disabled) this.getFilterArea(level_desc, item.id);
+            // else this.getAudienceArea(level_desc, item.id);
             break
           case 'division':
             level_desc = 'region';
             this.formFilter.get('zone').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('zone').disable();
+            if (sameArea.level_desc === 'division') {
+              lastLevelDisabled = 'division';
+              this.formFilter.get('zone').disable();
+            }
+            if (areasDisabled.indexOf(item.type) > -1) this.formFilter.get('zone').disable();
+            if (this.formFilter.get('zone').disabled) this.getFilterArea(level_desc, item.id);
+            else this.getAudienceArea(level_desc, item.id);
             break;
           case 'region':
             level_desc = 'area';
             this.formFilter.get('region').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('region').disable();
+            if (sameArea.level_desc === 'region') {
+              lastLevelDisabled = 'region';
+              this.formFilter.get('region').disable();
+            }
+            if (areasDisabled.indexOf(item.type) > -1) this.formFilter.get('region').disable();
+            if (this.formFilter.get('region').disabled) this.getFilterArea(level_desc, item.id);
+            else this.getAudienceArea(level_desc, item.id);
             break;
           case 'area':
             level_desc = 'salespoint';
             this.formFilter.get('area').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('area').disable();
+            if (sameArea.level_desc === 'area') {
+              lastLevelDisabled = 'area';
+              this.formFilter.get('area').disable();
+            }
+            if (areasDisabled.indexOf(item.type) > -1) this.formFilter.get('area').disable();
+            if (this.formFilter.get('area').disabled) this.getFilterArea(level_desc, item.id);
+            else this.getAudienceArea(level_desc, item.id);
             break;
           case 'salespoint':
             level_desc = 'district';
             this.formFilter.get('salespoint').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('salespoint').disable();
+            if (sameArea.level_desc === 'salespoint') {
+              lastLevelDisabled = 'salespoint';
+              this.formFilter.get('salespoint').disable();
+            }
+            if (areasDisabled.indexOf(item.type) > -1) this.formFilter.get('salespoint').disable();
+            if (this.formFilter.get('salespoint').disabled) this.getFilterArea(level_desc, item.id);
+            else this.getAudienceArea(level_desc, item.id);
             break;
           case 'district':
             level_desc = 'territory';
             this.formFilter.get('district').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('district').disable();
+            if (sameArea.level_desc === 'district') {
+              lastLevelDisabled = 'district';
+              this.formFilter.get('district').disable();
+            }
+            if (areasDisabled.indexOf(item.type) > -1) this.formFilter.get('district').disable();
+            if (this.formFilter.get('district').disabled) this.getFilterArea(level_desc, item.id);
+            else this.getAudienceArea(level_desc, item.id);
             break;
           case 'territory':
             this.formFilter.get('territory').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('territory').disable();
             break;
+          default:
+            level_desc = 'zone';
+            this.formFilter.get('national').setValue(1);
+            this.formFilter.get('national').disable();
         }
-        this.getAudienceArea(level_desc, item.id);
+        console.log(level_desc, lastLevelDisabled);
+        // this.getAudienceArea(level_desc, item.id);
       });
-    });
+    }
+    // this.areaFromLogin.map(area_types => {
+    //   area_types.map((item, index) => {
+    //     let level_desc = '';
+    //     switch (item.type.trim()) {
+    //       case 'national':
+    //         level_desc = 'zone';
+    //         this.formFilter.get('national').setValue(item.id);
+    //         this.formFilter.get('national').disable();
+    //         break
+    //       case 'division':
+    //         level_desc = 'region';
+    //         this.formFilter.get('zone').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('zone').disable();
+    //         break;
+    //       case 'region':
+    //         level_desc = 'area';
+    //         this.formFilter.get('region').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('region').disable();
+    //         break;
+    //       case 'area':
+    //         level_desc = 'salespoint';
+    //         this.formFilter.get('area').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('area').disable();
+    //         break;
+    //       case 'salespoint':
+    //         level_desc = 'district';
+    //         this.formFilter.get('salespoint').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('salespoint').disable();
+    //         break;
+    //       case 'district':
+    //         level_desc = 'territory';
+    //         this.formFilter.get('district').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('district').disable();
+    //         break;
+    //       case 'territory':
+    //         this.formFilter.get('territory').setValue(item.id);
+    //         if (index !== area_types.length - 1) this.formFilter.get('territory').disable();
+    //         break;
+    //     }
+    //     this.getAudienceArea(level_desc, item.id);
+    //   });
+    // });
+  }
+
+  getFilterArea(selection, id) {
+    let item: any;
+    switch (selection) {
+      case 'zone':
+        // this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+        //   // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+        //   this.list[selection] = res;
+        // });
+
+        // this.formFilter.get('region').setValue('');
+        // this.formFilter.get('area').setValue('');
+        // this.formFilter.get('salespoint').setValue('');
+        // this.formFilter.get('district').setValue('');
+        // this.formFilter.get('territory').setValue('');
+        // this.list['region'] = [];
+        // this.list['area'] = [];
+        // this.list['salespoint'] = [];
+        // this.list['district'] = [];
+        // this.list['territory'] = [];
+        break;
+      case 'region':
+        break;
+      case 'region':
+        break;
+      case 'area':
+        break;
+      case 'salespoint':
+        break;
+      case 'district':
+        break;
+      case 'territory':
+        break;
+
+      default:
+        break;
+    }
   }
 
   getAudienceArea(selection, id) {
@@ -283,6 +406,8 @@ export class RetailerIndexComponent {
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
+
+
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
 
