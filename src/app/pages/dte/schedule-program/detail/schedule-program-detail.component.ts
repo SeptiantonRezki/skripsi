@@ -167,6 +167,7 @@ export class ScheduleProgramDetailComponent {
       end_date: ["", Validators.required],
       repeated: ["by-weekly", Validators.required],
       is_backup: [1, Validators.required],
+      is_verification_toggle: [false, Validators.required],
       notif: [1, Validators.required]
     })
   }
