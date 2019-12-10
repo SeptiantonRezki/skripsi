@@ -186,6 +186,7 @@ export class ScheduleProgramCreateComponent {
       notif: [1, Validators.required],
       is_backup: [false, Validators.required],
       is_verification: [false, Validators.required],
+      is_verification_toggle: [false, Validators.required],
       task_template_id_backup: [{ value: "", disabled: true }],
       coin_delivered_backup: [{ value: "", disabled: true }],
       coin_approved_backup: [{ value: "", disabled: true }],
@@ -379,6 +380,7 @@ export class ScheduleProgramCreateComponent {
             ...item,
             is_backup: item.is_backup ? 1 : 0,
             is_verification: item.is_verification ? 1 : 0,
+            is_verification_toggle: item.is_verification_toggle ? 1 : 0,
             notif: item.is_notif === 1 ? item.notif : 0,
             start_date: this.convertDate(item.start_date),
             end_date: this.convertDate(item.end_date)

@@ -13,7 +13,8 @@
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Pengatur Jadwal Program Dagang">
-              <mat-error *ngIf="formSchedule.controls['name'].hasError('required') && formSchedule.controls['name'].touched">
+              <mat-error
+                *ngIf="formSchedule.controls['name'].hasError('required') && formSchedule.controls['name'].touched">
                 Nama Pengatur Jadwal Program Dagang harus diisi
               </mat-error>
             </mat-form-field>
@@ -39,25 +40,37 @@
                   {{item.name}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
+              <mat-error
+                *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
                 Trade Program harus diisi
               </mat-error>
             </mat-form-field>
           </div>
 
-          <div class="" formArrayName="task_templates" *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
+          <div class="" formArrayName="task_templates"
+            *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
             <div class="py-24" [formGroupName]="i">
               <div class="px-24 template-task" fxLayout="row" fxLayoutAlign="space-between end">
                 <div fxFlex="50">
                   <h3 class="">Template Tugas</h3>
                 </div>
-                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <h3><mat-slide-toggle formControlName="is_backup" (change)="backupTask($event, i)">Backup Task?</mat-slide-toggle></h3>
-                  <h3><mat-slide-toggle formControlName="is_verification">Push to FF?</mat-slide-toggle></h3>
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                  fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <h3>
+                    <mat-slide-toggle formControlName="is_verification_toggle">Perlu Verifikasi</mat-slide-toggle>
+                  </h3>
+                  <h3>
+                    <mat-slide-toggle formControlName="is_backup" (change)="backupTask($event, i)">Backup Task?
+                    </mat-slide-toggle>
+                  </h3>
+                  <h3>
+                    <mat-slide-toggle formControlName="is_verification">Push to FF?</mat-slide-toggle>
+                  </h3>
                 </div>
               </div>
 
-              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
+              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px"
+                fxLayoutAlign="start end">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <!-- <input matInput type="text" placeholder="Pilih Template Tugas" (keyup)="searchTemplateTask.next({value: $event.target.value, index: i})"
                     formControlName="task_template_id" [matAutocomplete]="templateTugas">
@@ -76,39 +89,47 @@
                       {{item.name}}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="item.controls['task_template_id'].hasError('required') && item.controls['task_template_id'].touched">
+                  <mat-error
+                    *ngIf="item.controls['task_template_id'].hasError('required') && item.controls['task_template_id'].touched">
                     Template Tugas harus diisi
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="number" min="0" formControlName="coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
-                    numericOnly>
-                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
+                  <input matInput type="number" min="0" formControlName="coin_delivered"
+                    placeholder="Nilai Coin Tugas Terkirim" numericOnly>
+                  <mat-error style="font-size: .9em"
+                    *ngIf="item.controls['coin_delivered'].hasError('required') && item.controls['coin_delivered'].touched">
                     Nilai Coin harus diisi
                   </mat-error>
-                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
-                    Nilai Coin  tidak boleh kurang dari 0
+                  <mat-error style="font-size: .9em"
+                    *ngIf="item.controls['coin_delivered'].hasError('min') && item.controls['coin_delivered'].touched">
+                    Nilai Coin tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="number" min="0" formControlName="coin_approved" placeholder="Nilai Coin Tugas Disetujui"
-                    numericOnly>
-                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
+                  <input matInput type="number" min="0" formControlName="coin_approved"
+                    placeholder="Nilai Coin Tugas Disetujui" numericOnly>
+                  <mat-error style="font-size: .9em"
+                    *ngIf="item.controls['coin_approved'].hasError('required') && item.controls['coin_approved'].touched">
                     Nilai Coin Tugas Disetujui harus diisi
                   </mat-error>
-                  <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved'].hasError('min') && item.controls['coin_approved'].touched">
+                  <mat-error style="font-size: .9em"
+                    *ngIf="item.controls['coin_approved'].hasError('min') && item.controls['coin_approved'].touched">
                     Nilai Coin Tugas Disetujui tidak boleh kurang dari 0
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date" [min]="minDate"
-                    [max]="maxStartDateTemplate" placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
-                  <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
+                  <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date"
+                    [min]="minDate" [max]="maxStartDateTemplate" placeholder="Tanggal Mulai"
+                    (dateChange)="setMinDate(i)" readonly>
+                  <mat-error
+                    *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
                     Tanggal Mulai harus diisi
                   </mat-error>
-                  <mat-error *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
+                  <mat-error
+                    *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
                     Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="dari">
@@ -118,12 +139,14 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('min_end_date').value" [max]="maxStartDateTemplate" (dateChange)="setStartEndDateBackup(item.value, i)"
-                    readonly>
-                  <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
+                    placeholder="Tanggal Berakhir" [min]="item.get('min_end_date').value" [max]="maxStartDateTemplate"
+                    (dateChange)="setStartEndDateBackup(item.value, i)" readonly>
+                  <mat-error
+                    *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
                     Tanggal Berakhir harus diisi
                   </mat-error>
-                  <mat-error *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
+                  <mat-error
+                    *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
                     Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="sampai">
@@ -137,50 +160,57 @@
                 <mat-divider style="border-top-style: dashed"></mat-divider>
                 <h3 class="px-24 text-bold">Backup Task</h3>
                 <mat-divider style="border-top-style: dashed"></mat-divider>
-                
-                <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
+
+                <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px"
+                  fxLayoutAlign="start end">
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <mat-select formControlName="task_template_id_backup" placeholder="Pilih Template Tugas (Backup)" #singleSelect>
+                    <mat-select formControlName="task_template_id_backup" placeholder="Pilih Template Tugas (Backup)"
+                      #singleSelect>
                       <ngx-mat-select-search [formControl]="filterTask" [placeholderLabel]="'Cari Template Tugas...'"
                         [noEntriesFoundLabel]="'Tidak ada Template Tugas yang ditemukan'"></ngx-mat-select-search>
                       <mat-option *ngFor="let item of filteredTask | async" [value]="item.id">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="item.controls['task_template_id_backup'].hasError('required') && item.controls['task_template_id_backup'].touched">
+                    <mat-error
+                      *ngIf="item.controls['task_template_id_backup'].hasError('required') && item.controls['task_template_id_backup'].touched">
                       Template Tugas harus diisi
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field fxFlex="22%" class="is-light form-primary">
-                    <input matInput type="number" min="0" formControlName="coin_delivered_backup" placeholder="Nilai Coin Tugas Terkirim (Backup)"
-                      numericOnly>
-                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered_backup'].hasError('required') && item.controls['coin_delivered_backup'].touched">
+                    <input matInput type="number" min="0" formControlName="coin_delivered_backup"
+                      placeholder="Nilai Coin Tugas Terkirim (Backup)" numericOnly>
+                    <mat-error style="font-size: .9em"
+                      *ngIf="item.controls['coin_delivered_backup'].hasError('required') && item.controls['coin_delivered_backup'].touched">
                       Nilai Coin Tugas Terkirim harus diisi
                     </mat-error>
-                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_delivered_backup'].hasError('min') && item.controls['coin_delivered_backup'].touched">
+                    <mat-error style="font-size: .9em"
+                      *ngIf="item.controls['coin_delivered_backup'].hasError('min') && item.controls['coin_delivered_backup'].touched">
                       Nilai Coin Tugas Terkirim tidak boleh kurang dari 0
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field fxFlex="22%" class="is-light form-primary">
-                    <input matInput type="number" min="0" formControlName="coin_approved_backup" placeholder="Nilai Coin Tugas Disetujui (Backup)"
-                      numericOnly>
-                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved_backup'].hasError('required') && item.controls['coin_approved_backup'].touched">
+                    <input matInput type="number" min="0" formControlName="coin_approved_backup"
+                      placeholder="Nilai Coin Tugas Disetujui (Backup)" numericOnly>
+                    <mat-error style="font-size: .9em"
+                      *ngIf="item.controls['coin_approved_backup'].hasError('required') && item.controls['coin_approved_backup'].touched">
                       Nilai Coin Tugas Disetujui harus diisi
                     </mat-error>
-                    <mat-error style="font-size: .9em" *ngIf="item.controls['coin_approved_backup'].hasError('min') && item.controls['coin_approved_backup'].touched">
+                    <mat-error style="font-size: .9em"
+                      *ngIf="item.controls['coin_approved_backup'].hasError('min') && item.controls['coin_approved_backup'].touched">
                       Nilai Coin Tugas Disetujui tidak boleh kurang dari 0
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <input matInput type="text" [value]="item.controls['start_date_backup'].value | dateToMoment" placeholder="Tanggal Mulai"
-                      disabled>
+                    <input matInput type="text" [value]="item.controls['start_date_backup'].value | dateToMoment"
+                      placeholder="Tanggal Mulai" disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
                   <mat-form-field fxFlex="47%" class="is-light form-primary">
-                    <input matInput type="text" [value]="item.controls['end_date_backup'].value | dateToMoment" placeholder="Tanggal Berakhir"
-                      disabled>
+                    <input matInput type="text" [value]="item.controls['end_date_backup'].value | dateToMoment"
+                      placeholder="Tanggal Berakhir" disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
                 </div>
@@ -205,7 +235,8 @@
                   </h3>
                 </div>
                 <mat-radio-group formControlName="is_notif" (change)="changeValue(i)">
-                  <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification" [value]="item.value">
+                  <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification"
+                    [value]="item.value">
                     {{item.name}}&nbsp;&nbsp;
                   </mat-radio-button>
                 </mat-radio-group>
@@ -216,12 +247,12 @@
                 </mat-radio-group>
               </div>
               <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
-                <button mat-raised-button *ngIf="i === formSchedule.get('task_templates')['controls'].length - 1" type="button"
-                  (click)="addTaskTemplate()" fxFlex="15">
+                <button mat-raised-button *ngIf="i === formSchedule.get('task_templates')['controls'].length - 1"
+                  type="button" (click)="addTaskTemplate()" fxFlex="15">
                   <mat-icon class="secondary-text">add</mat-icon> Tambah
                 </button>
-                <button mat-stroked-button *ngIf="formSchedule.get('task_templates')['controls'].length != 1" type="button"
-                  color="primary" (click)="deleteTaskTemplate(i)" fxFlex="15">
+                <button mat-stroked-button *ngIf="formSchedule.get('task_templates')['controls'].length != 1"
+                  type="button" color="primary" (click)="deleteTaskTemplate(i)" fxFlex="15">
                   <mat-icon class="">delete</mat-icon> Hapus
                 </button>
               </div>
