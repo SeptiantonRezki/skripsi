@@ -78,7 +78,7 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
     MatToolbarModule,
     MatDialogModule,
     ngfModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
   ],
   exports: [
     FieldForceIndexComponent,

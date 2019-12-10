@@ -59,6 +59,9 @@ export class RetailerEditComponent {
   private _onDestroy = new Subject<void>();
   bankAccountLength: number = 0;
 
+  npwp: FormControl = new FormControl();
+  pkp: FormControl = new FormControl(-1);
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -213,6 +216,16 @@ export class RetailerEditComponent {
       .subscribe(() => {
         this.filteringBanks();
       });
+
+    this.npwp
+      .valueChanges
+      .debounceTime(500)
+      .subscribe(res => {
+        if (res) {
+          let str = res.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/, '$1.$2.$3.$4-$5.$6');
+          this.npwp.setValue(str, { emitEvent: false });
+        }
+      })
   }
 
   getBanks() {
@@ -330,6 +343,9 @@ export class RetailerEditComponent {
       bank_name: this.detailRetailer.bank_name,
       branch: this.detailRetailer.branch
     });
+
+    this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
+    this.pkp.setValue(this.detailRetailer.pkp ? this.detailRetailer.pkp : -1);
 
     if (this.detailRetailer.classification === 'NON-SRC') {
       this.formRetailer.controls['business_code'].disable();
@@ -542,6 +558,16 @@ export class RetailerEditComponent {
       };
 
       console.log(body);
+      if (this.pkp.value === -1) {
+        if (body['pkp']) delete body['pkp'];
+      }
+      if (this.pkp.value === 0 || this.pkp.value === 1) {
+        body['pkp'] = this.pkp.value;
+      }
+
+      if (this.pkp.value === 1) {
+        body['npwp'] = this.npwp.value;
+      }
 
       this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
         res => {
