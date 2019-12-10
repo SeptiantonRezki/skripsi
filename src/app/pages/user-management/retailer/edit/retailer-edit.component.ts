@@ -354,6 +354,8 @@ export class RetailerEditComponent {
     if (this.isDetail) {
       this.formRetailer.disable();
       this.formBankAccount.disable();
+      this.npwp.disable();
+      this.pkp.disable();
     }
   }
 
