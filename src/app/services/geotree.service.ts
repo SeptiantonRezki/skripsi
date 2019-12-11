@@ -93,4 +93,21 @@ export class GeotreeService {
         return "territory";
     }
   }
+
+  getBeforeLevel(level) {
+    switch (level) {
+      case 'division':
+        return "national"
+      case 'region':
+        return "division";
+      case 'area':
+        return "region"
+      case 'salespoint':
+        return "area";
+      case 'district':
+        return 'salespoint';
+      case 'territory':
+        return 'district';
+    }
+  }
 }

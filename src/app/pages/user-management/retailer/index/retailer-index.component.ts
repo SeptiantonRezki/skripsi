@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { RetailerService } from "../../../../services/user-management/retailer.service";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, FormArray } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatDialogConfig, MatDialog } from "@angular/material";
@@ -103,12 +103,12 @@ export class RetailerIndexComponent {
   ngOnInit() {
     this.formFilter = this.formBuilder.group({
       national: [""],
-      zone: [""],
-      region: [""],
-      area: [""],
-      salespoint: [""],
-      district: [""],
-      territory: [""]
+      zone: new FormControl(),
+      region: new FormControl(),
+      area: new FormControl(),
+      salespoint: new FormControl(),
+      district: new FormControl(),
+      territory: new FormControl()
     })
 
     // this.initArea();
@@ -126,6 +126,8 @@ export class RetailerIndexComponent {
     let sameArea = this.geotreeService.diffLevelStarted;
     let areasDisabled = this.geotreeService.disableArea(sameArea);
     let lastLevelDisabled = null;
+    let stopNext = false;
+    let stopNextFeeder = false
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
       this.formFilter.get('national').setValue(1);
@@ -135,13 +137,17 @@ export class RetailerIndexComponent {
     areas.map((area, index) => {
       area.map((level, i) => {
         let level_desc = level.level_desc;
+        // let beforeLevel = this.geotreeService.getBeforeLevel(level.type);
+        // if(this.list[this.parseArea(beforeLevel)].length === 1) {
 
+        // }
         if (!this.list[level.type]) this.list[level.type] = [];
         if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
-          this.formFilter.controls[this.parseArea(level.type)].setValue(level.id);
-
+          this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
+          console.log(this.formFilter.controls[this.parseArea(level.type)]);
           if (sameArea.level_desc === level.type) {
             lastLevelDisabled = level.type;
+
             this.formFilter.get(this.parseArea(level.type)).disable();
           }
 
@@ -156,18 +162,20 @@ export class RetailerIndexComponent {
           ...this.list[this.parseArea(level.type)],
           level
         ];
+
         if (i === area.length - 1) {
           this.endArea = this.parseArea(level.type);
           this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
         }
+
       });
     });
 
-    let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
-    mutableAreas.areas.map((ar, i) => {
-      this.list[ar].splice(1, 1);
-    });
-    console.log(this.list, lastLevelDisabled, mutableAreas);
+    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
+    // mutableAreas.areas.map((ar, i) => {
+    //   this.list[ar].splice(1, 1);
+    // });
+    console.log(this.list, lastLevelDisabled);
   }
 
   parseArea(type) {
@@ -643,9 +651,9 @@ export class RetailerIndexComponent {
 
   getRetailerList() {
     this.dataService.showLoading(true);
-    // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
-    // this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let area: any = areaSelected[areaSelected.length - 1].value;
+    this.pagination.area = area;
 
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
