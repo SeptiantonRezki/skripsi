@@ -562,6 +562,7 @@ export class RetailerEditComponent {
       console.log(body);
       if (this.pkp.value === -1) {
         if (body['pkp']) delete body['pkp'];
+        if (body['npwp']) delete body['npwp'];
       }
       if (this.pkp.value === 0 || this.pkp.value === 1) {
         body['pkp'] = this.pkp.value;
@@ -569,6 +570,10 @@ export class RetailerEditComponent {
 
       if (this.pkp.value === 1) {
         body['npwp'] = this.npwp.value;
+      }
+
+      if (this.pkp.value === 0) {
+        if (body['npwp']) body['npwp'] = "";
       }
 
       this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
