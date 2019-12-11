@@ -183,13 +183,17 @@ export class RetailerIndexComponent {
     } else {
       console.log(this.geotreeService.mutableAreas);
       let mutableAreas = this.geotreeService.mutableAreas;
-      mutableAreas.areas.map(area => {
+      let last = mutableAreas.areas.findIndex(ar => ar === selection);
+      mutableAreas.areas.map((area, indexArea) => {
+        if (last > indexArea) return;
+
         if (this.parseArea(selection) === selection) {
-          let item = areas[index].find(ar => this.parseArea(ar.type) === selection);
-          this.list[this.parseArea(area)] = [item];
-          this.formFilter.get(this.parseArea(area)).setValue(item.id);
+          let item = areas[index].find(ar => this.parseArea(ar.type) === area);
+          if (item) {
+            this.list[this.parseArea(area)] = [item];
+            this.formFilter.get(this.parseArea(area)).setValue(item.id);
+          }
         }
-        // if (area === this.endArea) return;
       });
     }
   }
