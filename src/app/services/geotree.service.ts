@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { d } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ export class GeotreeService {
   authAreas: any[] = [];
   diffLevelStarted: any;
   areas: any[] = [];
+  mutableAreas: any;
 
   constructor() { }
 
@@ -49,6 +51,46 @@ export class GeotreeService {
         return area_levels;
       default:
         return [];
+    }
+  }
+
+  listMutableArea(last_level) {
+    this.mutableAreas = { first: '', areas: [] };
+    switch (last_level) {
+      case 'national':
+        this.mutableAreas = { first: "division", areas: ["region", "area", "salespoint", "district", "territory"] };
+        return this.mutableAreas;
+      case 'division':
+        this.mutableAreas = { first: 'region', areas: ["area", "salespoint", "district", "territory"] };
+        return this.mutableAreas;
+      case 'region':
+        this.mutableAreas = { first: 'area', areas: ["salespoint", "district", "territory"] };
+        return this.mutableAreas;
+      case 'area':
+        this.mutableAreas = { first: 'salespoint', areas: ["district", "territory"] };
+        return this.mutableAreas;
+      case 'salespoint':
+        this.mutableAreas = { first: 'district', areas: ["territory"] };
+        return this.mutableAreas;
+      default:
+        return this.mutableAreas;
+    }
+  }
+
+  getNextLevel(level) {
+    switch (level) {
+      case 'national':
+        return "division";
+      case 'division':
+        return "region"
+      case 'region':
+        return "area";
+      case 'area':
+        return "salespoint"
+      case 'salespoint':
+        return "district";
+      default:
+        return "territory";
     }
   }
 }
