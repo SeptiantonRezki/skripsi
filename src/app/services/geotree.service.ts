@@ -1,17 +1,27 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { d } from '@angular/core/src/render3';
+import { BaseService } from './base.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GeotreeService {
+export class GeotreeService extends BaseService {
   authAreas: any[] = [];
   diffLevelStarted: any;
   areas: any[] = [];
   mutableAreas: any;
 
-  constructor() { }
+  constructor(http: HttpClient) {
+    super(http);
+  }
+
+  getChildFilterArea(body?): Observable<any> {
+    const url = this.getUrl("area", "child_filter");
+    return this.postApi(url, body);
+  }
 
   getFilter2Geotree(areas) {
     this.authAreas = areas.slice();

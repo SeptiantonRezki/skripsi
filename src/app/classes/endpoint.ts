@@ -53,6 +53,9 @@ export class Endpoint {
         logout: `${AYO_API_SERVICE(SERVER.auth)}/api/v1/auth/remove-token`,
         check_token: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/token`,
       },
+      area: {
+        child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
+      },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
