@@ -350,7 +350,7 @@ export class RetailerEditComponent {
     });
     console.log(this.detailRetailer.pkp);
     this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
-    this.pkp.setValue(this.detailRetailer.pkp);
+    this.pkp.setValue(this.detailRetailer.pkp !== null && this.detailRetailer.pkp !== "" ? this.detailRetailer.pkp : "");
 
     if (this.detailRetailer.classification === 'NON-SRC') {
       this.formRetailer.controls['business_code'].disable();
