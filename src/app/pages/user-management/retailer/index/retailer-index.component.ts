@@ -205,23 +205,19 @@ export class RetailerIndexComponent {
     // mutableAreas.areas.map((ar, i) => {
     //   this.list[ar].splice(1, 1);
     // });
-    console.log(this.list, lastLevelDisabled);
   }
 
   parseArea(type) {
     return type === 'division' ? 'zone' : type;
   }
 
-  getAudienceAreaV2(selection, id, event = null) {
-    console.log('argas', arguments ? arguments : 'not arguments lol');
+  getAudienceAreaV2(selection, id, event?) {
     let item: any;
-    // let selection = this.geotreeService.getNextLevel(areaSelected);
-    // console.log('next', selection, areaSelected);
     let fd = new FormData();
-    // let area = this.formFilter.get(selection).value || [];
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -230,24 +226,46 @@ export class RetailerIndexComponent {
       })
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      let lastAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, lastAreaSelected);
-      console.log('last area selected', lastAreaSelected);
-      if (lastAreaSelected && lastAreaSelected[0] && lastAreaSelected[0].key === 'national') {
-        fd.append('area_id[]', lastAreaSelected[0].value);
-      } else if (lastAreaSelected.length > 0) {
-        lastAreaSelected[0].value.map(ar => {
+      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
+      // console.log('new', beforeLastLevel, areaSelected);
+      if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+        fd.append('area_id[]', areaSelected[0].value);
+      } else if (areaSelected.length > 0) {
+        areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
       }
     }
+
     fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
+    let thisAreaOnSet = [];
+    let areaNumber = 0;
+    let expectedArea = [];
+    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
+      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
+      if (this.areaFromLogin[1]) thisAreaOnSet = [
+        ...thisAreaOnSet,
+        ...this.areaFromLogin[1]
+      ]
+
+      thisAreaOnSet = thisAreaOnSet.filter(ar => ar.level_desc === selection);
+      if (id && id.length > 1) {
+        areaNumber = 1;
+      }
+
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      // console.log('on set', thisAreaOnSet, selection, id);
+    }
+
+
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = res.data;
+          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
           // fd = null
         });
 
@@ -270,7 +288,8 @@ export class RetailerIndexComponent {
         if (item && item.name && item.name !== 'all') {
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = res.data;
+            // this.list[selection] = res.data;
+            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             // fd = null
           });
         } else {
@@ -295,7 +314,8 @@ export class RetailerIndexComponent {
         if (item && item.name && item.name !== 'all') {
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = res.data;
+            // this.list[selection] = res.data;
+            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             // fd = null
           });
         } else {
@@ -319,7 +339,8 @@ export class RetailerIndexComponent {
         if (item && item.name && item.name !== 'all') {
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = res.data;
+            // this.list[selection] = res.data;
+            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             // fd = null
           });
         } else {
@@ -340,7 +361,7 @@ export class RetailerIndexComponent {
         if (item && item.name && item.name !== 'all') {
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = res.data;
+            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             // fd = null
           });
         } else {
@@ -359,7 +380,9 @@ export class RetailerIndexComponent {
         if (item && item.name && item.name !== 'all') {
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = res.data;
+            // this.list[selection] = res.data;
+            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
             // fd = null
           });
         } else {
