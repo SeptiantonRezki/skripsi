@@ -121,13 +121,13 @@ export class RetailerIndexComponent {
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
       if (res) {
-        this.getAudienceAreaV2('zone', res);
+        this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
       console.log('region', res);
       if (res) {
-        this.getAudienceAreaV2('region', res);
+        this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
@@ -190,6 +190,7 @@ export class RetailerIndexComponent {
             ...this.list[this.parseArea(level.type)],
             level
           ];
+          console.log('area you choose', this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
 
           if (i === area.length - 1) {
@@ -211,63 +212,42 @@ export class RetailerIndexComponent {
     return type === 'division' ? 'zone' : type;
   }
 
-  getChildAreas(selection, id) {
-    console.log(selection, id);
-
-    // let areas = this.dataService.getDecryptedProfile()['areas'];
-    // let index = areas.findIndex(area => area.map(ar => ar.id).includes(id));
-    // let needPopulate = areas[0] ? areas[0].find(area => this.parseArea(area.type) === selection) : null;
-    // if (!needPopulate) {
-    //   this.getAudienceAreaV2(selection, id);
-    // } else {
-    //   // console.log(this.geotreeService.mutableAreas);
-    //   // let mutableAreas = this.geotreeService.mutableAreas;
-    //   // let last = mutableAreas.areas.findIndex(ar => ar === selection);
-    //   // mutableAreas.areas.map((area, indexArea) => {
-    //   //   if (last > indexArea) return;
-
-    //   //   if (this.parseArea(selection) === selection) {
-    //   //     let item = areas[index].find(ar => this.parseArea(ar.type) === area);
-    //   //     if (item) {
-    //   //       this.list[this.parseArea(area)] = [item];
-    //   //       this.formFilter.get(this.parseArea(area)).setValue(item.id);
-    //   //     }
-    //   //   }
-    //   // });
-    // }
-  }
-
-  getAudienceAreaV2(selection, id) {
+  getAudienceAreaV2(selection, id, event = null) {
+    console.log('argas', arguments ? arguments : 'not arguments lol');
     let item: any;
     // let selection = this.geotreeService.getNextLevel(areaSelected);
     // console.log('next', selection, areaSelected);
     let fd = new FormData();
-    console.log('lk12j3kj12', id);
     // let area = this.formFilter.get(selection).value || [];
-    let lastLevel = this.geotreeService.getBeforeLevel(selection);
-    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === lastLevel);
-    if (areaSelected.length > 0) {
-      console.log('asdkjkwqe12dxhuscazp- ', areaSelected, selection, lastLevel, id);
+    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
+    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
+    console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+    if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+      fd.append('area_id[]', areaSelected[0].value);
+    } else if (areaSelected.length > 0) {
       areaSelected[0].value.map(ar => {
         fd.append('area_id[]', ar);
       })
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      let lastAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === beforeLastLevel);
-      console.log('new', beforeLastLevel, lastAreaSelected);
-      if (lastAreaSelected.length > 0) {
+      let lastAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
+      // console.log('new', beforeLastLevel, lastAreaSelected);
+      console.log('last area selected', lastAreaSelected);
+      if (lastAreaSelected && lastAreaSelected[0] && lastAreaSelected[0].key === 'national') {
+        fd.append('area_id[]', lastAreaSelected[0].value);
+      } else if (lastAreaSelected.length > 0) {
         lastAreaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
       }
     }
-    fd.append('area_type', selection);
-    switch (selection) {
+    fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
+    switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          this.list[selection] = res.data;
+          this.list[this.parseArea(selection)] = res.data;
           // fd = null
         });
 

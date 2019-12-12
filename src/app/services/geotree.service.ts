@@ -25,23 +25,25 @@ export class GeotreeService extends BaseService {
 
   getFilter2Geotree(areas) {
     this.authAreas = areas.slice();
-    if (this.authAreas[0] && this.authAreas[0].length > 1) this.authAreas[0].splice(0, 1);
-    if (this.authAreas[1] && this.authAreas[1].length > 1) this.authAreas[1].splice(0, 1);
+    // if (this.authAreas[0] && this.authAreas[0].length > 1) this.authAreas[0].splice(0, 1);
+    // if (this.authAreas[1] && this.authAreas[1].length > 1) this.authAreas[1].splice(0, 1);
 
     console.log('auth areasaskljdsa', this.authAreas);
     if (areas.length > 0 && this.authAreas[0].length > 1) {
       let sameLevelArea = this.authAreas[0].filter(area => this.authAreas[1].map(ar => ar.id).includes(area.id));
+      console.log('sameLevelArea', sameLevelArea);
       this.diffLevelStarted = sameLevelArea.length > 0 ? sameLevelArea[sameLevelArea.length - 1] : null;
     }
     else {
-      this.diffLevelStarted = this.authAreas[0][0] ? this.authAreas[0][0] : null;
-
+      this.diffLevelStarted = this.authAreas[0] && this.authAreas[0][0] ? this.authAreas[0][0] : null;
+      console.log('this', this.diffLevelStarted, this.authAreas);
       this.areas = [this.diffLevelStarted];
     }
     console.log('the areas', this.authAreas, this.diffLevelStarted);
   }
 
   disableArea(sameLevelArea) {
+    console.log('sameArea', sameLevelArea);
     let area_levels = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     switch (sameLevelArea.type) {
       case "territory":
@@ -92,7 +94,9 @@ export class GeotreeService extends BaseService {
       case 'national':
         return "division";
       case 'division':
-        return "region"
+        return "region";
+      case 'zone':
+        return "region";
       case 'region':
         return "area";
       case 'area':
@@ -106,8 +110,12 @@ export class GeotreeService extends BaseService {
 
   getBeforeLevel(level) {
     switch (level) {
+      // case 'national:':
+      //   return "territory";
       case 'division':
-        return "national"
+        return "national";
+      case 'zone':
+        return 'national';
       case 'region':
         return "division";
       case 'area':
