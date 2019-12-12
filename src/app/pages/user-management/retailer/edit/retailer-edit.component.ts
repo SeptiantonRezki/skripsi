@@ -62,7 +62,7 @@ export class RetailerEditComponent {
   npwp: FormControl = new FormControl();
   pkp: FormControl = new FormControl();
   pkpOptions: any[] = [
-    { key: null, value: "Belum Diisi" },
+    { key: "", value: "Belum Diisi" },
     { key: 0, value: "Tidak" },
     { key: 1, value: "Ya" }
   ]
@@ -565,8 +565,8 @@ export class RetailerEditComponent {
       };
 
       console.log(body);
-      if (this.pkp.value === -1) {
-        body['pkp'] = null;
+      if (this.pkp.value === "") {
+        body['pkp'] = "";
         if (body['npwp']) delete body['npwp'];
       }
       if (this.pkp.value === 0 || this.pkp.value === 1) {
