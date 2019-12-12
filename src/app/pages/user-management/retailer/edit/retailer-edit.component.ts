@@ -60,7 +60,12 @@ export class RetailerEditComponent {
   bankAccountLength: number = 0;
 
   npwp: FormControl = new FormControl();
-  pkp: FormControl = new FormControl(-1);
+  pkp: FormControl = new FormControl();
+  pkpOptions: any[] = [
+    { key: null, value: "Belum Diisi" },
+    { key: 0, value: "Tidak" },
+    { key: 1, value: "Ya" }
+  ]
 
   constructor(
     private formBuilder: FormBuilder,
@@ -343,9 +348,9 @@ export class RetailerEditComponent {
       bank_name: this.detailRetailer.bank_name,
       branch: this.detailRetailer.branch
     });
-
+    console.log(this.detailRetailer.pkp);
     this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
-    this.pkp.setValue(this.detailRetailer.pkp ? this.detailRetailer.pkp : -1);
+    this.pkp.setValue(this.detailRetailer.pkp);
 
     if (this.detailRetailer.classification === 'NON-SRC') {
       this.formRetailer.controls['business_code'].disable();
@@ -561,7 +566,7 @@ export class RetailerEditComponent {
 
       console.log(body);
       if (this.pkp.value === -1) {
-        if (body['pkp']) delete body['pkp'];
+        body['pkp'] = null;
         if (body['npwp']) delete body['npwp'];
       }
       if (this.pkp.value === 0 || this.pkp.value === 1) {
@@ -573,7 +578,7 @@ export class RetailerEditComponent {
       }
 
       if (this.pkp.value === 0) {
-        if (body['npwp']) body['npwp'] = "";
+        body['npwp'] = "";
       }
 
       this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(

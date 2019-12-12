@@ -202,9 +202,7 @@
               <div fxLayout="row wrap" fxFlex="40" style="margin-left: 63px;">
                 <mat-form-field fxFlex="40" class="is-light form-primary">
                   <mat-select placeholder="PKP" [formControl]="pkp">
-                    <mat-option [value]="-1">Tidak Ada</mat-option>
-                    <mat-option [value]="0">0</mat-option>
-                    <mat-option [value]="1">1</mat-option>
+                    <mat-option *ngFor="let item of pkpOptions" [value]="item.key">{{ item.value }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <!-- <mat-error
