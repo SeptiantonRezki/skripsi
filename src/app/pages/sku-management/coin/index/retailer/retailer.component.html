@@ -13,8 +13,65 @@
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16 pl-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-
           <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceAreaV2('region', formFilter.get('zone').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Zona' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceAreaV2('area', formFilter.get('region').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Regional'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceAreaV2('salespoint', formFilter.get('area').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Area'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceAreaV2('district', formFilter.get('salespoint').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
+                Salespoint'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceAreaV2('territory', formFilter.get('district').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                District'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Territori'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
@@ -71,7 +128,7 @@
                 :
                 item.name}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
       </form>
     </div>
