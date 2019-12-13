@@ -18,7 +18,7 @@
           </mat-form-field>
         </div>
       </div>
-      <form *ngIf="filterArea" [formGroup]="formFilter" autoComplete="off">
+      <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -27,59 +27,65 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
-              <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceAreaV2('region', formFilter.get('zone').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
-              <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceAreaV2('area', formFilter.get('region').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
-              <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceAreaV2('salespoint', formFilter.get('area').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
-              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceAreaV2('district', formFilter.get('salespoint').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
-              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceAreaV2('territory', formFilter.get('district').value, $event)" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
-              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
-        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)">
 
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -151,7 +157,8 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
+              <button mat-icon-button color="primary" matTooltip="Hapus"
+                [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

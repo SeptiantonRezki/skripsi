@@ -531,7 +531,7 @@ export class RetailerComponent {
   }
 
   getRetailer() {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = 'name';
     // this.pagination.sort_type = 'asc';

@@ -178,7 +178,7 @@ export class WholesalerIndexComponent {
 
             if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            console.log('data you got', this.formFilter.controls[this.parseArea(level.type)].value, this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
           let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -204,6 +204,7 @@ export class WholesalerIndexComponent {
   }
 
   getAudienceAreaV2(selection, id, event?) {
+    console.log('audince id', id, selection);
     let item: any;
     let fd = new FormData();
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
@@ -581,13 +582,11 @@ export class WholesalerIndexComponent {
   }
 
   filteringGeotree(areaList) {
-    let filteredArea = areaList.slice(1, areaList.length).filter(ar => this.area_id_list.includes(Number(ar.id)));
-    // if (areaList && areaList[0]) filteredArea.unshift(areaList[0]);
-    return filteredArea.length > 0 ? filteredArea : areaList;
+    return areaList;
   }
 
   getWholesalerList() {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
