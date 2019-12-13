@@ -559,12 +559,10 @@ export class TradeIndexComponent {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    if (this.filterArea) {
-      let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-      this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
-      this.loadingIndicator = true;
-    }
+    this.loadingIndicator = true;
 
     this.tradeProgramService.get(this.pagination).subscribe(
       res => {
