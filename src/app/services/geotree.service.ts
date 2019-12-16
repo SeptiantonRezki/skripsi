@@ -30,7 +30,7 @@ export class GeotreeService extends BaseService {
 
     console.log('auth areasaskljdsa', this.authAreas);
     if (areas.length > 0 && this.authAreas[0].length > 1) {
-      let sameLevelArea = this.authAreas[0].filter(area => this.authAreas[1].map(ar => ar.id).includes(area.id));
+      let sameLevelArea = this.authAreas[0].filter(area => (this.authAreas[1] ? this.authAreas[1] : []).map(ar => ar.id).includes(area.id));
       console.log('sameLevelArea', sameLevelArea);
       this.diffLevelStarted = sameLevelArea.length > 0 ? sameLevelArea[sameLevelArea.length - 1] : null;
     }
