@@ -19,6 +19,8 @@ export class ImportPopUpAudienceComponent {
   validData: any[];
   dialogData: any;
 
+  typeTargeted: string;
+
   constructor(
     public dialogRef: MatDialogRef<ImportPopUpAudienceComponent>,
     public dialog: MatDialog,
@@ -33,18 +35,32 @@ export class ImportPopUpAudienceComponent {
   }
 
   ngOnInit() {
+    switch (this.dialogData.type) {
+      case 'push_notification':
+        this.typeTargeted = 'importPushNotifAudience';
+        break;
+      default:
+        this.typeTargeted = 'importAudience';
+    }
   }
 
   preview(event) {
     this.files = undefined;
     this.files = event;
 
+    console.log('files info', this.files);
+    if (this.files.name.indexOf(".xlsx") > -1) {
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      return;
+    }
+
+
     let fd = new FormData();
 
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     this.dataService.showLoading(true);
-    this.notificationService.importAudience(fd).subscribe(
+    this.notificationService[this.typeTargeted](fd).subscribe(
       res => {
         if (res && res.is_valid) {
           this.rows = res.data;
