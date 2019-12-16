@@ -29,7 +29,7 @@ export class GeotreeService extends BaseService {
     // if (this.authAreas[1] && this.authAreas[1].length > 1) this.authAreas[1].splice(0, 1);
 
     console.log('auth areasaskljdsa', this.authAreas);
-    if (areas.length > 0 && this.authAreas[0].length > 1) {
+    if (areas.length > 0 && this.authAreas.length > 1) {
       let sameLevelArea = this.authAreas[0].filter(area => (this.authAreas[1] ? this.authAreas[1] : []).map(ar => ar.id).includes(area.id));
       console.log('sameLevelArea', sameLevelArea);
       this.diffLevelStarted = sameLevelArea.length > 0 ? sameLevelArea[sameLevelArea.length - 1] : null;
@@ -44,6 +44,8 @@ export class GeotreeService extends BaseService {
 
   disableArea(sameLevelArea) {
     console.log('sameArea', sameLevelArea);
+    if (!sameLevelArea) return [];
+
     let area_levels = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     switch (sameLevelArea.type) {
       case "territory":
@@ -125,6 +127,7 @@ export class GeotreeService extends BaseService {
       case 'district':
         return 'salespoint';
       case 'territory':
+      case 'teritory':
         return 'district';
     }
   }

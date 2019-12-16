@@ -349,7 +349,7 @@ export class PopupNotificationCreateComponent {
     let areasDisabled = this.geotreeService.disableArea(sameArea);
     let lastLevelDisabled = null;
     let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === sameArea.type);
+    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
       this.formFilter.get('national').setValue(1);
@@ -364,6 +364,7 @@ export class PopupNotificationCreateComponent {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
+            console.log('ff value', this.formFilter.value);
             // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
@@ -382,7 +383,7 @@ export class PopupNotificationCreateComponent {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
 
           if (i === area.length - 1) {
@@ -392,10 +393,24 @@ export class PopupNotificationCreateComponent {
         }
       });
     });
+
+    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
+    // mutableAreas.areas.map((ar, i) => {
+    //   this.list[ar].splice(1, 1);
+    // });
   }
 
   parseArea(type) {
-    return type === 'division' ? 'zone' : type;
+    // return type === 'division' ? 'zone' : type;
+    switch (type) {
+      case 'division':
+        return 'zone';
+      case 'teritory':
+      case 'territory':
+        return 'territory';
+      default:
+        return type;
+    }
   }
 
   getAudienceAreaV2(selection, id, event?) {
@@ -404,13 +419,16 @@ export class PopupNotificationCreateComponent {
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-
+    console.log('audienceareav2', this.formFilter.getRawValue());
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      areaSelected[0].value.map(ar => {
-        fd.append('area_id[]', ar);
-      })
+      if (areaSelected[0].value !== "") {
+        areaSelected[0].value.map(ar => {
+          fd.append('area_id[]', ar);
+        })
+        if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+      }
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
@@ -418,9 +436,12 @@ export class PopupNotificationCreateComponent {
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
-        areaSelected[0].value.map(ar => {
-          fd.append('area_id[]', ar);
-        })
+        if (areaSelected[0].value !== "") {
+          areaSelected[0].value.map(ar => {
+            fd.append('area_id[]', ar);
+          })
+          if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        }
       }
     }
 
@@ -433,9 +454,9 @@ export class PopupNotificationCreateComponent {
       if (this.areaFromLogin[1]) thisAreaOnSet = [
         ...thisAreaOnSet,
         ...this.areaFromLogin[1]
-      ]
+      ];
 
-      thisAreaOnSet = thisAreaOnSet.filter(ar => ar.level_desc === selection);
+      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
       if (id && id.length > 1) {
         areaNumber = 1;
       }
