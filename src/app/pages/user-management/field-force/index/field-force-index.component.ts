@@ -565,6 +565,12 @@ export class FieldForceIndexComponent {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
+    let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+    if (this.areaFromLogin[1]) self_area = [
+      ...self_area,
+      ...this.areaFromLogin[1].map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+    ];
+    this.pagination['self_area'] = self_area;
     this.loadingIndicator = true;
 
     const page = this.dataService.getFromStorage("page");
