@@ -566,11 +566,24 @@ export class FieldForceIndexComponent {
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
     let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-    if (this.areaFromLogin[1]) self_area = [
-      ...self_area,
-      ...this.areaFromLogin[1].map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-    ];
+    let last_self_area = [];
+    if (self_area.length > 0) {
+      last_self_area.push(self_area[self_area.length - 1]);
+    }
+
+    if (this.areaFromLogin[1]) {
+      let second_areas = this.areaFromLogin[1];
+      last_self_area = [
+        ...last_self_area,
+        second_areas[second_areas.length - 1].id
+      ];
+      self_area = [
+        ...self_area,
+        ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+      ];
+    }
     this.pagination['self_area'] = self_area;
+    this.pagination['last_self_area'] = last_self_area;
     this.loadingIndicator = true;
 
     const page = this.dataService.getFromStorage("page");
