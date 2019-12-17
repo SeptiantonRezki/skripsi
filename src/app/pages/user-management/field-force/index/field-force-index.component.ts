@@ -589,7 +589,9 @@ export class FieldForceIndexComponent {
 
     this.pagination['self_area'] = self_area;
     this.pagination['last_self_area'] = last_self_area;
-
+    let levelCovered = [];
+    if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+    console.log('berubah', levelCovered, lastSelectedArea);
     if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
       let oneAreaSelected = lastSelectedArea.value[0];
       console.log('oneArea Selected', oneAreaSelected);
@@ -597,8 +599,18 @@ export class FieldForceIndexComponent {
       if (findOnFirstArea) is_area_2 = false;
       else is_area_2 = true;
 
-      if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-      else this.pagination['last_self_area'] = [last_self_area[0]];
+      console.log('last self area', last_self_area);
+      if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+        if (is_area_2) this.pagination['last_self_area'] = [last_self_area[0]];
+        else this.pagination['last_self_area'] = [last_self_area[1]];
+      } else {
+        let lastLevelFromLogin = levelCovered.length > 0 ? levelCovered[levelCovered.length - 1] : oneAreaSelected.key;
+        if (is_area_2) {
+          this.pagination['last_self_area'] = [this.areaFromLogin[1][this.areaFromLogin[1].length - 1].id];
+        } else {
+          this.pagination['last_self_area'] = [this.areaFromLogin[0][this.areaFromLogin[0].length - 1].id];
+        }
+      }
     }
 
     this.loadingIndicator = true;
