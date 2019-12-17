@@ -565,6 +565,10 @@ export class FieldForceIndexComponent {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
+    console.log('area_selected on ff list', areaSelected);
+    let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+    let is_area_2 = false;
+
     let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
     let last_self_area = [];
     if (self_area.length > 0) {
@@ -582,8 +586,21 @@ export class FieldForceIndexComponent {
         ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
       ];
     }
+
     this.pagination['self_area'] = self_area;
     this.pagination['last_self_area'] = last_self_area;
+
+    if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+      let oneAreaSelected = lastSelectedArea.value[0];
+      console.log('oneArea Selected', oneAreaSelected);
+      let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+      if (findOnFirstArea) is_area_2 = false;
+      else is_area_2 = true;
+
+      if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+      else this.pagination['last_self_area'] = [last_self_area[0]];
+    }
+
     this.loadingIndicator = true;
 
     const page = this.dataService.getFromStorage("page");
