@@ -47,6 +47,8 @@ export class FieldForceIndexComponent {
 
   // 2 geotree property
   endArea: String;
+  lastLevel: any;
+  bankAreas: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -113,31 +115,31 @@ export class FieldForceIndexComponent {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
+      console.log('zone changes', res, this.formFilter.value['zone']);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
+      console.log('region changes', res, this.formFilter.value['region']);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
+      console.log('area changes', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
+      console.log('salespoint changes', res, this.formFilter.value['salespoint']);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
+      console.log('district changes', res, this.formFilter.value['district']);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -149,6 +151,7 @@ export class FieldForceIndexComponent {
     this.geotreeService.getFilter2Geotree(areas);
     let sameArea = this.geotreeService.diffLevelStarted;
     let areasDisabled = this.geotreeService.disableArea(sameArea);
+    this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
     let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
@@ -561,11 +564,39 @@ export class FieldForceIndexComponent {
     return areaList;
   }
 
+  areasCoverage: any[] = [];
+  checkAreaLocation(area, lastSelfArea) {
+    let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
+    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
+    let indexAreaSelected = areaList.indexOf(area.key);
+    let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
+    let newLastSelfArea = []
+    console.log('[checkAreaLocation:area]', area);
+    console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
+    console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
+    if (area.value !== 1) {
+      console.log('[checkAreaLocation:list]', this.list[area.key]);
+      console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
+      if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
+        let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
+        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
+        console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
+        console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
+        // this.areasCoverage = [...this.list[area.key]];
+      }
+    }
+
+    return newLastSelfArea;
+  }
+
   getFfList() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    // console.log('area_selected on ff list', areaSelected, this.list);
 
-    console.log('area_selected on ff list', areaSelected);
     let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
     let is_area_2 = false;
 
@@ -587,29 +618,44 @@ export class FieldForceIndexComponent {
       ];
     }
 
+    let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+
     this.pagination['self_area'] = self_area;
     this.pagination['last_self_area'] = last_self_area;
     let levelCovered = [];
     if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-    console.log('berubah', levelCovered, lastSelectedArea);
     if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
       let oneAreaSelected = lastSelectedArea.value[0];
-      console.log('oneArea Selected', oneAreaSelected);
       let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+      console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
       if (findOnFirstArea) is_area_2 = false;
       else is_area_2 = true;
 
-      console.log('last self area', last_self_area);
+      console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
       if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-        if (is_area_2) this.pagination['last_self_area'] = [last_self_area[0]];
-        else this.pagination['last_self_area'] = [last_self_area[1]];
+        if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+        else this.pagination['last_self_area'] = [last_self_area[0]];
       } else {
-        let lastLevelFromLogin = levelCovered.length > 0 ? levelCovered[levelCovered.length - 1] : oneAreaSelected.key;
-        if (is_area_2) {
-          this.pagination['last_self_area'] = [this.areaFromLogin[1][this.areaFromLogin[1].length - 1].id];
-        } else {
-          this.pagination['last_self_area'] = [this.areaFromLogin[0][this.areaFromLogin[0].length - 1].id];
-        }
+        this.pagination['last_self_area'] = newLastSelfArea;
+        // let findOnSecondArea = this.areaFromLogin[1].find(are => are.id === oneAreaSelected);
+        // console.log('oneArea Selected 2', oneAreaSelected, findOnSecondArea);
+        // if (findOnSecondArea) is_area_2 = true;
+        // else is_area_2 = false;
+
+        // // if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+        // //   if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+        // //   else this.pagination['last_self_area'] = [last_self_area[0]];
+        // // } else {
+
+        // // }
+        // if (is_area_2) {
+        //   // this.pagination['last_self_area'] = [this.areaFromLogin[1][this.areaFromLogin[1].length - 1].id];
+        //   this.pagination['last_self_area'] = [last_self_area[1]];
+        // } else {
+        //   // this.pagination['last_self_area'] = [this.areaFromLogin[0][this.areaFromLogin[0].length - 1].id];
+        //   this.pagination['last_self_area'] = [last_self_area[0]];
+        // }
       }
     }
 
