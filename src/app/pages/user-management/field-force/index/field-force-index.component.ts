@@ -569,7 +569,7 @@ export class FieldForceIndexComponent {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
+    let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(areaAfterEndLevel));
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
@@ -579,6 +579,7 @@ export class FieldForceIndexComponent {
     if (area.value !== 1) {
       // console.log('[checkAreaLocation:list]', this.list[area.key]);
       // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
+      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
         // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
@@ -595,9 +596,13 @@ export class FieldForceIndexComponent {
   getFfList() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+
     // console.log('area_selected on ff list', areaSelected, this.list);
 
     let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+    let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type));
+    let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
     let is_area_2 = false;
 
     let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
@@ -634,10 +639,18 @@ export class FieldForceIndexComponent {
 
       console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
       if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+        // console.log('its hitted [levelCovered > -1]');
         if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
         else this.pagination['last_self_area'] = [last_self_area[0]];
       } else {
+        // console.log('its hitted [other level]');
         this.pagination['after_level'] = true;
+        this.pagination['last_self_area'] = newLastSelfArea;
+      }
+    } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+      // console.log('its hitted [other level other]');
+      this.pagination['after_level'] = true;
+      if (newLastSelfArea.length > 0) {
         this.pagination['last_self_area'] = newLastSelfArea;
       }
     }
