@@ -236,12 +236,16 @@ export class WholesalerIndexComponent {
         })
         // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
         if (areaSelected[0].value.length === 0) {
-          console.log('the selection', this.parseArea(selection));
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          newAreaSelected[0].value.map(ar => {
-            fd.append('area_id[]', ar);
-          })
+          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          if (newAreaSelected[0].key !== 'national') {
+            newAreaSelected[0].value.map(ar => {
+              fd.append('area_id[]', ar);
+            })
+          } else {
+            fd.append('area_id[]', newAreaSelected[0].value);
+          }
         }
       }
     } else {
@@ -257,12 +261,16 @@ export class WholesalerIndexComponent {
           })
           // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
-            console.log('the selection', this.parseArea(selection));
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            newAreaSelected[0].value.map(ar => {
-              fd.append('area_id[]', ar);
-            })
+            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            if (newAreaSelected[0].key !== 'national') {
+              newAreaSelected[0].value.map(ar => {
+                fd.append('area_id[]', ar);
+              })
+            } else {
+              fd.append('area_id[]', newAreaSelected[0].value);
+            }
           }
         }
       }
@@ -310,6 +318,7 @@ export class WholesalerIndexComponent {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
+        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
