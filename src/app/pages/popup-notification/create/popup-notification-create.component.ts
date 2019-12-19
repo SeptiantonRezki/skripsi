@@ -345,6 +345,13 @@ export class PopupNotificationCreateComponent {
         this.getAudience();
       }
     });
+    this.formFilter.get('territory').valueChanges.subscribe(res => {
+      console.log('territory', res);
+      if (res) {
+        // this.getAudienceAreaV2('territory', res);
+        this.getAudience();
+      }
+    });
     // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
   }
 
