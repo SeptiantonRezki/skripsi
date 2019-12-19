@@ -637,12 +637,12 @@ export class AudienceCreateComponent {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area_id = areaSelected[areaSelected.length - 1].value;
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    this.pagination.area = area_id;
 
     // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
-
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
       let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
@@ -699,7 +699,6 @@ export class AudienceCreateComponent {
       }
     }
     this.loadingIndicator = true;
-    this.pagination.area = area_id;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
