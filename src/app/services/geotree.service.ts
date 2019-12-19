@@ -95,6 +95,7 @@ export class GeotreeService extends BaseService {
     switch (level) {
       case 'national':
         return "division";
+      case 'zone':
       case 'division':
         return "region";
       case 'zone':
@@ -114,6 +115,7 @@ export class GeotreeService extends BaseService {
     switch (level) {
       // case 'national:':
       //   return "territory";
+      case 'zone':
       case 'division':
         return "national";
       case 'zone':

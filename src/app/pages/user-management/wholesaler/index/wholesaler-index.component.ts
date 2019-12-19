@@ -656,7 +656,7 @@ export class WholesalerIndexComponent {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(areaAfterEndLevel));
+    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
@@ -693,7 +693,7 @@ export class WholesalerIndexComponent {
     } else {
 
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type));
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
       let is_area_2 = false;
 
