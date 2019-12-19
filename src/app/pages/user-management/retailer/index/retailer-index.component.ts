@@ -1028,23 +1028,23 @@ export class RetailerIndexComponent {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     let area_id = areaSelected[areaSelected.length - 1].value;
 
-    let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-    let last_self_area = [];
-    if (self_area.length > 0) {
-      last_self_area.push(self_area[self_area.length - 1]);
-    }
+    // let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+    // let last_self_area = [];
+    // if (self_area.length > 0) {
+    //   last_self_area.push(self_area[self_area.length - 1]);
+    // }
 
-    if (this.areaFromLogin[1]) {
-      let second_areas = this.areaFromLogin[1];
-      last_self_area = [
-        ...last_self_area,
-        second_areas[second_areas.length - 1].id
-      ];
-    }
+    // if (this.areaFromLogin[1]) {
+    //   let second_areas = this.areaFromLogin[1];
+    //   last_self_area = [
+    //     ...last_self_area,
+    //     second_areas[second_areas.length - 1].id
+    //   ];
+    // }
 
-    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], last_self_area);
+    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
-      const response = await this.retailerService.getAccessCashier({ area_id: last_self_area }).toPromise();
+      const response = await this.retailerService.getAccessCashier({ area_id: area_id }).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
