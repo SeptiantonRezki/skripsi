@@ -234,7 +234,7 @@ export class TradeIndexComponent {
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue());
+    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -242,7 +242,15 @@ export class TradeIndexComponent {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
-        if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        if (areaSelected[0].value.length === 0) {
+          console.log('the selection', this.parseArea(selection));
+          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          newAreaSelected[0].value.map(ar => {
+            fd.append('area_id[]', ar);
+          })
+        }
       }
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
@@ -255,7 +263,15 @@ export class TradeIndexComponent {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           })
-          if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          if (areaSelected[0].value.length === 0) {
+            console.log('the selection', this.parseArea(selection));
+            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            newAreaSelected[0].value.map(ar => {
+              fd.append('area_id[]', ar);
+            })
+          }
         }
       }
     }
@@ -305,18 +321,22 @@ export class TradeIndexComponent {
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
-        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
-          return id && id.length > 0 ? id[0] : id;
-        })[0] : {};
-        if (item && item.name && item.name !== 'all') {
-          this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            // this.list[selection] = res.data;
-            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-            // fd = null
-          });
+        if (id && id.length !== 0) {
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['region'] = [];
         }
         this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
@@ -330,19 +350,23 @@ export class TradeIndexComponent {
         break;
       case 'area':
         // area = this.formFilter.get(selection).value;
-        item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
-          return id && id.length > 0 ? id[0] : id;
-        })[0] : {};
-        console.log('area hitted', selection, item, this.list['region']);
-        if (item && item.name && item.name !== 'all') {
-          this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            // this.list[selection] = res.data;
-            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-            // fd = null
-          });
+        if (id && id.length !== 0) {
+          item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('area hitted', selection, item, this.list['region']);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['area'] = [];
         }
 
         this.formFilter.get('area').setValue('');
@@ -355,19 +379,23 @@ export class TradeIndexComponent {
         break;
       case 'salespoint':
         // area = this.formFilter.get(selection).value;
-        item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
-          return id && id.length > 0 ? id[0] : id;
-        })[0] : {};
-        console.log('item', item);
-        if (item && item.name && item.name !== 'all') {
-          this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            // this.list[selection] = res.data;
-            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-            // fd = null
-          });
+        if (id && id.length !== 0) {
+          item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('item', item);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['salespoint'] = [];
         }
 
         this.formFilter.get('salespoint').setValue('');
@@ -378,17 +406,21 @@ export class TradeIndexComponent {
         break;
       case 'district':
         // area = this.formFilter.get(selection).value;
-        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
-          return id && id.length > 0 ? id[0] : id;
-        })[0] : {};
-        if (item && item.name && item.name !== 'all') {
-          this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-            // fd = null
-          });
+        if (id && id.length !== 0) {
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['district'] = [];
         }
 
         this.formFilter.get('district').setValue('');
@@ -397,19 +429,23 @@ export class TradeIndexComponent {
         break;
       case 'territory':
         // area = this.formFilter.get(selection).value;
-        item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
-          return id && id.length > 0 ? id[0] : id;
-        })[0] : {};
-        if (item && item.name && item.name !== 'all') {
-          this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-            // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            // this.list[selection] = res.data;
-            this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+        if (id && id.length !== 0) {
+          item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
-            // fd = null
-          });
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['territory'] = [];
         }
 
         this.formFilter.get('territory').setValue('');
