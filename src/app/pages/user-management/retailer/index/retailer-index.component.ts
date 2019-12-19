@@ -796,7 +796,7 @@ export class RetailerIndexComponent {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
     let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(areaAfterEndLevel));
+    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
@@ -834,7 +834,7 @@ export class RetailerIndexComponent {
     } else {
 
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type));
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
       let is_area_2 = false;
 
@@ -1027,9 +1027,24 @@ export class RetailerIndexComponent {
     this.exportAccessCashier = true;
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     let area_id = areaSelected[areaSelected.length - 1].value;
-    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1]);
+
+    let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+    let last_self_area = [];
+    if (self_area.length > 0) {
+      last_self_area.push(self_area[self_area.length - 1]);
+    }
+
+    if (this.areaFromLogin[1]) {
+      let second_areas = this.areaFromLogin[1];
+      last_self_area = [
+        ...last_self_area,
+        second_areas[second_areas.length - 1].id
+      ];
+    }
+
+    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], last_self_area);
     try {
-      const response = await this.retailerService.getAccessCashier({ area_id: area_id }).toPromise();
+      const response = await this.retailerService.getAccessCashier({ area_id: last_self_area }).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
