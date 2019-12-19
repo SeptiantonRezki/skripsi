@@ -2,12 +2,13 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Paguyuban'">
     <div class="button-row" fxLayout="row">
-      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','paguyuban','create']">
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/user-management','paguyuban','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
-      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button" class="is-danger"
-        (click)="deleteAllPaguyuban()">HAPUS</button>
+      <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button"
+        class="is-danger" (click)="deleteAllPaguyuban()">HAPUS</button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -25,66 +26,67 @@
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
-              <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Zone" formControlName="zone" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
-              <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Regional" formControlName="region" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
-              <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Area" formControlName="area" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
-              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
+            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
-              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="District" formControlName="district" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
-              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
-                item.name}}</mat-option>
+                item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows" [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-        [reorderable]="reorderable" [selectionType]="'checkbox'" [selected]="selected" [count]="pagination.total" [offset]="offsetPagination"
-        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'"
+        [selected]="selected" [count]="pagination.total" [offset]="offsetPagination" [limit]="pagination.per_page"
+        [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+        (select)="onSelect($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -125,7 +127,8 @@
         <ngx-datatable-column [width]="100" name="Status" prop="active_status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4" style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
+              <p class="status text-truncate h6 p-4"
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
                 [ngClass]="row.paguyuban?.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{row.paguyuban?.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
@@ -134,7 +137,8 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="68" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
@@ -142,7 +146,8 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deletePaguyuban(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+              <button mat-icon-button color="primary" (click)="deletePaguyuban(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

@@ -67,6 +67,7 @@ import { SupportService } from "./services/settings/support.service";
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
+import { GeotreeService } from "./services/geotree.service";
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import { IdleService } from "./services/idle.service";
     GeneralService,
     IdleService,
     SupportService,
+    GeotreeService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
