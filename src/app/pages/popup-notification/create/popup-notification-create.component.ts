@@ -302,9 +302,9 @@ export class PopupNotificationCreateComponent {
       }
     });
 
-    this.formFilter.valueChanges.subscribe(filter => {
-      if (this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
-    });
+    // this.formFilter.valueChanges.subscribe(filter => {
+    //   if (this.formPopupGroup.get("is_target_audience").value === false) this.getAudience();
+    // });
 
     this.addArea();
     // this.initFilterArea();
@@ -314,30 +314,35 @@ export class PopupNotificationCreateComponent {
       console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
+        this.getAudience();
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
       console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
+        this.getAudience();
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
       console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
+        this.getAudience();
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
       console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
+        this.getAudience();
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
       console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
+        this.getAudience();
       }
     });
     // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
