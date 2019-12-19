@@ -538,6 +538,68 @@ export class RetailerComponent {
     // this.pagination.sort = 'name';
     // this.pagination.sort_type = 'asc';
 
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    // console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+      console.log('filter area location running ...');
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type));
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+          else this.pagination['last_self_area'] = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -596,18 +658,18 @@ export class RetailerComponent {
   }
 
   getRetailerByArea() {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = 'name';
     // this.pagination.sort_type = 'asc';
 
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
+    console.log('this area', this.areaFromLogin[0]);
     // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
-
+      console.log('filter area location running ...');
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
       let indexAreaAfterEndLevel = areaList.indexOf(this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type));
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
