@@ -564,7 +564,6 @@ export class FieldForceIndexComponent {
     return areaList;
   }
 
-  areasCoverage: any[] = [];
   checkAreaLocation(area, lastSelfArea) {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -586,7 +585,6 @@ export class FieldForceIndexComponent {
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
         // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
         // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
-        // this.areasCoverage = [...this.list[area.key]];
       }
     }
 
