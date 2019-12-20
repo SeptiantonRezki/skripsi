@@ -1026,7 +1026,7 @@ export class RetailerIndexComponent {
     this.dataService.showLoading(true);
     this.exportAccessCashier = true;
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
-    let area_id = areaSelected[areaSelected.length - 1].value;
+    let area_id: any = areaSelected[areaSelected.length - 1].value;
 
     // let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
     // let last_self_area = [];
@@ -1041,6 +1041,10 @@ export class RetailerIndexComponent {
     //     second_areas[second_areas.length - 1].id
     //   ];
     // }
+
+    if (!area_id || area_id === 'null' || area_id.length === 0) {
+      area_id = 1;
+    }
 
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
