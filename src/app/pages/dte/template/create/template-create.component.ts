@@ -28,7 +28,8 @@ export class TemplateCreateComponent {
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
-    { name: "Pilihan Tanggal", value: "date", icon: "date_range" }
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check_data", icon: "insert_chart" }
   ];
 
   @ViewChild("autosize")
@@ -131,14 +132,14 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length+1}` }));
+    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}` }));
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
 
     if (type === 'rejected_reason_choices' && event.target.value === "") {
       let rejected_reason = this.templateTaskForm.get(type) as FormArray;
-      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx+1))
+      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx + 1))
     }
 
     if (questionsIdx !== undefined && additionalIdx === undefined && event.target.value === "") {
@@ -146,10 +147,10 @@ export class TemplateCreateComponent {
       return questions.at(questionsIdx).get('question').setValue(text);
     }
 
-    if(questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
+    if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx+1));
+      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
     }
 
     if (event.target.value === "") {
@@ -175,7 +176,7 @@ export class TemplateCreateComponent {
       additional.push(this.createAdditional());
     }
 
-    if(additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
+    if (additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
@@ -197,11 +198,11 @@ export class TemplateCreateComponent {
 
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    let newId = _.max(questions.value, function(item){ return item.id })
+    let newId = _.max(questions.value, function (item) { return item.id })
     if (newId === -Infinity) newId = { id: 0 }
 
     questions.push(this.formBuilder.group({
-      id: newId.id+1,
+      id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
@@ -214,15 +215,15 @@ export class TemplateCreateComponent {
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length+1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({option: 'Opsi 1'})
+    return this.formBuilder.group({ option: 'Opsi 1' })
   }
 
   createRejectedReson(): FormGroup {
-    return this.formBuilder.group({ reason: 'Alasan 1'})
+    return this.formBuilder.group({ reason: 'Alasan 1' })
   }
 
   addOthers(idx): void {
@@ -300,7 +301,7 @@ export class TemplateCreateComponent {
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if(this.templateTaskForm.get('questions').invalid)
+      if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
     }
   }
@@ -316,7 +317,7 @@ export class TemplateCreateComponent {
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
-      if(response) {
+      if (response) {
         switch (type) {
           case 'master':
             this.templateTaskForm.get('image').setValue(response);
