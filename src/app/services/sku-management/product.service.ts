@@ -60,4 +60,9 @@ export class ProductService extends BaseService {
     const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
   }
+
+  getProductSkuBank(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "products_sku_bank", { param: queryParams });
+    return this.getApi(url);
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, ViewChild, HostListener } from "@angular/core";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { UploadImageComponent } from "../dialog/upload-image/upload-image.component";
@@ -9,7 +9,9 @@ import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { ProductService } from "app/services/sku-management/product.service";
+import { startWith, map } from "rxjs/operators";
 
 @Component({
   selector: "app-template-create",
@@ -29,7 +31,7 @@ export class TemplateCreateComponent {
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check_data", icon: "insert_chart" }
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
 
   @ViewChild("autosize")
@@ -38,6 +40,12 @@ export class TemplateCreateComponent {
   saveData: Boolean;
   valueChange: Boolean;
   duplicateTask: any;
+  product: FormControl = new FormControl("");
+  listProductSkuBank: Array<any>;
+  filteredSkuOptions: Observable<string[]>;
+  keyUp = new Subject<string>();
+  stockOptionCtrl: FormControl = new FormControl();
+  stockOptions = ["Ada", "Tidak Ada"];
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -57,7 +65,8 @@ export class TemplateCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private taskTemplateService: TemplateTaskService,
-    private dataService: DataService
+    private dataService: DataService,
+    private productService: ProductService
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
@@ -70,6 +79,15 @@ export class TemplateCreateComponent {
   }
 
   ngOnInit() {
+    this.keyUp.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.getListProduct(res);
+        this.resetField(res);
+      });
+
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
@@ -91,6 +109,36 @@ export class TemplateCreateComponent {
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+  }
+
+  _filterSku(value): any[] {
+    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    // if (filteredItem.length == 0) {
+    //   this.product = undefined;
+    // }
+  }
+
+  getListProduct(param?): void {
+    console.log(param);
+    if (param.length >= 3) {
+      this.productService.getProductSkuBank(param).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
   }
 
   setValue() {
