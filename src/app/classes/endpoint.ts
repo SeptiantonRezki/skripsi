@@ -117,7 +117,10 @@ export class Endpoint {
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
-        list_wallet: `${AYO_API}/api/v2/general/wallet`
+        list_wallet: `${AYO_API}/api/v2/general/wallet`,
+        get_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/audience`,
+        export_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/bannerprincipal/banner/audience/export`,
+        import_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/audience/import`,
       },
       landingPage: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
