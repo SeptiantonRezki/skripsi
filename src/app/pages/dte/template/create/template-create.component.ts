@@ -338,6 +338,7 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
+            required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),

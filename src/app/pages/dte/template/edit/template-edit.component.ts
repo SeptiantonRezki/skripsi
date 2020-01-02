@@ -331,6 +331,7 @@ export class TemplateEditComponent {
             id: item.id,
             question: item.question,
             type: item.type,
+            required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
             additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
