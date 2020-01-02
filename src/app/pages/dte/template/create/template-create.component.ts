@@ -41,11 +41,14 @@ export class TemplateCreateComponent {
   valueChange: Boolean;
   duplicateTask: any;
   product: FormControl = new FormControl("");
-  listProductSkuBank: Array<any>;
+  listProductSkuBank: Array<any> = [];
   filteredSkuOptions: Observable<string[]>;
   keyUp = new Subject<string>();
   stockOptionCtrl: FormControl = new FormControl();
   stockOptions = ["Ada", "Tidak Ada"];
+  directBelanja: Boolean;
+  listDirectBelanja: any = {};
+  listProductSelected: any = {};
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -84,6 +87,7 @@ export class TemplateCreateComponent {
         return Observable.of(key).delay(300);
       })
       .subscribe(res => {
+        console.log('reas ngetik cuk', res);
         this.getListProduct(res);
         this.resetField(res);
       });
@@ -119,9 +123,9 @@ export class TemplateCreateComponent {
   resetField(data?: any): void {
     const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
 
-    // if (filteredItem.length == 0) {
-    //   this.product = undefined;
-    // }
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
   }
 
   getListProduct(param?): void {
@@ -134,6 +138,19 @@ export class TemplateCreateComponent {
     } else {
       this.listProductSkuBank = [];
       this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+    }
+  }
+
+  getProductObj(event, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log('event', event, index);
+    if (event.source.selected) {
+      questions.at(index).get('question').setValue(`Apakah Anda Memiliki stok ${event.source.value.name} ?`)
+      questions.at(index).get('question_image').setValue(event.source.value.image ? event.source.value.image_url : "");
+      this.listProductSelected[index] = {
+        ...this.listProductSelected[index],
+        ...event.source.value
+      };
     }
   }
 
@@ -255,10 +272,12 @@ export class TemplateCreateComponent {
       type: 'radio',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
-      question_image: [''],
+      question_image: ['']
       // others: false,
       // required: false
     }))
+    this.listDirectBelanja[questions.length - 1] = false;
+    this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
   }
 
   addRejectedReason() {
@@ -281,6 +300,10 @@ export class TemplateCreateComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     questions.removeAt(idx);
+    if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
+    if (this.listProductSelected[idx]) {
+      delete this.listProductSelected[idx];
+    }
   }
 
   deleteReason(idx): void {
@@ -317,7 +340,11 @@ export class TemplateCreateComponent {
             type: item.type,
             // required: item.required,
             question_image: item.question_image || '',
-            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : []
+            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            stock_check_data: item.type === 'stock_check' ? ({
+              sku_id: this.listProductSelected[index].sku_id,
+              directly: this.listDirectBelanja[index]
+            }) : null
           }
           // }
           // return {
@@ -330,7 +357,7 @@ export class TemplateCreateComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-
+      console.log(body);
       this.taskTemplateService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
@@ -393,5 +420,10 @@ export class TemplateCreateComponent {
       default:
         break;
     }
+  }
+
+  onDirectBelanja(idx) {
+    console.log(this.listDirectBelanja, idx);
+    this.listDirectBelanja[idx] = !this.listDirectBelanja[idx];
   }
 }

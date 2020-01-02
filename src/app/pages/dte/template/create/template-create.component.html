@@ -100,12 +100,12 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="68" class="question is-light"
-                  *ngIf="item.get('typeSelection').value['value'] == 'stock_check'">
+                  *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
                   <input matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
-                    [formControl]="product" [matAutocomplete]="auto">
+                    [formControl]="listProductSelected[i].product" [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
-                      (onSelectionChange)="getProductObj($event)">
+                      (onSelectionChange)="getProductObj($event, i)">
                       {{item.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -136,7 +136,7 @@
                 </mat-form-field>
               </div>
               <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
-                *ngIf="item.get('question_image').value">
+                *ngIf="item.get('question_image').value && item.get('type').value !== 'stock_check'">
                 <div fxLayout="row" fxLayoutAlign="start start">
                   <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
                     <mat-icon>more_vert</mat-icon>
@@ -218,10 +218,13 @@
                           {{stockOption}}
                         </mat-radio-button>
                       </mat-radio-group>
-                      <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
-                        fxFlex="1 0 auto" [formGroupName]="j">
-                        <mat-icon class="secondary-text" fxFlex="5">{{
-                          'radio_button_unchecked'}}</mat-icon> Direct to Belanja
+                      <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="center" fxFlex="1 0 auto"
+                        [formGroupName]="j">
+                        <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
+                          listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
+                          style="margin-top: 5px;margin-left: 3px;">Direct
+                          to
+                          Belanja</span>
                       </div>
                     </div>
                     <!-- <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
@@ -256,8 +259,7 @@
                   </div>
                 </ng-container>
               </div>
-              <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom"
-                *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+              <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
                 <!-- <section class="required-section secondary-text">
                   <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                 </section>
