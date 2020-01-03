@@ -179,6 +179,13 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
     this.detailTask['questions'].map((item, index) => {
+      if (item.type === 'stock_check') {
+        console.log('stock check')
+        this.listProductSelected[index] = {
+          product: new FormControl("")
+        }
+        this.listProductSelected[index].product.patchValue(item.stock_check_data.sku_id);
+      }
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
@@ -191,12 +198,10 @@ export class TemplateEditComponent {
             return this.formBuilder.group({ option: item })
           })
         )
-      }))
-      this.listDirectBelanja[index] = item.stock_check_data ? item.stock_check_data.directly : false
-      this.listProductSelected[index] = {
-        product: item.stock_check_data ? new FormControl(item.stock_check_data.sku_id) : new FormControl("Test")
-      }
-    })
+      }));
+      this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
+    });
+    console.log('asdakdj', this.listProductSelected);
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     })
@@ -276,6 +281,7 @@ export class TemplateEditComponent {
       // required: false
     }))
     this.listDirectBelanja[questions.length - 1] = false;
+    this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
   }
 
   addRejectedReason() {
