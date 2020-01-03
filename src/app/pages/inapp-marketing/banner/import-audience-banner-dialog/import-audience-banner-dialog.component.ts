@@ -62,9 +62,10 @@ export class ImportAudienceBannerDialogComponent implements OnInit {
     this.dataService.showLoading(true);
     this.bannerService[keyAudience](fd).subscribe(
       res => {
-        if (res && res.is_valid) {
-          this.rows = res.data;
-          this.validData = (res.data || []).filter(item => item.is_valid).length;
+        if (res && res.data.is_valid) {
+          this.rows = res.data && res.data.audiences ? res.data.audiences : [];
+          this.validData = res.data && res.data.is_valid ? res.data.is_valid : false;
+          // this.validData = (res.data.audiences || []).filter(item => item.is_valid).length;
           this.dataService.showLoading(false);
         } else {
           this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
