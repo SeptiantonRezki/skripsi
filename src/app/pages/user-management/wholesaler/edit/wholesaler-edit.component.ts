@@ -467,7 +467,12 @@ export class WholesalerEditComponent {
       if (this.formWs.get("branchShop").value === true) {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
         body['total_branch'] = this.frmTotalBranch.value
+      } else {
+        body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
       }
+
+      console.log(this.formWs.get("branchShop").value);
+      // return;
 
       this.wholesalerService
         .put(body, { wholesaler_id: this.detailWholesaler.id })
