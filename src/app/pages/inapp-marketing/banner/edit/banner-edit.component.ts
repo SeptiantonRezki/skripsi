@@ -1401,6 +1401,7 @@ export class BannerEditComponent {
   }
 
   getAudience() {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
@@ -1489,7 +1490,7 @@ export class BannerEditComponent {
       this.pagination['customer_age_from'] = this.formBannerGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formBannerGroup.get("age_consumer_to").value;
     }
-    this.bannerService.getAudience(this.pagination).subscribe(res => {
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.dataService.showLoading(false);
@@ -1505,9 +1506,10 @@ export class BannerEditComponent {
   }
 
   setPage(pageInfo) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
-    this.bannerService.getAudience(this.pagination).subscribe(res => {
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1515,12 +1517,13 @@ export class BannerEditComponent {
   }
 
   onSort(event) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    this.bannerService.getAudience(this.pagination).subscribe(res => {
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1528,13 +1531,14 @@ export class BannerEditComponent {
   }
 
   updateFilter(string) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
     this.loadingIndicator = true;
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
 
 
-    this.bannerService.getAudience(this.pagination).subscribe(res => {
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1570,6 +1574,7 @@ export class BannerEditComponent {
   }
 
   async export() {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'exportAudience' : 'exportCustomerAudience';
     if (this.audienceSelected.length === 0) {
       this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
       return;
@@ -1578,7 +1583,7 @@ export class BannerEditComponent {
     let body = this.audienceSelected.map(aud => aud.id);
     // this.exportPopUpNotif = true;
     try {
-      const response = await this.bannerService.exportAudience({ selected: body, audience: this.formBannerGroup.get("user_group").value }).toPromise();
+      const response = await this.bannerService[keyAudience]({ selected: body, audience: this.formBannerGroup.get("user_group").value }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Banner_${this.formBannerGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();

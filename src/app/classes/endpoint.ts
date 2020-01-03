@@ -120,8 +120,11 @@ export class Endpoint {
         list_wallet: `${AYO_API}/api/v2/general/wallet`,
         // get_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/audience`,
         get_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences`,
-        export_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/bannerprincipal/banner/audience/export`,
-        import_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/audience/import`,
+        export_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/export`,
+        import_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/import`,
+        get_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience`,
+        export_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/export`,
+        import_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/import`,
       },
       landingPage: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,

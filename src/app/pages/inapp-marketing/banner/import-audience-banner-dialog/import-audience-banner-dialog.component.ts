@@ -58,8 +58,9 @@ export class ImportAudienceBannerDialogComponent implements OnInit {
 
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
+    let keyAudience = this.dialogData.audience === 'retailer' ? 'importAudience' : 'importCustomerAudience';
     this.dataService.showLoading(true);
-    this.bannerService.importAudience(fd).subscribe(
+    this.bannerService[keyAudience](fd).subscribe(
       res => {
         if (res && res.is_valid) {
           this.rows = res.data;

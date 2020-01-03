@@ -70,4 +70,19 @@ export class BannerService extends BaseService {
     const url = this.getUrl(this.namespace, "import_audience");
     return this.postApi(url, body);
   }
+
+  getCustomerAudience(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_c_audience");
+    return this.getApi(url, queryParams);
+  }
+
+  exportCustomerAudience(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_c_audience");
+    return this.postBlobApi(url, body);
+  }
+
+  importCustomerAudience(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_c_audience");
+    return this.postApi(url, body);
+  }
 }
