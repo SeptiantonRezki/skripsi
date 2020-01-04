@@ -686,6 +686,7 @@ export class BannerEditComponent {
     this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
     this.formBannerGroup.get('status').setValue(this.detailBanner.status);
     this.formBannerGroup.get('content_type').setValue(this.detailBanner.target_page.type);
+    this.formBannerGroup.get('is_target_audience').setValue(this.detailBanner.target_audience === 0 ? false : true);
 
     console.log('this detailBanner', this.detailBanner);
 
