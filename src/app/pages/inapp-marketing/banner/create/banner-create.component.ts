@@ -1102,10 +1102,14 @@ export class BannerCreateComponent {
       // })
 
       if (this.formBannerGroup.get("is_target_audience").value) {
-        body['target_audience'] = 1;
-        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+        fd.append('target_audience', "1");
+        this.audienceSelected.map(aud => {
+          fd.append('target_audiences[]', aud.id)
+        });
       } else {
-        if (body['target_audience']) delete body['target_audience'];
+        if (fd.has('target_audience')) {
+          fd.delete('target_audience');
+        }
       }
 
       this.bannerService.create(fd).subscribe(
