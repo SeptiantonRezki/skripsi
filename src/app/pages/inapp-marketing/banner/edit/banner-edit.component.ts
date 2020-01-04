@@ -1246,6 +1246,13 @@ export class BannerEditComponent {
       //   fd.append('areas[]', item)
       // })
 
+      if (this.formBannerGroup.get("is_target_audience").value) {
+        body['target_audience'] = 1;
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      } else {
+        if (body['target_audience']) delete body['target_audience'];
+      }
+
       this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
         res => {
           this.loadingIndicator = false;
