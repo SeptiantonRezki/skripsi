@@ -1100,6 +1100,9 @@ export class BannerCreateComponent {
       // areas.map(item => {
       //   fd.append('areas[]', item)
       // })
+      if (body.user_group === 'retailer') {
+        fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
+      }
 
       if (this.formBannerGroup.get("is_target_audience").value) {
         fd.append('target_audience', "1");
@@ -1300,6 +1303,10 @@ export class BannerCreateComponent {
     }
 
     this.pagination['audience'] = this.formBannerGroup.get("user_group").value;
+    if (this.formBannerGroup.controls['user_group'].value === 'retailer') {
+      this.pagination["business_type"] = this.formBannerGroup.controls['group_type'].value;
+    }
+
     if (this.formBannerGroup.get("user_group").value === 'retailer') {
       this.pagination['retailer_type'] = this.formBannerGroup.get("group_type").value;
       delete this.pagination['customer_smoking'];
