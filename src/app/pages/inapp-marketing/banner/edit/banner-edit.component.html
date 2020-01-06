@@ -496,7 +496,7 @@
               <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
               <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                  {{row.code ? row.code : '-'}}
+                  {{row.code ? row.code : '-'}} {{ row.id }}
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Owner" prop="owner">

@@ -301,10 +301,20 @@ export class BannerEditComponent {
       }
     })
 
-    console.log('get parent area', this.detailBanner.area_id[0]);
-    this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] ? this.detailBanner.area_id[0] : 1 }).subscribe(res => {
-      this.detailAreaSelected = res.data;
-    })
+    if (this.detailBanner.target_audience === 0) {
+      console.log('get parent area', this.detailBanner.area_id[0]);
+      this.bannerService.getParentArea({ parent: this.detailBanner.area_id[0] ? this.detailBanner.area_id[0] : 1 }).subscribe(res => {
+        this.detailAreaSelected = res.data;
+      })
+    }
+
+    this.formBannerGroup.controls['group_type'].valueChanges.debounceTime(50).subscribe(res => {
+      if (this.formBannerGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
+    });
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
@@ -687,14 +697,23 @@ export class BannerEditComponent {
     this.formBannerGroup.get('status').setValue(this.detailBanner.status);
     this.formBannerGroup.get('content_type').setValue(this.detailBanner.target_page.type);
     this.formBannerGroup.get('is_target_audience').setValue(this.detailBanner.target_audience === 0 ? false : true);
-
+    if (this.detailBanner.target_audience && this.detailBanner.target_audience === 1) {
+      this.formBannerGroup.controls["is_target_audience"].setValue(true);
+      this.audienceSelected = this.detailBanner.targeted_audiences.map(aud => ({ id: aud.audience_id }));
+      this.onSelect({ selected: this.audienceSelected });
+      console.log('this auddd', this.audienceSelected);
+    }
     console.log('this detailBanner', this.detailBanner);
 
     if (this.detailBanner.user_group === 'retailer') {
       this.formBannerGroup.get('age').setValue(this.detailBanner.age);
 
-      const group_type = this.detailBanner.areas.map(item => item.type)[0];
-      this.formBannerGroup.get('group_type').setValue(group_type);
+      if (this.detailBanner.target_audience === 0) {
+        const group_type = this.detailBanner.areas.map(item => item.type)[0];
+        this.formBannerGroup.get('group_type').setValue(group_type);
+      } else {
+        this.formBannerGroup.get('group_type').setValue(this.detailBanner.business_type);
+      }
     }
 
     if (this.detailBanner.user_group === 'customer') {
@@ -738,33 +757,34 @@ export class BannerEditComponent {
     if (this.detailBanner.target_page.type === 'image') {
       this.imageContentTypeFromDetail = this.detailBanner.target_page.url;
     }
+    if (this.detailBanner.target_audience === 0) {
+      for (const { val, index } of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
+        const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+        let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
 
-    for (const { val, index } of this.detailBanner.areas.map((val, index) => ({ val, index }))) {
-      const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
-      let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
+        wilayah.push(this.formBuilder.group({
+          national: [this.getArea(response, 'national'), Validators.required],
+          zone: [this.getArea(response, 'division')],
+          region: [this.getArea(response, 'region')],
+          area: [this.getArea(response, 'area')],
+          salespoint: [this.getArea(response, 'salespoint')],
+          district: [this.getArea(response, 'district')],
+          territory: [this.getArea(response, 'teritory')],
+          list_national: this.formBuilder.array(this.listLevelArea),
+          list_zone: this.formBuilder.array([]),
+          list_region: this.formBuilder.array([]),
+          list_area: this.formBuilder.array([]),
+          list_salespoint: this.formBuilder.array([]),
+          list_district: this.formBuilder.array([]),
+          list_territory: this.formBuilder.array([])
+        }))
 
-      wilayah.push(this.formBuilder.group({
-        national: [this.getArea(response, 'national'), Validators.required],
-        zone: [this.getArea(response, 'division')],
-        region: [this.getArea(response, 'region')],
-        area: [this.getArea(response, 'area')],
-        salespoint: [this.getArea(response, 'salespoint')],
-        district: [this.getArea(response, 'district')],
-        territory: [this.getArea(response, 'teritory')],
-        list_national: this.formBuilder.array(this.listLevelArea),
-        list_zone: this.formBuilder.array([]),
-        list_region: this.formBuilder.array([]),
-        list_area: this.formBuilder.array([]),
-        list_salespoint: this.formBuilder.array([]),
-        list_district: this.formBuilder.array([]),
-        list_territory: this.formBuilder.array([])
-      }))
+        this.initArea(index);
+        this.initFormGroup(response, index);
 
-      this.initArea(index);
-      this.initFormGroup(response, index);
-
-      if (this.detailBanner.areas.length === (index + 1)) {
-        this.onLoad = false;
+        if (this.detailBanner.areas.length === (index + 1)) {
+          this.onLoad = false;
+        }
       }
     }
 
@@ -774,6 +794,8 @@ export class BannerEditComponent {
 
     setTimeout(() => {
       this.onLoad = false;
+      if (this.formBannerGroup.controls["is_target_audience"].value === true) this.getAudience();
+
     }, 500);
 
     if (this.isDetail) this.formBannerGroup.disable();
@@ -1512,6 +1534,7 @@ export class BannerEditComponent {
       this.pagination['customer_age_from'] = this.formBannerGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formBannerGroup.get("age_consumer_to").value;
     }
+
     this.bannerService[keyAudience](this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
