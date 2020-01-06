@@ -1305,6 +1305,8 @@ export class BannerCreateComponent {
     this.pagination['audience'] = this.formBannerGroup.get("user_group").value;
     if (this.formBannerGroup.controls['user_group'].value === 'retailer') {
       this.pagination["business_type"] = this.formBannerGroup.controls['group_type'].value;
+    } else {
+      if (this.pagination["business_type"]) delete this.pagination["business_type"];
     }
 
     if (this.formBannerGroup.get("user_group").value === 'retailer') {
