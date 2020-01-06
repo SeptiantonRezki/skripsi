@@ -1486,13 +1486,13 @@ export class BannerEditComponent {
 
     this.pagination['audience'] = this.formBannerGroup.get("user_group").value;
     if (this.formBannerGroup.controls['user_group'].value === 'retailer') {
-      this.pagination["business_type"] = this.formBannerGroup.controls['group_type'].value;
+      this.pagination["type"] = this.formBannerGroup.controls['group_type'].value;
     } else {
-      if (this.pagination["business_type"]) delete this.pagination["business_type"];
+      if (this.pagination["type"]) delete this.pagination["type"];
     }
 
     if (this.formBannerGroup.get("user_group").value === 'retailer') {
-      this.pagination['retailer_type'] = this.formBannerGroup.get("group_type").value;
+      // this.pagination['retailer_type'] = this.formBannerGroup.get("group_type").value;
       delete this.pagination['customer_smoking'];
       delete this.pagination['customer_gender'];
       delete this.pagination['customer_age_from'];
@@ -1506,7 +1506,7 @@ export class BannerEditComponent {
       delete this.pagination['retailer_type'];
     }
     if (this.formBannerGroup.get("user_group").value === 'customer') {
-      delete this.pagination['retailer_type'];
+      delete this.pagination['type'];
       this.pagination['customer_smoking'] = this.formBannerGroup.get("is_smoker").value;
       this.pagination['customer_gender'] = this.formBannerGroup.get("gender").value;
       this.pagination['customer_age_from'] = this.formBannerGroup.get("age_consumer_from").value;
