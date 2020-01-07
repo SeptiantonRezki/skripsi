@@ -43,7 +43,7 @@
                     <mat-icon class="secondary-text">add</mat-icon>
                     Tambah Pesan
                   </button>
-                  <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('wholesaler')">
+                  <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('wholesaler')" *ngIf="wholesalerTemplates.length > 0 || deleteListWholesaler.length > 0">
                     SIMPAN
                   </button>
                   <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span><mat-icon class="success">check</mat-icon></div>
@@ -83,7 +83,7 @@
                       <mat-icon class="secondary-text">add</mat-icon>
                       Tambah Pesan
                     </button>
-                    <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('retailer')">
+                    <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('retailer')" *ngIf="retailerTemplates.length > 0 || deleteListRetailer.length > 0">
                       SIMPAN
                     </button>
                     <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span><mat-icon class="success">check</mat-icon></div>
