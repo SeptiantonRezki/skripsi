@@ -97,13 +97,13 @@ export class TemplateMessageComponent {
 
   resetToDefault(index: number, user: string) {
     if (user == 'wholesaler') {
-      this.wholesalerTemplates[index] = defaultTemplate[index];
-      this.wholesalerTemplates[index].user = user;
+      this.wholesalerTemplates[index].title = defaultTemplate[index].title;
+      this.wholesalerTemplates[index].body = defaultTemplate[index].body;
     } else {
-    if (user == 'retailer') {
-      this.retailerTemplates[index] = defaultTemplate[index];
-      this.retailerTemplates[index].user = user;
-    }
+      if (user == 'retailer') {
+        this.retailerTemplates[index].title = defaultTemplate[index].title;
+        this.retailerTemplates[index].body = defaultTemplate[index].body;
+      }
     }
   }
 
@@ -206,10 +206,12 @@ export class TemplateMessageComponent {
   async deleteTemplates(body: FormData, user: string) {
     return await this.tms.delete(body).subscribe((res) => {
       console.log('deleted');
+      this.onSaveTemplate(user);
       if(user == "wholesaler") this.deleteListWholesaler = [];
       if(user == "retailer") this.deleteListRetailer = [];
     }, error => {
       console.log('delete failed', error);
+      alert('Failed to Save Template')
     });
   }
 
@@ -227,8 +229,69 @@ export class TemplateMessageComponent {
           await Promise.all(deleteReady).then(async () => {
             await this.deleteTemplates(bodyDelete, user);
           });
+        } else {
+          let templateReady = await this.wholesalerTemplates.map((item: any, i: number) => {
+            if (item.title !== '' && item.body !== '') {
+              if (item.body.toString().length < 500 ) { 
+                bodySave.append('template['+i+'][id]', item.id);
+                bodySave.append('template['+i+'][title]', item.title);
+                bodySave.append('template['+i+'][body]', item.body);
+                bodySave.append('template['+i+'][user]', item.user);
+                return item;
+              } else {
+                error2 = true;
+              }
+            } else {
+              error = true;
+            }
+          });
+          await Promise.all(templateReady).then(async () => {
+            if (!error) {
+              if(!error2) {
+                this.onLoad = true;
+                await this.tms.create(bodySave).subscribe((res_: any) => {
+                  this.indexOnEdit = -1;
+                  this.isSaved = true;
+                  this.onLoad = true;
+                  this.tms.get().subscribe((res: any) => {
+                    this.wholesalerTemplates = res.data.wholesaler;
+                    this.retailerTemplates = res.data.retailer;
+                    this.onLoad = false;
+                  }, error => {
+                    this.onLoad = false;
+                    this.isSaved = false
+                    alert(error);
+                  });
+                  setTimeout(() => {
+                    this.isSaved = false
+                  }, 1500);
+                }, error => {
+                  this.onLoad = false;
+                  this.isSaved = false
+                  alert(error);
+                });
+              } else {
+                this.onLoad = false;
+                alert('Maksimal Teks Template 500 Karakter!')
+              }
+            } else {
+              this.onLoad = false;
+              alert('Lengkapi bagian template yang masih kosong!')
+            }
+          });
         }
-        let templateReady = await this.wholesalerTemplates.map((item: any, i: number) => {
+    }
+
+    if (user == "retailer") {
+      if (this.deleteListRetailer.length > 0) {
+        let deleteReady = await this.deleteListRetailer.map((item: any, i: number) => {
+          bodyDelete.append('ids['+i+']', item.id);
+        });
+        await Promise.all(deleteReady).then(async () => {
+          await this.deleteTemplates(bodyDelete, user);
+        });
+      } else {
+        let templateReady = await this.retailerTemplates.map((item: any, i: number) => {
           if (item.title !== '' && item.body !== '') {
             if (item.body.toString().length < 500 ) { 
               bodySave.append('template['+i+'][id]', item.id);
@@ -246,7 +309,6 @@ export class TemplateMessageComponent {
         await Promise.all(templateReady).then(async () => {
           if (!error) {
             if(!error2) {
-              this.onLoad = true;
               await this.tms.create(bodySave).subscribe((res_: any) => {
                 this.indexOnEdit = -1;
                 this.isSaved = true;
@@ -255,18 +317,10 @@ export class TemplateMessageComponent {
                   this.wholesalerTemplates = res.data.wholesaler;
                   this.retailerTemplates = res.data.retailer;
                   this.onLoad = false;
-                }, error => {
-                  this.onLoad = false;
-                  this.isSaved = false
-                  alert(error);
                 });
                 setTimeout(() => {
                   this.isSaved = false
                 }, 1500);
-              }, error => {
-                this.onLoad = false;
-                this.isSaved = false
-                alert(error);
               });
             } else {
               this.onLoad = false;
@@ -277,57 +331,7 @@ export class TemplateMessageComponent {
             alert('Lengkapi bagian template yang masih kosong!')
           }
         });
-    }
-
-    if (user == "retailer") {
-      if (this.deleteListRetailer.length > 0) {
-        let deleteReady = await this.deleteListRetailer.map((item: any, i: number) => {
-          bodyDelete.append('ids['+i+']', item.id);
-        });
-        await Promise.all(deleteReady).then(async () => {
-          await this.deleteTemplates(bodyDelete, user);
-        });
       }
-      let templateReady = await this.retailerTemplates.map((item: any, i: number) => {
-        if (item.title !== '' && item.body !== '') {
-          if (item.body.toString().length < 500 ) { 
-            bodySave.append('template['+i+'][id]', item.id);
-            bodySave.append('template['+i+'][title]', item.title);
-            bodySave.append('template['+i+'][body]', item.body);
-            bodySave.append('template['+i+'][user]', item.user);
-            return item;
-          } else {
-            error2 = true;
-          }
-        } else {
-          error = true;
-        }
-      });
-      await Promise.all(templateReady).then(async () => {
-        if (!error) {
-          if(!error2) {
-            await this.tms.create(bodySave).subscribe((res_: any) => {
-              this.indexOnEdit = -1;
-              this.isSaved = true;
-              this.onLoad = true;
-              this.tms.get().subscribe((res: any) => {
-                this.wholesalerTemplates = res.data.wholesaler;
-                this.retailerTemplates = res.data.retailer;
-                this.onLoad = false;
-              });
-              setTimeout(() => {
-                this.isSaved = false
-              }, 1500);
-            });
-          } else {
-            this.onLoad = false;
-            alert('Maksimal Teks Template 500 Karakter!')
-          }
-        } else {
-          this.onLoad = false;
-          alert('Lengkapi bagian template yang masih kosong!')
-        }
-      });
     }
   }
 
