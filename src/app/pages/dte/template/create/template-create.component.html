@@ -211,21 +211,21 @@
                     </div>
                     <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
                       *ngIf="item.get('typeSelection').value['value'] == 'stock_check'">
-                      <mat-radio-group fxFlex="50" aria-labelledby="example-radio-group-label"
+                      <!-- <mat-radio-group fxFlex="50" aria-labelledby="example-radio-group-label"
                         class="example-radio-group" [formControl]="stockOptionCtrl">
                         <mat-radio-button class="example-radio-button" *ngFor="let stockOption of stockOptions"
                           [value]="stockOption">
                           {{stockOption}}
                         </mat-radio-button>
-                      </mat-radio-group>
-                      <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="center" fxFlex="1 0 auto"
+                      </mat-radio-group> -->
+                      <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
+                        listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
+                        style="margin-top: 5px;margin-left: 3px;">Direct
+                        to
+                        Belanja</span>
+                      <!-- <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="center" fxFlex="1 0 auto"
                         [formGroupName]="j">
-                        <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
-                          listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
-                          style="margin-top: 5px;margin-left: 3px;">Direct
-                          to
-                          Belanja</span>
-                      </div>
+                      </div> -->
                     </div>
                     <!-- <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
                       *ngIf="item.others">
