@@ -2,6 +2,34 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { TemplateMessageService } from 'app/services/template-message-management/template-message.service';
+
+const defaultTemplate = [
+    {
+      "id": 0,
+      "title": "Hai, selamat datang di toko kami! Apakah ada informasi yang dapat kami berikan?",
+      "body": "Hai, selamat datang di toko kami! Apakah ada informasi yang dapat kami berikan?"
+    },
+    {
+      "id": 1,
+      "title": "Pesanan Anda masih dalam proses untuk disiapkan.",
+      "body": "Pesanan Anda masih dalam proses untuk disiapkan."
+    },
+    {
+      "id": 2,
+      "title": "Mohon maaf ada perubahan pada pesanan Anda, apakah bisa dilakukan konfirmasi (tekan Setuju)?",
+      "body": "Mohon maaf ada perubahan pada pesanan Anda, apakah bisa dilakukan konfirmasi (tekan Setuju)?"
+    },
+    {
+      "id": 3,
+      "title": "Apakah pesanannya sudah diterima? Jika sudah, mohon untuk lakukan konfirmasi penerimaan (tekan Pesanan Diterima)",
+      "body": "Apakah pesanannya sudah diterima? Jika sudah, mohon untuk lakukan konfirmasi penerimaan (tekan Pesanan Diterima)"
+    },
+    {
+      "id": 4,
+      "title": "Terima kasih telah berbelanja di toko kami. Semoga pengalaman berbelanja Anda menyenangkan!\nSilahkan sampaikan kritik dan saran agar kami dapat melayani Anda lebih baik lagi.",
+      "body": "Terima kasih telah berbelanja di toko kami. Semoga pengalaman berbelanja Anda menyenangkan!\nSilahkan sampaikan kritik dan saran agar kami dapat melayani Anda lebih baik lagi."
+    }
+];
 @Component({
   selector: 'app-template-message',
   templateUrl: './template-message.component.html',
@@ -39,15 +67,63 @@ export class TemplateMessageComponent {
     this.tms.get().subscribe((res: any) => {
       this.wholesalerTemplates = res.data.wholesaler;
       this.retailerTemplates = res.data.retailer;
+
+      if (res.data.wholesaler.length == 0) {
+        defaultTemplate.map((item: any) => {
+          item.user = 'wholesaler';
+          return this.wholesalerTemplates.push(item);
+        });
+      }
+      if (res.data.retailer.length == 0) {
+        defaultTemplate.map((item: any) => {
+          item.user = 'retailer';
+          return this.retailerTemplates.push(item);
+        });
+      } 
       this.onLoad = false;
+    }, error => {
+      this.onLoad = false;
+      alert(error);
     })
   }
 
   selectedTabChange(e: any) {
-    console.log(this.selectedTab + " - ",  e);
+    // console.log(this.selectedTab + " - ",  e);
     this.indexOnEdit = -1;
     if(e !== this.selectedTab) {
       this.selectedTab = e;
+    }
+  }
+
+  resetToDefault(index: number, user: string) {
+    if (user == 'wholesaler') {
+      this.wholesalerTemplates[index] = defaultTemplate[index];
+      this.wholesalerTemplates[index].user = user;
+    } else {
+    if (user == 'retailer') {
+      this.retailerTemplates[index] = defaultTemplate[index];
+      this.retailerTemplates[index].user = user;
+    }
+    }
+  }
+
+  resetToDefaultAll(user: string) {
+    if (user == 'wholesaler') {
+      this.deleteListWholesaler = this.wholesalerTemplates;
+      this.wholesalerTemplates = [];
+      defaultTemplate.map((item: any) => {
+        item.user = 'wholesaler';
+        return this.wholesalerTemplates.push(item);
+      });
+    } else {
+      if (user == 'retailer') {
+        this.deleteListRetailer = this.retailerTemplates;
+        this.retailerTemplates = [];
+        defaultTemplate.map((item: any) => {
+          item.user = 'retailer';
+          return this.retailerTemplates.push(item);
+        });
+      }
     }
   }
 
@@ -129,9 +205,11 @@ export class TemplateMessageComponent {
 
   async deleteTemplates(body: FormData, user: string) {
     return await this.tms.delete(body).subscribe((res) => {
-        console.log('deleted');
-        if(user == "wholesaler") this.deleteListWholesaler = [];
-        if(user == "retailer") this.deleteListRetailer = [];
+      console.log('deleted');
+      if(user == "wholesaler") this.deleteListWholesaler = [];
+      if(user == "retailer") this.deleteListRetailer = [];
+    }, error => {
+      console.log('delete failed', error);
     });
   }
 
@@ -168,6 +246,7 @@ export class TemplateMessageComponent {
         await Promise.all(templateReady).then(async () => {
           if (!error) {
             if(!error2) {
+              this.onLoad = true;
               await this.tms.create(bodySave).subscribe((res_: any) => {
                 this.indexOnEdit = -1;
                 this.isSaved = true;
@@ -176,10 +255,18 @@ export class TemplateMessageComponent {
                   this.wholesalerTemplates = res.data.wholesaler;
                   this.retailerTemplates = res.data.retailer;
                   this.onLoad = false;
+                }, error => {
+                  this.onLoad = false;
+                  this.isSaved = false
+                  alert(error);
                 });
                 setTimeout(() => {
                   this.isSaved = false
                 }, 1500);
+              }, error => {
+                this.onLoad = false;
+                this.isSaved = false
+                alert(error);
               });
             } else {
               this.onLoad = false;

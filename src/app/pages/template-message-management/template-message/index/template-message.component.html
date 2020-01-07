@@ -31,17 +31,21 @@
                       <div class="body-layout">
                         <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body" wrap="soft" (blur)="onBlur(item, i, 'wholesaler')"></textarea>
                       </div>
-                      <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                      <!-- <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
                         <mat-icon (click)="onDeleteTemplate(item, i, 'wholesaler')">delete</mat-icon>
-                      </div>
+                      </div> -->
+                        <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                          <mat-icon (click)="resetToDefault(i, 'retailer')">refresh</mat-icon>
+                          Reset to default
+                        </div>
                     </div> 
                     <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan harus diisi!</mat-error>
                   </div>
                 </div>
                 <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
-                  <button mat-button class="add" (click)="addTemplate('wholesaler')">
-                    <mat-icon class="secondary-text">add</mat-icon>
-                    Tambah Pesan
+                  <button mat-button class="add" (click)="resetToDefaultAll('wholesaler')">
+                    <mat-icon class="secondary-text">refresh</mat-icon>
+                    Reset All to Default
                   </button>
                   <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('wholesaler')" *ngIf="wholesalerTemplates.length > 0 || deleteListWholesaler.length > 0">
                     SIMPAN
@@ -71,17 +75,25 @@
                         <div class="body-layout">
                           <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body" wrap="soft" (blur)="onBlur(item, i, 'retailer')"></textarea>
                         </div>
-                        <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                        <!-- <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
                           <mat-icon (click)="onDeleteTemplate(item, i, 'retailer')">delete</mat-icon>
+                        </div> -->
+                        <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+                          <mat-icon (click)="resetToDefault(i, 'retailer')">refresh</mat-icon>
+                          Reset to default
                         </div>
                       </div> 
                       <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan harus diisi!</mat-error>
                     </div>
                   </div>
                   <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
-                    <button mat-button class="add" (click)="addTemplate('retailer')">
+                    <!-- <button mat-button class="add" (click)="addTemplate('retailer')">
                       <mat-icon class="secondary-text">add</mat-icon>
                       Tambah Pesan
+                    </button> -->
+                    <button mat-button class="add" (click)="resetToDefaultAll('retailer')">
+                      <mat-icon class="secondary-text">refresh</mat-icon>
+                      Reset All to Default
                     </button>
                     <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('retailer')" *ngIf="retailerTemplates.length > 0 || deleteListRetailer.length > 0">
                       SIMPAN
