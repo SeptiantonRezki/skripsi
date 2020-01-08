@@ -182,9 +182,15 @@ export class TemplateEditComponent {
       if (item.type === 'stock_check') {
         console.log('stock check')
         this.listProductSelected[index] = {
-          product: new FormControl("")
+          product: new FormControl(item.stock_check_data.name)
         }
-        this.listProductSelected[index].product.patchValue(item.stock_check_data.sku_id);
+
+        // this.listProductSelected[index] = this.formBuilder.group({
+        //   product: item.stock_check_data.name
+        // });
+
+        // this.listProductSelected[index].product.updateValueAndValidity();
+
       }
       questions.push(this.formBuilder.group({
         id: item.id,
@@ -343,6 +349,7 @@ export class TemplateEditComponent {
             additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
+              name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
             }) : null
           }

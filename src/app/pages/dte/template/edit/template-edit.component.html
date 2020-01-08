@@ -111,8 +111,10 @@
 
                 <mat-form-field fxFlex="68" class="question is-light"
                   *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
-                  <input matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
-                    [formControl]="listProductSelected[i].product" [matAutocomplete]="auto">
+                  <input matInput [formControl]="listProductSelected[i].product"
+                    (input)="keyUp.next($event.target.value)">
+                  <!-- <input matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
+                    [formControl]="listProductSelected[i].product" [matAutocomplete]="auto"> -->
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
                       (onSelectionChange)="getProductObj($event, i)">
@@ -222,7 +224,7 @@
                         </div>
                       </div>
                     </div>
-                    <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
+                    <div fxFlex="80" class="py-2" fxLayout="row" fxFlex="1 0 auto"
                       *ngIf="item.get('typeSelection').value['value'] == 'stock_check'">
                       <!-- <mat-radio-group fxFlex="50" aria-labelledby="example-radio-group-label"
                         class="example-radio-group" [formControl]="stockOptionCtrl">

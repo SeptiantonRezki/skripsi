@@ -344,6 +344,7 @@ export class TemplateCreateComponent {
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
+              name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
             }) : null
           }
