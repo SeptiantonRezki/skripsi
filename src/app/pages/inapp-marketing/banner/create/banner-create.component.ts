@@ -1,17 +1,26 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'underscore';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { BannerService } from '../../../../services/inapp-marketing/banner.service';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
 import * as html2canvas from 'html2canvas';
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
+import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
+import { Page } from 'app/classes/laravel-pagination';
+import { Subject } from 'rxjs';
+import { RetailerService } from 'app/services/user-management/retailer.service';
+import { CustomerService } from 'app/services/user-management/customer.service';
+import { WholesalerService } from 'app/services/user-management/wholesaler.service';
+import { GeotreeService } from 'app/services/geotree.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
 
 @Component({
   selector: 'app-banner-create',
@@ -19,7 +28,7 @@ import { Lightbox } from 'ngx-lightbox';
   styleUrls: ['./banner-create.component.scss']
 })
 export class BannerCreateComponent {
-
+  formFilter: FormGroup;
   onLoad: boolean;
   loadingIndicator: boolean;
   showLoading: Boolean;
@@ -61,19 +70,50 @@ export class BannerCreateComponent {
   formBannerErrors: any;
 
   public options: Object = Config.FROALA_CONFIG;
+  audienceSelected: any[] = [];
+  dialogRef: any;
+
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild("activeCell")
+  @ViewChild(DatatableComponent)
+  table: DatatableComponent;
+  activeCellTemp: TemplateRef<any>;
+  SelecectionType = SelectionType;
+
+  rows: any[];
+  selected: any[] = [];
+  id: any[];
+  reorderable = true;
+  pagination: Page = new Page();
+
+  keyUp = new Subject<string>();
+  areaType: any[] = [];
+
+  // 2 geotree property
+  endArea: String;
+  area_id_list: any = [];
+  lastLevel: any;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
     private dialogService: DialogService,
     private dataService: DataService,
     private bannerService: BannerService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private _lightbox: Lightbox
+    private _lightbox: Lightbox,
+    private retailerService: RetailerService,
+    private customerService: CustomerService,
+    private wholesalerService: WholesalerService,
+    private geotreeService: GeotreeService
   ) {
     this.adapter.setLocale('id');
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    this.areaType = this.dataService.getDecryptedProfile()['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
+    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.customAge = false;
     // this.validComboDrag = true;
 
@@ -130,8 +170,9 @@ export class BannerCreateComponent {
       // is_smoker: this.formBuilder.array([]),
       is_smoker: ["both"],
       gender: ["both"],
-      age_consumer_from: ["", Validators.required],
-      age_consumer_to: ["", Validators.required],
+      age_consumer_from: [""],
+      age_consumer_to: [""],
+      is_target_audience: [false],
       banner_selected: this.formBuilder.group({
         "id": [""],
         "name": [""],
@@ -141,7 +182,19 @@ export class BannerCreateComponent {
       })
     })
 
+    this.formFilter = this.formBuilder.group({
+      national: [""],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
+    })
+
     this.formBannerGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
+      this.selected.splice(0, this.selected.length);
+      this.audienceSelected = [];
       if (res === 'retailer') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         this.formBannerGroup.controls['age_consumer_from'].disable();
@@ -153,6 +206,9 @@ export class BannerCreateComponent {
         this.formBannerGroup.controls['age_consumer_to'].enable();
         this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
       }
+      if (this.formBannerGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+      };
       this.formBannerGroup.controls['landing_page'].setValue('');
     });
 
@@ -196,11 +252,21 @@ export class BannerCreateComponent {
         this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
         this.formBannerGroup.updateValueAndValidity();
       }
+      if (this.formBannerGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
       this.formBannerGroup.updateValueAndValidity();
+      if (this.formBannerGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
     })
 
     this.formBannerGroup.controls['url_iframe'].disable();
@@ -210,6 +276,7 @@ export class BannerCreateComponent {
 
     this.setMinDate();
     this.addArea();
+    this.initAreaV2();
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
@@ -221,7 +288,363 @@ export class BannerCreateComponent {
 
     this.formBannerGroup.controls['status'].valueChanges.subscribe(res => {
       this.statusChange = true;
-    })
+    });
+
+    this.formFilter.get('zone').valueChanges.subscribe(res => {
+      console.log('zone', res);
+      if (res) {
+        this.getAudienceAreaV2('region', res);
+        this.getAudience();
+      }
+    });
+    this.formFilter.get('region').valueChanges.subscribe(res => {
+      console.log('region', res);
+      if (res) {
+        this.getAudienceAreaV2('area', res);
+        this.getAudience();
+      }
+    });
+    this.formFilter.get('area').valueChanges.subscribe(res => {
+      console.log('area', res, this.formFilter.value['area']);
+      if (res) {
+        this.getAudienceAreaV2('salespoint', res);
+        this.getAudience();
+      }
+    });
+    this.formFilter.get('salespoint').valueChanges.subscribe(res => {
+      console.log('salespoint', res);
+      if (res) {
+        this.getAudienceAreaV2('district', res);
+        this.getAudience();
+      }
+    });
+    this.formFilter.get('district').valueChanges.subscribe(res => {
+      console.log('district', res);
+      if (res) {
+        this.getAudienceAreaV2('territory', res);
+        this.getAudience();
+      }
+    });
+    this.formFilter.get('territory').valueChanges.subscribe(res => {
+      console.log('territory', res);
+      if (res) {
+        // this.getAudienceAreaV2('territory', res);
+        this.getAudience();
+      }
+    });
+  }
+
+  initAreaV2() {
+    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+    this.geotreeService.getFilter2Geotree(areas);
+    let sameArea = this.geotreeService.diffLevelStarted;
+    let areasDisabled = this.geotreeService.disableArea(sameArea);
+    this.lastLevel = areasDisabled;
+    let lastLevelDisabled = null;
+    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+
+    if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
+      this.formFilter.get('national').setValue(1);
+      this.formFilter.get('national').disable();
+      lastLevelDisabled = 'national';
+    }
+    areas.map((area, index) => {
+      area.map((level, i) => {
+        let level_desc = level.level_desc;
+        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
+        if (lastDiffLevelIndex > levelIndex - 2) {
+          if (!this.list[level.type]) this.list[level.type] = [];
+          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
+            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
+            console.log('ff value', this.formFilter.value);
+            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
+            if (sameArea.level_desc === level.type) {
+              lastLevelDisabled = level.type;
+
+              this.formFilter.get(this.parseArea(level.type)).disable();
+            }
+
+            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
+            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
+            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+          }
+
+          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
+          level['area_type'] = `area_${index + 1}`;
+          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
+            ...this.list[this.parseArea(level.type)],
+            level
+          ];
+          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+
+          if (i === area.length - 1) {
+            this.endArea = this.parseArea(level.type);
+            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          }
+        }
+      });
+    });
+
+    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
+    // mutableAreas.areas.map((ar, i) => {
+    //   this.list[ar].splice(1, 1);
+    // });
+  }
+
+  parseArea(type) {
+    // return type === 'division' ? 'zone' : type;
+    switch (type) {
+      case 'division':
+        return 'zone';
+      case 'teritory':
+      case 'territory':
+        return 'territory';
+      default:
+        return type;
+    }
+  }
+
+  getAudienceAreaV2(selection, id, event?) {
+    let item: any;
+    let fd = new FormData();
+    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
+    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
+    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+      fd.append('area_id[]', areaSelected[0].value);
+    } else if (areaSelected.length > 0) {
+      if (areaSelected[0].value !== "") {
+        areaSelected[0].value.map(ar => {
+          fd.append('area_id[]', ar);
+        })
+        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        if (areaSelected[0].value.length === 0) {
+          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          if (newAreaSelected[0].key !== 'national') {
+            newAreaSelected[0].value.map(ar => {
+              fd.append('area_id[]', ar);
+            })
+          } else {
+            fd.append('area_id[]', newAreaSelected[0].value);
+          }
+        }
+      }
+    } else {
+      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
+      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
+      // console.log('new', beforeLastLevel, areaSelected);
+      if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+        fd.append('area_id[]', areaSelected[0].value);
+      } else if (areaSelected.length > 0) {
+        if (areaSelected[0].value !== "") {
+          areaSelected[0].value.map(ar => {
+            fd.append('area_id[]', ar);
+          })
+          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          if (areaSelected[0].value.length === 0) {
+            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            if (newAreaSelected[0].key !== 'national') {
+              newAreaSelected[0].value.map(ar => {
+                fd.append('area_id[]', ar);
+              })
+            } else {
+              fd.append('area_id[]', newAreaSelected[0].value);
+            }
+          }
+        }
+      }
+    }
+
+    fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
+    let thisAreaOnSet = [];
+    let areaNumber = 0;
+    let expectedArea = [];
+    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
+      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
+      if (this.areaFromLogin[1]) thisAreaOnSet = [
+        ...thisAreaOnSet,
+        ...this.areaFromLogin[1]
+      ];
+
+      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
+      if (id && id.length > 1) {
+        areaNumber = 1;
+      }
+
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      // console.log('on set', thisAreaOnSet, selection, id);
+    }
+
+
+    switch (this.parseArea(selection)) {
+      case 'zone':
+        // area = this.formFilter.get(selection).value;
+        this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+          // this.list[this.parseArea(selection)] = res.data;
+          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
+          // fd = null
+        });
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
+        break;
+      case 'region':
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
+        } else {
+          this.list['region'] = [];
+        }
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'area':
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('area hitted', selection, item, this.list['region']);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
+        } else {
+          this.list['area'] = [];
+        }
+
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'salespoint':
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('item', item);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
+        } else {
+          this.list['salespoint'] = [];
+        }
+
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'district':
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
+        } else {
+          this.list['district'] = [];
+        }
+
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['territory'] = [];
+        break;
+      case 'territory':
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
+        } else {
+          this.list['territory'] = [];
+        }
+
+        this.formFilter.get('territory').setValue('');
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  filteringGeotree(areaList) {
+    return areaList;
   }
 
   createArea(): FormGroup {
@@ -264,7 +687,7 @@ export class BannerCreateComponent {
 
   initArea(index) {
     let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
-    this.areaFromLogin.map(item => {
+    this.areaType.map(item => {
       switch (item.type.trim()) {
         case 'national':
           wilayah.at(index).get('national').disable();
@@ -677,6 +1100,20 @@ export class BannerCreateComponent {
       // areas.map(item => {
       //   fd.append('areas[]', item)
       // })
+      if (body.user_group === 'retailer') {
+        fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
+      }
+
+      if (this.formBannerGroup.get("is_target_audience").value) {
+        fd.append('target_audience', "1");
+        this.audienceSelected.map(aud => {
+          fd.append('target_audiences[]', aud.id)
+        });
+      } else {
+        if (fd.has('target_audience')) {
+          fd.delete('target_audience');
+        }
+      }
 
       this.bannerService.create(fd).subscribe(
         res => {
@@ -766,6 +1203,496 @@ export class BannerCreateComponent {
     };
 
     this._lightbox.open([album], 0);
+  }
+
+  checkAreaLocation(area, lastSelfArea) {
+    let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
+    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
+    let indexAreaSelected = areaList.indexOf(area.key);
+    let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
+    let newLastSelfArea = []
+    // console.log('[checkAreaLocation:area]', area);
+    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
+    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
+    if (area.value !== 1) {
+      // console.log('[checkAreaLocation:list]', this.list[area.key]);
+      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
+      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
+      if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
+        let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
+        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
+        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
+        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
+      }
+    }
+
+    return newLastSelfArea;
+  }
+
+  getAudience() {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
+    console.log('keyAudience', keyAudience);
+    this.dataService.showLoading(true);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+
+    // console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+          else this.pagination['last_self_area'] = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+
+    this.pagination['audience'] = this.formBannerGroup.get("user_group").value;
+    if (this.formBannerGroup.controls['user_group'].value === 'retailer') {
+      this.pagination["type"] = this.formBannerGroup.controls['group_type'].value;
+    } else {
+      if (this.pagination["type"]) delete this.pagination["type"];
+    }
+
+    if (this.formBannerGroup.get("user_group").value === 'retailer') {
+      // this.pagination['retailer_type'] = this.formBannerGroup.get("group_type").value;
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+    }
+    if (this.formBannerGroup.get("user_group").value === 'customer') {
+      delete this.pagination['customer_smoking'];
+      delete this.pagination['customer_gender'];
+      delete this.pagination['customer_age_from'];
+      delete this.pagination['customer_age_to'];
+      delete this.pagination['retailer_type'];
+    }
+    if (this.formBannerGroup.get("user_group").value === 'customer') {
+      delete this.pagination['type'];
+      this.pagination['customer_smoking'] = this.formBannerGroup.get("is_smoker").value;
+      this.pagination['customer_gender'] = this.formBannerGroup.get("gender").value;
+      this.pagination['customer_age_from'] = this.formBannerGroup.get("age_consumer_from").value;
+      this.pagination['customer_age_to'] = this.formBannerGroup.get("age_consumer_to").value;
+    }
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err', err);
+      this.dataService.showLoading(false);
+    });
+  }
+
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  setPage(pageInfo) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+
+    // console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+          else this.pagination['last_self_area'] = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+
+    // console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+          else this.pagination['last_self_area'] = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  updateFilter(string) {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
+    this.loadingIndicator = true;
+    this.table.offset = 0;
+    this.pagination.search = string;
+    this.pagination.page = 1;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = areaSelected[areaSelected.length - 1].value;
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+
+    // console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
+          else this.pagination['last_self_area'] = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+
+    this.bannerService[keyAudience](this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
+  displayCheck(row) {
+    return row.name !== 'Ethel Price';
+  }
+
+  onSelectAudience(event, row) {
+    console.log('onnnnnn', event);
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      this.audienceSelected.splice(index, 1);
+    } else {
+      this.audienceSelected.push(row);
+    }
+    this.onSelect({ selected: this.audienceSelected });
+    console.log('asdasd', this.audienceSelected);
+  }
+
+  selectCheck(row, column, value) {
+    console.log('selectcheck', row, column, value);
+    return row.id !== null;
+  }
+
+  bindSelector(isSelected, row) {
+    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    if (index > - 1) {
+      return true;
+    }
+    return false;
+  }
+
+  isTargetAudience(event) {
+    if (event.checked) this.getAudience();
+  }
+
+  async export() {
+    let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'exportAudience' : 'exportCustomerAudience';
+    if (this.audienceSelected.length === 0) {
+      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
+      return;
+    }
+    this.dataService.showLoading(true);
+    let body = this.audienceSelected.map(aud => aud.id);
+    // this.exportAccessCashier = true;
+    try {
+      const response = await this.bannerService[keyAudience]({ selected: body, audience: this.formBannerGroup.get("user_group").value }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Banner_${this.formBannerGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      // this.exportAccessCashier = false;
+      this.dataService.showLoading(false);
+    } catch (error) {
+      // this.exportAccessCashier = false;
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { audience: this.formBannerGroup.get("user_group").value };
+
+    this.dialogRef = this.dialog.open(ImportAudienceBannerDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.audienceSelected = this.audienceSelected.concat(response);
+        this.onSelect({ selected: this.audienceSelected });
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
   }
 
 }

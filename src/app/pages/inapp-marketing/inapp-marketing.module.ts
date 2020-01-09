@@ -22,7 +22,9 @@ import {
   MatProgressSpinnerModule,
   MatDatepickerModule,
   MatTooltipModule,
-  MatRadioModule
+  MatRadioModule,
+  MatDialogModule,
+  MatToolbarModule
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -38,6 +40,7 @@ import {
 import { ngfModule } from "angular-file";
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 import { LightboxModule } from 'ngx-lightbox';
+import { ImportAudienceBannerDialogComponent } from './banner/import-audience-banner-dialog/import-audience-banner-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -73,7 +76,9 @@ export const MY_FORMATS = {
     ngfModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
-    LightboxModule
+    LightboxModule,
+    MatDialogModule,
+    MatToolbarModule
   ],
   declarations: [
     BannerIndexComponent,
@@ -81,7 +86,8 @@ export const MY_FORMATS = {
     BannerEditComponent,
     LandingPageIndexComponent,
     LandingPageCreateComponent,
-    LandingPageEditComponent
+    LandingPageEditComponent,
+    ImportAudienceBannerDialogComponent
   ],
   exports: [
     BannerIndexComponent,
@@ -100,6 +106,7 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
-  ]
+  ],
+  entryComponents: [ImportAudienceBannerDialogComponent]
 })
-export class InappMarketingModule {}
+export class InappMarketingModule { }

@@ -977,7 +977,7 @@ export class PopupNotificationEditComponent {
 
   initArea(index) {
     let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    this.areaFromLogin.map(item => {
+    this.areaType.map(item => {
       switch (item.type.trim()) {
         case 'national':
           wilayah.at(index).get('national').disable();
@@ -1544,7 +1544,7 @@ export class PopupNotificationEditComponent {
       this.dataService.showLoading(false);
     }, err => {
       console.log('err', err);
-      this.dataService.showLoading(true);
+      this.dataService.showLoading(false);
     });
   }
 
