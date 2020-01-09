@@ -9,7 +9,8 @@
         <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
           <h2>Detil Pengatur Jadwal Trade Program</h2>
           <div *ngIf="dataScheduler['audience']">
-            <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px" (click)="export()">
+            <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px"
+              (click)="export()">
               <mat-icon>arrow_upward</mat-icon>
               EXPORT COIN
             </button>
@@ -23,15 +24,15 @@
         <div class="ayo-middle py-24" fxLayout="column">
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang" [value]="dataScheduler['name']"
-                name="name" disabled>
+              <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang"
+                [value]="dataScheduler['name']" name="name" disabled>
             </mat-form-field>
           </div>
 
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select [value]="dataScheduler['trade_creator_id']" placeholder="Trade Program" name="trade_creator_id"
-                disabled>
+              <mat-select [value]="dataScheduler['trade_creator_id']" placeholder="Trade Program"
+                name="trade_creator_id" disabled>
                 <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -48,8 +49,8 @@
               <mat-form-field fxFlex="45%" class="is-light form-primary">
                 <input matInput type="text" placeholder="Audience / Grup" [value]="dataScheduler['audience'].name"
                   disabled>
-                <button mat-button matTooltip="Lihat daftar audience" (click)="openListAudience(dataScheduler['audience'])"
-                  matSuffix mat-icon-button>
+                <button mat-button matTooltip="Lihat daftar audience"
+                  (click)="openListAudience(dataScheduler['audience'])" matSuffix mat-icon-button>
                   <mat-icon class="s-24">view_list</mat-icon>
                 </button>
               </mat-form-field>
@@ -65,12 +66,12 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Permintaan Dana" [value]="dataScheduler['budget_request'] | rupiahFormater"
-                  disabled>
+                <input matInput type="text" placeholder="Permintaan Dana"
+                  [value]="dataScheduler['budget_request'] | rupiahFormater" disabled>
               </mat-form-field>
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Dana Trade Program" [value]="dataScheduler['budget_trade_program'] | rupiahFormater"
-                  disabled>
+                <input matInput type="text" placeholder="Dana Trade Program"
+                  [value]="dataScheduler['budget_trade_program'] | rupiahFormater" disabled>
               </mat-form-field>
             </div>
           </div>
@@ -82,8 +83,15 @@
                 <div fxFlex="50">
                   <h3 class="">Template Tugas</h3>
                 </div>
-                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <h3><mat-slide-toggle disabled [checked]="item.is_verification">Push to FF?</mat-slide-toggle></h3>
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                  fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <h3>
+                    <mat-slide-toggle disabled [checked]="item.is_verification_toggle">Perlu Verifikasi
+                    </mat-slide-toggle>
+                  </h3>
+                  <h3>
+                    <mat-slide-toggle disabled [checked]="item.is_verification">Push to FF?</mat-slide-toggle>
+                  </h3>
                 </div>
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
@@ -92,13 +100,13 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.coin_delivered" placeholder="Nilai Coin Tugas Terkirim"
-                    disabled>
+                  <input matInput type="text" min="0" [value]="item.coin_delivered"
+                    placeholder="Nilai Coin Tugas Terkirim" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.coin_approved" placeholder="Nilai Coin Tugas Disetujui"
-                    disabled>
+                  <input matInput type="text" min="0" [value]="item.coin_approved"
+                    placeholder="Nilai Coin Tugas Disetujui" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput type="text" [value]="item.start_date | dateToMoment" placeholder="Tanggal Mulai"
@@ -116,29 +124,31 @@
               <mat-divider style="border-top-style: dashed"></mat-divider>
               <h3 class="px-24 text-bold">Backup Task</h3>
               <mat-divider style="border-top-style: dashed"></mat-divider>
-                
-              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start end">
-                <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Template Tugas (Backup)" [value]="item.backup?.name" disabled>
-                </mat-form-field>
 
-                <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.backup?.coin_delivered" placeholder="Nilai Coin Tugas Terkirim (Backup)"
+              <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px"
+                fxLayoutAlign="start end">
+                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Template Tugas (Backup)" [value]="item.backup?.name"
                     disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.backup?.coin_approved" placeholder="Nilai Coin Tugas Disetujui (Backup)"
-                    disabled>
+                  <input matInput type="text" min="0" [value]="item.backup?.coin_delivered"
+                    placeholder="Nilai Coin Tugas Terkirim (Backup)" disabled>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="22%" class="is-light form-primary">
+                  <input matInput type="text" min="0" [value]="item.backup?.coin_approved"
+                    placeholder="Nilai Coin Tugas Disetujui (Backup)" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.backup?.start_date | dateToMoment" placeholder="Tanggal Mulai (Backup)"
-                    disabled>
+                  <input matInput type="text" [value]="item.backup?.start_date | dateToMoment"
+                    placeholder="Tanggal Mulai (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.backup?.end_date | dateToMoment" placeholder="Tanggal Berakhir (Backup)"
-                    disabled>
+                  <input matInput type="text" [value]="item.backup?.end_date | dateToMoment"
+                    placeholder="Tanggal Berakhir (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
@@ -146,7 +156,8 @@
           </div>
         </div>
 
-        <div class="confirm p-24" *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] === 'draft'"
+        <div class="confirm p-24"
+          *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] === 'draft'"
           fxLayout="row" fxLayoutGap="20px">
           <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
             REJECT
@@ -157,8 +168,8 @@
           </button>
         </div>
 
-        <div class="confirm p-24" *ngIf="dataScheduler['status_scheduler'] === 'publish'"
-          fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm p-24" *ngIf="dataScheduler['status_scheduler'] === 'publish'" fxLayout="row"
+          fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit('unpublish')" fxFlex="20">
             UNPUBLISH
           </button>

@@ -57,6 +57,9 @@
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <h3>
+                    <mat-slide-toggle formControlName="is_verification_toggle">Perlu Verifikasi</mat-slide-toggle>
+                  </h3>
+                  <h3>
                     <mat-slide-toggle formControlName="is_backup" (change)="backupTask($event, i)">Backup Task?
                     </mat-slide-toggle>
                   </h3>
