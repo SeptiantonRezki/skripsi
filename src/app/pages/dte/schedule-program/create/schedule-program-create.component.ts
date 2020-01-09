@@ -325,7 +325,10 @@ export class ScheduleProgramCreateComponent {
       template.get('is_notif').disable();
 
       template.get('is_verification').setValue(false);
-      template.get('is_verification').disable();
+      // template.get('is_verification').disable();
+
+      template.get('is_verification_toggle').setValue(false);
+      // template.get('is_verification_toggle').disable();
 
       template.updateValueAndValidity();
 
@@ -341,12 +344,36 @@ export class ScheduleProgramCreateComponent {
 
       template.get('is_verification').enable();
       template.get('is_notif').enable();
+      // template.get('is_verification_toggle').enable();
 
       template.get('task_template_id_backup').disable();
       template.get('coin_delivered_backup').disable();
       template.get('coin_approved_backup').disable();
       template.get('start_date_backup').disable();
       template.get('end_date_backup').disable();
+    }
+  }
+
+  isVerif(event, i) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(i);
+
+    if (event.checked) {
+      template.get('is_verification').setValue(false);
+      template.get('is_backup').setValue(false);
+      template.updateValueAndValidity();
+    }
+
+  }
+
+  isVerifFieldForce(event, i) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(i);
+
+    if (event.checked) {
+      template.get('is_verification_toggle').setValue(false);
+      template.get('is_backup').setValue(false);
+      template.updateValueAndValidity();
     }
   }
 
