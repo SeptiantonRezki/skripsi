@@ -137,6 +137,10 @@ export class ScheduleProgramCreateComponent {
       });
   }
 
+  onChangeTemplateTask(event, i) {
+    console.log('eventasdjaslkda', event, i);
+  }
+
   filteringTP() {
     if (!this.listTradeProgram) {
       return;

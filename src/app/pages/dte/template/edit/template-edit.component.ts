@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,7 +9,9 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { UploadImageComponent } from '../dialog/upload-image/upload-image.component';
 import { DataService } from '../../../../services/data.service';
 import * as _ from 'underscore';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { ProductService } from 'app/services/sku-management/product.service';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-template-edit',
@@ -30,7 +32,8 @@ export class TemplateEditComponent {
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
-    { name: "Pilihan Tanggal", value: "date", icon: "date_range" }
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
 
   @ViewChild("autosize")
@@ -39,6 +42,16 @@ export class TemplateEditComponent {
   saveData: Boolean;
   valueChange: Boolean;
   isDetail: Boolean;
+
+  product: FormControl = new FormControl("");
+  listProductSkuBank: Array<any> = [];
+  filteredSkuOptions: Observable<string[]>;
+  keyUp = new Subject<string>();
+  stockOptionCtrl: FormControl = new FormControl();
+  stockOptions = ["Ada", "Tidak Ada"];
+  directBelanja: Boolean;
+  listDirectBelanja: any = {};
+  listProductSelected: any = {};
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -55,13 +68,14 @@ export class TemplateEditComponent {
   }
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private dialog: MatDialog, 
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
     private taskTemplateService: TemplateTaskService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private productService: ProductService
   ) {
     this.saveData = false;
     this.templateTaskFormError = {
@@ -78,10 +92,19 @@ export class TemplateEditComponent {
   }
 
   ngOnInit() {
+    this.keyUp.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        console.log('reas ngetik cuk', res);
+        this.getListProduct(res);
+        this.resetField(res);
+      });
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
-      image: [""], 
+      image: [""],
       material: false,
       material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
@@ -93,13 +116,57 @@ export class TemplateEditComponent {
     })
 
     if (this.detailTask.material === 'no')
-    this.templateTaskForm.get('material_description').disable();
+      this.templateTaskForm.get('material_description').disable();
 
     this.setValue();
 
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+  }
+
+  _filterSku(value): any[] {
+    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
+  }
+
+  getListProduct(param?): void {
+    console.log(param);
+    if (param.length >= 3) {
+      this.productService.getProductSkuBank(param).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+    }
+  }
+
+  getProductObj(event, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log('event', event, index);
+    if (event.source.selected) {
+      questions.at(index).get('question').setValue(`Apakah Anda Memiliki stok ${event.source.value.name} ?`)
+      questions.at(index).get('question_image').setValue(event.source.value.image ? event.source.value.image_url : "");
+      console.log('current', this.listProductSkuBank[index]);
+      this.listProductSelected[index] = {
+        ...this.listProductSelected[index],
+        ...event.source.value
+      };
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
   }
 
   setValue() {
@@ -111,7 +178,20 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
-    this.detailTask['questions'].map(item => {
+    this.detailTask['questions'].map((item, index) => {
+      if (item.type === 'stock_check') {
+        console.log('stock check')
+        this.listProductSelected[index] = {
+          product: new FormControl(item.stock_check_data.name)
+        }
+
+        // this.listProductSelected[index] = this.formBuilder.group({
+        //   product: item.stock_check_data.name
+        // });
+
+        // this.listProductSelected[index].product.updateValueAndValidity();
+
+      }
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
@@ -124,8 +204,10 @@ export class TemplateEditComponent {
             return this.formBuilder.group({ option: item })
           })
         )
-      }))
-    })
+      }));
+      this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
+    });
+    console.log('asdakdj', this.listProductSelected);
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     })
@@ -136,26 +218,26 @@ export class TemplateEditComponent {
   addAdditional(idx) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
-    
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length+1}` }));
+
+    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}` }));
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
 
     if (type === 'rejected_reason_choices' && event.target.value === "") {
       let rejected_reason = this.templateTaskForm.get(type) as FormArray;
-      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx+1))
+      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx + 1))
     }
-    
+
     if (questionsIdx !== undefined && additionalIdx === undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       return questions.at(questionsIdx).get('question').setValue(text);
     }
 
-    if(questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
+    if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx+1));
+      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
     }
 
     if (event.target.value === "") {
@@ -181,7 +263,7 @@ export class TemplateEditComponent {
       additional.push(this.createAdditional());
     }
 
-    if(additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
+    if (additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
@@ -192,10 +274,10 @@ export class TemplateEditComponent {
 
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    let newId = _.max(questions.value, function(item) { return item.id });
-    
+    let newId = _.max(questions.value, function (item) { return item.id });
+
     questions.push(this.formBuilder.group({
-      id: newId.id+1,
+      id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
@@ -204,11 +286,13 @@ export class TemplateEditComponent {
       // others: false,
       // required: false
     }))
+    this.listDirectBelanja[questions.length - 1] = false;
+    this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
   }
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length+1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
   }
 
   createAdditional(): FormGroup {
@@ -222,6 +306,10 @@ export class TemplateEditComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     questions.removeAt(idx);
+    if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
+    if (this.listProductSelected[idx]) {
+      delete this.listProductSelected[idx];
+    }
   }
 
   deleteReason(idx): void {
@@ -255,9 +343,15 @@ export class TemplateEditComponent {
             id: item.id,
             question: item.question,
             type: item.type,
+            required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
-            additional: item.additional.map(item => item.option)
+            additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
+            stock_check_data: item.type === 'stock_check' ? ({
+              sku_id: this.listProductSelected[index].sku_id,
+              name: this.listProductSelected[index].name,
+              directly: this.listDirectBelanja[index]
+            }) : null
           }
           // }
           // return {
@@ -292,7 +386,7 @@ export class TemplateEditComponent {
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if(this.templateTaskForm.get('questions').invalid)
+      if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
     }
   }
@@ -307,8 +401,8 @@ export class TemplateEditComponent {
 
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { 
-      if(response) {
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
         switch (type) {
           case 'master':
             this.templateTaskForm.get('image').setValue(response);
@@ -336,6 +430,10 @@ export class TemplateEditComponent {
       default:
         break;
     }
+  }
+
+  onDirectBelanja(idx) {
+    this.listDirectBelanja[idx] = !this.listDirectBelanja[idx];
   }
 
 }

@@ -1,7 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Buat Tugas'">
-    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">SIMPAN</button>
+    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+      type="button">SIMPAN</button>
   </page-content-header>
   <!-- / HEADER -->
 
@@ -25,7 +26,8 @@
                 class="titletextareaInput"></textarea> -->
               <textarea matInput placeholder="Judul Tugas" formControlName="name" style="font-size: 34px;"
                 cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
-              <mat-error *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
+              <mat-error
+                *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
                 Judul Tugas harus diisi
               </mat-error>
             </mat-form-field>
@@ -37,7 +39,8 @@
                 style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea> -->
               <textarea matInput formControlName="description" placeholder="Deskripsi Tugas" style="font-size: 13px;"
                 cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea>
-              <mat-error *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
+              <mat-error
+                *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
                 Deskripsi Tugas harus diisi
               </mat-error>
             </mat-form-field>
@@ -45,7 +48,8 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <section class="required-section secondary-text">
-              <mat-checkbox formControlName="material" (change)="changeValue('material', 'material_description')">Tambahkan
+              <mat-checkbox formControlName="material" (change)="changeValue('material', 'material_description')">
+                Tambahkan
                 Material?</mat-checkbox>
             </section>
           </div>
@@ -55,15 +59,18 @@
               <!-- <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
                 style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                 [disabled]="!templateTaskForm.get('material').value"></textarea> -->
-              <textarea matInput formControlName="material_description" placeholder="Jenis Material" style="font-size: 13px;"
-                cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput" [disabled]="!templateTaskForm.get('material').value"></textarea>
-              <mat-error *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
+              <textarea matInput formControlName="material_description" placeholder="Jenis Material"
+                style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
+                [disabled]="!templateTaskForm.get('material').value"></textarea>
+              <mat-error
+                *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
                 Jenis Material Tugas harus diisi
               </mat-error>
             </mat-form-field>
           </div>
 
-          <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto" *ngIf="templateTaskForm.get('image').value">
+          <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto"
+            *ngIf="templateTaskForm.get('image').value">
             <div fxLayout="row" fxLayoutAlign="start start">
               <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
                 <mat-icon>more_vert</mat-icon>
@@ -82,15 +89,31 @@
             <img class="template-task-image" [src]="templateTaskForm.get('image').value">
           </div>
 
-          <div formArrayName="questions" *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
+          <div formArrayName="questions"
+            *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
             <div [formGroupName]="i" class="py-24">
               <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
-                <mat-form-field fxFlex="68" class="question is-light">
-                  <input matInput formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', 'Pertanyaan', i)">
+                <mat-form-field fxFlex="68" class="question is-light"
+                  *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                  <input matInput formControlName="question" (focus)="$event.target.select()"
+                    (change)="defaultValue($event, 'questions', 'Pertanyaan', i)">
                 </mat-form-field>
 
-                <button mat-icon-button fxFlex="5" matTooltip="Sisipkan Gambar" matTooltipPosition="below" class="add-image secondary-text"
-                  (click)="uploadImage('question', i)">
+                <mat-form-field fxFlex="68" class="question is-light"
+                  *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
+                  <input matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
+                    [formControl]="listProductSelected[i].product" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
+                    <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                      (onSelectionChange)="getProductObj($event, i)">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <button mat-icon-button fxFlex="5" matTooltip="Sisipkan Gambar" matTooltipPosition="below"
+                  class="add-image secondary-text" (click)="uploadImage('question', i)"
+                  *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                   <mat-icon class="secondary-text">photo</mat-icon>
                 </button>
 
@@ -112,7 +135,8 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto" *ngIf="item.get('question_image').value">
+              <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
+                *ngIf="item.get('question_image').value && item.get('type').value !== 'stock_check'">
                 <div fxLayout="row" fxLayoutAlign="start start">
                   <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
                     <mat-icon>more_vert</mat-icon>
@@ -163,11 +187,13 @@
                     <mat-icon matSuffix>dialpad</mat-icon>
                   </mat-form-field>
                 </ng-container>
-                <ng-container *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date'" >
+                <ng-container
+                  *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date'">
                   <div fxFlex="100" fxLayout="column">
-                    <div formArrayName="additional" *ngFor="let additional of item.get('additional')['controls']; let j=index;">
-                      <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
-                        [formGroupName]="j">
+                    <div formArrayName="additional"
+                      *ngFor="let additional of item.get('additional')['controls']; let j=index;">
+                      <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
+                        fxFlex="1 0 auto" [formGroupName]="j">
                         <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                           'radio' ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
@@ -177,10 +203,29 @@
                         </mat-form-field>
                         <div fxFlex="10"></div>
                         <button *ngIf="item.get('additional').value.length > 1" (click)="deleteAdditional(i, j)"
-                          mat-icon-button fxFlex="5" matTooltip="Hapus" matTooltipPosition="below" class="secondary-text">
+                          mat-icon-button fxFlex="5" matTooltip="Hapus" matTooltipPosition="below"
+                          class="secondary-text">
                           <mat-icon class="secondary-text">close</mat-icon>
                         </button>
                       </div>
+                    </div>
+                    <div fxFlex="80" class="py-2" fxLayout="row" fxFlex="1 0 auto"
+                      *ngIf="item.get('typeSelection').value['value'] == 'stock_check'">
+                      <!-- <mat-radio-group fxFlex="50" aria-labelledby="example-radio-group-label"
+                        class="example-radio-group" [formControl]="stockOptionCtrl">
+                        <mat-radio-button class="example-radio-button" *ngFor="let stockOption of stockOptions"
+                          [value]="stockOption">
+                          {{stockOption}}
+                        </mat-radio-button>
+                      </mat-radio-group> -->
+                      <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
+                        listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
+                        style="margin-top: 5px;margin-left: 3px;">Direct
+                        to
+                        Belanja</span>
+                      <!-- <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="center" fxFlex="1 0 auto"
+                        [formGroupName]="j">
+                      </div> -->
                     </div>
                     <!-- <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto"
                       *ngIf="item.others">
@@ -196,7 +241,8 @@
                         <mat-icon class="secondary-text">close</mat-icon>
                       </button>
                     </div> -->
-                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
+                      fxFlex="1 0 auto" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                       <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                         'radio' ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
@@ -218,8 +264,8 @@
                   <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                 </section>
                 <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div> -->
-                <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)" matTooltipPosition="below"
-                  class="secondary-text">
+                <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)"
+                  matTooltipPosition="below" class="secondary-text">
                   <mat-icon class="secondary-text">delete</mat-icon>
                 </button>
               </div>
@@ -227,15 +273,18 @@
           </div>
           <div class="footer pt-48">
             <div class="note">Alasan Menolak Pilihan</div>
-            <div formArrayName="rejected_reason_choices" *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
-              <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto">
+            <div formArrayName="rejected_reason_choices"
+              *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
+              <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start"
+                fxFlex="1 0 auto">
                 <mat-form-field fxFlex="50" class="question is-light secondary-text">
                   <input matInput style="font-size: 13px;" formControlName="reason" (focus)="$event.target.select()"
                     (change)="defaultValue($event, 'rejected_reason_choices', 'Alasan ', k)">
                 </mat-form-field>
 
                 <button mat-icon-button fxFlex="5" *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1"
-                  matTooltip="Hapus" matTooltipPosition="below" class="add-image secondary-text" (click)="deleteReason(k)">
+                  matTooltip="Hapus" matTooltipPosition="below" class="add-image secondary-text"
+                  (click)="deleteReason(k)">
                   <mat-icon class="secondary-text">close</mat-icon>
                 </button>
               </div>
@@ -259,7 +308,8 @@
         <!-- <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
           <mat-icon>text_fields</mat-icon>
         </button> -->
-        <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text" (click)="uploadImage('master', null)">
+        <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text"
+          (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
         </button>
       </div>

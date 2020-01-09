@@ -1,6 +1,6 @@
 import { Component, ViewChild, HostListener } from "@angular/core";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { UploadImageComponent } from "../dialog/upload-image/upload-image.component";
@@ -9,7 +9,9 @@ import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { ProductService } from "app/services/sku-management/product.service";
+import { startWith, map } from "rxjs/operators";
 
 @Component({
   selector: "app-template-create",
@@ -28,7 +30,8 @@ export class TemplateCreateComponent {
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
-    { name: "Pilihan Tanggal", value: "date", icon: "date_range" }
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
 
   @ViewChild("autosize")
@@ -37,6 +40,15 @@ export class TemplateCreateComponent {
   saveData: Boolean;
   valueChange: Boolean;
   duplicateTask: any;
+  product: FormControl = new FormControl("");
+  listProductSkuBank: Array<any> = [];
+  filteredSkuOptions: Observable<string[]>;
+  keyUp = new Subject<string>();
+  stockOptionCtrl: FormControl = new FormControl();
+  stockOptions = ["Ada", "Tidak Ada"];
+  directBelanja: Boolean;
+  listDirectBelanja: any = {};
+  listProductSelected: any = {};
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -56,7 +68,8 @@ export class TemplateCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private taskTemplateService: TemplateTaskService,
-    private dataService: DataService
+    private dataService: DataService,
+    private productService: ProductService
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
@@ -69,6 +82,16 @@ export class TemplateCreateComponent {
   }
 
   ngOnInit() {
+    this.keyUp.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        console.log('reas ngetik cuk', res);
+        this.getListProduct(res);
+        this.resetField(res);
+      });
+
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
@@ -90,6 +113,49 @@ export class TemplateCreateComponent {
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+  }
+
+  _filterSku(value): any[] {
+    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
+  }
+
+  getListProduct(param?): void {
+    console.log(param);
+    if (param.length >= 3) {
+      this.productService.getProductSkuBank(param).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+    }
+  }
+
+  getProductObj(event, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log('event', event, index);
+    if (event.source.selected) {
+      questions.at(index).get('question').setValue(`Apakah Anda Memiliki stok ${event.source.value.name} ?`)
+      questions.at(index).get('question_image').setValue(event.source.value.image ? event.source.value.image_url : "");
+      this.listProductSelected[index] = {
+        ...this.listProductSelected[index],
+        ...event.source.value
+      };
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
   }
 
   setValue() {
@@ -131,14 +197,14 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length+1}` }));
+    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}` }));
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
 
     if (type === 'rejected_reason_choices' && event.target.value === "") {
       let rejected_reason = this.templateTaskForm.get(type) as FormArray;
-      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx+1))
+      return rejected_reason.at(questionsIdx).get('reason').setValue(text + (questionsIdx + 1))
     }
 
     if (questionsIdx !== undefined && additionalIdx === undefined && event.target.value === "") {
@@ -146,10 +212,10 @@ export class TemplateCreateComponent {
       return questions.at(questionsIdx).get('question').setValue(text);
     }
 
-    if(questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
+    if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx+1));
+      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
     }
 
     if (event.target.value === "") {
@@ -175,7 +241,7 @@ export class TemplateCreateComponent {
       additional.push(this.createAdditional());
     }
 
-    if(additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
+    if (additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
@@ -197,32 +263,34 @@ export class TemplateCreateComponent {
 
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    let newId = _.max(questions.value, function(item){ return item.id })
+    let newId = _.max(questions.value, function (item) { return item.id })
     if (newId === -Infinity) newId = { id: 0 }
 
     questions.push(this.formBuilder.group({
-      id: newId.id+1,
+      id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
-      question_image: [''],
+      question_image: ['']
       // others: false,
       // required: false
     }))
+    this.listDirectBelanja[questions.length - 1] = false;
+    this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
   }
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length+1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({option: 'Opsi 1'})
+    return this.formBuilder.group({ option: 'Opsi 1' })
   }
 
   createRejectedReson(): FormGroup {
-    return this.formBuilder.group({ reason: 'Alasan 1'})
+    return this.formBuilder.group({ reason: 'Alasan 1' })
   }
 
   addOthers(idx): void {
@@ -232,6 +300,10 @@ export class TemplateCreateComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     questions.removeAt(idx);
+    if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
+    if (this.listProductSelected[idx]) {
+      delete this.listProductSelected[idx];
+    }
   }
 
   deleteReason(idx): void {
@@ -266,9 +338,15 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
+            required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
-            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : []
+            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            stock_check_data: item.type === 'stock_check' ? ({
+              sku_id: this.listProductSelected[index].sku_id,
+              name: this.listProductSelected[index].name,
+              directly: this.listDirectBelanja[index]
+            }) : null
           }
           // }
           // return {
@@ -281,7 +359,7 @@ export class TemplateCreateComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-
+      console.log(body);
       this.taskTemplateService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
@@ -300,7 +378,7 @@ export class TemplateCreateComponent {
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if(this.templateTaskForm.get('questions').invalid)
+      if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
     }
   }
@@ -316,7 +394,7 @@ export class TemplateCreateComponent {
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
-      if(response) {
+      if (response) {
         switch (type) {
           case 'master':
             this.templateTaskForm.get('image').setValue(response);
@@ -344,5 +422,10 @@ export class TemplateCreateComponent {
       default:
         break;
     }
+  }
+
+  onDirectBelanja(idx) {
+    console.log(this.listDirectBelanja, idx);
+    this.listDirectBelanja[idx] = !this.listDirectBelanja[idx];
   }
 }

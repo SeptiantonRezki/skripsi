@@ -120,7 +120,7 @@ export const MY_FORMATS = {
     MatDividerModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
     TemplateIndexComponent,

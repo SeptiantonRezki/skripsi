@@ -1,4 +1,7 @@
 :host {
+  .direct-belanja:hover {
+    cursor: pointer;
+  } 
   .content {
     form {
       width: 100%;
@@ -41,6 +44,16 @@
       .mat-form-field-infix {
         padding: 0 !important;
       }
+    }
+
+    .example-radio-group {
+      display: flex;
+      flex-direction: column;
+      margin: 15px 0;
+    }
+    
+    .example-radio-button {
+      margin: 5px;
     }
 
     .titletextareaInput {

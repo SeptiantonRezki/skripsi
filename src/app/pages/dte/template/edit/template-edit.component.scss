@@ -1,4 +1,16 @@
 :host {
+  .direct-belanja:hover {
+    cursor: pointer;
+  }
+  .example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
+  }
   .content {
     form {
       width: 100%;
