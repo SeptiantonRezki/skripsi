@@ -13,7 +13,7 @@ import { SupportComponent } from "./support/support.component";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "access",
+    redirectTo: "access/index",
     pathMatch: "full"
   },
   {

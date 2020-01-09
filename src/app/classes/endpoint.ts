@@ -369,6 +369,12 @@ export class Endpoint {
         unlike: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/unlike?content_id=${context.id}`,
         search: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/search?keyword=${context.keyword}&user=${context.user}`,
       },
+      template_message: {
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

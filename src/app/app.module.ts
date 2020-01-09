@@ -64,6 +64,7 @@ import { NavigationService } from "./services/navigation.service";
 import { CustomerService } from "./services/user-management/customer.service";
 import { GeneralService } from "./services/general.service";
 import { SupportService } from "./services/settings/support.service";
+import { TemplateMessageService } from "./services/template-message-management/template-message.service";
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
@@ -131,6 +132,7 @@ import { GeotreeService } from "./services/geotree.service";
     IdleService,
     SupportService,
     GeotreeService,
+    TemplateMessageService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
