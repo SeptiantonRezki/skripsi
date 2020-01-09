@@ -201,6 +201,17 @@
             </mat-form-field>
           </div>
 
+          <div fxLayout="row">
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
+              Toko Cabang</mat-checkbox>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 5px;"
+            *ngIf="formWs.get('branchShop').value === true">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="number" [formControl]="frmTotalBranch" placeholder="Jumlah Toko Cabang">
+            </mat-form-field>
+          </div>
+
           <!-- <mat-form-field fxFlex="100" class="is-light">
               <input matInput placeholder="Kata Sandi Baru" type="password" formControlName="password">
             </mat-form-field>
