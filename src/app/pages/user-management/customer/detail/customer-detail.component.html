@@ -9,7 +9,8 @@
       <form [formGroup]="formCustomer">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
           <h3>Detail Consumer</h3>
-          <mat-form-field [class]="formCustomer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+          <mat-form-field
+            [class]="formCustomer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
             </mat-select>
@@ -49,6 +50,9 @@
             <mat-form-field fxFlex="45" class="is-light">
               <input matInput placeholder="Kode Referensi" type="text" formControlName="refferal_code">
             </mat-form-field>
+            <mat-form-field fxFlex="45" class="is-light">
+              <input matInput placeholder="Apps Version" formControlName="version">
+            </mat-form-field>
           </div>
 
           <!-- <mat-form-field fxFlex="100" class="is-light">
@@ -79,7 +83,8 @@
             <div class="oval-coupon">
               <span>C</span>
             </div>
-            <span class="value-target-pembelian">{{formCustomer.get('total_coupon').value | rupiahFormaterWithoutRp}}</span>
+            <span
+              class="value-target-pembelian">{{formCustomer.get('total_coupon').value | rupiahFormaterWithoutRp}}</span>
           </div>
         </div>
         <div class="pb-64"></div>
