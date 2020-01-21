@@ -50,6 +50,7 @@ import { DetailRetailerComponent } from './coin/detail/detail-retailer/detail-re
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
+import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import { ProgramComponent } from './coin/index/program/program.component';
     DetailTradeProgramComponent,
     DetailRetailerComponent,
     RetailerComponent,
-    ProgramComponent
+    ProgramComponent,
+    ImportAdjustmentCoinDialogComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -106,7 +108,7 @@ import { ProgramComponent } from './coin/index/program/program.component';
     DetailTradeProgramComponent,
     DetailRetailerComponent
   ],
-  entryComponents: [ScanBarcodeDialogComponent],
+  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
   providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe]
 })
-export class SkuManagementModule {}
+export class SkuManagementModule { }

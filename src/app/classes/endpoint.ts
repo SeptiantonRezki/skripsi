@@ -259,6 +259,9 @@ export class Endpoint {
         detail_program: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin/program/${context.trade_program_id}`,
         flush: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent ? context.parent : 1}`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/dte/export-coin`,
+        import: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/adjustment/coin-retailer/preview`,
+        adjust_coin: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`
       },
       menu: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/menu`

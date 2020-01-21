@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class CoinService extends BaseService {
   public namespace = "coin";
-  constructor(http: HttpClient) { 
+  constructor(http: HttpClient) {
     super(http)
   }
 
@@ -53,5 +53,20 @@ export class CoinService extends BaseService {
   getParentArea(context?): Observable<any> {
     const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
+  }
+
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  previewImport(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import');
+    return this.postApi(url, body);
+  }
+
+  adjustCoin(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'adjust_coin');
+    return this.postApi(url, body);
   }
 }
