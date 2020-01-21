@@ -93,6 +93,7 @@
             *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
             <div [formGroupName]="i" class="py-24">
               <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                 <mat-form-field fxFlex="68" class="question is-light"
                   *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                   <input matInput formControlName="question" (focus)="$event.target.select()"
@@ -197,9 +198,22 @@
                         <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                           'radio' ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
-                        <mat-form-field fxFlex="85" class="opsi is-light">
+                        <mat-form-field [fxFlex]="item.get('typeSelection').value['value'] === 'radio' ? 30 : 85"
+                          class="opsi is-light">
                           <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
                             (change)="defaultValue($event, 'questions', 'Opsi ', i, j)">
+                        </mat-form-field>
+                        <div fxFlex="2" *ngIf="item.get('typeSelection').value['value'] === 'radio'"></div>
+                        <mat-form-field *ngIf="item.get('typeSelection').value['value'] === 'radio'" fxFlex="50"
+                          class="opsi is-light">
+                          <mat-select formControlName="next_question" placeholder="Next Question Possibility">
+                            <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">None</mat-option>
+                            <mat-option
+                              *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
+                              [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
+                              {{ possibility.question }}
+                            </mat-option>
+                          </mat-select>
                         </mat-form-field>
                         <div fxFlex="10"></div>
                         <button *ngIf="item.get('additional').value.length > 1" (click)="deleteAdditional(i, j)"

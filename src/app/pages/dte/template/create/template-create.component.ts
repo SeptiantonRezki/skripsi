@@ -12,6 +12,7 @@ import * as _ from 'underscore';
 import { Observable, Subject } from "rxjs";
 import { ProductService } from "app/services/sku-management/product.service";
 import { startWith, map } from "rxjs/operators";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-template-create",
@@ -49,6 +50,8 @@ export class TemplateCreateComponent {
   directBelanja: Boolean;
   listDirectBelanja: any = {};
   listProductSelected: any = {};
+  allQuestionList: any[] = [];
+  questionHasNext: any = {};
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -177,7 +180,7 @@ export class TemplateCreateComponent {
         // required: item.required,
         additional: this.formBuilder.array(
           item.additional.map(item => {
-            return this.formBuilder.group({ option: item })
+            return this.formBuilder.group({ option: item, next_question: '' })
           })
         )
       }))
@@ -197,7 +200,8 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}` }));
+    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '' });
+    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
@@ -215,7 +219,10 @@ export class TemplateCreateComponent {
     if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
+      additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
+      additional.at(additionalIdx).get('next_question').setValue('');
+      return;
+      // return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
     }
 
     if (event.target.value === "") {
@@ -261,6 +268,52 @@ export class TemplateCreateComponent {
     })
   }
 
+  filteringPossibilitiesQuestion(questionId) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+
+    return questions.value.filter(val => val.id !== questionId);
+  }
+
+  onPossibilitiesChange(questionPossibility, qIdx, additionalIdx) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let additionalValue = questions.at(qIdx).get('additional').value;
+    let hasNextQuestion = additionalValue.find(val => val.next_question !== '');
+    console.log('additionalValue', additionalValue, hasNextQuestion);
+
+    // this.allQuestionList[qIdx]['is_next_question'] = hasNextQuestion ? true : false;
+
+    if (questionPossibility === 'none ') {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = '';
+    } else {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = questionPossibility.id ? questionPossibility.id : '';
+    }
+
+    this.findQuestionsHasNext();
+  }
+
+  findQuestionsHasNext() {
+    // let questions = this.templateTaskForm.get('questions').value;
+    let allNexts = [];
+    this.allQuestionList.map(q => {
+      let qData = q.possibilities.filter(qa => (qa.next !== null && qa.next !== ""));
+      allNexts = [
+        ...allNexts,
+        ...qData
+      ];
+      // console.log('data', qData, q);
+      // if (qData.length > 0) {
+      //   this.questionHasNext[q.id] = true;
+      // } else {
+      //   this.questionHasNext[q.id] = false;
+      // }
+    });
+    let filteredNexts = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
+      return index === self.indexOf(elem);
+    }).map(elem => {
+      this.questionHasNext[elem] = true;
+    });
+  }
+
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id })
@@ -276,6 +329,13 @@ export class TemplateCreateComponent {
       // others: false,
       // required: false
     }))
+
+    this.allQuestionList.push({
+      id: newId.id + 1,
+      question: `Pertanyaan`,
+      is_next_question: false,
+      possibilities: [{ key: 'Opsi 1', next: '' }]
+    })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
   }
@@ -286,7 +346,7 @@ export class TemplateCreateComponent {
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({ option: 'Opsi 1' })
+    return this.formBuilder.group({ option: 'Opsi 1', next_question: '' })
   }
 
   createRejectedReson(): FormGroup {
@@ -300,10 +360,12 @@ export class TemplateCreateComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     questions.removeAt(idx);
+    this.allQuestionList.splice(idx, 1);
     if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
     if (this.listProductSelected[idx]) {
       delete this.listProductSelected[idx];
     }
+    this.findQuestionsHasNext();
   }
 
   deleteReason(idx): void {
@@ -315,7 +377,9 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx1).get('additional') as FormArray;
 
+    this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
     additional.removeAt(idx2);
+    this.findQuestionsHasNext();
   }
 
   submit(): void {
@@ -339,6 +403,11 @@ export class TemplateCreateComponent {
             question: item.question,
             type: item.type,
             required: item.type === 'stock_check' ? 1 : null,
+            is_next_question: this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false,
+            possibilities: this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+              key: item.additional[idx].option,
+              next: pos.next === "" ? null : pos.next
+            })),
             // required: item.required,
             question_image: item.question_image || '',
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
@@ -359,7 +428,7 @@ export class TemplateCreateComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-      console.log(body);
+      console.log(body, this.questionHasNext);
       this.taskTemplateService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
