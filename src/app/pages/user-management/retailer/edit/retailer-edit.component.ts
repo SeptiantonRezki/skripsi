@@ -147,6 +147,7 @@ export class RetailerEditComponent {
       type: [""],
       cashier: ["", Validators.required],
       InternalClassification: ["", Validators.required],
+      version: [""]
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -339,7 +340,8 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier
+      cashier: this.detailRetailer.cashier,
+      version: this.detailRetailer.version
     });
 
     this.formBankAccount.setValue({

@@ -136,6 +136,11 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
           </ng-template>
         </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="Application Version" prop="version" summary-template="activeCell"
+          [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version || '-'}}
+          </ng-template>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column [width]="120" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
