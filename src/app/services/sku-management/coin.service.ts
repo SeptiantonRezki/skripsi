@@ -57,7 +57,7 @@ export class CoinService extends BaseService {
 
   export(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "export");
-    return this.getBlobApi(url, queryParams);
+    return this.getBlobAsJsonApi(url, queryParams);
   }
 
   previewImport(body): Observable<any> {

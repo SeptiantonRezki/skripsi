@@ -63,14 +63,15 @@ export class ImportAdjustmentCoinDialogComponent implements OnInit {
     this.dataService.showLoading(true);
     this.coinService.previewImport(fd).subscribe(
       res => {
-        if (res && res.is_valid) {
-          this.rows = res.data;
-          // this.validData = (res.data || []).filter(item => item.is_valid).length;
-          this.dataService.showLoading(false);
-        } else {
-          this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
-          this.dataService.showLoading(false);
-        }
+        // if (res && res.data && res.data.is_valid) {
+        this.rows = res.data.data;
+        this.validData = res.data ? res.data.is_valid : false;
+        this.dataService.showLoading(false);
+        console.log('is valid', this.validData)
+        // } else {
+        //   this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+        //   this.dataService.showLoading(false);
+        // }
       },
       err => {
         this.dataService.showLoading(false);
@@ -80,6 +81,10 @@ export class ImportAdjustmentCoinDialogComponent implements OnInit {
           this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
       }
     )
+  }
+
+  gotFlag(item) {
+    if (item.flag === true) return '#C62728';
   }
 
   submit() {

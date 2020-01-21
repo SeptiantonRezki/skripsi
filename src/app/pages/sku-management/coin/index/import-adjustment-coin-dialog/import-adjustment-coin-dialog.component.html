@@ -36,29 +36,42 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>ID</th>
+            <th nowrap>No</th>
+            <th nowrap>ISMS Code</th>
+            <th nowrap>Retailer ID</th>
             <th nowrap>Name</th>
-            <th nowrap>Kode</th>
-            <th nowrap>Owner</th>
-            <th nowrap>Tipe</th>
+            <!-- <th nowrap>Status</th> -->
+            <th nowrap>Current Coin</th>
+            <th nowrap>Coin Adjusment</th>
+            <th nowrap>Reason</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows">
+          <tr *ngFor="let item of rows"
+            [ngStyle]="{ 'background-color': gotFlag(item), color: item.flag === true ? 'white' : 'black' }">
             <td nowrap>
-              {{ item.id }}
+              {{ item.no }}
+            </td>
+            <td nowrap>
+              {{ item.isms_code }}
+            </td>
+            <td nowrap>
+              {{ item.retailer_id }}
             </td>
             <td nowrap>
               {{ item.name }}
             </td>
+            <!-- <td nowrap>
+              {{ item.status }}
+            </td> -->
             <td nowrap>
-              {{ item.code }}
+              {{ item.current_coin }}
             </td>
             <td nowrap>
-              {{ item.owner }}
+              {{ item.coin }}
             </td>
             <td nowrap>
-              {{ item.type }}
+              {{ item.reason }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">
@@ -81,7 +94,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0">Kirim</button>
+          [disabled]="(rows.length === 0 || !validData)">Kirim</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>
