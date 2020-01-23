@@ -358,6 +358,8 @@ export class RetailerEditComponent {
       this.formRetailer.controls['business_code'].disable();
     }
 
+    this.formRetailer.controls['version'].disable();
+
     if (this.isDetail) {
       this.formRetailer.disable();
       this.formBankAccount.disable();

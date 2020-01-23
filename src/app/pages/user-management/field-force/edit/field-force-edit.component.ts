@@ -138,6 +138,8 @@ export class FieldForceEditComponent {
         if (this.isDetail) this.formFF.disable();
       }
     }
+    this.formFF.controls['version'].disable();
+
   }
 
   createWilayah(): FormGroup {
