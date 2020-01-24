@@ -24,6 +24,8 @@ export class TemplateEditComponent {
   templateTaskFormError: any;
   dialogRef: any;
   detailTask: any;
+  frmIsBranching: FormControl = new FormControl(false);
+  listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
 
   listChoose: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
@@ -181,9 +183,10 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
+    this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
+
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
-        console.log('stock check')
         this.listProductSelected[index] = {
           product: new FormControl(item.stock_check_data.name)
         }
@@ -203,8 +206,8 @@ export class TemplateEditComponent {
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         // required: item.required,
         additional: this.formBuilder.array(
-          item.additional.map((item, idx) => {
-            return this.formBuilder.group({ option: item, next_question: item.possibilities ? item.possibilities[idx].next : '' })
+          item.additional.map((itm, idx) => {
+            return this.formBuilder.group({ option: itm, next_question: item.possibilities ? item.possibilities[idx].next : '' })
           })
         )
       }));
@@ -212,8 +215,12 @@ export class TemplateEditComponent {
         id: item.id,
         question: item.question,
         is_next_question: item.is_next_question == 1 ? true : false,
-        possibilities: item.possibilities
+        possibilities: item.possibilities.map(pb => ({
+          ...pb,
+          isBranching: pb.next !== null ? true : false
+        }))
       });
+      console.log('aall Questions', this.templateTaskForm.get('questions').value);
       this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
     });
     console.log('asdakdj', this.listProductSelected, this.allQuestionList);
@@ -224,11 +231,15 @@ export class TemplateEditComponent {
     if (this.isDetail) this.templateTaskForm.disable();
   }
 
+  showNextQuestion(qIdx, addIdx) {
+    this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching']
+  }
+
   addAdditional(idx) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '' });
+    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
   }
 
@@ -303,7 +314,7 @@ export class TemplateEditComponent {
       id: newId.id + 1,
       question: `Pertanyaan`,
       is_next_question: false,
-      possibilities: [{ key: 'Opsi 1', next: '' }]
+      possibilities: [{ key: 'Opsi 1', next: '', isBranching: false }]
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
@@ -400,6 +411,7 @@ export class TemplateEditComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
+        is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           return {

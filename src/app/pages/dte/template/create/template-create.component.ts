@@ -23,6 +23,8 @@ export class TemplateCreateComponent {
   templateTaskForm: FormGroup;
   templateTaskFormError: any;
   dialogRef: any;
+  frmIsBranching: FormControl = new FormControl(false);
+  listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
 
   listChoose: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
@@ -200,7 +202,7 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '' });
+    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
   }
 
@@ -284,11 +286,17 @@ export class TemplateCreateComponent {
 
     if (questionPossibility === 'none ') {
       this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = '';
+    } else if (questionPossibility === '-99') {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = -99;
     } else {
       this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = questionPossibility.id ? questionPossibility.id : '';
     }
 
     this.findQuestionsHasNext();
+  }
+
+  showNextQuestion(qIdx, addIdx) {
+    this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching']
   }
 
   findQuestionsHasNext() {
@@ -334,7 +342,7 @@ export class TemplateCreateComponent {
       id: newId.id + 1,
       question: `Pertanyaan`,
       is_next_question: false,
-      possibilities: [{ key: 'Opsi 1', next: '' }]
+      possibilities: [{ key: 'Opsi 1', next: '', isBranching: false }],
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
@@ -396,6 +404,7 @@ export class TemplateCreateComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
+        is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           return {
@@ -406,7 +415,7 @@ export class TemplateCreateComponent {
             is_next_question: this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false,
             possibilities: this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
-              next: pos.next === "" ? null : pos.next
+              next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })),
             // required: item.required,
             question_image: item.question_image || '',
