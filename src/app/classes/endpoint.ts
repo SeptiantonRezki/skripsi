@@ -108,6 +108,12 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer/${context.customer_id}`
       },
+      pengajuan_src: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.paguyuban_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.paguyuban_id}`,
+      },
       banner: {
         get: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
         create: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,

@@ -56,6 +56,9 @@ import { PartnershipEditComponent } from "./principal-partnership/edit/partnersh
 import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
 import { ngfModule } from "angular-file";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { PengajuanSrcComponent } from './pengajuan-src/index/pengajuan-src.component';
+import { CreatePengajuanSrcComponent } from './pengajuan-src/create/create-pengajuan-src.component';
+import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-pengajuan-src.component';
 
 @NgModule({
   imports: [
@@ -121,7 +124,10 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
     PartnershipCreateComponent,
     PartnershipIndexComponent,
     PartnershipEditComponent,
-    ImportAccessCashierDialogComponent
+    ImportAccessCashierDialogComponent,
+    PengajuanSrcComponent,
+    CreatePengajuanSrcComponent,
+    DetailPengajuanSrcComponent
   ],
   entryComponents: [ImportAccessCashierDialogComponent],
   providers: [
