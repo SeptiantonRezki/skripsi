@@ -1279,9 +1279,7 @@ export class BannerEditComponent {
           fd.append('target_audiences[]', aud.id)
         });
       } else {
-        if (fd.has('target_audience')) {
-          fd.delete('target_audience');
-        }
+        fd.append('target_audience', "0");
       }
 
       this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(

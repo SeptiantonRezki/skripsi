@@ -1110,9 +1110,7 @@ export class BannerCreateComponent {
           fd.append('target_audiences[]', aud.id)
         });
       } else {
-        if (fd.has('target_audience')) {
-          fd.delete('target_audience');
-        }
+        fd.append('target_audience', "0");
       }
 
       this.bannerService.create(fd).subscribe(
