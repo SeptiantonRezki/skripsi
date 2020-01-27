@@ -7,6 +7,9 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { CoinService } from 'app/services/sku-management/coin.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ImportAdjustmentCoinDialogComponent } from '../import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
 
 @Component({
   selector: 'data-retailer',
@@ -37,6 +40,7 @@ export class RetailerComponent {
   keyUp = new Subject<string>();
 
   offsetPagination: any;
+  dialogRef: any;
 
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
@@ -52,7 +56,8 @@ export class RetailerComponent {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private coinService: CoinService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private dialog: MatDialog
   ) {
     this.onLoad = true;
 
@@ -892,6 +897,84 @@ export class RetailerComponent {
 
   setToStorage(item, name) {
     this.dataService.setToStorage(name, item);
+  }
+
+  async export() {
+    this.dataService.showLoading(true);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let area = areaSelected[areaSelected.length - 1].value;
+
+    try {
+      const response = await this.coinService.export({ area }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `TemplateManajemenCoin_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {};
+
+    this.dialogRef = this.dialog.open(ImportAdjustmentCoinDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
   }
 
 }

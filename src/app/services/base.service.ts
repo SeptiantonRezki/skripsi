@@ -61,6 +61,12 @@ export class BaseService {
     return this.http.get(url, { responseType: 'arraybuffer', headers: headers, params: query });
   }
 
+  protected getBlobAsJsonApi(url, params: any = null) {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
+    let query = this.loopParams(params);
+    return this.http.get(url, { responseType: 'blob' as 'json', headers: headers, params: query });
+  }
+
   protected postBlobApi(url, request, params: any = null) {
     let headers = new HttpHeaders();
     let query = this.loopParams(params);

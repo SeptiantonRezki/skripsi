@@ -2,6 +2,15 @@
 <div class="padding-top" fxLayout="column" fusePerfectScrollbar *ngIf="!onLoad">
   <div class="page-layout simple fullwidth">
     <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center" class="p-16 export">
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> EXPORT TEMPLATE
+        </button>
+        <button mat-raised-button type="button" class="is-danger" (click)="import()">
+          <mat-icon>arrow_downward</mat-icon> IMPORT ADJUSMENT COIN
+        </button>
+      </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2>Daftar Retailer</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
