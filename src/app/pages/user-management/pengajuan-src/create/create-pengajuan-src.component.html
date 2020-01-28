@@ -9,7 +9,7 @@
       <!-- VERTICAL STEPPER EXAMPLE -->
       <mat-vertical-stepper class="mat-elevation-z4" [linear]="true">
 
-        <mat-step [stepControl]="verticalStepperStep1">
+        <!-- <mat-step [stepControl]="verticalStepperStep1">
 
           <form [formGroup]="verticalStepperStep1">
 
@@ -17,67 +17,56 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
-              <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Paguyuban" formControlName="group_name">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Nama Toko" formControlName="name">
                 <mat-error
-                  *ngIf="verticalStepperStep1.controls['group_name'].hasError('required') && verticalStepperStep1.controls['group_name'].touched ">
-                  Nama Paguyuban harus diisi.
+                  *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
+                  Nama Toko harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Pengguna" formControlName="fullname">
+                <input matInput type="text" placeholder="Alamat" formControlName="address">
                 <mat-error
-                  *ngIf="verticalStepperStep1.controls['fullname'].hasError('required') && verticalStepperStep1.controls['fullname'].touched ">
-                  Nama Pengguna harus diisi.
+                  *ngIf="verticalStepperStep1.controls['address'].hasError('required') && verticalStepperStep1.controls['address'].touched ">
+                  Alamat harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Username" formControlName="username">
+                <mat-select placeholder="Provinsi" formControlName="province_id">
+                </mat-select>
                 <mat-error
-                  *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                  Username harus diisi.
+                  *ngIf="verticalStepperStep1.controls['province_id'].hasError('required') && verticalStepperStep1.controls['province_id'].touched ">
+                  Provinsi harus diisi.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password"
-                  placeholder="Kata Sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
-                  (click)="showPassword = !showPassword">
-                  <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
-                  <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
-                </button>
+                <mat-select placeholder="Kabupaten / Kota" formControlName="city_id">
+                </mat-select>
                 <mat-error
-                  *ngIf="verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched">
-                  Kata sandi harus diisi.
-                </mat-error>
-                <mat-error *ngIf="verticalStepperStep1.controls['password'].hasError('notValid')">
-                  Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
-                  & 1 angka
+                  *ngIf="verticalStepperStep1.controls['city_id'].hasError('required') && verticalStepperStep1.controls['city_id'].touched ">
+                  Kabupaten / Kota harus diisi.
                 </mat-error>
               </mat-form-field>
+
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi">
-                <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
-                  (click)="showConfirmPassword = !showConfirmPassword">
-                  <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
-                  <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
-                </button>
+                <mat-select placeholder="Kecamatan" formControlName="district_id">
+                </mat-select>
                 <mat-error
-                  *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
-                  Konfirmasi kata sandi harus diisi.
+                  *ngIf="verticalStepperStep1.controls['district_id'].hasError('required') && verticalStepperStep1.controls['district_id'].touched ">
+                  Kecamatan harus diisi.
                 </mat-error>
-                <mat-error
-                  *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
-                  Konfirmasi kata sandi tidak sesuai.
-                </mat-error>
-              </mat-form-field> -->
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Koordinat GPS (Latitude)" formControlName="lat">
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Koordinat GPS (Longitude)" formControlName="lng">
+              </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
@@ -88,62 +77,60 @@
 
           </form>
 
-        </mat-step>
+        </mat-step> -->
 
-        <mat-step [stepControl]="wilayah">
-          <form [formGroup]="wilayah">
+        <mat-step [stepControl]="verticalStepperStep2">
+          <form [formGroup]="verticalStepperStep2">
             <ng-template matStepLabel>Informasi Pemilik</ng-template>
 
 
             <div fxFlex="1 0 auto" fxLayout="column">
-              <!-- <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
-                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone"
-                (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)">
-                <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region"
-                (selectionChange)="getAudienceArea('area', wilayah.get('region').value)">
-                <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area"
-                (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)">
-                <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint"
-                (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)">
-                <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district"
-                (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)">
-                <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory">
-                <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field> -->
-
-              <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Latitude (Opsional)" formControlName="latitude">
-              </mat-form-field>
-
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Longitude (Opsional)" formControlName="longitude">
-              </mat-form-field> -->
+                <input matInput type="text" placeholder="Nama Pemilik Toko" formControlName="owner">
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['owner'].hasError('required') && verticalStepperStep2.controls['owner'].touched ">
+                  Nama Pemilik Toko harus diisi.
+                </mat-error>
+              </mat-form-field>
+              <div fxLayout="row">
+                <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
+                  <input matInput value="+62" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="93" class="is-light">
+                  <input matInput placeholder="Nomor Ponsel Pemilik Toko Yang Bisa Dihubungi" formControlName="phone"
+                    type="tel" min="0">
+                  <mat-error
+                    *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
+                    Nomor Ponsel harus diisi.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="Produk apa saja yang dijual di Toko Anda" readonly
+                  (click)="showList()">
+              </mat-form-field>
+              <div fxLayout="column" *ngIf="showListProduct">
+                <mat-checkbox fxFlex *ngFor="let item of listProducts" class="example-margin">{{ item }}
+                </mat-checkbox>
+              </div>
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="Tahu SRC darimana ?" formControlName="source">
+                  <mat-option *ngFor="let item of listSources" [value]="item">{{item}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['source'].hasError('required') && verticalStepperStep2.controls['source'].touched ">
+                  Sumber harus diisi.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="Channel ?" formControlName="channel">
+                  <mat-option *ngFor="let item of listChannel" [value]="item">{{item}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="verticalStepperStep2.controls['channel'].hasError('required') && verticalStepperStep2.controls['channel'].touched ">
+                  Channel harus diisi.
+                </mat-error>
+              </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
@@ -154,25 +141,26 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="verticalStepperStep2">
+        <mat-step [stepControl]="verticalStepperStep3">
 
-          <form [formGroup]="verticalStepperStep2">
+          <form [formGroup]="verticalStepperStep3">
 
             <ng-template matStepLabel>Upload Foto</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
-              <!-- <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Admin HMS" formControlName="principal_id">
-                  <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
-                </mat-select>
-                <mat-error
-                  *ngIf="verticalStepperStep2.controls['principal_id'].hasError('required') && verticalStepperStep2.controls['principal_id'].touched">
-                  Admin HMS harus diisi
-                </mat-error>
-              </mat-form-field> -->
-
-              <!-- <dropdown-form [dataCb]="listRole" [dataPlaceholder]="'Peran'" [form]="verticalStepperStep2"
-                (selectionChange)="selectionChange($event)"></dropdown-form> -->
+              <div class="px-24">
+                <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                  accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                  (fileChange)="changeImage($event)">
+                  <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                    <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                    <br>
+                    <span matPrefix>Tarik Gambar Toko Anda kesini /
+                      <strong>Pilih File</strong></span>
+                    <span matPrefix>Besar file maksimal 2mb</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">

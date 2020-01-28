@@ -33,4 +33,44 @@ export class PengajuanSrcService extends BaseService {
     return this.deleteApi(url);
   }
 
+  updateStatus(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_status", context);
+    return this.putApi(url, body);
+  }
+
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export');
+    return this.getBlobApi(url, queryParams);
+  }
+
+  getProducts(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_product');
+    return this.getApi(url, queryParams);
+  }
+
+  getSources(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_source');
+    return this.getApi(url, queryParams);
+  }
+
+  getChannels(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_channel');
+    return this.getApi(url, queryParams);
+  }
+
+  getProvinces(): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_province');
+    return this.getApi(url);
+  }
+
+  getCities(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_city', context);
+    return this.getApi(url);
+  }
+
+  getDistricts(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_district', context);
+    return this.getApi(url);
+  }
+
 }
