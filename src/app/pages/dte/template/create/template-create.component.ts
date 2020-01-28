@@ -412,11 +412,11 @@ export class TemplateCreateComponent {
             question: item.question,
             type: item.type,
             required: item.type === 'stock_check' ? 1 : null,
-            is_next_question: this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false,
-            possibilities: this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            is_next_question: this.frmIsBranching.value ? (this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false) : false,
+            possibilities: this.frmIsBranching.value ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
-            })),
+            })) : [],
             // required: item.required,
             question_image: item.question_image || '',
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),

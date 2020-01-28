@@ -418,11 +418,11 @@ export class TemplateEditComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            is_next_question: this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false,
-            possibilities: this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            is_next_question: this.frmIsBranching.value ? (this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false) : false,
+            possibilities: this.frmIsBranching.value ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
-            })),
+            })) : [],
             required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
