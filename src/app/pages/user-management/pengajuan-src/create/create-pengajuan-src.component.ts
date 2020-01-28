@@ -23,8 +23,13 @@ export class CreatePengajuanSrcComponent implements OnInit {
   listProducts: any[] = [];
   listSources: any[] = [];
   listChannel: any[] = [];
+  listProvinces: any[] = [];
+  listCities: any[] = [];
+  listDistricts: any[] = [];
   image: any;
   showListProduct: Boolean = false;
+  submitting: Boolean = false;
+  listProductSells: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,12 +46,9 @@ export class CreatePengajuanSrcComponent implements OnInit {
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
-      province_id: [""],
-      // province_id: ["", Validators.required],
-      city_id: [""],
-      // city_id: ["", Validators.required],
-      district_id: [""],
-      // district_id: ["", Validators.required],
+      province_id: ["", Validators.required],
+      city_id: ["", Validators.required],
+      district_id: ["", Validators.required],
       lat: [""],
       lng: [""]
     });
@@ -62,9 +64,27 @@ export class CreatePengajuanSrcComponent implements OnInit {
       image: ["", Validators.required]
     })
 
+    this.verticalStepperStep1
+      .get('province_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.getCities(res);
+        }
+      })
+    this.verticalStepperStep1
+      .get('city_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.getDistricts(res);
+        }
+      })
+
     this.getListChannels();
     this.getListProducts();
     this.getListSource();
+    this.getProvinces();
   }
 
   getListProducts() {
@@ -118,4 +138,78 @@ export class CreatePengajuanSrcComponent implements OnInit {
     this.showListProduct = !this.showListProduct;
   }
 
+  getProvinces() {
+    this.pengajuanSrcService.getProvinces()
+      .subscribe(res => {
+        console.log('res provinces', res);
+        this.listProvinces = res.data;
+      }, err => {
+        console.log('err get provinces', err);
+      })
+  }
+
+  getCities(province_id) {
+    this.pengajuanSrcService.getCities({ province_id })
+      .subscribe(res => {
+        console.log('res cities', res);
+        this.listCities = res.data;
+      }, err => {
+        console.log('err get cities', err);
+      })
+  }
+
+  getDistricts(city_id) {
+    this.pengajuanSrcService.getDistricts({ city_id })
+      .subscribe(res => {
+        console.log('res districts', res);
+        this.listDistricts = res.data;
+      }, err => {
+        console.log('err get districts', err);
+      })
+  }
+
+  addToProducts(product) {
+    let index = this.listProductSells.findIndex(prd => prd === product);
+    if (index === -1) {
+      this.listProductSells.push(product);
+    } else {
+      this.listProductSells.splice(index, 1);
+    }
+  }
+
+  submit() {
+    if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid && this.verticalStepperStep3.valid) {
+      this.submitting = true;
+
+      let fd = new FormData();
+      fd.append('name', this.verticalStepperStep1.get('name').value);
+      fd.append('address', this.verticalStepperStep1.get('address').value);
+      fd.append('province_id', this.verticalStepperStep1.get('province_id').value);
+      fd.append('city_id', this.verticalStepperStep1.get('city_id').value);
+      fd.append('district_id', this.verticalStepperStep1.get('district_id').value);
+      fd.append('latitude', this.verticalStepperStep1.get('lat').value);
+      fd.append('longitude', this.verticalStepperStep1.get('lng').value);
+      fd.append('owner', this.verticalStepperStep2.get('owner').value);
+      fd.append('phone', this.verticalStepperStep2.get('phone').value);
+      fd.append('source', this.verticalStepperStep2.get('source').value);
+      fd.append('channel', this.verticalStepperStep2.get('channel').value);
+      fd.append('image', this.verticalStepperStep3.get('image').value);
+      this.listProductSells.map(prd => {
+        fd.append('product[]', prd);
+      })
+
+      this.pengajuanSrcService.create(fd).subscribe(
+        res => {
+          this.dialogService.openSnackBar({ message: "Data Pengajuan SRC berhasil disimpan!" });
+          this.router.navigate(["user-management", "pengajuan-src"]);
+        },
+        err => {
+          this.submitting = false;
+        }
+      );
+    } else {
+      commonFormValidator.validateAllFields(this.verticalStepperStep1);
+      commonFormValidator.validateAllFields(this.verticalStepperStep2);
+    }
+  }
 }

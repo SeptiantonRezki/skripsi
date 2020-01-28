@@ -100,37 +100,36 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <!-- <ngx-datatable-column name="Nama Paguyuban" prop="name">
+        <ngx-datatable-column name="Nama Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="users" [sortable]="false">
+        <ngx-datatable-column name="Tanggal Masuk" prop="created_at" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.paguyuban?.fullname}} </span>
+            <span>{{row.created_at | date:'dd/MM/yyyy HH:mm'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Territori" prop="areas" [sortable]="false">
+        <ngx-datatable-column name="Kota" prop="province_name" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.area}} </span>
+            <span>{{row.province_name}} </span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login" [sortable]="false">
+        <ngx-datatable-column name="Alamat" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.paguyuban?.last_login | date:'dd/MM/yyyy HH:mm'}}
+            <span>{{ row.address }}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="active_status" [sortable]="false">
+        <ngx-datatable-column [width]="100" name="Status" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4"
-                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
-                [ngClass]="row.paguyuban?.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.paguyuban?.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;">
+                {{row.status ? row.status.toUpperCase() : '-'}}
               </p>
             </div>
           </ng-template>
@@ -152,7 +151,7 @@
               </button>
             </div>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>
