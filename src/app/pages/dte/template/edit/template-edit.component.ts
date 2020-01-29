@@ -232,7 +232,15 @@ export class TemplateEditComponent {
   }
 
   showNextQuestion(qIdx, addIdx) {
-    this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching']
+    this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'];
+    if (this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] === false) {
+      this.allQuestionList[qIdx]['possibilities'][addIdx]['next'] = "";
+      let questions = this.templateTaskForm.get('questions') as FormArray;
+      let additionals = questions.at(qIdx).get('additional') as FormArray;
+      additionals.at(addIdx).get('next_question').setValue('');
+
+      console.log(this.allQuestionList[qIdx]['possibilities'][addIdx])
+    }
   }
 
   addAdditional(idx) {
@@ -375,6 +383,14 @@ export class TemplateEditComponent {
 
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    let idQUestion = questions.at(idx).get('id').value;
+    if (this.frmIsBranching.value && questions.at(idx).get('typeSelection').value['value'] === 'radio' && this.checkHasLinked(idx, idQUestion)) {
+      // this.dialogService.openCustomDialog('Tidak Bisa Menghapus Pertanyaan', 'Pertanyaan ini terhubung sebagai Response Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.');
+      this.dialogService.openSnackBar({
+        message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
+      })
+      return;
+    }
     questions.removeAt(idx);
     this.allQuestionList.splice(idx, 1);
     if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
@@ -382,6 +398,23 @@ export class TemplateEditComponent {
       delete this.listProductSelected[idx];
     }
     this.findQuestionsHasNext();
+  }
+
+  checkHasLinked(idx, idQuestion): Boolean {
+    let anotherQuestions = [...this.allQuestionList].filter(qs => qs.id !== idQuestion);
+    let allPossibilities = [];
+    anotherQuestions.map(qs => qs.possibilities.map(ps => {
+      allPossibilities = [
+        ...allPossibilities,
+        ps.next
+      ]
+    }));
+    if (allPossibilities.indexOf(idQuestion) > -1) {
+      console.log('ada cuk')
+      return true
+    }
+
+    return false;
   }
 
   deleteReason(idx): void {
@@ -418,8 +451,8 @@ export class TemplateEditComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            is_next_question: this.frmIsBranching.value ? (this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false) : false,
-            possibilities: this.frmIsBranching.value ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false) : false,
+            possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
             })) : [],
