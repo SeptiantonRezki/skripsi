@@ -1,0 +1,12 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Alasan {{renderStatus(data.agreement)}}</h1>
+  <div mat-dialog-content>
+    <div fxFlex style="width: 400px;">
+      <input matInput type="text" placeholder="Masukan Alasan ..." [formControl]="reason">
+    </div>
+  </div>
+  <div mat-dialog-actions class="actions">
+    <button mat-button class="confirm" style="cursor: pointer;" (click)="submit()">Kirim</button>
+    <button mat-button class="reject" style="cursor: pointer;" (click)="closeDialog()">Batal</button>
+  </div>
+</div>

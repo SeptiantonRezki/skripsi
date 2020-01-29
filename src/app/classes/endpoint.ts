@@ -110,6 +110,7 @@ export class Endpoint {
       },
       pengajuan_src: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,

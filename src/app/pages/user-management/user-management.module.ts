@@ -59,6 +59,7 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { PengajuanSrcComponent } from './pengajuan-src/index/pengajuan-src.component';
 import { CreatePengajuanSrcComponent } from './pengajuan-src/create/create-pengajuan-src.component';
 import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-pengajuan-src.component';
+import { ReasonDialogComponent } from './pengajuan-src/reason-dialog/reason-dialog.component';
 
 @NgModule({
   imports: [
@@ -127,9 +128,10 @@ import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-penga
     ImportAccessCashierDialogComponent,
     PengajuanSrcComponent,
     CreatePengajuanSrcComponent,
-    DetailPengajuanSrcComponent
+    DetailPengajuanSrcComponent,
+    ReasonDialogComponent
   ],
-  entryComponents: [ImportAccessCashierDialogComponent],
+  entryComponents: [ImportAccessCashierDialogComponent, ReasonDialogComponent],
   providers: [
     ListRoleAdminResolver,
     ListLevelFFResolver,

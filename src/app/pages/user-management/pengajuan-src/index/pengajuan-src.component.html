@@ -139,15 +139,12 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <button mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deletePaguyuban(row.id)"
-                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
-                <mat-icon>delete</mat-icon>
+              <button mat-icon-button (click)="directDetail(row)">
+                <mat-icon>remove_red_eye
+                </mat-icon>
               </button>
             </div>
           </ng-template>

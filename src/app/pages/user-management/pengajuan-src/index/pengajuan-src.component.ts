@@ -621,4 +621,17 @@ export class PengajuanSrcComponent implements OnInit {
     });
   }
 
+  directEdit(param?: any): void {
+    // let navigationExtras: NavigationExtras = {
+    //   queryParams: param
+    // }
+    this.dataService.setToStorage("detail_pengajuan_src", param);
+    this.router.navigate(["user-management", "pengajuan-src", "edit"]);
+  }
+
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_pengajuan_src", param);
+    this.router.navigate(["user-management", "pengajuan-src", "detail"]);
+  }
+
 }
