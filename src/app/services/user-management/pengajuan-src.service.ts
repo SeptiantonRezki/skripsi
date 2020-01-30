@@ -40,7 +40,7 @@ export class PengajuanSrcService extends BaseService {
 
   updateStatus(body?, context?): Observable<any> {
     const url = this.getUrl(this.namespace, "update_status", context);
-    return this.putApi(url, body);
+    return this.postApi(url, body);
   }
 
   export(queryParams?): Observable<any> {

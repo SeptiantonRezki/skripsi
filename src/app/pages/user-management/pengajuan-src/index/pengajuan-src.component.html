@@ -114,7 +114,7 @@
 
         <ngx-datatable-column name="Kota" prop="province_name" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.province_name}} </span>
+            <span>{{row.city_name}} </span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -124,13 +124,16 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="status" [sortable]="false">
+        <ngx-datatable-column [width]="200" name="Status" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4"
+              <span
+                [ngStyle]="{ 'background-color': renderStatusName(row.status).bgColor, 'color': renderStatusName(row.status).textColor }"
+                style="min-width: 100px !important;min-height: 20px;font-size: .9em;text-align: center;padding: 5px 15px; border-radius: 10px;">{{row.status ? renderStatusName(row.status).name : ''}}</span>
+              <!-- <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;">
                 {{row.status ? row.status.toUpperCase() : '-'}}
-              </p>
+              </p> -->
             </div>
           </ng-template>
         </ngx-datatable-column>
@@ -139,9 +142,9 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)">
+              <!-- <button mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
+              </button> -->
               <button mat-icon-button (click)="directDetail(row)">
                 <mat-icon>remove_red_eye
                 </mat-icon>

@@ -26,12 +26,18 @@ export class ReasonDialogComponent implements OnInit {
 
   submit() {
     let body = {
-      status: this.data.status
+      status: this.data.agreement
     };
     if (this.data.status !== 'processed') {
       body['reason'] = this.reason.value;
     }
     this.pengajuanSrcService.updateStatus(body, { pengajuan_id: this.data.pengajuan_id })
+      .subscribe(res => {
+        console.log('resss', res);
+        this.dialogRef.close(res);
+      }, err => {
+        console.log('err', err);
+      })
   }
 
   renderStatus(agreement) {

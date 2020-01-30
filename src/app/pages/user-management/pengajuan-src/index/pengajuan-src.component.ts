@@ -634,4 +634,17 @@ export class PengajuanSrcComponent implements OnInit {
     this.router.navigate(["user-management", "pengajuan-src", "detail"]);
   }
 
+  renderStatusName(status) {
+    switch (status) {
+      case 'new':
+        return { name: 'APLIKASI MASUK', bgColor: '#34a5eb', textColor: '#fff' };
+      case 'processed':
+        return { name: 'APLIKASI DALAM PROSES', bgColor: '#ebd034', textColor: '#000' };
+      case 'approved':
+        return { name: 'APLIKASI DISETUJUI', bgColor: '#35c704', textColor: '#fff' };
+      default:
+        return { name: 'APLIKASI DITOLAK', bgColor: '#ff2626', textColor: '#fff' }
+    }
+  }
+
 }

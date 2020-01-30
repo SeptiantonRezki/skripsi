@@ -59,16 +59,28 @@ export class DetailPengajuanSrcComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { agreement: this.statusForm.value };
+    dialogConfig.data = { agreement: this.statusForm.value, pengajuan_id: this.shortDetail.id };
 
     this.dialogRef = this.dialog.open(ReasonDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
-      // if (response) {
-      //   this.selected = response;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      // }
+      if (response) {
+        this.getDetail();
+      }
     });
+  }
+
+  renderStatusName(status) {
+    switch (status) {
+      case 'new':
+        return { name: 'APLIKASI MASUK', bgColor: '#34a5eb', textColor: '#fff' };
+      case 'processed':
+        return { name: 'APLIKASI DALAM PROSES', bgColor: '#ebd034', textColor: '#000' };
+      case 'approved':
+        return { name: 'APLIKASI DISETUJUI', bgColor: '#35c704', textColor: '#fff' };
+      default:
+        return { name: 'APLIKASI DITOLAK', bgColor: '#ff2626', textColor: '#fff' }
+    }
   }
 
 }

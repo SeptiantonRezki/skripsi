@@ -1,8 +1,12 @@
 <div class="dialog-container">
-  <h1 mat-dialog-title>Alasan {{renderStatus(data.agreement)}}</h1>
+  <h1 mat-dialog-title>{{ data.agreement !== 'processed' ? 'Alasan' : 'Perubahan Status' }}
+    {{renderStatus(data.agreement)}}</h1>
   <div mat-dialog-content>
-    <div fxFlex style="width: 400px;">
+    <div fxFlex style="width: 400px;" *ngIf="data.agreement !== 'processed'">
       <input matInput type="text" placeholder="Masukan Alasan ..." [formControl]="reason">
+    </div>
+    <div fxFlex style="width: 400px;" *ngIf="data.agreement == 'processed'">
+      <h4>Apakah kamu yakin ingin mengubah Status Pengajuan ?</h4>
     </div>
   </div>
   <div mat-dialog-actions class="actions">
