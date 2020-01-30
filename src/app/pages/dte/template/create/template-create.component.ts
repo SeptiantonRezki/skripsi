@@ -292,16 +292,29 @@ export class TemplateCreateComponent {
       this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = questionPossibility.id ? questionPossibility.id : '';
     }
 
+    let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+    console.log('hax next onchange', hasNext);
+    this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
+
     this.findQuestionsHasNext();
   }
 
   showNextQuestion(qIdx, addIdx) {
     this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'];
     if (this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] === false) {
+      let referenceQIdx = { next: this.allQuestionList[qIdx]['possibilities'][addIdx]['next'], index: addIdx };
       this.allQuestionList[qIdx]['possibilities'][addIdx]['next'] = "";
       let questions = this.templateTaskForm.get('questions') as FormArray;
       let additionals = questions.at(qIdx).get('additional') as FormArray;
       additionals.at(addIdx).get('next_question').setValue('');
+      let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+      if (referenceQIdx.next) {
+        let referenceHasNext = this.allQuestionList[referenceQIdx.index]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+        this.questionHasNext[referenceQIdx.next] = referenceHasNext.length > 0 ? true : false;
+      }
+      this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
+
+      this.findQuestionsHasNext();
     }
   }
 
@@ -321,6 +334,7 @@ export class TemplateCreateComponent {
       //   this.questionHasNext[q.id] = false;
       // }
     });
+    console.log('all next', allNexts);
     let filteredNexts = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
       return index === self.indexOf(elem);
     }).map(elem => {
@@ -443,7 +457,7 @@ export class TemplateCreateComponent {
             question: item.question,
             type: item.type,
             required: item.type === 'stock_check' ? 1 : null,
-            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] ? this.questionHasNext[item.id] : false) : false,
+            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] === true ? 1 : 0) : false,
             possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
