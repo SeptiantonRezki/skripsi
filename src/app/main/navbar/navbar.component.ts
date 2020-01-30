@@ -22,6 +22,7 @@ import { DataService } from "app/services/data.service";
 import { AuthenticationService } from "app/services/authentication.service";
 import { IdleService } from 'app/services/idle.service';
 import { GeneralService } from "app/services/general.service";
+import { QiscusService } from "app/services/qiscus.service";
 
 @Component({
   selector: "fuse-navbar",
@@ -64,7 +65,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private userIdle: IdleService,
     private authenticationService: AuthenticationService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private qs: QiscusService,
   ) {
     // Navigation data
     // this.navigation = navigation;
@@ -113,21 +115,41 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
           });
         }
       });
+    }
 
-      // window.setInterval(() => { 
-      //   let body = {
-      //     refresh_token: session.refresh_token
-      //   };
-      //   this.authenticationService.refreshToken(body).subscribe(
-      //     res => {
-      //       res.expires_in = session.expires_in;
-      //       this.dataService.setAuthorization(res);
-      //     },
-      //     err => {
-      //       console.log(err);
-      //     }
-      //   );
-      // }, (session.expires_in * ((600-100)*1000)));
+    const profile = await this.dataService.getDecryptedProfile();
+    await this.qiscusLoginOrRegister(profile);
+  }
+
+  async qiscusLoginOrRegister(profile: any){
+    console.warn('profile', profile);
+    if(profile) {
+      if(profile.id && profile.email && profile.fullname){
+        const qiscusPayload = {
+          userIdMC: profile.email,
+          userKey: 'prinhms' + profile.id, //profile.qiscus_user_key,
+          userName: profile.fullname,
+          avatarImage: profile.image_url || null,
+        }
+
+				const qiscusMCPayload = {
+					user_id: qiscusPayload.userIdMC,
+					password: qiscusPayload.userKey,
+					username: qiscusPayload.userName,
+					avatar_url: qiscusPayload.avatarImage,
+				};
+        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async(res_2: any) => {
+					return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
+        });
+      } else {
+        console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
+        // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
+        return false;
+      }
+    } else {
+      console.warn('Maaf, Terjadi Kesalahan Server! failed to redirecting realtime server');
+      // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
+      return false;
     }
   }
 

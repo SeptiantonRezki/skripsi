@@ -70,6 +70,10 @@ import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
 import { GeotreeService } from "./services/geotree.service";
 
+// ==== QISCUS ====
+import { QiscusService } from "./services/qiscus.service";
+import { Emitter } from "./helper/emitter.helper";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -97,6 +101,10 @@ import { GeotreeService } from "./services/geotree.service";
     NgProgressModule
   ],
   providers: [
+    //===== QISCUS =====
+    QiscusService,
+    Emitter,
+    
     AuthenticationService,
     DataService,
     DialogService,

@@ -377,7 +377,11 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
-      }
+      },
+      qiscus: {
+        loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
+        createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

@@ -36,6 +36,9 @@ import { SupportComponent } from './support/support.component';
 import { PesanBantuan, } from "./support/content/pesan-bantuan/pesan-bantuan";
 import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
 import { PipesModule } from "app/pipe/pipes.module";
+import { UploadImageComponent } from "./support/content/pesan-bantuan/dialog/upload-image/upload-image.component";
+import { EllipsisModule } from 'ngx-ellipsis';
+import { ngfModule } from "angular-file";
 
 @NgModule({
   imports: [
@@ -63,6 +66,9 @@ import { PipesModule } from "app/pipe/pipes.module";
     MatTabsModule,
     MatAutocompleteModule,
     PipesModule,
+
+    EllipsisModule,
+    ngfModule,
   ],
   declarations: [
     RoleIndexComponent,
@@ -72,7 +78,8 @@ import { PipesModule } from "app/pipe/pipes.module";
     ForceUpdateAppsComponent,
     SupportComponent,
     PesanBantuan,
-    DialogOtherHelp
+    DialogOtherHelp,
+    UploadImageComponent
   ],
   exports: [
     RoleIndexComponent,
@@ -84,6 +91,6 @@ import { PipesModule } from "app/pipe/pipes.module";
     PesanBantuan
   ],
   providers: [ListMenuResolver, PageGuard],
-  entryComponents: [DialogOtherHelp]
+  entryComponents: [DialogOtherHelp, UploadImageComponent]
 })
 export class SettingsModule { }

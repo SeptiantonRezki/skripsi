@@ -1,3 +1,297 @@
-<div class="pb-container" fxlayout="column" fxLayoutAlign="center center">
-  Sorry, this page is under construction
+<div class="main-container">
+  <div *ngIf="isCreate" class="p-24">
+    <div fxLayout="row" class="pb-16" fxLayoutAlign="start center" (click)="backToPusatBantuan()">
+      <mat-icon class="button-back back">navigate_before</mat-icon>
+      <span class="back pl-8">Kembali ke Homepage Bantuan</span>
+    </div>
+    <div fxLayout="row" class="pb-16" fxLayoutAlign="start center">
+      <h2 class="">Kirim Kendala Baru</h2>
+    </div>
+    <div class="ayo-content-middle pb-48">
+      <form name="form" [formGroup]="formNewInquiry" autocomplete="off">
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field fxFlex="40" class="is-light">
+            <mat-select placeholder="Kategori Kendala" formControlName="kategoriKendala">
+              <mat-option [value]="category.category" *ngFor="let category of categoryList">
+                {{category.category}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formNewInquiry.controls['kategoriKendala'].hasError('required') && formNewInquiry.controls['kategoriKendala'].touched">
+              Kategori Kendala harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" class="" fxLayoutAlign="start center">
+          <span style="font-size: 14px; margin: 5px 0px;">Detail Kendala Anda</span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-form-field class="w-100-p otc" floatLabel="never" appearance="standard">
+            <textarea matInput rows="5" [maxLength]="500" placeholder="Tulis detail kendala Anda disini" formControlName="detailKendala"></textarea>
+            <mat-error style="padding-left: 10px" *ngIf="formNewInquiry.controls['detailKendala'].hasError('required') && formNewInquiry.controls['detailKendala'].touched">
+              Detail Kendala Anda harus diisi
+            </mat-error>
+            <mat-error style="padding-left: 10px" *ngIf="formNewInquiry.controls['detailKendala'].errors?.maxlength && formNewInquiry.controls['detailKendala'].touched">
+              Jumlah karakter melebihi 500 karakter
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="confirm py-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            Kirim
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div *ngIf="!isCreate" fxLayout="row" style="max-height: 550px;">
+    <div fxFlex="60" fxLayout="column">
+      <div class="search-container m-20">
+        <div class="full-width" fxLayout="row">
+          <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="search-icon">search</mat-icon>
+          </div>
+          <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda"
+            aria-label="Number" matInput [formControl]="searchRoomControl" [matAutocomplete]="auto">
+          <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()"
+            *ngIf="searchRoomControl.value">
+            <mat-icon class="cancel-icon">delete</mat-icon>
+          </div>
+        </div>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title"
+            (click)="openRoomDetail({id: option.id, type: 'search'})" [disabled]="option.disabled">
+            <span *ngIf="isSearchFound">{{option.title}}</span>
+            <span *ngIf="!isSearchFound" title="{{option.text}}">HASIL PENCARIAN untuk
+              <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan.</span>
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <mat-list class="pt-5" style="border-top: solid 1px #ddd;">
+        <mat-list-item style="height: 60px" [ngStyle]="{'background-color': i % 2 == 0 ? (selectedRoomIndex == i? '#ddd' : '#fafafa') : (selectedRoomIndex == i? '#ddd' : '#fff')}" *ngFor="let room of roomList; let i = index" (click)="openRoomDetail(room, i)">
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxFlex="100">
+            <div class="pl-8" fxLayout="column" style="flex: 1;" fxFlex="80">
+              <span class="title-room" fxLayout="row" fxAlignLayout="center center">{{room.additionalOptions ? room.additionalOptions.extras.inquirycategory : null}}<span *ngIf="room.count_notif > 0" class="badge-chat"></span></span>
+              <div class="subtitle-room" *ngIf="room.last_comment.type == 'file_attachment'">Melampirkan File/Gambar</div>
+              <div class="subtitle-room" *ngIf="room.last_comment.type !== 'file_attachment'">{{room.last_comment_message}}</div>
+            </div>
+            <div class="pr-8" style="flex: 1;" fxLayout="column" fxFlex="20">
+              <span style="font-size: 12px; color: #888; text-align: right;">{{room.last_comment_message_created_at | date: 'dd MMM yyyy'}}</span>
+            </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div fxFlex="40">
+      <div *ngIf="roomList.length > 0 && dataRoomSelected !== null" #qContainer class="q-container" fxLayout="column" >
+        <mat-card class="q-card ayo-main-wrapper" fxLayout="column" fxLayoutAlign="space-between center">
+          <mat-card-header class="q-card-header" fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-card-title class="q-card-header-title">
+              <span class="header-text">{{ dataRoomSelected.additionalOptions ? dataRoomSelected.additionalOptions.extras.inquirycategory : null }}</span>
+              <div>
+                <span class="header-subtext">{{ dataRoomSelected.last_comment_message_created_at | date: 'dd MMM yyyy'}}</span>
+              </div>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content #containerScroll (scroll)="onScroll($event)" class="q-card-content" fxLayout="column" fxLayoutAlign="none none">
+            <div class="message-loader"> 
+              <span *ngIf="state_.isLoadMore || isLoadMessage">Sedang Memuat Pesan...</span>
+            </div>
+            <div class="message-layout" fxLayout="column" *ngFor="let q of dataChat; let i = index">
+              
+              <div class="message-info">
+                <span class="message-date" *ngIf="onDateFilter(q.timestamp, i) && !isDateToday(q.timestamp)">{{ dateLive(q.timestamp) }}</span>
+                <span class="message-date" *ngIf="onDateFilter(q.timestamp, i) && isDateToday(q.timestamp)">Hari ini</span>
+                <span class="system-event" *ngIf="q.type == 'system_event'">{{q.message}}</span>
+              </div>
+      
+              <!-- RIGHT -->
+              <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)" *ngIf="q.username_real.search(userQiscus.email) > -1 && onMessageSameName(q.username_real, i) && q.type !== 'system_event'">
+                <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
+                  <span class="message-name-right">{{q.username_as}}</span>
+                  <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
+                    <div class="replied-content" fxLayout="column">
+                      <span class="replied-name">{{q.payload.replied_comment_sender_username}}</span> 
+                      <div class="image-attach" *ngIf="q.payload.replied_comment_type == 'file_attachment'">
+                        <a href="{{q.payload.replied_comment_payload.url}}" target="blank">
+                          <img id="image" [src]='q.payload.replied_comment_payload.url' />
+                        </a>
+                      </div>
+                      <span class="replied-text" *ngIf="q.payload.replied_comment_type !== 'file_attachment'">{{q.payload.replied_comment_message}}</span>
+                      <span class="replied-text" *ngIf="q.payload.replied_comment_type == 'file_attachment'">{{q.payload.replied_comment_payload.caption}}</span>
+                    </div>
+                  </div>
+                  <div class="image-attach" *ngIf="q.type == 'file_attachment'">
+                    <a href="{{q.payload.url}}" target="blank">
+                      <img id="image" [src]='q.payload.url' />
+                    </a>
+                  </div>
+                  <div class="message-text" *ngIf="q.type !== 'file_attachment'">{{q.message}}</div>
+                  <div class="message-text" *ngIf="q.type == 'file_attachment'">{{q.payload.caption}}</div>
+                </div>
+                <div class="wing-right">
+                  <span class='wing-1-right'></span>
+                  <span class='wing-2-right'></span>
+                </div>
+                <div class="extras-right" fxLayout="column" fxLayoutAlign="center end">
+                  <span class="message-time">{{q.time}}</span>
+                  <button *ngIf="!chatIsOver" [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)" mat-button>
+                    <!-- <mat-icon>reply</mat-icon> -->
+                    Balas
+                  </button>
+                </div>
+              </div>
+      
+              <div id="{{q.id}}" class="message-container-next-right" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)" *ngIf="q.username_real.search(userQiscus.email) > -1 && !onMessageSameName(q.username_real, i) && q.type !== 'system_event'">
+                  <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
+                    <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
+                      <div class="replied-content" fxLayout="column">
+                        <span class="replied-name">{{q.payload.replied_comment_sender_username}}</span>
+                        <div class="image-attach" *ngIf="q.payload.replied_comment_type == 'file_attachment'">
+                          <a href="{{q.payload.replied_comment_payload.url}}" target="blank">
+                            <img id="image" [src]='q.payload.replied_comment_payload.url' />
+                          </a>
+                        </div>
+                        <span class="replied-text" *ngIf="q.payload.replied_comment_type !== 'file_attachment'">{{q.payload.replied_comment_message}}</span>
+                        <span class="replied-text" *ngIf="q.payload.replied_comment_type == 'file_attachment'">{{q.payload.replied_comment_payload.caption}}</span>
+                      </div>
+                    </div>
+                    <div class="image-attach" *ngIf="q.type == 'file_attachment'">
+                      <a href="{{q.payload.url}}" target="blank">
+                        <img id="image" [src]='q.payload.url' />
+                      </a>
+                    </div>
+                    <div class="message-text" *ngIf="q.type !== 'file_attachment'">{{q.message}}</div>
+                    <div class="message-text" *ngIf="q.type == 'file_attachment'">{{q.payload.caption}}</div>
+                  </div>
+                  <div class="extras-right" fxLayout="column" fxLayoutAlign="center end">
+                    <span class="message-time">{{q.time}}</span>
+                    <button *ngIf="!chatIsOver" [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)" mat-button>
+                      <!-- <mat-icon>reply</mat-icon> -->
+                      Balas
+                    </button>
+                  </div>
+              </div>
+      
+              <!-- LEFT -->
+              <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)" *ngIf="q.username_real.search(userQiscus.email) == -1 && onMessageSameName(q.username_real, i) && q.type !== 'system_event'">
+                <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
+                  <span class="message-name-left">{{q.username_as}}</span>
+                  <div class="replied-content" fxLayout="column">
+                    <span class="replied-name">{{q.payload.replied_comment_sender_username}}</span>
+                    <div class="image-attach" *ngIf="q.payload.replied_comment_type == 'file_attachment'">
+                      <a href="{{q.payload.replied_comment_payload.url}}" target="blank">
+                        <img id="image" [src]='q.payload.replied_comment_payload.url' />
+                      </a>
+                    </div>
+                    <span class="replied-text" *ngIf="q.payload.replied_comment_type !== 'file_attachment'">{{q.payload.replied_comment_message}}</span>
+                    <span class="replied-text" *ngIf="q.payload.replied_comment_type == 'file_attachment'">{{q.payload.replied_comment_payload.caption}}</span>
+                  </div>
+                  <div class="image-attach" *ngIf="q.type == 'file_attachment'">
+                    <a href="{{q.payload.url}}" target="blank">
+                      <img id="image" [src]='q.payload.url' />
+                    </a>
+                  </div>
+                  <div class="message-text" *ngIf="q.type !== 'file_attachment'">{{q.message}}</div>
+                  <div class="message-text" *ngIf="q.type == 'file_attachment'">{{q.payload.caption}}</div>
+                </div>
+                <div class="wing-left">
+                  <span class='wing-1-left'></span>
+                  <span class='wing-2-left'></span>
+                </div>
+                <div class="extras-left" fxLayout="column" fxLayoutAlign="center start">
+                  <span class="message-time">{{q.time}}</span>
+                  <button *ngIf="!chatIsOver" [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)" mat-button>
+                    <!-- <mat-icon>reply</mat-icon> -->
+                    Balas
+                  </button>
+                </div>
+              </div>
+      
+              <div id="{{q.id}}" class="message-container-next-left" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)" *ngIf="q.username_real.search(userQiscus.email) == -1 && !onMessageSameName(q.username_real, i) && q.type !== 'system_event'">
+                  <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
+                    <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
+                      <div class="replied-content" fxLayout="column">
+                        <span class="replied-name">{{q.payload.replied_comment_sender_username}}</span>
+                        <div class="image-attach" *ngIf="q.payload.replied_comment_type == 'file_attachment'">
+                          <a href="{{q.payload.replied_comment_payload.url}}" target="blank">
+                            <img id="image" [src]='q.payload.replied_comment_payload.url' />
+                          </a>
+                        </div>
+                        <span class="replied-text" *ngIf="q.payload.replied_comment_type !== 'file_attachment'">{{q.payload.replied_comment_message}}</span>
+                        <span class="replied-text" *ngIf="q.payload.replied_comment_type == 'file_attachment'">{{q.payload.replied_comment_payload.caption}}</span>
+                      </div>
+                    </div>
+                    <div class="image-attach" *ngIf="q.type == 'file_attachment'">
+                      <a href="{{q.payload.url}}" target="blank">
+                        <img id="image" [src]='q.payload.url' />
+                      </a>
+                    </div>
+                    <div class="message-text" *ngIf="q.type !== 'file_attachment'">{{q.message}}</div>
+                    <div class="message-text" *ngIf="q.type == 'file_attachment'">{{q.payload.caption}}</div>
+                  </div>
+                  <div class="extras-left" fxLayout="column" fxLayoutAlign="center start">
+                    <span class="message-time">{{q.time}}</span>
+                    <button *ngIf="!chatIsOver" [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)" mat-button>
+                      <!-- <mat-icon>reply</mat-icon> -->
+                      Balas
+                    </button>
+                  </div>
+              </div>
+      
+            </div>
+            <!-- <div class="chat-is-over" *ngIf="chatIsOver" fxLayout="column" fxLayoutAlign="center center">
+                <mat-icon fontSet="material-icons-outlined">chat</mat-icon>
+                <span>Sesi Diskusi Telah Berakhir</span>
+            </div> -->
+          </mat-card-content>
+          <div *ngIf="!isCancelReply" class="replied-container" fxLayout="row" fxLayoutAlign="space-around center">
+            <div class="replied-content" fxLayout="column" fxFlex="80">
+              <span class="replied-name">{{dataReplied.replyNameUser}}</span>
+              <span class="replied-image-attach" *ngIf="dataReplied.replyUriImage">
+                  <img id="image" [src]='dataReplied.replyUriImage' />
+              </span>
+              <span class="replied-text">{{dataReplied.replyMessage}}</span>
+            </div>
+            <div>
+              <button (click)="cancelReply()" mat-icon-button> 
+                  <mat-icon class="replied-cancel-button" >cancel</mat-icon>
+              </button>
+            </div>
+          </div>
+          <mat-card-footer class="q-card-footer" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="!chatIsOver">
+            <button class="q-attachment-btn" mat-icon-button (click)="openMedia('image')">
+              <img mat-list-icon src="assets/images/chat/image_attach2x.png" />
+            </button>
+            <mat-form-field fxFlex="90">
+              <input matInput placeholder="Tulis Pesan" value="" (keypress)="onMessageKeyPress($event)" [(ngModel)]="message">
+            </mat-form-field>
+            <button class="q-send-btn" mat-icon-button (click)="sendChat()">
+              <mat-icon class="q-send-icon">send</mat-icon>
+            </button>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+      <div *ngIf="roomList.length == 0 || dataRoomSelected == null" >
+        <div class="p-20" style="text-align: center; min-height: 550px; background-color: #fafafa; border-left: solid 1px #ddd;" fxLayout="column" fxLayoutAlign="center center">
+          <img style="margin: 20px auto; width: 100px;" src="assets/images/ayo/AYO_SRC_(Master).png" srcset="assets/images/ayo/AYO_SRC_(Master)@2x.png 2x" />
+          <div>
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 20px;">
+              Selamat Datang di Pesan Bantuan
+            </div>
+            <div style="font-size: 15px; color: #666; font-weight: 500; margin-bottom: 10px;">
+              Silahkan memilih pesan bantuan di samping untuk melihat percakapan dengan <strong>Customer Care AYO</strong> 
+            </div>
+            <div style="font-size: 15px; color: #666; font-weight: 500; margin-bottom: 10px;">
+              Ajukan kendala anda dan chat ke <strong>Customer Care AYO</strong> dengan mengklik tombol dibawah ini
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start start">
+              <button mat-raised-button type="button" class="confirmation-button" style="margin: 0px auto;" (click)="goToCreateNewBantuan()">
+                Perlu Bantuan?
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

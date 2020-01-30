@@ -14,6 +14,7 @@ import { IdleService } from "../../services/idle.service";
 import { GeneralService } from "app/services/general.service";
 import * as _ from 'underscore';
 import { forkJoin } from "rxjs";
+import { QiscusService } from "app/services/qiscus.service";
 
 @Component({
   selector: "login",
@@ -43,7 +44,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private cookieService: CookieService,
     private userIdle: IdleService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private qs: QiscusService,
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -94,6 +96,38 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  async qiscusLoginOrRegister(profile: any){
+    if(profile) {
+      if(profile.id !== undefined && profile.id !== null){
+        const qiscusPayload = {
+          userId: profile.id + 'paghms' + profile.business_id,
+          userIdMC: profile.email,
+          userKey: 'paghms' + profile.id, //profile.qiscus_user_key,
+          userName: profile.fullname,
+          avatarImage: profile.image_url || null,
+        }
+
+				const qiscusMCPayload = {
+					user_id: qiscusPayload.userIdMC,
+					password: qiscusPayload.userKey,
+					username: qiscusPayload.userName,
+					avatar_url: qiscusPayload.avatarImage,
+				};
+        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async(res_2: any) => {
+					return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
+        });
+      } else {
+        console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
+        // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
+        return false;
+      }
+    } else {
+      console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
+      // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
+      return false;
+    }
+  }
+
   submit() {
     if (this.loginForm.valid) {
       this.submitting = true;
@@ -117,6 +151,7 @@ export class LoginComponent implements OnInit {
                 this.dataService.setEncryptedProfile(profile);
                 this.router.navigate(["dashboard"]);
                 this.submitting = false;
+                this.qiscusLoginOrRegister(profile);
               }, err => {
                 console.log('err', err);
                 this.submitting = false;

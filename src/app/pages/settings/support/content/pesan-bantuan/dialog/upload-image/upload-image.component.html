@@ -1,0 +1,61 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah {{ data.type == 'image' ? 'Gambar' : 'Produk' }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content style="height: 600px" class="p-24 m-0" *ngIf="data.type == 'image'" fxLayout="column" fxLayoutAlign="center center">
+    <div ngfDrop selectable="1" class="img-layout rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" *ngIf="!files">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix style="text-align: center;">Tarik Gambar Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+        <span matPrefix style="text-align: center;">Ukuran Gambar Maksimum 10MB</span>
+      </div>
+    </div>
+
+    <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" style="width: 100%">
+      <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
+        <div class="delete-img">
+          <mat-icon (click)="removeImage()" alt="Hapus gambar">cancel_outline</mat-icon>
+        </div>
+        <div class="attachment-img" [ngfBackground]="files"></div>
+      </div>
+    </div>
+  </div>
+  <div class="upload-progress-layout" *ngIf="isProgressBar">
+    <div class="upload-progress-bar" [ngStyle]="{'width': progressBar+'%'}"></div>
+    <div class="upload-progress-text">{{progressBar > 99 ? 'Upload Success' : 'Uploading...'}}</div>
+  </div>
+  <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxFlex="1 0 auto">
+        <mat-form-field fxFlex="90">
+          <input matInput placeholder="Tulis Keterangan" value="" (keypress)="onMessageKeyPress($event)" [(ngModel)]="message">
+        </mat-form-field>
+        <button class="q-send-btn" mat-icon-button (click)="submit()">
+          <mat-icon class="q-send-icon">send</mat-icon>
+        </button>
+        <!-- <button type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">Pilih</button> -->
+        <!-- <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Batal</button> -->
+      </div>
+    </div>
+  </div>
+</div>
