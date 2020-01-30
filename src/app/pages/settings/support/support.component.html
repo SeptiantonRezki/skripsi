@@ -1,6 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Bantuan'">
+    <button *ngIf="selectedTab == 1 && !isPesanBantuanCreate" style="min-width: 120px;" (click)="redirectToCreatePesanBantuan()" mat-raised-button aria-label="Cabang"  type="button">
+      <mat-icon>add</mat-icon>BUAT
+    </button>
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">

@@ -112,6 +112,7 @@ export class PesanBantuan {
       kategoriKendala: '',
       detailKendala: '',
     }
+    this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
     this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
       if (data.isCreate !== undefined) {
         this.isCreate = data.isCreate;
@@ -175,6 +176,7 @@ export class PesanBantuan {
       } else {
         this.isCreate = true;
       }
+      this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
       this.onLoad = false;
     });
     
@@ -269,6 +271,7 @@ export class PesanBantuan {
                     this.chatIsOver = false;
                   }
                   this.isCreate = false;
+                  this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
                   this.isLoadMessage = true;
                   this._loadRoom(initiateData.room_id);
                 }
@@ -299,6 +302,7 @@ export class PesanBantuan {
   backToPusatBantuan() {
     this.emitter.emitSelectedHelpTabQ({ selectedTab: 0 });
     this.isCreate = false;
+    this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
     this.formNewInquiry.setValue({
       kategoriKendala: '',
       detailKendala: '',
@@ -330,6 +334,7 @@ export class PesanBantuan {
   goToCreateNewBantuan() {
     this.emitter.emitSelectedHelpTabQ({ selectedTab: 0 });
     this.isCreate = true;
+    this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
     this.formNewInquiry.setValue({
       kategoriKendala: '',
       detailKendala: '',

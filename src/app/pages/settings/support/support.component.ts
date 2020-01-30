@@ -38,6 +38,7 @@ export class SupportComponent implements OnInit {
   selectedTab: Number;
   countNotifPesanBantuan: number;
   badgePesanBantuan: any;
+  isPesanBantuanCreate: any;
 
   constructor(
     private supportService: SupportService,
@@ -65,6 +66,9 @@ export class SupportComponent implements OnInit {
     this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
       if (data.selectedTab !== undefined) {
         this.selectedTab = data.selectedTab;
+      }
+      if (data.isCreate !== undefined) {
+        this.isPesanBantuanCreate = data.isCreate;
       }
     });
     this.emitter.listenNewMessageQMC.subscribe((data: any) => {
@@ -337,6 +341,11 @@ export class SupportComponent implements OnInit {
         console.log('isLogin', isLogin)
       }
     // });
+  }
+
+  redirectToCreatePesanBantuan() {
+    this.selectedTab = 1;
+    this.emitter.emitSelectedHelpTabQ({ isCreate: true });
   }
 
 }
