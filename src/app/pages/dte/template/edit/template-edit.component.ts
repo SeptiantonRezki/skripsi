@@ -24,6 +24,8 @@ export class TemplateEditComponent {
   templateTaskFormError: any;
   dialogRef: any;
   detailTask: any;
+  frmIsBranching: FormControl = new FormControl(false);
+  listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
 
   listChoose: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
@@ -52,6 +54,9 @@ export class TemplateEditComponent {
   directBelanja: Boolean;
   listDirectBelanja: any = {};
   listProductSelected: any = {};
+
+  allQuestionList: any[] = [];
+  questionHasNext: any = {};
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -178,9 +183,10 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
+    this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
+
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
-        console.log('stock check')
         this.listProductSelected[index] = {
           product: new FormControl(item.stock_check_data.name)
         }
@@ -200,14 +206,24 @@ export class TemplateEditComponent {
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         // required: item.required,
         additional: this.formBuilder.array(
-          item.additional.map(item => {
-            return this.formBuilder.group({ option: item })
+          item.additional.map((itm, idx) => {
+            return this.formBuilder.group({ option: itm, next_question: item.possibilities ? item.possibilities[idx].next : '' })
           })
         )
       }));
+      this.allQuestionList.push({
+        id: item.id,
+        question: item.question,
+        is_next_question: item.is_next_question == 1 ? true : false,
+        possibilities: item.possibilities.map(pb => ({
+          ...pb,
+          isBranching: pb.next !== null ? true : false
+        }))
+      });
+      console.log('aall Questions', this.templateTaskForm.get('questions').value);
       this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
     });
-    console.log('asdakdj', this.listProductSelected);
+    console.log('asdakdj', this.listProductSelected, this.allQuestionList);
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     })
@@ -215,11 +231,33 @@ export class TemplateEditComponent {
     if (this.isDetail) this.templateTaskForm.disable();
   }
 
+  showNextQuestion(qIdx, addIdx) {
+    this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] = !this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'];
+    if (this.allQuestionList[qIdx]['possibilities'][addIdx]['isBranching'] === false) {
+      let referenceQIdx = { next: this.allQuestionList[qIdx]['possibilities'][addIdx]['next'], index: addIdx };
+      this.allQuestionList[qIdx]['possibilities'][addIdx]['next'] = "";
+      let questions = this.templateTaskForm.get('questions') as FormArray;
+      let additionals = questions.at(qIdx).get('additional') as FormArray;
+      additionals.at(addIdx).get('next_question').setValue('');
+      let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+      if (referenceQIdx.next) {
+        let referenceHasNext = this.allQuestionList[referenceQIdx.index]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+        this.questionHasNext[referenceQIdx.next] = referenceHasNext.length > 0 ? true : false;
+      }
+      this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
+
+      this.findQuestionsHasNext();
+
+      console.log(this.allQuestionList[qIdx]['possibilities'][addIdx])
+    }
+  }
+
   addAdditional(idx) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}` }));
+    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
@@ -237,7 +275,9 @@ export class TemplateEditComponent {
     if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
+      additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
+      additional.at(additionalIdx).get('next_question').setValue('');
+      // return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
     }
 
     if (event.target.value === "") {
@@ -286,8 +326,59 @@ export class TemplateEditComponent {
       // others: false,
       // required: false
     }))
+
+    this.allQuestionList.push({
+      id: newId.id + 1,
+      question: `Pertanyaan`,
+      is_next_question: false,
+      possibilities: [{ key: 'Opsi 1', next: '', isBranching: false }]
+    })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
+  }
+
+  filteringPossibilitiesQuestion(questionId) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+
+    return questions.value.filter(val => val.id !== questionId);
+  }
+
+  onPossibilitiesChange(questionPossibility, qIdx, additionalIdx) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let additionalValue = questions.at(qIdx).get('additional').value;
+    let hasNextQuestion = additionalValue.find(val => val.next_question !== '');
+    console.log('additionalValue', additionalValue, hasNextQuestion);
+
+    // this.allQuestionList[qIdx]['is_next_question'] = hasNextQuestion ? true : false;
+
+    if (questionPossibility === 'none ') {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = '';
+    } else {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = questionPossibility.id ? questionPossibility.id : '';
+    }
+
+    let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+    console.log('hax next onchange', hasNext);
+    this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
+
+    this.findQuestionsHasNext();
+  }
+
+  findQuestionsHasNext() {
+    // let questions = this.templateTaskForm.get('questions').value;
+    let allNexts = [];
+    this.allQuestionList.map(q => {
+      let qData = q.possibilities.filter(qa => (qa.next !== null && qa.next !== ""));
+      allNexts = [
+        ...allNexts,
+        ...qData
+      ];
+    });
+    let filteredNexts = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
+      return index === self.indexOf(elem);
+    }).map(elem => {
+      this.questionHasNext[elem] = true;
+    });
   }
 
   addRejectedReason() {
@@ -296,7 +387,7 @@ export class TemplateEditComponent {
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({ option: 'Opsi 1' })
+    return this.formBuilder.group({ option: 'Opsi 1', next_question: '' })
   }
 
   addOthers(idx): void {
@@ -305,11 +396,38 @@ export class TemplateEditComponent {
 
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    let idQUestion = questions.at(idx).get('id').value;
+    if (this.frmIsBranching.value && questions.at(idx).get('typeSelection').value['value'] === 'radio' && this.checkHasLinked(idx, idQUestion)) {
+      // this.dialogService.openCustomDialog('Tidak Bisa Menghapus Pertanyaan', 'Pertanyaan ini terhubung sebagai Response Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.');
+      this.dialogService.openSnackBar({
+        message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
+      })
+      return;
+    }
     questions.removeAt(idx);
+    this.allQuestionList.splice(idx, 1);
     if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
     if (this.listProductSelected[idx]) {
       delete this.listProductSelected[idx];
     }
+    this.findQuestionsHasNext();
+  }
+
+  checkHasLinked(idx, idQuestion): Boolean {
+    let anotherQuestions = [...this.allQuestionList].filter(qs => qs.id !== idQuestion);
+    let allPossibilities = [];
+    anotherQuestions.map(qs => qs.possibilities.map(ps => {
+      allPossibilities = [
+        ...allPossibilities,
+        ps.next
+      ]
+    }));
+    if (allPossibilities.indexOf(idQuestion) > -1) {
+      console.log('ada cuk')
+      return true
+    }
+
+    return false;
   }
 
   deleteReason(idx): void {
@@ -321,7 +439,9 @@ export class TemplateEditComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx1).get('additional') as FormArray;
 
+    this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
     additional.removeAt(idx2);
+    this.findQuestionsHasNext();
   }
 
   submit(): void {
@@ -337,12 +457,18 @@ export class TemplateEditComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
+        is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           return {
             id: item.id,
             question: item.question,
             type: item.type,
+            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] === true ? 1 : 0) : false,
+            possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+              key: item.additional[idx].option,
+              next: pos.next === "" ? null : pos.next
+            })) : [],
             required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
