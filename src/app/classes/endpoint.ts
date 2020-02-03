@@ -98,11 +98,11 @@ export class Endpoint {
         store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`
       },
       paguyuban: {
-        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban`,
-        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban`,
-        put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban/${context.paguyuban_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban/${context.paguyuban_id}`,
-        delete_multiple: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/paguyuban/delete/multiple`,
+        get: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/paguyuban`,
+        create: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/${type_api}/paguyuban`,
+        put: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/${type_api}/paguyuban/${context.paguyuban_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/${type_api}/paguyuban/${context.paguyuban_id}`,
+        delete_multiple: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/${type_api}/paguyuban/delete/multiple`,
       },
       customer: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer`,
@@ -351,10 +351,10 @@ export class Endpoint {
         sku_penetration_detail: `${AYO_API}/api/${type_api}/analytics/b2b/brand-sku-detail`
       },
       principal_partnership: {
-        get: `${AYO_API}/api/principal/user/principal-partnership`,
-        create: `${AYO_API}/api/principal/user/principal-partnership`,
-        put: `${AYO_API}/api/principal/user/principal-partnership/${context.principal_partnership_id}`,
-        delete: `${AYO_API}/api/principal/user/principal-partnership/${context.principal_partnership_id}`
+        get: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/principal-partnership`,
+        create: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/principal-partnership`,
+        put: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/principal-partnership/${context.principal_partnership_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/principal-partnership/${context.principal_partnership_id}`
       },
       report_list: {
         get_report: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report`,

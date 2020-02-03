@@ -75,8 +75,8 @@ export class PartnershipIndexComponent implements OnInit {
 
     this.principalPartnershipService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -105,8 +105,8 @@ export class PartnershipIndexComponent implements OnInit {
     }
 
     this.principalPartnershipService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
 
       this.loadingIndicator = false;
     });
@@ -123,8 +123,8 @@ export class PartnershipIndexComponent implements OnInit {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.principalPartnershipService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
 
       this.loadingIndicator = false;
     });
@@ -144,8 +144,8 @@ export class PartnershipIndexComponent implements OnInit {
     }
 
     this.principalPartnershipService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
 
       this.loadingIndicator = false;
     });
