@@ -20,6 +20,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
   orderStatuses: any[] = [];
   statusForm: FormControl = new FormControl('', Validators.required);
   dialogRef: any;
+  onLoad: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,6 +31,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
     private pengajuanSrcService: PengajuanSrcService,
     private dialog: MatDialog
   ) {
+    this.onLoad = true;
     this.shortDetail = this.dataService.getFromStorage('detail_pengajuan_src');
   }
 
@@ -41,6 +43,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
     this.pengajuanSrcService.show({ pengajuan_id: this.shortDetail.id })
       .subscribe(res => {
         console.log('res', res);
+        this.onLoad = false
         this.detailPengajuan = res.data;
         if (res && res.data && res.data.product) {
           this.productList = res.data.product;
@@ -49,6 +52,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
           this.orderStatuses = res.data.available_status;
         }
       }, err => {
+        this.onLoad = false
         console.log('err', err);
       })
   }
