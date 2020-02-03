@@ -9,6 +9,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-pengajuan-src',
@@ -24,6 +25,9 @@ export class PengajuanSrcComponent implements OnInit {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
+  listProvince: any[] = [];
+  listCities: any[] = [];
+  listDistricts: any[] = [];
 
   keyUp = new Subject<string>();
 
@@ -93,49 +97,115 @@ export class PengajuanSrcComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.formFilter = this.formBuilder.group({
+    //   national: [""],
+    //   zone: [""],
+    //   region: [""],
+    //   area: [""],
+    //   salespoint: [""],
+    //   district: [""],
+    //   territory: [""]
+    // })
     this.formFilter = this.formBuilder.group({
-      national: [""],
-      zone: [""],
-      region: [""],
-      area: [""],
-      salespoint: [""],
-      district: [""],
-      territory: [""]
+      province_id: [""],
+      city_id: [""],
+      district_id: [""],
     })
 
     // this.initArea();
-    this.initAreaV2();
+    // this.initAreaV2();
     this.getPengajuanSRC();
+    this.getProvinces();
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
-      this.getPengajuanSRC();
-    });
+    // this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
+    //   this.getPengajuanSRC();
+    // });
 
-    this.formFilter.get('zone').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('region', res);
-      }
-    });
-    this.formFilter.get('region').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('area', res);
-      }
-    });
-    this.formFilter.get('area').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('salespoint', res);
-      }
-    });
-    this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('district', res);
-      }
-    });
-    this.formFilter.get('district').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('territory', res);
-      }
-    });
+    // this.formFilter.get('zone').valueChanges.subscribe(res => {
+    //   if (res) {
+    //     this.getAudienceAreaV2('region', res);
+    //   }
+    // });
+    // this.formFilter.get('region').valueChanges.subscribe(res => {
+    //   if (res) {
+    //     this.getAudienceAreaV2('area', res);
+    //   }
+    // });
+    // this.formFilter.get('area').valueChanges.subscribe(res => {
+    //   if (res) {
+    //     this.getAudienceAreaV2('salespoint', res);
+    //   }
+    // });
+    // this.formFilter.get('salespoint').valueChanges.subscribe(res => {
+    //   if (res) {
+    //     this.getAudienceAreaV2('district', res);
+    //   }
+    // });
+    // this.formFilter.get('district').valueChanges.subscribe(res => {
+    //   if (res) {
+    //     this.getAudienceAreaV2('territory', res);
+    //   }
+    // });
+
+    this.formFilter
+      .get('province_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.listCities = [];
+          this.getPengajuanSRC(true);
+          this.getCities(res);
+        }
+      })
+    this.formFilter
+      .get('city_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.listDistricts = [];
+          this.getPengajuanSRC(true);
+          this.getDistricts(res);
+        }
+      })
+    this.formFilter
+      .get('district_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.getPengajuanSRC(true);
+          // this.getDistricts(res);
+        }
+      })
+  }
+
+  getProvinces() {
+    this.pengajuanSrcService.getProvinces()
+      .subscribe(res => {
+        console.log('res provinces', res);
+        this.listProvince = res.data;
+      }, err => {
+        console.log('err get provinces', err);
+      })
+  }
+
+  getCities(province_id) {
+    this.pengajuanSrcService.getCities({ province_id })
+      .subscribe(res => {
+        console.log('res cities', res);
+        this.listCities = res.data;
+      }, err => {
+        console.log('err get cities', err);
+      })
+  }
+
+  getDistricts(city_id) {
+    this.pengajuanSrcService.getDistricts({ city_id })
+      .subscribe(res => {
+        console.log('res districts', res);
+        this.listDistricts = res.data;
+      }, err => {
+        console.log('err get districts', err);
+      })
   }
 
   initAreaV2() {
@@ -470,9 +540,9 @@ export class PengajuanSrcComponent implements OnInit {
     return newLastSelfArea;
   }
 
-  getPengajuanSRC() {
-    // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = 1;
+  getPengajuanSRC(withArea = null) {
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    this.pagination.area = withArea ? areaSelected[areaSelected.length - 1].value : 1;
     // this.loadingIndicator = true;
     // // this.pagination.sort = "name";
     // // this.pagination.sort_type = "asc";
@@ -645,6 +715,62 @@ export class PengajuanSrcComponent implements OnInit {
       default:
         return { name: 'APLIKASI DITOLAK', bgColor: '#ff2626', textColor: '#fff' }
     }
+  }
+
+  async export() {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.pengajuanSrcService.export({ area: 1 }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PengajuanSRC_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
 }

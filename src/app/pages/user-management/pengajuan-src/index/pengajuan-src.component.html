@@ -2,11 +2,12 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Pengajuan SRC'">
     <div class="button-row" fxLayout="row">
+      <button mat-raised-button aria-label="Login" (click)="export()" type="button">EXPORT
+        PENGAJUAN SRC</button>
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','pengajuan-src','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
-      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
       <!-- <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button"
         class="is-danger" (click)="deleteAllPaguyuban()">HAPUS</button> -->
     </div>
@@ -27,6 +28,28 @@
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Provinsi" formControlName="province_id">
+              <mat-option value="1">Semua Provinsi</mat-option>
+              <mat-option *ngFor="let item of listProvince" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Kabupaten / Kota" formControlName="city_id">
+              <mat-option *ngIf="listCities.length > 0" [value]="formFilter.get('province_id').value">Semua Kota
+              </mat-option>
+              <mat-option *ngFor="let item of listCities" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Kecamatan" formControlName="district_id">
+              <mat-option *ngIf="listDistricts.length > 0" [value]="formFilter.get('city_id').value">Semua Kecamatan
+              </mat-option>
+              <mat-option *ngFor="let item of listDistricts" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
@@ -78,7 +101,7 @@
                 :
                 item.code}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
