@@ -464,7 +464,7 @@ export class TemplateEditComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] === true ? 1 : 0) : 0,
+            is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
