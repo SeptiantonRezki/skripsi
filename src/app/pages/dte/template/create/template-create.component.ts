@@ -457,7 +457,7 @@ export class TemplateCreateComponent {
             question: item.question,
             type: item.type,
             required: item.type === 'stock_check' ? 1 : null,
-            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] === true ? 1 : 0) : false,
+            is_next_question: (this.frmIsBranching.value && item.type === 'radio') ? (this.questionHasNext[item.id] === true ? 1 : 0) : 0,
             possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
