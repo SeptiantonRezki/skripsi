@@ -239,9 +239,10 @@ export class TemplateEditComponent {
       let questions = this.templateTaskForm.get('questions') as FormArray;
       let additionals = questions.at(qIdx).get('additional') as FormArray;
       additionals.at(addIdx).get('next_question').setValue('');
-      let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+
+      let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
       if (referenceQIdx.next) {
-        let referenceHasNext = this.allQuestionList[referenceQIdx.index]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+        let referenceHasNext = this.allQuestionList[referenceQIdx.next]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
         this.questionHasNext[referenceQIdx.next] = referenceHasNext.length > 0 ? true : false;
       }
       this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
@@ -347,19 +348,24 @@ export class TemplateEditComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additionalValue = questions.at(qIdx).get('additional').value;
     let hasNextQuestion = additionalValue.find(val => val.next_question !== '');
-    console.log('additionalValue', additionalValue, hasNextQuestion);
+    let referenceQIdx = { next: this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'], index: additionalIdx };
 
     // this.allQuestionList[qIdx]['is_next_question'] = hasNextQuestion ? true : false;
-
     if (questionPossibility === 'none ') {
       this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = '';
+    } else if (questionPossibility == '-99') {
+      this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = -99;
     } else {
       this.allQuestionList[qIdx]['possibilities'][additionalIdx]['next'] = questionPossibility.id ? questionPossibility.id : '';
     }
 
-    let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "");
+    let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
     console.log('hax next onchange', hasNext);
     this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
+    if (referenceQIdx.next) {
+      let referenceHasNext = this.allQuestionList[referenceQIdx.next]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
+      this.questionHasNext[referenceQIdx.next] = referenceHasNext.length > 0 ? true : false;
+    }
 
     this.findQuestionsHasNext();
   }
@@ -368,7 +374,7 @@ export class TemplateEditComponent {
     // let questions = this.templateTaskForm.get('questions').value;
     let allNexts = [];
     this.allQuestionList.map(q => {
-      let qData = q.possibilities.filter(qa => (qa.next !== null && qa.next !== ""));
+      let qData = q.possibilities.filter(qa => (!!qa.next && qa.next !== "" && qa.next != "-99"));
       allNexts = [
         ...allNexts,
         ...qData
