@@ -54,6 +54,8 @@ export class TemplateCreateComponent {
   listProductSelected: any = {};
   allQuestionList: any[] = [];
   questionHasNext: any = {};
+  childQuestions: any = {};
+  filteredNext: any[] = []
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -342,7 +344,8 @@ export class TemplateCreateComponent {
       // }
     });
     console.log('all next', allNexts);
-    let filteredNexts = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
+    this.filteredNext = [...allNexts];
+    let filteredNext = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
       return index === self.indexOf(elem);
     }).map(elem => {
       this.questionHasNext[elem] = true;
@@ -459,11 +462,14 @@ export class TemplateCreateComponent {
         is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
+          console.log('fioter', this.filteredNext);
+          let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
           return {
             id: item.id,
             question: item.question,
             type: item.type,
             required: item.type === 'stock_check' ? 1 : null,
+            is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
@@ -490,7 +496,6 @@ export class TemplateCreateComponent {
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
       console.log(body, this.questionHasNext);
-      // return;
       this.taskTemplateService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });

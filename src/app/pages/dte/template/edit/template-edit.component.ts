@@ -57,6 +57,7 @@ export class TemplateEditComponent {
 
   allQuestionList: any[] = [];
   questionHasNext: any = {};
+  filteredNext: any[] = [];
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -380,6 +381,7 @@ export class TemplateEditComponent {
         ...qData
       ];
     });
+    this.filteredNext = [...allNexts];
     let filteredNexts = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
       return index === self.indexOf(elem);
     }).map(elem => {
@@ -466,10 +468,12 @@ export class TemplateEditComponent {
         is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
+          let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
           return {
             id: item.id,
             question: item.question,
             type: item.type,
+            is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
