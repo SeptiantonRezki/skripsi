@@ -180,6 +180,7 @@ export class CreatePengajuanSrcComponent implements OnInit {
   submit() {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid && this.verticalStepperStep3.valid) {
       this.submitting = true;
+      let phoneNumber = this.verticalStepperStep2.getRawValue()["phone"] && this.verticalStepperStep2.getRawValue()["phone"].slice(0, 3) === '+62' ? this.verticalStepperStep2.getRawValue()["phone"].slice(3, this.verticalStepperStep2.getRawValue()["phone"].length) : `+62${this.verticalStepperStep2.getRawValue()["phone"]}`
 
       let fd = new FormData();
       fd.append('name', this.verticalStepperStep1.get('name').value);
@@ -190,7 +191,7 @@ export class CreatePengajuanSrcComponent implements OnInit {
       fd.append('latitude', this.verticalStepperStep1.get('lat').value);
       fd.append('longitude', this.verticalStepperStep1.get('lng').value);
       fd.append('owner', this.verticalStepperStep2.get('owner').value);
-      fd.append('phone', this.verticalStepperStep2.get('phone').value);
+      fd.append('phone', phoneNumber);
       fd.append('source', this.verticalStepperStep2.get('source').value);
       fd.append('channel', this.verticalStepperStep2.get('channel').value);
       fd.append('image', this.verticalStepperStep3.get('image').value);

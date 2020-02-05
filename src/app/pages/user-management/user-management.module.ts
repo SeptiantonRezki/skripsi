@@ -60,6 +60,7 @@ import { PengajuanSrcComponent } from './pengajuan-src/index/pengajuan-src.compo
 import { CreatePengajuanSrcComponent } from './pengajuan-src/create/create-pengajuan-src.component';
 import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-pengajuan-src.component';
 import { ReasonDialogComponent } from './pengajuan-src/reason-dialog/reason-dialog.component';
+import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-edit.component';
 
 @NgModule({
   imports: [
@@ -129,7 +130,8 @@ import { ReasonDialogComponent } from './pengajuan-src/reason-dialog/reason-dial
     PengajuanSrcComponent,
     CreatePengajuanSrcComponent,
     DetailPengajuanSrcComponent,
-    ReasonDialogComponent
+    ReasonDialogComponent,
+    PengajuanSrcEditComponent
   ],
   entryComponents: [ImportAccessCashierDialogComponent, ReasonDialogComponent],
   providers: [

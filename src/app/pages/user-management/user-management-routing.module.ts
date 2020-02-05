@@ -33,6 +33,7 @@ import { ImportAccessCashierDialogComponent } from "./retailer/import-access-cas
 import { PengajuanSrcComponent } from "./pengajuan-src/index/pengajuan-src.component";
 import { CreatePengajuanSrcComponent } from "./pengajuan-src/create/create-pengajuan-src.component";
 import { DetailPengajuanSrcComponent } from "./pengajuan-src/detail/detail-pengajuan-src.component";
+import { PengajuanSrcEditComponent } from "./pengajuan-src/edit/pengajuan-src-edit.component";
 
 const routes: Routes = [
   {
@@ -297,6 +298,13 @@ const routes: Routes = [
     component: DetailPengajuanSrcComponent,
     data: {
       breadcrumbs: brConfig.pengajuanSRC.detail
+    }
+  },
+  {
+    path: "pengajuan-src/edit",
+    component: PengajuanSrcEditComponent,
+    data: {
+      breadcrumbs: brConfig.pengajuanSRC.edit
     }
   },
 ];

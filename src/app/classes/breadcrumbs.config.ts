@@ -297,6 +297,18 @@ export const brConfig = {
         url: "",
         name: "Detail Pengajuan SRC"
       }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/pengajuan-src",
+        name: "Daftar Pengajuan SRC"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengajuan SRC"
+      }
     ]
   },
   partnership: {
