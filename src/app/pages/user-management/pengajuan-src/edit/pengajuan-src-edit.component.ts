@@ -27,6 +27,9 @@ export class PengajuanSrcEditComponent implements OnInit {
   detailPengajuan: any;
   productChecked: any = {};
 
+  files: File;
+  validComboDrag: Boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
