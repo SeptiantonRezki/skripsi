@@ -85,7 +85,7 @@ export class PengajuanSrcEditComponent implements OnInit {
           lat: this.detailPengajuan.latitude,
           lng: this.detailPengajuan.longitude,
           owner: this.detailPengajuan.owner,
-          phone: this.detailPengajuan.phone ? this.detailPengajuan.phone.split("+62")[1] : this.detailPengajuan.phone,
+          phone: this.detailPengajuan.phone ? (this.detailPengajuan.phone.slice(0, 3) === '+62' ? this.detailPengajuan.phone.split("+62")[1] : this.detailPengajuan.phone) : '',
           source: this.detailPengajuan.source,
           channel: this.detailPengajuan.channel,
           image: this.detailPengajuan.image_url
