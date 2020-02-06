@@ -56,6 +56,30 @@ export class PengajuanSrcEditComponent implements OnInit {
       channel: ["", Validators.required],
       image: ["", Validators.required]
     })
+
+    this.formPengajuanSrc
+      .get('province_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.listDistricts = [];
+          this.listCities = [];
+          this.formPengajuanSrc.get("district_id").setValue("");
+          this.formPengajuanSrc.get("city_id").setValue("");
+          this.getCities(res);
+        }
+      })
+    this.formPengajuanSrc
+      .get('city_id')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.listDistricts = [];
+          this.formPengajuanSrc.get("district_id").setValue("");
+          this.getDistricts(res);
+        }
+      })
+
     this.getDetail();
     this.getListChannels();
     this.getListProducts();
