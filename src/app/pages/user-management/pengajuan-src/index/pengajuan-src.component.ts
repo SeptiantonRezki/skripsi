@@ -110,12 +110,13 @@ export class PengajuanSrcComponent implements OnInit {
       .get('province_id')
       .valueChanges
       .subscribe(res => {
+        console.log('on change province', res);
         if (res) {
           this.listCities = [];
           this.listDistricts = [];
           this.formFilter.get('city_id').setValue("");
           this.formFilter.get('district_id').setValue("");
-          this.getPengajuanSRC('province_id');
+          this.getPengajuanSRC(res === -1 ? null : 'province_id');
           if (res && !res['value']) this.getCities(res && res['value'] ? res['value'] : res);
         }
       })
@@ -172,9 +173,7 @@ export class PengajuanSrcComponent implements OnInit {
   }
 
   getPengajuanSRC(keyArea = null) {
-
     if (!!keyArea && !!this.formFilter.get(keyArea).value && !this.formFilter.get(keyArea).value['value']) {
-      console.log()
       this.pagination[keyArea] = this.formFilter.get(keyArea).value;
     } else if (!!keyArea && !!this.formFilter.get(keyArea).value && !!this.formFilter.get(keyArea).value['value']) {
       console.log(this.formFilter.get(keyArea).value);
@@ -189,6 +188,12 @@ export class PengajuanSrcComponent implements OnInit {
       } else if (area.key == 'city_id') {
         delete this.pagination['district_id'];
       }
+    }
+
+    if (this.formFilter.get('province_id').value == -1) {
+      this.pagination['province_id'] = null;
+      this.pagination['city_id'] = null;
+      this.pagination['district_id'] = null;
     }
 
     const page = this.dataService.getFromStorage("page");

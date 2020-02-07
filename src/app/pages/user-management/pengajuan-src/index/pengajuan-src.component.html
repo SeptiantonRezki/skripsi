@@ -29,7 +29,7 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="20%" class="is-light form-primary">
             <mat-select placeholder="Provinsi" formControlName="province_id">
-              <mat-option [value]="{value: null, key: 'national'}">Semua Provinsi</mat-option>
+              <mat-option [value]="-1">Semua Provinsi</mat-option>
               <mat-option *ngFor="let item of listProvince" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
