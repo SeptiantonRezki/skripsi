@@ -41,7 +41,7 @@ export class FieldForceEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private fieldforceService: FieldForceService,
-  ) { 
+  ) {
     this.formdataErrors = {
       status: {},
       national: {},
@@ -89,6 +89,7 @@ export class FieldForceEditComponent {
       wilayah: this.formBuilder.array([], Validators.required),
       password: [""],
       password_confirmation: [""],
+      version: [""]
     });
 
     this.formFF.valueChanges.subscribe(() => {
@@ -102,12 +103,13 @@ export class FieldForceEditComponent {
   }
 
   async setDetail() {
-    
+
     this.formFF.controls['fullname'].setValue(this.detailFF.fullname);
     this.formFF.controls['username'].setValue(this.detailFF.username);
     this.formFF.controls['status'].setValue(this.detailFF.status);
+    this.formFF.controls['version'].setValue(this.detailFF.version);
 
-    for (const {val, index} of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
+    for (const { val, index } of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
       const response = await this.fieldforceService.getParentByCode({ parent: val }).toPromise();
       let wilayah = this.formFF.controls['wilayah'] as FormArray;
 
@@ -131,11 +133,13 @@ export class FieldForceEditComponent {
       this.initArea(index);
       this.initFormGroup(response, index);
 
-      if (this.detailFF.area_code.length === (index+1)) {
+      if (this.detailFF.area_code.length === (index + 1)) {
         this.onLoad = false;
         if (this.isDetail) this.formFF.disable();
       }
     }
+    this.formFF.controls['version'].disable();
+
   }
 
   createWilayah(): FormGroup {
@@ -219,151 +223,151 @@ export class FieldForceEditComponent {
     let wilayah = this.formFF.controls['wilayah'] as FormArray;
     switch (selection) {
       case 'zone':
+        const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+        let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+
+        while (list.length > 0) {
+          list.removeAt(list.length - 1);
+        }
+
+        _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+          list.push(this.formBuilder.group(item));
+        });
+
+        if (type !== 'render') {
+          wilayah.at(index).get('region').setValue(null);
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
+
+          this.clearFormArray(index, 'list_region');
+          this.clearFormArray(index, 'list_area');
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
+        break;
+      case 'region':
+        item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
           const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-
           _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
             list.push(this.formBuilder.group(item));
           });
+        } else {
+          wilayah.at(index).get(`list_${selection}`).setValue([]);
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('region').setValue(null);
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('region').setValue('');
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(index, 'list_region');
-            this.clearFormArray(index, 'list_area');
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
-          }
-        break;
-      case 'region':
-          item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-              list.push(this.formBuilder.group(item));
-            });
-          } else {
-            wilayah.at(index).get(`list_${selection}`).setValue([]);
-          }
-
-          if (type !== 'render') {
-            wilayah.at(index).get('region').setValue('');
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
-
-            this.clearFormArray(index, 'list_area');
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
-          }
+          this.clearFormArray(index, 'list_area');
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'area':
-          item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-              list.push(this.formBuilder.group(item));
-            });
-          } else {
-            wilayah.at(index).get(`list_${selection}`).setValue([]);
+        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+            list.push(this.formBuilder.group(item));
+          });
+        } else {
+          wilayah.at(index).get(`list_${selection}`).setValue([]);
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('area').setValue('');
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('area').setValue('');
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(index, 'list_salespoint');
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
-          }
+          this.clearFormArray(index, 'list_salespoint');
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'salespoint':
-          item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-              list.push(this.formBuilder.group(item));
-            });
-          } else {
-            wilayah.at(index).get(`list_${selection}`).setValue([]);
+        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+            list.push(this.formBuilder.group(item));
+          });
+        } else {
+          wilayah.at(index).get(`list_${selection}`).setValue([]);
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('salespoint').setValue('');
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('salespoint').setValue('');
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(index, 'list_district');
-            this.clearFormArray(index, 'list_territory');
-          }
+          this.clearFormArray(index, 'list_district');
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'district':
-          item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-              list.push(this.formBuilder.group(item));
-            });
-          } else {
-            wilayah.at(index).get(`list_${selection}`).setValue([]);
+        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+            list.push(this.formBuilder.group(item));
+          });
+        } else {
+          wilayah.at(index).get(`list_${selection}`).setValue([]);
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('district').setValue('');
-            wilayah.at(index).get('territory').setValue('');
+        if (type !== 'render') {
+          wilayah.at(index).get('district').setValue('');
+          wilayah.at(index).get('territory').setValue('');
 
-            this.clearFormArray(index, 'list_territory');
-          }
+          this.clearFormArray(index, 'list_territory');
+        }
         break;
       case 'territory':
         item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-          if (item.name !== 'all') {
-            const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-            let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-            while (list.length > 0) {
-              list.removeAt(list.length - 1);
-            }
-            _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-              list.push(this.formBuilder.group(item));
-            });
-          } else {
-            wilayah.at(index).get(`list_${selection}`).setValue([]);
+        if (item.name !== 'all') {
+          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
+          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
           }
+          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
+            list.push(this.formBuilder.group(item));
+          });
+        } else {
+          wilayah.at(index).get(`list_${selection}`).setValue([]);
+        }
 
-          if (type !== 'render') {
-            wilayah.at(index).get('territory').setValue('');
-          }
+        if (type !== 'render') {
+          wilayah.at(index).get('territory').setValue('');
+        }
         break;
-    
+
       default:
         break;
     }
@@ -374,7 +378,7 @@ export class FieldForceEditComponent {
   }
 
   submit() {
-    if (this.formFF.valid) {  
+    if (this.formFF.valid) {
       let wilayah = this.formFF.controls['wilayah'] as FormArray;
 
       let body = {
@@ -397,7 +401,7 @@ export class FieldForceEditComponent {
           this.router.navigate(["user-management", "field-force"]);
           window.localStorage.removeItem("detail_field_force");
         },
-        err => {}
+        err => { }
       );
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
@@ -407,7 +411,7 @@ export class FieldForceEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length){
+    if (value && array.length) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
@@ -429,7 +433,7 @@ export class FieldForceEditComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx+1} ?`,
+      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };

@@ -12,7 +12,7 @@ import { DialogService } from 'app/services/dialog.service';
 export class CustomerDetailComponent {
   formCustomer: FormGroup;
   onLoad = true;
-  
+
   customer_id: any;
   detailCustomer: any;
   listStatus: any[] = [
@@ -56,7 +56,8 @@ export class CustomerDetailComponent {
           email: [res.email || '-'],
           refferal_name: [res.refferal_name || '-'],
           refferal_code: [res.refferal_code || '-'],
-          total_coupon: [res.total_coupon]
+          total_coupon: [res.total_coupon],
+          version: res.version
         });
 
         this.formCustomer.disable();
