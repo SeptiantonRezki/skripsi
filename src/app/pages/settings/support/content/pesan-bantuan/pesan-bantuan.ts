@@ -40,6 +40,7 @@ export class PesanBantuan {
   isLoadingSearch: boolean;
   isSearchFound: boolean;
   roomList: any;
+  roomListCopy: any;
   // public kategoriKendala: FormControl = new FormControl();
   // public detailKendala: FormControl = new FormControl();
 
@@ -80,6 +81,7 @@ export class PesanBantuan {
     this.isLoadingSearch = false;
     this.isSearchFound = false;
     this.roomList = [];
+    this.roomListCopy = [];
 
     this.dataChat = [];
     this.dataQiscus = null;
@@ -130,6 +132,7 @@ export class PesanBantuan {
           }
           return item;
         });
+        this.roomListCopy = this.roomList;
       }
       if (data.isActiveRoomChat !== undefined) {
         if (!data.isActiveRoomChat) {
@@ -228,17 +231,17 @@ export class PesanBantuan {
           inquirycategory: this.formNewInquiry.get('kategoriKendala').value,
           detailedinquiry: this.formNewInquiry.get('detailKendala').value
         };
-        const params = {
-          app_id: environment.qiscus_appIdMC,
-          user_id: extras.phonenumber,
-          name: this.dataProfile.fullname,
-          avatar: this.dataProfile.image_url,
-          extras: JSON.stringify(extras),
-          nonce: null,
-        };
         // console.log('PARAM', params);
         this.qs.qiscusMC.getNonce().then(async (res) => {
-          params.nonce = res.nonce;
+          const params = {
+            app_id: environment.qiscus_appIdMC,
+            user_id: extras.phonenumber,
+            name: this.dataProfile.fullname,
+            avatar: this.dataProfile.image_url,
+            extras: JSON.stringify(extras),
+            nonce: res.nonce,
+            reset_extras: true,
+          };
           await this.qs.qiscusCreateRoomMultichannel(params).subscribe(async(res_2: any) => {
             this.openDialogSuccess();
             // console.log('qiscusLoginMultichannel', res_2);
@@ -313,8 +316,29 @@ export class PesanBantuan {
     this.searchRoomControl.setValue('');
   }
 
-  filter(value: string) {
-    return [];
+  async filter(value: string) {
+    if (value) {
+      const ret = await this.roomList.filter((item: any) => {
+        return item.additionalOptions.extras.inquirycategory.includes(value);
+      })
+      if (ret && ret.length > 0){
+        this.isSearchFound = true;
+        this.roomList = ret;
+        return [];
+      }
+      this.isSearchFound = false;
+      return [{
+        id: null,
+        title: "",
+        text: "HASIL PENCARIAN untuk \"" + value + "\" tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.",
+        value: value,
+        disabled: true
+      }];
+    } else {
+      this.isSearchFound = true;
+      this.roomList = this.roomListCopy;
+      return [];
+    }
   }
 
   openRoomDetail(room: any, index: number) {
@@ -1003,6 +1027,7 @@ export class PesanBantuan {
               }
               return {...item};
             });
+            this.roomListCopy = this.roomList;
           }
           // console.log('success getRoomList2', rooms)
         // resolve(console.log('success getRoomList', rooms));

@@ -75,7 +75,7 @@
               <div class="subtitle-room" *ngIf="room.last_comment.type !== 'file_attachment'">{{room.last_comment_message}}</div>
             </div>
             <div class="pr-8" style="flex: 1;" fxLayout="column" fxFlex="20">
-              <span style="font-size: 12px; color: #888; text-align: right;">{{room.last_comment_message_created_at | date: 'dd MMM yyyy'}}</span>
+              <span style="font-size: 12px; color: #888; text-align: right;">{{room.last_comment_message_created_at | date: 'dd MMMM'}}</span>
             </div>
           </div>
         </mat-list-item>
