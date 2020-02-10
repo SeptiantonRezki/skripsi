@@ -377,6 +377,10 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
+      },
+      otp_settings: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

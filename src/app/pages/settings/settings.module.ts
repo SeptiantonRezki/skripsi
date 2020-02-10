@@ -36,6 +36,7 @@ import { SupportComponent } from './support/support.component';
 import { PesanBantuan, } from "./support/content/pesan-bantuan/pesan-bantuan";
 import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
 import { PipesModule } from "app/pipe/pipes.module";
+import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { PipesModule } from "app/pipe/pipes.module";
     ForceUpdateAppsComponent,
     SupportComponent,
     PesanBantuan,
-    DialogOtherHelp
+    DialogOtherHelp,
+    OTPSettingsComponent
   ],
   exports: [
     RoleIndexComponent,
