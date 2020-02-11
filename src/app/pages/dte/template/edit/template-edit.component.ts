@@ -216,7 +216,7 @@ export class TemplateEditComponent {
         id: item.id,
         question: item.question,
         is_next_question: item.is_next_question == 1 ? true : false,
-        possibilities: item.possibilities.map(pb => ({
+        possibilities: item.possibilities && item.possibilities.map(pb => ({
           ...pb,
           isBranching: pb.next !== null ? true : false
         }))
