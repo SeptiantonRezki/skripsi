@@ -1119,6 +1119,13 @@ export const brConfig = {
         url: "",
         name: "Bantuan"
       }
+    ],
+    otp: [
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengaturan OTP"
+      }
     ]
   },
   admin: {
