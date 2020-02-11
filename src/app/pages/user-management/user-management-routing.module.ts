@@ -30,6 +30,10 @@ import { PartnershipIndexComponent } from "./principal-partnership/index/partner
 import { PartnershipCreateComponent } from "./principal-partnership/create/partnership-create.component";
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 import { ImportAccessCashierDialogComponent } from "./retailer/import-access-cashier-dialog/import-access-cashier-dialog.component";
+import { PengajuanSrcComponent } from "./pengajuan-src/index/pengajuan-src.component";
+import { CreatePengajuanSrcComponent } from "./pengajuan-src/create/create-pengajuan-src.component";
+import { DetailPengajuanSrcComponent } from "./pengajuan-src/detail/detail-pengajuan-src.component";
+import { PengajuanSrcEditComponent } from "./pengajuan-src/edit/pengajuan-src-edit.component";
 
 const routes: Routes = [
   {
@@ -274,7 +278,35 @@ const routes: Routes = [
       breadcrumbs: brConfig.partnership.detail
     },
     // canActivate: [PageGuard]
-  }
+  },
+  {
+    path: "pengajuan-src",
+    component: PengajuanSrcComponent,
+    data: {
+      breadcrumbs: brConfig.pengajuanSRC.index
+    }
+  },
+  {
+    path: "pengajuan-src/create",
+    component: CreatePengajuanSrcComponent,
+    data: {
+      breadcrumbs: brConfig.pengajuanSRC.create
+    }
+  },
+  {
+    path: "pengajuan-src/detail",
+    component: DetailPengajuanSrcComponent,
+    data: {
+      breadcrumbs: brConfig.pengajuanSRC.detail
+    }
+  },
+  {
+    path: "pengajuan-src/edit",
+    component: PengajuanSrcEditComponent,
+    data: {
+      breadcrumbs: brConfig.pengajuanSRC.edit
+    }
+  },
 ];
 
 @NgModule({

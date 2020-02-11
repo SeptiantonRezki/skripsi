@@ -108,6 +108,21 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/customer/${context.customer_id}`
       },
+      pengajuan_src: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/${context.pengajuan_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/update-status/${context.pengajuan_id}`,
+        list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/list/product`,
+        list_source: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/list/source`,
+        list_channel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/list/channel`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/export/data`,
+        list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/province?page=1&sort=name&page=all`,
+        list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city?page=all&sort=name&province_id=${context.province_id}`,
+        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/district?page=all&sort=name&city_id=${context.city_id}`
+      },
       banner: {
         get: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
         create: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
