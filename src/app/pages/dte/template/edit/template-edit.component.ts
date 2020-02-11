@@ -208,7 +208,7 @@ export class TemplateEditComponent {
         // required: item.required,
         additional: this.formBuilder.array(
           item.additional.map((itm, idx) => {
-            return this.formBuilder.group({ option: itm, next_question: item.possibilities.length > 0 ? item.possibilities[idx].next : '' })
+            return this.formBuilder.group({ option: itm, next_question: item.possibilities && item.possibilities.length > 0 ? item.possibilities[idx].next : '' })
           })
         )
       }));
