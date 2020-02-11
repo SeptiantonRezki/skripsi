@@ -24,5 +24,6 @@ export const server = {
   product: "product",
   task: "task-management",
   submission: "task-submission",
-  coin: "coin-management"
+  coin: "coin-management",
+  community: "community"
 }
