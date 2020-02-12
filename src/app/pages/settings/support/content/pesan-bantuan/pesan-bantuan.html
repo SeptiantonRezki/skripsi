@@ -88,7 +88,7 @@
             <mat-card-title class="q-card-header-title">
               <span class="header-text">{{ dataRoomSelected.additionalOptions ? dataRoomSelected.additionalOptions.extras.inquirycategory : null }}</span>
               <div>
-                <span class="header-subtext">{{ dataRoomSelected.last_comment_message_created_at | date: 'dd MMM yyyy'}}</span>
+                <span class="header-subtext">{{ dataRoomSelected.lastCommentAt | date: 'dd MMM yyyy'}}</span>
               </div>
             </mat-card-title>
           </mat-card-header>

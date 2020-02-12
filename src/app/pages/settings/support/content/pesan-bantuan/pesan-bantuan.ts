@@ -346,6 +346,7 @@ export class PesanBantuan {
     this.isLoadMessage = true;
     this.dataChat = [];
     this.dataRoomSelected = room;
+    this.dataRoomSelected.lastCommentAt = room.last_comment_message_created_at;
     this.dataRoomSelected.additionalOptions = JSON.parse(room.options);
     if (this.dataRoomSelected.additionalOptions.is_resolved) {
       this.chatIsOver = true;
