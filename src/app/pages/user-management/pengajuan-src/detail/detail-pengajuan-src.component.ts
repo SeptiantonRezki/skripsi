@@ -6,6 +6,7 @@ import { DataService } from 'app/services/data.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ReasonDialogComponent } from '../reason-dialog/reason-dialog.component';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-detail-pengajuan-src',
@@ -22,6 +23,9 @@ export class DetailPengajuanSrcComponent implements OnInit {
   dialogRef: any;
   onLoad: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
@@ -32,6 +36,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.onLoad = true;
+    this.permission = this.roles.getRoles("principal.pengajuansrc");
     this.shortDetail = this.dataService.getFromStorage('detail_pengajuan_src');
   }
 
@@ -51,6 +56,7 @@ export class DetailPengajuanSrcComponent implements OnInit {
         if (res && res.data && res.data.available_status) {
           this.orderStatuses = res.data.available_status;
         }
+        console.log(this.permission.ubah, this.orderStatuses)
       }, err => {
         this.onLoad = false
         console.log('err', err);

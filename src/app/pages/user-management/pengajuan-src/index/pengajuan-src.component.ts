@@ -63,7 +63,7 @@ export class PengajuanSrcComponent implements OnInit {
     this.onLoad = true;
     this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.paguyuban');
+    this.permission = this.roles.getRoles('principal.pengajuansrc');
     console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
