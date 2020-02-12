@@ -346,6 +346,9 @@ export class PaguyubanEditComponent {
       else if (body['password'] !== body['password_confirmation']) return this.dialogService.openSnackBar({ message: 'Konfirmasi Kata Sandi tidak sesuai!' });
 
       this.submitting = true;
+      console.log('body', body);
+      if (body['password'] == null || body['password'] == "") delete body['password'];
+      if (body['password_confirmation'] == null || body['password_confirmation'] == "") delete body['password_confirmation'];
       this.paguyubanService.put(body, { paguyuban_id: this.detailPaguyuban.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({
