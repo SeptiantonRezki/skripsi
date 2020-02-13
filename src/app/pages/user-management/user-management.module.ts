@@ -39,6 +39,22 @@ import { RetailerIndexComponent } from "./retailer/index/retailer-index.componen
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
 
+//PRIVATE-LABEL
+import { OrdertoSupplierDetailComponent } from "./private-label/orderto-supplier/detail/orderto-supplier-detail.component";
+import { OrdertoSupplierIndexComponent } from "./private-label/orderto-supplier/index/orderto-supplier-index.component";
+
+import { PanelMitraCreateComponent } from "./private-label/panel-mitra/create/panel-mitra-create.component";
+import { PanelMitraEditComponent } from "./private-label/panel-mitra/edit/panel-mitra-edit.component";
+import { PanelMitraIndexComponent } from "./private-label/panel-mitra/index/panel-mitra-index.component";
+
+import { SupplierCompanyCreateComponent } from "./private-label/supplier-company/create/supplier-company-create.component";
+import { SupplierCompanyEditComponent } from "./private-label/supplier-company/edit/supplier-company-edit.component";
+import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/index/supplier-company-index.component";
+
+import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
+import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
+import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+
 import { PageGuard } from "app/classes/auth.guard";
 
 import {
@@ -97,7 +113,20 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
     RetailerCreateComponent,
     RetailerEditComponent,
     CustomerIndexComponent,
-    CustomerDetailComponent
+    CustomerDetailComponent,
+
+    OrdertoSupplierDetailComponent,
+    OrdertoSupplierIndexComponent,
+    PanelMitraCreateComponent,
+    PanelMitraEditComponent,
+    PanelMitraIndexComponent,
+    SupplierCompanyCreateComponent,
+    SupplierCompanyEditComponent,
+    SupplierCompanyIndexComponent,
+    UserSupplierCreateComponent,
+    UserSupplierEditComponent,
+    UserSupplierIndexComponent
+
   ],
   declarations: [
     AdminPrincipalIndexComponent,
@@ -121,7 +150,19 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
     PartnershipCreateComponent,
     PartnershipIndexComponent,
     PartnershipEditComponent,
-    ImportAccessCashierDialogComponent
+    ImportAccessCashierDialogComponent,
+
+    OrdertoSupplierDetailComponent,
+    OrdertoSupplierIndexComponent,
+    PanelMitraCreateComponent,
+    PanelMitraEditComponent,
+    PanelMitraIndexComponent,
+    SupplierCompanyCreateComponent,
+    SupplierCompanyEditComponent,
+    SupplierCompanyIndexComponent,
+    UserSupplierCreateComponent,
+    UserSupplierEditComponent,
+    UserSupplierIndexComponent
   ],
   entryComponents: [ImportAccessCashierDialogComponent],
   providers: [

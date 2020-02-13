@@ -311,6 +311,188 @@ export const brConfig = {
       }
     ]
   },
+  privatelabel: {
+    suppliercompany: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Supplier Company"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Supplier Company"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Supplier Company"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Supplier Company"
+        }
+      ]
+    },
+    usersupplier: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "User Supplier"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/user-supplier",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "User Supplier"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/user-supplier",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "User Supplier"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/user-supplier",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "User Supplier"
+        }
+      ]
+    },
+    panelmitra: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ]
+    },
+    ordertosupplier: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/orderto-supplier",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/orderto-supplier",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/orderto-supplier",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ]
+    },
+  },
   inappMarketing: {
     banner: {
       index: [

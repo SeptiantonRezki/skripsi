@@ -31,6 +31,18 @@ import { PartnershipCreateComponent } from "./principal-partnership/create/partn
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 import { ImportAccessCashierDialogComponent } from "./retailer/import-access-cashier-dialog/import-access-cashier-dialog.component";
 
+import { OrdertoSupplierDetailComponent } from "./private-label/orderto-supplier/detail/orderto-supplier-detail.component";
+import { OrdertoSupplierIndexComponent } from "./private-label/orderto-supplier/index/orderto-supplier-index.component";
+import { PanelMitraCreateComponent } from "./private-label/panel-mitra/create/panel-mitra-create.component";
+import { PanelMitraEditComponent } from "./private-label/panel-mitra/edit/panel-mitra-edit.component";
+import { PanelMitraIndexComponent } from "./private-label/panel-mitra/index/panel-mitra-index.component";
+import { SupplierCompanyCreateComponent } from "./private-label/supplier-company/create/supplier-company-create.component";
+import { SupplierCompanyEditComponent } from "./private-label/supplier-company/edit/supplier-company-edit.component";
+import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/index/supplier-company-index.component";
+import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
+import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
+import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+
 const routes: Routes = [
   {
     path: "",
@@ -274,7 +286,97 @@ const routes: Routes = [
       breadcrumbs: brConfig.partnership.detail
     },
     // canActivate: [PageGuard]
-  }
+  },
+
+  {
+    path: "supplier-order",
+    component: OrdertoSupplierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.ordertosupplier.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-order/detail",
+    component: OrdertoSupplierDetailComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.ordertosupplier.detail
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra",
+    component: PanelMitraIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra/create",
+    component: PanelMitraCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra/edit",
+    component: PanelMitraEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.edit
+    },
+    // canActivate: [PageGuard]
+  },
+
+  {
+    path: "supplier-company",
+    component: SupplierCompanyIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/create",
+    component: SupplierCompanyCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/edit",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user",
+    component: UserSupplierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/create",
+    component: UserSupplierCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/edit",
+    component: UserSupplierEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.edit
+    },
+    // canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
