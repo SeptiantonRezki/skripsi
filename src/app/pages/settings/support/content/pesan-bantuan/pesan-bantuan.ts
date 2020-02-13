@@ -153,7 +153,7 @@ export class PesanBantuan {
               this.roomList[index].count_notif = 0;
               if (data.newMessage.room_options) {
                 data.newMessage.room_options = JSON.parse(data.newMessage.room_options);
-                if (data.newMessage.room_options.extras.is_resolved) {
+                if (data.newMessage.room_options.is_resolved) {
                   this.chatIsOver = true;
                 } else {
                   this.chatIsOver = false;
