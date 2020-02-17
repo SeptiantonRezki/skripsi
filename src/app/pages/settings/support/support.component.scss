@@ -317,6 +317,36 @@
     background-color: #ffffff;
     margin-bottom: 20px;
   }
+
+  @media only screen and (max-width: 599px) {
+    .badgePesanBantuan {
+      position: absolute;
+      left: 245px;
+      top: 200px;
+      background-color: #e53934;
+      border-radius: 15px;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      padding: 3px;
+      color: #fff;
+    }
+  }
+
+  @media only screen and (min-width: 600px) {
+    .badgePesanBantuan {
+      position: absolute;
+      left: 315px;
+      top: 200px;
+      background-color: #e53934;
+      border-radius: 15px;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      color: #fff;
+    }
+  }
+
 }
 
 .image-layout {

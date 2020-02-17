@@ -38,7 +38,10 @@ export class SupportComponent implements OnInit {
   selectedTab: Number;
   countNotifPesanBantuan: number;
   badgePesanBantuan: any;
-  isPesanBantuanCreate: any;
+  isPesanBantuan: boolean;
+  isPesanBantuanCreate: boolean;
+  isResolved: boolean;
+
 
   constructor(
     private supportService: SupportService,
@@ -62,14 +65,31 @@ export class SupportComponent implements OnInit {
     this.isFound = false;
     this.selectedTab = 0;
     this.countNotifPesanBantuan = 0;
+    this.isPesanBantuan = false;
+    this.isPesanBantuanCreate = false;
+    this.isResolved = true;
+
 
     this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
       if (data.selectedTab !== undefined) {
         this.selectedTab = data.selectedTab;
       }
       if (data.isCreate !== undefined) {
-        this.isPesanBantuanCreate = data.isCreate;
+        this.isPesanBantuan = data.isCreate;
       }
+      if (data.countNotif !== undefined) {
+        this.countNotifPesanBantuan = data.countNotif;
+      }
+      if (data.roomList !== undefined && data.roomList.length > 0) {
+        let countNotif = 0;
+        data.roomList.map((item) => {
+          if (item.count_notif > 0) {
+            countNotif = countNotif + 1;
+          }
+        });
+        this.countNotifPesanBantuan = countNotif;
+      }
+
     });
     this.emitter.listenNewMessageQMC.subscribe((data: any) => {
       console.log('listenNewMessageQ', data);
@@ -81,6 +101,7 @@ export class SupportComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getRoomListPesanBantuan();
 
     this.supportService.getBantuanListCategory({ user: 'principal' }).subscribe((res: any) => {
       this.menuButtons = res.data;
@@ -186,7 +207,8 @@ export class SupportComponent implements OnInit {
     }
   }
 
-  backToPusatBantuan() {
+  backToPusatBantuan() {    
+    this.isPesanBantuanCreate = false;
     this.isListCategoryDetails = false;
     this.helpDetail = null;
     this.listCategoryDetails = [];
@@ -294,7 +316,8 @@ export class SupportComponent implements OnInit {
       // this.openDialogChat('tab');
     } else {
       const item = {
-        isActiveRoomChat: false
+        isActiveRoomChat: false,
+        isCreate: false
       };
       this.emitter.emitSelectedHelpTabQ(item);
     }
@@ -318,10 +341,16 @@ export class SupportComponent implements OnInit {
             await rooms.map((item) => {
               if (item.count_notif > 0) {
                 countNotif = countNotif + 1;
+              }              
+              if (item.options) {
+                item.additionalOptions = JSON.parse(item.options);
+                if (!item.additionalOptions.is_resolved) {
+                  this.isResolved = false;
+                  this.emitter.emitSelectedHelpTabQ({ isResolved: false });
+                }
               }
               return item;
             });
-            console.log('countNotif', countNotif);
             this.emitter.emitSelectedHelpTabQ({ roomList: [ ...rooms ] });
             if (countNotif) this.countNotifPesanBantuan = countNotif;
 

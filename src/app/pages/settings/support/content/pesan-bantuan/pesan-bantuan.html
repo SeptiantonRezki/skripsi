@@ -70,7 +70,7 @@
         <mat-list-item style="height: 60px" [ngStyle]="{'background-color': i % 2 == 0 ? (selectedRoomIndex == i? '#ddd' : '#fafafa') : (selectedRoomIndex == i? '#ddd' : '#fff')}" *ngFor="let room of roomList; let i = index" (click)="openRoomDetail(room, i)">
           <div fxLayout="row" fxLayoutAlign="space-between start" fxFlex="100">
             <div class="pl-8" fxLayout="column" style="flex: 1;" fxFlex="80">
-              <span class="title-room" fxLayout="row" fxAlignLayout="center center">{{room.additionalOptions ? room.additionalOptions.extras.inquirycategory : null}}<span *ngIf="room.count_notif > 0" class="badge-chat"></span></span>
+              <span class="title-room" fxLayout="row" fxAlignLayout="center center">{{room.additionalOptions ? room.additionalOptions.extras.inquirycategory ? room.additionalOptions.extras.inquirycategory : 'TicketId: ' + room.additionalOptions.extras.user_properties[0].value : null}}<span *ngIf="room.count_notif > 0" class="badge-chat"></span></span>
               <div class="subtitle-room" *ngIf="room.last_comment.type == 'file_attachment'">Melampirkan File/Gambar</div>
               <div class="subtitle-room" *ngIf="room.last_comment.type !== 'file_attachment'">{{room.last_comment_message}}</div>
             </div>
@@ -86,7 +86,7 @@
         <mat-card class="q-card ayo-main-wrapper" fxLayout="column" fxLayoutAlign="space-between center">
           <mat-card-header class="q-card-header" fxLayout="row" fxLayoutAlign="space-between center">
             <mat-card-title class="q-card-header-title">
-              <span class="header-text">{{ dataRoomSelected.additionalOptions ? dataRoomSelected.additionalOptions.extras.inquirycategory : null }}</span>
+              <span class="header-text">{{ dataRoomSelected.additionalOptions ? dataRoomSelected.additionalOptions.extras.inquirycategory ? dataRoomSelected.additionalOptions.extras.inquirycategory : 'TicketId: ' + dataRoomSelected.additionalOptions.extras.user_properties[0].value  : null }}</span>
               <div>
                 <span class="header-subtext">{{ dataRoomSelected.lastCommentAt | date: 'dd MMM yyyy'}}</span>
               </div>
@@ -268,6 +268,10 @@
             <button class="q-send-btn" mat-icon-button (click)="sendChat()">
               <mat-icon class="q-send-icon">send</mat-icon>
             </button>
+          </mat-card-footer>
+
+          <mat-card-footer class="q-card-footer" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="chatIsOver">
+            <div>Sesi Diskusi Telah Berakhir</div>
           </mat-card-footer>
         </mat-card>
       </div>

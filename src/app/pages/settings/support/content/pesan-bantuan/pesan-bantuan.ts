@@ -63,7 +63,9 @@ export class PesanBantuan {
   dialogRef: any;
   isCancelReply: boolean;
   isLoadMessage: boolean;
-  selectedRoomIndex: number;
+  selectedRoomIndex: number;  
+  isResolved: boolean;
+
 
   constructor(
     private supportService: SupportService,
@@ -109,6 +111,7 @@ export class PesanBantuan {
     this.isCancelReply = true;
     this.isLoadMessage = false;
     this.selectedRoomIndex = -1;
+    this.isResolved = true;
 
     this.formNewInquiryErrors = {
       kategoriKendala: '',
@@ -117,7 +120,10 @@ export class PesanBantuan {
     this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
     this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
       if (data.isCreate !== undefined) {
-        this.isCreate = data.isCreate;
+        this.isCreate = data.isCreate;        
+        if(!this.isResolved && this.isCreate) {
+          this.openDialogNotResolved();
+        }
         if (data.isCreate) {
           this.formNewInquiry.setValue({
             kategoriKendala: '',
@@ -151,23 +157,28 @@ export class PesanBantuan {
             }
             if (this.dataRoomSelected && String(data.newMessage.room_id_str) === String(this.dataRoomSelected.id)){
               this.roomList[index].count_notif = 0;
-              if (data.newMessage.room_options) {
-                data.newMessage.room_options = JSON.parse(data.newMessage.room_options);
-                if (data.newMessage.room_options.is_resolved) {
-                  this.chatIsOver = true;
-                } else {
-                  this.chatIsOver = false;
-                }
-              }
             } else {
               if (data.newMessage.email !== this.userQiscus.email) {
                 this.roomList[index].count_notif = 1;
               }
             }
+          }          
+          this.emitter.emitSelectedHelpTabQ({ roomList: this.roomList });
+        }
+        if (data.newMessage.room_options) {
+          data.newMessage.room_options = JSON.parse(data.newMessage.room_options);
+          if (data.newMessage.room_options.is_resolved) {
+            this.chatIsOver = true;
+          } else {
+            this.chatIsOver = false;
           }
         }
         this._onNewMessage(data.newMessage);
       }
+      if (data.isResolved !== undefined) {
+        this.isResolved = data.isResolved;
+      }
+
     });
   }
 
@@ -302,6 +313,22 @@ export class PesanBantuan {
     });
   }
 
+  openDialogNotResolved(e?: any): void {
+    const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { target: '', description: 'Anda masih memiliki Pesan Bantuan yang belum selesai' };
+    const dialogRef = this.dialog.open(DialogOtherHelp, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log('The dialog was closed');
+      this.isCreate = false;
+      this.emitter.emitSelectedHelpTabQ({ isCreate: false });
+    });
+  }
+
+
   backToPusatBantuan() {
     this.emitter.emitSelectedHelpTabQ({ selectedTab: 0 });
     this.isCreate = false;
@@ -353,6 +380,8 @@ export class PesanBantuan {
     } else {
       this.chatIsOver = false;
     }
+    this.roomList[index].count_notif = 0;
+    this.emitter.emitSelectedHelpTabQ({ roomList: this.roomList });
     this._loadRoom(room.id, index);
   }
 
@@ -1022,12 +1051,20 @@ export class PesanBantuan {
             // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
           // }
           if(rooms.length > 0) {
+            let countNotif = 0;
             this.roomList = rooms.map((item: any) => {
+              if (item.count_notif > 0) {
+                countNotif = countNotif + 1;
+              }
               if (item.options) {
                 item.additionalOptions = JSON.parse(item.options);
+                if (!item.additionalOptions.is_resolved) {
+                  this.isResolved = false;
+                }
               }
               return {...item};
-            });
+            });            
+            this.emitter.emitSelectedHelpTabQ({ countNotif: countNotif });
             this.roomListCopy = this.roomList;
           }
           // console.log('success getRoomList2', rooms)
