@@ -4,7 +4,7 @@
     <div class="button-row" fxLayout="row">
       <button mat-raised-button aria-label="Login" (click)="export()" type="button">EXPORT
         PENGAJUAN SRC</button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','pengajuan-src','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
@@ -102,10 +102,10 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button (click)="directEdit(row)" *ngIf="row.status !== 'approved'">
+              <button mat-icon-button (click)="directEdit(row)" *ngIf="permission?.ubah && row.status !== 'approved'">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button (click)="directDetail(row)">
+              <button *ngIf="permission?.lihat" mat-icon-button (click)="directDetail(row)">
                 <mat-icon>remove_red_eye
                 </mat-icon>
               </button>
