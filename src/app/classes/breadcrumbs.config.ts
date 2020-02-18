@@ -558,6 +558,51 @@ export const brConfig = {
           name: "Detail Layanan Kurir"
         }
       ]
+    },
+    panel_mitra: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/delivery/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Atur Panel Mitra"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/delivery/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Panel Mitra"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/delivery/panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Panel Mitra"
+        }
+      ]
     }
   },
   dte: {
