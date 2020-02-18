@@ -513,6 +513,53 @@ export const brConfig = {
       ]
     }
   },
+  deliveryManagement: {
+    courier_management: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Kurir"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/delivery/courier",
+          name: "Daftar Kurir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Layanan Kurir"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/delivery/courier",
+          name: "Daftar Kurir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Layanan Kurir"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/delivery/courier",
+          name: "Daftar Kurir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Layanan Kurir"
+        }
+      ]
+    }
+  },
   dte: {
     template: {
       index: [

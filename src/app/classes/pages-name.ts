@@ -82,7 +82,14 @@ export class PagesName {
       "/settings/access/edit/": "principal.akses.ubah",
       "/settings/access/detail/": "principal.akses.lihat",
       "/settings/account": "principal.ubahpassword.lihat",
-      "/settings/force-update-apps": "principal.forceupdate.lihat"
+      "/settings/force-update-apps": "principal.forceupdate.lihat",
+      "/delivery/courier": "principal.delivery_courier.lihat",
+      "/delivery/courier/create": "principal.delivery_courier.buat",
+      "/delivery/courier/edit": "principal.delivery_courier.ubah",
+      "/delivery/courier/detail": "principal.delivery_courier.lihat",
+      // "/delivery/courier/create": "principal.courier.buat",
+      // "/delivery/courier/edit": "principal.courier.ubah",
+      // "/delivery/courier/detail": "principal.courier.lihat",
     }
     return PAGES[name];
   }
