@@ -266,6 +266,51 @@ export const brConfig = {
       }
     ]
   },
+  pengajuanSRC: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Daftar Pengajuan SRC"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/user-management/pengajuan-src",
+        name: "Daftar Pengajuan SRC"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Pengajuan SRC"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/pengajuan-src",
+        name: "Daftar Pengajuan SRC"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Pengajuan SRC"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/pengajuan-src",
+        name: "Daftar Pengajuan SRC"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengajuan SRC"
+      }
+    ]
+  },
   partnership: {
     index: [
       {
@@ -1073,6 +1118,13 @@ export const brConfig = {
         type: "current",
         url: "",
         name: "Bantuan"
+      }
+    ],
+    otp: [
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengaturan OTP"
       }
     ]
   },

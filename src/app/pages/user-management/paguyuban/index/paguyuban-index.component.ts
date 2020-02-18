@@ -722,8 +722,8 @@ export class PaguyubanIndexComponent {
 
     this.paguyubanService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data.map(item => {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res && res.data ? res.data.data.map(item => {
           const principal = item.users.filter(item => item.type === "principal");
           const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
           return {
@@ -733,7 +733,7 @@ export class PaguyubanIndexComponent {
             area: item.areas[0]['code'],
             area_id: item.areas[0]['id']
           }
-        });
+        }) : [];
 
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -764,8 +764,8 @@ export class PaguyubanIndexComponent {
     }
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res && res.data ? res.data.data.map(item => {
         const principal = item.users.filter(item => item.type === "principal");
         const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
         return {
@@ -775,7 +775,7 @@ export class PaguyubanIndexComponent {
           area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -792,8 +792,8 @@ export class PaguyubanIndexComponent {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res && res.data ? res.data.data.map(item => {
         const principal = item.users.filter(item => item.type === "principal");
         const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
         return {
@@ -803,7 +803,7 @@ export class PaguyubanIndexComponent {
           area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });
@@ -823,8 +823,8 @@ export class PaguyubanIndexComponent {
     }
 
     this.paguyubanService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data.map(item => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res && res.data ? res.data.data.map(item => {
         const principal = item.users.filter(item => item.type === "principal");
         const paguyuban = item.users.filter(item => item.type === "paguyuban")[0];
         return {
@@ -834,7 +834,7 @@ export class PaguyubanIndexComponent {
           area: item.areas[0]['code'],
           area_id: item.areas[0]['id']
         }
-      });
+      }) : [];
 
       this.loadingIndicator = false;
     });

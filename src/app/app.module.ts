@@ -69,6 +69,8 @@ import { TemplateMessageService } from "./services/template-message-management/t
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
 import { GeotreeService } from "./services/geotree.service";
+import { PengajuanSrcService } from "./services/user-management/pengajuan-src.service";
+import { OTPSettingService } from "./services/otpsetting.service";
 
 @NgModule({
   declarations: [
@@ -133,6 +135,8 @@ import { GeotreeService } from "./services/geotree.service";
     SupportService,
     GeotreeService,
     TemplateMessageService,
+    PengajuanSrcService,
+    OTPSettingService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],

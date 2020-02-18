@@ -1,0 +1,109 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detil Pesanan'">
+  </page-content-header>
+
+  <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24 mb-42" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+      <mat-tab-group [selectedIndex]="selectedTab">
+        <mat-tab label="Detil Pengajuan">
+          <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
+              <div class="h2 secondary-text">Detil Pengajuan SRC</div>
+            </div>
+
+            <div class="customer">
+              <h2>Pelanggan</h2>
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Nama Toko</th>
+                    <th>Nomor Ponsel</th>
+                    <th>Produk Yang Dijual</th>
+                    <th>Alamat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{detailPengajuan?.name}}</span>
+                    </td>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{detailPengajuan?.phone}}</span>
+                    </td>
+                    <td class="w-100">
+                      <p *ngFor="let item of productList" class="email text-truncate">{{item}}</p>
+                    </td>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{detailPengajuan?.address}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="customer" style="margin-top: 50px;">
+              <h2>Status Aplikasi</h2>
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Diperbaharui Pada</th>
+                    <th>Diperbaharui Oleh</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of detailPengajuan?.logs">
+                    <td class="w-100">
+                      <span class="email text-truncate"
+                        [ngStyle]="{ 'background-color': renderStatusName(item?.status).bgColor, 'color': renderStatusName(item?.status).textColor }"
+                        style="text-align: center;padding: 5px 0; border-radius: 10px;">{{renderStatusName(item?.status).name}}</span>
+                    </td>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{item?.updated_at | date:'dd/MM/yyyy HH:mm'}}</span>
+                    </td>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{item?.updated_by}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <form class="update-status p-24" fxLayout="row" fxLayoutAlign="start center"
+              *ngIf="orderStatuses.length > 0">
+              <mat-form-field class="mr-16 is-light" fxFlex>
+                <mat-select [formControl]="statusForm" placeholder="Pilih Status Pengajuan" required>
+                  <mat-option *ngFor="let status of orderStatuses" [value]="status">
+                    <span
+                      [ngStyle]="{ 'background-color': renderStatusName(status).bgColor, 'color': renderStatusName(status).textColor }"
+                      style="text-align: center;padding: 5px 15px; border-radius: 10px;">{{status ? renderStatusName(status).name : ''}}</span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-raised-button class="mat-accent" (click)="updateStatus()"
+                [disabled]="statusForm.invalid">PERBARUI
+                STATUS</button>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Informasi Lainnya">
+          <div class="ayo-middle p-24" fxLayout="column">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">photo_camera</mat-icon>
+              <div class="h2 secondary-text">Foto Toko</div>
+            </div>
+            <div fxFlex>
+              <img [src]="detailPengajuan?.image_url" alt="Foto toko terkait"
+                style="max-width: 60%;max-height: 300px;box-shadow: 0 0 1px #000;">
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

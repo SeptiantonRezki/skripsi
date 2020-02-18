@@ -9,6 +9,7 @@ import { ListMenuResolver } from "../../resolver/settings.resolver";
 import { PageGuard } from "app/classes/auth.guard";
 import { ForceUpdateAppsComponent } from "./force-update-apps/force-update-apps.component";
 import { SupportComponent } from "./support/support.component";
+import { OTPSettingsComponent } from "./otpsettings/otpsettings.component";
 
 const routes: Routes = [
   {
@@ -73,6 +74,13 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.settings.support
     }
+  },
+  {
+    path: "otp",
+    component: OTPSettingsComponent,
+    data: {
+      breadcrumbs: brConfig.settings.otp
+    }
   }
 ];
 
@@ -80,4 +88,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SettingsRoutingModule {}
+export class SettingsRoutingModule { }
