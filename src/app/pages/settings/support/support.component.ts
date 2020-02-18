@@ -5,6 +5,8 @@ import { map, startWith, debounceTime, distinctUntilChanged, switchMap, finalize
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SupportService } from 'app/services/settings/support.service';
 import { DialogOtherHelp } from './content/dialog/dialog-other-help';
+import { Emitter } from 'app/helper/emitter.helper';
+import { QiscusService } from 'app/services/qiscus.service';
 
 @Component({
   selector: 'app-support',
@@ -34,10 +36,18 @@ export class SupportComponent implements OnInit {
   selectedIndex: any;
   isFound: boolean;
   selectedTab: Number;
+  countNotifPesanBantuan: number;
+  badgePesanBantuan: any;
+  isPesanBantuan: boolean;
+  isPesanBantuanCreate: boolean;
+  isResolved: boolean;
+
 
   constructor(
     private supportService: SupportService,
     public dialog: MatDialog,
+    private emitter: Emitter,
+    private qs: QiscusService,
   ) {
     this.onLoad = true;
     this.menuButtons = [];
@@ -54,9 +64,44 @@ export class SupportComponent implements OnInit {
     this.selectedIndex = -1;
     this.isFound = false;
     this.selectedTab = 0;
+    this.countNotifPesanBantuan = 0;
+    this.isPesanBantuan = false;
+    this.isPesanBantuanCreate = false;
+    this.isResolved = true;
+
+
+    this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
+      if (data.selectedTab !== undefined) {
+        this.selectedTab = data.selectedTab;
+      }
+      if (data.isCreate !== undefined) {
+        this.isPesanBantuan = data.isCreate;
+      }
+      if (data.countNotif !== undefined) {
+        this.countNotifPesanBantuan = data.countNotif;
+      }
+      if (data.roomList !== undefined && data.roomList.length > 0) {
+        let countNotif = 0;
+        data.roomList.map((item) => {
+          if (item.count_notif > 0) {
+            countNotif = countNotif + 1;
+          }
+        });
+        this.countNotifPesanBantuan = countNotif;
+      }
+
+    });
+    this.emitter.listenNewMessageQMC.subscribe((data: any) => {
+      console.log('listenNewMessageQ', data);
+      const item = {
+        newMessage: data
+      };
+      this.emitter.emitSelectedHelpTabQ(item);
+    });
   }
 
   ngOnInit() {
+    this.getRoomListPesanBantuan();
 
     this.supportService.getBantuanListCategory({ user: 'principal' }).subscribe((res: any) => {
       this.menuButtons = res.data;
@@ -162,7 +207,8 @@ export class SupportComponent implements OnInit {
     }
   }
 
-  backToPusatBantuan() {
+  backToPusatBantuan() {    
+    this.isPesanBantuanCreate = false;
     this.isListCategoryDetails = false;
     this.helpDetail = null;
     this.listCategoryDetails = [];
@@ -198,7 +244,8 @@ export class SupportComponent implements OnInit {
   }
 
   onHelpNext() {
-    this.openDialogChat();
+    // this.openDialogChat();
+    this.selectedTab = 1;
   }
 
   deleteSearch() {
@@ -211,7 +258,12 @@ export class SupportComponent implements OnInit {
     } else if (item.category == 'E-Mail') {
       this.openDialogEmail();
     } else {
-      this.openDialogChat();
+      // this.openDialogChat();
+      this.selectedTab = 1;
+      const item = {
+        isCreate: true
+      };
+      this.emitter.emitSelectedHelpTabQ(item);
     }
   }
 
@@ -261,8 +313,68 @@ export class SupportComponent implements OnInit {
   selectedTabChange(index: number) {
     this.selectedTab = index;
     if (index == 1) {
-      this.openDialogChat('tab');
+      // this.openDialogChat('tab');
+    } else {
+      const item = {
+        isActiveRoomChat: false,
+        isCreate: false
+      };
+      this.emitter.emitSelectedHelpTabQ(item);
     }
+  }
+
+  async getRoomListPesanBantuan() {
+    // return new Promise((resolve, reject) => {
+      const params_ = { 
+        page: 1, 
+        limit: 100,
+        show_participants: false,
+        show_empty: false,
+      };
+      const isLogin = await this.qs.qiscusMC.isLogin;
+      if (isLogin) {
+        console.log('isLogin2', isLogin)
+      this.qs.qiscusMC.loadRoomList(params_).then(async (rooms) => {
+          // On success
+          if (rooms && rooms.length > 0) {
+            let countNotif = 0;
+            await rooms.map((item) => {
+              if (item.count_notif > 0) {
+                countNotif = countNotif + 1;
+              }              
+              if (item.options) {
+                item.additionalOptions = JSON.parse(item.options);
+                if (!item.additionalOptions.is_resolved) {
+                  this.isResolved = false;
+                  this.emitter.emitSelectedHelpTabQ({ isResolved: false });
+                }
+              }
+              return item;
+            });
+            this.emitter.emitSelectedHelpTabQ({ roomList: [ ...rooms ] });
+            if (countNotif) this.countNotifPesanBantuan = countNotif;
+
+            // this.badgePesanBantuan = `<p><span matBadge="4" matBadgeOverlap="false">Text with a badge</span></p>`;
+            // var d1 = this.elementRef.nativeElement.querySelector('#mat-tab-label-0-1');
+            // console.log('d1', d1);
+            // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
+          }
+          console.log('success getRoomList', rooms)
+        // resolve(console.log('success getRoomList', rooms));
+      }).catch((error) => {
+          // On error
+        // reject(console.log('error getRoomList', error));
+        console.log('error getRoomList', error)
+      });
+    } else {
+        console.log('isLogin', isLogin)
+      }
+    // });
+  }
+
+  redirectToCreatePesanBantuan() {
+    this.selectedTab = 1;
+    this.emitter.emitSelectedHelpTabQ({ isCreate: true });
   }
 
 }

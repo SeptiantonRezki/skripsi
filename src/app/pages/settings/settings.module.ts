@@ -37,6 +37,9 @@ import { PesanBantuan, } from "./support/content/pesan-bantuan/pesan-bantuan";
 import { DialogOtherHelp } from "./support/content/dialog/dialog-other-help";
 import { PipesModule } from "app/pipe/pipes.module";
 import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
+import { UploadImageComponent } from "./support/content/pesan-bantuan/dialog/upload-image/upload-image.component";
+import { EllipsisModule } from 'ngx-ellipsis';
+import { ngfModule } from "angular-file";
 
 @NgModule({
   imports: [
@@ -64,6 +67,9 @@ import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
     MatTabsModule,
     MatAutocompleteModule,
     PipesModule,
+
+    EllipsisModule,
+    ngfModule,
   ],
   declarations: [
     RoleIndexComponent,
@@ -74,7 +80,8 @@ import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
     SupportComponent,
     PesanBantuan,
     DialogOtherHelp,
-    OTPSettingsComponent
+    OTPSettingsComponent,
+    UploadImageComponent
   ],
   exports: [
     RoleIndexComponent,
@@ -86,6 +93,6 @@ import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
     PesanBantuan
   ],
   providers: [ListMenuResolver, PageGuard],
-  entryComponents: [DialogOtherHelp]
+  entryComponents: [DialogOtherHelp, UploadImageComponent]
 })
 export class SettingsModule { }

@@ -396,7 +396,11 @@ export class Endpoint {
       otp_settings: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`,
         update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`
-      }
+      },
+      qiscus: {
+        loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
+        createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

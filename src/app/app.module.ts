@@ -72,6 +72,10 @@ import { GeotreeService } from "./services/geotree.service";
 import { PengajuanSrcService } from "./services/user-management/pengajuan-src.service";
 import { OTPSettingService } from "./services/otpsetting.service";
 
+// ==== QISCUS ====
+import { QiscusService } from "./services/qiscus.service";
+import { Emitter } from "./helper/emitter.helper";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -99,6 +103,10 @@ import { OTPSettingService } from "./services/otpsetting.service";
     NgProgressModule
   ],
   providers: [
+    //===== QISCUS =====
+    QiscusService,
+    Emitter,
+    
     AuthenticationService,
     DataService,
     DialogService,
