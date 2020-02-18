@@ -457,7 +457,7 @@ export class TemplateEditComponent {
       this.saveData = !this.saveData;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
-
+      let questionsIsEmpty = [];
       let body = {
         _method: 'PUT',
         name: this.templateTaskForm.get('name').value,
@@ -468,6 +468,9 @@ export class TemplateEditComponent {
         is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
+          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+            questionsIsEmpty.push({ qId: item.id });
+          }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
           return {
             id: item.id,
@@ -501,7 +504,10 @@ export class TemplateEditComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-
+      if (questionsIsEmpty.length > 0) {
+        this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
+        return;
+      }
       this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });

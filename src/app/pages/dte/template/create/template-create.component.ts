@@ -452,7 +452,7 @@ export class TemplateCreateComponent {
       this.saveData = true;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
-
+      let questionsIsEmpty = [];
       let body = {
         name: this.templateTaskForm.get('name').value,
         description: this.templateTaskForm.get('description').value,
@@ -463,6 +463,9 @@ export class TemplateCreateComponent {
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
+          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+            questionsIsEmpty.push({ qId: item.id });
+          }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
           return {
             id: item.id,
@@ -496,6 +499,10 @@ export class TemplateCreateComponent {
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
       console.log(body, this.questionHasNext[2]);
+      if (questionsIsEmpty.length > 0) {
+        this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
+        return;
+      }
       this.taskTemplateService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
