@@ -305,7 +305,12 @@ export class PengajuanSrcComponent implements OnInit {
   async export() {
     this.dataService.showLoading(true);
     try {
-      const response = await this.pengajuanSrcService.export({ area: 1 }).toPromise();
+      let other = {
+        province_id: this.pagination['province_id'],
+        district_id: this.pagination['district_id'],
+        city_id: this.pagination['city_id']
+      }
+      const response = await this.pengajuanSrcService.export(other).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PengajuanSRC_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
