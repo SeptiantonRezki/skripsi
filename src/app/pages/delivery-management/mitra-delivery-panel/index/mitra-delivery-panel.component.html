@@ -26,14 +26,16 @@
         [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="Nama Kurir" prop="delivery_courier_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+            <a class="direct-edit" (click)="directDetail(row)">{{row.delivery_courier_name}} </a>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="200" name="Jumlah Layanan" prop="services_count" summary-template="activeCell">
+        <ngx-datatable-column name="Jenis Layanan" prop="delivery_courier_service_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.delivery_courier_service_name}}
+          </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="200" name="Jumlah Mitra" prop="business_count" summary-template="activeCell">
+        <ngx-datatable-column [width]="200" name="Jumlah Mitra" prop="mitra_count" summary-template="activeCell">
         </ngx-datatable-column>
 
         <!-- <ngx-datatable-column [width]="100" name="Status" prop="status">

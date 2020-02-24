@@ -10,6 +10,7 @@ import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImportPanelMitraDialogComponent } from '../import-panel-mitra-dialog/import-panel-mitra-dialog.component';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
   selector: 'app-mitra-delivery-panel-create',
@@ -37,6 +38,8 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
   @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
   @ViewChild('table') table: DatatableComponent;
+  listCourier: any[] = [];
+  listCourierServices: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,8 +55,33 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       courier: ["", Validators.required],
       service: ["", Validators.required]
     });
-
+    this.getCourerList();
     this.getPanelMitraList();
+
+    this.formPanelMitra.get("courier")
+      .valueChanges
+      .subscribe(res => {
+        console.log('res change', res);
+        if (res) {
+          this.getCourierService(res);
+        }
+      })
+  }
+
+  getCourerList() {
+    this.mitraPanelService.courierList().subscribe(res => {
+      console.log('res', res);
+      this.listCourier = res.data;
+    }, err => {
+      console.log('err', err);
+    })
+  }
+
+  getCourierService(courierID) {
+    console.log('courier id', courierID);
+    this.mitraPanelService.courierServiceList({ courier_id: courierID }).subscribe(res => {
+      this.listCourierServices = res.data;
+    })
   }
 
   getPanelMitraList() {
@@ -162,6 +190,13 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   }
 
   async export() {
+    if (this.selectedMitra.length === 0) {
+      this.dialogService.openSnackBar({
+        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+      })
+      return;
+    }
+
     this.dataService.showLoading(true);
     // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
     // let area_id: any = areaSelected[areaSelected.length - 1].value;
@@ -247,6 +282,40 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
     }
     console.log(error);
     // alert('Open console to see the error')
+  }
+
+  submit() {
+    if (this.formPanelMitra.valid) {
+      if (this.selectedMitra.length === 0) {
+        this.dialogService.openSnackBar({
+          message: "Jumlah Mitra yang dipilih tidak boleh kosong!"
+        });
+        return;
+      }
+
+      this.dataService.showLoading(true);
+      let body = {
+        delivery_courier_id: this.formPanelMitra.get('courier').value,
+        delivery_courier_service_id: this.formPanelMitra.get('service').value,
+        mitra: this.selectedMitra.map(item => ({
+          wholesaler_id: item.id
+        }))
+      };
+
+      this.mitraPanelService.create(body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Data berhasil disimpan"
+        });
+        this.router.navigate(['delivery', 'panel-mitra']);
+      }, err => {
+        console.log('err create panel mitra', err);
+        this.dataService.showLoading(false);
+      })
+    } else {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formPanelMitra);
+    }
   }
 
 }

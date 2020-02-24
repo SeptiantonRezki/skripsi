@@ -146,8 +146,8 @@ export class MitraDeliveryPanelComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Layanan Kurir",
-      captionDialog: "Apakah anda yakin untuk menghapus Layanan Kurir ini ?",
+      titleDialog: "Hapus Panel Mitra",
+      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -155,7 +155,7 @@ export class MitraDeliveryPanelComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.mitraPanelService.delete({ courier_id: this.id }).subscribe(
+    this.mitraPanelService.delete({ panel_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
@@ -170,13 +170,13 @@ export class MitraDeliveryPanelComponent implements OnInit {
   }
 
   directEdit(param?: any): void {
-    // this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["delivery", "courier", "edit", param.id]);
+    this.dataService.setToStorage("detail_panel_mitra", param);
+    this.router.navigate(["delivery", "panel-mitra", "edit", param.id]);
   }
 
   directDetail(param?: any): void {
-    // this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["delivery", "courier", "detail", param.id]);
+    this.dataService.setToStorage("detail_panel_mitra", param);
+    this.router.navigate(["delivery", "panel-mitra", "detail", param.id]);
   }
 
 }

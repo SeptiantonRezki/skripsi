@@ -57,4 +57,14 @@ export class MitraPanelService extends BaseService {
     const url = this.getUrl(this.namespace, "preview_import");
     return this.getApi(url, queryParams);
   }
+
+  courierList(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "courier_list");
+    return this.getApi(url, queryParams);
+  }
+
+  courierServiceList(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "courier_service", context);
+    return this.getApi(url, queryParams);
+  }
 }

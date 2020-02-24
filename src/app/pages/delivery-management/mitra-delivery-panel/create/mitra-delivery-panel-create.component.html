@@ -9,24 +9,33 @@
         <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
           <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-              <mat-select placeholder="Pilih Kurir" formControlname="courier">
-                <mat-option value="1">Kurir 1</mat-option>
+              <mat-select placeholder="Pilih Kurir" formControlName="courier">
+                <mat-option *ngFor="let cr of listCourier" [value]="cr.id">{{ cr.name }}</mat-option>
               </mat-select>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formPanelMitra.controls['courier'].hasError('required') && formPanelMitra.controls['courier'].touched">
+                Jenis Kurir harus diisi.
+              </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
               <mat-select placeholder="Pilih Layanan" formControlName="service">
-                <mat-option value="1">Layanan 1</mat-option>
+                <mat-option *ngFor="let service of listCourierServices" [value]="service.id">{{ service.name }}
+                </mat-option>
               </mat-select>
+              <mat-error class="mt-8 px-24"
+                *ngIf="formPanelMitra.controls['service'].hasError('required') && formPanelMitra.controls['service'].touched">
+                Jenis Layanan harus diisi.
+              </mat-error>
             </mat-form-field>
             <div fxLayout="row" fxFlex="20" style="height: 35px;">
-              <button mat-raised-button type="button" class="confirmation-button" fxFlex="100" (click)="submit()">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="100">
                 ATUR PANEL MITRA
               </button>
             </div>
           </div>
           <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">
             <small>Mitra Terpilih</small>
-            <h1 style="margin-top: -4px;font-size: 30px;">{{ 2500 | rupiahFormaterWithoutRp }}</h1>
+            <h1 style="margin-top: -4px;font-size: 30px;">{{ selectedMitra.length | rupiahFormaterWithoutRp }}</h1>
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
