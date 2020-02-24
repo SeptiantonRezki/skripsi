@@ -149,7 +149,9 @@ export class TemplateEditComponent {
     if (param.length >= 3) {
       this.productService.getProductSkuBank(param).subscribe(res => {
         this.listProductSkuBank = res.data ? res.data.data : [];
+        console.log('listProductSkuBank', this.listProductSkuBank);
         this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+        console.log('on get sku options', this.filteredSkuOptions);
       })
     } else {
       this.listProductSkuBank = [];
@@ -468,7 +470,8 @@ export class TemplateEditComponent {
         is_branching: this.frmIsBranching.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+          console.log('item.type', item.type);
+          if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
