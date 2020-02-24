@@ -16,6 +16,7 @@ import { PageGuard } from 'app/classes/auth.guard';
 import { DeliveryManagementRoutingModule } from './delivery-management-routing.module';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { NgxMaskModule } from "ngx-mask";
+import { ImportPanelMitraDialogComponent } from './mitra-delivery-panel/import-panel-mitra-dialog/import-panel-mitra-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -55,9 +56,10 @@ export const customCurrencyMaskConfig = {
     NgxMaskModule.forRoot(),
     MatExpansionModule
   ],
-  declarations: [CourierManagementComponent, CourierCreateManagamentComponent, CourierEditManagementComponent, MitraDeliveryPanelComponent, MitraDeliveryPanelCreateComponent, MitraDeliveryPanelEditComponent],
+  declarations: [CourierManagementComponent, CourierCreateManagamentComponent, CourierEditManagementComponent, MitraDeliveryPanelComponent, MitraDeliveryPanelCreateComponent, MitraDeliveryPanelEditComponent, ImportPanelMitraDialogComponent],
   providers: [
     PageGuard
-  ]
+  ],
+  entryComponents: [ImportPanelMitraDialogComponent]
 })
 export class DeliveryManagementModule { }

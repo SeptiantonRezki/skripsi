@@ -1,3 +1,96 @@
-<p>
-  mitra-delivery-panel-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Panel Mitra'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formPanelMitra">
+        <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
+          <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
+            <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
+              <mat-select placeholder="Pilih Kurir" formControlname="courier">
+                <mat-option value="1">Kurir 1</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
+              <mat-select placeholder="Pilih Layanan" formControlName="service">
+                <mat-option value="1">Layanan 1</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div fxLayout="row" fxFlex="20" style="height: 35px;">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="100" (click)="submit()">
+                ATUR PANEL MITRA
+              </button>
+            </div>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">
+            <small>Mitra Terpilih</small>
+            <h1 style="margin-top: -4px;font-size: 30px;">{{ 2500 | rupiahFormaterWithoutRp }}</h1>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+          style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+          <a #downloadLink></a>
+          <button mat-raised-button type="button" class="is-danger" (click)="import()">
+            <mat-icon>arrow_downward</mat-icon> Import XLSX
+          </button>
+          <button (click)="export()" mat-raised-button type="button" class="is-danger">
+            <mat-icon>arrow_upward</mat-icon> Export XLSX
+          </button>
+        </div>
+        <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+          [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
+          [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selectionType]="'checkbox'"
+          (select)='onSelect($event)' [selectCheck]='selectCheck'>
+
+          <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+            <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+              </ng-template> -->
+
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn">
+              <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
+              </mat-checkbox>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+          <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.phone ? row.phone : '-'}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Tipe" prop="classification" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.classification ? row.classification : '-'}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.division ? row.division : '-'}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.region ? row.region : '-'}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Area" prop="area" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.area ? row.area : '-'}}
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -18,6 +18,11 @@ export class MitraPanelService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getMitraList(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "mitra_list");
+    return this.getApi(url, queryParams);
+  }
+
   show(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "show", context);
     return this.getApi(url, {});
@@ -33,8 +38,23 @@ export class MitraPanelService extends BaseService {
     return this.postApi(url, body);
   }
 
+  export(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postBlobApi(url, body);
+  }
+
   delete(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
+  }
+
+  importFile(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import');
+    return this.postApi(url, body);
+  }
+
+  previewImport(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview_import");
+    return this.getApi(url, queryParams);
   }
 }
