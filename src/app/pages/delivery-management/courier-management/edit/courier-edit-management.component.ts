@@ -159,6 +159,9 @@ export class CourierEditManagementComponent implements OnInit {
               let first = time_limit.slice(0, 2);
               let second = time_limit.substr(2, 1);
               time_limit = first + ":" + second + "0";
+            } else if (time_limit.indexOf(":") > -1 && time_limit.length > 5) {
+              console.log('disini bor masuk time format dari BE');
+              time_limit = time_limit.substr(0, 5);
             } else {
               let first = time_limit.slice(0, 2);
               let second = time_limit.substr(2, time_limit.length);
