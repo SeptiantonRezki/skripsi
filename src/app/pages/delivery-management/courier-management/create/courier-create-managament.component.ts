@@ -130,8 +130,8 @@ export class CourierCreateManagamentComponent implements OnInit {
             description: item.note_duration,
             status: item.service_status,
             cost_flat: item.flat_cost,
-            max_distance: item.max_distance,
-            time_limit: time_limit
+            max_distance: item.max_distance_config ? item.max_distance : null,
+            time_limit: item.max_received_time_config ? time_limit : null
           }
         })
       }
