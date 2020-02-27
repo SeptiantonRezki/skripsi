@@ -172,6 +172,7 @@ export class CourierEditManagementComponent implements OnInit {
             hasNoValid.push(idx);
           }
           return {
+            id: this.detailCourier.services[idx] ? this.detailCourier.services[idx]['id'] : -99,
             name: item.name,
             short_duration: item.est_fastest_duration,
             short_duration_type: item.est_fastest_duration_time === "days" ? "day" : "hour",
