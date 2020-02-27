@@ -43,7 +43,7 @@
                   style="margin-top: 8px;font-weight: bold;">{{ service.get('name').value || 'Nama Layanan' }}</span>
               </mat-panel-title>
               <mat-panel-description>
-                <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" *ngIf="i !== 0">
+                <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto">
                   <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteService(i)"
                     matTooltipPosition="below" class="secondary-text">
                     <mat-icon class="secondary-text">delete</mat-icon>

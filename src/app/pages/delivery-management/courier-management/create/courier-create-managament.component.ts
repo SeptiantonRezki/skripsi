@@ -48,7 +48,7 @@ export class CourierCreateManagamentComponent implements OnInit {
       name: ["", Validators.required],
       contact: ["", Validators.required],
       email: ["", Validators.compose([Validators.required, Validators.email])],
-      services: this.formBuilder.array([], Validators.required)
+      services: this.formBuilder.array([])
     });
   }
 
