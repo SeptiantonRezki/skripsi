@@ -43,7 +43,7 @@
                   style="margin-top: 8px;font-weight: bold;">{{ service.get('name').value || 'Nama Layanan' }}</span>
               </mat-panel-title>
               <mat-panel-description>
-                <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto">
+                <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" *ngIf="!isDetail">
                   <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteService(i)"
                     matTooltipPosition="below" class="secondary-text">
                     <mat-icon class="secondary-text">delete</mat-icon>
@@ -171,12 +171,12 @@
             </button>
           </div>
         </div> -->
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
           <button mat-raised-button type="button" fxFlex="20" (click)="addNewService()">
             <mat-icon>add</mat-icon>TAMBAH LAYANAN
           </button>
         </div>
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
             SIMPAN
           </button>

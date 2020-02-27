@@ -4,7 +4,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { Router } from '@angular/router';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
@@ -81,6 +81,15 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       district: [],
       territory: []
     }
+
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
   }
 
   ngOnInit() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
@@ -85,6 +85,15 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
       district: [],
       territory: []
     }
+
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
 
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;

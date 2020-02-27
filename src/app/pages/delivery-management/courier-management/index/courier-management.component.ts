@@ -19,6 +19,7 @@ export class CourierManagementComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any[];
+  statusRow: any;
 
   loadingIndicator = true;
   reorderable = true;
@@ -179,4 +180,32 @@ export class CourierManagementComponent implements OnInit {
     this.router.navigate(["delivery", "courier", "detail", param.id]);
   }
 
+  updateStatus(row, status) {
+    this.id = row.id;
+    this.statusRow = status;
+    let data = {
+      titleDialog: "Ubah Status Kurir",
+      captionDialog: "Apakah kamu yakin ingin mengubah status Kurir ini ?",
+      confirmCallback: this.confirmUpdateStats.bind(this),
+      orderDetail: true,
+      buttonText: ["Ya, Lanjutkan", "Tidak, Batalkan"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmUpdateStats() {
+    this.dataService.showLoading(true);
+    this.courierManagementService.updateStatus({ courier_id: this.id }, { status: this.statusRow }).subscribe(res => {
+      if (res && res.data) {
+        this.dialogService.openSnackBar({
+          message: "Berhasil mengubah status kurir"
+        });
+      }
+      this.dialogService.brodcastCloseConfirmation();
+      this.dataService.showLoading(false);
+      this.getCourierList();
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
 }

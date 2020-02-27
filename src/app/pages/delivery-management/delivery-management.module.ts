@@ -9,7 +9,7 @@ import { MitraDeliveryPanelEditComponent } from './mitra-delivery-panel/edit/mit
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatExpansionPanel, MatExpansionModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatExpansionPanel, MatExpansionModule, MatMenuModule } from '@angular/material';
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { PageGuard } from 'app/classes/auth.guard';
@@ -54,7 +54,8 @@ export const customCurrencyMaskConfig = {
     NgxMatSelectSearchModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     NgxMaskModule.forRoot(),
-    MatExpansionModule
+    MatExpansionModule,
+    MatMenuModule
   ],
   declarations: [CourierManagementComponent, CourierCreateManagamentComponent, CourierEditManagementComponent, MitraDeliveryPanelComponent, MitraDeliveryPanelCreateComponent, MitraDeliveryPanelEditComponent, ImportPanelMitraDialogComponent],
   providers: [

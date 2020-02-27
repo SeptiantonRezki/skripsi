@@ -107,6 +107,15 @@
             </mat-form-field>
           </div>
         </form>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+          <h2 class="pl-8"></h2>
+          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon>search</mat-icon>
+            <mat-form-field class="is-light tab-search">
+              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
           [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
           [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
