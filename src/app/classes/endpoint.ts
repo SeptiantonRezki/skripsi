@@ -383,7 +383,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/courier/update-status/${context.courier_id}`
       },
       mitra_panel: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra`,

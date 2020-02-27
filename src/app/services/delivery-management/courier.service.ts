@@ -36,4 +36,9 @@ export class CourierService extends BaseService {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
   }
+
+  updateStatus(context?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_status", context);
+    return this.putApi(url, body);
+  }
 }
