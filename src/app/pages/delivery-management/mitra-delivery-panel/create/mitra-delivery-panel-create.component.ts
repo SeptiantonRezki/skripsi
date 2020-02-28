@@ -51,6 +51,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   area_id_list: any = [];
   endArea: String;
   lastLevel: any;
+  loaded: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -154,7 +155,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       }
     });
     this.getCourerList();
-    this.getPanelMitraList();
+    // this.getPanelMitraList();
   }
 
   getCourerList() {
@@ -174,6 +175,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   }
 
   getPanelMitraList() {
+    this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
@@ -255,13 +257,16 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
     this.mitraPanelService.getMitraList(this.pagination).subscribe(
       res => {
+        this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
 
         this.onLoad = false;
+        this.loaded = true;
         this.loadingIndicator = false;
       },
       err => {
+        this.dataService.showLoading(false);
         console.error(err);
         this.onLoad = false;
       }

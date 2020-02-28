@@ -21,6 +21,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 export class MitraDeliveryPanelEditComponent implements OnInit {
   formPanelMitra: FormGroup;
   formPanelMitraError: any;
+  loaded: Boolean;
 
   rows: any[];
   selected: any[] = [];
@@ -166,7 +167,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
 
     this.getDetail();
     this.getCourerList();
-    this.getPanelMitraList();
+    // this.getPanelMitraList();
   }
 
   getDetail() {
@@ -218,6 +219,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   }
 
   getPanelMitraList() {
+    this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
@@ -299,14 +301,16 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
 
     this.mitraPanelService.getMitraList(this.pagination).subscribe(
       res => {
+        this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
-
         this.onLoad = false;
+        this.loaded = true;
         this.loadingIndicator = false;
       },
       err => {
         console.error(err);
+        this.dataService.showLoading(false);
         this.onLoad = false;
       }
     );

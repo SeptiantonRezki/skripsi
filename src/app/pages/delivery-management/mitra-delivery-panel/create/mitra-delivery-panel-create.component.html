@@ -40,7 +40,7 @@
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-          style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+          style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export" *ngIf="loaded">
           <a #downloadLink></a>
           <button mat-raised-button type="button" class="is-danger" (click)="import()">
             <mat-icon>arrow_downward</mat-icon> Import XLSX
@@ -49,7 +49,7 @@
             <mat-icon>arrow_upward</mat-icon> Export XLSX
           </button>
         </div>
-        <form [formGroup]="formFilter" autoComplete="off">
+        <form [formGroup]="formFilter" autoComplete="off" *ngIf="loaded">
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
             fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -107,7 +107,7 @@
             </mat-form-field>
           </div>
         </form>
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8" *ngIf="loaded">
           <h2 class="pl-8"></h2>
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
@@ -116,53 +116,55 @@
             </mat-form-field>
           </div>
         </div>
-        <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-          [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
-          [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selectionType]="'checkbox'"
-          (select)='onSelect($event)'>
+        <div *ngIf="loaded">
+          <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+            [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+            [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
+            [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selectionType]="'checkbox'"
+            (select)='onSelect($event)'>
 
-          <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-            <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-                let-selectFn="selectFn">
-                <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-              </ng-template> -->
+            <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+              <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                  let-selectFn="selectFn">
+                  <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                </ng-template> -->
 
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
-              let-onCheckboxChangeFn="onCheckboxChangeFn">
-              <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
-              </mat-checkbox>
-            </ng-template>
-          </ngx-datatable-column>
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
+                </mat-checkbox>
+              </ng-template>
+            </ngx-datatable-column>
 
-          <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
-          <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.phone ? row.phone : '-'}}
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Tipe" prop="classification" [sortable]="false">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.classification ? row.classification : '-'}}
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.division ? row.division : '-'}}
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.region ? row.region : '-'}}
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Area" prop="area" [sortable]="false">
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.area ? row.area : '-'}}
-            </ng-template>
-          </ngx-datatable-column>
-        </ngx-datatable>
-        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.phone ? row.phone : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Tipe" prop="classification" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.classification ? row.classification : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.division ? row.division : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.region ? row.region : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Area" prop="area" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.area ? row.area : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" *ngIf="loaded">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
             SIMPAN
           </button>
