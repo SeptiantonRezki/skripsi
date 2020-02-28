@@ -6,7 +6,7 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">{{ isDetal ? 'Detil' : 'Ubah' }} Group Trade Program</h2>
+        <h2 class="">{{ isDetail ? 'Detil' : 'Ubah' }} Group Trade Program</h2>
         <mat-form-field [class]="formStatus.value === 'active' ? 'radius-select green' : 'radius-select red'">
           <mat-select [formControl]="formStatus">
             <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
