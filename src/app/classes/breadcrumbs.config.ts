@@ -771,6 +771,51 @@ export const brConfig = {
           name: "Detail DTE Automation"
         }
       ]
+    },
+    group_trade_program: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Group Trade Program"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/group-trade-program",
+          name: "Group Trade Program"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Group Trade Program"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/group-trade-program",
+          name: "Group Trade Program"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Group Trade Program"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/group-trade-program",
+          name: "Group Trade Program"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Group Trade Program"
+        }
+      ]
     }
   },
   notification: {

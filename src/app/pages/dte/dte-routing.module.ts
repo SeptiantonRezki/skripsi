@@ -20,6 +20,9 @@ import { ScheduleProgramEditComponent } from "./schedule-program/edit/schedule-p
 import { AudienceTradeProgramComponent } from "./automation/create/audience-trade-program.component";
 import { AudienceTradeProgramIndexComponent } from "./automation/index/audience-trade-program-index.component";
 import { AudienceTradeProgramEditComponent } from "./automation/edit/audience-trade-program-edit.component";
+import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
+import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/group-trade-program-create.component";
+import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
 
 const routes: Routes = [
   {
@@ -225,6 +228,42 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
+  },
+  {
+    path: "group-trade-program",
+    component: GroupTradeProgramComponent,
+    data: {
+      breadcrumbs: brConfig.dte.group_trade_program.index
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "group-trade-program/create",
+    component: GroupTradeProgramCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.group_trade_program.create
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "group-trade-program/edit",
+    component: GroupTradeProgramEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.group_trade_program.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "group-trade-program/detail",
+    component: GroupTradeProgramEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.group_trade_program.detail
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
   }
 ];
 

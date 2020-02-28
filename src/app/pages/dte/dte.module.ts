@@ -65,6 +65,9 @@ import { EOrderComponent } from "./automation/create/e-order/e-order.component";
 import { AudienceTradeProgramIndexComponent } from './automation/index/audience-trade-program-index.component';
 import { AudienceTradeProgramEditComponent } from './automation/edit/audience-trade-program-edit.component';
 import { EOrderEditComponent } from './automation/edit/eorder-edit/eorder-edit.component';
+import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
+import { GroupTradeProgramCreateComponent } from './group-trade-program/create/group-trade-program-create.component';
+import { GroupTradeProgramEditComponent } from './group-trade-program/edit/group-trade-program-edit.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -144,7 +147,10 @@ export const MY_FORMATS = {
     EOrderComponent,
     AudienceTradeProgramIndexComponent,
     AudienceTradeProgramEditComponent,
-    EOrderEditComponent
+    EOrderEditComponent,
+    GroupTradeProgramComponent,
+    GroupTradeProgramCreateComponent,
+    GroupTradeProgramEditComponent
   ],
   exports: [
     TemplateIndexComponent,

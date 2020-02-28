@@ -401,6 +401,13 @@ export class Endpoint {
         loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
       },
+      group_trade_program: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,
+        show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,
+        put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

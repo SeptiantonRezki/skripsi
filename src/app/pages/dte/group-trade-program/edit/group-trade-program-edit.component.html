@@ -1,0 +1,40 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') +' Group Trade Program'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">{{ isDetal ? 'Detil' : 'Ubah' }} Group Trade Program</h2>
+        <mat-form-field [class]="formStatus.value === 'active' ? 'radius-select green' : 'radius-select red'">
+          <mat-select [formControl]="formStatus">
+            <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formGroupTradeProgram">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Group Trade Program">
+              <mat-error
+                *ngIf="formGroupTradeProgram.controls['name'].hasError('required') && formGroupTradeProgram.controls['name'].touched">
+                Nama Group Trade Program harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+        SIMPAN
+      </button>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>
+<p>
+  group-trade-program-edit works!
+</p>

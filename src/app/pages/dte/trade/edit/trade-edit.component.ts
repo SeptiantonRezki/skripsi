@@ -8,6 +8,7 @@ import { TradeProgramService } from 'app/services/dte/trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 
 @Component({
   selector: 'app-trade-edit',
@@ -31,6 +32,7 @@ export class TradeEditComponent {
 
   isDetail: Boolean;
   statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
+  listGroupTradeProgram: any[] = [];
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -57,7 +59,8 @@ export class TradeEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private tradeProgramService: TradeProgramService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private groupTradeProgramService: GroupTradeProgramService
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -81,13 +84,15 @@ export class TradeEditComponent {
   }
 
   ngOnInit() {
+    this.getGroupTradeProgram();
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       budget: ['', [Validators.required, Validators.min(0)]],
       coin_expiry_date: ['', Validators.required],
-      status: ['', Validators.required]
+      status: ['', Validators.required],
+      group_trade_program_id: [""]
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -100,7 +105,8 @@ export class TradeEditComponent {
       end_date: this.detailFormTrade.end_date,
       budget: this.detailFormTrade.budget,
       coin_expiry_date: this.detailFormTrade.coin_expiry_date,
-      status: this.detailFormTrade.status_publish
+      status: this.detailFormTrade.status_publish,
+      group_trade_program_id: this.detailFormTrade.trade_creator_group_id ? this.detailFormTrade.trade_creator_group_id : ''
     })
 
     if (this.detailFormTrade.status === 'active') {
@@ -117,6 +123,12 @@ export class TradeEditComponent {
     this.setMinExpireDate('init');
 
     if (this.isDetail) this.formTradeProgram.disable();
+  }
+
+  getGroupTradeProgram() {
+    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+      this.listGroupTradeProgram = res.data ? res.data.data : [];
+    })
   }
 
   setMinEndDate(init?) {
@@ -163,6 +175,7 @@ export class TradeEditComponent {
       fd.append('budget', body.budget);
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
+      fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program_id').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.put(fd, { trade_program_id: this.detailFormTrade.id }).subscribe(

@@ -9,7 +9,8 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Trade Program</h2>
           <div>
-            <mat-form-field [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
+            <mat-form-field
+              [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
               <mat-select formControlName="status">
                 <mat-option *ngFor="let item of statusTP" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
@@ -21,8 +22,10 @@
           <div class="message-box warning" *ngIf="detailFormTrade.status === 'active'">
             Trade Program sedang berjalan.
           </div>
-          <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16" [(validDrag)]="validComboDrag" [(invalidDrag)]="isDetail"
-            [(file)]="files" accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" [fileDropDisabled]="isDetail">
+          <div ngfDrop selectable="1" [hidden]="detailFormTrade.status === 'active'" class="rectangle-16"
+            [(validDrag)]="validComboDrag" [(invalidDrag)]="isDetail" [(file)]="files" accept="image/*"
+            [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+            [fileDropDisabled]="isDetail">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
@@ -46,8 +49,19 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
+              <mat-select formControlName="group_trade_program_id" placeholder="Group Trade Program">
+                <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <!-- <mat-error *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
+                Nama Trade Program harus diisi
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="47%" class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
-              <mat-error *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
                 Nama Trade Program harus diisi
               </mat-error>
             </mat-form-field>
@@ -61,7 +75,8 @@
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #startDate></mat-datepicker>
-              <mat-error *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
                 Tanggal Mulai harus diisi
               </mat-error>
             </mat-form-field>
@@ -73,7 +88,8 @@
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #endDate></mat-datepicker>
-              <mat-error *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
                 Tanggal Berakhir harus diisi
               </mat-error>
             </mat-form-field>
@@ -82,10 +98,12 @@
             <mat-form-field fxFlex="47%" class="is-light form-primary">
               <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program"
                 numericOnly>
-              <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi
               </mat-error>
-              <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program tidak boleh kurang dari 0
               </mat-error>
             </mat-form-field>
@@ -98,15 +116,16 @@
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
-              <mat-error *ngIf="formTradeProgram.controls['coin_expiry_date'].hasError('required') && formTradeProgram.controls['coin_expiry_date'].touched">
+              <mat-error
+                *ngIf="formTradeProgram.controls['coin_expiry_date'].hasError('required') && formTradeProgram.controls['coin_expiry_date'].touched">
                 Tanggal Kadaluarsa Coin Trade Program harus diisi
               </mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div  *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row">
-          <button mat-raised-button type="button" class="confirmation-button"
-            fxFlex="20" (click)="detailFormTrade?.status === 'active' ? updateStatus() : submit()">
+        <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
+            (click)="detailFormTrade?.status === 'active' ? updateStatus() : submit()">
             SIMPAN
           </button>
         </div>

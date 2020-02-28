@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { DateAdapter } from '@angular/material';
 import { Observable } from 'rxjs';
+import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 
 @Component({
   selector: 'app-trade-create',
@@ -44,12 +45,15 @@ export class TradeCreateComponent {
     return true;
   }
 
+  listGroupTradeProgram: any[] = [];
+
   constructor(
     private router: Router,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
-    private tradeProgramService: TradeProgramService
+    private tradeProgramService: TradeProgramService,
+    private groupTradeProgramService: GroupTradeProgramService
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -67,13 +71,15 @@ export class TradeCreateComponent {
   }
 
   ngOnInit() {
+    this.getGroupTradeProgram();
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       budget: ['', [Validators.required, Validators.min(0)]],
       coin_expiry_date: ['', Validators.required],
-      status: ['publish', Validators.required]
+      status: ['publish', Validators.required],
+      group_trade_program: [""]
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -82,6 +88,12 @@ export class TradeCreateComponent {
 
     this.formTradeProgram.valueChanges.subscribe(res => {
       this.valueChange = true;
+    })
+  }
+
+  getGroupTradeProgram() {
+    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+      this.listGroupTradeProgram = res.data ? res.data.data : [];
     })
   }
 
@@ -121,6 +133,7 @@ export class TradeCreateComponent {
       fd.append('budget', body.budget);
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
+      fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program_id').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.create(fd).subscribe(
