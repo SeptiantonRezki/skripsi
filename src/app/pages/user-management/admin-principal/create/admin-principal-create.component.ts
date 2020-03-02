@@ -79,6 +79,7 @@ export class AdminPrincipalCreateComponent {
     }
 
     this.listRole = this.activatedRoute.snapshot.data["listRole"].data;
+    console.log('listROLE__', this.listRole);
   }
 
   ngOnInit() {

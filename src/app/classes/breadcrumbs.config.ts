@@ -315,6 +315,11 @@ export const brConfig = {
     suppliercompany: {
       index: [
         {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
           type: "current",
           url: "",
           name: "Supplier Company"
@@ -324,27 +329,25 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
           name: "Supplier Company"
         },
         {
           type: "current",
           url: "",
-          name: "Supplier Company"
+          name: "Create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Supplier Company"
+          name: "Private Label"
         },
-        {
-          type: "current",
-          url: "",
-          name: "Supplier Company"
-        }
-      ],
-      detail: [
         {
           type: "parent",
           url: "/user-management/supplier-company",
@@ -353,13 +356,35 @@ export const brConfig = {
         {
           type: "current",
           url: "",
+          name: "Edit"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
           name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
         }
       ]
     },
     usersupplier: {
       index: [
         {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
           type: "current",
           url: "",
           name: "User Supplier"
@@ -368,43 +393,63 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/user-management/user-supplier",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
           name: "User Supplier"
         },
         {
           type: "current",
           url: "",
-          name: "User Supplier"
+          name: "Create"
         }
       ],
       edit: [
         {
           type: "parent",
-          url: "/user-management/user-supplier",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
           name: "User Supplier"
         },
         {
           type: "current",
           url: "",
-          name: "User Supplier"
+          name: "Edit"
         }
       ],
       detail: [
         {
           type: "parent",
-          url: "/user-management/user-supplier",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
           name: "User Supplier"
         },
         {
           type: "current",
           url: "",
-          name: "User Supplier"
+          name: "Detail"
         }
       ]
     },
     panelmitra: {
       index: [
         {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
           type: "current",
           url: "",
           name: "Panel Mitra"
@@ -413,37 +458,52 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/user-management/panel-mitra",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
           name: "Panel Mitra"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Mitra"
+          name: "Create"
         }
       ],
       edit: [
         {
           type: "parent",
-          url: "/user-management/panel-mitra",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
           name: "Panel Mitra"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Mitra"
+          name: "Edit"
         }
       ],
       detail: [
         {
           type: "parent",
-          url: "/user-management/panel-mitra",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
           name: "Panel Mitra"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Mitra"
+          name: "Detail"
         }
       ]
     },

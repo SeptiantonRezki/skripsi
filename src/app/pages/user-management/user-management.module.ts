@@ -23,8 +23,18 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatDatepickerModule,
 } from "@angular/material";
+
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
 
 import { AdminPrincipalEditComponent } from "./admin-principal/edit/admin-principal-edit.component";
 import { FieldForceCreateComponent } from "./field-force/create/field-force-create.component";
@@ -61,7 +71,9 @@ import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
   ListLevelAreaResolver,
-  ListAdminPrincipalResolver
+  ListAdminPrincipalResolver,
+  ListCategoryProdukResolver,
+  ListSupplierCompanyResolver,
 } from "../../resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -73,6 +85,17 @@ import { ImportAccessCashierDialogComponent } from './retailer/import-access-cas
 import { ngfModule } from "angular-file";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 @NgModule({
   imports: [
     CommonModule,
@@ -95,6 +118,9 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
     MatDialogModule,
     ngfModule,
     NgxMatSelectSearchModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -166,11 +192,19 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
   ],
   entryComponents: [ImportAccessCashierDialogComponent],
   providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ListRoleAdminResolver,
     ListLevelFFResolver,
     ListLevelAreaResolver,
     ListAdminPrincipalResolver,
-    PageGuard
+    ListCategoryProdukResolver,
+    ListSupplierCompanyResolver,
+    PageGuard,
   ],
 })
 export class UserManagementModule { }

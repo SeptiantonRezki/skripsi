@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <page-content-header [contentTitle]="'User Supplier'">
-    <button style="width: 170px" [routerLink]="['/user-management', 'user-supplier','create']" mat-raised-button
+    <button style="width: 170px" [routerLink]="['/user-management', 'supplier-user','create']" mat-raised-button
       type="button">
       <mat-icon>add</mat-icon> TAMBAH
     </button>
@@ -22,24 +22,41 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Supplier" prop="name">
+        <ngx-datatable-column name="Nama Supplier" prop="suppliername">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.supplier_company_name || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Alamat" prop="address">
+        <ngx-datatable-column name="Nama User" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.address}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.fullname || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No Telepon" prop="phone">
+        <ngx-datatable-column name="Email" prop="email">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.phone}}</span>
+            <span class="row-address">{{row.email || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Terakhir Masuk" prop="lastlogin">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.last_login | date:'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Terakhir Diubah" prop="lastupdated">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.updated_at | date:'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
+            <span [class]="row.status == 'active'? 'dropdown-active' : 'dropdown-inactive'" *ngIf="!permission?.ubah">{{row.status}}
+            </span>
+            <mat-form-field class="orders dropdown" [class]="row.status == 'active'? 'orders status-active' : row.status == 'inactive'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center" *ngIf="permission?.ubah">
+              <mat-select [(ngModel)]="row.status" (selectionChange)="selectionStatus($event, row, $index)">
+                <mat-option [value]="item.status" *ngFor="let item of userSupplierStatusList">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
@@ -48,7 +65,7 @@
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text" outline>edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteSupplierCompanyById(row.id)"
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

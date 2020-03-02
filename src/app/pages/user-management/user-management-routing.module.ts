@@ -22,7 +22,9 @@ import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
   ListLevelAreaResolver,
-  ListAdminPrincipalResolver
+  ListAdminPrincipalResolver,
+  ListCategoryProdukResolver,
+  ListSupplierCompanyResolver,
 } from "app/resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -310,6 +312,9 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.privatelabel.panelmitra.index
     },
+    resolve: {
+      listCategory: ListCategoryProdukResolver
+    }
     // canActivate: [PageGuard]
   },
   {
@@ -318,17 +323,32 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.privatelabel.panelmitra.create
     },
+    resolve: {
+      listCategory: ListCategoryProdukResolver,
+      listSupplierCompany: ListSupplierCompanyResolver,
+    }
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-panel-mitra/edit",
+    path: "supplier-panel-mitra/edit/:id",
     component: PanelMitraEditComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.panelmitra.edit
     },
+    resolve: {
+      listCategory: ListCategoryProdukResolver,
+      listSupplierCompany: ListSupplierCompanyResolver,
+    }
     // canActivate: [PageGuard]
   },
-
+  {
+    path: "supplier-panel-mitra/detail/:id",
+    component: PanelMitraEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.detail
+    },
+    // canActivate: [PageGuard]
+  },
   {
     path: "supplier-company",
     component: SupplierCompanyIndexComponent,
@@ -346,10 +366,18 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-company/edit",
+    path: "supplier-company/edit/:id",
     component: SupplierCompanyEditComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.suppliercompany.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/detail/:id",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.detail
     },
     // canActivate: [PageGuard]
   },
@@ -367,13 +395,30 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.privatelabel.usersupplier.create
     },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-user/edit",
+    path: "supplier-user/edit/:id",
     component: UserSupplierEditComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.usersupplier.edit
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/detail/:id",
+    component: UserSupplierEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.detail
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
     },
     // canActivate: [PageGuard]
   },

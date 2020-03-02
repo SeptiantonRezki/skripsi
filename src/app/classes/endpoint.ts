@@ -377,6 +377,34 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
+      },
+      PLSupplierCompany: {
+        getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        getListByProductId: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company-list?product_id=${context.productId}&search=${context.value}`,
+        detail: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}?type=status`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}`
+      },
+      PLSupplierUser: {
+        getList: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
+        detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}?type=status`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+      },
+      PLSupplierPanelMitra: {
+        getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra`,
+        getListMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-list-mitra`,
+        detail: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-list-mitra/${context.panelMitraId}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
+        listCategory: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/category/list-all-category`,
+        filterProduct: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}&category_id=${context.categoryId}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

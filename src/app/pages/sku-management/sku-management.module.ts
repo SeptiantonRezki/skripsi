@@ -35,8 +35,18 @@ import {
   MatProgressBarModule,
   MatMenuModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDividerModule,
+  MatListModule,
 } from "@angular/material";
+
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
+import { NgxCurrencyModule } from "ngx-currency";
 
 import {
   ListBrandResolver,
@@ -51,6 +61,30 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
+};
 
 @NgModule({
   imports: [
@@ -78,7 +112,10 @@ import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustm
     MatDialogModule,
     MatToolbarModule,
     ngfModule,
-    AutofocusModule
+    AutofocusModule,
+    MatDividerModule,
+    MatListModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
     ProductIndexComponent,
@@ -109,6 +146,18 @@ import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustm
     DetailRetailerComponent
   ],
   entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe]
+  providers: [
+    ListBrandResolver, 
+    ListCategoryResolver, 
+    ListPackagingResolver, 
+    PageGuard, 
+    RupiahFormaterPipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ]
 })
 export class SkuManagementModule { }

@@ -14,7 +14,9 @@ export class Page {
   end_date: string;
   area: any;
   user: any;
-
+  product_id: any;
+  category_id: any;
+  
   constructor() {
     this.per_page = 15;
     this.page = 1;
@@ -28,6 +30,8 @@ export class Page {
     this.end_date = "";
     this.area = null;
     this.user = "";
+    this.category_id = null;
+    this.product_id = null;
   }
 
   public static renderPagination(pagination, response) {

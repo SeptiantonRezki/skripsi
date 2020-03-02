@@ -6,8 +6,10 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
+import { FormGroup, FormBuilder } from "@angular/forms";
 
 import { Endpoint } from '../../../../../classes/endpoint';
+import { DateAdapter } from '@angular/material';
 
 @Component({
   selector: 'app-orderto-supplier-index',
@@ -16,6 +18,21 @@ import { Endpoint } from '../../../../../classes/endpoint';
 })
 export class OrdertoSupplierIndexComponent implements OnInit {
   onLoad: boolean;
+  formFilter: FormGroup;
+  statusFilter: any[] = [
+    { name: 'Semua Status', value: '' },
+    { name: 'Pesanan Baru', value: 'pesanan-baru' },
+    { name: 'Diproses', value: 'diproses' },
+    { name: 'Konfirmasi Perubahan', value: 'konfirmasi-perubahan' },
+    { name: 'Perubahan Disetujui', value: 'perubahan-disetujui' },
+    { name: 'Pesanan Dibatalkan', value: 'pesanan-dibatalkan' },
+    { name: 'Siap Dikirim', value: 'siap-dikirim' },
+    { name: 'Siap Diambil', value: 'siap-diambil' },
+    { name: 'Dalam Pengiriman', value: 'dalam-pengiriman' },
+    { name: 'Pesanan Diterima', value: 'pesanan-diterima' },
+    { name: 'Belum Lunas', value: 'belum-lunas' },
+    { name: 'Selesai', value: 'selesai' },
+  ]
 
   rows: any[];
   selected: any[];
@@ -40,49 +57,50 @@ export class OrdertoSupplierIndexComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private adapter: DateAdapter<any>,
+    private formBuilder: FormBuilder,
   ) {
     this.onLoad = false;
+    this.adapter.setLocale("id");
   }
 
   ngOnInit() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    this.initFilter
+  }
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+  initFilter() {
+    this.formFilter = this.formBuilder.group({
+      status: "",
+      from: "",
+      to: ""
+    });
 
-    this.offsetPagination = page ? (page - 1) : 0;
-    this.rows = [
-      {
-        id: 21,
-        name: 'PT Bintang Toedjoeh',
-        address: 'Jl. Sumatera No. 123 Pondok Bambu Jakarta Timur, DKI Jakarta, Indonesia',
-        phone: '08123456789',
-        status: 'active',
-      },
-      {
-        id: 211,
-        name: 'PT Bintang Toedjoeh2',
-        address: 'Jl. Sumatera No. 123A Pondok Bambu Jakarta Timur, DKI Jakarta, Indonesia',
-        phone: '081234567891',
-        status: 'active',
-      }
-    ];
-    const res = {
-      current_page: 1,
-      first_page_url: "https://dev.ayo-api.dxtr.asia/api/principal/user/principal-partnership?page=1",
-      from: 1,
-      last_page: 7,
-      last_page_url: "https://dev.ayo-api.dxtr.asia/api/principal/user/principal-partnership?page=7",
-      next_page_url: "https://dev.ayo-api.dxtr.asia/api/principal/user/principal-partnership?page=2",
-      path: "https://dev.ayo-api.dxtr.asia/api/principal/user/principal-partnership",
-      per_page: "15",
-      prev_page_url: null,
-      to: 15,
-      total: 98,
-    }
-    Page.renderPagination(this.pagination, res);
+    this.formFilter
+      .get("status")
+      .valueChanges
+      .debounceTime(200)
+      .subscribe(data => {
+        this.dataService.setToStorage("filter_orders_status", data);
+      });
+    this.formFilter
+      .get("from")
+      .valueChanges
+      .debounceTime(200)
+      .subscribe(data => {
+        this.dataService.setToStorage("filter_orders_from", data);
+      });
+    this.formFilter
+      .get("to")
+      .valueChanges
+      .debounceTime(200)
+      .subscribe(data => {
+        this.dataService.setToStorage("filter_orders_to", data);
+      });
+
+    this.formFilter.setValue({
+      status: this.dataService.getFromStorage("filter_orders_status") ? this.dataService.getFromStorage("filter_orders_status") : "",
+      from: this.dataService.getFromStorage("filter_orders_from") ? this.dataService.getFromStorage("filter_orders_from") : "",
+      to: this.dataService.getFromStorage("filter_orders_to") ? this.dataService.getFromStorage("filter_orders_to") : "",
+    });
   }
 }

@@ -65,6 +65,9 @@ import { CustomerService } from "./services/user-management/customer.service";
 import { GeneralService } from "./services/general.service";
 import { SupportService } from "./services/settings/support.service";
 import { TemplateMessageService } from "./services/template-message-management/template-message.service";
+import { SupplierCompanyService } from "./services/user-management/private-label/supplier-company.service";
+import { UserSupplierService } from "./services/user-management/private-label/user-supplier.service";
+import { PanelMitraService } from "./services/user-management/private-label/panel-mitra.service";
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
@@ -133,6 +136,9 @@ import { GeotreeService } from "./services/geotree.service";
     SupportService,
     GeotreeService,
     TemplateMessageService,
+    SupplierCompanyService,
+    UserSupplierService,
+    PanelMitraService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
