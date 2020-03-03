@@ -4,8 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class PanelMitraService extends BaseService {
-  public namespace = "PLSupplierPanelMitra";
+export class OrdertoSupplierService extends BaseService {
+  public namespace = "PLOrdertoSupplier";
 
   constructor(http: HttpClient) {
     super(http);
@@ -48,16 +48,6 @@ export class PanelMitraService extends BaseService {
 
   getFilterProduct(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "filterProduct", context);
-    return this.getApi(url);
-  }
-
-  getListMitra(queryParams?: any, context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "getListMitra", context);
-    return this.getApi(url, queryParams);
-  }
-  
-  getListOtherChildren(context): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
   }
 }

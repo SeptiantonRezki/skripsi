@@ -4,18 +4,25 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="top-table pt-8 mb-8 bb">
-        <div fxLayout="column">
-          <h2 class="pl-8">Daftar Pesanan</h2>
-          <div fxLayout="row" fxLayoutAlign="center center" fusePerfectScrollbar>
-            <form [formGroup]="formFilter" autoComplete="off">
-              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8" fxLayoutAlign="center center">
-                <mat-form-field fxFlex="25" class="orders dropdown">
+      <div fxLayout="column" class="top-table pt-8 mb-8 pr-16 bb">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center"> 
+          <h2 class="pl-16">Daftar Pesanan</h2>
+          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon>search</mat-icon>
+            <mat-form-field class="is-light tab-search">
+              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="40px">
+          <form [formGroup]="formFilter" autoComplete="off">
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8" fxLayoutAlign="center center">
+                <mat-form-field  class="orders dropdown">
                   <mat-select formControlName="status">
                     <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="25" class="orders datepicker is-light">
+                <mat-form-field class="orders datepicker is-light">
                   <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
                     formControlName="from" (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
                   <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
@@ -27,7 +34,7 @@
                   </mat-datepicker-toggle>
                   <mat-datepicker #dari></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field fxFlex="25" class="orders datepicker is-light">
+                <mat-form-field class="orders datepicker is-light">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
                     placeholder="Sampai Tanggal" formControlName="to" readonly>
                   <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
@@ -40,65 +47,73 @@
                   <mat-datepicker #sampai></mat-datepicker>
                 </mat-form-field>
               </div>
-            </form>
-          </div>
-        </div>
-        <div fxLayout="column">
-          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-            <mat-icon>search</mat-icon>
-            <mat-form-field class="is-light tab-search">
-              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
-            </mat-form-field>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px"> 
+          </form>
+
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"> 
             <div class="button-row">
               <button mat-raised-button style="width: 100px" color="primary" (click)="updateFilter()">FILTER</button>
             </div>
             <div class="button-row">
-              <button mat-flat-button style="width: 100px" color="white" (click)="updateFilter()">EXPORT PO</button>
+              <button mat-stroked-button style="width: 100px" color="primary">EXPORT PO</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Produk" prop="name">
+        <ngx-datatable-column name="Nomor PO" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+            <span class="row-name">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kategori" prop="address">
+        <ngx-datatable-column name="Nama Mitra" prop="address">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.address}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Supplier" prop="phone">
+        <ngx-datatable-column name="Alamat" prop="phone">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Mitra" prop="status">
+        <ngx-datatable-column name="No Telepon" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.status}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column name="Jumlah Pesanan" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Total Pesanan" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Tanggal" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Action" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
-                <mat-icon class="secondary-text" outline>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteSupplierCompanyById(row.id)"
-                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
-                <mat-icon>delete</mat-icon>
+              <button mat-icon-button color="" (click)="cetakPO(row)">
+                CETAK PO
               </button>
             </div>
           </ng-template>
         </ngx-datatable-column>
-      </ngx-datatable> -->
+      </ngx-datatable>
     </div>
   </div>
 </div>

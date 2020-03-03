@@ -44,6 +44,7 @@ import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/
 import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
 import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
 import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+// import { PendingChangesGuard } from "../dte/dte.guard";
 
 const routes: Routes = [
   {
@@ -326,7 +327,8 @@ const routes: Routes = [
     resolve: {
       listCategory: ListCategoryProdukResolver,
       listSupplierCompany: ListSupplierCompanyResolver,
-    }
+    },
+    // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
   {
@@ -338,7 +340,8 @@ const routes: Routes = [
     resolve: {
       listCategory: ListCategoryProdukResolver,
       listSupplierCompany: ListSupplierCompanyResolver,
-    }
+    },
+    // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
   {

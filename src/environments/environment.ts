@@ -29,7 +29,8 @@ export const server = {
   product: "product",
   task: "task",
   submission: "submission",
-  coin: "coin"
+  coin: "coin",
+  order: "order",
 }
 
 /*

@@ -107,9 +107,11 @@ export class UserSupplierCreateComponent implements OnInit {
           }, err => {
             console.log('err', err);
             this.isLoadingSave = false;
-            this.dialogService.openSnackBar({
-              message: err.error.message
-            });
+            // this.dialogService.openSnackBar({
+            //   message: err.error.message
+            // });
+            let errorArray = Object.values(err.error.errors);
+            this.dialogService.openSnackBar({ message: errorArray[0][0] });
           }
         );
       } else {

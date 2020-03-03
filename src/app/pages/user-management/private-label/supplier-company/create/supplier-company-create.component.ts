@@ -171,6 +171,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
         });
         this.products = [];
         this.createForm.reset();
+        this.catatanControl.reset();
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;

@@ -478,6 +478,10 @@ mat-form-field.orders {
       border-top: 0;
     }
 
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
     .mat-input-placeholder {
       padding-top: 20px;
       box-sizing: border-box;
@@ -490,6 +494,10 @@ mat-form-field.orders {
     }
 
     .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-form-field-label-wrapper {
       display: none;
     }
 
