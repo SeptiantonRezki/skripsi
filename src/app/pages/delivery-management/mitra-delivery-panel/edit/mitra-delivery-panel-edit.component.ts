@@ -167,6 +167,9 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
 
     this.getDetail();
     this.getCourerList();
+    if (this.isDetail) {
+      this.getPanelMitraList();
+    }
     // this.getPanelMitraList();
   }
 

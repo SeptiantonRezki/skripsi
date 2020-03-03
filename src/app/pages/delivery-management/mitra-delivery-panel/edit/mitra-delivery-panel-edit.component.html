@@ -40,7 +40,8 @@
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-          style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export" *ngIf="loaded">
+          style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export"
+          *ngIf="(isDetail || loaded)">
           <a #downloadLink></a>
           <button mat-raised-button type="button" class="is-danger" (click)="import()">
             <mat-icon>arrow_downward</mat-icon> Import XLSX
@@ -51,7 +52,7 @@
         </div>
         <form [formGroup]="formFilter" autoComplete="off">
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
-            fxLayoutGap.lt-md="0px" *ngIf="loaded">
+            fxLayoutGap.lt-md="0px" *ngIf="(isDetail || loaded)">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -107,7 +108,7 @@
             </mat-form-field>
           </div>
         </form>
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8" *ngIf="loaded">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8" *ngIf="(isDetail || loaded)">
           <h2 class="pl-8"></h2>
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
@@ -116,7 +117,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div *ngIf="loaded">
+        <div *ngIf="(isDetail || loaded)">
           <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
             [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
             [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
