@@ -42,9 +42,25 @@ export class ImportAudienceDialogComponent {
     this.dataService.showLoading(true);
     this.audienceService.importExcel(fd).subscribe(
       res => {
-        this.rows = res.data;
-        this.validData = (res.data || []).filter(item => item.is_valid).length;
-        this.dataService.showLoading(false);
+        if (res && res.data) {
+          this.audienceService.showImport({ code: res.data }).subscribe(res => {
+            this.rows = res.data;
+            this.validData = (res.data || []).filter(item => item.is_valid).length;
+            this.dataService.showLoading(false);
+          }, err => {
+            console.log('error show import', err);
+            this.dataService.showLoading(false);
+            this.files = undefined;
+
+            if (err.status === 404 || err.status === 500)
+              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          })
+        } else {
+          this.dataService.showLoading(false);
+          this.files = undefined;
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+        }
+
       },
       err => {
         this.dataService.showLoading(false);
