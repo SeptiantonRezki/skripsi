@@ -165,6 +165,14 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
       }
     });
 
+    this.formPanelMitra.get('service')
+      .valueChanges
+      .subscribe(res => {
+        if (res && this.loaded) {
+          this.getPanelMitraList();
+        }
+      })
+
     this.getDetail();
     this.getCourerList();
     if (this.isDetail) {
