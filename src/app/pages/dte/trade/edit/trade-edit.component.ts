@@ -1,14 +1,15 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DateAdapter } from '@angular/material';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TradeProgramService } from 'app/services/dte/trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trade-edit',
@@ -33,6 +34,10 @@ export class TradeEditComponent {
   isDetail: Boolean;
   statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
   listGroupTradeProgram: any[] = [];
+  private _onDestroy = new Subject<void>();
+  filteredGTpOptions: Observable<string[]>;
+  public filterGTP: FormControl = new FormControl();
+  public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -119,15 +124,40 @@ export class TradeEditComponent {
       this.valueChange = true;
     })
 
+    this.filterGTP.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringGTP();
+      });
+
     this.setMinEndDate('init');
     this.setMinExpireDate('init');
 
     if (this.isDetail) this.formTradeProgram.disable();
   }
 
+
+  filteringGTP() {
+    if (!this.listGroupTradeProgram) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterGTP.value;
+    if (!search) {
+      this.filteredGTP.next(this.listGroupTradeProgram.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredGTP.next(
+      this.listGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
   getGroupTradeProgram() {
     this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
       this.listGroupTradeProgram = res.data ? res.data.data : [];
+      this.filteredGTP.next(this.listGroupTradeProgram.slice());
     })
   }
 

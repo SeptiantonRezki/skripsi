@@ -49,12 +49,16 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <mat-select formControlName="group_trade_program_id" placeholder="Group Trade Program">
+              <!-- <mat-select formControlName="group_trade_program_id" placeholder="Group Trade Program">
                 <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select> -->
+              <mat-select formControlName="group_trade_program_id" placeholder="Group Trade Program" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Group Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Group Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
               </mat-select>
-              <!-- <mat-error *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
-                Nama Trade Program harus diisi
-              </mat-error> -->
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
