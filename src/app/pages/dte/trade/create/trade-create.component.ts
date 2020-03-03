@@ -133,7 +133,7 @@ export class TradeCreateComponent {
       fd.append('budget', body.budget);
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
-      fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program_id').value);
+      fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.create(fd).subscribe(
