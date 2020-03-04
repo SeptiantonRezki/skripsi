@@ -59,8 +59,8 @@ export class ProductEditComponent {
   ];
 
   listPinUpProduct: any[] = [
-    { name: "Ya", value: "1" },
-    { name: "Tidak", value: "0" }
+    { name: "Ya", value: 1 },
+    { name: "Tidak", value: 0 }
   ]
   minDate: any;
 
@@ -730,7 +730,7 @@ export class ProductEditComponent {
       fd.append("status", body.status);
       fd.append("is_promo_src", body.is_promo_src);
 
-      if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == '1') {
+      if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
         fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
         fd.append('start_date_pin_up', this.formProductGroup.get('start_date_pin_up').value);
         fd.append('end_date_pin_up', this.formProductGroup.get('end_date_pin_up').value);
