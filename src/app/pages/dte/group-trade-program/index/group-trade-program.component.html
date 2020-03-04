@@ -43,7 +43,7 @@
         <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)" [disabled]="row.status === 'active'">
+              <button mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)"

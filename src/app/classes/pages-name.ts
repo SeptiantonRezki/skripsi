@@ -65,6 +65,10 @@ export class PagesName {
       "/dte/template-task/create": "principal.tugas.buat",
       "/dte/template-task/edit": "principal.tugas.ubah",
       "/dte/template-task/detail": "principal.tugas.lihat",
+      "/dte/group-trade-program": "principal.dtegrouptradeprogram.lihat",
+      "/dte/group-trade-program/create": "principal.dtegrouptradeprogram.buat",
+      "/dte/group-trade-program/edit": "principal.dtegrouptradeprogram.ubah",
+      "/dte/group-trade-program/detail": "principal.dtegrouptradeprogram.lihat",
       "/dte/trade-program": "principal.tradeprogram.lihat",
       "/dte/trade-program/create": "principal.tradeprogram.buat",
       "/dte/trade-program/edit": "principal.tradeprogram.ubah",
@@ -86,7 +90,7 @@ export class PagesName {
       "/settings/access/edit/": "principal.akses.ubah",
       "/settings/access/detail/": "principal.akses.lihat",
       "/settings/account": "principal.ubahpassword.lihat",
-      "/settings/force-update-apps": "principal.forceupdate.lihat"
+      "/settings/force-update-apps": "principal.forceupdate.lihat",
     }
     return PAGES[name];
   }
@@ -95,6 +99,7 @@ export class PagesName {
     let localPerm = window.localStorage.getItem('_prmdxtrn');
     let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
     const permission = JSON.parse(perm);
+    // console.log('permit', permission);
 
     if (!permission) return;
 

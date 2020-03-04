@@ -42,7 +42,8 @@ export class GroupTradeProgramComponent implements OnInit {
     private groupTradeProgramService: GroupTradeProgramService
   ) {
     this.onLoad = true;
-    this.permission = this.roles.getRoles('principal.tugas')
+    this.permission = this.roles.getRoles('principal.dtegrouptradeprogram')
+    console.log('my permitt', this.permission);
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
