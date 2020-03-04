@@ -58,6 +58,12 @@ export class ProductEditComponent {
     { name: "Non Aktif", status: "inactive" }
   ];
 
+  listPinUpProduct: any[] = [
+    { name: "Ya", value: "1" },
+    { name: "Tidak", value: "0" }
+  ]
+  minDate: any;
+
   filteredSkuOptions: Observable<string[]>;
 
   public filterCategory: FormControl = new FormControl();
@@ -95,6 +101,7 @@ export class ProductEditComponent {
     this.otherProduct = [];
     this.listSubCategory = [];
     this.onLoad = true;
+    this.minDate = moment();
 
     activatedRoute.url.subscribe(params => {
       this.idProduct = params[2].path;
@@ -194,6 +201,11 @@ export class ProductEditComponent {
       this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
       this.formProductGroup.get("status").setValue(res.data.status);
       this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
+      if (res && res.data.status_pin_up) {
+        this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
+        if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(res.data.start_date_pin_up);
+        if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(res.data.end_date_pin_up);
+      }
       console.log(this.formProductGroup);
       if (res.data.category.parent_id) {
         this.formProductGroup.get("category").setValue(res.data.category_all[0]);
@@ -592,6 +604,9 @@ export class ProductEditComponent {
       // otherSubCategory: ["", Validators.required],
       packaging: ["", Validators.required],
       areas: this.formBuilder.array([]),
+      start_date_pin_up: [""],
+      end_date_pin_up: [""],
+      status_pin_up: [""]
       // convertion: ["", [Validators.min(0)]]
     });
   }
@@ -714,6 +729,12 @@ export class ProductEditComponent {
       fd.append("packaging_id", body.packaging_id);
       fd.append("status", body.status);
       fd.append("is_promo_src", body.is_promo_src);
+
+      if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == '1') {
+        fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
+        fd.append('start_date_pin_up', this.formProductGroup.get('start_date_pin_up').value);
+        fd.append('end_date_pin_up', this.formProductGroup.get('end_date_pin_up').value);
+      }
       // fd.append("convertion", body.convertion);
 
       body.alias.map(item => {

@@ -35,7 +35,11 @@ import {
   MatProgressBarModule,
   MatMenuModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDatepicker,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS
 } from "@angular/material";
 
 import {
@@ -51,6 +55,19 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @NgModule({
   imports: [
@@ -109,6 +126,12 @@ import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustm
     DetailRetailerComponent
   ],
   entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe]
+  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },]
 })
 export class SkuManagementModule { }
