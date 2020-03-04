@@ -260,6 +260,7 @@ export class PanelMitraCreateComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: "Berhasil Menyimpan Data"
         });
+        this.router.navigate(["user-management", "supplier-panel-mitra"]);
         }, err => {
           console.log('err', err);
           this.dialogService.openSnackBar({

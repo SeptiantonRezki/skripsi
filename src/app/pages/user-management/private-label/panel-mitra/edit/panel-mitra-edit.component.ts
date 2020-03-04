@@ -289,7 +289,7 @@ export class PanelMitraEditComponent implements OnInit {
           this.dialogService.openSnackBar({
             message: "Berhasil Menyimpan Data"
           });
-          this.router.navigate(["user-management", "supplier-panel-mitrar"]);
+          this.router.navigate(["user-management", "supplier-panel-mitra"]);
           }, err => {
             console.log('err', err);
             this.dialogService.openSnackBar({

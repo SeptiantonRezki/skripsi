@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
@@ -30,6 +30,7 @@ export class UserSupplierCreateComponent implements OnInit {
     private supplierCompanyService: SupplierCompanyService,
     private userSupplierService: UserSupplierService,
     private dialogService: DialogService,
+    private router: Router,
   ) {
     this.onLoad = true;
     this.isLoadingSave = false;
@@ -104,6 +105,7 @@ export class UserSupplierCreateComponent implements OnInit {
           this.verticalStepperStep2.reset();
           this.verticalStepperStep3.reset();
           this.isLoadingSave = false;
+          this.router.navigate(["user-management", "supplier-user"]);
           }, err => {
             console.log('err', err);
             this.isLoadingSave = false;

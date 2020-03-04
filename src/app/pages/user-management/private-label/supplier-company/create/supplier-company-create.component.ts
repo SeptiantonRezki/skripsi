@@ -8,6 +8,7 @@ import { map, startWith, debounceTime, distinctUntilChanged, switchMap, finalize
 import { DialogService } from "../../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
 import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-supplier-company-create',
@@ -44,6 +45,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private supplierCompanyService: SupplierCompanyService,
     private dialogService: DialogService,
+    private router: Router,
   ) {
     this.onLoad = true;
     this.isLoadingProduct = false;
@@ -172,6 +174,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
         this.products = [];
         this.createForm.reset();
         this.catatanControl.reset();
+        this.router.navigate(["user-management", "supplier-company"]);
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
