@@ -45,7 +45,7 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Produk" prop="produkName">
+        <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div fxLayout="row">
               <!-- <div class="inner-card name-container product-image my-8 mx-16">
@@ -55,17 +55,17 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kategori" prop="kategori">
+        <ngx-datatable-column name="Kategori" prop="kategori" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.category_name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Supplier" prop="phone">
+        <ngx-datatable-column name="Nama Supplier" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.supplier_name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Mitra" prop="status">
+        <ngx-datatable-column name="Jumlah Mitra" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.total_mitra}}</span>
           </ng-template>
