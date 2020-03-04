@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PanelMitraService } from 'app/services/user-management/private-label/panel-mitra.service';
 import { DialogService } from 'app/services/dialog.service';
 import { PagesName } from 'app/classes/pages-name';
@@ -63,7 +63,8 @@ export class PanelMitraCreateComponent implements OnInit {
     private panelMitraService: PanelMitraService,
     private dialogService: DialogService,
     private dataService: DataService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private router: Router,
   ) {
     this.onLoad = false;
     this.selected = [];
