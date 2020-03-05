@@ -116,7 +116,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Kode Agen" prop="code" summary-template="activeCell">
+        <ngx-datatable-column name="Kode Agen" prop="code" summary-template="activeCell">
         </ngx-datatable-column>
         <ngx-datatable-column name="Nama Pemilik" prop="owner">
           <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -124,11 +124,10 @@
           </ng-template> -->
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Classification" prop="classification" summary-template="activeCell">
+        <ngx-datatable-column name="Classification" prop="classification" summary-template="activeCell">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Kode WS" prop="wholesaler_code" summary-template="activeCell"
-          [sortable]="false">
+        <ngx-datatable-column name="Kode WS" prop="wholesaler_code" summary-template="activeCell" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
           </ng-template>
         </ngx-datatable-column>
@@ -136,11 +135,16 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
           </ng-template>
         </ngx-datatable-column>
-        <!-- <ngx-datatable-column name="Application Version" prop="version" summary-template="activeCell"
+        <ngx-datatable-column name="AYO SRC Toko Version" prop="version_retailer" summary-template="activeCell"
           [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version || '-'}}
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
+        <ngx-datatable-column name="AYO SRC Kasir Version" prop="version_cashier" summary-template="activeCell"
+          [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_cashier || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="120" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
