@@ -168,6 +168,7 @@ export class PanelMitraEditComponent implements OnInit {
         res => {
           if (res.status == 'success') {
             this.panelMitraDetail = res.data;
+            this.selected = res.data.wholesaler_id.map((item: any) => { return({ id: item })});
             this.formInput.get('filterproduct').setValue(res.data.product_id);
             this.formInput.get('filtersupplier').setValue(res.data.supplier_company_id);
           } else {
@@ -229,6 +230,8 @@ export class PanelMitraEditComponent implements OnInit {
       // console.log(arguments);
       this.selected.splice(0, this.selected.length);
       this.selected.push(...selected);
+      console.log('selected', selected);
+      console.log('this.selected', this.selected);
     }
     
     // selectFnn(allRowsSelected: any) {
