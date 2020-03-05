@@ -67,4 +67,9 @@ export class MitraPanelService extends BaseService {
     const url = this.getUrl(this.namespace, "courier_service", context);
     return this.getApi(url, queryParams);
   }
+
+  checkMitra(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "check_mitra");
+    return this.postApi(url, body);
+  }
 }

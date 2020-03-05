@@ -52,6 +52,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   endArea: String;
   lastLevel: any;
   loaded: Boolean;
+  currentMitraCount: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -180,6 +181,24 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
     this.mitraPanelService.courierServiceList({ courier_id: courierID }).subscribe(res => {
       this.listCourierServices = res.data;
     })
+  }
+
+  aturPanelMitra() {
+    if (this.formPanelMitra.valid) {
+      this.mitraPanelService.checkMitra({ delivery_courier_id: this.formPanelMitra.get('courier').value, delivery_courier_service_id: this.formPanelMitra.get('service').value }).subscribe(res => {
+        console.log('res', res);
+        if (res && res.data) {
+          this.currentMitraCount = res.data.mitra_count;
+        } else {
+          this.currentMitraCount = 0;
+        }
+        this.getPanelMitraList();
+      }, err => {
+        console.log('err occured', err);
+      })
+    } else {
+
+    }
   }
 
   getPanelMitraList() {

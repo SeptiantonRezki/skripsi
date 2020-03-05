@@ -29,14 +29,15 @@
             </mat-form-field>
             <div fxLayout="row" fxFlex="20" style="height: 35px;">
               <button mat-raised-button type="button" class="confirmation-button" fxFlex="100"
-                (click)="getPanelMitraList()">
+                (click)="aturPanelMitra()">
                 ATUR PANEL MITRA
               </button>
             </div>
           </div>
           <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">
             <small>Mitra Terpilih</small>
-            <h1 style="margin-top: -4px;font-size: 30px;">{{ selectedMitra.length | rupiahFormaterWithoutRp }}</h1>
+            <h1 style="margin-top: -4px;font-size: 30px;">
+              {{ currentMitraCount + selectedMitra.length | rupiahFormaterWithoutRp }}</h1>
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
