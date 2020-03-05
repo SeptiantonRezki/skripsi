@@ -203,8 +203,8 @@ export class ProductEditComponent {
       this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
       if (res && res.data.status_pin_up) {
         this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
-        if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(res.data.start_date_pin_up);
-        if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(res.data.end_date_pin_up);
+        if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
+        if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(new Date(res.data.end_date_pin_up));
       }
       console.log(this.formProductGroup);
       if (res.data.category.parent_id) {
@@ -732,8 +732,8 @@ export class ProductEditComponent {
 
       if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
         fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
-        fd.append('start_date_pin_up', this.formProductGroup.get('start_date_pin_up').value);
-        fd.append('end_date_pin_up', this.formProductGroup.get('end_date_pin_up').value);
+        fd.append('start_date_pin_up', moment(this.formProductGroup.get('start_date_pin_up').value).format("YYYY/MM/DD"));
+        fd.append('end_date_pin_up', moment(this.formProductGroup.get('end_date_pin_up').value).format("YYYY/MM/DD"));
       }
       // fd.append("convertion", body.convertion);
 

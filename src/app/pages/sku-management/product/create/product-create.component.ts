@@ -590,8 +590,8 @@ export class ProductCreateComponent {
 
       if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
         fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
-        fd.append('start_date_pin_up', this.formProductGroup.get('start_date_pin_up').value);
-        fd.append('end_date_pin_up', this.formProductGroup.get('end_date_pin_up').value);
+        fd.append('start_date_pin_up', moment(this.formProductGroup.get('start_date_pin_up').value).format("YYYY/MM/DD"));
+        fd.append('end_date_pin_up', moment(this.formProductGroup.get('end_date_pin_up').value).format("YYYY/MM/DD"));
       }
       // fd.append("convertion", body.convertion);
 
