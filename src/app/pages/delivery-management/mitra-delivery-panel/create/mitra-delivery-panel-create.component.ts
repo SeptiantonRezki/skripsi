@@ -189,6 +189,18 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         console.log('res', res);
         if (res && res.data) {
           this.currentMitraCount = res.data.mitra_count;
+          let filteredMitra = res.data.mitra.map(mtr => {
+            mtr['bak_id'] = mtr.id;
+            mtr.id = mtr.wholesaler_id;
+            return mtr
+          })
+          setTimeout(() => {
+            this.selectedMitra = [
+              ...this.selectedMitra,
+              ...filteredMitra
+            ];
+            this.onSelect({ selected: res.data.mitra });
+          }, 800);
         } else {
           this.currentMitraCount = 0;
         }
