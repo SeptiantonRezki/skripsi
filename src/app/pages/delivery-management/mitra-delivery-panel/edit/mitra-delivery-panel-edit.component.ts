@@ -31,6 +31,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
+  allSelected: Boolean;
 
   offsetPagination: Number = null;
   selectedMitra: any[] = [];
@@ -389,7 +390,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   }
 
   bindSelector(isSelected, row) {
-    let index = this.selectedMitra.findIndex(r => r.id === row.id);
+    let index = this.selected.findIndex(r => r.id === row.id);
     if (index > - 1) {
       return true;
     }
@@ -397,18 +398,25 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   }
 
   onSelectAudience(event, row) {
-    let index = this.selectedMitra.findIndex(r => r.id === row.id);
-    if (index > - 1) {
-      this.selectedMitra.splice(index, 1);
-    } else {
-      this.selectedMitra.push(row);
-    }
-    this.onSelect({ selected: this.selectedMitra });
+    // let index = this.selectedMitra.findIndex(r => r.id === row.id);
+    // if (index > - 1) {
+    //   this.selectedMitra.splice(index, 1);
+    // } else {
+    //   this.selectedMitra.push(row);
+    // }
+    // this.onSelect({ selected: this.selectedMitra });
+  }
+
+  mySelectFn(selectFn: Function, allRowsSelected) {
+    this.allSelected = !allRowsSelected;
+    selectFn(!allRowsSelected);
   }
 
   onSelect({ selected }) {
+    console.log('arguments', arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.selectedMitra = this.selected;
     console.log('selecteds', this.selected);
   }
 
@@ -524,6 +532,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
           wholesaler_id: item.id
         }))
       };
+      if (this.allSelected) body['type'] = 'all';
 
       this.mitraPanelService.update(body).subscribe(res => {
         this.dataService.showLoading(false);
