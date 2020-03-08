@@ -41,6 +41,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   @ViewChild('table') table: DatatableComponent;
   listCourier: any[] = [];
   listCourierServices: any[] = [];
+  allSelected: Boolean;
 
   // 2 geotree property
   listLevelArea: any[];
@@ -356,7 +357,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   }
 
   bindSelector(isSelected, row) {
-    let index = this.selectedMitra.findIndex(r => r.id === row.id);
+    let index = this.selected.findIndex(r => r.id === row.id);
     if (index > - 1) {
       return true;
     }
@@ -364,18 +365,25 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   }
 
   onSelectAudience(event, row) {
-    let index = this.selectedMitra.findIndex(r => r.id === row.id);
-    if (index > - 1) {
-      this.selectedMitra.splice(index, 1);
-    } else {
-      this.selectedMitra.push(row);
-    }
-    this.onSelect({ selected: this.selectedMitra });
+    console.log('event', event, row);
+    // let index = this.selectedMitra.findIndex(r => r.id === row.id);
+    // if (index > - 1) {
+    //   this.selectedMitra.splice(index, 1);
+    // } else {
+    //   this.selectedMitra.push(row);
+    // }
+    // this.onSelect({ selected: this.selectedMitra });
+  }
+
+  mySelectFn(selectFn: Function, allRowsSelected) {
+    this.allSelected = !allRowsSelected;
+    selectFn(!allRowsSelected);
   }
 
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.selectedMitra = this.selected;
     console.log('selecteds', this.selected);
   }
 
@@ -492,6 +500,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         }))
       };
 
+      if (this.allSelected) body['type'] = 'all';
       this.mitraPanelService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
