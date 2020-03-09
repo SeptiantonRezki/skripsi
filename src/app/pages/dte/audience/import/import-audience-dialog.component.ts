@@ -71,22 +71,24 @@ export class ImportAudienceDialogComponent {
     this.audienceService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
-          this.lastPage = res.data.last_page;
           this.recursiveImport(res);
-          // this.audienceService.showImport(this.pagination).subscribe(res => {
-          //   // Page.renderPagination(this.pagination, res.data);
-          //   // this.lastPage = res.data.last_page;
-          //   // this.rows = res.data.data;
-          //   // // this.validData = (res.data.data || []).filter(item => item.is_valid).length;
-          //   // this.dataService.showLoading(false);
-          // }, err => {
-          //   console.log('error show import', err);
-          //   this.dataService.showLoading(false);
-          //   this.files = undefined;
+          this.audienceService.showImport(this.pagination).subscribe(response => {
+            this.currPage += 1;
+            this.lastPage = response.data.last_page;
+            if (this.currPage < this.lastPage) this.recursiveImport(response);
+            // Page.renderPagination(this.pagination, res.data);
+            // this.lastPage = res.data.last_page;
+            // this.rows = res.data.data;
+            // // this.validData = (res.data.data || []).filter(item => item.is_valid).length;
+            // this.dataService.showLoading(false);
+          }, err => {
+            console.log('error show import', err);
+            this.dataService.showLoading(false);
+            this.files = undefined;
 
-          //   if (err.status === 404 || err.status === 500)
-          //     this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
-          // })
+            if (err.status === 404 || err.status === 500)
+              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          })
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
