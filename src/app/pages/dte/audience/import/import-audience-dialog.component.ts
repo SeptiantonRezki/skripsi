@@ -71,21 +71,22 @@ export class ImportAudienceDialogComponent {
     this.audienceService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
+          this.lastPage = res.data.last_page;
+          this.recursiveImport(res);
+          // this.audienceService.showImport(this.pagination).subscribe(res => {
+          //   // Page.renderPagination(this.pagination, res.data);
+          //   // this.lastPage = res.data.last_page;
+          //   // this.rows = res.data.data;
+          //   // // this.validData = (res.data.data || []).filter(item => item.is_valid).length;
+          //   // this.dataService.showLoading(false);
+          // }, err => {
+          //   console.log('error show import', err);
+          //   this.dataService.showLoading(false);
+          //   this.files = undefined;
 
-          this.audienceService.showImport(this.pagination).subscribe(res => {
-            Page.renderPagination(this.pagination, res.data);
-            this.lastPage = res.data.last_page;
-            this.rows = res.data.data;
-            // this.validData = (res.data.data || []).filter(item => item.is_valid).length;
-            this.dataService.showLoading(false);
-          }, err => {
-            console.log('error show import', err);
-            this.dataService.showLoading(false);
-            this.files = undefined;
-
-            if (err.status === 404 || err.status === 500)
-              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
-          })
+          //   if (err.status === 404 || err.status === 500)
+          //     this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          // })
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
@@ -103,13 +104,13 @@ export class ImportAudienceDialogComponent {
     )
   }
 
-  submit() {
+  recursiveImport(res) {
     if (this.currPage <= this.lastPage) {
       this.audienceService.showImport({ page: this.currPage }).subscribe(res => {
         if (res && res.data) {
           this.idbService.bulkUpdate(res.data.data).then(res => {
             this.currPage += 1;
-            this.submit();
+            this.recursiveImport(res);
           }, err => {
             this.dialogService.openSnackBar({
               message: "Gagal mengimport Data!"
@@ -123,9 +124,19 @@ export class ImportAudienceDialogComponent {
           this.dialogRef.close([]);
         }
       }, err => {
-
+        console.log('error show import', err);
+        this.dataService.showLoading(false);
+        this.files = undefined;
       });
+    } else {
+      this.dataService.showLoading(false);
+      this.idbService.paginate(this.pagination).then(res => {
+        console.log('res on else idbservice', res)
+      })
     }
+  }
+
+  submit() {
     // const rows = this.rows.filter(item => item.is_valid);
     // if (this.rows.length > 0) {
 
