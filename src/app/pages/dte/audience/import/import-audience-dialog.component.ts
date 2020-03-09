@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { DataService } from 'app/services/data.service';
+import { Page } from 'app/classes/laravel-pagination';
 
 @Component({
   templateUrl: './import-audience-dialog.component.html',
@@ -17,6 +18,7 @@ export class ImportAudienceDialogComponent {
   uploading: Boolean;
   rows: any[];
   validData: any[];
+  pagination: Page = new Page();
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -43,7 +45,8 @@ export class ImportAudienceDialogComponent {
     this.audienceService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
-          this.audienceService.showImport({ code: res.data }).subscribe(res => {
+
+          this.audienceService.showImport(this.pagination).subscribe(res => {
             this.rows = res.data;
             this.validData = (res.data || []).filter(item => item.is_valid).length;
             this.dataService.showLoading(false);
