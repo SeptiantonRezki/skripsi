@@ -190,6 +190,18 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         console.log('res', res);
         if (res && res.data) {
           this.currentMitraCount = res.data.mitra_count;
+          let filteredMitra = res.data.mitra.map(mtr => {
+            mtr['bak_id'] = mtr.id;
+            mtr.id = mtr.wholesaler_id;
+            return mtr
+          })
+          setTimeout(() => {
+            this.selectedMitra = [
+              ...this.selectedMitra,
+              ...filteredMitra
+            ];
+            this.onSelect({ selected: res.data.mitra });
+          }, 800);
         } else {
           this.currentMitraCount = 0;
         }
@@ -283,7 +295,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.mitraPanelService.getMitraList(this.pagination).subscribe(
+    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: [] }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -312,7 +324,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.mitraPanelService.getMitraList(this.pagination).subscribe(res => {
+    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: [] }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -329,7 +341,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.mitraPanelService.getMitraList(this.pagination).subscribe(res => {
+    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: [] }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -349,7 +361,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.mitraPanelService.getMitraList(this.pagination).subscribe(res => {
+    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: [] }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;

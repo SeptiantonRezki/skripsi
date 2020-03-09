@@ -73,14 +73,14 @@ export class BaseService {
     return this.http.post(url, request, { responseType: 'arraybuffer', headers: headers, params: query });
   }
 
-  protected postApi(url, request, requestConfig?) {
+  protected postApi(url, request, params: any = null, requestConfig?) {
     if (!requestConfig) {
       requestConfig = {};
     }
+    let query = this.loopParams(params);
     this.clean(request);
     let headers = new HttpHeaders().set('Accept', 'application/json');
-    return this.http.post(url, request, { ...requestConfig, headers });
-
+    return this.http.post(url, request, { ...requestConfig, headers, params: query });
   }
 
   protected multipartPost(url, request) {
