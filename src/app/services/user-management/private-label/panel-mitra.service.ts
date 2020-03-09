@@ -41,9 +41,9 @@ export class PanelMitraService extends BaseService {
     return this.deleteApi(url);
   }
 
-  getListCategory(): Observable<any> {
+  getListCategory(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "listCategory");
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   getFilterProduct(context?: any): Observable<any> {
@@ -51,13 +51,19 @@ export class PanelMitraService extends BaseService {
     return this.getApi(url);
   }
 
-  getListMitra(queryParams?: any, context?: any): Observable<any> {
+  getListMitra(queryParams?: any, body?: any, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "getListMitra", context);
-    return this.getApi(url, queryParams);
+    return this.postApi(url, body, { params: queryParams });
   }
   
   getListOtherChildren(context): Observable<any> {
     const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
   }
+
+  getFilterSupplier(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "filterSupplier", context);
+    return this.getApi(url);
+  }
+
 }

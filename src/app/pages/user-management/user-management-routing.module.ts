@@ -25,6 +25,7 @@ import {
   ListAdminPrincipalResolver,
   ListCategoryProdukResolver,
   ListSupplierCompanyResolver,
+  ListAllCategoryProdukResolver,
 } from "app/resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -325,8 +326,8 @@ const routes: Routes = [
       breadcrumbs: brConfig.privatelabel.panelmitra.create
     },
     resolve: {
-      listCategory: ListCategoryProdukResolver,
-      listSupplierCompany: ListSupplierCompanyResolver,
+      listCategory: ListAllCategoryProdukResolver,
+      // listSupplierCompany: ListSupplierCompanyResolver,
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
@@ -338,8 +339,8 @@ const routes: Routes = [
       breadcrumbs: brConfig.privatelabel.panelmitra.edit
     },
     resolve: {
-      listCategory: ListCategoryProdukResolver,
-      listSupplierCompany: ListSupplierCompanyResolver,
+      listCategory: ListAllCategoryProdukResolver,
+      // listSupplierCompany: ListSupplierCompanyResolver,
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]

@@ -70,9 +70,9 @@ export class PanelMitraCreateComponent implements OnInit {
     this.selected = [];
     this.permission = this.roles.getRoles('principal.supplierpanelmitra');
     this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data ];
-    this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
+    // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
     this.filterCategory = this.listFilterCategory;
-    this.filterSupplier = this.listFilterSupplier;
+    // this.filterSupplier = this.listFilterSupplier;
     // this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
@@ -153,6 +153,8 @@ export class PanelMitraCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+
+    commonFormValidator.validateAllFields(this.formInput);
   }
   
   getFilterProduct(value?: any) {
@@ -168,6 +170,18 @@ export class PanelMitraCreateComponent implements OnInit {
     });
   }
 
+  getFilterSupplier(value?: any) {
+    this.panelMitraService.getFilterSupplier( { productId: value.id }).subscribe(res => {
+      if (res.status == 'success') {
+        this.listFilterSupplier =  [ { name: 'Pilih Supplier', id: '' }, ...res.data ];
+        this.filterSupplier = this.listFilterSupplier.map((v) => ({...v}));
+      } else {
+        this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ];
+        this.filterSupplier = this.listFilterSupplier;
+      }
+    });
+  }
+
   selectionChangeFilterCategory(event: any) {
     const e = event.value;
     this.getFilterProduct();
@@ -175,7 +189,7 @@ export class PanelMitraCreateComponent implements OnInit {
 
   selectionChangeFilterProduct(event: any) {
     const e = event.value;
-    this.getFilterProduct();
+    this.getFilterSupplier({ id: e });
   }
 
   getListMitra_() {

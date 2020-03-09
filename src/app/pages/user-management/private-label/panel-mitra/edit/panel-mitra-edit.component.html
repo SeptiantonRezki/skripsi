@@ -137,32 +137,32 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="penjual">
+        <ngx-datatable-column name="Penjual" prop="penjual" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No. Ponsel" prop="phone">
+        <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode" prop="code">
+        <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.code || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi">
+        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.division || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Wilayah" prop="wilayah">
+        <ngx-datatable-column name="Wilayah" prop="wilayah" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.district || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area">
+        <ngx-datatable-column name="Area" prop="area" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.area || '-'}}</span>
           </ng-template>

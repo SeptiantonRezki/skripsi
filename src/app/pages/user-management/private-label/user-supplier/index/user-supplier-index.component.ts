@@ -103,7 +103,7 @@ export class UserSupplierIndexComponent implements OnInit {
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = page;
+    this.pagination.page = 1;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 

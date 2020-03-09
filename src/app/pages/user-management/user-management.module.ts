@@ -75,6 +75,7 @@ import {
   ListAdminPrincipalResolver,
   ListCategoryProdukResolver,
   ListSupplierCompanyResolver,
+  ListAllCategoryProdukResolver,
 } from "../../resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -206,6 +207,7 @@ export const MY_FORMATS = {
     ListAdminPrincipalResolver,
     ListCategoryProdukResolver,
     ListSupplierCompanyResolver,
+    ListAllCategoryProdukResolver,
     PageGuard,
   ],
 })

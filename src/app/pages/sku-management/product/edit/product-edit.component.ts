@@ -194,8 +194,6 @@ export class ProductEditComponent {
             }
           })
     });
-    const lppl = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-    lppl.at(0).get('price_discount_expires_at').disable();
 
   }
 

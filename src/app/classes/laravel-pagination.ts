@@ -21,17 +21,17 @@ export class Page {
     this.per_page = 15;
     this.page = 1;
     this.total = 0;
-    this.sort = null;
+    this.sort = "";
     this.sort_type = "desc";
     this.search = "";
     this.filter = "";
     this.status = "";
     this.start_date = "";
     this.end_date = "";
-    this.area = null;
+    this.area = "";
     this.user = "";
-    this.category_id = null;
-    this.product_id = null;
+    this.category_id = "";
+    this.product_id = "";
   }
 
   public static renderPagination(pagination, response) {

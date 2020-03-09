@@ -51,7 +51,7 @@ export class PanelMitraEditComponent implements OnInit {
     isDetail: boolean;
     panelMitraId: any;
     panelMitraDetail: null;
-
+    
   areaFromLogin;
   area_id_list: any = [];
   listLevelArea: any[];
@@ -59,6 +59,7 @@ export class PanelMitraEditComponent implements OnInit {
   area: Array<any>;
   lastLevel: any;
   endArea: String;
+  wholesalerIds: any[] = [];
   
   constructor(
       private formBuilder: FormBuilder,
@@ -73,9 +74,9 @@ export class PanelMitraEditComponent implements OnInit {
       this.selected = [];
       this.permission = this.roles.getRoles('principal.supplierpanelmitra');
       this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data ];
-      this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
+      // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
       this.filterCategory = this.listFilterCategory;
-      this.filterSupplier = this.listFilterSupplier;
+      // this.filterSupplier = this.listFilterSupplier;
       // this.allRowsSelected = false;
       // this.allRowsSelectedValid = false;
       this.isSelected = false;
@@ -125,7 +126,6 @@ export class PanelMitraEditComponent implements OnInit {
       })
 
       this.initAreaV2();
-      this.getListMitra();
 
       this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
         this.getListMitra();
@@ -164,22 +164,28 @@ export class PanelMitraEditComponent implements OnInit {
     }
 
     getDetails() {
+      this.dataService.showLoading(true);
       this.panelMitraService.detail({ panelMitraId: this.panelMitraId }).subscribe(
         res => {
           if (res.status == 'success') {
             this.panelMitraDetail = res.data;
             this.selected = res.data.wholesaler_id.map((item: any) => { return({ id: item })});
+            this.getFilterSupplier({ id: res.data.product_id })
             this.formInput.get('filterproduct').setValue(res.data.product_id);
             this.formInput.get('filtersupplier').setValue(res.data.supplier_company_id);
+            this.wholesalerIds = res.data.wholesaler_id;
+            this.getListMitra(res.data.wholesaler_id);
           } else {
             this.panelMitraDetail = null;
             this.dialogService.openSnackBar({
               message: res.status
             });
+            this.dataService.showLoading(false);
           }
         },
         err => {
           console.error(err);
+          this.dataService.showLoading(false);
         }
       );
     }
@@ -196,6 +202,18 @@ export class PanelMitraEditComponent implements OnInit {
         }
       });
     }
+
+    getFilterSupplier(value?: any) {
+      this.panelMitraService.getFilterSupplier( { productId: value.id }).subscribe(res => {
+        if (res.status == 'success') {
+          this.listFilterSupplier =  [ { name: 'Pilih Supplier', id: '' }, ...res.data ];
+          this.filterSupplier = this.listFilterSupplier.map((v) => ({...v}));
+        } else {
+          this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ];
+          this.filterSupplier = this.listFilterSupplier;
+        }
+      });
+    }
   
     selectionChangeFilterCategory(event: any) {
       const e = event.value;
@@ -204,7 +222,7 @@ export class PanelMitraEditComponent implements OnInit {
   
     selectionChangeFilterProduct(event: any) {
       const e = event.value;
-      this.getFilterProduct();
+      this.getFilterSupplier({ id: e });
     }
   
     getListMitra_() {
@@ -250,8 +268,9 @@ export class PanelMitraEditComponent implements OnInit {
         this.dataService.setToStorage("page", pageInfo.offset + 1);
         this.pagination.page = this.dataService.getFromStorage("page");
       }
-  
-      this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
+      delete this.pagination['sort'];
+      delete this.pagination['sort_type'];
+      this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
         this.loadingIndicator = false;
@@ -283,6 +302,7 @@ export class PanelMitraEditComponent implements OnInit {
   
     onSave() {
       if (this.formInput.valid && this.selected.length > 0) {
+        this.dataService.showLoading(true);
         const body = {
           product_id: this.formInput.get('filterproduct').value,
           supplier_company_id: this.formInput.get('filtersupplier').value,
@@ -298,6 +318,7 @@ export class PanelMitraEditComponent implements OnInit {
             this.dialogService.openSnackBar({
               message: err.error.message
             });
+            this.dataService.showLoading(false);
           }
         );
       } else {
@@ -716,12 +737,12 @@ export class PanelMitraEditComponent implements OnInit {
       }
     }
   
-    getListMitra() {
+    getListMitra(wholesaler_ids?: any) {
       try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
-      this.pagination.sort = 'name';
-      this.pagination.sort_type = 'asc';
+      // this.pagination.sort = 'name';
+      // this.pagination.sort_type = 'asc';
       let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
       let area_id = areaSelected[areaSelected.length - 1].value;
       let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -797,8 +818,10 @@ export class PanelMitraEditComponent implements OnInit {
       // }, err => {
       //   this.dataService.showLoading(false);
       // })
+       delete this.pagination['sort'];
+       delete this.pagination['sort_type'];
   
-      this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
+      this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.rows = res.data.data;

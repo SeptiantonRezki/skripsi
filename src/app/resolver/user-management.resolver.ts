@@ -45,6 +45,16 @@ export class ListCategoryProdukResolver implements Resolve<any> {
     return this.panelMitraService.getListCategory();
   }
 }
+
+@Injectable()
+export class ListAllCategoryProdukResolver implements Resolve<any> {
+  constructor(private panelMitraService: PanelMitraService) {}
+  resolve(): Observable<any> {
+    const params = { all: true };
+    return this.panelMitraService.getListCategory(params);
+  }
+}
+
 @Injectable()
 export class ListSupplierCompanyResolver implements Resolve<any> {
   constructor(private supplierCompanyService: SupplierCompanyService) {}
