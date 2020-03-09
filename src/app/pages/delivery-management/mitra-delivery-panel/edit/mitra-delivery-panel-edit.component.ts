@@ -532,7 +532,10 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
           wholesaler_id: item.id
         }))
       };
-      if (this.allSelected) body['type'] = 'all';
+      if (this.allSelected) {
+        body['type'] = 'all';
+        body['area_id'] = this.pagination.area;
+      }
 
       this.mitraPanelService.update(body).subscribe(res => {
         this.dataService.showLoading(false);

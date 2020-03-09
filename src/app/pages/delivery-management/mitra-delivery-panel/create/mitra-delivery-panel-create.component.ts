@@ -186,6 +186,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
   aturPanelMitra() {
     if (this.formPanelMitra.valid) {
+      this.dataService.showLoading(true);
       this.mitraPanelService.checkMitra({ delivery_courier_id: this.formPanelMitra.get('courier').value, delivery_courier_service_id: this.formPanelMitra.get('service').value }).subscribe(res => {
         console.log('res', res);
         if (res && res.data) {
@@ -202,20 +203,21 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
             ];
             this.onSelect({ selected: res.data.mitra });
           }, 800);
+          this.getPanelMitraList();
         } else {
           this.currentMitraCount = 0;
+          this.dataService.showLoading(false);
         }
-        this.getPanelMitraList();
       }, err => {
         console.log('err occured', err);
+        this.dataService.showLoading(false);
       })
     } else {
-
+      this.dataService.showLoading(false);
     }
   }
 
   getPanelMitraList() {
-    this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
@@ -512,7 +514,10 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         }))
       };
 
-      if (this.allSelected) body['type'] = 'all';
+      if (this.allSelected) {
+        body['type'] = 'all';
+        body['area_id'] = this.pagination.area;
+      }
       this.mitraPanelService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
