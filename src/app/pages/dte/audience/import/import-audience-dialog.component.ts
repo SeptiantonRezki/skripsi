@@ -26,7 +26,7 @@ export class ImportAudienceDialogComponent {
   selected: any[];
   id: any;
 
-  loadingIndicator = true;
+  loadingIndicator = false;
   reorderable = true;
   onLoad: boolean;
 
@@ -44,6 +44,13 @@ export class ImportAudienceDialogComponent {
   offsetPagination: any;
   currPage: number = 1;
   lastPage: number = 1;
+  p_page: number = 1;
+  totalData: number = 0;
+  p_pagination: any = {
+    page: 1,
+    last_page: 1,
+    total: 0
+  }
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -65,22 +72,26 @@ export class ImportAudienceDialogComponent {
     this.files = event;
 
     let fd = new FormData();
-
+    this.idbService.reset();
     fd.append('file', this.files);
     this.dataService.showLoading(true);
     this.audienceService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
-          this.recursiveImport(res);
+          // this.recursiveImport(res);
           this.audienceService.showImport(this.pagination).subscribe(response => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
-            if (this.currPage < this.lastPage) this.recursiveImport(response);
-            // Page.renderPagination(this.pagination, res.data);
-            // this.lastPage = res.data.last_page;
-            // this.rows = res.data.data;
-            // // this.validData = (res.data.data || []).filter(item => item.is_valid).length;
-            // this.dataService.showLoading(false);
+            this.totalData = response.data.total;
+            this.idbService.bulkUpdate(response.data.data).then(res => {
+              console.log('page', this.currPage - 1, res);
+              this.recursiveImport();
+            }, err => {
+              this.dialogService.openSnackBar({
+                message: "Gagal mengimport Data!"
+              })
+              this.dialogRef.close([]);
+            })
           }, err => {
             console.log('error show import', err);
             this.dataService.showLoading(false);
@@ -106,13 +117,14 @@ export class ImportAudienceDialogComponent {
     )
   }
 
-  recursiveImport(res) {
+  recursiveImport() {
     if (this.currPage <= this.lastPage) {
       this.audienceService.showImport({ page: this.currPage }).subscribe(res => {
         if (res && res.data) {
           this.idbService.bulkUpdate(res.data.data).then(res => {
+            console.log('page', this.currPage - 1, res);
             this.currPage += 1;
-            this.recursiveImport(res);
+            this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({
               message: "Gagal mengimport Data!"
@@ -131,22 +143,33 @@ export class ImportAudienceDialogComponent {
         this.files = undefined;
       });
     } else {
-      this.dataService.showLoading(false);
       this.idbService.paginate(this.pagination).then(res => {
-        console.log('res on else idbservice', res)
+        this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+        Page.renderPagination(this.pagination, this.p_pagination);
+        this.rows = res && res[0] ? res[0] : [];
+        this.dataService.showLoading(false);
       })
     }
   }
 
-  submit() {
-    // const rows = this.rows.filter(item => item.is_valid);
-    // if (this.rows.length > 0) {
+  setPage(pageInfo) {
+    this.dataService.showLoading(true);
+    this.offsetPagination = pageInfo.offset;
+    this.p_pagination['page'] = pageInfo.offset + 1;
+    this.idbService.paginate(this.p_pagination).then(res => {
+      this.p_pagination = { page: pageInfo.offset + 1, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+      Page.renderPagination(this.pagination, this.p_pagination);
+      this.rows = res && res[0] ? res[0] : [];
+      this.dataService.showLoading(false);
+    });
+  }
 
-    //   // const res = rows.map(item => { return { id: item.id } });
-    //   this.dialogRef.close(res);
-    // } else {
-    //   this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
-    // }
+  submit() {
+    if (this.totalData > 0) {
+      this.dialogRef.close(true);
+    } else {
+      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+    }
   }
 
 }

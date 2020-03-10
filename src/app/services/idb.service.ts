@@ -60,6 +60,10 @@ export class IdbService {
     }
   }
 
+  getAnyOf(data) {
+    return this.table.where('id').anyOf(data).toArray();
+  }
+
   find(id) {
     return this.table.where('id').equals(id).first();
   }
@@ -82,5 +86,13 @@ export class IdbService {
 
   remove(id) {
     return this.table.delete(id);
+  }
+
+  reset() {
+    return this.table.clear();
+  }
+
+  count() {
+    return this.table.count();
   }
 }
