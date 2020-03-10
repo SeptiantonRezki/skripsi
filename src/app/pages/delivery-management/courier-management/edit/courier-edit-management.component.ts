@@ -55,7 +55,7 @@ export class CourierEditManagementComponent implements OnInit {
   ngOnInit() {
     this.formCourier = this.formBuilder.group({
       name: ["", Validators.required],
-      contact: ["", Validators.required],
+      contact: ["", [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
       email: ["", Validators.compose([Validators.required, Validators.email])],
       services: this.formBuilder.array([])
     });

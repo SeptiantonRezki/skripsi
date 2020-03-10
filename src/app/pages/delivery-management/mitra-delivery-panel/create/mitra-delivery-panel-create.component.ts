@@ -163,7 +163,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       .valueChanges
       .subscribe(res => {
         if (res && this.loaded) {
-          this.getPanelMitraList();
+          this.aturPanelMitra();
         }
       })
   }
