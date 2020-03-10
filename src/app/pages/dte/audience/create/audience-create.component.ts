@@ -721,11 +721,11 @@ export class AudienceCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map(row => row.id);
-      this.idbService.getAnyOf(rows).then(result => {
-        console.log('result', result);
-        this.selected = result;
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      })
+      // this.idbService.getAnyOf(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -741,11 +741,11 @@ export class AudienceCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map(row => row.id);
-      this.idbService.getAnyOf(rows).then(result => {
-        console.log('result', result);
-        this.selected = result;
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      })
+      // this.idbService.get(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -1244,7 +1244,7 @@ export class AudienceCreateComponent {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         let rows = this.rows.map(row => row.id);
-        this.idbService.getAnyOf(rows).then(result => {
+        this.idbService.getAll(dt => dt.is_valid).then(result => {
           console.log('result', result);
           this.selected = result;
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
