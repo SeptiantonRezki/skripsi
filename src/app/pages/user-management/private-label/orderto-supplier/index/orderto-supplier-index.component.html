@@ -54,7 +54,7 @@
               <button mat-raised-button style="width: 100px" color="primary" (click)="updateFilter()">FILTER</button>
             </div>
             <div class="button-row">
-              <button mat-stroked-button style="width: 100px" color="primary">EXPORT PO</button>
+              <button mat-stroked-button style="width: 100px" color="primary" (click)="exportPO()">EXPORT PO</button>
             </div>
           </div>
         </div>
@@ -64,50 +64,52 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nomor PO" prop="name">
+        <ngx-datatable-column name="Nomor PO" prop="invoicenumber" [sortable]="false" [width]="200">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name">{{row.name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Mitra" prop="address">
+        <ngx-datatable-column name="Nama Mitra" prop="namamitra" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.wholesaler_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Alamat" prop="alamat" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.address}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Alamat" prop="phone">
+        <ngx-datatable-column name="No Telepon" prop="notelepon" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No Telepon" prop="status">
+        <ngx-datatable-column name="Jumlah Pesanan" prop="jumlahpesanan" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
+            <span class="row-address">{{row.total_products}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Pesanan" prop="status">
+        <ngx-datatable-column name="Total Pesanan" prop="totalpesanan" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
+            <span class="row-address">{{row.total_price}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Total Pesanan" prop="status">
+        <ngx-datatable-column name="Tanggal" prop="tanggal" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
+            <span class="row-address">{{row.created_at | date:'dd/mm/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal" prop="status">
+        <ngx-datatable-column name="Status" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
+            <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
+              {{row.status_indo.replace('-', ' ').toUpperCase()}}
+            </p>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Status" prop="status">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.status}}</span>
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column [width]="80" name="Action" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column name="Action" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="cetakPO(row)">
+              <button mat-stroked-button color="" (click)="getDetailOrder(row.id)">
                 CETAK PO
               </button>
             </div>
@@ -116,4 +118,6 @@
       </ngx-datatable>
     </div>
   </div>
+
+  <a #downloadLink></a>
 </div>

@@ -518,7 +518,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/user-management/orderto-supplier",
+          url: "/user-management/supplier-order",
           name: "Order to Supplier"
         },
         {
@@ -530,7 +530,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/user-management/orderto-supplier",
+          url: "/user-management/supplier-order",
           name: "Order to Supplier"
         },
         {
@@ -542,13 +542,13 @@ export const brConfig = {
       detail: [
         {
           type: "parent",
-          url: "/user-management/orderto-supplier",
+          url: "/user-management/supplier-order",
           name: "Order to Supplier"
         },
         {
           type: "current",
           url: "",
-          name: "Order to Supplier"
+          name: "Detail"
         }
       ]
     },

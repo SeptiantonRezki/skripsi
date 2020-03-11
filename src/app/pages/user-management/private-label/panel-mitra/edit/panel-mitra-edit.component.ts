@@ -9,6 +9,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { GeotreeService } from 'app/services/geotree.service';
+import { takeUntil } from "rxjs/operators";
   
 @Component({
   selector: 'app-panel-mitra-edit',
@@ -131,6 +132,10 @@ export class PanelMitraEditComponent implements OnInit {
         this.getListMitra();
       });
 
+      this.filterProdukSearch.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+        this.filteringProdukSearch();
+      });
+
       this.formFilter.get('zone').valueChanges.subscribe(res => {
         console.log('zone', res);
         if (res) {
@@ -162,6 +167,22 @@ export class PanelMitraEditComponent implements OnInit {
         }
       });
     }
+
+  filteringProdukSearch() {
+    if (!this.listFilterProducts) {
+      return;
+    }
+      // get the search keyword
+      let search = this.filterProdukSearch.value;
+      if (!search) {
+        this.filterProducts = this.listFilterProducts.slice();
+        return;
+      } else {
+        search = search.toLowerCase();
+      }
+      // filter the products
+      this.filterProducts = this.listFilterProducts.filter(item => item.name.toLowerCase().indexOf(search) > -1).map((v)=>({...v}));
+  }
 
     getDetails() {
       this.dataService.showLoading(true);

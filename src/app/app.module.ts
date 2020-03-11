@@ -73,6 +73,8 @@ import { OrdertoSupplierService } from "./services/user-management/private-label
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
 import { GeotreeService } from "./services/geotree.service";
+import { QzTrayService } from "./services/qz-tray.service";
+import { Emitter } from "./helper/emitter.helper";
 
 @NgModule({
   declarations: [
@@ -101,6 +103,8 @@ import { GeotreeService } from "./services/geotree.service";
     NgProgressModule
   ],
   providers: [
+    Emitter,
+
     AuthenticationService,
     DataService,
     DialogService,
@@ -141,8 +145,9 @@ import { GeotreeService } from "./services/geotree.service";
     UserSupplierService,
     PanelMitraService,
     OrdertoSupplierService,
+    QzTrayService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

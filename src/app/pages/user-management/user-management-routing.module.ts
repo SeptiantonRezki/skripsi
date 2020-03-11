@@ -301,7 +301,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-order/detail",
+    path: "supplier-order/detail/:id",
     component: OrdertoSupplierDetailComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.ordertosupplier.detail

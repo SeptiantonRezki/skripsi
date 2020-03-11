@@ -28,6 +28,7 @@ import {
   MatChipsModule,
   MatAutocompleteModule,
   MatDatepickerModule,
+  MatDividerModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -86,6 +87,7 @@ import { PartnershipEditComponent } from "./principal-partnership/edit/partnersh
 import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
 import { ngfModule } from "angular-file";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 
 export const MY_FORMATS = {
   parse: {
@@ -123,6 +125,7 @@ export const MY_FORMATS = {
     MatChipsModule,
     MatAutocompleteModule,
     MatDatepickerModule,
+    MatDividerModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -208,6 +211,7 @@ export const MY_FORMATS = {
     ListCategoryProdukResolver,
     ListSupplierCompanyResolver,
     ListAllCategoryProdukResolver,
+    RupiahFormaterWithoutRpPipe,
     PageGuard,
   ],
 })

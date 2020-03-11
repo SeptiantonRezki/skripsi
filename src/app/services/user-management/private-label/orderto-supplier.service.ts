@@ -50,4 +50,20 @@ export class OrdertoSupplierService extends BaseService {
     const url = this.getUrl(this.namespace, "filterProduct", context);
     return this.getApi(url);
   }
+
+  showListPesanan(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "showListPesanan", context);
+    return this.getApi(url);
+  }
+
+  putStatusPesanan(body, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "statusPesanan", context);
+    return this.postApi(url, body);
+  }
+
+  exportPO(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportPO");
+    return this.getBlobAsJsonApi(url, queryParams);
+  }
+
 }
