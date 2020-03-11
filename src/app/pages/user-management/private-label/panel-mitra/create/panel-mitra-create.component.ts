@@ -272,13 +272,14 @@ export class PanelMitraCreateComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data.data;
-      this.loadingIndicator = false;
-      // this.allRowsSelected = false;
-      // this.allRowsSelectedValid = false;
-    });
+    this.getListMitra();
+    // this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
+    //   Page.renderPagination(this.pagination, res.data);
+    //   this.rows = res.data.data;
+    //   this.loadingIndicator = false;
+    //   // this.allRowsSelected = false;
+    //   // this.allRowsSelectedValid = false;
+    // });
   }
 
   onSort(event) {
@@ -291,11 +292,13 @@ export class PanelMitraCreateComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data.data;
-      this.loadingIndicator = false;
-    });
+    // this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
+    //   Page.renderPagination(this.pagination, res.data);
+    //   this.rows = res.data.data;
+    //   this.loadingIndicator = false;
+    // });
+
+    this.getListMitra();
   }
 
   getId(row) {
