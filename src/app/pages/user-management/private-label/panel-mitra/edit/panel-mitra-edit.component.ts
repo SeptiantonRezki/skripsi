@@ -212,7 +212,7 @@ export class PanelMitraEditComponent implements OnInit {
             this.formInput.get('filterproduct').setValue(res.data.product_id);
             this.formInput.get('filtersupplier').setValue(res.data.supplier_company_id);
             this.wholesalerIds = res.data.wholesaler_id;
-            this.getListMitra(res.data.wholesaler_id);
+            this.getListMitra();
           } else {
             this.panelMitraDetail = null;
             this.dialogService.openSnackBar({
