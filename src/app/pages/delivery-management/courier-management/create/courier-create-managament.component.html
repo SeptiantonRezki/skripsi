@@ -15,17 +15,22 @@
               Nama Kurir harus diisi
             </mat-error>
           </mat-form-field>
-          <mat-form-field fxFlex="100" class="is-light form-primary">
-            <input matInput type="text" formControlName="contact" placeholder="Nomor Kontak">
-            <mat-error
-              *ngIf="formCourier.controls['contact'].hasError('required') && formCourier.controls['contact'].touched">
-              Nomor Kontak harus diisi
-            </mat-error>
-            <mat-error
-              *ngIf="formCourier.controls['contact'].hasError('pattern') && formCourier.controls['contact'].touched">
-              Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka
-            </mat-error>
-          </mat-form-field>
+          <div fxLayout="row" fxFlex="100">
+            <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light form-primary">
+              <input matInput value="+62" readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light form-primary">
+              <input matInput type="tel" min="0" formControlName="contact" placeholder="Nomor Kontak">
+            </mat-form-field>
+          </div>
+          <mat-error
+            *ngIf="formCourier.controls['contact'].hasError('required') && formCourier.controls['contact'].touched">
+            Nomor Kontak harus diisi
+          </mat-error>
+          <mat-error
+            *ngIf="formCourier.controls['contact'].hasError('pattern') && formCourier.controls['contact'].touched">
+            Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka
+          </mat-error>
           <mat-form-field fxFlex="100" class="is-light form-primary">
             <input matInput type="text" formControlName="email" placeholder="Email">
             <mat-error

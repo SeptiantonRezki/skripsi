@@ -53,6 +53,8 @@ export class CourierEditManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    let regex = new RegExp(/[0-9]/g);
+
     this.formCourier = this.formBuilder.group({
       name: ["", Validators.required],
       contact: ["", [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
@@ -61,6 +63,15 @@ export class CourierEditManagementComponent implements OnInit {
     });
 
     this.getCourierDetail();
+
+    this.formCourier.get('contact').valueChanges.debounceTime(500).subscribe(res => {
+      if (res.match(regex)) {
+        if (res.substring(0, 1) == '0') {
+          let phone = res.substring(1);
+          this.formCourier.get('contact').setValue(phone, { emitEvent: false });
+        }
+      }
+    })
   }
 
   getCourierDetail() {
@@ -69,7 +80,7 @@ export class CourierEditManagementComponent implements OnInit {
       this.detailCourier = res.data;
 
       this.formCourier.get("name").setValue(res.data.name);
-      this.formCourier.get("contact").setValue(res.data.phone);
+      this.formCourier.get("contact").setValue(res.data.phone ? (res.data.phone.split("+62")[1] ? res.data.phone.split("+62")[1] : res.data.phone) : '');
       this.formCourier.get("email").setValue(res.data.email);
 
       let services = this.formCourier.get("services") as FormArray;
@@ -145,7 +156,7 @@ export class CourierEditManagementComponent implements OnInit {
       let hasNoValid = [];
       let body = {
         name: this.formCourier.get("name").value,
-        phone: this.formCourier.get("contact").value,
+        phone: '+62' + this.formCourier.get("contact").value,
         email: this.formCourier.get("email").value,
         status: "active",
         services: this.formCourier.get("services").value.map((item, idx) => {
