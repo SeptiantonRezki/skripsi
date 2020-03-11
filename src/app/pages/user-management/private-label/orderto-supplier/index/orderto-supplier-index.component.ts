@@ -208,19 +208,6 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       delete this.pagination.start_date;
       delete this.pagination.end_date;
     }
-
-    // this.ordertoSupplierService.exportPO(this.pagination).subscribe(async res => {
-    //   const blob = new Blob([res], { type: res.type });
-    //   const url = window.URL.createObjectURL(blob);
-
-    //   this.downloadLink.nativeElement.href = url;
-    //   this.downloadLink.nativeElement.download = fileName;
-    //   this.downloadLink.nativeElement.click();
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    //   console.log('rows', this.rows);
-    // }, err => { this.loadingIndicator = false; this.dataService.showLoading(false); })
-
     try {
       const response = await this.ordertoSupplierService.exportPO(this.pagination).toPromise();
       console.log('he', response.headers);

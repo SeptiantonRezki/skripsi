@@ -48,15 +48,15 @@
         </div>
         <div fxLayout="column">
           <label style="font-size: 10px;">Mitra Terpilih</label>
-          <span style="font-size: 32px;">{{selected.length}}</span>
+          <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
         </div>
       </div>
       <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
         <div class="button-row">
-          <button mat-flat-button style="width: 160px" color="white" (click)="updateFilter()"><mat-icon>vertical_align_bottom</mat-icon> Import XLSX</button>
+          <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS</button>
         </div>
         <div class="button-row">
-          <button mat-flat-button style="width: 160px" color="white" (click)="updateFilter()"><mat-icon>vertical_align_top</mat-icon> Export XLSX</button>
+          <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()"><mat-icon>vertical_align_top</mat-icon> Export XLS</button>
         </div>
       </div>
 
@@ -125,60 +125,48 @@
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" 
         [selected]="selected" [selectAllRowsOnPage]="false" [selectionType]="'checkbox'" (select)="onSelect($event)" [rowIdentity]="getId">
 
-        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
-          <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedValid" let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected); selectFnn(!allRowsSelected);"></mat-checkbox>
-          </ng-template> -->
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+          <ng-template ngx-datatable-header-template >
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
+          </ng-template>
 
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="penjual">
+        <ngx-datatable-column name="Penjual" prop="penjual" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No. Ponsel" prop="phone">
+        <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode" prop="code">
+        <ngx-datatable-column name="Kode" prop="code" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.code || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi">
+        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.division || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Wilayah" prop="wilayah">
+        <ngx-datatable-column name="Wilayah" prop="wilayah" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.district || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area">
+        <ngx-datatable-column name="Area" prop="area" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.area || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <!-- <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
-                <mat-icon class="secondary-text" outline>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteSupplierCompanyById(row.id)"
-                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ngx-datatable-column> -->
       </ngx-datatable>
       <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">

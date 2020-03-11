@@ -66,4 +66,19 @@ export class PanelMitraService extends BaseService {
     return this.getApi(url);
   }
 
+  importMitra(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "importMitra");
+    return this.postApi(url, body);
+  }
+
+  exportMitra(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportMitra");
+    return this.postBlobAsJsonApi(url, body);
+  }
+
+  previewImportMitra(): Observable<any> {
+    const url = this.getUrl(this.namespace, "previewImportMitra");
+    return this.getApi(url);
+  }
+
 }

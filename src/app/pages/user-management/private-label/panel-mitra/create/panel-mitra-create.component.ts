@@ -10,6 +10,11 @@ import { DataService } from 'app/services/data.service';
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { GeotreeService } from 'app/services/geotree.service';
 import { takeUntil } from "rxjs/operators";
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { HttpErrorResponse } from '@angular/common/http';
+import * as moment from "moment";
+
+import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-mitra-dialog.component';
 
 @Component({
   selector: 'app-panel-mitra-create',
@@ -41,7 +46,7 @@ export class PanelMitraCreateComponent implements OnInit {
   reorderable = true;
   pagination: Page = new Page();
   offsetPagination: any;
-  // allRowsSelected: boolean;
+  allRowsSelected: boolean;
   // allRowsSelectedValid: boolean;
   
   isSelected: boolean;
@@ -57,6 +62,8 @@ export class PanelMitraCreateComponent implements OnInit {
   area: Array<any>;
   lastLevel: any;
   endArea: String;
+  dialogRef: any;
+  totalData: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,6 +73,7 @@ export class PanelMitraCreateComponent implements OnInit {
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private router: Router,
+    private dialog: MatDialog,
   ) {
     this.onLoad = false;
     this.selected = [];
@@ -74,7 +82,7 @@ export class PanelMitraCreateComponent implements OnInit {
     // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
     this.filterCategory = this.listFilterCategory;
     // this.filterSupplier = this.listFilterSupplier;
-    // this.allRowsSelected = false;
+    this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
 
@@ -97,6 +105,15 @@ export class PanelMitraCreateComponent implements OnInit {
       territory: []
     }
     this.area = dataService.getDecryptedProfile()['area_type'];
+
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.getListMitra(data);
+      });
   }
 
   ngOnInit() {
@@ -238,12 +255,12 @@ export class PanelMitraCreateComponent implements OnInit {
     this.selected.push(...selected);
   }
   
-  // selectFnn(allRowsSelected: any) {
-  //   this.allRowsSelected = allRowsSelected;
-  //   this.allRowsSelectedValid = allRowsSelected;
-  //   console.log('selectFnn', arguments);
-  //   console.log('allRowsSelected_', allRowsSelected);
-  // }
+  selectFn(allRowsSelected: boolean) {
+    console.log('allRowsSelected_', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (!allRowsSelected) this.selected = [];
+    else this.selected.length = this.totalData;
+  }
 
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
@@ -287,23 +304,34 @@ export class PanelMitraCreateComponent implements OnInit {
 
   onSave() {
     if (this.formInput.valid && this.selected.length > 0) {
-      const body = {
-        product_id: this.formInput.get('filterproduct').value,
-        supplier_company_id: this.formInput.get('filtersupplier').value,
-        wholesaler_id: this.selected.map((item) => item.id)
-      };
-      this.panelMitraService.create(body).subscribe(res => {
-        this.dialogService.openSnackBar({
-          message: "Berhasil Menyimpan Data"
-        });
-        this.router.navigate(["user-management", "supplier-panel-mitra"]);
-        }, err => {
-          console.log('err', err);
+      let body = null; 
+      if (this.allRowsSelected) {
+        body ={
+          product_id: this.formInput.get('filterproduct').value,
+          supplier_company_id: this.formInput.get('filtersupplier').value,
+          type: 'all'
+        };
+      } else {
+        body ={
+          product_id: this.formInput.get('filterproduct').value,
+          supplier_company_id: this.formInput.get('filtersupplier').value,
+          wholesaler_id: this.selected.map((item) => item.id)
+        };
+      }
+      if (body) {
+        this.panelMitraService.create(body).subscribe(res => {
           this.dialogService.openSnackBar({
-            message: err.error.message
+            message: "Berhasil Menyimpan Data"
           });
-        }
-      );
+          this.router.navigate(["user-management", "supplier-panel-mitra"]);
+          }, err => {
+            console.log('err', err);
+            this.dialogService.openSnackBar({
+              message: err.error.message
+            });
+          }
+        );
+      }
     } else {
       commonFormValidator.validateAllFields(this.formInput);
       if (this.selected.length == 0) {
@@ -720,10 +748,12 @@ export class PanelMitraCreateComponent implements OnInit {
     }
   }
 
-  getListMitra() {
+  getListMitra(string?: any) {
     try {
     this.dataService.showLoading(true);
     this.pagination.per_page = 25;
+    if (string) this.pagination.search = string;
+    else delete this.pagination.search;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
@@ -805,6 +835,7 @@ export class PanelMitraCreateComponent implements OnInit {
     this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
+        this.totalData = res.data.total;
         this.rows = res.data.data;
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
@@ -915,6 +946,105 @@ export class PanelMitraCreateComponent implements OnInit {
     // mutableAreas.areas.map((ar, i) => {
     //   this.list[ar].splice(1, 1);
     // });
+  }
+
+
+  importMitra(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {};
+
+    this.dialogRef = this.dialog.open(ImportPanelMitraDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        if (response.data) {
+          this.selected = response.data.map((item: any) => { return({ id: item })});
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
+  }
+
+  convertDate(param?: Date) {
+    if (param) {
+      return moment(param).format("YYYY-MM-DD");
+    }
+    return "";
+  }
+
+  async exportMitra() {
+    this.dataService.showLoading(true);
+    let fileName = `Private_Label_Panel_Mitra_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let area = areaSelected[areaSelected.length - 1].value;
+    if (!this.allRowsSelected) {
+    if (this.selected.length > 0) {
+      const body = {
+        wholesaler_id: this.selected.map((item) => item.id),
+        area: area
+      }
+
+      try {
+        const response = await this.panelMitraService.exportMitra(body).toPromise();
+        console.log('he', response.headers);
+        this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        this.dataService.showLoading(false);
+      } catch (error) {
+        this.handleError(error);
+        this.dataService.showLoading(false);
+      }
+    } else {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: 'Mitra Belum dipilih!' });
+    } 
+    } else {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: 'Tidak Dapat Export Semua Data, Silahkan Pilih beberapa data!' });
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
 }

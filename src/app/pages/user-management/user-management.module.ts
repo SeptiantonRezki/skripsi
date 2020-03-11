@@ -85,6 +85,7 @@ import { PartnershipCreateComponent } from "./principal-partnership/create/partn
 import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
+import { ImportPanelMitraDialogComponent } from './private-label/panel-mitra/dialog-import/import-panel-mitra-dialog.component';
 import { ngfModule } from "angular-file";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
@@ -156,7 +157,7 @@ export const MY_FORMATS = {
     SupplierCompanyIndexComponent,
     UserSupplierCreateComponent,
     UserSupplierEditComponent,
-    UserSupplierIndexComponent
+    UserSupplierIndexComponent,
 
   ],
   declarations: [
@@ -181,7 +182,6 @@ export const MY_FORMATS = {
     PartnershipCreateComponent,
     PartnershipIndexComponent,
     PartnershipEditComponent,
-    ImportAccessCashierDialogComponent,
 
     OrdertoSupplierDetailComponent,
     OrdertoSupplierIndexComponent,
@@ -193,9 +193,13 @@ export const MY_FORMATS = {
     SupplierCompanyIndexComponent,
     UserSupplierCreateComponent,
     UserSupplierEditComponent,
-    UserSupplierIndexComponent
+    UserSupplierIndexComponent,
+
+    ImportAccessCashierDialogComponent,
+    ImportPanelMitraDialogComponent,
+    
   ],
-  entryComponents: [ImportAccessCashierDialogComponent],
+  entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent,],
   providers: [
     // PendingChangesGuard,
     {
