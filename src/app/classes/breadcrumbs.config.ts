@@ -64,6 +64,51 @@ export const brConfig = {
       }
     ]
   },
+  store_layout_template: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Template Layout Toko"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Template Layout Toko"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Template Layout Toko"
+      }
+    ]
+  },
   adminprincipal: {
     index: [
       {

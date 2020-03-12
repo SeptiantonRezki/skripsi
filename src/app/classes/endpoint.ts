@@ -401,6 +401,13 @@ export class Endpoint {
         loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
       },
+      store_template_layout: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
