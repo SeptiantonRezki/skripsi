@@ -55,6 +55,11 @@ export class ProductCreateComponent {
     { name: "Non Aktif", status: "inactive" }
   ];
 
+  listPinUpProduct: any[] = [
+    { name: "Ya", value: 1 },
+    { name: "Tidak", value: 0 }
+  ]
+
   filteredSkuOptions: Observable<string[]>;
 
   public filterCategory: FormControl = new FormControl();
@@ -76,6 +81,7 @@ export class ProductCreateComponent {
 
   areaFromLogin;
   detailAreaSelected: any[];
+  minDate: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -120,7 +126,7 @@ export class ProductCreateComponent {
 
   ngOnInit() {
     this.createFormGroup();
-
+    this.minDate = moment();
     this.formProductGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(
         this.formProductGroup,
@@ -213,7 +219,10 @@ export class ProductCreateComponent {
       is_promo_src: [false],
       // otherSubCategory: ["", Validators.required],
       packaging: ["", Validators.required],
-      areas: this.formBuilder.array([])
+      areas: this.formBuilder.array([]),
+      start_date_pin_up: [""],
+      end_date_pin_up: [""],
+      status_pin_up: [""]
       // convertion: ["", [Validators.min(0)]]
     });
   }
@@ -578,6 +587,12 @@ export class ProductCreateComponent {
       fd.append("packaging_id", body.packaging_id);
       fd.append("status", body.status);
       fd.append("is_promo_src", body.is_promo_src);
+
+      if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
+        fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
+        fd.append('start_date_pin_up', moment(this.formProductGroup.get('start_date_pin_up').value).format("YYYY/MM/DD"));
+        fd.append('end_date_pin_up', moment(this.formProductGroup.get('end_date_pin_up').value).format("YYYY/MM/DD"));
+      }
       // fd.append("convertion", body.convertion);
 
       if (body.is_promo_src === "1") {
