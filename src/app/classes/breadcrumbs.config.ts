@@ -19,6 +19,51 @@ export const brConfig = {
       ]
     }
   },
+  vendors: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/vendor",
+        name: "Daftar Admin Principal"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendor",
+        name: "Daftar Admin Principal"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Admin Principal"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendor",
+        name: "Daftar Admin Principal"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Admin Principal"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendor",
+        name: "Daftar Admin Principal"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Admin Principal"
+      }
+    ]
+  },
   adminprincipal: {
     index: [
       {

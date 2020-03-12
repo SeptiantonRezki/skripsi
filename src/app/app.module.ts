@@ -37,6 +37,7 @@ import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
+import { VendorsService } from "./services/src-catalogue/vendors.service";
 import { FieldForceService } from "./services/user-management/field-force.service";
 import { PaguyubanService } from "./services/user-management/paguyuban.service";
 import { WholesalerService } from "./services/user-management/wholesaler.service";
@@ -111,6 +112,7 @@ import { Emitter } from "./helper/emitter.helper";
     DataService,
     DialogService,
     AdminPrincipalService,
+    VendorsService,
     FieldForceService,
     PaguyubanService,
     CustomerService,
