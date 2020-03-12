@@ -548,7 +548,25 @@ export class ProductCreateComponent {
     );
   }
 
+  findInvalidControls() {
+    const invalid = [];
+    const controls = this.formProductGroup.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
   async submit() {
+    console.log('validator', this.findInvalidControls());
+    if (this.formProductGroup.get('status_pin_up').value != '1') {
+      this.formProductGroup.get('start_date_pin_up').clearValidators();
+      this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
+      this.formProductGroup.get('end_date_pin_up').clearValidators();
+      this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
+    }
     if (this.formProductGroup.valid && (this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
 
