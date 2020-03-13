@@ -76,6 +76,7 @@ import { OTPSettingService } from "./services/otpsetting.service";
 import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
 import { GroupTradeProgramService } from "./services/dte/group-trade-program.service";
+import { IdbService } from "./services/idb.service";
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import { GroupTradeProgramService } from "./services/dte/group-trade-program.ser
     PengajuanSrcService,
     OTPSettingService,
     GroupTradeProgramService,
+    IdbService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],

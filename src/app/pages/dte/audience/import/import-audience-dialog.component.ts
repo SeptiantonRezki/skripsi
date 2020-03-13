@@ -1,8 +1,13 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { DataService } from 'app/services/data.service';
+import { Page } from 'app/classes/laravel-pagination';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Subject } from 'rxjs';
+import { PagesName } from 'app/classes/pages-name';
+import { IdbService } from 'app/services/idb.service';
 
 @Component({
   templateUrl: './import-audience-dialog.component.html',
@@ -17,13 +22,43 @@ export class ImportAudienceDialogComponent {
   uploading: Boolean;
   rows: any[];
   validData: any[];
+  pagination: Page = new Page();
+  selected: any[];
+  id: any;
+
+  loadingIndicator = false;
+  reorderable = true;
+  onLoad: boolean;
+
+  @ViewChild(DatatableComponent)
+  table: DatatableComponent;
+
+  @ViewChild("activeCell")
+  activeCellTemp: TemplateRef<any>;
+
+  keyUp = new Subject<string>();
+
+  permission: any;
+  roles: PagesName = new PagesName();
+
+  offsetPagination: any;
+  currPage: number = 1;
+  lastPage: number = 1;
+  p_page: number = 1;
+  totalData: number = 0;
+  p_pagination: any = {
+    page: 1,
+    last_page: 1,
+    total: 0
+  }
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    private dataService: DataService
+    private dataService: DataService,
+    private idbService: IdbService
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -37,14 +72,40 @@ export class ImportAudienceDialogComponent {
     this.files = event;
 
     let fd = new FormData();
-
+    this.idbService.reset();
     fd.append('file', this.files);
     this.dataService.showLoading(true);
     this.audienceService.importExcel(fd).subscribe(
       res => {
-        this.rows = res.data;
-        this.validData = (res.data || []).filter(item => item.is_valid).length;
-        this.dataService.showLoading(false);
+        if (res && res.data) {
+          // this.recursiveImport(res);
+          this.audienceService.showImport(this.pagination).subscribe(response => {
+            this.currPage += 1;
+            this.lastPage = response.data.last_page;
+            this.totalData = response.data.total;
+            this.idbService.bulkUpdate(response.data.data).then(res => {
+              console.log('page', this.currPage - 1, res);
+              this.recursiveImport();
+            }, err => {
+              this.dialogService.openSnackBar({
+                message: "Gagal mengimport Data!"
+              })
+              this.dialogRef.close([]);
+            })
+          }, err => {
+            console.log('error show import', err);
+            this.dataService.showLoading(false);
+            this.files = undefined;
+
+            if (err.status === 404 || err.status === 500)
+              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          })
+        } else {
+          this.dataService.showLoading(false);
+          this.files = undefined;
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+        }
+
       },
       err => {
         this.dataService.showLoading(false);
@@ -56,11 +117,56 @@ export class ImportAudienceDialogComponent {
     )
   }
 
+  recursiveImport() {
+    if (this.currPage <= this.lastPage) {
+      this.audienceService.showImport({ page: this.currPage }).subscribe(res => {
+        if (res && res.data) {
+          this.idbService.bulkUpdate(res.data.data).then(res => {
+            console.log('page', this.currPage - 1, res);
+            this.currPage += 1;
+            this.recursiveImport();
+          }, err => {
+            this.dialogService.openSnackBar({
+              message: "Gagal mengimport Data!"
+            })
+            this.dialogRef.close([]);
+          })
+        } else {
+          this.dialogService.openSnackBar({
+            message: "Gagal mengimport Data!"
+          })
+          this.dialogRef.close([]);
+        }
+      }, err => {
+        console.log('error show import', err);
+        this.dataService.showLoading(false);
+        this.files = undefined;
+      });
+    } else {
+      this.idbService.paginate(this.pagination).then(res => {
+        this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+        Page.renderPagination(this.pagination, this.p_pagination);
+        this.rows = res && res[0] ? res[0] : [];
+        this.dataService.showLoading(false);
+      })
+    }
+  }
+
+  setPage(pageInfo) {
+    this.dataService.showLoading(true);
+    this.offsetPagination = pageInfo.offset;
+    this.p_pagination['page'] = pageInfo.offset + 1;
+    this.idbService.paginate(this.p_pagination).then(res => {
+      this.p_pagination = { page: pageInfo.offset + 1, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+      Page.renderPagination(this.pagination, this.p_pagination);
+      this.rows = res && res[0] ? res[0] : [];
+      this.dataService.showLoading(false);
+    });
+  }
+
   submit() {
-    const rows = this.rows.filter(item => item.is_valid);
-    if (rows.length > 0) {
-      const res = rows.map(item => { return { id: item.id } });
-      this.dialogRef.close(res);
+    if (this.totalData > 0) {
+      this.dialogRef.close(true);
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }
