@@ -1,0 +1,78 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'User Supplier'">
+    <button style="width: 170px" [routerLink]="['/user-management', 'supplier-user','create']" mat-raised-button
+      type="button">
+      <mat-icon>add</mat-icon> TAMBAH
+    </button>
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar User Supplier</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Supplier" prop="suppliername">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.supplier_company_name || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nama User" prop="fullname">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.fullname || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Email" prop="email">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.email || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Terakhir Masuk" prop="lastlogin">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.last_login | date:'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Terakhir Diubah" prop="lastupdated">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.updated_at | date:'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span [class]="row.status == 'active'? 'dropdown-active' : 'dropdown-inactive'" *ngIf="!permission?.ubah">{{row.status}}
+            </span>
+            <mat-form-field class="orders dropdown" [class]="row.status == 'active'? 'orders status-active' : row.status == 'inactive'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center" *ngIf="permission?.ubah">
+              <mat-select [(ngModel)]="row.status" (selectionChange)="selectionStatus($event, row, $index)">
+                <mat-option [value]="item.status" *ngFor="let item of userSupplierStatusList">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text" outline>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

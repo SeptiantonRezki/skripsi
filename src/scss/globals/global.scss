@@ -477,6 +477,10 @@ mat-form-field.orders {
       padding: 0;
       border-top: 0;
     }
+    
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
 
     .mat-input-placeholder {
       padding-top: 20px;
@@ -499,6 +503,53 @@ mat-form-field.orders {
 
     .mat-form-field-can-float {
       display: block;
+    }
+  }
+
+  &.status-active {
+    .mat-form-field-infix {
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 3px 10px;
+      min-width: 100px;
+      width: 100px !important;
+      border-color: green;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 0.8em;
+      color: green;
+    }
+  }
+  &.status-nonactive {
+    .mat-form-field-infix {
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 3px 10px;
+      min-width: 100px;
+      width: 100px !important;
+      border-color:red;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 0.8em;
+      color: red;
     }
   }
 }
@@ -913,6 +964,8 @@ a {
   text-align: center;
   font-size: 0.9em;
   border-radius: 3px;
+  line-height: 1.3;
+  white-space: normal;
 }
 
 .fr-toolbar {
@@ -1013,6 +1066,38 @@ a {
 
 .mat-dalam-proses-color {
   background-color: #916000 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+
+/** color private label */
+.mat-baru-color {
+  background-color: #ff9800 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-dibatalkan-color {
+  background-color: #f44336 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-diproses-color {
+  background-color: #916000 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-dikirim-color {
+  background-color: #a5c267 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-diterima-color {
+  background-color: #388e3c !important;
   color: white !important;
   padding: 6px !important;
 }

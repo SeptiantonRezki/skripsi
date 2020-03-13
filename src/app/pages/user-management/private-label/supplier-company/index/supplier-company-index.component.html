@@ -1,0 +1,70 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Supplier Company'">
+    <button style="width: 170px" [routerLink]="['/user-management', 'supplier-company','create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> TAMBAH
+    </button>
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Supplier Company</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Supplier" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Alamat" prop="address">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.address}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="No Telepon" prop="phone">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.telephone}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span [class]="row.status == 'active'? 'dropdown-active' : 'dropdown-inactive'" *ngIf="!permission?.ubah">{{row.status}}
+            </span>
+            <!-- <span> -->
+              <mat-form-field class="orders dropdown" [class]="row.status == 'active'? 'orders status-active' : row.status == 'inactive'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center" *ngIf="permission?.ubah">
+                <mat-select [(ngModel)]="row.status" (selectionChange)="selectionStatus($event, row, $index)">
+                  <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option>
+                  <!-- <mat-option [value]="active" selected>Aktif</mat-option>
+                  <mat-option [value]="inactive">Non-Aktif</mat-option> -->
+                </mat-select>
+              </mat-form-field>
+            <!-- </span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="primary" matTooltip="Edit" (click)="directEdit(row)" [disabled]="!permission?.ubah">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

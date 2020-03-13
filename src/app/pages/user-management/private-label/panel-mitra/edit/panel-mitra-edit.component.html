@@ -1,0 +1,191 @@
+<div #containerScroll class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Panel Mitra'">
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="pr-16 bb">
+        <div fxLayout="row" fxLayoutAlign="center center" fusePerfectScrollbar>
+          <form [formGroup]="formInput" autoComplete="off">
+            <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" fxLayoutAlign="center center">
+              <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                <mat-select placeholder="Pilih Kategori Produk" formControlName="filtercategory" (selectionChange)="selectionChangeFilterCategory($event)">
+                  <mat-option [value]="item.id" *ngFor="let item of filterCategory">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formInput.controls['filtercategory'].hasError('required') && formInput.controls['filtercategory'].touched">
+                  Kategori harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxLayoutAlign="center center">
+                <mat-select placeholder="Pilih Produk" formControlName="filterproduct" (selectionChange)="selectionChangeFilterProduct($event)">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="'Cari Produk...'"
+                    [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option [value]="item.id" *ngFor="let item of filterProducts">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formInput.controls['filterproduct'].hasError('required') && formInput.controls['filterproduct'].touched">
+                  Produk harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxLayoutAlign="center center">
+                <mat-select placeholder="Pilih Supplier" formControlName="filtersupplier" (selectionChange)="selectionChangeFilterSupplier($event)">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="filterSupplierSearch" [placeholderLabel]="'Cari Supplier...'"
+                    [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option [value]="item.id" *ngFor="let item of filterSupplier">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formInput.controls['filtersupplier'].hasError('required') && formInput.controls['filtersupplier'].touched">
+                  Supplier harus diisi
+                </mat-error>
+              </mat-form-field>
+              <div class="button-row">
+                <button mat-raised-button style="width: 160px" color="primary" (click)="updateFilter()">ATUR PANEL MITRA</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div fxLayout="column">
+          <label style="font-size: 10px;">Mitra Terpilih</label>
+          <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
+        </div>
+      </div>
+      <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+        <div class="button-row">
+          <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS</button>
+        </div>
+        <div class="button-row">
+          <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()"><mat-icon>vertical_align_top</mat-icon> Export XLS</button>
+        </div>
+      </div>
+
+      <form [formGroup]="formFilter" autoComplete="off">
+        <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Zone" formControlName="zone" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+                Zona' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Regional" formControlName="region" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+                Regional' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Area" formControlName="area" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+                Area' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name === 'all' ? 'Semua
+                Salespoint' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="District" formControlName="district" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all' ? 'Semua
+                District' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+                Territory' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon>search</mat-icon>
+            <mat-form-field class="is-light tab-search">
+              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+        </form>
+
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" 
+        [selected]="selected" [selectAllRowsOnPage]="false" [selectionType]="'checkbox'" (select)="onSelect($event)" [rowIdentity]="getId">
+
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-header-template >
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
+          </ng-template>
+
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Penjual" prop="penjual" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.phone || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Kode" prop="code" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.code || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.division || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Wilayah" prop="wilayah" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.district || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Area" prop="area" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.area || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text" outline>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+      </ngx-datatable>
+      <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
+          SIMPAN
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

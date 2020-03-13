@@ -1,4 +1,4 @@
-<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+<div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Tambah Produk'">
     <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
@@ -182,8 +182,15 @@
                 <div class="pt-16">
                   <strong>Jenis Produk</strong>
                 </div>
-                <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC
-                </mat-checkbox>
+                <div fxLayout="row" fxLayoutGap="20px">
+                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox>
+                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label">Private Label</mat-checkbox>
+                </div>
+                <!-- <mat-radio-group formControlName="jenisproduk" class="radio-group pb-16" fxLayout="row" fxLayoutGap="20px">
+                  <mat-radio-button class="radio-button" *ngFor="let item of jenisProduk" [value]="item.value" (change)="jenisProdukChange($event)">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group> -->
               </div>
               <div class="" formArrayName="areas"
                 *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
@@ -279,6 +286,109 @@
                       </mat-error>
                     </mat-form-field>
                   </div>
+                </div>
+              </div>
+              <div *ngIf="formProductGroup.get('is_private_label').value">
+                <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50"><h3 class="">Harga Produk</h3></div>
+                  <div class="button-row">
+                    <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice()"><mat-icon>add</mat-icon></button>
+                  </div>
+                </div>
+                <div>
+                  <mat-list style="overflow: hidden;" class="pt-0">
+                    <mat-divider></mat-divider>
+                    <mat-list-item>
+                      <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+                        <span fxFlex="15" class="h6 text-semibold">Kemasan</span>
+                        <span fxFlex="15" class="h6 text-semibold">Jumlah per Kemasan</span>
+                        <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
+                        <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
+                        <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                        <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
+                          <span class="h6 text-semibold">Hapus</span>
+                        </div>
+                      </div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel" *ngFor="let item of formProductGroup.get('listProdukPrivateLabel')['controls']; let i = index;">
+                      <div [formGroupName]="i">
+                        <mat-list-item class="custom-height mb-8">
+                          <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging">
+                                <input matInput type="text" formControlName="packaging">
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
+                                  Nama Kemasan harus diisi
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging-amount">
+                                <input matInput type="number" formControlName="packaging_amount">
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['packaging_amount'].hasError('required') && item.controls['packaging_amount'].touched">
+                                  Jumlah per Kemasan harus diisi
+                                </mat-error>
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['packaging_amount'].hasError('min') && item.controls['packaging_amount'].touched">
+                                  Jumlah per Kemasan min. 1
+                                </mat-error>
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['packaging_amount'].hasError('max') && item.controls['packaging_amount'].touched">
+                                  Jumlah per Kemasan maks. 1000
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging">
+                                <input matInput type="tel" currencyMask min="0" formControlName="price">
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
+                                  Harga Produk harus diisi
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="17">
+                              <mat-form-field class="is-light packaging">
+                                <input matInput type="tel" currencyMask min="0" formControlName="price_discount">
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
+                                  Tidak boleh melebihi harga produk
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging">
+                                <input matInput [matDatepicker]="dp" (focus)="dp.open()" [min]="minDate"
+                                  formControlName="price_discount_expires_at">
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
+                                  Tanggal Berakhir Diskon harus diisi
+                                </mat-error>
+                                <mat-error style="font-size: .8em"
+                                  *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
+                                  Tidak boleh kurang dari tanggal hari ini
+                                </mat-error>
+                                <mat-datepicker-toggle matSuffix [for]="dp">
+                                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #dp></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
+                              <button type="button" mat-icon-button color="primary" (click)="removePackaging(item, i)"
+                                [disabled]="formProductGroup.get('listProdukPrivateLabel').controls.length === 1">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                      </div>
+                    </div>
+                  </mat-list>
                 </div>
               </div>
             </div>

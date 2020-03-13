@@ -65,6 +65,10 @@ import { CustomerService } from "./services/user-management/customer.service";
 import { GeneralService } from "./services/general.service";
 import { SupportService } from "./services/settings/support.service";
 import { TemplateMessageService } from "./services/template-message-management/template-message.service";
+import { SupplierCompanyService } from "./services/user-management/private-label/supplier-company.service";
+import { UserSupplierService } from "./services/user-management/private-label/user-supplier.service";
+import { PanelMitraService } from "./services/user-management/private-label/panel-mitra.service";
+import { OrdertoSupplierService } from "./services/user-management/private-label/orderto-supplier.service";
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
@@ -77,6 +81,7 @@ import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
 import { GroupTradeProgramService } from "./services/dte/group-trade-program.service";
 import { IdbService } from "./services/idb.service";
+import { QzTrayService } from "./services/qz-tray.service";
 
 @NgModule({
   declarations: [
@@ -149,8 +154,13 @@ import { IdbService } from "./services/idb.service";
     OTPSettingService,
     GroupTradeProgramService,
     IdbService,
+    SupplierCompanyService,
+    UserSupplierService,
+    PanelMitraService,
+    OrdertoSupplierService,
+    QzTrayService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
