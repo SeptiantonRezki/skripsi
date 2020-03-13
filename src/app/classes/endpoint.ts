@@ -409,6 +409,28 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
       },
+      courier: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier/${context.courier_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/courier/update-status/${context.courier_id}`
+      },
+      mitra_panel: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra/${context.panel_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/panel-mitra/${context.panel_id}`,
+        mitra_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/mitra/list?area=${context.area_id ? context.area_id : 1}`,
+        courier_service: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/courier-service/${context.courier_id}`,
+        courier_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/courier/list`,
+        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/mitra/import`,
+        preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/mitra/preview-import`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/mitra/export`,
+        check_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/panel-mitra/mitra/check`
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

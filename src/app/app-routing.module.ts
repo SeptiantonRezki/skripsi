@@ -49,6 +49,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "delivery",
+    loadChildren: "./pages/delivery-management/delivery-management.module#DeliveryManagementModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "content-management",
     loadChildren:
       "./pages/content-management/content-management.module#ContentManagementModule",
