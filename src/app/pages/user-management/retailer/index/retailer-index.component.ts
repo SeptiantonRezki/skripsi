@@ -13,6 +13,7 @@ import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ImportAccessCashierDialogComponent } from "../import-access-cashier-dialog/import-access-cashier-dialog.component";
 import { GeotreeService } from "app/services/geotree.service";
 import * as _ from 'lodash';
+import { GeneralService } from "app/services/general.service";
 
 @Component({
   selector: "app-retailer-index",
@@ -54,6 +55,14 @@ export class RetailerIndexComponent {
   endArea: String;
   lastLevel: any;
 
+  listVersionsRetailer: any[] = []
+  listVersionsCashier: any[] = []
+  version_retailer: FormControl = new FormControl('');
+  version_cashier: FormControl = new FormControl('');
+  status: FormControl = new FormControl('');
+  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -61,8 +70,8 @@ export class RetailerIndexComponent {
     private retailerService: RetailerService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private geotreeService: GeotreeService
-
+    private geotreeService: GeotreeService,
+    private generalService: GeneralService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -102,6 +111,10 @@ export class RetailerIndexComponent {
   }
 
   ngOnInit() {
+
+    this.getVersions('retailer');
+    this.getVersions('cashier');
+
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: new FormControl(),
@@ -115,6 +128,18 @@ export class RetailerIndexComponent {
     // this.initArea();
     this.initAreaV2();
     this.getRetailerList();
+
+    this.status.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.version_retailer.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.version_cashier.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
       this.getRetailerList();
@@ -149,6 +174,17 @@ export class RetailerIndexComponent {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  getVersions(type) {
+    this.generalService.getAppVersions({ type }).subscribe(res => {
+      if (type === 'retailer') {
+        this.listVersionsRetailer = [{ version: 'Semua Versi' }, ...res];
+      } else {
+        this.listVersionsCashier = [{ version: 'Semua Versi' }, ...res];
+      }
+      console.log('res versions', res);
+    })
   }
 
   initAreaV2() {
@@ -898,6 +934,17 @@ export class RetailerIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
+    this.pagination['status'] = this.status.value;
+    this.pagination['retailer_version'] = this.version_retailer.value;
+    this.pagination['cashier_version'] = this.version_cashier.value;
+
+    if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
+    if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
+    if (this.version_cashier.value === 'Semua Versi') {
+      this.pagination['cashier_version'] = null;
+      this.pagination['is_cashier'] = null;
+    }
+    if (this.status.value === '-1') this.pagination['status'] = null;
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(

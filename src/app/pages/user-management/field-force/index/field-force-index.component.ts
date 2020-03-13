@@ -7,9 +7,10 @@ import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { DialogService } from "../../../../services/dialog.service";
 import { FieldForceService } from "../../../../services/user-management/field-force.service";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
 import { GeotreeService } from "app/services/geotree.service";
+import { GeneralService } from "app/services/general.service";
 
 @Component({
   selector: "app-field-force-index",
@@ -49,6 +50,10 @@ export class FieldForceIndexComponent {
   endArea: String;
   lastLevel: any;
   bankAreas: any[] = [];
+  listVersions: any[] = []
+  version: FormControl = new FormControl('');
+  status: FormControl = new FormControl('');
+  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
 
   constructor(
     private http: HttpClient,
@@ -57,7 +62,8 @@ export class FieldForceIndexComponent {
     private dataService: DataService,
     private fieldForceService: FieldForceService,
     private formBuilder: FormBuilder,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private generalService: GeneralService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -106,6 +112,8 @@ export class FieldForceIndexComponent {
       territory: [""]
     })
 
+    this.getVersions();
+
     // this.initArea()
     this.initAreaV2();
     this.getFfList();
@@ -113,6 +121,14 @@ export class FieldForceIndexComponent {
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.getFfList();
     });
+
+    this.status.valueChanges.subscribe(res => {
+      this.getFfList();
+    })
+
+    this.version.valueChanges.subscribe(res => {
+      this.getFfList();
+    })
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone changes', res, this.formFilter.value['zone']);
@@ -144,6 +160,13 @@ export class FieldForceIndexComponent {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  getVersions() {
+    this.generalService.getAppVersions({ type: 'field-force' }).subscribe(res => {
+      this.listVersions = [{ version: 'Semua Versi' }, ...res];
+      console.log('res versions', res);
+    })
   }
 
   initAreaV2() {
@@ -720,7 +743,11 @@ export class FieldForceIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
+    this.pagination['status'] = this.status.value;
+    this.pagination['version'] = this.version.value;
 
+    if (this.version.value === 'Semua Versi') this.pagination['version'] = null;
+    if (this.status.value === '-1') this.pagination['status'] = null;
     this.fieldForceService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
