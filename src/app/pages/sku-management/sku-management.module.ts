@@ -39,8 +39,13 @@ import {
   MatDatepicker,
   DateAdapter,
   MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
+  MAT_DATE_FORMATS,
+  MatDividerModule,
+  MatListModule,
 } from "@angular/material";
+
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { NgxCurrencyModule } from "ngx-currency";
 
 import {
   ListBrandResolver,
@@ -55,7 +60,6 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
 
 export const MY_FORMATS = {
   parse: {
@@ -67,6 +71,18 @@ export const MY_FORMATS = {
     dateA11yLabel: "LL",
     monthYearA11yLabel: "MMMM YYYY"
   }
+};
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
 };
 
 @NgModule({
@@ -95,7 +111,10 @@ export const MY_FORMATS = {
     MatDialogModule,
     MatToolbarModule,
     ngfModule,
-    AutofocusModule
+    AutofocusModule,
+    MatDividerModule,
+    MatListModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
     ProductIndexComponent,
@@ -126,12 +145,18 @@ export const MY_FORMATS = {
     DetailRetailerComponent
   ],
   entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe,
+  providers: [
+    ListBrandResolver, 
+    ListCategoryResolver, 
+    ListPackagingResolver, 
+    PageGuard, 
+    RupiahFormaterPipe,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },]
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ]
 })
 export class SkuManagementModule { }

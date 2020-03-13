@@ -9,6 +9,7 @@ import { UserManagementRoutingModule } from "./user-management-routing.module";
 import { AdminPrincipalIndexComponent } from "./admin-principal/index/admin-principal-index.component";
 import { AdminPrincipalCreateComponent } from "./admin-principal/create/admin-principal-create.component";
 import { FieldForceIndexComponent } from "./field-force/index/field-force-index.component";
+// import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 
 import {
   MatButtonModule,
@@ -23,8 +24,19 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatDatepickerModule,
+  MatDividerModule,
 } from "@angular/material";
+
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
 
 import { AdminPrincipalEditComponent } from "./admin-principal/edit/admin-principal-edit.component";
 import { FieldForceCreateComponent } from "./field-force/create/field-force-create.component";
@@ -39,13 +51,32 @@ import { RetailerIndexComponent } from "./retailer/index/retailer-index.componen
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
 
+//PRIVATE-LABEL
+import { OrdertoSupplierDetailComponent } from "./private-label/orderto-supplier/detail/orderto-supplier-detail.component";
+import { OrdertoSupplierIndexComponent } from "./private-label/orderto-supplier/index/orderto-supplier-index.component";
+
+import { PanelMitraCreateComponent } from "./private-label/panel-mitra/create/panel-mitra-create.component";
+import { PanelMitraEditComponent } from "./private-label/panel-mitra/edit/panel-mitra-edit.component";
+import { PanelMitraIndexComponent } from "./private-label/panel-mitra/index/panel-mitra-index.component";
+
+import { SupplierCompanyCreateComponent } from "./private-label/supplier-company/create/supplier-company-create.component";
+import { SupplierCompanyEditComponent } from "./private-label/supplier-company/edit/supplier-company-edit.component";
+import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/index/supplier-company-index.component";
+
+import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
+import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
+import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+
 import { PageGuard } from "app/classes/auth.guard";
 
 import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
   ListLevelAreaResolver,
-  ListAdminPrincipalResolver
+  ListAdminPrincipalResolver,
+  ListCategoryProdukResolver,
+  ListSupplierCompanyResolver,
+  ListAllCategoryProdukResolver,
 } from "../../resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -54,6 +85,7 @@ import { PartnershipCreateComponent } from "./principal-partnership/create/partn
 import { PartnershipIndexComponent } from "./principal-partnership/index/partnership-index.component";
 import { PartnershipEditComponent } from "./principal-partnership/edit/partnership-edit.component";
 import { ImportAccessCashierDialogComponent } from './retailer/import-access-cashier-dialog/import-access-cashier-dialog.component';
+import { ImportPanelMitraDialogComponent } from './private-label/panel-mitra/dialog-import/import-panel-mitra-dialog.component';
 import { ngfModule } from "angular-file";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { PengajuanSrcComponent } from './pengajuan-src/index/pengajuan-src.component';
@@ -61,7 +93,19 @@ import { CreatePengajuanSrcComponent } from './pengajuan-src/create/create-penga
 import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-pengajuan-src.component';
 import { ReasonDialogComponent } from './pengajuan-src/reason-dialog/reason-dialog.component';
 import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-edit.component';
+import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 @NgModule({
   imports: [
     CommonModule,
@@ -84,6 +128,10 @@ import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-ed
     MatDialogModule,
     ngfModule,
     NgxMatSelectSearchModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatDividerModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -102,7 +150,20 @@ import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-ed
     RetailerCreateComponent,
     RetailerEditComponent,
     CustomerIndexComponent,
-    CustomerDetailComponent
+    CustomerDetailComponent,
+
+    OrdertoSupplierDetailComponent,
+    OrdertoSupplierIndexComponent,
+    PanelMitraCreateComponent,
+    PanelMitraEditComponent,
+    PanelMitraIndexComponent,
+    SupplierCompanyCreateComponent,
+    SupplierCompanyEditComponent,
+    SupplierCompanyIndexComponent,
+    UserSupplierCreateComponent,
+    UserSupplierEditComponent,
+    UserSupplierIndexComponent,
+
   ],
   declarations: [
     AdminPrincipalIndexComponent,
@@ -131,15 +192,42 @@ import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-ed
     CreatePengajuanSrcComponent,
     DetailPengajuanSrcComponent,
     ReasonDialogComponent,
-    PengajuanSrcEditComponent
+    PengajuanSrcEditComponent,
+
+    OrdertoSupplierDetailComponent,
+    OrdertoSupplierIndexComponent,
+    PanelMitraCreateComponent,
+    PanelMitraEditComponent,
+    PanelMitraIndexComponent,
+    SupplierCompanyCreateComponent,
+    SupplierCompanyEditComponent,
+    SupplierCompanyIndexComponent,
+    UserSupplierCreateComponent,
+    UserSupplierEditComponent,
+    UserSupplierIndexComponent,
+
+    ImportAccessCashierDialogComponent,
+    ImportPanelMitraDialogComponent,
+    
   ],
-  entryComponents: [ImportAccessCashierDialogComponent, ReasonDialogComponent],
+  entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent, ReasonDialogComponent],
   providers: [
+    // PendingChangesGuard,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ListRoleAdminResolver,
     ListLevelFFResolver,
     ListLevelAreaResolver,
     ListAdminPrincipalResolver,
-    PageGuard
+    ListCategoryProdukResolver,
+    ListSupplierCompanyResolver,
+    ListAllCategoryProdukResolver,
+    RupiahFormaterWithoutRpPipe,
+    PageGuard,
   ],
 })
 export class UserManagementModule { }

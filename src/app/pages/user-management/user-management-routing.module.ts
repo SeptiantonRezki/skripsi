@@ -22,7 +22,10 @@ import {
   ListRoleAdminResolver,
   ListLevelFFResolver,
   ListLevelAreaResolver,
-  ListAdminPrincipalResolver
+  ListAdminPrincipalResolver,
+  ListCategoryProdukResolver,
+  ListSupplierCompanyResolver,
+  ListAllCategoryProdukResolver,
 } from "app/resolver/user-management.resolver";
 import { CustomerIndexComponent } from "./customer/index/customer-index.component";
 import { CustomerDetailComponent } from "./customer/detail/customer-detail.component";
@@ -34,6 +37,19 @@ import { PengajuanSrcComponent } from "./pengajuan-src/index/pengajuan-src.compo
 import { CreatePengajuanSrcComponent } from "./pengajuan-src/create/create-pengajuan-src.component";
 import { DetailPengajuanSrcComponent } from "./pengajuan-src/detail/detail-pengajuan-src.component";
 import { PengajuanSrcEditComponent } from "./pengajuan-src/edit/pengajuan-src-edit.component";
+
+import { OrdertoSupplierDetailComponent } from "./private-label/orderto-supplier/detail/orderto-supplier-detail.component";
+import { OrdertoSupplierIndexComponent } from "./private-label/orderto-supplier/index/orderto-supplier-index.component";
+import { PanelMitraCreateComponent } from "./private-label/panel-mitra/create/panel-mitra-create.component";
+import { PanelMitraEditComponent } from "./private-label/panel-mitra/edit/panel-mitra-edit.component";
+import { PanelMitraIndexComponent } from "./private-label/panel-mitra/index/panel-mitra-index.component";
+import { SupplierCompanyCreateComponent } from "./private-label/supplier-company/create/supplier-company-create.component";
+import { SupplierCompanyEditComponent } from "./private-label/supplier-company/edit/supplier-company-edit.component";
+import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/index/supplier-company-index.component";
+import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
+import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
+import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+// import { PendingChangesGuard } from "../dte/dte.guard";
 
 const routes: Routes = [
   {
@@ -306,6 +322,141 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pengajuanSRC.edit
     }
+  },
+
+  {
+    path: "supplier-order",
+    component: OrdertoSupplierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.ordertosupplier.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-order/detail/:id",
+    component: OrdertoSupplierDetailComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.ordertosupplier.detail
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra",
+    component: PanelMitraIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.index
+    },
+    resolve: {
+      listCategory: ListCategoryProdukResolver
+    }
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra/create",
+    component: PanelMitraCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.create
+    },
+    resolve: {
+      listCategory: ListAllCategoryProdukResolver,
+      // listSupplierCompany: ListSupplierCompanyResolver,
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra/edit/:id",
+    component: PanelMitraEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.edit
+    },
+    resolve: {
+      listCategory: ListAllCategoryProdukResolver,
+      // listSupplierCompany: ListSupplierCompanyResolver,
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-panel-mitra/detail/:id",
+    component: PanelMitraEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelmitra.detail
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company",
+    component: SupplierCompanyIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/create",
+    component: SupplierCompanyCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/edit/:id",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-company/detail/:id",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.detail
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user",
+    component: UserSupplierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/create",
+    component: UserSupplierCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.create
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/edit/:id",
+    component: UserSupplierEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.edit
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-user/detail/:id",
+    component: UserSupplierEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.usersupplier.detail
+    },
+    resolve: {
+      listRole: ListRoleAdminResolver
+    },
+    // canActivate: [PageGuard]
   },
 ];
 

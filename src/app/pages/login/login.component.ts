@@ -143,19 +143,26 @@ export class LoginComponent implements OnInit {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
               // const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
-              this.getAreasAsync(area_id).subscribe(res => {
-                let area_type = res ? res.map(r => r.data) : [];
-                profile['area_type'] = area_type[0] ? area_type[0] : [];
-                profile['areas'] = area_type;
+              if (profile.type == "supplier") {
+                  this.dataService.setEncryptedProfile(profile);
+                  this.router.navigate(["dashboard"]);
+                  this.submitting = false;
+                  // this.qiscusLoginOrRegister(profile);
+              } else {
+                this.getAreasAsync(area_id).subscribe(res => {
+                  let area_type = res ? res.map(r => r.data) : [];
+                  profile['area_type'] = area_type[0] ? area_type[0] : [];
+                  profile['areas'] = area_type;
 
-                this.dataService.setEncryptedProfile(profile);
-                this.router.navigate(["dashboard"]);
-                this.submitting = false;
-                this.qiscusLoginOrRegister(profile);
-              }, err => {
-                console.log('err', err);
-                this.submitting = false;
-              })
+                  this.dataService.setEncryptedProfile(profile);
+                  this.router.navigate(["dashboard"]);
+                  this.submitting = false;
+                  // this.qiscusLoginOrRegister(profile);
+                }, err => {
+                  console.log('err', err);
+                  this.submitting = false;
+                })
+              }
             } else {
               this.dataService.unSetAuthorization();
               this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });

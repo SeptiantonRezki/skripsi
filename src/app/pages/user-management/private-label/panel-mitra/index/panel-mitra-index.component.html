@@ -1,0 +1,89 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Panel Mitra'">
+    <button style="width: 170px" [routerLink]="['/user-management', 'supplier-panel-mitra','create']" mat-raised-button
+      type="button">
+      <mat-icon>add</mat-icon> TAMBAH
+    </button>
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="top-table pt-8 mb-8 bb">
+        <h2 class="pl-8">Daftar Produk</h2>
+        <div fxLayout="row" fxLayoutAlign="center center" fusePerfectScrollbar>
+          <form [formGroup]="formFilter" autoComplete="off">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8" fxLayoutAlign="center center">
+              <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                <mat-select placeholder="Filter Kategori" formControlName="filtercategory" (selectionChange)="selectionChangeFilterCategory($event)">
+                  <mat-option [value]="item.id" *ngFor="let item of filterCategory">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxLayoutAlign="center center">
+                <mat-select placeholder="Filter Produk" formControlName="filterproduct" (selectionChange)="selectionChangeFilterProduct($event)">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="'Cari Produk...'"
+                    [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option [value]="item.id" *ngFor="let item of filterProducts">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="button-row">
+                <button mat-raised-button style="width: 130px" color="primary" (click)="updateFilter()">FILTER</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div fxLayout="row">
+              <!-- <div class="inner-card name-container product-image my-8 mx-16">
+                <img class="" *ngIf="item.image_url" [src]="item.image_url">
+              </div> -->
+              <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Kategori" prop="kategori" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.category_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nama Supplier" prop="phone" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.supplier_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Jumlah Mitra" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.total_mitra}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button matTooltip="Edit" *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text" outline>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

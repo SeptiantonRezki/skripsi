@@ -5,6 +5,8 @@ import { Observable } from "rxjs";
 import { FieldForceService } from "../services/user-management/field-force.service";
 import { WholesalerService } from "../services/user-management/wholesaler.service";
 import { PaguyubanService } from "app/services/user-management/paguyuban.service";
+import { PanelMitraService } from "app/services/user-management/private-label/panel-mitra.service";
+import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
 
 @Injectable()
 export class ListRoleAdminResolver implements Resolve<any> {
@@ -34,5 +36,29 @@ export class ListAdminPrincipalResolver implements Resolve<any> {
   constructor(private paguyubanService: PaguyubanService){}
   resolve(): Observable<any> {
     return this.paguyubanService.getListAdminPrincipal({});
+  }
+}
+@Injectable()
+export class ListCategoryProdukResolver implements Resolve<any> {
+  constructor(private panelMitraService: PanelMitraService) {}
+  resolve(): Observable<any> {
+    return this.panelMitraService.getListCategory();
+  }
+}
+
+@Injectable()
+export class ListAllCategoryProdukResolver implements Resolve<any> {
+  constructor(private panelMitraService: PanelMitraService) {}
+  resolve(): Observable<any> {
+    const params = { all: true };
+    return this.panelMitraService.getListCategory(params);
+  }
+}
+
+@Injectable()
+export class ListSupplierCompanyResolver implements Resolve<any> {
+  constructor(private supplierCompanyService: SupplierCompanyService) {}
+  resolve(): Observable<any> {
+    return this.supplierCompanyService.getList();
   }
 }
