@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="'Template Layout Toko'">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/store-layout-template', '', 'create']">
+        [routerLink]="['/src-catalogue', 'store-layout-template', 'create']">
         <mat-icon>add</mat-icon>BUAT
       </button>
     </div>
@@ -26,39 +26,47 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="ID" prop="id">
+        <ngx-datatable-column name="Nama Layout Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.id}}
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Judul Notifikasi" prop="title">
+        <ngx-datatable-column name="Panjang Toko (m)" prop="length">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
-            {{row.title}}
+            {{ row['length'] }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="type">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}
+        <ngx-datatable-column name="Lebar Toko (m)" prop="width">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row['width'] }}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date: 'dd/MM/yyyy
-            HH:mm:ss'}}</ng-template>
+        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.status == 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status == 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
             <div class="button-row pl-8">
+              <button mat-icon-button color="" matTooltip="Ubah Produk" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
               <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>

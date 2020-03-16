@@ -13,6 +13,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule } from '@angular/material';
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
   imports: [
@@ -35,6 +36,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatToolbarModule,
     MatDialogModule,
     ngfModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
     NgxMatSelectSearchModule,
   ],
   declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent]

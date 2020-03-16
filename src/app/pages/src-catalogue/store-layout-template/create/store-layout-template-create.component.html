@@ -1,3 +1,62 @@
-<p>
-  store-layout-template-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Template Layout Toko'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formStoreTemplate">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">Buat Template Layout Toko</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="30" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Layout Toko">
+              <mat-error
+                *ngIf="formStoreTemplate.controls['name'].hasError('required') && formStoreTemplate.controls['name'].touched">
+                Nama Template Layout Toko harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxLayout="row" fxFlex="45"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary">
+              <mat-select formControlName="length" placeholder="Panjang Toko">
+                <mat-option *ngFor="let item of listStoreLength" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formStoreTemplate.controls['length'].hasError('required') && formStoreTemplate.controls['length'].touched">
+                Panjang Toko harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxLayout="row" fxFlex="5"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary">
+              <mat-select formControlName="width" placeholder="Lebar Toko">
+                <mat-option *ngFor="let item of listStoreLength" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formStoreTemplate.controls['width'].hasError('required') && formStoreTemplate.controls['width'].touched">
+                Lebar Toko harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">Deskripsi Layout</h3>
+            </div>
+            <textarea [froalaEditor]="options" formControlName="description" class="pb-4" fxFlex="100"></textarea>
+            <mat-error style="padding-top: 6px !important; font-size: .86em;"
+              *ngIf="formStoreTemplate.controls['description'].hasError('required') && formStoreTemplate.controls['description'].touched">
+              Isi Halaman harus diisi
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

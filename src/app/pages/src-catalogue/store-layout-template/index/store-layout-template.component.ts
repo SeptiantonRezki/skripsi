@@ -127,12 +127,12 @@ export class StoreLayoutTemplateComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_store_layout", param);
-    this.router.navigate(["store-template-layout", "edit"]);
+    this.router.navigate(["src-catalogue", "store-layout-template", "edit"]);
   }
 
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_store_layout", param);
-    this.router.navigate(["store-template-layout", "detail"]);
+    this.router.navigate(["src-catalogue", "store-layout-template", "detail"]);
   }
 
 }
