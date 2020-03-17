@@ -70,4 +70,8 @@ export class StoreLayoutTemplateEditComponent implements OnInit {
     })
   }
 
+  submit() {
+
+  }
+
 }

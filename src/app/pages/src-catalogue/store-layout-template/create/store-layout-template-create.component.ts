@@ -43,4 +43,8 @@ export class StoreLayoutTemplateCreateComponent implements OnInit {
     })
   }
 
+  submit() {
+
+  }
+
 }
