@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
-import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { UserCatalogueService } from "app/services/src-catalogue/user-catalogue.service";
+import { Observable, Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-vendors-index',
-  templateUrl: './vendors-index.component.html',
-  styleUrls: ['./vendors-index.component.scss']
+  selector: 'app-user-src-catalogue',
+  templateUrl: './user-src-catalogue.component.html',
+  styleUrls: ['./user-src-catalogue.component.scss']
 })
-export class VendorsIndexComponent implements OnInit {
+export class UserSrcCatalogueComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any[];
@@ -34,7 +34,7 @@ export class VendorsIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private vendorsService: VendorsService
+    private userCatalogueService: UserCatalogueService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -50,10 +50,10 @@ export class VendorsIndexComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getVendors();
+    this.getUserCatalogues();
   }
 
-  getVendors() {
+  getUserCatalogues() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -65,7 +65,7 @@ export class VendorsIndexComponent implements OnInit {
     this.offsetPagination = page ? (page - 1) : 0;
 
     this.loadingIndicator = true;
-    this.vendorsService.get(this.pagination).subscribe(
+    this.userCatalogueService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -88,7 +88,7 @@ export class VendorsIndexComponent implements OnInit {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.vendorsService.get(this.pagination).subscribe(res => {
+    this.userCatalogueService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -103,7 +103,7 @@ export class VendorsIndexComponent implements OnInit {
 
     console.log("check pagination", this.pagination);
 
-    this.vendorsService.get(this.pagination).subscribe(res => {
+    this.userCatalogueService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -118,7 +118,7 @@ export class VendorsIndexComponent implements OnInit {
 
     console.log(this.pagination);
 
-    this.vendorsService.get(this.pagination).subscribe(res => {
+    this.userCatalogueService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -126,13 +126,13 @@ export class VendorsIndexComponent implements OnInit {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage("detail_vendor", param);
-    this.router.navigate(["src-catalogue", "vendors", "edit"]);
+    this.dataService.setToStorage("detail_user_catalogue", param);
+    this.router.navigate(["src-catalogue", "users", "edit"]);
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_vendor", param);
-    this.router.navigate(["src-catalogue", "vendors", "detail"]);
+    this.dataService.setToStorage("detail_user_catalogue", param);
+    this.router.navigate(["src-catalogue", "users", "detail"]);
   }
 
 }

@@ -23,44 +23,44 @@ export const brConfig = {
     index: [
       {
         type: "current",
-        url: "/src-catalogue/vendor",
-        name: "Daftar Admin Principal"
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
       }
     ],
     create: [
       {
         type: "parent",
-        url: "/src-catalogue/vendor",
-        name: "Daftar Admin Principal"
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Admin Principal"
+        name: "Buat Vendor"
       }
     ],
     edit: [
       {
         type: "parent",
-        url: "/src-catalogue/vendor",
-        name: "Daftar Admin Principal"
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Admin Principal"
+        name: "Ubah Vendor"
       }
     ],
     detail: [
       {
         type: "parent",
-        url: "/src-catalogue/vendor",
-        name: "Daftar Admin Principal"
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Admin Principal"
+        name: "Detail Vendor"
       }
     ]
   },
@@ -106,6 +106,51 @@ export const brConfig = {
         type: "current",
         url: "",
         name: "Detail Template Layout Toko"
+      }
+    ]
+  },
+  user_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Pengguna"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengguna"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Pengguna"
       }
     ]
   },

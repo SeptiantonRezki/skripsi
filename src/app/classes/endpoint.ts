@@ -408,6 +408,20 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`
       },
+      user_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor`,
+        show: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+      },
+      vendors: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

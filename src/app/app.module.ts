@@ -76,6 +76,7 @@ import { OTPSettingService } from "./services/otpsetting.service";
 // ==== QISCUS ====
 import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
+import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.service";
 
 @NgModule({
   declarations: [
@@ -107,7 +108,7 @@ import { Emitter } from "./helper/emitter.helper";
     //===== QISCUS =====
     QiscusService,
     Emitter,
-    
+
     AuthenticationService,
     DataService,
     DialogService,
@@ -147,6 +148,7 @@ import { Emitter } from "./helper/emitter.helper";
     TemplateMessageService,
     PengajuanSrcService,
     OTPSettingService,
+    UserCatalogueService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],

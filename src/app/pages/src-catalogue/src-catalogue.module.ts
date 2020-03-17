@@ -14,6 +14,10 @@ import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, 
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { UserSrcCatalogueComponent } from './user-src-catalogue/index/user-src-catalogue.component';
+import { UserSrcCatalogueCreateComponent } from './user-src-catalogue/create/user-src-catalogue-create.component';
+import { UserSrcCatalogueEditComponent } from './user-src-catalogue/edit/user-src-catalogue-edit.component';
+import { ListRoleAdminResolver } from 'app/resolver/user-management.resolver';
 
 @NgModule({
   imports: [
@@ -40,6 +44,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     FroalaViewModule.forRoot(),
     NgxMatSelectSearchModule,
   ],
-  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent]
+  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent],
+  providers: [ListRoleAdminResolver]
 })
 export class SrcCatalogueModule { }
