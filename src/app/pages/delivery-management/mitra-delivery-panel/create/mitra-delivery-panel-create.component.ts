@@ -186,6 +186,9 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
   aturPanelMitra() {
     if (this.formPanelMitra.valid) {
+      this.selectedMitra = [];
+      this.onSelect({ selected: [] });
+
       this.dataService.showLoading(true);
       this.mitraPanelService.checkMitra({ delivery_courier_id: this.formPanelMitra.get('courier').value, delivery_courier_service_id: this.formPanelMitra.get('service').value }).subscribe(res => {
         console.log('res', res);

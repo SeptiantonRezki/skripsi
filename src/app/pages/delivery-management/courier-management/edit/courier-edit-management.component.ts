@@ -74,6 +74,14 @@ export class CourierEditManagementComponent implements OnInit {
     })
   }
 
+  numbersOnlyValidation(event) {
+    const inp = String.fromCharCode(event.keyCode);
+    /*Allow only numbers*/
+    if (!/^\d+$/.test(inp)) {
+      event.preventDefault()
+    }
+  }
+
   getCourierDetail() {
     this.dataService.showLoading(true);
     this.courierManagementService.show({ courier_id: this.courierID }).subscribe(res => {

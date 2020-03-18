@@ -20,7 +20,8 @@
               <input matInput value="+62" readonly>
             </mat-form-field>
             <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light form-primary">
-              <input matInput type="tel" min="0" formControlName="contact" placeholder="Nomor Kontak">
+              <input matInput type="tel" min="0" formControlName="contact" placeholder="Nomor Kontak"
+                (keypress)="numbersOnlyValidation($event)">
             </mat-form-field>
           </div>
           <mat-error
