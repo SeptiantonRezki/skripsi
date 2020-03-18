@@ -422,6 +422,22 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
       },
+      product_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,
+        create: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,
+        show: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        delete_all: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/delete-all`,
+        categories: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/categories`,
+        export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/export`
+      },
+      orders_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
+        export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

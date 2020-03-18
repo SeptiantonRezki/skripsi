@@ -154,6 +154,51 @@ export const brConfig = {
       }
     ]
   },
+  product_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Product SRC Catalogue"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Product SRC Catalogue"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Product SRC Catalogue"
+      }
+    ]
+  },
   adminprincipal: {
     index: [
       {

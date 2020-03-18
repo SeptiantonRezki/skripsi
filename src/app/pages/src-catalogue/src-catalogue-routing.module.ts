@@ -12,6 +12,11 @@ import { UserSrcCatalogueEditComponent } from "./user-src-catalogue/edit/user-sr
 import { ListRoleAdminResolver } from "app/resolver/user-management.resolver";
 import { VendorsCreateComponent } from "./vendors/create/vendors-create.component";
 import { VendorsEditComponent } from "./vendors/edit/vendors-edit.component";
+import { ProductCatalogueComponent } from "./product-catalogue/index/product-catalogue.component";
+import { ProductCatalogueCreateComponent } from "./product-catalogue/create/product-catalogue-create.component";
+import { ProductCatalogueEditComponent } from "./product-catalogue/edit/product-catalogue-edit.component";
+import { OrderCatalogueComponent } from "./order-catalogue/index/order-catalogue.component";
+import { OrderCatalogueDetailComponent } from "./order-catalogue/detail/order-catalogue-detail.component";
 
 
 const routes: Routes = [
@@ -115,6 +120,48 @@ const routes: Routes = [
     },
     resolve: {
       listRole: ListRoleAdminResolver
+    }
+  },
+  {
+    path: "products",
+    component: ProductCatalogueComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.index
+    }
+  },
+  {
+    path: "products/create",
+    component: ProductCatalogueCreateComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.create
+    }
+  },
+  {
+    path: "products/edit",
+    component: ProductCatalogueEditComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.edit
+    }
+  },
+  {
+    path: "products/detail",
+    component: ProductCatalogueEditComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.detail
+    }
+  },
+  {
+    path: "orders",
+    component: OrderCatalogueComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.index
+    }
+  },
+  {
+    path: "orders/detail",
+    component: OrderCatalogueDetailComponent,
+    data: {
+      breadcrumbs: brConfig.product_catalogue.index
     }
   },
 ];

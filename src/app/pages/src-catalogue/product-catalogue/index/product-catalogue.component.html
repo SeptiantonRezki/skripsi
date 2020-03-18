@@ -1,0 +1,133 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Product SRC Catalogue'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/src-catalogue', 'products', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center" class="p-16 export">
+        <a #downloadLink></a>
+        <button *ngIf="rows.length > 0" mat-raised-button type="button" color="primary" (click)="deleteAll()">
+          Hapus Semua SKU
+        </button>
+        <button mat-raised-button type="button" class="is-danger" (click)="import()">
+          <mat-icon>arrow_downward</mat-icon> Import XLS
+        </button>
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export XLS
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Product SRC Catalogue</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <form [formGroup]="formFilter" autoComplete="off">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+          class="top-table p-8">
+          <mat-form-field fxFlex="35" class="orders dropdown">
+            <mat-select formControlName="category">
+              <mat-option value="">Semua Kategori</mat-option>
+              <mat-option [value]="item.id" *ngFor="let item of listCategory">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="35" class="orders dropdown">
+            <mat-select formControlName="status">
+              <mat-option value="">Semua Status</mat-option>
+              <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="button-row pb-16">
+            <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+          </div>
+        </div>
+      </form>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+
+        <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container product-image m-8">
+              <img class="" *ngIf="row.image_url" [src]="row.image_url">
+              <img class="" *ngIf="!row.image_url" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Produk" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Kategori" prop="category">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.category}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Harga Produk" prop="price">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.price | rupiahFormater}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Ada Harga Paguyuban" headerClass="textright" prop="have_community_price">>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.have_community_price == 1" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.have_community_price == 0" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Stok" prop="availability">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.availability}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" prop="status">>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.status == 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status == 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" matTooltip="Ubah Produk" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Produk'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formProduct">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">Buat Produk</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Produk">
+              <mat-error
+                *ngIf="formProduct.controls['name'].hasError('required') && formProduct.controls['name'].touched">
+                Nama Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="text" formControlName="description" placeholder="Deskripsi Produk">
+              <mat-error
+                *ngIf="formProduct.controls['description'].hasError('required') && formProduct.controls['description'].touched">
+                Deskripsi Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select placeholder="Kategori Produk" formControlName="category">
+                <mat-option *ngFor="let item of listCategory" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['category'].hasError('required') && formProduct.controls['category'].touched">
+                Kategori Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="stage">Masukan ke Tahapan?</mat-checkbox>
+            </div>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="price" placeholder="Harga Produk">
+              <mat-error
+                *ngIf="formProduct.controls['price'].hasError('required') && formProduct.controls['price'].touched">
+                Harga Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="have_community_price">Ada Harga Paguyuban</mat-checkbox>
+            </div>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="5" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="number" min="0" formControlName="community_min_qty" placeholder="Min. Qty">
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="tel" currencyMask min="0" formControlName="community_price"
+                placeholder="Harga / Pcs">
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <mat-select placeholder="Ketersediaan" formControlName="availability">
+                <mat-option *ngFor="let item of listStock" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['availability'].hasError('required') && formProduct.controls['availability'].touched">
+                Ketersediaan Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <mat-select placeholder="Status Produk" formControlName="status">
+                <mat-option *ngFor="let item of listStatus" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['status'].hasError('required') && formProduct.controls['status'].touched">
+                Status Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

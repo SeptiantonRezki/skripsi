@@ -10,7 +10,7 @@ import { StoreLayoutTemplateEditComponent } from './store-layout-template/edit/s
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
@@ -18,6 +18,39 @@ import { UserSrcCatalogueComponent } from './user-src-catalogue/index/user-src-c
 import { UserSrcCatalogueCreateComponent } from './user-src-catalogue/create/user-src-catalogue-create.component';
 import { UserSrcCatalogueEditComponent } from './user-src-catalogue/edit/user-src-catalogue-edit.component';
 import { ListRoleAdminResolver } from 'app/resolver/user-management.resolver';
+import { ProductCatalogueComponent } from './product-catalogue/index/product-catalogue.component';
+import { ProductCatalogueCreateComponent } from './product-catalogue/create/product-catalogue-create.component';
+import { ProductCatalogueEditComponent } from './product-catalogue/edit/product-catalogue-edit.component';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { CatalogueProductImportFileDialogComponent } from './product-catalogue/index/import-file-dialog/import-file-dialog.component';
+import { RupiahFormaterWithoutRpPipe, RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
+import { OrderCatalogueComponent } from './order-catalogue/index/order-catalogue.component';
+import { OrderCatalogueDetailComponent } from './order-catalogue/detail/order-catalogue-detail.component';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
+};
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @NgModule({
   imports: [
@@ -43,8 +76,19 @@ import { ListRoleAdminResolver } from 'app/resolver/user-management.resolver';
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     NgxMatSelectSearchModule,
+    MatDatepickerModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
-  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent],
-  providers: [ListRoleAdminResolver]
+  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ListRoleAdminResolver, RupiahFormaterWithoutRpPipe, RupiahFormaterPipe],
+  exports: [CatalogueProductImportFileDialogComponent],
+  entryComponents: [CatalogueProductImportFileDialogComponent]
 })
 export class SrcCatalogueModule { }

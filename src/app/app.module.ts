@@ -77,6 +77,8 @@ import { OTPSettingService } from "./services/otpsetting.service";
 import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
 import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.service";
+import { ProductCatalogueService } from "./services/src-catalogue/product-catalogue.service";
+import { StoreTemplateLayoutService } from "./services/src-catalogue/store-template-layout.service";
 
 @NgModule({
   declarations: [
@@ -149,6 +151,8 @@ import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.se
     PengajuanSrcService,
     OTPSettingService,
     UserCatalogueService,
+    ProductCatalogueService,
+    StoreTemplateLayoutService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],
