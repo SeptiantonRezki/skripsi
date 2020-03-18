@@ -189,25 +189,23 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       this.dataService.showLoading(true);
       this.mitraPanelService.checkMitra({ delivery_courier_id: this.formPanelMitra.get('courier').value, delivery_courier_service_id: this.formPanelMitra.get('service').value }).subscribe(res => {
         console.log('res', res);
+        let filteredMitra = [];
+        this.currentMitraCount = res.data ? res.data.mitra_count : 0;
         if (res && res.data) {
-          this.currentMitraCount = res.data.mitra_count;
-          let filteredMitra = res.data.mitra.map(mtr => {
+          filteredMitra = res.data.mitra.map(mtr => {
             mtr['bak_id'] = mtr.id;
             mtr.id = mtr.wholesaler_id;
             return mtr
           })
-          setTimeout(() => {
-            this.selectedMitra = [
-              ...this.selectedMitra,
-              ...filteredMitra
-            ];
-            this.onSelect({ selected: res.data.mitra });
-          }, 800);
-          this.getPanelMitraList();
-        } else {
-          this.currentMitraCount = 0;
-          this.dataService.showLoading(false);
         }
+        setTimeout(() => {
+          this.selectedMitra = [
+            ...this.selectedMitra,
+            ...filteredMitra
+          ];
+          this.onSelect({ selected: res.data.mitra });
+        }, 800);
+        this.getPanelMitraList();
       }, err => {
         console.log('err occured', err);
         this.dataService.showLoading(false);
