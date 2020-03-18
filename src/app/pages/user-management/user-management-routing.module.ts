@@ -383,6 +383,10 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.privatelabel.panelmitra.detail
     },
+    resolve: {
+      listCategory: ListAllCategoryProdukResolver,
+      // listSupplierCompany: ListSupplierCompanyResolver,
+    },
     // canActivate: [PageGuard]
   },
   {

@@ -83,15 +83,6 @@ export class SupplierCompanyEditComponent implements OnInit {
       commonFormValidator.parseFormChanged(this.createForm, this.createFormError);
     })
 
-    this.productOptions = this.productControl.valueChanges.pipe(
-        startWith(''),
-        debounceTime(400),
-        tap(() => this.isLoadingProduct = true),
-        distinctUntilChanged(),
-        switchMap(value => this._filter(value)
-        )
-      )
-
     try {
       const response = await this.supplierCompanyService.detail({ supplierId: this.supplierId }).toPromise();
       if (response && response.status == 'success' && response.data) {
@@ -111,13 +102,46 @@ export class SupplierCompanyEditComponent implements OnInit {
         this.router.navigate(["user-management", "supplier-company"]);
       }
       throw error;
-    }    
+    }  
+    
+    this.productOptions = this.productControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(400),
+      tap(() => this.isLoadingProduct = true),
+      distinctUntilChanged(),
+      switchMap(value => this._filter(value)
+      )
+    )  
   }
+
+  // private _filter(value: string) {
+  //   // console.log('value', value);
+  //   // if (value) {
+  //   return this.supplierCompanyService.search({ param: value, isAll: true }).pipe(
+  //     map((option: any) => {
+  //       console.log('option', option);
+  //       if (option.data.length > 0) {
+  //         this.isProductFound = true;
+  //         return option.data;
+  //       } else {
+  //         this.isProductFound = false;
+  //         return [{
+  //           id: null,
+  //           title: "",
+  //           text: "HASIL PENCARIAN untuk \"" + value + "\" tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.",
+  //           value: value,
+  //           disabled: true
+  //         }];
+  //       }
+  //     })
+  //   );
+  //   // } else { this.productValue = ''; return []; }
+  // }
 
   private _filter(value: string) {
     // console.log('value', value);
     // if (value) {
-    return this.supplierCompanyService.search({ param: value }).pipe(
+    return this.supplierCompanyService.search({ param: value, isAll: true }).pipe(
       map((option: any) => {
         // console.log('option', option);
         if (option.data.length > 0) {

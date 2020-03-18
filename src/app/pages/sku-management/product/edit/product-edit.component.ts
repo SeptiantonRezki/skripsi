@@ -156,6 +156,7 @@ export class ProductEditComponent {
   }
 
   ngOnInit() {
+    this.getDetails();
     this.createFormGroup();
 
     this.formProductGroup.valueChanges.subscribe(() => {
@@ -165,7 +166,7 @@ export class ProductEditComponent {
       );
     });
 
-    this.getDetails();
+    // this.getDetails();
 
     this.filterCategory.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -193,11 +194,12 @@ export class ProductEditComponent {
               listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
             }
     
-            if (item.price_discount) {
+            if (parseInt(item.price_discount) > 0 ) {
               listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
             } else {
               listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
               listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+              listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
             }
           })
     });
@@ -273,16 +275,17 @@ export class ProductEditComponent {
 
       if (res.data.is_private_label === 1) {
         let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-
-        res.data.product_prices.map((item: any) => {
+        let idx = 0;
+        for (const item of res.data.product_prices ) {
           priceProduct.push(this.formBuilder.group({
             packaging: [item.packaging, Validators.required],
             packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
             price: [item.price, Validators.required],
             price_discount: [item.price_discount, Validators.required],
-            price_discount_expires_at: [item.price_discount_expires_at, Validators.required],
-          }))
-        });
+            price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+          }));
+          idx++;
+        };
       }
 
       setTimeout(() => {
@@ -644,7 +647,7 @@ export class ProductEditComponent {
       status_pin_up: [""],
       // convertion: ["", [Validators.min(0)]]
       is_private_label: [false],
-      listProdukPrivateLabel: this.formBuilder.array([])
+      listProdukPrivateLabel: this.formBuilder.array([], Validators.required)
     });
   }
 
@@ -856,7 +859,7 @@ export class ProductEditComponent {
       } else if (!this.files) {
         msg = "Gambar produk belum dipilih!";
       } else if (this.files.size > 2000000) {
-        msg = "Ukuran gambar tidak boleh melebihi 200mb!";
+        msg = "Ukuran gambar tidak boleh melebihi 2MB!";
       } else {
         msg = "Silakan lengkapi data terlebih dahulu!";
       }

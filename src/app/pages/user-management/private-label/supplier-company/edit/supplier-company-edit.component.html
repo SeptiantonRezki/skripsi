@@ -43,13 +43,13 @@
                   (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" *ngIf="!isDetail">
                   <input matInput placeholder="Produk yang dijual" [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
-                    (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" readonly *ngIf="isDetail">
+                    (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" readonly *ngIf="isDetail">
               </mat-chip-list>
               <mat-error *ngIf="products.length == 0">
                 Produk yang dijual harus diisi.
               </mat-error>
             </mat-form-field>
-            <mat-autocomplete #auto="matAutocomplete" *ngIf="!isDetail">
+            <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of productOptions | async" [value]="option.name"
                 (click)="addProductChip(option)" [disabled]="option.disabled">
                 <span *ngIf="isProductFound">{{option.name}}</span>

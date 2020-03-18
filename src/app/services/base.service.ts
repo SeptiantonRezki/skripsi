@@ -85,9 +85,6 @@ export class BaseService {
     }
     this.clean(request);
     let headers = new HttpHeaders().set('Accept', 'application/json');
-    console.log('request1', request);
-    if (request !== undefined)
-    console.log('request2', request.get('file'));
     return this.http.post(url, request, { ...requestConfig, headers });
 
   }

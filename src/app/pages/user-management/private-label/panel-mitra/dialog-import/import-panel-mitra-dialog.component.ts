@@ -56,9 +56,11 @@ export class ImportPanelMitraDialogComponent {
       fd.append('file', this.files);
       console.log('fd', fd.get('file'));
       this.panelMitraService.importMitra(fd).subscribe(res => {
-          this.dataService.showLoading(false);
+          console.log('res.data', res);
           if (res.data) {
-          // //   this.preview();
+            setTimeout(() => {
+              this.preview();
+            }, 1000);
             this.onImport = true;
             this.rows = [];
           }
@@ -84,7 +86,9 @@ export class ImportPanelMitraDialogComponent {
           this.rows = res.data;
           this.onImport = false;
           this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
+          this.dataService.showLoading(false);
         }, err => {
+          this.dataService.showLoading(false);
           console.log('err', err);
         })
   }

@@ -53,7 +53,7 @@ export class PanelMitraService extends BaseService {
 
   getListMitra(queryParams?: any, body?: any, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "getListMitra", context);
-    return this.postApi(url, body, queryParams);
+    return this.postApi(url, body, { params: queryParams });
   }
   
   getListOtherChildren(context): Observable<any> {

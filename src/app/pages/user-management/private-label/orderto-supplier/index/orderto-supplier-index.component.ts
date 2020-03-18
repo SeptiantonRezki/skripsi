@@ -26,17 +26,12 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   formFilter: FormGroup;
   statusFilter: any[] = [
     { name: 'Semua Status', value: '' },
-    { name: 'Pesanan Baru', value: 'pesanan-baru' },
-    { name: 'Diproses', value: 'diproses' },
-    { name: 'Konfirmasi Perubahan', value: 'konfirmasi-perubahan' },
-    { name: 'Perubahan Disetujui', value: 'perubahan-disetujui' },
-    { name: 'Pesanan Dibatalkan', value: 'pesanan-dibatalkan' },
-    { name: 'Siap Dikirim', value: 'siap-dikirim' },
-    { name: 'Siap Diambil', value: 'siap-diambil' },
-    { name: 'Dalam Pengiriman', value: 'dalam-pengiriman' },
-    { name: 'Pesanan Diterima', value: 'pesanan-diterima' },
-    { name: 'Belum Lunas', value: 'belum-lunas' },
-    { name: 'Selesai', value: 'selesai' },
+    { name: 'Pesanan Baru', value: 'baru' },
+    { name: 'Pesanan Dibatalkan', value: 'dibatalkan' },
+    { name: 'Pesanan Diproses', value: 'diproses' },
+    { name: 'Pesanan Dikirim', value: 'dikirim' },
+    { name: 'Pesanan Diterima', value: 'diterima' },
+    { name: 'Pesanan Selesai', value: 'selesai' },
   ];
   generatePO: GeneratePO = new GeneratePO();
 
@@ -80,6 +75,15 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   ngOnInit() {
     this.initFilter();
     this.getList();
+
+    const observable = this.keyUp.debounceTime(1000)
+    .distinctUntilChanged()
+    .flatMap(search => {
+      return Observable.of(search).delay(500);
+    })
+    .subscribe(data => {
+      this.updateFilter(data);
+    });
   }
 
   initFilter() {
@@ -124,7 +128,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = 1;
+    this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 
@@ -133,22 +137,29 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     this.ordertoSupplierService.getList(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
-          Page.renderPagination(this.pagination, res.data);
-          this.rows = res.data.data;
+          if (res.data.total < res.data.per_page && page !== 1) {
+            this.dataService.setToStorage("page", 1);
+            this.getList();
+          } else {
+            Page.renderPagination(this.pagination, res.data);
+            this.rows = res.data.data;
+            this.onLoad = false;
+            this.loadingIndicator = false;
+          }
         } else {
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.dialogService.openSnackBar({
             message: res.status
           });
+          this.onLoad = false;
+          this.loadingIndicator = false;
         }
-
-        this.onLoad = false;
-        this.loadingIndicator = false;
       },
       err => {
         console.error(err);
         this.onLoad = false;
+        this.loadingIndicator = false;
       }
     );
   }
@@ -158,7 +169,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     this.minDate = param;
   }
 
-  updateFilter(string, value) {
+  updateFilter(string: any) {
     this.loadingIndicator = true;
     this.pagination.search = string;
 
@@ -182,7 +193,26 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
-      console.log('rows', this.rows);
+      // console.log('rows', this.rows);
+    });
+  }
+
+  setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
+    this.loadingIndicator = true;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.ordertoSupplierService.getList(this.pagination).subscribe(async res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+      this.loadingIndicator = false;
+      // console.log('rows', this.rows);
     });
   }
 

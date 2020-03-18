@@ -53,7 +53,7 @@ export class PanelMitraIndexComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
   ) {
-    this.onLoad = false;
+    this.onLoad = true;
     this.selected = [];
     this.permission = this.roles.getRoles('principal.supplierpanelmitra');
     
@@ -122,7 +122,7 @@ export class PanelMitraIndexComponent implements OnInit {
   }
 
   getFilterProduct(value?: any) {
-    console.log('kk', this.formFilter.get('filtercategory').value);
+    // console.log('kk', this.formFilter.get('filtercategory').value);
     this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formFilter.get('filtercategory').value }).subscribe(res => {
       if (res.status == 'success') {
         this.listFilterProducts =  [ { name: 'Semua Produk', id: '' }, ...res.data ];
@@ -164,7 +164,7 @@ export class PanelMitraIndexComponent implements OnInit {
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = 1;
+    this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 
@@ -173,21 +173,29 @@ export class PanelMitraIndexComponent implements OnInit {
     this.panelMitraService.getList(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
-          Page.renderPagination(this.pagination, res.data);
-          this.rows = res.data.data;
+          if (res.data.total < res.data.per_page && page !== 1) {
+            this.dataService.setToStorage("page", 1);
+            this.getList();
+          } else {
+            Page.renderPagination(this.pagination, res.data);
+            this.rows = res.data.data;
+            this.onLoad = false;
+            this.loadingIndicator = false;
+          }
         } else {
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.dialogService.openSnackBar({
             message: res.status
           });
+          this.onLoad = false;
+          this.loadingIndicator = false;
         }
-        this.onLoad = false;
-        this.loadingIndicator = false;
       },
       err => {
         console.error(err);
         this.onLoad = false;
+        this.loadingIndicator = false;
       }
     );
   }
