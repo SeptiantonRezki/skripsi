@@ -408,6 +408,45 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
       },
+      PLSupplierCompany: {
+        getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        getListByProductId: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company-list?product_id=${context.productId}&search=${context.value}`,
+        detail: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}?type=status`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
+        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}`
+      },
+      PLSupplierUser: {
+        getList: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
+        detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}?type=status`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier/${context.userSupplierId}`,
+      },
+      PLSupplierPanelMitra: {
+        getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra`,
+        getListMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-list-mitra`,
+        detail: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
+        listCategory: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/category/list-all-category`,
+        filterProduct: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}&category_id=${context.categoryId}`,
+        list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
+        filterSupplier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/private-label/supplier-company-by-product-id/${context.productId}`,
+        importMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-import-mitra`,
+        exportMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-export-mitra`,
+        previewImportMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-preview-mitra`,
+      },
+      PLOrdertoSupplier: {
+        getList: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/list-pesanan`,
+        showListPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/show-pesanan/${context.orderId}`,
+        statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
+        exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

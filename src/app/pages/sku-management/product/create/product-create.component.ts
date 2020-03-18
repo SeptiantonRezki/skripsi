@@ -22,6 +22,7 @@ import * as _ from 'underscore';
   styleUrls: ["./product-create.component.scss"]
 })
 export class ProductCreateComponent {
+  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
   visible = true;
   selectable = true;
   removable = true;
@@ -36,6 +37,7 @@ export class ProductCreateComponent {
   listSubCategory: Array<any>;
   listOtherSubCategory: Array<any>;
   listPackaging: Array<any>;
+  packagingIndex: any;
 
   files: File;
   validComboDrag: boolean;
@@ -58,7 +60,11 @@ export class ProductCreateComponent {
   listPinUpProduct: any[] = [
     { name: "Ya", value: 1 },
     { name: "Tidak", value: 0 }
-  ]
+  ];
+  jenisProduk: any[] = [
+    { name: "Promo SRC", value: "promo_src" },
+    { name: "Private Label", value: "private_label" }
+  ];
 
   filteredSkuOptions: Observable<string[]>;
 
@@ -151,6 +157,26 @@ export class ProductCreateComponent {
       .subscribe(() => {
         this.filteringSubCategory();
       });
+    
+    this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+      let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
+        (res || []).map((item, index) => {
+          if (item.price) {
+            listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+            listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+          }
+  
+          if (item.price_discount) {
+            listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+          } else {
+            listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+            listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+          }
+        })
+    });
+    const lppl = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
+    lppl.at(0).get('price_discount_expires_at').disable();
+
   }
 
   filteringCategory() {
@@ -222,8 +248,11 @@ export class ProductCreateComponent {
       areas: this.formBuilder.array([]),
       start_date_pin_up: [""],
       end_date_pin_up: [""],
-      status_pin_up: [""]
+      status_pin_up: [""],
       // convertion: ["", [Validators.min(0)]]
+      // jenisproduk: "",
+      is_private_label: [false],
+      listProdukPrivateLabel: this.formBuilder.array([this.createListPriceProdukPrivateLabel()]),
     });
   }
 
@@ -560,13 +589,14 @@ export class ProductCreateComponent {
   }
 
   async submit() {
-    console.log('validator', this.findInvalidControls());
-    if (this.formProductGroup.get('status_pin_up').value != '1') {
-      this.formProductGroup.get('start_date_pin_up').clearValidators();
-      this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
-      this.formProductGroup.get('end_date_pin_up').clearValidators();
-      this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
-    }
+    try {
+      // console.log('validator', this.findInvalidControls());
+      if (this.formProductGroup.get('status_pin_up').value != '1') {
+        this.formProductGroup.get('start_date_pin_up').clearValidators();
+        this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
+        this.formProductGroup.get('end_date_pin_up').clearValidators();
+        this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
+      }
     if (this.formProductGroup.valid && (this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
 
@@ -591,8 +621,13 @@ export class ProductCreateComponent {
         packaging_id: this.formProductGroup.get("packaging").value,
         status: this.formProductGroup.get("status").value,
         is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
+        is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
+        // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
+        // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
+        
         // convertion: this.formProductGroup.get("convertion").value
       };
+      
 
       let fd = new FormData();
       fd.append("name", body.name);
@@ -611,6 +646,7 @@ export class ProductCreateComponent {
         fd.append('start_date_pin_up', moment(this.formProductGroup.get('start_date_pin_up').value).format("YYYY/MM/DD"));
         fd.append('end_date_pin_up', moment(this.formProductGroup.get('end_date_pin_up').value).format("YYYY/MM/DD"));
       }
+      fd.append("is_private_label", body.is_private_label);
       // fd.append("convertion", body.convertion);
 
       if (body.is_promo_src === "1") {
@@ -643,6 +679,48 @@ export class ProductCreateComponent {
         fd.append("alias[]", item);
       });
 
+      let priceProducts = []
+      if (body.is_private_label == "1") {
+        let listProdukPrivateLabel = [];
+        let product = this.formProductGroup.getRawValue();
+        product.listProdukPrivateLabel.map((item, index) => {
+          listProdukPrivateLabel.push({
+            packaging: item.packaging,
+            packaging_amount: item.packaging_amount,
+            price: item.price,
+            price_discount: item.price_discount || 0,
+            price_discount_expires_at: this.convertDate(item.price_discount_expires_at)
+          })
+        });
+
+        if (listProdukPrivateLabel.length > 0) {
+          listProdukPrivateLabel.map((item, index) => {
+            fd.append(`product_prices[${index}][packaging]`, item.packaging);
+            fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
+            fd.append(`product_prices[${index}][price]`, item.price);
+    
+            if (item.price_discount_expires_at)
+              fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
+            else
+              fd.append(`product_prices[${index}][price_discount]`, '0');
+    
+            fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+          });
+    
+          let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
+          if (primaryNamePackaging.length > 0) {
+            this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
+            this.loadingIndicator = false;
+    
+            return;
+          }
+        } else {
+          this.dialogService.openSnackBar({ message: `Terjadi Kesalahan saat Menyimpan Harga Produk!` });
+
+          return;
+        }
+      }
+
       this.productService.create(fd).subscribe(
         res => {
           this.loadingIndicator = false;
@@ -668,6 +746,10 @@ export class ProductCreateComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formProductGroup);
+    }
+    } catch (ex) {
+      console.warn(ex);
+      this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan saat menyimpan data' });
     }
   }
 
@@ -723,7 +805,9 @@ export class ProductCreateComponent {
 
   isPromo(event) {
     if (event.checked) {
+      this.formProductGroup.get('is_private_label').setValue(false);
       this.addArea();
+      this.goToBottom();
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
       while (areas.length > 0) {
@@ -759,4 +843,81 @@ export class ProductCreateComponent {
 
     return result;
   }
+
+  isPrivateLabel(event: any) {
+    if (event.checked) {
+      this.formProductGroup.get('is_promo_src').setValue(false);
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
+      }
+      this.openProductPrice();
+      this.goToBottom();
+    } else {
+      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      packaging.reset();  
+    }
+  }
+
+  goToBottom() {
+    setTimeout(() => {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }, 300);
+  }
+
+  jenisProdukChange(event: any) {
+    const e = event.value
+    if (e == 'promo_src') {
+      this.addArea();
+    } else {
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
+      }
+      this.openProductPrice();
+    }
+    this.goToBottom();
+  }
+
+  openProductPrice() {
+    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+    packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]); 
+  }
+
+  addProductPrice() {
+    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+    packaging.push(this.createListPriceProdukPrivateLabel());
+    this.goToBottom();
+  }
+
+  createListPriceProdukPrivateLabel(): FormGroup {
+    return this.formBuilder.group({
+      packaging: ["", Validators.required],
+      packaging_amount: ["", [Validators.required, Validators.min(1), Validators.max(1000)]],
+      price: ["", Validators.required],
+      price_discount: "",
+      price_discount_expires_at: ["", Validators.required],
+    })
+  }
+
+  removePackaging(param?: any, i?: any): void {
+    this.packagingIndex = i;
+
+    let data = {
+      titleDialog: "Hapus Data Kemasan",
+      captionDialog: `Apakah anda yakin untuk menghapus data Kemasan ${param.value.packaging}?`,
+      confirmCallback: this.confirmRemovePackaging.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmRemovePackaging(): void {
+    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+    packaging.removeAt(this.packagingIndex);
+
+    this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
 }

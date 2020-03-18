@@ -974,6 +974,7 @@ export class AudienceEditComponent {
   detailAudienceSelect() {
     this.audienceService.getListRetailerIdSelected({ audience_id: this.detailAudience.id }).subscribe(
       res => {
+        console.log('this.selected', res);
         this.selected = res;
 
         this.formAudience.get('min').setValue(this.detailAudience.min ? this.detailAudience.min : 1);

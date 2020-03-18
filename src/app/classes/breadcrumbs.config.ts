@@ -356,6 +356,248 @@ export const brConfig = {
       }
     ]
   },
+  privatelabel: {
+    suppliercompany: {
+      index: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Supplier Company"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Create"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-company",
+          name: "Supplier Company"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
+        }
+      ]
+    },
+    usersupplier: {
+      index: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "User Supplier"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Create"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-user",
+          name: "User Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
+        }
+      ]
+    },
+    panelmitra: {
+      index: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Panel Mitra"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Create"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Private Label"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-panel-mitra",
+          name: "Panel Mitra"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
+        }
+      ]
+    },
+    ordertosupplier: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-order",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-order",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Order to Supplier"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-order",
+          name: "Order to Supplier"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail"
+        }
+      ]
+    },
+  },
   inappMarketing: {
     banner: {
       index: [

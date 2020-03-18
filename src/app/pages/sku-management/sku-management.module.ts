@@ -36,11 +36,16 @@ import {
   MatMenuModule,
   MatToolbarModule,
   MatDialogModule,
+  MatDividerModule,
+  MatListModule,
   MatDatepicker,
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
 } from "@angular/material";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
+import { NgxCurrencyModule } from "ngx-currency";
 
 import {
   ListBrandResolver,
@@ -69,6 +74,18 @@ export const MY_FORMATS = {
   }
 };
 
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
+};
+
 @NgModule({
   imports: [
     CommonModule,
@@ -95,7 +112,10 @@ export const MY_FORMATS = {
     MatDialogModule,
     MatToolbarModule,
     ngfModule,
-    AutofocusModule
+    AutofocusModule,
+    MatDividerModule,
+    MatListModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
     ProductIndexComponent,
@@ -126,12 +146,18 @@ export const MY_FORMATS = {
     DetailRetailerComponent
   ],
   entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
-  providers: [ListBrandResolver, ListCategoryResolver, ListPackagingResolver, PageGuard, RupiahFormaterPipe,
+  providers: [
+    ListBrandResolver, 
+    ListCategoryResolver, 
+    ListPackagingResolver, 
+    PageGuard, 
+    RupiahFormaterPipe,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },]
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ]
 })
 export class SkuManagementModule { }
