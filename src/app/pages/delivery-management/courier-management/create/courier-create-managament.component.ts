@@ -63,6 +63,14 @@ export class CourierCreateManagamentComponent implements OnInit {
     })
   }
 
+  numbersOnlyValidation(event) {
+    const inp = String.fromCharCode(event.keyCode);
+    /*Allow only numbers*/
+    if (!/^\d+$/.test(inp)) {
+      event.preventDefault()
+    }
+  }
+
   createFormService() {
     let maxReceivedTime = new Date();
     maxReceivedTime.setHours(14, 0, 0, 0);
