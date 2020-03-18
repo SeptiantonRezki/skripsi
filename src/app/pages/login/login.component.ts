@@ -147,7 +147,7 @@ export class LoginComponent implements OnInit {
                   this.dataService.setEncryptedProfile(profile);
                   this.router.navigate(["dashboard"]);
                   this.submitting = false;
-                  // this.qiscusLoginOrRegister(profile);
+                  this.qiscusLoginOrRegister(profile);
               } else {
                 this.getAreasAsync(area_id).subscribe(res => {
                   let area_type = res ? res.map(r => r.data) : [];
@@ -157,7 +157,7 @@ export class LoginComponent implements OnInit {
                   this.dataService.setEncryptedProfile(profile);
                   this.router.navigate(["dashboard"]);
                   this.submitting = false;
-                  // this.qiscusLoginOrRegister(profile);
+                  this.qiscusLoginOrRegister(profile);
                 }, err => {
                   console.log('err', err);
                   this.submitting = false;

@@ -250,10 +250,9 @@ export class ProductCreateComponent {
       end_date_pin_up: [""],
       status_pin_up: [""],
       // convertion: ["", [Validators.min(0)]]
-      // convertion: ["", [Validators.min(0)]],
       // jenisproduk: "",
       is_private_label: [false],
-      listProdukPrivateLabel: this.formBuilder.array([this.createListPriceProdukPrivateLabel()])
+      listProdukPrivateLabel: this.formBuilder.array([this.createListPriceProdukPrivateLabel()]),
     });
   }
 
@@ -590,14 +589,14 @@ export class ProductCreateComponent {
   }
 
   async submit() {
-    console.log('validator', this.findInvalidControls());
-    if (this.formProductGroup.get('status_pin_up').value != '1') {
-      this.formProductGroup.get('start_date_pin_up').clearValidators();
-      this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
-      this.formProductGroup.get('end_date_pin_up').clearValidators();
-      this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
-    }
     try {
+      // console.log('validator', this.findInvalidControls());
+      if (this.formProductGroup.get('status_pin_up').value != '1') {
+        this.formProductGroup.get('start_date_pin_up').clearValidators();
+        this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
+        this.formProductGroup.get('end_date_pin_up').clearValidators();
+        this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
+      }
     if (this.formProductGroup.valid && (this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
 

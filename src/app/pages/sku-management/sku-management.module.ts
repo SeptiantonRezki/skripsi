@@ -61,18 +61,6 @@ import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
 
-export const MY_FORMATS = {
-  parse: {
-    dateInput: "LL"
-  },
-  display: {
-    dateInput: "LL",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "MMMM YYYY"
-  }
-};
-
 export const customCurrencyMaskConfig = {
   align: "left",
   allowNegative: false,
@@ -83,6 +71,18 @@ export const customCurrencyMaskConfig = {
   suffix: "",
   thousands: ".",
   nullable: false
+};
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
 };
 
 @NgModule({

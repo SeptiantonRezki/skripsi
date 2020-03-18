@@ -114,7 +114,7 @@
                       </mat-radio-button>
                     </mat-radio-group>
                   </div>
-                  <div fxLayout="row" style="margin-left: 50px;">
+                  <div fxLayout="row" style="margin-left: 50px;" *ngIf="!detailProduct.is_private_label_editable">
                     <div class="pt-16" fxLayout="column">
                       <strong>Pin Up Product</strong>
                       <mat-radio-group formControlName="status_pin_up" class="radio-group pb-16">
@@ -151,8 +151,8 @@
                 </div>
                 <!-- <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox> -->
                 <div fxLayout="row" fxLayoutGap="20px">
-                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox>
-                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label">Private Label</mat-checkbox>
+                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src" [disabled]="detailProduct.is_private_label_editable">Promo SRC</mat-checkbox>
+                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label" [disabled]="detailProduct.is_private_label_editable">Private Label</mat-checkbox>
                 </div>
               </div>
               <div class="" formArrayName="areas"
@@ -255,7 +255,7 @@
                 <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxFlex="50"><h3 class="">Harga Produk</h3></div>
                   <div class="button-row">
-                    <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice()"><mat-icon>add</mat-icon></button>
+                    <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice()" [disabled]="isDetail"><mat-icon>add</mat-icon></button>
                   </div>
                 </div>
                 <div>
@@ -342,7 +342,7 @@
                             </div>
                             <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
                               <button type="button" mat-icon-button color="primary" (click)="removePackaging(item, i)"
-                                [disabled]="formProductGroup.get('listProdukPrivateLabel').controls.length === 1">
+                                [disabled]="formProductGroup.get('listProdukPrivateLabel').controls.length === 1 && !isDetail || isDetail">
                                 <mat-icon>delete</mat-icon>
                               </button>
                             </div>
@@ -367,7 +367,7 @@
                   <span matPrefix>Tarik Gambar Kesini atau
                     <strong>Pilih File</strong>
                   </span>
-                  <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span>
+                  <span matPrefix>Ukuran 800x800 piksel, Maksimum 2MB</span>
                 </div>
               </div>
 

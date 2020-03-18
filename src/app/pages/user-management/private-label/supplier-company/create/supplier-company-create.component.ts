@@ -82,7 +82,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
   private _filter(value: string) {
     // console.log('value', value);
     // if (value) {
-    return this.supplierCompanyService.search({ param: value }).pipe(
+    return this.supplierCompanyService.search({ param: value, isAll: true }).pipe(
       map((option: any) => {
         // console.log('option', option);
         if (option.data.length > 0) {

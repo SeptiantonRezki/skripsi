@@ -5,7 +5,9 @@
       <mat-icon>add</mat-icon> TAMBAH
     </button>
   </page-content-header>
-
+  <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="top-table pt-8 mb-8 bb">
@@ -51,7 +53,8 @@
               <!-- <div class="inner-card name-container product-image my-8 mx-16">
                 <img class="" *ngIf="item.image_url" [src]="item.image_url">
               </div> -->
-              <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span>
+              <!-- <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span> -->
+              <span class="row-address" >{{row.product_name}}</span>
             </div>
           </ng-template>
         </ngx-datatable-column>

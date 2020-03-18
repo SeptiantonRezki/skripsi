@@ -96,7 +96,7 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Tanggal" prop="tanggal" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address">{{row.created_at | date:'dd/mm/yyyy'}}</span>
+            <span class="row-address">{{row.created_at | date:'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="status" [sortable]="false">

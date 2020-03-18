@@ -40,6 +40,7 @@ export class PanelMitraEditComponent implements OnInit {
     formInput: FormGroup;
     formFilter: FormGroup;
     filterProdukSearch = new FormControl();
+    filterSupplierSearch = new FormControl();
     private _onDestroy = new Subject<void>();
   
     loadingIndicator = true;
@@ -82,6 +83,7 @@ export class PanelMitraEditComponent implements OnInit {
       this.onLoad = false;
       this.selected = [];
       this.permission = this.roles.getRoles('principal.supplierpanelmitra');
+      console.log('snapshot', this.activatedRoute.snapshot.data)
       this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data ];
       // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
       this.filterCategory = this.listFilterCategory;
@@ -230,7 +232,7 @@ export class PanelMitraEditComponent implements OnInit {
     
     getFilterProduct(value?: any) {
       console.log('kk', this.formInput.get('filtercategory').value);
-      this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formInput.get('filtercategory').value }).subscribe(res => {
+      this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formInput.get('filtercategory').value, isAll: true }).subscribe(res => {
         if (res.status == 'success') {
           this.listFilterProducts =  [ { name: 'Pilih Produk', id: '' }, ...res.data ];
           this.filterProducts = this.listFilterProducts.map((v) => ({...v}));
@@ -261,6 +263,10 @@ export class PanelMitraEditComponent implements OnInit {
     selectionChangeFilterProduct(event: any) {
       const e = event.value;
       this.getFilterSupplier({ id: e });
+    }
+
+    selectionChangeFilterSupplier(event: any) {
+      const e = event.value;
     }
   
     getListMitra_() {
@@ -353,6 +359,7 @@ export class PanelMitraEditComponent implements OnInit {
             message: "Berhasil Menyimpan Data"
           });
           this.router.navigate(["user-management", "supplier-panel-mitra"]);
+          this.dataService.showLoading(false);
           }, err => {
             console.log('err', err);
             this.dialogService.openSnackBar({
@@ -781,8 +788,8 @@ export class PanelMitraEditComponent implements OnInit {
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
-      if (string) this.pagination.search = string;
-      else delete this.pagination.search;
+      if (string) { this.pagination.search = string; }
+      else { delete this.pagination.search; }
       let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
       let area_id = areaSelected[areaSelected.length - 1].value;
       let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -991,7 +998,7 @@ export class PanelMitraEditComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (response.data) {
-          this.selected = response.data.map((item: any) => { return({ id: item })});
+          this.selected = response.data.map((item: any) => { return({ id: item.id })});
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         }
       }
@@ -1007,7 +1014,7 @@ export class PanelMitraEditComponent implements OnInit {
 
   async exportMitra() {
     this.dataService.showLoading(true);
-    let fileName = `Private_Label_Panel_Mitra_${moment(new Date()).format('YYYY_MM_DD')}`;
+    let fileName = `Private_Label_Panel_Mitra_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area = areaSelected[areaSelected.length - 1].value;
     if (!this.allRowsSelected) {
@@ -1019,7 +1026,7 @@ export class PanelMitraEditComponent implements OnInit {
 
       try {
         const response = await this.panelMitraService.exportMitra(body).toPromise();
-        console.log('he', response.headers);
+        // console.log('he', response.headers);
         this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         this.dataService.showLoading(false);
       } catch (error) {

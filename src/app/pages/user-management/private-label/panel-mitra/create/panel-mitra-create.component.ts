@@ -40,6 +40,7 @@ export class PanelMitraCreateComponent implements OnInit {
   formInput: FormGroup;
   formFilter: FormGroup;
   filterProdukSearch = new FormControl();
+  filterSupplierSearch = new FormControl();
   private _onDestroy = new Subject<void>();
 
   loadingIndicator = true;
@@ -197,7 +198,7 @@ export class PanelMitraCreateComponent implements OnInit {
   
   getFilterProduct(value?: any) {
     console.log('kk', this.formInput.get('filtercategory').value);
-    this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formInput.get('filtercategory').value }).subscribe(res => {
+    this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formInput.get('filtercategory').value, isAll: true }).subscribe(res => {
       if (res.status == 'success') {
         this.listFilterProducts =  [ { name: 'Pilih Produk', id: '' }, ...res.data ];
         this.filterProducts = this.listFilterProducts.map((v) => ({...v}));
@@ -228,6 +229,10 @@ export class PanelMitraCreateComponent implements OnInit {
   selectionChangeFilterProduct(event: any) {
     const e = event.value;
     this.getFilterSupplier({ id: e });
+  }
+
+  selectionChangeFilterSupplier(event: any) {
+    const e = event.value;
   }
 
   getListMitra_() {
@@ -752,11 +757,12 @@ export class PanelMitraCreateComponent implements OnInit {
   }
 
   getListMitra(string?: any) {
+    console.log('Search', string);
     try {
     this.dataService.showLoading(true);
     this.pagination.per_page = 25;
-    if (string) this.pagination.search = string;
-    else delete this.pagination.search;
+    if (string) { this.pagination.search = string; }
+    else { delete this.pagination.search; }
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
@@ -965,8 +971,9 @@ export class PanelMitraCreateComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (response.data) {
-          this.selected = response.data.map((item: any) => { return({ id: item })});
+          this.selected = response.data.map((item: any) => { return({ id: item.id })});
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          console.log('thisSELECTED', this.selected)
         }
       }
     });

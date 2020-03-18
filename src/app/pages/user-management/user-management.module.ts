@@ -191,7 +191,6 @@ export const MY_FORMATS = {
     PengajuanSrcComponent,
     CreatePengajuanSrcComponent,
     DetailPengajuanSrcComponent,
-    ReasonDialogComponent,
     PengajuanSrcEditComponent,
 
     OrdertoSupplierDetailComponent,
@@ -208,6 +207,7 @@ export const MY_FORMATS = {
 
     ImportAccessCashierDialogComponent,
     ImportPanelMitraDialogComponent,
+    ReasonDialogComponent,
     
   ],
   entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent, ReasonDialogComponent],
