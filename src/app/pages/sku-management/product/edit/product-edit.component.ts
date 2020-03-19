@@ -647,7 +647,7 @@ export class ProductEditComponent {
       status_pin_up: [""],
       // convertion: ["", [Validators.min(0)]]
       is_private_label: [false],
-      listProdukPrivateLabel: this.formBuilder.array([], Validators.required)
+      listProdukPrivateLabel: this.formBuilder.array([])
     });
   }
 
@@ -714,6 +714,14 @@ export class ProductEditComponent {
       this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
       this.formProductGroup.get('end_date_pin_up').clearValidators();
       this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
+    }
+    if (this.formProductGroup.get("is_promo_src").value !== true ) {
+      // this.formProductGroup.get("is_promo_src").disable();
+      this.formProductGroup.get("is_promo_src").setValue(false);
+    }
+    if (this.formProductGroup.get("is_private_label").value !== true) {
+      // this.formProductGroup.get("is_private_label").disable();
+      this.formProductGroup.get("is_private_label").setValue(false);
     }
     if ((this.formProductGroup.valid && this.files === undefined) || (this.formProductGroup.valid && this.files && this.files.size < 2000000)) {
       this.loadingIndicator = true;
@@ -835,26 +843,30 @@ export class ProductEditComponent {
             return;
           }
         } else {
-          this.dialogService.openSnackBar({ message: `Terjadi Kesalahan saat Menyimpan Harga Produk!` });
+          this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
 
           return;
         }
       }
-
+      this.dataService.showLoading(true);
       this.productService.put(fd, { product_id: this.idProduct }).subscribe(
         res => {
           this.loadingIndicator = false;
           this.router.navigate(["sku-management", "product"]);
           this.dialogService.openSnackBar({ message: "Data berhasil diubah" });
+          this.dataService.showLoading(false);
         },
         err => {
           // this.dialogService.openSnackBar({ message: err.error.message });
           this.loadingIndicator = false;
+          this.dataService.showLoading(false);
         }
       );
     } else {
       let msg;
       if (this.formProductGroup.status == "INVALID") {
+        console.log('failed,', this.formProductGroup.get('is_promo_src').hasError('required'))
+        console.log('failed2,', this.formProductGroup.get('is_private_label').hasError('required'))
         msg = "Silakan lengkapi data terlebih dahulu!";
       } else if (!this.files) {
         msg = "Gambar produk belum dipilih!";
@@ -922,6 +934,10 @@ export class ProductEditComponent {
   isPromo(event) {
     if (event.checked) {
       this.formProductGroup.get('is_private_label').setValue(false);
+      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      while (packaging.length > 0) {
+        packaging.removeAt(packaging.length - 1);
+      }
       this.addArea();
       this.goToBottom();
     } else {
@@ -972,6 +988,9 @@ export class ProductEditComponent {
     } else {
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
       packaging.reset();  
+      while (packaging.length > 0) {
+        packaging.removeAt(packaging.length - 1);
+      }
     }
   }
 
