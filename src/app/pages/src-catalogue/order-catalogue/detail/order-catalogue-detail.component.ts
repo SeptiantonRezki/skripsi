@@ -22,6 +22,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
   detailOrder: any;
   loadingIndicator = true;
   onLoad: Boolean;
+  vendor_id: any;
 
   // generateReceipt: GenerateReceipt = new GenerateReceipt();
 
@@ -98,6 +99,9 @@ export class OrderCatalogueDetailComponent implements OnInit {
         // this.ngOnInit();
       }
     });
+
+    let profile = this.dataService.getDecryptedProfile();
+    if (profile) this.vendor_id = profile.vendor_company_id;
 
   }
 
@@ -242,7 +246,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
             community_min_qty: this.detailOrder.order_products[index]['community_min_qty'],
             community_price: this.detailOrder.order_products[index]['community_price'],
             use_community_price: this.detailOrder.order_products[index]['use_community_price'],
-            vendor_company_id: 1,
+            vendor_company_id: this.vendor_id ? this.vendor_id : -99,
             sku_id: this.detailOrder.order_products[index].sku_id,
             qty: item.amount,
             price: item.price,
@@ -320,7 +324,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
             community_min_qty: this.detailOrder.order_products[index]['community_min_qty'],
             community_price: this.detailOrder.order_products[index]['community_price'],
             use_community_price: this.detailOrder.order_products[index]['use_community_price'],
-            vendor_company_id: 1,
+            vendor_company_id: this.vendor_id ? this.vendor_id : -99,
             sku_id: this.detailOrder.order_products[index].sku_id,
             qty: item.amount,
             price: item.price,

@@ -199,6 +199,27 @@ export const brConfig = {
       }
     ]
   },
+  order_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/products",
+        name: "Daftar Pesanan SRC Catalogue"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Pesanan SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Pesanan SRC Catalogue"
+      }
+    ]
+  },
   adminprincipal: {
     index: [
       {

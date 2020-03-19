@@ -26,6 +26,7 @@ export class OrderCatalogueComponent implements OnInit {
   onLoad: boolean;
   body: any;
   selectedOrderToUpdate: any;
+  vendor_id: any;
   statusFilter: any[] = [
     { name: 'Semua Status', value: '' },
     { name: 'Pesanan Baru', value: 'pesanan-baru' },
@@ -111,6 +112,8 @@ export class OrderCatalogueComponent implements OnInit {
     });
 
     this.getListOrders();
+    let profile = this.dataService.getDecryptedProfile();
+    if (profile) this.vendor_id = profile.vendor_company_id;
   }
 
   getListOrders() {
@@ -128,7 +131,7 @@ export class OrderCatalogueComponent implements OnInit {
     this.pagination.status = this.formFilter.get("status").value;
     this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
     this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
-    this.pagination['company_id'] = 1;
+    this.pagination['company_id'] = this.vendor_id ? this.vendor_id : null;
 
     this.ordersService.get(this.pagination).subscribe(
       async res => {

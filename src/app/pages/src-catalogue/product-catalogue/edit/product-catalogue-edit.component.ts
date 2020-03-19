@@ -16,9 +16,21 @@ export class ProductCatalogueEditComponent implements OnInit {
   listCategory: Array<any>;
   listStock: Array<any> = [{ id: 'in-stock', name: 'Tersedia' }, { id: 'out-stock', name: 'Tidak Tersedia' }];
   listStatus: Array<any> = [{ id: 'active', name: 'Aktif' }, { id: 'inactive', name: 'Tidak Aktif' }];
+  listStages: Array<any> = [
+    { checked: false, id: 1, name: 'Baru bergabung menjadi SRC ?' },
+    { checked: false, id: 2, name: 'Ingin meningkatkan penjualan toko ?' },
+    { checked: false, id: 3, name: 'Ingin mengembangkan usaha lebih besar lagi ?' }
+  ]
   shortDetail: any;
   detailProduct: any;
   isDetail: Boolean;
+
+  image_list: Array<any> = [];
+  imageSku: any;
+  files: File;
+  fileList: Array<File> = [];
+
+  vendor_id: any;
 
   constructor(
     private router: Router,
@@ -32,6 +44,9 @@ export class ProductCatalogueEditComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
+
+    let profile = this.dataService.getDecryptedProfile();
+    if (profile) this.vendor_id = profile.vendor_company_id;
   }
 
   ngOnInit() {
@@ -81,12 +96,56 @@ export class ProductCatalogueEditComponent implements OnInit {
         stages: res.data.stages
       });
 
+      if (res && res.data) {
+        this.image_list = res.data.images;
+        this.fileList = res.data.images;
+
+        if (res.data.stages) {
+          res.data.stages.map(stg => {
+            let foundIdx = this.listStages.findIndex(stgg => stgg.id === stg.id);
+            if (foundIdx > -1) {
+              this.listStages[foundIdx].checked = true;
+            }
+          })
+        }
+      }
+
       if (this.isDetail) this.formProduct.disable();
 
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
     })
+  }
+
+  changeImage(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue;
+    if (file.size > 2000000) {
+      this.dialogService.openSnackBar({
+        message: "File melebihi maksimum 2mb!"
+      });
+      return;
+    }
+    this.fileList = [
+      ...this.fileList,
+      file
+    ]
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.image_list = [...this.image_list, myReader.result];
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  removeImage(idx) {
+    console.log('index you find!', idx);
+    this.image_list.splice(idx, 1);
   }
 
   submit() {
@@ -103,9 +162,28 @@ export class ProductCatalogueEditComponent implements OnInit {
         community_price: this.formProduct.get('community_price').value,
         stages: this.formProduct.get('stages').value,
         availability: this.formProduct.get('availability').value,
-        images: this.formProduct.get('images').value,
-        status: this.formProduct.get('status').value
+        images: this.fileList,
+        status: this.formProduct.get('status').value,
+        vendor_company_id: this.detailProduct.vendor_company_id
+      };
+      if (this.formProduct.get('stage').value) {
+        body['stages'] = this.listStages.filter(stg => stg.checked).map((stgg) => stgg.id);
       }
+
+      // let fd = new FormData();
+      // fd.append('name', this.formProduct.get('name').value);
+      // fd.append('description', this.formProduct.get('description').value);
+      // fd.append('vendor_product_category_id', this.formProduct.get('category').value);
+      // fd.append('price', this.formProduct.get('price').value);
+      // fd.append('availability', this.formProduct.get('availability').value);
+      // fd.append('status', this.formProduct.get('status').value);
+      // fd.append('have_community_price', this.formProduct.get('have_community_price').value);
+      // fd.append('community_min_qty', this.formProduct.get('community_min_qty').value);
+      // fd.append('community_price', this.formProduct.get('community_price').value);
+      // fd.append('stages[]', '');
+      // this.fileList.map(imgr => {
+      //   fd.append('images[]', imgr);
+      // });
 
       this.productCatalogueService.update({ product_id: this.detailProduct.id }, body).subscribe(res => {
         this.dataService.showLoading(false);

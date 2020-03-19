@@ -30,7 +30,7 @@ export class StoreTemplateLayoutService extends BaseService {
 
   update(context?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, 'update', context);
-    return this.postApi(url, body);
+    return this.putApi(url, body);
   }
 
   delete(context): Observable<any> {
