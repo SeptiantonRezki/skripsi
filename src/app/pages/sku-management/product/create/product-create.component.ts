@@ -252,7 +252,7 @@ export class ProductCreateComponent {
       // convertion: ["", [Validators.min(0)]]
       // jenisproduk: "",
       is_private_label: [false],
-      listProdukPrivateLabel: this.formBuilder.array([this.createListPriceProdukPrivateLabel()]),
+      listProdukPrivateLabel: this.formBuilder.array([])
     });
   }
 
@@ -715,21 +715,24 @@ export class ProductCreateComponent {
             return;
           }
         } else {
-          this.dialogService.openSnackBar({ message: `Terjadi Kesalahan saat Menyimpan Harga Produk!` });
+          this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
 
           return;
         }
       }
 
+      this.dataService.showLoading(true);
       this.productService.create(fd).subscribe(
         res => {
           this.loadingIndicator = false;
           this.router.navigate(["sku-management", "product"]);
           this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+          this.dataService.showLoading(false);
         },
         err => {
           // this.dialogService.openSnackBar({ message: err.error.message });
           this.loadingIndicator = false;
+          this.dataService.showLoading(false);
         }
       );
     } else {
@@ -806,6 +809,10 @@ export class ProductCreateComponent {
   isPromo(event) {
     if (event.checked) {
       this.formProductGroup.get('is_private_label').setValue(false);
+      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      while (packaging.length > 0) {
+        packaging.removeAt(packaging.length - 1);
+      }
       this.addArea();
       this.goToBottom();
     } else {
@@ -855,7 +862,10 @@ export class ProductCreateComponent {
       this.goToBottom();
     } else {
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset();  
+      packaging.reset(); 
+      while (packaging.length > 0) {
+        packaging.removeAt(packaging.length - 1);
+      } 
     }
   }
 

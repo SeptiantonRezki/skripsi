@@ -39,6 +39,7 @@ import {
   MatDividerModule,
   MatListModule,
   MatDatepicker,
+  MatProgressSpinnerModule,
 } from "@angular/material";
 import {
   DateAdapter,
@@ -115,6 +116,7 @@ export const customCurrencyMaskConfig = {
     AutofocusModule,
     MatDividerModule,
     MatListModule,
+    MatProgressSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
