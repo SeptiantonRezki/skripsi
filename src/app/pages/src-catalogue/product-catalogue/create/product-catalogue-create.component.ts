@@ -26,6 +26,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
+  validComboDrag: Boolean;
 
   vendor_id: any;
 

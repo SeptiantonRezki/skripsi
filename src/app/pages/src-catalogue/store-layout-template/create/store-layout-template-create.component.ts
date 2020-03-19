@@ -31,6 +31,7 @@ export class StoreLayoutTemplateCreateComponent implements OnInit {
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
+  validComboDrag: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
