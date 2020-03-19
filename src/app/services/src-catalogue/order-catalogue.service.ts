@@ -33,6 +33,11 @@ export class OrderCatalogueService extends BaseService {
         return this.putApi(url, body);
     }
 
+    updateStatus(context?, body?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'update_status', context);
+        return this.putApi(url, body);
+    }
+
     export(): Observable<any> {
         const url = this.getUrl(this.namespace, "export");
         return this.getApi(url)

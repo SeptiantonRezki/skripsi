@@ -158,7 +158,7 @@ const routes: Routes = [
     }
   },
   {
-    path: "orders/detail",
+    path: "orders/detail/:id",
     component: OrderCatalogueDetailComponent,
     data: {
       breadcrumbs: brConfig.product_catalogue.index

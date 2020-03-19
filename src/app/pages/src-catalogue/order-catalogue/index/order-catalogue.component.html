@@ -59,12 +59,13 @@
 
         <ngx-datatable-column name="Kode Pesanan" prop="invoice_number">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" [routerLink]="['/orders', 'detail', row.id]"
-              (click)="directDetail(row)">{{row.invoice_number}}</span>
+            <span class="row-name"
+              [routerLink]="['/src-catalogue', 'orders', 'detail',row.id]">{{row.invoice_number}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+        <ngx-datatable-column name=" Nama" prop="name">
+        </ngx-datatable-column>
         <ngx-datatable-column name="Alamat" prop="address"></ngx-datatable-column>
         <ngx-datatable-column name="Area" prop="area"></ngx-datatable-column>
         <ngx-datatable-column name="No. Telepon" prop="phone"></ngx-datatable-column>

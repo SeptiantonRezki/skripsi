@@ -436,6 +436,7 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor`,
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
         update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/status`,
         export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
       }
     };

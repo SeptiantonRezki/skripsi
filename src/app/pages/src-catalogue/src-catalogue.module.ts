@@ -10,7 +10,7 @@ import { StoreLayoutTemplateEditComponent } from './store-layout-template/edit/s
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDividerModule } from '@angular/material';
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
@@ -27,6 +27,7 @@ import { RupiahFormaterWithoutRpPipe, RupiahFormaterPipe } from '@fuse/pipes/rup
 import { OrderCatalogueComponent } from './order-catalogue/index/order-catalogue.component';
 import { OrderCatalogueDetailComponent } from './order-catalogue/detail/order-catalogue-detail.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { EstShippingDialogComponent } from './order-catalogue/est-shipping-dialog/est-shipping-dialog';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -77,9 +78,10 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot(),
     NgxMatSelectSearchModule,
     MatDatepickerModule,
+    MatDividerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
-  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent],
+  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent, EstShippingDialogComponent],
   providers: [
     {
       provide: DateAdapter,
@@ -88,7 +90,7 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     ListRoleAdminResolver, RupiahFormaterWithoutRpPipe, RupiahFormaterPipe],
-  exports: [CatalogueProductImportFileDialogComponent],
-  entryComponents: [CatalogueProductImportFileDialogComponent]
+  exports: [CatalogueProductImportFileDialogComponent, EstShippingDialogComponent],
+  entryComponents: [CatalogueProductImportFileDialogComponent, EstShippingDialogComponent]
 })
 export class SrcCatalogueModule { }
