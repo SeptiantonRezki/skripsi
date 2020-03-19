@@ -22,6 +22,12 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "src-catalogue",
+    loadChildren:
+      "./pages/src-catalogue/src-catalogue.module#SrcCatalogueModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "advertisement",
     loadChildren:
       "./pages/inapp-marketing/inapp-marketing.module#InappMarketingModule",

@@ -441,7 +441,7 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
         updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}?type=status`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
-        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll?'&all=true':''}`
+        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll ? '&all=true' : ''}`
       },
       PLSupplierUser: {
         getList: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
@@ -459,7 +459,7 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.panelMitraId}`,
         listCategory: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/category/list-all-category`,
-        filterProduct: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}&category_id=${context.categoryId}${context.isAll?'&all=true':''}`,
+        filterProduct: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}&category_id=${context.categoryId}${context.isAll ? '&all=true' : ''}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         filterSupplier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/private-label/supplier-company-by-product-id/${context.productId}`,
         importMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-import-mitra`,
@@ -471,6 +471,44 @@ export class Endpoint {
         showListPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/show-pesanan/${context.orderId}`,
         statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
         exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
+      },
+      store_template_layout: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/layout-template/${context.layout_id}`
+      },
+      user_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor`,
+        show: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/vendor/${context.user_catalogue_id}`,
+      },
+      vendors: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+      },
+      product_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,
+        create: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,
+        show: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/${context.product_id}`,
+        delete_all: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/delete-all`,
+        categories: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/categories`,
+        export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/export`
+      },
+      orders_catalogue: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/status`,
+        export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

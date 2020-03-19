@@ -19,6 +19,207 @@ export const brConfig = {
       ]
     }
   },
+  vendors: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Vendor"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Vendor"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/vendors",
+        name: "Daftar Vendor"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Vendor"
+      }
+    ]
+  },
+  store_layout_template: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Template Layout Toko"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Template Layout Toko"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/store-layout-template",
+        name: "Daftar Template Layout Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Template Layout Toko"
+      }
+    ]
+  },
+  user_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Pengguna"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Pengguna"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/users",
+        name: "Daftar Pengguna"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Pengguna"
+      }
+    ]
+  },
+  product_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Product SRC Catalogue"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Product SRC Catalogue"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Product SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Product SRC Catalogue"
+      }
+    ]
+  },
+  order_catalogue: {
+    index: [
+      {
+        type: "current",
+        url: "/src-catalogue/products",
+        name: "Daftar Pesanan SRC Catalogue"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/src-catalogue/products",
+        name: "Daftar Pesanan SRC Catalogue"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Pesanan SRC Catalogue"
+      }
+    ]
+  },
   adminprincipal: {
     index: [
       {
