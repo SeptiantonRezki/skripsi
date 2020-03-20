@@ -534,8 +534,9 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
       };
       if (this.allSelected) {
         body['type'] = 'all';
-        body['area_id'] = this.pagination.area;
+        body['area_id'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
       }
+
 
       this.mitraPanelService.update(body).subscribe(res => {
         this.dataService.showLoading(false);
