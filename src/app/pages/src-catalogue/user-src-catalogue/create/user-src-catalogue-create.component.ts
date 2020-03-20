@@ -75,7 +75,7 @@ export class UserSrcCatalogueCreateComponent implements OnInit {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2) {
       this.dataService.showLoading(true);
       let body = {
-        fullname: this.verticalStepperStep1.get('name').value,
+        fullname: this.verticalStepperStep1.get('nama').value,
         username: this.verticalStepperStep1.get('username').value,
         email: this.verticalStepperStep1.get('email').value,
         vendor_company_id: this.verticalStepperStep2.get('vendor').value,
