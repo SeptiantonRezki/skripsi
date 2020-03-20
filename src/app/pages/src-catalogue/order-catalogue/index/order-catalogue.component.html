@@ -5,6 +5,13 @@
   <!-- / HEADER -->
   <div class="content p-24 mb-42" *ngIf="!onLoad">
     <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center" class="p-16 export">
+        <a #downloadLink></a>
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export XLS
+        </button>
+      </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">Daftar Pesanan</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">

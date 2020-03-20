@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 
 @Component({
   selector: 'app-product-catalogue-edit',
@@ -21,6 +22,7 @@ export class ProductCatalogueEditComponent implements OnInit {
     { checked: false, id: 2, name: 'Ingin meningkatkan penjualan toko ?' },
     { checked: false, id: 3, name: 'Ingin mengembangkan usaha lebih besar lagi ?' }
   ]
+  listVendor: Array<any>;
   shortDetail: any;
   detailProduct: any;
   isDetail: Boolean;
@@ -39,7 +41,8 @@ export class ProductCatalogueEditComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private productCatalogueService: ProductCatalogueService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private vendorService: VendorsService
   ) {
     this.shortDetail = this.dataService.getFromStorage("detail_product_catalogue");
     activatedRoute.url.subscribe(params => {
@@ -51,6 +54,7 @@ export class ProductCatalogueEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getVendors();
     this.getCategories();
 
     this.formProduct = this.formBuilder.group({
@@ -70,6 +74,13 @@ export class ProductCatalogueEditComponent implements OnInit {
     });
 
     this.getDetail();
+  }
+
+  getVendors() {
+    this.vendorService.get({ page: 'all' }).subscribe(res => {
+      console.log('list vendors', res);
+      this.listVendor = res.data ? res.data.data : []
+    })
   }
 
   getCategories() {
@@ -160,7 +171,7 @@ export class ProductCatalogueEditComponent implements OnInit {
         description: this.formProduct.get('description').value,
         vendor_product_category_id: this.formProduct.get('category').value,
         price: this.formProduct.get('price').value,
-        have_community_price: this.formProduct.get('have_community_price').value ? 1 : 0,
+        have_community_price: 0,
         community_min_qty: this.formProduct.get('community_min_qty').value,
         community_price: this.formProduct.get('community_price').value,
         stages: this.formProduct.get('stages').value,

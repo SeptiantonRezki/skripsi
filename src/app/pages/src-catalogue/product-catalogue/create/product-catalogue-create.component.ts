@@ -122,7 +122,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
       fd.append('price', this.formProduct.get('price').value);
       fd.append('availability', this.formProduct.get('availability').value);
       fd.append('status', this.formProduct.get('status').value);
-      fd.append('have_community_price', this.formProduct.get('have_community_price').value ? '1' : '0');
+      fd.append('have_community_price', '0');
       fd.append('community_min_qty', this.formProduct.get('community_min_qty').value);
       fd.append('community_price', this.formProduct.get('community_price').value);
       fd.append('vendor_company_id', this.vendor_id ? this.vendor_id : this.formProduct.get('vendor').value);

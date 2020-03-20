@@ -40,7 +40,7 @@ export class OrderCatalogueService extends BaseService {
 
     export(): Observable<any> {
         const url = this.getUrl(this.namespace, "export");
-        return this.getApi(url)
+        return this.getBlobAsJsonApi(url)
     }
 
     // delete(context): Observable<any> {
