@@ -65,7 +65,8 @@ export class ProductCatalogueEditComponent implements OnInit {
       community_min_qty: [0],
       community_price: [0],
       availability: ["", Validators.required],
-      status: ["active"]
+      status: ["active"],
+      vendor: [""]
     });
 
     this.getDetail();
@@ -94,7 +95,8 @@ export class ProductCatalogueEditComponent implements OnInit {
         availability: res.data.availability,
         status: res.data.status,
         images: res.data.images,
-        stages: res.data.stages
+        stages: res.data.stages,
+        vendor: res.data.vendor_company_id
       });
 
       if (res && res.data) {
@@ -165,7 +167,7 @@ export class ProductCatalogueEditComponent implements OnInit {
         availability: this.formProduct.get('availability').value,
         images: this.fileList,
         status: this.formProduct.get('status').value,
-        vendor_company_id: this.detailProduct.vendor_company_id
+        vendor_company_id: this.vendor_id ? this.vendor_id : this.formProduct.get('vendor').value
       };
       if (this.formProduct.get('stage').value) {
         body['stages'] = this.listStages.filter(stg => stg.checked).map((stgg) => stgg.id);

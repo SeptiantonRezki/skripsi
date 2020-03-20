@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 
 @Component({
   selector: 'app-product-catalogue-create',
@@ -21,6 +22,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
     { checked: false, id: 2, name: 'Ingin meningkatkan penjualan toko ?' },
     { checked: false, id: 3, name: 'Ingin mengembangkan usaha lebih besar lagi ?' }
   ]
+  listVendor: Array<any>;
 
   image_list: Array<any> = [];
   imageSku: any;
@@ -35,7 +37,8 @@ export class ProductCatalogueCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private productCatalogueService: ProductCatalogueService
+    private productCatalogueService: ProductCatalogueService,
+    private vendorService: VendorsService
   ) {
     let profile = this.dataService.getDecryptedProfile();
     if (profile) this.vendor_id = profile.vendor_company_id;
@@ -43,6 +46,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
 
   ngOnInit() {
     this.getCategories();
+    this.getVendors();
 
     this.formProduct = this.formBuilder.group({
       name: ["", Validators.required],
@@ -56,8 +60,16 @@ export class ProductCatalogueCreateComponent implements OnInit {
       community_min_qty: [0],
       community_price: [0],
       availability: ["", Validators.required],
-      status: ["active"]
+      status: ["active"],
+      vendor: [""]
     });
+  }
+
+  getVendors() {
+    this.vendorService.get({ page: 'all' }).subscribe(res => {
+      console.log('list vendors', res);
+      this.listVendor = res.data ? res.data.data : []
+    })
   }
 
   getCategories() {
@@ -110,10 +122,10 @@ export class ProductCatalogueCreateComponent implements OnInit {
       fd.append('price', this.formProduct.get('price').value);
       fd.append('availability', this.formProduct.get('availability').value);
       fd.append('status', this.formProduct.get('status').value);
-      fd.append('have_community_price', this.formProduct.get('have_community_price').value);
+      fd.append('have_community_price', this.formProduct.get('have_community_price').value ? '1' : '0');
       fd.append('community_min_qty', this.formProduct.get('community_min_qty').value);
       fd.append('community_price', this.formProduct.get('community_price').value);
-      fd.append('vendor_company_id', this.vendor_id ? this.vendor_id : -99);
+      fd.append('vendor_company_id', this.vendor_id ? this.vendor_id : this.formProduct.get('vendor').value);
 
       if (this.formProduct.get('stage').value) {
         this.listStages.map((stgg) => {

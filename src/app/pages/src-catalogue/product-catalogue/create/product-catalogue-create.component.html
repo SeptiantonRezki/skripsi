@@ -30,6 +30,18 @@
             </mat-form-field>
           </div>
 
+          <div fxLayout="row" *ngIf="!vendor_id">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select placeholder="Nama Vendor" formControlName="vendor">
+                <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['vendor'].hasError('required') && formProduct.controls['vendor'].touched">
+                Nama Vendor harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select placeholder="Kategori Produk" formControlName="category">
