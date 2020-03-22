@@ -633,6 +633,16 @@ mat-form-field.jumlah {
   // }
 }
 
+.mat-checkbox-all {
+  .mat-checkbox-layout {
+    .mat-checkbox-inner-container {
+      .mat-checkbox-background {
+        background-color: #cacaca !important;
+      }
+    }
+  }
+}
+
 #shopping-order {
   .tab-content {
     flex: 1 1 auto !important;
