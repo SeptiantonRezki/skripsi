@@ -41,7 +41,7 @@
                 </mat-error>
               </mat-form-field>
               <div class="button-row">
-                <button mat-raised-button style="width: 160px" color="primary" (click)="updateFilter()">ATUR PANEL MITRA</button>
+                <button mat-raised-button style="width: 160px" color="primary" (click)="aturPanelMitra()">ATUR PANEL MITRA</button>
               </div>
             </div>
           </form>
@@ -137,7 +137,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="penjual" [sortable]="true">
+        <ngx-datatable-column name="Penjual" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>

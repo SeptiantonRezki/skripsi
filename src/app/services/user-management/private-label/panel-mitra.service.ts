@@ -81,4 +81,9 @@ export class PanelMitraService extends BaseService {
     return this.getApi(url);
   }
 
+  checkPanelMitra(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "checkPanelMitra");
+    return this.postApi(url, body);
+  }
+
 }

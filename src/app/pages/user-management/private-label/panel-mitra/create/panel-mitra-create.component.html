@@ -41,7 +41,7 @@
                 </mat-error>
               </mat-form-field>
               <div class="button-row">
-                <button mat-raised-button style="width: 160px" color="primary" (click)="updateFilter()">ATUR PANEL MITRA</button>
+                <button mat-raised-button style="width: 160px" color="primary" (click)="aturPanelMitra()">ATUR PANEL MITRA</button>
               </div>
             </div>
           </form>
@@ -51,7 +51,8 @@
           <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
         </div>
       </div>
-      <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+      <div *ngIf="rows.length > 0">
+      <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" >
         <div class="button-row">
           <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS</button>
         </div>
@@ -133,11 +134,11 @@
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
-            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="penjual" [sortable]="true">
+        <ngx-datatable-column name="Penjual" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>
@@ -173,6 +174,7 @@
           SIMPAN
         </button>
       </div>
+    </div>
     </div>
   </div>
 </div>
