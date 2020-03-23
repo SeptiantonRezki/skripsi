@@ -316,7 +316,17 @@ export class OrdertoSupplierDetailComponent {
     }
   }
 
-  updateStatus(): void {
+  updateStatus() {
+    let data = {
+      titleDialog: "Konfirmasi Perubahan Status Pesanan",
+      captionDialog: "Apakah anda yakin untuk melakukan perubahan status pesanan ini menjadi 'Pesanan "+ this.statusForm.get("newStatus").value + "'?",
+      confirmCallback: this._updateStatus.bind(this),
+      buttonText: ["Ya, Lanjutkan", "Tidak"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  _updateStatus(): void {
     let body: Object = {
       status: this.statusForm.get("newStatus").value
     };
