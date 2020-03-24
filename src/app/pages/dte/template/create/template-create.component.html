@@ -17,6 +17,9 @@
 
           <div fxFlex class="py-16 h3">Pertanyaan</div>
           <div fxFlex="60" fxLayoutAlign="flex-end flex-end">
+            <div fxFlex class="py-16 h3" style="margin-bottom: 10px;">
+              <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
+            </div>
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select [formControl]="frmIsBranching" placeholder="Reponse Type">
                 <mat-option *ngFor="let item of listCategoryResponse" [value]="item.value">{{item.name}}</mat-option>
