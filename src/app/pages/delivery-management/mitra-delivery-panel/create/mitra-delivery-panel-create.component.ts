@@ -519,7 +519,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         body['type'] = 'all';
         body['area_id'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
       } else {
-        body['area_id'] = 1;
+        body['area_id'] = [1];
       }
       console.log('my body', body);
       this.mitraPanelService.create(body).subscribe(res => {
