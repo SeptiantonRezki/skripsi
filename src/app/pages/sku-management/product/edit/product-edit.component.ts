@@ -207,6 +207,7 @@ export class ProductEditComponent {
   }
 
   getDetails() {
+    try {
     this.productService.getdetail(this.idProduct).subscribe(async (res) => {
       this.detailProduct = res.data;
 
@@ -273,7 +274,7 @@ export class ProductEditComponent {
       //   this.addArea();
       // }
 
-      if (res.data.is_private_label === 1) {
+      if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
         let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
         let idx = 0;
         for (const item of res.data.product_prices ) {
@@ -295,6 +296,9 @@ export class ProductEditComponent {
       if (this.isDetail) this.formProductGroup.disable();
 
     })
+  } catch(ex) {
+    console.log('ex', ex);
+  }
   }
 
   createArea(): FormGroup {
