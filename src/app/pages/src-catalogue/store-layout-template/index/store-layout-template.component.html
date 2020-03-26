@@ -1,0 +1,73 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Template Layout Toko'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/src-catalogue', 'store-layout-template', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Template Layout Toko</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Nama Layout Toko" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Panjang Toko (m)" prop="length">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row['length'] }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Lebar Toko (m)" prop="width">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row['width'] }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="name-container pl-12">
+              <mat-icon *ngIf="row.status == 'active'" class="active-icon mat-green-600-bg s-18">check</mat-icon>
+              <mat-icon *ngIf="row.status == 'inactive'" class="active-icon mat-red-500-bg s-18">close</mat-icon>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="" matTooltip="Ubah Produk" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

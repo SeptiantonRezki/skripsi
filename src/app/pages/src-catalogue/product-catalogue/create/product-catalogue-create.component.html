@@ -1,0 +1,162 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Produk'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formProduct">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">Buat Produk</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama Produk">
+              <mat-error
+                *ngIf="formProduct.controls['name'].hasError('required') && formProduct.controls['name'].touched">
+                Nama Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <input matInput type="text" formControlName="description" placeholder="Deskripsi Produk">
+              <mat-error
+                *ngIf="formProduct.controls['description'].hasError('required') && formProduct.controls['description'].touched">
+                Deskripsi Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" *ngIf="!vendor_id">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select placeholder="Nama Vendor" formControlName="vendor">
+                <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['vendor'].hasError('required') && formProduct.controls['vendor'].touched">
+                Nama Vendor harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select placeholder="Kategori Produk" formControlName="category">
+                <mat-option *ngFor="let item of listCategory" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['category'].hasError('required') && formProduct.controls['category'].touched">
+                Kategori Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="stage">Masukan ke Tahapan?</mat-checkbox>
+            </div>
+            <div fxFlex="5"></div>
+            <div fxLayout="column" *ngIf="formProduct.get('stage').value">
+              <div fxLayout="row" *ngFor="let item of listStages; let i = index;" style="cursor: pointer;"
+                (click)="checkStages(i)">
+                <mat-icon style="color: #fe0000;">{{ item.checked ? 'check_box' : 'check_box_outline_blank' }}
+                </mat-icon>
+                <span style="font-weight: bold;font-style: italic;">
+                  {{ item.name }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="column">
+            <h3>Unggah Gambar Layout</h3>
+            <small>Dimensi 410px410p, Besar file maksimal 2mb</small>
+            <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                (fileChange)="changeImage($event)">
+                <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                  <!-- <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon> -->
+                  <!-- <br> -->
+                  <span matPrefix>Tarik Gambar Kesini atau
+                    <strong>Pilih File</strong>
+                  </span>
+                  <!-- <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column">
+            <div class="" *ngFor="let imgUrl of image_list;let i = index" style="margin-top: 15px;margin-bottom: 15px;">
+              <div class="delete">
+                <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
+              </div>
+              <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
+              <div>
+                <img id="image" [src]='imgUrl' width="410px" height="410px" />
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="price" placeholder="Harga Produk">
+              <mat-error
+                *ngIf="formProduct.controls['price'].hasError('required') && formProduct.controls['price'].touched">
+                Harga Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="have_community_price">Ada Harga Paguyuban</mat-checkbox>
+            </div>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="5" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="number" min="0" formControlName="community_min_qty" placeholder="Min. Qty">
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="tel" currencyMask min="0" formControlName="community_price"
+                placeholder="Harga / Pcs">
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <mat-select placeholder="Ketersediaan" formControlName="availability">
+                <mat-option *ngFor="let item of listStock" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['availability'].hasError('required') && formProduct.controls['availability'].touched">
+                Ketersediaan Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <mat-select placeholder="Status Produk" formControlName="status">
+                <mat-option *ngFor="let item of listStatus" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formProduct.controls['status'].hasError('required') && formProduct.controls['status'].touched">
+                Status Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

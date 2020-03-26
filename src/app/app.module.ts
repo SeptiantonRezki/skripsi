@@ -37,6 +37,7 @@ import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
+import { VendorsService } from "./services/src-catalogue/vendors.service";
 import { FieldForceService } from "./services/user-management/field-force.service";
 import { PaguyubanService } from "./services/user-management/paguyuban.service";
 import { WholesalerService } from "./services/user-management/wholesaler.service";
@@ -82,6 +83,9 @@ import { Emitter } from "./helper/emitter.helper";
 import { GroupTradeProgramService } from "./services/dte/group-trade-program.service";
 import { QzTrayService } from "./services/qz-tray.service";
 import { IdbService } from "./services/idb.service";
+import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.service";
+import { ProductCatalogueService } from "./services/src-catalogue/product-catalogue.service";
+import { StoreTemplateLayoutService } from "./services/src-catalogue/store-template-layout.service";
 
 @NgModule({
   declarations: [
@@ -118,6 +122,7 @@ import { IdbService } from "./services/idb.service";
     DataService,
     DialogService,
     AdminPrincipalService,
+    VendorsService,
     FieldForceService,
     PaguyubanService,
     CustomerService,
@@ -159,6 +164,9 @@ import { IdbService } from "./services/idb.service";
     OrdertoSupplierService,
     QzTrayService,
     IdbService,
+    UserCatalogueService,
+    ProductCatalogueService,
+    StoreTemplateLayoutService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],

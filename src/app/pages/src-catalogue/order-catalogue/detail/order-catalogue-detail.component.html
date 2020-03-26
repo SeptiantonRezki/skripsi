@@ -1,0 +1,387 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detil Pesanan'">
+  </page-content-header>
+
+  <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24 mb-42" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+      <mat-tab-group [selectedIndex]="selectedTab">
+        <mat-tab label="Detil Pemesanan">
+          <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
+              <div class="h2 secondary-text">Pelanggan</div>
+            </div>
+
+            <div class="customer">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>No Telepon / No Ponsel</th>
+                    <th>Tipe Pelanggan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="w-100">
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <img class="avatar" [src]="'assets/images/avatars/profile.jpg'">
+                        <span class="name text-truncate">{{detailOrder.name}}</span>
+                      </div>
+                    </td>
+                    <td class="w-100">
+                      <span class="email text-truncate">{{detailOrder.phone}}</span>
+                    </td>
+                    <td class="w-200">
+                      <span class="email text-truncate">{{detailOrder.retailer_type}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="customer pb-16">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Alamat Pengiriman</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="pt-0 w-500">
+                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.address}}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="customer pb-16">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="pt-0 w-500">
+                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.note ? detailOrder.note : '-'}}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">av_timer</mat-icon>
+              <div class="h2 secondary-text">Status Pemesanan</div>
+            </div>
+            <div class="customer">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Diperbarui pada</th>
+                    <th>Diperbarui oleh Staff</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr>
+                    <td class="w-200">
+                      Menunggu
+                    </td>
+                    <td class="w-200">
+                      <span class="email text-truncate">3 April 2018 12.32PM</span>
+                    </td>
+                    <td>
+                      <span class="email text-truncate">Matthew Gray</span>
+                    </td>
+                  </tr> -->
+                  <tr *ngFor="let item of statusLogs">
+                    <td class="w-200">
+                      <div [class]="'status text-truncate h6 p-4 status-order mat-' + item.status + '-color'">
+                        {{(item.status.replace('-', ' ')).toUpperCase()}}
+                      </div>
+                    </td>
+                    <td class="w-200">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</td>
+                    <td class="w-600">{{item.name}}</td>
+                  </tr>
+                  <tr *ngIf="statusLogs.length == 0">
+                    <td colspan="3">Tidak ada data</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <form class="update-status p-24" *ngIf="orderStatuses.length > 0" [formGroup]="statusForm" fxLayout="row"
+              fxLayoutAlign="start center">
+              <mat-form-field class="mr-16 is-light" fxFlex>
+                <mat-select formControlName="newStatus" placeholder="Pilih Status Pemesanan" required>
+                  <mat-option *ngFor="let status of orderStatuses" [value]="status.value">{{status.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-raised-button class="mat-accent" (click)="updateStatus()"
+                [disabled]="statusForm.invalid">PERBARUI
+                STATUS</button>
+            </form>
+            <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">credit_card</mat-icon>
+              <div class="h2 secondary-text">Status Pembayaran</div>
+            </div>
+            <div class="customer pb-24">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Nomor Pembayaran</th>
+                    <th>Total Pembayaran</th>
+                    <th>Tanggal Pembayaran</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="w-200">{{detailOrder.invoice_number}}</td>
+                    <td class="w-200">
+                      <span class="email text-truncate">{{detailOrder.total_price | rupiahFormater}}</span>
+                    </td>
+                    <td>
+                      <span class="email text-truncate">{{(detailOrder.date_payment | date: 'dd/MM/yyyy HH:mm') ||
+                        '-'}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="m-0 mr-16 secondary-text">local_shipping_outline</mat-icon>
+              <div class="h2 secondary-text">Status Pengiriman</div>
+            </div>
+            <div class="customer">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <!-- <th>Kode Lacak</th> -->
+                    <th>Jenis Pengiriman</th>
+                    <th>Harga Pengiriman</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="w-200" style="text-transform: uppercase;">
+                      {{detailOrder.delivery_courier_name ? (detailOrder.delivery_courier_name + '-' + detailOrder.delivery_courier_service_name) : detailOrder.shipping_type?.toUpperCase() || '-'}}
+                    </td>
+                    <td class="w-200">
+                      <span class="email text-truncate">{{detailOrder.shipping_price | rupiahFormater}}</span>
+                    </td>
+                    <td>
+                      <span class="email text-truncate">{{(detailOrder.shipping_date | date:'dd/MM/yyyy HH:mm') ||
+                        '-'}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Produk Yang Dibeli">
+          <div class="ayo-middle p-24" fxLayout="column">
+            <div class="products tab-content" fusePerfectScrollbar>
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th></th>
+                    <th>Nama Produk</th>
+                    <th>Kategori</th>
+                    <th>Harga</th>
+                    <th style="text-align: center;">Jumlah</th>
+                    <th style="text-align: center;" *ngIf="editable">Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody [formGroup]="productsForm">
+                  <tr class="product-row" formArrayName="listProducts"
+                    *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;"
+                    [ngStyle]="{ 'background-color': (product.get('price_discount').value == 0) && product.get('price_update_status').value === true && showRedBG(detailOrder.status) ? '#f28383' : 'white' }">
+                    <td class="w-64">{{i+1}}</td>
+                    <td class="w-100">
+                      <div class="product-image name-container">
+                        <img class="product" *ngIf="product.get('image_url').value"
+                          [src]="product.get('image_url').value">
+                        <img class="product" *ngIf="!product.get('image_url').value"
+                          [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        <span>{{product.get("name").value || 'Produk'}}</span>
+                      </div>
+                    </td>
+                    <td>{{product.get("category").value}}</td>
+                    <td>
+                      <div class="w-100" [formGroupName]="i">
+                        <span>{{product.get("price").value | rupiahFormater}}</span>
+                        <!-- <span
+                          *ngIf="(product.get('tierHasDisc').value || product.get('price_discount').value != 0) && product.get('editable').value">{{product.get("price").value | rupiahFormater}}
+                        </span>
+                        <mat-form-field class="w-100 price-change"
+                          *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value">
+                          <input matInput type="tel" currencyMask min="0" formControlName="price"
+                            (keyup)="keyUp.next({ e: $event.target.value, i: i })">
+                        </mat-form-field>
+                        <button mat-raised-button style="height: 30px;margin-top: 3px;margin-right: 4px;"
+                          *ngIf="product.get('price_discount').value == 0 && product.get('price_update_status').value === true && showRedBG(detailOrder.status)"
+                          (click)="updatePrice(i)">PERBARUI
+                          HARGA</button> -->
+                      </div>
+                      <!-- <strong>{{product.get("price").value | rupiahFormater}}</strong> -->
+                    </td>
+                    <!-- <td *ngIf="onEdit">
+                      <mat-icon
+                        *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value"
+                        class="secondary-text price-per-tier-check" fxFlex="5" (click)="showTier(i, $event)">{{
+                        product.get('tierShowed').value ? 'check_box' :'check_box_outline_blank'}}</mat-icon>
+                    </td> -->
+                    <td align="center">
+                      <div class="w-80" [formGroupName]="i">
+                        <span *ngIf="!product.get('editable').value">{{product.get("amount").value}}</span>
+                        <mat-form-field class="w-80 quantity" *ngIf="product.get('editable').value">
+                          <input matInput type="number" min="0" formControlName="amount">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td *ngIf="editable">
+                      <div class="button-row" align="center">
+                        <button mat-icon-button *ngIf="!product.get('editable').value" (click)="updateQty(i)">
+                          <mat-icon>edit</mat-icon>
+                          <span class="pl-8" style="font-size: .8em">Ubah</span>
+                        </button>
+                        <button mat-icon-button *ngIf="product.get('editable').value" (click)="setQty(i);">
+                          <mat-icon>save</mat-icon>
+                          <span class="pl-8" style="font-size: .8em">Simpan</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div fxLayout="row" style="width: 300px;">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="tel" currencyMask min="0" [formControl]="shipping_cost"
+                    placeholder="Biaya Pengiriman">
+                </mat-form-field>
+              </div>
+              <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
+                <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
+                  (click)="saveUpdateQty()">
+                  SIMPAN
+                </button>
+                <!-- <button mat-raised-button *ngIf="showRedBG(detailOrder.status) && isAnyUpdate > -1" fxFlex="20"
+                  (click)="updateAllPrice()" style="margin-left: 10px;">
+                  PERBARUI SEMUA HARGA
+                </button> -->
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Nota">
+          <div id="invoice" class="ayo-main-wrapper modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
+            <div class="invoice-container" fxFlex="100" fxLayout="column">
+              <div class="px-24 py-16">
+                <div class="button" (click)="print()">
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                    <mat-icon class="secondary-text">print</mat-icon>
+                    <span class="h3 pr-48">CETAK</span>
+                  </div>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div id="invoicedetail">
+                <div fxLayout="row wrap" fxLayoutAlign="center stretch" fxLayout.lt-md="column" fxLayoutGap="20px"
+                  fxLayoutGap.lt-md="0px">
+                  <div fxFlex="90" class="py-16 pr-16">
+                    <div class="text-center">
+                      <div class="text-bold">DETAIL PENGIRIMAN</div>
+                      <div class="text-bold">{{detailOrder?.wholesaler_name}}</div>
+                      <div>{{detailOrder?.wholesaler_phone || '-'}}</div>
+                      <div class="py-16" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+                        <span>No. Order: {{detailOrder?.invoice_number}}</span>
+                      </div>
+                      <div class="pt-8">DETAIL PEMESANAN</div>
+                      <div class="mt-8 detail-order2" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+                        <div class="text-bold">{{detailOrder?.name}}</div>
+                        <div>{{detailOrder?.address || '-'}}</div>
+                        <div>{{detailOrder?.phone || '-'}}</div>
+                        <div class="text-bold">TAGIH TUNAI</div>
+                      </div>
+                    </div>
+                    <div class="pt-16">
+                      <div class="pb-24" *ngFor="let item of productsNota">
+                        <div class="py-2 text-bold">{{item.name}}</div>
+                        <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+                          <span fxFlex="25">{{item.packaging}}</span>
+                          <span fxFlex="25">{{item.qty}}x</span>
+                          <span fxFlex="25">{{item.price | rupiahFormaterWithoutRp}}</span>
+                          <span fxFlex="25" class="text-right">{{item.total_price | rupiahFormaterWithoutRp}}</span>
+                        </div>
+                        <div *ngIf="item.discount_nota > 0" class="" fxFlex="100" fxLayout="row"
+                          fxLayoutAlign="start center">
+                          <span fxFlex="25">&nbsp;</span>
+                          <span fxFlex="25">&nbsp;</span>
+                          <span fxFlex="25">disc (-)</span>
+                          <span fxFlex="25" class="text-right">({{item.discount_nota ? discount_nota : 0}})</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pt-8 border-bottom-custom"></div>
+                    <div class="">
+                      <div *ngFor="let item of detailOrder?.summary"
+                        [ngStyle]="{'border-top': item.title === 'Total Pembayaran' ? '1px dashed rgba(0,0,0,0.54)' : ''}"
+                        [ngClass]="{'py-8' : item.title === 'Total Pembayaran', 'py-4' : item.title !== 'Total Pembayaran'}"
+                        fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                        <span fxFlex="50"
+                          [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}">{{item.title.toUpperCase() === 'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title.toUpperCase()}}</span>
+                        <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}"
+                          class="text-right">{{checkOngkirWithProductExisting(item)}}</span>
+                        <!-- item.value.split('Rp ')[1] -->
+                      </div>
+                    </div>
+                    <div class="py-16">
+                      <div class="py-4" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                        <span class="mat-caption" fxFlex="50">TOTAL HEMAT BELANJA</span>
+                        <span class="mat-caption text-right"
+                          fxFlex="50">{{detailOrder?.grand_total | rupiahFormaterWithoutRp}}</span>
+                      </div>
+                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                        <span *ngIf="detailOrder?.status !== 'selesai'" class="mat-caption" fxFlex="50">ESTIMASI
+                          POIN</span>
+                        <span *ngIf="detailOrder?.status === 'selesai'" class="mat-caption" fxFlex="50">TAMBAHAN
+                          POIN</span>
+                        <span class="mat-caption text-right" fxFlex="50">{{detailOrder?.point_received}}</span>
+                      </div>
+                    </div>
+                    <div class="text-center" *ngIf="detailOrder?.point_curs > 0">
+                      <div class="mat-caption">DAPATKAN POIN DENGAN SETIAP</div>
+                      <div class="mat-caption">PEMESANAN {{detailOrder?.point_curs | rupiahFormaterWithoutRp}}</div>
+                    </div>
+                    <br>
+                    <div class="text-center">
+                      <div class="mat-caption">ORDER DISIAPKAN OLEH:</div>
+                      <div class="mat-caption">{{detailOrder?.created_at | date: 'dd/MM/yyyy HH:mm'}}</div>
+                      <br>
+                      <div class="mat-caption">CUSTOMER SERVICE AYO SRC 0804 1000 234</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

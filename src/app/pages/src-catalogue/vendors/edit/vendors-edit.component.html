@@ -1,0 +1,129 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Vendor'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <div class="mat-white-bg p-24" fxLayout="column">
+        <form [formGroup]="formVendor">
+          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3>{{ isDetail ? 'Detil' : 'Ubah' }} Vendor</h3>
+            <!-- <mat-form-field
+              [class]="formVendor.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="column">
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Nama Vendor" type="text" formControlName="nama">
+              <mat-error
+                *ngIf="formVendor.controls['nama'].hasError('required') && formVendor.controls['nama'].touched ">
+                Nama harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Alamat Vendor" type="text" formControlName="address">
+              <mat-error
+                *ngIf="formVendor.controls['address'].hasError('required') && formVendor.controls['address'].touched ">
+                Alamat Vendor harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Nama PIC" type="text" formControlName="pic_name">
+              <mat-error
+                *ngIf="formVendor.controls['pic_name'].hasError('required') && formVendor.controls['pic_name'].touched ">
+                Nama PIC harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput placeholder="Email PIC" type="email" formControlName="pic_email">
+              <mat-error
+                *ngIf="formVendor.controls['pic_email'].hasError('required') && formVendor.controls['pic_email'].touched ">
+                Email PIC harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <small>Nomor Telepon</small>
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
+                  <input matInput value="+62" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
+                  <input matInput formControlName="phone" type="tel">
+                </mat-form-field>
+              </div>
+              <mat-error
+                *ngIf="formVendor.controls['phone'].hasError('required') && formVendor.controls['phone'].touched ">
+                Nomor Telepon harus diisi.
+              </mat-error>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+              fxLayoutAlign="space-between stretch" [formGroup]="formWilayah">
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="National" formControlName="national" id="area1_national">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Zone" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', formWilayah.get('zone').value)" id="area1_zone">
+                  <mat-option *ngFor="let item of list['zone']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Regional" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', formWilayah.get('region').value)" id="area1_region">
+                  <mat-option *ngFor="let item of list['region']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Area" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', formWilayah.get('area').value)" id="area1_area">
+                  <mat-option *ngFor="let item of list['area']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', formWilayah.get('salespoint').value)"
+                  id="area1_salespoint">
+                  <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="District" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', formWilayah.get('district').value)"
+                  id="area1_district">
+                  <mat-option *ngFor="let item of list['district']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Territory" formControlName="territory" id="area1_territory">
+                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">
+                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                SIMPAN
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

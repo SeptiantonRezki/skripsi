@@ -1,0 +1,17 @@
+<div class="dialog-container">
+    <h1 mat-dialog-title style="text-align: center;">
+        <b>Estimasi Durasi Pengiriman</b><br />
+    </h1>
+    <div mat-dialog-content fxLayoutAlign="center center" style="min-height: 50px;min-width: 300px;">
+        <div fxLayout="row" style="width: 300px;">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input matInput type="text" [formControl]="est_shipping">
+            </mat-form-field>
+        </div>
+        <p>Hari</p>
+    </div>
+    <div mat-dialog-actions class="actions" fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" (click)="submit()">Simpan</button>
+        <button mat-raised-button color="primary" (click)="dialogRef.close()">Kembali</button>
+    </div>
+</div>
