@@ -15,6 +15,7 @@ import * as _ from 'underscore';
 import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.component';
 import { environment } from 'environments/environment';
 import { GeotreeService } from 'app/services/geotree.service';
+import { IdbService } from 'app/services/idb.service';
 
 @Component({
   selector: 'app-audience-create',
@@ -94,7 +95,8 @@ export class AudienceCreateComponent {
     private audienceService: AudienceService,
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private idbService: IdbService
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -718,6 +720,12 @@ export class AudienceCreateComponent {
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
+      let rows = this.rows.map(row => row.id);
+      // this.idbService.getAnyOf(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -732,6 +740,12 @@ export class AudienceCreateComponent {
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
+      let rows = this.rows.map(row => row.id);
+      // this.idbService.get(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -1229,8 +1243,12 @@ export class AudienceCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.selected = response;
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        let rows = this.rows.map(row => row.id);
+        this.idbService.getAll(dt => dt.is_valid).then(result => {
+          console.log('result', result);
+          this.selected = result;
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        })
       }
     });
   }

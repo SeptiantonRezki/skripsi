@@ -81,6 +81,7 @@ import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
 import { GroupTradeProgramService } from "./services/dte/group-trade-program.service";
 import { QzTrayService } from "./services/qz-tray.service";
+import { IdbService } from "./services/idb.service";
 
 @NgModule({
   declarations: [
@@ -157,6 +158,7 @@ import { QzTrayService } from "./services/qz-tray.service";
     PanelMitraService,
     OrdertoSupplierService,
     QzTrayService,
+    IdbService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],
