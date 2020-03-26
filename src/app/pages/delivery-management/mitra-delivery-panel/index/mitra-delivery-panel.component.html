@@ -1,0 +1,70 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Panel Mitra'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/delivery','panel-mitra','create']">
+        <mat-icon>add</mat-icon>TAMBAH
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Kurir</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Kurir" prop="delivery_courier_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directDetail(row)">{{row.delivery_courier_name}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Jenis Layanan" prop="delivery_courier_service_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.delivery_courier_service_name}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Jumlah Mitra" prop="mitra_count" summary-template="activeCell">
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column [width]="100" name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p class="status text-truncate h6 p-4"
+                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+              </p>
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
