@@ -37,6 +37,7 @@ export class TemplateEditComponent {
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
     { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
+  shareable: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -149,7 +150,9 @@ export class TemplateEditComponent {
     if (param.length >= 3) {
       this.productService.getProductSkuBank(param).subscribe(res => {
         this.listProductSkuBank = res.data ? res.data.data : [];
+        console.log('listProductSkuBank', this.listProductSkuBank);
         this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+        console.log('on get sku options', this.filteredSkuOptions);
       })
     } else {
       this.listProductSkuBank = [];
@@ -185,6 +188,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
+    this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
 
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
@@ -466,9 +470,11 @@ export class TemplateEditComponent {
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
         is_branching: this.frmIsBranching.value ? 1 : 0,
+        is_shareable: this.shareable.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+          console.log('item.type', item.type);
+          if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);

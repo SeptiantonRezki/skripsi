@@ -81,8 +81,8 @@ import { OTPSettingService } from "./services/otpsetting.service";
 import { QiscusService } from "./services/qiscus.service";
 import { Emitter } from "./helper/emitter.helper";
 import { GroupTradeProgramService } from "./services/dte/group-trade-program.service";
-import { QzTrayService } from "./services/qz-tray.service";
 import { IdbService } from "./services/idb.service";
+import { QzTrayService } from "./services/qz-tray.service";
 import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.service";
 import { ProductCatalogueService } from "./services/src-catalogue/product-catalogue.service";
 import { StoreTemplateLayoutService } from "./services/src-catalogue/store-template-layout.service";
@@ -158,6 +158,7 @@ import { StoreTemplateLayoutService } from "./services/src-catalogue/store-templ
     PengajuanSrcService,
     OTPSettingService,
     GroupTradeProgramService,
+    IdbService,
     SupplierCompanyService,
     UserSupplierService,
     PanelMitraService,

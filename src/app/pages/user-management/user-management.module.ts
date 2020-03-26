@@ -187,6 +187,7 @@ export const MY_FORMATS = {
     PartnershipCreateComponent,
     PartnershipIndexComponent,
     PartnershipEditComponent,
+    ImportAccessCashierDialogComponent,
     PengajuanSrcComponent,
     CreatePengajuanSrcComponent,
     DetailPengajuanSrcComponent,

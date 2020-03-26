@@ -82,4 +82,14 @@ export class GeneralService extends BaseService {
     const url = this.generateUrl(this.namespace, "banks");
     return this.getApi(url);
   }
+
+  getAppVersions(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "app_versions");
+    return this.getApi(url, queryParams);
+  }
+
+  getCities(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "cities");
+    return this.getApi(url, queryParams)
+  }
 }

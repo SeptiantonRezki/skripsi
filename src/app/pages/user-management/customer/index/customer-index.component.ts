@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { CustomerService } from 'app/services/user-management/customer.service';
+import { GeneralService } from "app/services/general.service";
 
 @Component({
   selector: 'app-customer-index',
@@ -14,7 +15,7 @@ import { CustomerService } from 'app/services/user-management/customer.service';
   styleUrls: ['./customer-index.component.scss']
 })
 export class CustomerIndexComponent {
-
+  formFilterCustomer: FormGroup;
   rows: any[];
   selected: any[];
   id: any[];
@@ -38,13 +39,16 @@ export class CustomerIndexComponent {
   filterArea: Boolean;
 
   offsetPagination: any;
-
+  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listVersions: any[] = [];
+  listCities: any[] = [];
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
     private customerService: CustomerService,
     private formBuilder: FormBuilder,
+    private generalService: GeneralService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -79,7 +83,15 @@ export class CustomerIndexComponent {
   }
 
   ngOnInit() {
+    this.getVersions();
+    this.getCities();
     // this.fuseSplashScreen.show();
+    this.formFilterCustomer = this.formBuilder.group({
+      city: [""],
+      version: [""],
+      status: [""]
+    });
+
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
@@ -95,6 +107,43 @@ export class CustomerIndexComponent {
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.getCustomerList();
     })
+
+    this.formFilterCustomer.get('status').valueChanges.subscribe(res => {
+      this.getCustomerList();
+    })
+
+    this.formFilterCustomer.get('version').valueChanges.subscribe(res => {
+      this.getCustomerList();
+    })
+
+    this.formFilterCustomer.get('city').valueChanges.subscribe(res => {
+      this.getCustomerList();
+    })
+  }
+
+  getVersions() {
+    this.generalService.getAppVersions({ type: 'customer' }).subscribe(res => {
+      this.listVersions = [{ version: 'Semua Versi' }, ...res];
+    })
+  }
+
+  getCities() {
+    this.generalService.getCities({ type: 'customer', area: 1 }).subscribe(res => {
+      // this.listCities = [{  }]
+      this.listCities = [{ name: 'Semua Kota', id: -1 }];
+      if (res) {
+        Object.keys(res).map(city => {
+          if (res[city][0]) {
+            this.listCities = [
+              ...this.listCities,
+              {
+                ...res[city][0]
+              }
+            ]
+          }
+        })
+      }
+    })
   }
 
   getCustomerList() {
@@ -107,8 +156,16 @@ export class CustomerIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-      
+
     this.loadingIndicator = true;
+    this.pagination['status'] = this.formFilterCustomer.get('status').value;
+    this.pagination['version'] = this.formFilterCustomer.get('version').value;
+    this.pagination['city'] = this.formFilterCustomer.get('city').value
+
+    if (this.formFilterCustomer.get('version').value === 'Semua Versi') this.pagination['version'] = null;
+    if (this.formFilterCustomer.get('status').value === '-1') this.pagination['status'] = null;
+    if (this.formFilterCustomer.get('city').value === '-1') this.pagination['city'] = null;
+
     this.customerService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -133,7 +190,7 @@ export class CustomerIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {

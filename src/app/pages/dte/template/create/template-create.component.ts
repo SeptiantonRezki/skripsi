@@ -36,6 +36,7 @@ export class TemplateCreateComponent {
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
     { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
+  shareable: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -460,6 +461,7 @@ export class TemplateCreateComponent {
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value,
         is_branching: this.frmIsBranching.value ? 1 : 0,
+        is_shareable: this.shareable.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);

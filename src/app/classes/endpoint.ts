@@ -71,7 +71,7 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force`,
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force`,
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
       },
       wholesaler: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
@@ -317,7 +317,9 @@ export class Endpoint {
         sku: `${AYO_API}/api/`,
         category_product: `${AYO_API}/api/general/analytic/category-product`,
         unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`,
-        banks: `${AYO_API}/api/v2/general/bank`
+        banks: `${AYO_API}/api/v2/general/bank`,
+        app_versions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/version`,
+        cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
       },
       user_onboarding: {
         register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,
