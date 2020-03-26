@@ -312,6 +312,7 @@ export class PanelMitraCreateComponent implements OnInit {
 
   onSave() {
     if (this.formInput.valid && this.selected.length > 0) {
+      this.dataService.showLoading(true);
       let body = null; 
       if (this.allRowsSelected) {
         body ={
@@ -332,11 +333,13 @@ export class PanelMitraCreateComponent implements OnInit {
             message: "Berhasil Menyimpan Data"
           });
           this.router.navigate(["user-management", "supplier-panel-mitra"]);
+          this.dataService.showLoading(false);
           }, err => {
             console.log('err', err);
             this.dialogService.openSnackBar({
               message: err.error.message
             });
+            this.dataService.showLoading(false);
           }
         );
       }
