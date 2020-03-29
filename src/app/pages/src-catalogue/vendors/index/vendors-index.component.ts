@@ -135,4 +135,32 @@ export class VendorsIndexComponent implements OnInit {
     this.router.navigate(["src-catalogue", "vendors", "detail"]);
   }
 
+
+  deleteUser(id): void {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Vendor",
+      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.dataService.showLoading(true);
+    this.vendorsService.delete({ vendor_id: this.id }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dataService.showLoading(false);
+        this.getVendors();
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
 }
