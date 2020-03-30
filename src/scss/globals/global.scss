@@ -1032,7 +1032,7 @@ a {
   padding: 6px !important;
 }
 
-.mat-diterima-color {
+.mat-pesanan-diterima-color {
   background-color: #388e3c !important;
   color: white !important;
   padding: 6px !important;
@@ -1050,13 +1050,13 @@ a {
   padding: 6px !important;
 }
 
-.mat-batal-color {
+.mat-pesanan-dibatalkan-color {
   background-color: #f44336 !important;
   color: white !important;
   padding: 6px !important;
 }
 
-.mat-konfirmasi-color {
+.mat-pesanan-baru-color {
   background-color: #ff9800 !important;
   color: white !important;
   padding: 6px !important;
@@ -1068,20 +1068,55 @@ a {
   padding: 6px !important;
 }
 
-.mat-terkirim-color {
+.mat-dalam-pengiriman-color {
   background-color: #a5c267 !important;
   color: white !important;
   padding: 6px !important;
 }
 
-.mat-dalam-proses-color {
+.mat-diproses-color {
   background-color: #916000 !important;
   color: white !important;
   padding: 6px !important;
 }
 
+.mat-konfirmasi-perubahan-color {
+  background-color: #f1c40f !important;
+  color: white !important;
+  padding: 6px !important;
+}
 
-/** color private label & SRC Catalogue */
+.mat-perubahan-disetujui-color {
+  background-color: #1abc9c !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-lunas-color {
+  background-color: #388e3c !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-belum-lunas-color {
+  background-color: #dc1e2d !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-barang-diterima-color {
+  background-color: #1abc9c !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-siap-dikirim-color {
+  background-color: #f1c40f !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+/** color SRC Catalogue & private label */
 .mat-baru-color {
   background-color: #ff9800 !important;
   color: white !important;
@@ -1107,6 +1142,12 @@ a {
 }
 
 .mat-diterima-color {
+  background-color: #388e3c !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-diserahkan-color {
   background-color: #388e3c !important;
   color: white !important;
   padding: 6px !important;

@@ -125,6 +125,33 @@ export class StoreLayoutTemplateComponent implements OnInit {
     });
   }
 
+  deleteUser(id): void {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Vendor",
+      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.dataService.showLoading(true);
+    this.storeTemplateLayoutService.delete({ layout_id: this.id }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dataService.showLoading(false);
+        this.getStoreTemplateLayouts();
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_store_layout", param);
     this.router.navigate(["src-catalogue", "store-layout-template", "edit"]);

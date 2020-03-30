@@ -125,6 +125,33 @@ export class UserSrcCatalogueComponent implements OnInit {
     });
   }
 
+  deleteUser(id): void {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Vendor",
+      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.dataService.showLoading(true);
+    this.userCatalogueService.delete({ user_catalogue_id: this.id }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dataService.showLoading(false);
+        this.getUserCatalogues();
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_user_catalogue", param);
     this.router.navigate(["src-catalogue", "users", "edit"]);
