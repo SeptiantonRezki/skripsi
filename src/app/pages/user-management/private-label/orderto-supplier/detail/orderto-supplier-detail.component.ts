@@ -335,6 +335,7 @@ export class OrdertoSupplierDetailComponent {
     this.ordertoSupplierService.putStatusPesanan(body, { orderId: this.orderId }).subscribe(
         res => {
           this.loadingIndicator = false;
+          this.dialogService.brodcastCloseConfirmation();
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Status Berhasil Diubah" });
 
