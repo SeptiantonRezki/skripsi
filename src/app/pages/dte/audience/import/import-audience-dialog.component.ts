@@ -5,7 +5,7 @@ import { AudienceService } from 'app/services/dte/audience.service';
 import { DataService } from 'app/services/data.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
 
@@ -51,6 +51,7 @@ export class ImportAudienceDialogComponent {
     last_page: 1,
     total: 0
   }
+  trials: Array<any> = [];
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -139,17 +140,61 @@ export class ImportAudienceDialogComponent {
         }
       }, err => {
         console.log('error show import', err);
+        this.trials.push(this.currPage);
         this.dataService.showLoading(false);
         this.files = undefined;
       });
     } else {
-      this.idbService.paginate(this.pagination).then(res => {
-        this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
-        Page.renderPagination(this.pagination, this.p_pagination);
-        this.rows = res && res[0] ? res[0] : [];
-        this.dataService.showLoading(false);
-      })
+      if (this.trials.length > 0) {
+        this.trialImport().subscribe(results => {
+          let bowls = [];
+          results.map(result => {
+            if (result && result.data && result.data.data) {
+              bowls = [
+                ...bowls,
+                result.data.data
+              ]
+            }
+          });
+
+          this.idbService.bulkUpdate(bowls).then(resUpdate => {
+            this.idbService.paginate(this.pagination).then(resPaginate => {
+              this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+              Page.renderPagination(this.pagination, this.p_pagination);
+              this.rows = resPaginate && resPaginate[0] ? resPaginate[0] : [];
+              this.dataService.showLoading(false);
+            })
+          }, err => {
+            this.dialogService.openSnackBar({
+              message: "Gagal mengimport Sebagian Data! pada halaman " + this.trials.join(",")
+            })
+            this.dialogRef.close([]);
+          })
+        }, err => {
+          this.dialogService.openSnackBar({
+            message: "Sebagian Data gagal di import, pada halaman " + this.trials.join(",")
+          })
+          this.dialogRef.close([]);
+        });
+      } else {
+        this.idbService.paginate(this.pagination).then(res => {
+          this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+          Page.renderPagination(this.pagination, this.p_pagination);
+          this.rows = res && res[0] ? res[0] : [];
+          this.dataService.showLoading(false);
+        })
+      }
     }
+  }
+
+  trialImport() {
+    let trialsRes = [];
+    this.trials.map(trial => {
+      let response = this.audienceService.showImport({ page: trial });
+      trialsRes.push(response);
+    })
+
+    return forkJoin(trialsRes);
   }
 
   setPage(pageInfo) {
