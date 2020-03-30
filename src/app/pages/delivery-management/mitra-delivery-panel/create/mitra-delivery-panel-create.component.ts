@@ -166,6 +166,14 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
           this.aturPanelMitra();
         }
       })
+
+    this.formPanelMitra.get('courier')
+      .valueChanges
+      .subscribe(res => {
+        if (res && this.loaded) {
+          this.loaded = false;
+        }
+      })
   }
 
   getCourerList() {
