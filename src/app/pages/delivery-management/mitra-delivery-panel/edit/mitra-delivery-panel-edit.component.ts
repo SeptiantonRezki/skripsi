@@ -192,6 +192,8 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
           courier: res.data.delivery_courier_id,
           service: res.data.delivery_courier_service_id
         });
+        this.formPanelMitra.disable();
+
         let filteredMitra = res.data.mitra.map(mtr => {
           mtr['bak_id'] = mtr.id;
           mtr.id = mtr.wholesaler_id;
@@ -202,7 +204,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
             ...this.selectedMitra,
             ...filteredMitra
           ];
-          this.onSelect({ selected: res.data.mitra });
+          this.onSelect({ selected: res && res.data && res.data.mitra ? res.data.mitra : [] });
           this.dataService.showLoading(false);
         }, 800);
       } else {
@@ -516,44 +518,44 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   }
 
   submit() {
-    if (this.formPanelMitra.valid) {
-      if (this.selectedMitra.length === 0) {
-        this.dialogService.openSnackBar({
-          message: "Jumlah Mitra yang dipilih tidak boleh kosong!"
-        });
-        return;
-      }
-
-      this.dataService.showLoading(true);
-      let body = {
-        delivery_courier_id: this.formPanelMitra.get('courier').value,
-        delivery_courier_service_id: this.formPanelMitra.get('service').value,
-        mitra: this.selectedMitra.map(item => ({
-          wholesaler_id: item.id
-        }))
-      };
-      if (this.allSelected) {
-        body['type'] = 'all';
-        body['area_id'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
-      } else {
-        body['area_id'] = [1];
-      }
-
-
-      this.mitraPanelService.update(body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
-        });
-        this.router.navigate(['delivery', 'panel-mitra']);
-      }, err => {
-        console.log('err create panel mitra', err);
-        this.dataService.showLoading(false);
-      })
-    } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formPanelMitra);
+    // if (this.formPanelMitra.valid) {
+    if (this.selectedMitra.length === 0) {
+      this.dialogService.openSnackBar({
+        message: "Jumlah Mitra yang dipilih tidak boleh kosong!"
+      });
+      return;
     }
+    let rawValue = this.formPanelMitra.getRawValue();
+    this.dataService.showLoading(true);
+    let body = {
+      delivery_courier_id: rawValue['courier'],
+      delivery_courier_service_id: rawValue['service'],
+      mitra: this.selectedMitra.map(item => ({
+        wholesaler_id: item.id
+      }))
+    };
+    if (this.allSelected) {
+      body['type'] = 'all';
+      body['area_id'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
+    } else {
+      body['area_id'] = [1];
+    }
+
+
+    this.mitraPanelService.update(body).subscribe(res => {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({
+        message: "Data berhasil disimpan"
+      });
+      this.router.navigate(['delivery', 'panel-mitra']);
+    }, err => {
+      console.log('err create panel mitra', err);
+      this.dataService.showLoading(false);
+    })
+    // } else {
+    //   this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+    //   commonFormValidator.validateAllFields(this.formPanelMitra);
+    // }
   }
 
   initAreaV2() {
