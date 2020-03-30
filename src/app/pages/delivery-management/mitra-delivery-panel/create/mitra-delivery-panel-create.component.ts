@@ -215,8 +215,8 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
             ...filteredMitra
           ];
           this.onSelect({ selected: res.data.mitra });
+          this.getPanelMitraList();
         }, 800);
-        this.getPanelMitraList();
       }, err => {
         console.log('err occured', err);
         this.dataService.showLoading(false);
@@ -227,6 +227,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   }
 
   getPanelMitraList() {
+    let wsIds = this.selectedMitra.map(mtr => mtr.id);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
@@ -306,7 +307,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: [] }).subscribe(
+    this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: wsIds }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
