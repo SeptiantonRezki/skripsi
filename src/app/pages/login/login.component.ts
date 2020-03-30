@@ -96,9 +96,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async qiscusLoginOrRegister(profile: any){
-    if(profile) {
-      if(profile.id !== undefined && profile.id !== null){
+  async qiscusLoginOrRegister(profile: any) {
+    if (profile) {
+      if (profile.id !== undefined && profile.id !== null) {
         const qiscusPayload = {
           userId: profile.id + 'paghms' + profile.business_id,
           userIdMC: profile.email,
@@ -107,14 +107,14 @@ export class LoginComponent implements OnInit {
           avatarImage: profile.image_url || null,
         }
 
-				const qiscusMCPayload = {
-					user_id: qiscusPayload.userIdMC,
-					password: qiscusPayload.userKey,
-					username: qiscusPayload.userName,
-					avatar_url: qiscusPayload.avatarImage,
-				};
-        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async(res_2: any) => {
-					return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
+        const qiscusMCPayload = {
+          user_id: qiscusPayload.userIdMC,
+          password: qiscusPayload.userKey,
+          username: qiscusPayload.userName,
+          avatar_url: qiscusPayload.avatarImage,
+        };
+        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async (res_2: any) => {
+          return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
         });
       } else {
         console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
@@ -143,11 +143,19 @@ export class LoginComponent implements OnInit {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
               // const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
+              if (profile.type == 'vendor') {
+                this.dataService.setEncryptedProfile(profile);
+                this.router.navigate(["dashboard"]);
+                this.submitting = false;
+                this.qiscusLoginOrRegister(profile);
+                return;
+              }
+
               if (profile.type == "supplier") {
-                  this.dataService.setEncryptedProfile(profile);
-                  this.router.navigate(["dashboard"]);
-                  this.submitting = false;
-                  this.qiscusLoginOrRegister(profile);
+                this.dataService.setEncryptedProfile(profile);
+                this.router.navigate(["dashboard"]);
+                this.submitting = false;
+                this.qiscusLoginOrRegister(profile);
               } else {
                 this.getAreasAsync(area_id).subscribe(res => {
                   let area_type = res ? res.map(r => r.data) : [];
