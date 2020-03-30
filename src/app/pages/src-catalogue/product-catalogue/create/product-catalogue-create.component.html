@@ -22,7 +22,7 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="text" formControlName="description" placeholder="Deskripsi Produk">
+              <textarea matInput rows="2" formControlName="description" placeholder="Deskripsi Produk"></textarea>
               <mat-error
                 *ngIf="formProduct.controls['description'].hasError('required') && formProduct.controls['description'].touched">
                 Deskripsi Produk harus diisi
@@ -108,7 +108,7 @@
               </mat-error>
             </mat-form-field>
             <div fxFlex="5"></div>
-            <div fxLayout="row" fxFlex="10">
+            <!-- <div fxLayout="row" fxFlex="10">
               <mat-checkbox formControlName="have_community_price">Ada Harga Paguyuban</mat-checkbox>
             </div>
             <div fxFlex="5"></div>
@@ -121,7 +121,7 @@
               *ngIf="formProduct.get('have_community_price').value">
               <input matInput type="tel" currencyMask min="0" formControlName="community_price"
                 placeholder="Harga / Pcs">
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
 
           <div fxLayout="row">

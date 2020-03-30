@@ -40,6 +40,7 @@ export class ProductCatalogueComponent implements OnInit {
   listCategory: Array<any>;
   statusFilter: Array<any> = [{ value: 'active', name: 'Aktif' }, { value: 'inactive', name: 'Tidak Aktif' }];
   dialogRef: any;
+  vendor_id: any;
 
   constructor(
     private router: Router,
@@ -60,6 +61,8 @@ export class ProductCatalogueComponent implements OnInit {
       .subscribe(data => {
         this.updateFilter(data);
       });
+    let profile = this.dataService.getDecryptedProfile();
+    if (profile) this.vendor_id = profile.vendor_company_id;
   }
 
   ngOnInit() {
@@ -88,6 +91,8 @@ export class ProductCatalogueComponent implements OnInit {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
+    this.pagination['company_id'] = this.vendor_id ? this.vendor_id : null;
+
 
     this.loadingIndicator = true;
     this.productCatalogueService.get(this.pagination).subscribe(
@@ -188,7 +193,7 @@ export class ProductCatalogueComponent implements OnInit {
 
   export() {
     this.dataService.showLoading(true);
-    this.productCatalogueService.export().subscribe(
+    this.productCatalogueService.export({ company_id: this.vendor_id ? this.vendor_id : null }).subscribe(
       res => {
         console.log('resss', res);
         this.downloadLink.nativeElement.href = res.data;
@@ -243,6 +248,10 @@ export class ProductCatalogueComponent implements OnInit {
       err => {
       }
     );
+  }
+
+  renderStockName(stockName) {
+    return stockName === 'in-stock' ? 'Tersedia' : 'Tidak Tersedia';
   }
 
 }
