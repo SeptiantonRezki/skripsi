@@ -15,7 +15,7 @@ import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 export class ProductCatalogueCreateComponent implements OnInit {
   formProduct: FormGroup;
   listCategory: Array<any>;
-  listStock: Array<any> = [{ id: 'in-stock', name: 'Tersedia' }, { id: 'out-stock', name: 'Tidak Tersedia' }];
+  listStock: Array<any> = [{ id: 'in-stock', name: 'Tersedia' }, { id: 'out-of-stock', name: 'Tidak Tersedia' }];
   listStatus: Array<any> = [{ id: 'active', name: 'Aktif' }, { id: 'inactive', name: 'Tidak Aktif' }];
   listStages: Array<any> = [
     { checked: false, id: 1, name: 'Baru bergabung menjadi SRC ?' },
