@@ -143,18 +143,7 @@ export class LoginComponent implements OnInit {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];
               // const areaType = await this.generalService.getParentArea({ parent: _.last(area_id) }).toPromise().catch(err => { this.submitting = false; throw err; });
-              if (profile.type == "vendor") {
-                this.dataService.setEncryptedProfile(profile);
-                this.router.navigate(["dashboard"]);
-                this.submitting = false;
-                this.qiscusLoginOrRegister(profile);
-                return;
-              }
-              this.getAreasAsync(area_id).subscribe(res => {
-                let area_type = res ? res.map(r => r.data) : [];
-                profile['area_type'] = area_type[0] ? area_type[0] : [];
-                profile['areas'] = area_type;
-
+              if (profile.type == 'vendor') {
                 this.dataService.setEncryptedProfile(profile);
                 this.router.navigate(["dashboard"]);
                 this.submitting = false;
