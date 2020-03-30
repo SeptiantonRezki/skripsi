@@ -214,7 +214,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
             ...this.selectedMitra,
             ...filteredMitra
           ];
-          this.onSelect({ selected: res.data.mitra });
+          this.onSelect({ selected: res && res.data && res.data.mitra ? res.data.mitra : [] });
           this.getPanelMitraList();
         }, 800);
       }, err => {
