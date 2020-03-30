@@ -64,37 +64,37 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nomor PO" prop="invoicenumber" [sortable]="false" [width]="200">
+        <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Mitra" prop="namamitra" [sortable]="false">
+        <ngx-datatable-column name="Nama Mitra" prop="wholesaler_name" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.wholesaler_name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Alamat" prop="alamat" [sortable]="false">
+        <ngx-datatable-column name="Alamat" prop="address" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.address}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No Telepon" prop="notelepon" [sortable]="false">
+        <ngx-datatable-column name="No Telepon" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Pesanan" prop="jumlahpesanan" [sortable]="false">
+        <ngx-datatable-column name="Jumlah Pesanan" prop="total_products" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.total_products}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Total Pesanan" prop="totalpesanan" [sortable]="false">
+        <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.total_price}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal" prop="tanggal" [sortable]="false">
+        <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.created_at | date:'dd/MM/yyyy'}}</span>
           </ng-template>

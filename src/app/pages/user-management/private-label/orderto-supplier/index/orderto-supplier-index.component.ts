@@ -216,6 +216,23 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     });
   }
 
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.ordertoSupplierService.getList(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+      this.loadingIndicator = false;
+    });
+  }
+
   async exportPO(string, value) {
     // this.loadingIndicator = true;
     this.dataService.showLoading(true);
@@ -223,7 +240,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
 
     delete this.pagination.page;
     this.offsetPagination = 0;
-    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}`;
+    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
 
     if (this.formFilter.get("status").value) {
       this.pagination.status = this.formFilter.get("status").value;
@@ -233,7 +250,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     if (this.formFilter.get("from").value && this.formFilter.get("to").value) {
       this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
       this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
-      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}`;
+      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xls`;
     } else {
       delete this.pagination.start_date;
       delete this.pagination.end_date;
