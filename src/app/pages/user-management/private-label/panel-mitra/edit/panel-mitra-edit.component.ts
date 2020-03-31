@@ -69,6 +69,7 @@ export class PanelMitraEditComponent implements OnInit {
   wholesalerIds: any[] = [];
   dialogRef: any;
   totalData: number = 0;
+  isSort: boolean = false;
   
   constructor(
       private formBuilder: FormBuilder,
@@ -148,7 +149,7 @@ export class PanelMitraEditComponent implements OnInit {
       this.initAreaV2();
 
       this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-        this.getListMitra();
+        // this.getListMitra();
       });
 
       this.filterProdukSearch.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
@@ -339,6 +340,7 @@ export class PanelMitraEditComponent implements OnInit {
       //   this.rows = res.data.data;
       //   this.loadingIndicator = false;
       // });
+      this.isSort = true;
       this.getListMitra();
     }
   
@@ -865,8 +867,10 @@ export class PanelMitraEditComponent implements OnInit {
       // }, err => {
       //   this.dataService.showLoading(false);
       // })
-       delete this.pagination['sort'];
-       delete this.pagination['sort_type'];
+      if (this.wholesalerIds.length > 0 && !this.isSort) {
+        delete this.pagination['sort'];
+        delete this.pagination['sort_type'];
+      }
   
       this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
         if (res.status == 'success') {
@@ -874,6 +878,9 @@ export class PanelMitraEditComponent implements OnInit {
           this.totalData = res.data.total;
           this.rows = res.data.data;
           this.loadingIndicator = false;
+          this.isSort = false;
+          this.pagination.sort = 'name';
+          this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
           this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
@@ -1081,6 +1088,31 @@ export class PanelMitraEditComponent implements OnInit {
     }
     console.log(error);
     // alert('Open console to see the error')
+  }
+
+  aturPanelMitra() {
+    if (this.formInput.valid) {
+      let body = {
+          product_id: this.formInput.get('filterproduct').value,
+          supplier_company_id: this.formInput.get('filtersupplier').value,
+        };
+      this.panelMitraService.checkPanelMitra(body).subscribe(res => {
+          this.wholesalerIds = res.data;
+          this.selected = res.data.map((item: any) => { return({ id: item })});
+          this.getListMitra();
+        }, err => {
+          console.log('err', err);
+          this.dialogService.openSnackBar({
+            message: err.error.message
+          });
+        }
+      );
+    } else {
+      commonFormValidator.validateAllFields(this.formInput);
+      this.dialogService.openSnackBar({
+        message: "Product dan supplier harus dipilih"
+      });
+    }
   }
   
 }

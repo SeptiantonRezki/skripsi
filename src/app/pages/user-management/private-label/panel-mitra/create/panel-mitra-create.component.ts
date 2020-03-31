@@ -25,7 +25,7 @@ export class PanelMitraCreateComponent implements OnInit {
   onLoad: boolean;
   @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
-  rows: any[];
+  rows: any[] = [];
   selected: any[];
   id: any;
   listFilterCategory: any[];
@@ -65,6 +65,8 @@ export class PanelMitraCreateComponent implements OnInit {
   endArea: String;
   dialogRef: any;
   totalData: number = 0;
+  wholesalerIds: any = [];
+  isSort: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -136,10 +138,10 @@ export class PanelMitraCreateComponent implements OnInit {
     })
 
     this.initAreaV2();
-    this.getListMitra();
+    // this.getListMitra();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.getListMitra();
+      // this.getListMitra();
     });
 
     this.filterProdukSearch.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
@@ -197,9 +199,10 @@ export class PanelMitraCreateComponent implements OnInit {
   }
   
   getFilterProduct(value?: any) {
-    console.log('kk', this.formInput.get('filtercategory').value);
     this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formInput.get('filtercategory').value, isAll: true }).subscribe(res => {
       if (res.status == 'success') {
+        this.formInput.get('filterproduct').setValue('');
+        this.formInput.get('filtersupplier').setValue('');
         this.listFilterProducts =  [ { name: 'Pilih Produk', id: '' }, ...res.data ];
         this.filterProducts = this.listFilterProducts.map((v) => ({...v}));
       } else {
@@ -212,6 +215,7 @@ export class PanelMitraCreateComponent implements OnInit {
   getFilterSupplier(value?: any) {
     this.panelMitraService.getFilterSupplier( { productId: value.id }).subscribe(res => {
       if (res.status == 'success') {
+        this.formInput.get('filtersupplier').setValue('');
         this.listFilterSupplier =  [ { name: 'Pilih Supplier', id: '' }, ...res.data ];
         this.filterSupplier = this.listFilterSupplier.map((v) => ({...v}));
       } else {
@@ -302,6 +306,7 @@ export class PanelMitraCreateComponent implements OnInit {
     //   this.rows = res.data.data;
     //   this.loadingIndicator = false;
     // });
+    this.isSort = true;
 
     this.getListMitra();
   }
@@ -766,8 +771,6 @@ export class PanelMitraCreateComponent implements OnInit {
     this.pagination.per_page = 25;
     if (string) { this.pagination.search = string; }
     else { delete this.pagination.search; }
-    this.pagination.sort = 'name';
-    this.pagination.sort_type = 'asc';
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area_id = areaSelected[areaSelected.length - 1].value;
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -843,13 +846,20 @@ export class PanelMitraCreateComponent implements OnInit {
     // }, err => {
     //   this.dataService.showLoading(false);
     // })
+    if (this.wholesalerIds.length > 0 && !this.isSort) {
+      delete this.pagination['sort'];
+      delete this.pagination['sort_type'];
+    }
 
-    this.panelMitraService.getListMitra(this.pagination).subscribe(res => {
+    this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.totalData = res.data.total;
         this.rows = res.data.data;
         this.loadingIndicator = false;
+        this.isSort = false;
+        this.pagination.sort = 'name';
+        this.pagination.sort_type = 'asc';
         this.dataService.showLoading(false);
       } else {
         this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
@@ -1058,6 +1068,31 @@ export class PanelMitraCreateComponent implements OnInit {
     }
     console.log(error);
     // alert('Open console to see the error')
+  }
+
+  aturPanelMitra() {
+    if (this.formInput.valid) {
+      let body = {
+          product_id: this.formInput.get('filterproduct').value,
+          supplier_company_id: this.formInput.get('filtersupplier').value,
+        };
+      this.panelMitraService.checkPanelMitra(body).subscribe(res => {
+          this.wholesalerIds = res.data;
+          this.selected = res.data.map((item: any) => { return({ id: item })});
+          this.getListMitra();
+        }, err => {
+          console.log('err', err);
+          this.dialogService.openSnackBar({
+            message: err.error.message
+          });
+        }
+      );
+    } else {
+      commonFormValidator.validateAllFields(this.formInput);
+      this.dialogService.openSnackBar({
+        message: "Product dan supplier harus dipilih"
+      });
+    }
   }
 
 }
