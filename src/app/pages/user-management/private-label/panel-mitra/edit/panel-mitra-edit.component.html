@@ -133,7 +133,7 @@
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
             <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
-            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
