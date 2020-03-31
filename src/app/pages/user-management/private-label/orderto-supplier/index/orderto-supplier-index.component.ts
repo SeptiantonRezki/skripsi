@@ -258,7 +258,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     try {
       const response = await this.ordertoSupplierService.exportPO(this.pagination).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+      this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
@@ -277,7 +277,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     // IE doesn't allow using a blob object directly as link href
     // instead it is necessary to use msSaveOrOpenBlob
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
+      window.navigator.msSaveOrOpenBlob(newBlob, fileName);
       return;
     }
 
