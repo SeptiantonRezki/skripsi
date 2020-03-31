@@ -120,11 +120,12 @@ export class ImportAudienceDialogComponent {
 
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(res => {
-        if (res && res.data) {
-          this.idbService.bulkUpdate(res.data.data).then(res => {
+      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+        if (response && response.data) {
+          this.idbService.bulkUpdate(response.data.data).then(res => {
             console.log('page', this.currPage - 1, res);
             this.currPage += 1;
+            this.lastPage = response.data.last_page;
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({

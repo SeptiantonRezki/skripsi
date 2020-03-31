@@ -148,6 +148,8 @@ export class AudienceCreateComponent {
   }
 
   ngOnInit() {
+    this.idbService.reset();
+
     this.formAudience = this.formBuilder.group({
       name: ["", Validators.required],
       min: ["", [Validators.required, Validators.min(0)]],
