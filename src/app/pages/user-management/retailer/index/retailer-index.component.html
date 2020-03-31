@@ -94,19 +94,25 @@
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           style="margin-bottom: 25px;">
-          <mat-form-field fxFlex="20" class="is-light form-primary">
+          <mat-form-field fxFlex="16" class="is-light form-primary">
             <mat-select placeholder="Apps Version AYO SRC Toko" [formControl]="version_retailer">
               <mat-option *ngFor="let item of listVersionsRetailer" [value]="item.version">{{item.version}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field fxFlex="20" class="is-light form-primary">
+          <mat-form-field fxFlex="16" class="is-light form-primary">
             <mat-select placeholder="Apps Version AYO SRC Kasir" [formControl]="version_cashier">
               <mat-option *ngFor="let item of listVersionsCashier" [value]="item.version">{{item.version}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field fxFlex="20" class="is-light form-primary">
+          <mat-form-field fxFlex="16" class="is-light form-primary">
             <mat-select placeholder="Status" [formControl]="status">
               <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Akses Kasir" [formControl]="access_cashier">
+              <mat-option *ngFor="let item of listAccessCashier" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

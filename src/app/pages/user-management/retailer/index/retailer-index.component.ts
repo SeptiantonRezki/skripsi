@@ -60,7 +60,9 @@ export class RetailerIndexComponent {
   version_retailer: FormControl = new FormControl('');
   version_cashier: FormControl = new FormControl('');
   status: FormControl = new FormControl('');
+  access_cashier: FormControl = new FormControl('');
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
 
 
   constructor(
@@ -138,6 +140,10 @@ export class RetailerIndexComponent {
     })
 
     this.version_cashier.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.access_cashier.valueChanges.subscribe(res => {
       this.getRetailerList();
     })
 
@@ -937,13 +943,15 @@ export class RetailerIndexComponent {
     this.pagination['status'] = this.status.value;
     this.pagination['retailer_version'] = this.version_retailer.value;
     this.pagination['cashier_version'] = this.version_cashier.value;
+    this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
 
-    if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
+    // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
     if (this.version_cashier.value === 'Semua Versi') {
       this.pagination['cashier_version'] = null;
       this.pagination['is_cashier'] = null;
     }
+    if (this.access_cashier.value == '-1') this.pagination['is_cashier'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
 
     this.loadingIndicator = true;
