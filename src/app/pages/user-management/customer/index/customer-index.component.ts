@@ -131,18 +131,10 @@ export class CustomerIndexComponent {
     this.generalService.getCities({ type: 'customer', area: 1 }).subscribe(res => {
       // this.listCities = [{  }]
       this.listCities = [{ name: 'Semua Kota', id: -1 }];
-      if (res) {
-        Object.keys(res).map(city => {
-          if (res[city][0]) {
-            this.listCities = [
-              ...this.listCities,
-              {
-                ...res[city][0]
-              }
-            ]
-          }
-        })
-      }
+      this.listCities = [
+        ...this.listCities,
+        ...res.data
+      ]
     })
   }
 
