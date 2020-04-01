@@ -224,28 +224,13 @@
                     <td>{{product.get("category").value}}</td>
                     <td>
                       <div class="w-100" [formGroupName]="i">
-                        <span>{{product.get("price").value | rupiahFormater}}</span>
-                        <!-- <span
-                          *ngIf="(product.get('tierHasDisc').value || product.get('price_discount').value != 0) && product.get('editable').value">{{product.get("price").value | rupiahFormater}}
-                        </span>
-                        <mat-form-field class="w-100 price-change"
-                          *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value">
-                          <input matInput type="tel" currencyMask min="0" formControlName="price"
-                            (keyup)="keyUp.next({ e: $event.target.value, i: i })">
+                        <span
+                          *ngIf="!product.get('editable').value">{{product.get("price").value | rupiahFormater}}</span>
+                        <mat-form-field class="w-100 price-change" *ngIf="product.get('editable').value">
+                          <input matInput type="tel" currencyMask min="0" formControlName="price">
                         </mat-form-field>
-                        <button mat-raised-button style="height: 30px;margin-top: 3px;margin-right: 4px;"
-                          *ngIf="product.get('price_discount').value == 0 && product.get('price_update_status').value === true && showRedBG(detailOrder.status)"
-                          (click)="updatePrice(i)">PERBARUI
-                          HARGA</button> -->
                       </div>
-                      <!-- <strong>{{product.get("price").value | rupiahFormater}}</strong> -->
                     </td>
-                    <!-- <td *ngIf="onEdit">
-                      <mat-icon
-                        *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value"
-                        class="secondary-text price-per-tier-check" fxFlex="5" (click)="showTier(i, $event)">{{
-                        product.get('tierShowed').value ? 'check_box' :'check_box_outline_blank'}}</mat-icon>
-                    </td> -->
                     <td align="center">
                       <div class="w-80" [formGroupName]="i">
                         <span *ngIf="!product.get('editable').value">{{product.get("amount").value}}</span>
