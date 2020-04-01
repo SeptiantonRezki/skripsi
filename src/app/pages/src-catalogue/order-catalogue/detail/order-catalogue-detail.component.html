@@ -306,8 +306,8 @@
                   <div fxFlex="90" class="py-16 pr-16">
                     <div class="text-center">
                       <div class="text-bold">DETAIL PENGIRIMAN</div>
-                      <div class="text-bold">{{detailOrder?.wholesaler_name}}</div>
-                      <div>{{detailOrder?.wholesaler_phone || '-'}}</div>
+                      <div class="text-bold">{{detailOrder?.vendor_company?.name || '-'}}</div>
+                      <div>{{detailOrder?.vendor_company?.phone_number || '-'}}</div>
                       <div class="py-16" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
                         <span>No. Order: {{detailOrder?.invoice_number}}</span>
                       </div>
@@ -326,7 +326,8 @@
                           <span fxFlex="25">{{item.packaging}}</span>
                           <span fxFlex="25">{{item.qty}}x</span>
                           <span fxFlex="25">{{item.price | rupiahFormaterWithoutRp}}</span>
-                          <span fxFlex="25" class="text-right">{{item.total_price | rupiahFormaterWithoutRp}}</span>
+                          <span fxFlex="25"
+                            class="text-right">{{item.price * item.qty | rupiahFormaterWithoutRp}}</span>
                         </div>
                         <div *ngIf="item.discount_nota > 0" class="" fxFlex="100" fxLayout="row"
                           fxLayoutAlign="start center">
@@ -356,18 +357,18 @@
                         <span class="mat-caption text-right"
                           fxFlex="50">{{detailOrder?.grand_total | rupiahFormaterWithoutRp}}</span>
                       </div>
-                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                      <!-- <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span *ngIf="detailOrder?.status !== 'selesai'" class="mat-caption" fxFlex="50">ESTIMASI
                           POIN</span>
                         <span *ngIf="detailOrder?.status === 'selesai'" class="mat-caption" fxFlex="50">TAMBAHAN
                           POIN</span>
                         <span class="mat-caption text-right" fxFlex="50">{{detailOrder?.point_received}}</span>
-                      </div>
+                      </div> -->
                     </div>
-                    <div class="text-center" *ngIf="detailOrder?.point_curs > 0">
+                    <!-- <div class="text-center" *ngIf="detailOrder?.point_curs > 0">
                       <div class="mat-caption">DAPATKAN POIN DENGAN SETIAP</div>
                       <div class="mat-caption">PEMESANAN {{detailOrder?.point_curs | rupiahFormaterWithoutRp}}</div>
-                    </div>
+                    </div> -->
                     <br>
                     <div class="text-center">
                       <div class="mat-caption">ORDER DISIAPKAN OLEH:</div>

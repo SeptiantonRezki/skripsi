@@ -128,6 +128,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
         console.log('detail order', this.detailOrder);
         let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.qty > 0) : [];
         this.productsNota = products;
+        console.log('products nota', this.productsNota);
 
         // if (res.data.type === "retailer") {
         this.editable =
@@ -283,7 +284,8 @@ export class OrderCatalogueDetailComponent implements OnInit {
   }
 
   updateStatus(): void {
-    if (this.detailOrder.status === 'baru' || this.detailOrder.status === 'diproses') {
+    console.log('selected stat', this.statusForm.get('newStatus').value);
+    if ((this.detailOrder.status === 'baru' || this.detailOrder.status === 'diproses') && this.statusForm.get('newStatus').value !== 'dibatalkan') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
@@ -344,7 +346,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
       res => {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
-        this.dialogService.brodcastCloseConfirmation();
+        // this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Status Berhasil Diubah" });
 
         this.ngOnInit();
@@ -356,6 +358,15 @@ export class OrderCatalogueDetailComponent implements OnInit {
         // this.dialogService.openSnackBar({ message: err.error.message })
       }
     );
+  }
+
+  checkOngkirWithProductExisting(item) {
+    console.log('cek ongkir', item);
+    if (item.title === 'Ongkos Pengiriman' || item.title === 'Total Pembayaran') {
+      return this.productsNota.length === 0 ? 0 : item.value.split('Rp ')[1];
+    } else {
+      return item.value.split('Rp ')[1];
+    }
   }
 
 }
