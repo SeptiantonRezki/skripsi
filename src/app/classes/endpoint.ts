@@ -319,7 +319,8 @@ export class Endpoint {
         unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`,
         banks: `${AYO_API}/api/v2/general/bank`,
         app_versions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/version`,
-        cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
+        // cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
+        cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`
       },
       user_onboarding: {
         register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,
