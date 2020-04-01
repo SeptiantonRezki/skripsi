@@ -1248,7 +1248,7 @@ export class AudienceCreateComponent {
         let rows = this.rows.map(row => row.id);
         this.idbService.getAll(dt => dt.is_valid).then(result => {
           console.log('result', result);
-          this.selected = result;
+          this.onSelect({ selected: result });
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         })
       }
