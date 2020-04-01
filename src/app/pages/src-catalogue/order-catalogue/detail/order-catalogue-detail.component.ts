@@ -239,6 +239,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
           return {
             id: item.id,
             name: this.detailOrder.order_products[index].name,
+            images: this.detailOrder.order_products[index]['images'],
             image: this.detailOrder.order_products[index]['images'],
             description: this.detailOrder.order_products[index]['description'],
             total_price: this.detailOrder.order_products[index]['total_price'],
@@ -318,7 +319,8 @@ export class OrderCatalogueDetailComponent implements OnInit {
           return {
             id: item.id,
             name: this.detailOrder.order_products[index].name,
-            image: this.detailOrder.order_products[index]['image'],
+            image: this.detailOrder.order_products[index]['images'],
+            images: this.detailOrder.order_products[index]['images'],
             description: this.detailOrder.order_products[index]['description'],
             total_price: this.detailOrder.order_products[index]['total_price'],
             have_community_price: this.detailOrder.order_products[index]['have_community_price'],
