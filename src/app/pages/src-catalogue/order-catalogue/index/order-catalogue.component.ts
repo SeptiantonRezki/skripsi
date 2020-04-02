@@ -127,8 +127,8 @@ export class OrderCatalogueComponent implements OnInit {
     const sort = this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.pagination.sort_type = sort_type ? sort_type : 'desc';
+    this.pagination.sort = sort ? sort : 'created_at';
 
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination.status = this.formFilter.get("status").value;
