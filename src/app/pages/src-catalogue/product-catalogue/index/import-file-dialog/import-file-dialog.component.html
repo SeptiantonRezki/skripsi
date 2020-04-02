@@ -75,7 +75,13 @@
       </table>
     </div>
   </div>
-
+  <div class="p-24 m-0" fxLayout="row" *ngIf="!vendor_id">
+    <mat-form-field fxFlex="50" class="is-light form-primary">
+      <mat-select placeholder="Nama Vendor" [formControl]="vendorCompany">
+        <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="border-top">
     <div class="p-16">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
