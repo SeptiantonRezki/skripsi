@@ -212,7 +212,7 @@ export class ProductCatalogueComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { password: 'P@ssw0rd' };
+    dialogConfig.data = { password: 'P@ssw0rd', company_id: this.vendor_id };
 
     this.dialogRef = this.dialog.open(CatalogueProductImportFileDialogComponent, dialogConfig);
 

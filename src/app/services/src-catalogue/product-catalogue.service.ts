@@ -52,4 +52,14 @@ export class ProductCatalogueService extends BaseService {
         const url = this.getUrl(this.namespace, "export");
         return this.getApi(url, queryParams);
     }
+
+    previewImport(context?, body?): Observable<any> {
+        const url = this.getUrl(this.namespace, "preview_import", context);
+        return this.postApi(url, body)
+    }
+
+    import(context?, body?): Observable<any> {
+        const url = this.getUrl(this.namespace, "import", context);
+        return this.postApi(url, body)
+    }
 }

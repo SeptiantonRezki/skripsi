@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, HostListener, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
@@ -24,6 +24,7 @@ export class CatalogueProductImportFileDialogComponent {
   asd: any[] = [];
   importing: Boolean = false;
   isInvalid: Boolean;
+  payload: any;
 
   constructor(
     public dialogRef: MatDialogRef<CatalogueProductImportFileDialogComponent>,
@@ -31,8 +32,10 @@ export class CatalogueProductImportFileDialogComponent {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private productService: ProductCatalogueService,
-    private dataService: DataService
+    private dataService: DataService,
+    @Inject(MAT_DIALOG_DATA) data,
   ) {
+    this.payload = data;
     this.rows = [];
     this.dataService.showLoading(false);
   }
@@ -57,101 +60,41 @@ export class CatalogueProductImportFileDialogComponent {
     fd.append('file', this.files);
     this.dataService.showLoading(true);
 
-    // this.productService.previewExcel(fd).subscribe(
-    //   res => {
-    //     this.jsonData = res.data;
+    this.productService.previewImport({ company_id: this.payload.company_id }, fd).subscribe(
+      res => {
+        this.rows = res && res.data ? res.data.data : [];
+        this.isInvalid = res.data.is_valid ? false : true;
+        this.dataService.showLoading(false);
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.files = undefined;
 
-    //     /** map for price */
-    //     this.rows = res.data.map(item => {
-    //       return {
-    //         ...item,
-    //         prices: this.convert(item.prices)
-    //       }
-    //     })
-
-    //     this.isInvalid = this.rows.filter(item => !item.is_valid).length > 0 ? true : false;
-
-    //     /** map for header */
-    //     const headers = res.data[0].prices.map(item => {
-    //       return [{ "name": `${item.name} Harga Normal` }, { "name": `${item.name} Harga Diskon` }, { "name": `${item.name} Tanggal Kadaluarsa` }]
-    //     })
-
-    //     let pushHeader = [];
-    //     headers.map(item => item.map(val => {
-    //       pushHeader.push(val)
-    //     }));
-
-    //     this.headers = pushHeader;
-    //     this.dataService.showLoading(false);
-    //   },
-    //   err => {
-    //     this.dataService.showLoading(false);
-    //     this.files = undefined;
-
-    //     if (err.status === 404 || err.status === 500)
-    //       this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
-    //   }
-    // )
+        if (err.status === 404 || err.status === 500)
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
+      }
+    )
   }
 
   async submit() {
-    const validData = this.jsonData.filter(item => item.is_valid === true);
+    const validData = this.rows.filter(item => item.is_valid === true);
     if (this.files && validData.length > 0 && validData.length <= 10000) {
 
-      let fd = new FormData();
-      let done = false;
-      let response;
-      const data = this.chunk_inefficient(validData, 50);
+      let body = {
+        products: validData
+      }
 
-      console.log(data.length);
-
-      const length = 100 / data.length;
-      let current_progress = 0;
-
-      this.importing = !this.importing;
       this.dataService.showLoading(true);
-      this.dataService.setProgress({ progress: current_progress.toFixed(0) });
-
-      for (const { item, index } of data.map((item, index) => ({ item, index }))) {
-        fd.append('file', JSON.stringify(item));
-
-        // try {
-        //   response = await this.productService.importExcel(fd).toPromise();
-
-        //   current_progress = current_progress === 0 ? length : current_progress + length;
-        //   this.dataService.setProgress({ progress: current_progress.toFixed(0) });
-
-        // } catch (error) {
-        //   this.dataService.showLoading(false);
-        //   throw error;
-        // }
-
-        done = (index + 1) === data.length ? true : false;
-      }
-
-      this.dataService.setProgress({ progress: 100 });
-      this.importing = !this.importing;
-
-      if (done) {
-        setTimeout(() => {
-          this.dialogRef.close(response);
+      this.productService.import({ company_id: this.payload.company_id }, body).subscribe(
+        res => {
+          this.dialogRef.close(res);
           this.dataService.showLoading(false);
-        }, 1000);
-      }
-
-      // fd.append('file', JSON.stringify(this.jsonData));
-
-      // this.dataService.showLoading(true);
-      // this.productService.importExcel(fd).subscribe(
-      //   res => {
-      //     this.dialogRef.close(res);
-      //     this.dataService.showLoading(false);
-      //   },
-      //   err => {
-      //     this.dataService.showLoading(false);
-      //     // this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
-      //   }
-      // )
+        },
+        err => {
+          this.dataService.showLoading(false);
+          // this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
+        }
+      )
 
     } else {
       let msg: string;
