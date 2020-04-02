@@ -39,14 +39,10 @@
           <tr>
             <th>SKU ID</th>
             <th>Nama Produk</th>
-            <th>Nama Lain Produk</th>
-            <th>Barcode</th>
-            <th>Perusahaan</th>
-            <th>Kategori</th>
-            <th nowrap>Nama Kemasan</th>
-            <th style="text-align: center">Jumlah</th>
+            <th>Deskripsi Produk</th>
+            <th nowrap>Ketersediaan</th>
             <th>Status</th>
-            <th *ngFor="let item of headers" nowrap>{{item.name}}</th>
+            <th>Harga</th>
             <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
@@ -59,27 +55,13 @@
               <strong>{{ item.name }}</strong>
             </td>
             <td nowrap>
-              <strong>{{ item.other_name }}</strong>
-            </td>
-            <td nowrap>
-              {{ item.barcode }}
-            </td>
-            <td nowrap>
-              {{ item.brand }}
-            </td>
-            <td nowrap>
-              {{ item.category }}
+              <strong>{{ item.product_description }}</strong>
             </td>
             <td>
-              {{ item.packaging }}
+              {{ item.availability_text === 'in-stock' ? 'Tersedia' : 'Tidak Tersedia' }}
             </td>
-            <td style="text-align: center">
-              {{ item.packaging_amount }}
-            </td>
-            <td nowrap>
-              {{ item.status.toUpperCase() }}
-            </td>
-            <td *ngFor="let price of item.prices">{{price.value || '-'}}</td>
+            <td>{{item.status === 'active' ? 'AKTIF' : 'TIDAK AKTIF'}}</td>
+            <td>{{item.harga | rupiahFormater}}</td>
             <td nowrap>
               {{ item.reason || '-' }}
             </td>
