@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, HostListener, Inject } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import * as _ from 'underscore';
 import { DataService } from 'app/services/data.service';
 import { Observable } from 'rxjs';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
+import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 
 @Component({
   templateUrl: './import-file-dialog.component.html',
@@ -25,6 +26,9 @@ export class CatalogueProductImportFileDialogComponent {
   importing: Boolean = false;
   isInvalid: Boolean;
   payload: any;
+  listVendor: Array<any>;
+  vendorCompany: FormControl = new FormControl('');
+  vendor_id: any;
 
   constructor(
     public dialogRef: MatDialogRef<CatalogueProductImportFileDialogComponent>,
@@ -33,14 +37,26 @@ export class CatalogueProductImportFileDialogComponent {
     private dialogService: DialogService,
     private productService: ProductCatalogueService,
     private dataService: DataService,
+    private vendorService: VendorsService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;
     this.rows = [];
     this.dataService.showLoading(false);
+    let profile = this.dataService.getDecryptedProfile();
+    if (profile) this.vendor_id = profile.vendor_company_id;
   }
 
   ngOnInit() {
+    this.getVendors();
+    console.log('valid', this.validComboDrag);
+  }
+
+  getVendors() {
+    this.vendorService.get({ page: 'all' }).subscribe(res => {
+      console.log('list vendors', res);
+      this.listVendor = res.data ? res.data.data : []
+    })
   }
 
   ngOnDestroy() {
@@ -52,6 +68,8 @@ export class CatalogueProductImportFileDialogComponent {
   }
 
   preview(event) {
+    console.log('valid', this.validComboDrag);
+
     this.files = undefined;
     this.files = event;
 
@@ -60,7 +78,7 @@ export class CatalogueProductImportFileDialogComponent {
     fd.append('file', this.files);
     this.dataService.showLoading(true);
 
-    this.productService.previewImport({ company_id: this.payload.company_id }, fd).subscribe(
+    this.productService.previewImport({ company_id: this.payload.company_id ? this.payload.company_id : this.vendorCompany.value }, fd).subscribe(
       res => {
         this.rows = res && res.data ? res.data.data : [];
         this.isInvalid = res.data.is_valid ? false : true;
@@ -77,6 +95,12 @@ export class CatalogueProductImportFileDialogComponent {
   }
 
   async submit() {
+    if (this.payload.company_id == null && !this.vendorCompany.value) {
+      this.dialogService.openSnackBar({
+        message: "Pilih Vendor terlebih dahulu"
+      })
+      return;
+    }
     const validData = this.rows.filter(item => item.is_valid === true);
     if (this.files && validData.length > 0 && validData.length <= 10000) {
 
@@ -85,7 +109,7 @@ export class CatalogueProductImportFileDialogComponent {
       }
 
       this.dataService.showLoading(true);
-      this.productService.import({ company_id: this.payload.company_id }, body).subscribe(
+      this.productService.import({ company_id: this.payload.company_id ? this.payload.company_id : this.vendorCompany.value }, body).subscribe(
         res => {
           this.dialogRef.close(res);
           this.dataService.showLoading(false);
