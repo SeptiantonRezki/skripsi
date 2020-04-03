@@ -132,6 +132,10 @@ export class ProductCatalogueEditComponent implements OnInit {
     })
   }
 
+  checkStages(idx) {
+    this.listStages[idx].checked = !this.listStages[idx].checked;
+  }
+
   changeImage(evt) {
     this.readThis(evt);
   }
