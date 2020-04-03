@@ -505,7 +505,7 @@ export class Endpoint {
         categories: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/categories`,
         export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/export`,
         preview_import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/preview?company_id=${context.company_id}`,
-        import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/preview?company_id=${context.company_id}`
+        import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/import?company_id=${context.company_id}`
       },
       orders_catalogue: {
         get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor`,
