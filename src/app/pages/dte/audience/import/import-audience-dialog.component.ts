@@ -80,6 +80,7 @@ export class ImportAudienceDialogComponent {
       res => {
         if (res && res.data) {
           // this.recursiveImport(res);
+          this.pagination['per_page'] = 250;
           this.audienceService.showImport(this.pagination).subscribe(response => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
@@ -159,8 +160,9 @@ export class ImportAudienceDialogComponent {
           });
 
           this.idbService.bulkUpdate(bowls).then(resUpdate => {
+            this.pagination['per_page'] = 15;
             this.idbService.paginate(this.pagination).then(resPaginate => {
-              this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+              this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
               Page.renderPagination(this.pagination, this.p_pagination);
               this.rows = resPaginate && resPaginate[0] ? resPaginate[0] : [];
               this.dataService.showLoading(false);
@@ -178,8 +180,9 @@ export class ImportAudienceDialogComponent {
           this.dialogRef.close([]);
         });
       } else {
+        this.pagination['per_page'] = 15;
         this.idbService.paginate(this.pagination).then(res => {
-          this.p_pagination = { page: this.p_page, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+          this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
           Page.renderPagination(this.pagination, this.p_pagination);
           this.rows = res && res[0] ? res[0] : [];
           this.dataService.showLoading(false);
@@ -202,8 +205,9 @@ export class ImportAudienceDialogComponent {
     this.dataService.showLoading(true);
     this.offsetPagination = pageInfo.offset;
     this.p_pagination['page'] = pageInfo.offset + 1;
+
     this.idbService.paginate(this.p_pagination).then(res => {
-      this.p_pagination = { page: pageInfo.offset + 1, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+      this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
       Page.renderPagination(this.pagination, this.p_pagination);
       this.rows = res && res[0] ? res[0] : [];
       this.dataService.showLoading(false);

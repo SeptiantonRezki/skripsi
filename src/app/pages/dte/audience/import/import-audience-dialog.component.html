@@ -40,7 +40,7 @@
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
 
         <ngx-datatable-column name="Penjual" prop="name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
             {{ row.name }}
           </ng-template>
         </ngx-datatable-column>
