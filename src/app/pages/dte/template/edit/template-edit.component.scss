@@ -107,7 +107,9 @@
 
     .question-list {
       .add-image {
-        visibility: hidden;
+        // visibility: hidden;
+        top: -30px;
+        position: relative;
       }
     }
 
@@ -144,6 +146,12 @@
       border-radius: 3px;
     }
 
+    .template-task-video {
+      width: 50%;
+      border: 1px solid #ececec;
+      border-radius: 3px;
+    }
+    
     .required-section {
       display: flex;
       align-content: center;

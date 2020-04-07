@@ -77,15 +77,20 @@ export class TemplateIndexComponent {
 
     this.templateTaskService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data ? res.data.data.map(item => {
-          return {
-            ...item,
-            image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
-          }
-        }) : [];
-        this.onLoad = false;
-        this.loadingIndicator = false;
+        if (res.data.total < res.data.per_page && page !== 1) {
+          this.dataService.setToStorage("page", 1);
+          this.getTemplateTask();
+        } else {
+          Page.renderPagination(this.pagination, res.data);
+          this.rows = res.data ? res.data.data.map(item => {
+            return {
+              ...item,
+              image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
+            }
+          }) : [];
+          this.onLoad = false;
+          this.loadingIndicator = false;
+        }
       },
       err => {
         this.onLoad = false;

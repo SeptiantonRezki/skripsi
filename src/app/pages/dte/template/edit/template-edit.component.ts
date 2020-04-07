@@ -60,6 +60,9 @@ export class TemplateEditComponent {
   questionHasNext: any = {};
   filteredNext: any[] = [];
 
+  videoMaster: any = null;
+  questionVideo: any[] = [];
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
@@ -112,6 +115,7 @@ export class TemplateEditComponent {
       name: ["", Validators.required],
       description: ["", Validators.required],
       image: [""],
+      video: [""],
       material: false,
       material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
@@ -166,6 +170,7 @@ export class TemplateEditComponent {
     if (event.source.selected) {
       questions.at(index).get('question').setValue(`Apakah Anda Memiliki stok ${event.source.value.name} ?`)
       questions.at(index).get('question_image').setValue(event.source.value.image ? event.source.value.image_url : "");
+      questions.at(index).get('question_image').setValue(event.source.value.video ? event.source.value.video_url : "");
       console.log('current', this.listProductSkuBank[index]);
       this.listProductSelected[index] = {
         ...this.listProductSelected[index],
@@ -186,7 +191,8 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
-    this.templateTaskForm.get('image').setValue(this.detailTask.image_url);
+    this.templateTaskForm.get('image').setValue(this.detailTask.image? this.detailTask.image_url : '');
+    this.templateTaskForm.get('video').setValue(this.detailTask.video? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
 
@@ -207,6 +213,7 @@ export class TemplateEditComponent {
         id: item.id,
         question: item.question,
         question_image: item['question_image'] ? item['question_image'] : '',
+        question_video: item['question_video'] ? item['question_video'] : '',
         type: item.type,
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         // required: item.required,
@@ -329,6 +336,7 @@ export class TemplateEditComponent {
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image: [''],
+      question_video: [''],
       // others: false,
       // required: false
     }))
@@ -456,7 +464,7 @@ export class TemplateEditComponent {
     this.findQuestionsHasNext();
   }
 
-  submit(): void {
+  async submit() {
     if (this.templateTaskForm.valid) {
       this.saveData = !this.saveData;
       let questions: any[] = this.templateTaskForm.get('questions').value;
@@ -468,7 +476,8 @@ export class TemplateEditComponent {
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
-        image: this.templateTaskForm.get('image').value,
+        image: this.templateTaskForm.get('image').value? this.templateTaskForm.get('image').value : '',
+        video: this.templateTaskForm.get('video').value? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         questions: questions.map((item, index) => {
@@ -491,6 +500,7 @@ export class TemplateEditComponent {
             required: item.type === 'stock_check' ? 1 : null,
             // required: item.required,
             question_image: item.question_image || '',
+            question_video: item.question_video || '',
             additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
@@ -514,17 +524,120 @@ export class TemplateEditComponent {
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
-      this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-          this.router.navigate(['dte', 'template-task']);
+      if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
+        if (this.videoMaster) {
+        let bodyMasterVideo = new FormData();
+        bodyMasterVideo.append('file', this.videoMaster);
+        this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
+          async res => {
+            body.video = res.data;
+            if (this.questionVideo.length > 0) {
+              const promise1 = await this.questionVideo.map(async(qv) => {
+                let bodyQuestionVideo = new FormData();
+                bodyQuestionVideo.append('file', qv.event);
+                await new Promise(async (resolve, reject) => { 
+                  this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+                    resQuestionVideo => {
+                      resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+                    }, err => {
+                      console.log(err.error);
+                      reject(err);
+                      return;
+                  });
+                });
+                return qv;
+              });
+  
+              Promise.all(promise1).then(() => { 
+                this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+                  res => {
+                    this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                    this.router.navigate(['dte', 'template-task']);
+        
+                    window.localStorage.removeItem('detail_template_task');
+                  },
+                  err => {
+                    console.log(err.error)
+                  }
+                )
+              });
+            } else {
+              this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+                res => {
+                  this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                  this.router.navigate(['dte', 'template-task']);
+      
+                  window.localStorage.removeItem('detail_template_task');
+                },
+                err => {
+                  console.log(err.error)
+                }
+              )
+            }
+          },
+          err => {
+            console.log(err.error)
+            return;
+          }
+        )
+        } else {
+          if (this.questionVideo.length > 0) {
+            const promise1 = await this.questionVideo.map(async(qv) => {
+              let bodyQuestionVideo = new FormData();
+              bodyQuestionVideo.append('file', qv.event);
+              await new Promise(async (resolve, reject) => { 
+                this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+                  resQuestionVideo => {
+                    resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+                  }, err => {
+                    console.log(err.error);
+                    reject(err);
+                    return;
+                });
+              });
+              return qv;
+            });
 
-          window.localStorage.removeItem('detail_template_task');
-        },
-        err => {
-          console.log(err.error)
+            Promise.all(promise1).then(() => { 
+              this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+                res => {
+                  this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                  this.router.navigate(['dte', 'template-task']);
+      
+                  window.localStorage.removeItem('detail_template_task');
+                },
+                err => {
+                  console.log(err.error)
+                }
+              )
+            });
+          } else {
+            this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+              res => {
+                this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                this.router.navigate(['dte', 'template-task']);
+    
+                window.localStorage.removeItem('detail_template_task');
+              },
+              err => {
+                console.log(err.error)
+              }
+            )
+          }
         }
-      )
+      } else {
+        this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+            this.router.navigate(['dte', 'template-task']);
+
+            window.localStorage.removeItem('detail_template_task');
+          },
+          err => {
+            console.log(err.error)
+          }
+        )
+      }
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
@@ -553,11 +666,13 @@ export class TemplateEditComponent {
       if (response) {
         switch (type) {
           case 'master':
-            this.templateTaskForm.get('image').setValue(response);
+            this.templateTaskForm.get('video').setValue('');
+            this.templateTaskForm.get('image').setValue(response.res);
             break;
           case 'question':
             let questions = this.templateTaskForm.get('questions') as FormArray;
-            questions.at(idx).get('question_image').setValue(response);
+            questions.at(idx).get('question_video').setValue('');
+            questions.at(idx).get('question_image').setValue(response.res);
             break;
           default:
             break;
@@ -570,10 +685,12 @@ export class TemplateEditComponent {
     switch (type) {
       case 'master':
         this.templateTaskForm.get('image').setValue('');
+        this.templateTaskForm.get('video').setValue('');
         break;
       case 'question':
         let questions = this.templateTaskForm.get('questions') as FormArray;
         questions.at(idx).get('question_image').setValue('');
+        questions.at(idx).get('question_video').setValue('');
         break;
       default:
         break;
@@ -582,6 +699,42 @@ export class TemplateEditComponent {
 
   onDirectBelanja(idx) {
     this.listDirectBelanja[idx] = !this.listDirectBelanja[idx];
+  }
+
+  uploadVideo(type, idx) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { password: 'P@ssw0rd', fileType: 'video' };
+
+    this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        switch (type) {
+          case 'master':
+            this.templateTaskForm.get('image').setValue('');
+            this.templateTaskForm.get('video').setValue(response.res);
+            this.videoMaster = response.event;
+            break;
+          case 'question':
+            let questions = this.templateTaskForm.get('questions') as FormArray;
+            questions.at(idx).get('question_image').setValue('');
+            questions.at(idx).get('question_video').setValue(response.res);
+            const index = this.questionVideo.map((data) => data.idx).indexOf(idx);
+            if (index > -1) {
+              this.questionVideo[index] = { idx: idx, event: response.event };
+            } else {
+              this.questionVideo.push({ idx: idx, event: response.event });
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    });
   }
 
 }

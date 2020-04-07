@@ -109,11 +109,31 @@
             <img class="template-task-image" [src]="templateTaskForm.get('image').value">
           </div>
 
+          <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto"
+            *ngIf="templateTaskForm.get('video').value">
+            <div fxLayout="row" fxLayoutAlign="start start" style="z-index: 1;">
+              <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="uploadVideo('master', null)">
+                  <mat-icon>videocam</mat-icon>
+                  <span>Ubah</span>
+                </button>
+                <button mat-menu-item (click)="deleteImage('master', null)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Hapus</span>
+                </button>
+              </mat-menu>
+            </div>
+            <video class="template-task-video" [src]="templateTaskForm.get('video').value" controls> </video>
+          </div>
+
           <div formArrayName="questions"
             *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
             <div [formGroupName]="i" class="py-24">
-              <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
               <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                 <mat-form-field fxFlex="68" class="question is-light"
                   *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                   <input matInput formControlName="question" (focus)="$event.target.select()"
@@ -134,12 +154,18 @@
                   </mat-autocomplete>
                 </mat-form-field>
 
-                <button mat-icon-button fxFlex="5"
-                  *ngIf="!isDetail && item.get('typeSelection').value['value'] !== 'stock_check'"
-                  matTooltip="Sisipkan Gambar" matTooltipPosition="below" class="add-image secondary-text"
-                  (click)="uploadImage('question', i)">
-                  <mat-icon class="secondary-text">photo</mat-icon>
-                </button>
+                <div fxFlex="5" fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto" >
+                  <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below"
+                    class="add-image secondary-text" (click)="uploadVideo('question', i)"
+                    *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                    <mat-icon class="secondary-text">videocam</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Sisipkan Gambar" matTooltipPosition="below"
+                    class="add-image secondary-text" (click)="uploadImage('question', i)"
+                    *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                    <mat-icon class="secondary-text">photo</mat-icon>
+                  </button>
+                </div>
 
                 <mat-form-field class="chooice is-light" fxFlex="30">
                   <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
@@ -177,6 +203,25 @@
                   </mat-menu>
                 </div>
                 <img class="template-task-image" [src]="item.get('question_image').value">
+              </div>
+              <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
+                *ngIf="item.get('question_video').value && item.get('type').value !== 'stock_check'">
+                <div fxLayout="row" fxLayoutAlign="start start" style="z-index: 1;">
+                  <button mat-icon-button class="btn-img" [matMenuTriggerFor]="menu" xPosition="after">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="uploadVideo('question', i)">
+                      <mat-icon>videocam</mat-icon>
+                      <span>Ubah</span>
+                    </button>
+                    <button mat-menu-item (click)="deleteImage('question', i)">
+                      <mat-icon>delete</mat-icon>
+                      <span>Hapus</span>
+                    </button>
+                  </mat-menu>
+                </div>
+                <video class="template-task-video" [src]="item.get('question_video').value" controls> </video>
               </div>
               <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                 <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
@@ -371,6 +416,11 @@
         <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text"
           (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
+        </button>
+
+        <button mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text" 
+          (click)="uploadVideo('master', i)">
+          <mat-icon class="secondary-text">videocam</mat-icon>
         </button>
       </div>
 

@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah Gambar</span>
+        <span>Unggah {{fileType == 'video' ? 'Video' : 'Gambar'}}</span>
       </div>
 
     </div>
@@ -19,23 +19,45 @@
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
     <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
-      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
+      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" *ngIf="fileType == 'image'">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>
         <span matPrefix>Tarik Gambar Kesini atau
           <strong>Pilih File</strong>
         </span>
-        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2mb</span>
+        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2MB</span>
+      </div>
+    </div>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="video/mp4"
+      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" *ngIf="fileType == 'video'" (fileChange)="onSelectFile($event)">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center" >
+        <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix>Tarik Video Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+        <span matPrefix>Format MP4, Video landscape, Maksimum 50MB</span>
       </div>
     </div>
 
-    <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" class="pt-48 pb-16">
+    <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type) > -1" class="pt-48 pb-16">
       <div class="">
         <div class="deleteBanner">
           <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
         </div>
         <div class="previewBanner" [ngfBackground]="files"></div>
+      </div>
+    </div>
+    <div *ngIf="files && files.type.indexOf('video') > -1" class="pt-48 pb-16">
+      <div class="">
+        <video [src]="url" *ngIf="format==='video' && url" height="200" controls></video>
+        <div fxLayout="column">
+          <div>name: {{files.name? files.name : '-'}}</div>
+          <div>type: {{files.type? files.type : '-'}}</div>
+          <div>size: {{files.size? files.size/1000000 + ' MB' : '-'}}</div>
+          <mat-error *ngIf="files.size > 50000000">Ukuran Video melebihi batas maks 50MB</mat-error>
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +67,8 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">Pilih</button>
-        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Batal</button>
+        <button type="button" mat-stroked-button color="primary" (click)="onSelectFile(files)">Batal</button> 
+        <!-- dialogRef.close() -->
       </div>
     </div>
   </div>

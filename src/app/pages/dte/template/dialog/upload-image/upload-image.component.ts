@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatMenuTrigger } from '@angular/material';
 import { Router } from '@angular/router';
@@ -16,6 +16,11 @@ export class UploadImageComponent {
 
   dataImage: FormGroup;
 
+  fileType: string;
+  format: string;
+  url: any;
+  file_copied: any;
+
   constructor(
     public dialogRef: MatDialogRef<UploadImageComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
@@ -23,7 +28,9 @@ export class UploadImageComponent {
     private router: Router,
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
-  ) { }
+  ) {
+    this.fileType = data.fileType;
+   }
 
   ngOnInit() {
     this.dataImage = this.formBuilder.group({
@@ -40,18 +47,41 @@ export class UploadImageComponent {
   }
 
   submit() {
-    if (this.files && this.files.size <= 2000000) {
+    if (this.files && this.files.size <= 2000000 && this.fileType == 'image' || this.files && this.files.size <= 50000000 &&  this.fileType == 'video') {
       let reader = new FileReader();
       let file = this.files;
       reader.readAsDataURL(file);
 
       let self = this;
       reader.onload = () => {
-        this.dialogRef.close(reader.result);
+        this.dialogRef.close({ res: reader.result, event: this.file_copied });
       };
       
     } else {
-      this.dialogService.openSnackBar({ message: 'Ukuran gambar melebihi 2mb'})
+      if (this.fileType == 'image') {
+        this.dialogService.openSnackBar({ message: 'Ukuran gambar melebihi 2MB'})
+      } else {
+        this.dialogService.openSnackBar({ message: 'Ukuran video melebihi 50MB'})
+      }
+    }
+  }
+
+  onSelectFile(value: any) {
+    // console.log('event', event);
+    const file = value;
+    if (file) {
+      this.file_copied = file;
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      if (file.type.indexOf('image')> -1){
+        this.format = 'image';
+      } else if(file.type.indexOf('video')> -1){
+        this.format = 'video';
+      }
+      reader.onload = (event) => {
+        // console.log('event', event);
+        this.url = (<FileReader>event.target).result;
+      }
     }
   }
 

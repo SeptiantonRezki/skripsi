@@ -30,4 +30,9 @@ export class TemplateTaskService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
+
+  uploadVideo(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'upload_video');
+    return this.postApi(url, body);
+  }
 }
