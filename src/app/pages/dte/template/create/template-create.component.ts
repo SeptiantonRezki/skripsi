@@ -462,6 +462,7 @@ export class TemplateCreateComponent {
   async submit() {
     console.log(this.templateTaskForm);
     if (this.templateTaskForm.valid) {
+      this.dataService.showLoading(true);
       // this.saveData = !this.saveData;
       this.saveData = true;
       let questions: any[] = this.templateTaskForm.get('questions').value;
@@ -519,6 +520,7 @@ export class TemplateCreateComponent {
 
       console.log(body, this.questionHasNext[2]);
       if (questionsIsEmpty.length > 0) {
+        this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
@@ -541,6 +543,7 @@ export class TemplateCreateComponent {
                     }, err => {
                       console.log(err.error);
                       reject(err);
+                      this.dataService.showLoading(false);
                       return;
                   });
                 });
@@ -550,21 +553,25 @@ export class TemplateCreateComponent {
               Promise.all(promise1).then(() => { 
                 this.taskTemplateService.create(body).subscribe(
                   res => {
+                    this.dataService.showLoading(false);
                     this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
                     this.router.navigate(['dte', 'template-task']);
                   }, err => {
                     console.log(err.error)
+                    this.dataService.showLoading(false);
                     return;
                 })
               });
             } else {
               this.taskTemplateService.create(body).subscribe(
                 res => {
+                  this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
                   this.router.navigate(['dte', 'template-task']);
                 },
                 err => {
                   console.log(err.error)
+                  this.dataService.showLoading(false);
                   return;
                 }
               )
@@ -572,6 +579,7 @@ export class TemplateCreateComponent {
           },
           err => {
             console.log(err.error)
+            this.dataService.showLoading(false);
             return;
           }
         )
@@ -587,6 +595,7 @@ export class TemplateCreateComponent {
                   }, err => {
                     console.log(err.error);
                     reject(err);
+                    this.dataService.showLoading(false);
                     return;
                 });
               });
@@ -596,21 +605,25 @@ export class TemplateCreateComponent {
             Promise.all(promise1).then(() => { 
               this.taskTemplateService.create(body).subscribe(
                 res => {
+                  this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
                   this.router.navigate(['dte', 'template-task']);
                 }, err => {
-                  console.log(err.error)
+                  console.log(err.error);
+                  this.dataService.showLoading(false);
                   return;
               })
             });
           } else {
             this.taskTemplateService.create(body).subscribe(
               res => {
+                this.dataService.showLoading(false);
                 this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
                 this.router.navigate(['dte', 'template-task']);
               },
               err => {
-                console.log(err.error)
+                console.log(err.error);
+                this.dataService.showLoading(false);
                 return;
               }
             )
@@ -619,11 +632,13 @@ export class TemplateCreateComponent {
       } else {
         this.taskTemplateService.create(body).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
             this.router.navigate(['dte', 'template-task']);
           },
           err => {
-            console.log(err.error)
+            console.log(err.error);
+            this.dataService.showLoading(false);
           }
         )
       }

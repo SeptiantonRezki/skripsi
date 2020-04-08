@@ -466,6 +466,7 @@ export class TemplateEditComponent {
 
   async submit() {
     if (this.templateTaskForm.valid) {
+      this.dataService.showLoading(true);
       this.saveData = !this.saveData;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
@@ -477,7 +478,7 @@ export class TemplateEditComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value? this.templateTaskForm.get('image').value : '',
-        video: this.templateTaskForm.get('video').value? this.templateTaskForm.get('video').value : '',
+        video: this.detailTask.video? this.detailTask.video : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         questions: questions.map((item, index) => {
@@ -521,6 +522,7 @@ export class TemplateEditComponent {
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
       if (questionsIsEmpty.length > 0) {
+        this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
@@ -542,6 +544,7 @@ export class TemplateEditComponent {
                     }, err => {
                       console.log(err.error);
                       reject(err);
+                      this.dataService.showLoading(false);
                       return;
                   });
                 });
@@ -551,32 +554,37 @@ export class TemplateEditComponent {
               Promise.all(promise1).then(() => { 
                 this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                   res => {
+                    this.dataService.showLoading(false);
                     this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                     this.router.navigate(['dte', 'template-task']);
         
                     window.localStorage.removeItem('detail_template_task');
                   },
                   err => {
-                    console.log(err.error)
+                    console.log(err.error);
+                    this.dataService.showLoading(false);
                   }
                 )
               });
             } else {
               this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                 res => {
+                  this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                   this.router.navigate(['dte', 'template-task']);
       
                   window.localStorage.removeItem('detail_template_task');
                 },
                 err => {
-                  console.log(err.error)
+                  console.log(err.error);
+                  this.dataService.showLoading(false);
                 }
               )
             }
           },
           err => {
-            console.log(err.error)
+            console.log(err.error);
+            this.dataService.showLoading(false);
             return;
           }
         )
@@ -592,6 +600,7 @@ export class TemplateEditComponent {
                   }, err => {
                     console.log(err.error);
                     reject(err);
+                    this.dataService.showLoading(false);
                     return;
                 });
               });
@@ -601,26 +610,30 @@ export class TemplateEditComponent {
             Promise.all(promise1).then(() => { 
               this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                 res => {
+                  this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                   this.router.navigate(['dte', 'template-task']);
       
                   window.localStorage.removeItem('detail_template_task');
                 },
                 err => {
-                  console.log(err.error)
+                  console.log(err.error);
+                  this.dataService.showLoading(false);
                 }
               )
             });
           } else {
             this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
               res => {
+                this.dataService.showLoading(false);
                 this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                 this.router.navigate(['dte', 'template-task']);
     
                 window.localStorage.removeItem('detail_template_task');
               },
               err => {
-                console.log(err.error)
+                console.log(err.error);
+                this.dataService.showLoading(false);
               }
             )
           }
@@ -628,13 +641,15 @@ export class TemplateEditComponent {
       } else {
         this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
             this.router.navigate(['dte', 'template-task']);
 
             window.localStorage.removeItem('detail_template_task');
           },
           err => {
-            console.log(err.error)
+            console.log(err.error);
+            this.dataService.showLoading(false);
           }
         )
       }
