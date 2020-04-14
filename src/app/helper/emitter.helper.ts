@@ -6,31 +6,33 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class Emitter {
   // Observable navItem source
   private selectedHelpTabQ = new BehaviorSubject<object>({});
-
   // QISCUS - MULTICHANNEL
   private newMessageQMC = new BehaviorSubject<object>({});
   private presenceQMC = new BehaviorSubject<object>({});
   private typingQMC = new BehaviorSubject<object>({});
   private readQMC = new BehaviorSubject<object>({});
   private deliveredQMC = new BehaviorSubject<object>({});
+  // PRIVATE - LABEL
+  private privateLabelEmitter = new BehaviorSubject<object>({});
+  private payMethodDataEmitter = new BehaviorSubject<object>({});
 
 
   // Observable navItem stream
   listenSelectedHelpTabQ = this.selectedHelpTabQ.asObservable();
-
   // QISCUS - MULTICHANNEL
   listenNewMessageQMC = this.newMessageQMC.asObservable();
   listenPresenceQMC = this.presenceQMC.asObservable();
   listenTypingQMC = this.typingQMC.asObservable();
   listenReadQMC = this.readQMC.asObservable();
   listenDeliveredQMC = this.deliveredQMC.asObservable();
+  // PRIVATE - LABEL
+  listenPrivateLabelEmitter = this.privateLabelEmitter.asObservable();
+  listenPayMethodDataEmitter = this.payMethodDataEmitter.asObservable();
 
   // service command
-
   emitSelectedHelpTabQ(data: any) {
     this.selectedHelpTabQ.next(data);
   }
-
   // QISCUS - MULTICHANNEL
   emitNewMessageQMC(message: any) {
     this.newMessageQMC.next(message);
@@ -47,9 +49,8 @@ export class Emitter {
   emitDeliveredQMC(message: any) {
     this.deliveredQMC.next(message);
   }
-  //PRIVATE - LABEL
-  private privateLabelEmitter = new BehaviorSubject<object>({});
-  listenPrivateLabelEmitter = this.privateLabelEmitter.asObservable();
+  // PRIVATE - LABEL
   emitPrivateLabelEmitter(message: any) { this.privateLabelEmitter.next(message); }
+  emitPayMethodDataEmitter(message: any) { this.payMethodDataEmitter.next(message); }
 
 }

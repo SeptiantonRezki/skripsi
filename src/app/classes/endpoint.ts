@@ -514,6 +514,10 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
         update_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/status`,
         export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
+      },
+      PLPayMethod: {
+        getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/metode-pembayaran`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/metode-pembayaran/${context.payMethodId}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

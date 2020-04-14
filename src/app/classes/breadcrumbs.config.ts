@@ -563,24 +563,24 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "current",
           url: "",
-          name: "Supplier Company"
+          name: "Perusahaan"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Private Label"
+          name: "Produk Prinsipall"
         },
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Supplier Company"
+          name: "Perusahaan"
         },
         {
           type: "current",
@@ -592,12 +592,12 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Supplier Company"
+          name: "Perusahaan"
         },
         {
           type: "current",
@@ -609,12 +609,12 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
           url: "/user-management/supplier-company",
-          name: "Supplier Company"
+          name: "Perusahaan"
         },
         {
           type: "current",
@@ -628,24 +628,24 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "current",
           url: "",
-          name: "User Supplier"
+          name: "User Perusahaan"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Supplier"
+          name: "User Perusahaan"
         },
         {
           type: "current",
@@ -657,12 +657,12 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Supplier"
+          name: "User Perusahaan"
         },
         {
           type: "current",
@@ -674,12 +674,12 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Supplier"
+          name: "User Perusahaan"
         },
         {
           type: "current",
@@ -693,7 +693,7 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "current",
@@ -705,7 +705,7 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
@@ -722,7 +722,7 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
@@ -739,7 +739,7 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Private Label"
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
@@ -756,40 +756,43 @@ export const brConfig = {
     ordertosupplier: {
       index: [
         {
-          type: "current",
-          url: "",
-          name: "Order to Supplier"
-        }
-      ],
-      create: [
-        {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Order to Supplier"
+          name: "Produk Prinsipal"
         },
         {
           type: "current",
           url: "",
-          name: "Order to Supplier"
+          name: "Order dari Mitra"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Order to Supplier"
+          name: "Produk Prinsipal"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-order",
+          name: "Order dari Mitra"
         },
         {
           type: "current",
           url: "",
-          name: "Order to Supplier"
+          name: "Edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Order to Supplier"
+          name: "Produk Prinsipal"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-order",
+          name: "Order dari Mitra"
         },
         {
           type: "current",
@@ -797,6 +800,37 @@ export const brConfig = {
           name: "Detail"
         }
       ]
+    },
+    paymentmethod: {
+      index: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-metode-pembayaran",
+          name: "Produk Prinsipal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Metode Pembayaran"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-metode-pembayaran",
+          name: "Produk Prinsipal"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-metode-pembayaran",
+          name: "Metode Pembayaran"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
     },
   },
   inappMarketing: {

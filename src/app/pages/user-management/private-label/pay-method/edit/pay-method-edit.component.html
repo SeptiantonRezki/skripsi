@@ -1,0 +1,41 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Metode Pembayaran'">
+    <button style="width: 150px" mat-raised-button type="button" (click)="onSave()">
+    SIMPAN
+  </button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper" *ngIf="payMethodData">
+      <mat-list style="overflow: hidden;" class="pt-0">
+        <mat-list-item>
+          <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+            <span fxFlex="15" class="h6 text-semibold">Nama Produk</span>
+            <span fxFlex="15" class="h6 text-semibold">Kategori</span>
+            <span fxFlex="70" class="h6 text-semibold">Metode Pembayaran</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <form autocomplete="off" [formGroup]="formPaymentMethod">
+          <mat-list-item class="custom-height mb-8">
+            <div fxFlex="15" >{{payMethodData.product_name}}</div>
+            <div fxFlex="15" >{{payMethodData.category_name}}</div>
+            <div fxFlex="70" >
+              <div fxLayout="column" *ngIf="payMethodData.payments.length > 0">
+                <mat-checkbox [checked]="checkAll" class="payments-column" (change)="selectionAll($event)">Pilih Semua</mat-checkbox>
+                <div fxLayout="row wrap">
+                  <div formArrayName="listPayments" *ngFor="let payment of formPaymentMethod.get('listPayments')['controls']; let i = index;" class="payments-column" >
+                    <div [formGroupName]="i">
+                      <mat-checkbox formControlName="value" [checked]="payment.value.value" class="pr-8">{{payment.value.name}}</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </form>
+      </mat-list>
+    </div>
+  </div>
+</div>

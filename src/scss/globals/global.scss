@@ -643,6 +643,14 @@ mat-form-field.jumlah {
   }
 }
 
+.mat-checkbox-payment.active .mat-checkbox-layout .mat-checkbox-inner-container .mat-checkbox-background {
+  background-color: #333 !important;
+}
+
+.mat-checkbox-payment.inactive .mat-checkbox-layout .mat-checkbox-inner-container .mat-checkbox-frame {
+  border-color: #333 !important;
+}
+
 #shopping-order {
   .tab-content {
     flex: 1 1 auto !important;

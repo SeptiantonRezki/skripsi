@@ -54,13 +54,13 @@
             <ng-template matStepLabel>Nama Supplier</ng-template>
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field>
-                <mat-label>Supplier Company</mat-label>
-                <mat-select placeholder="Supplier Company" formControlName="supplierCompany">
+                <mat-label>Perusahaan</mat-label>
+                <mat-select placeholder="Perusahaan" formControlName="supplierCompany">
                   <mat-option [value]="item.id" *ngFor="let item of supplierCompanyList">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['supplierCompany'].hasError('required') && verticalStepperStep2.controls['supplierCompany'].touched">
-                  Supplier Company harus diisi
+                  Perusahaan harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -81,7 +81,7 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="User Supplier" formControlName="role">
+                <mat-select placeholder="User Perusahaan" formControlName="role">
                   <mat-option *ngFor="let item of listRole" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error

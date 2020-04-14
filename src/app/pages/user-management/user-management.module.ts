@@ -29,6 +29,7 @@ import {
   MatAutocompleteModule,
   MatDatepickerModule,
   MatDividerModule,
+  MatListModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -66,6 +67,9 @@ import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/
 import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
 import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
 import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+
+import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
+import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
 
 import { PageGuard } from "app/classes/auth.guard";
 
@@ -132,6 +136,7 @@ export const MY_FORMATS = {
     MatAutocompleteModule,
     MatDatepickerModule,
     MatDividerModule,
+    MatListModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -163,6 +168,8 @@ export const MY_FORMATS = {
     UserSupplierCreateComponent,
     UserSupplierEditComponent,
     UserSupplierIndexComponent,
+    PayMethodEditComponent,
+    PayMethodIndexComponent,
 
   ],
   declarations: [
@@ -204,6 +211,8 @@ export const MY_FORMATS = {
     UserSupplierCreateComponent,
     UserSupplierEditComponent,
     UserSupplierIndexComponent,
+    PayMethodEditComponent,
+    PayMethodIndexComponent,
 
     ImportAccessCashierDialogComponent,
     ImportPanelMitraDialogComponent,

@@ -49,6 +49,8 @@ import { SupplierCompanyIndexComponent } from "./private-label/supplier-company/
 import { UserSupplierCreateComponent } from "./private-label/user-supplier/create/user-supplier-create.component";
 import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
 import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
+import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
+import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
 // import { PendingChangesGuard } from "../dte/dte.guard";
 
 const routes: Routes = [
@@ -459,6 +461,22 @@ const routes: Routes = [
     },
     resolve: {
       listRole: ListRoleAdminResolver
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-metode-pembayaran",
+    component: PayMethodIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.paymentmethod.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-metode-pembayaran/edit/:id",
+    component: PayMethodEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.paymentmethod.edit
     },
     // canActivate: [PageGuard]
   },

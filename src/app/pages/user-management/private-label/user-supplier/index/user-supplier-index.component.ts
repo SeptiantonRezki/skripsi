@@ -165,8 +165,8 @@ export class UserSupplierIndexComponent implements OnInit {
   deleteById(id: any) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus User Supplier",
-      captionDialog: "Apakah anda yakin untuk menghapus User Supplier ini?",
+      titleDialog: "Hapus User Perusahaan",
+      captionDialog: "Apakah anda yakin untuk menghapus User Perusahaan ini?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };

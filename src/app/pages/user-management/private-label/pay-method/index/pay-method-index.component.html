@@ -1,0 +1,98 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Metode Pembayaran'">
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper p-8" >
+      <ngx-datatable class="material ngx-datatable fixed-header virtualized" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama" prop="product_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.product_name || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Kategori" prop="category_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.category_name || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Direct Debit Cash" prop="email" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments" fxLayout="row" fxLayoutAlign="center center">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Direct Debit Cash' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Direct Debit Cash' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Direct Debit Credit" prop="lastlogin" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Direct Debit Credit' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Direct Debit Credit' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Giro/Cek Mundur" prop="lastupdated" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Giro/Cek Mundur' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Giro/Cek Mundur' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="120" name="Giro/Cek Tunai" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Giro/Cek Tunai' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Giro/Cek Tunai' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Kredit/Nota Putih" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Kredit/Nota Putih' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Kredit/Nota Putih' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="120" name="Slip Setoran" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Slip Setoran' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Slip Setoran' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="120" name="Transfer Tunai" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Transfer Tunai' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Transfer Tunai' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Uang Tunai" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Uang Tunai' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Uang Tunai' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text" outline>edit</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

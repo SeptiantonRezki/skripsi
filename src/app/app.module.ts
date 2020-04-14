@@ -70,6 +70,7 @@ import { SupplierCompanyService } from "./services/user-management/private-label
 import { UserSupplierService } from "./services/user-management/private-label/user-supplier.service";
 import { PanelMitraService } from "./services/user-management/private-label/panel-mitra.service";
 import { OrdertoSupplierService } from "./services/user-management/private-label/orderto-supplier.service";
+import { PayMethodService } from "./services/user-management/private-label/pay-method.service";
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from "./services/idle.service";
@@ -168,6 +169,7 @@ import { StoreTemplateLayoutService } from "./services/src-catalogue/store-templ
     UserCatalogueService,
     ProductCatalogueService,
     StoreTemplateLayoutService,
+    PayMethodService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],

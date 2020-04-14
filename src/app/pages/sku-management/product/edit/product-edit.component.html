@@ -156,7 +156,7 @@
                 <!-- <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox> -->
                 <div fxLayout="row" fxLayoutGap="20px">
                   <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src" [disabled]="!detailProduct.is_private_label_editable">Promo SRC</mat-checkbox>
-                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label" [disabled]="!detailProduct.is_private_label_editable">Private Label</mat-checkbox>
+                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label" [disabled]="!detailProduct.is_private_label_editable">Produk Prinsipal</mat-checkbox>
                 </div>
               </div>
               <div class="" formArrayName="areas"

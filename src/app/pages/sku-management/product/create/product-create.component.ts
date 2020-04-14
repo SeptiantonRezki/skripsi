@@ -63,7 +63,7 @@ export class ProductCreateComponent {
   ];
   jenisProduk: any[] = [
     { name: "Promo SRC", value: "promo_src" },
-    { name: "Private Label", value: "private_label" }
+    { name: "Produk Prinsipal", value: "private_label" }
   ];
 
   filteredSkuOptions: Observable<string[]>;
