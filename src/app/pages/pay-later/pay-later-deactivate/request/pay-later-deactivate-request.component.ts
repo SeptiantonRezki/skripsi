@@ -51,7 +51,7 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getListDeactivation();
+    // this.getListDeactivation();
   }
 
   getListDeactivation() {

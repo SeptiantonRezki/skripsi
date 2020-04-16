@@ -131,7 +131,7 @@ export class PayLaterCompanyComponent implements OnInit {
 
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_paylater_company", param);
-    this.router.navigate(["paylater", "companies", "edit"]);
+    this.router.navigate(["paylater", "companies", "detail"]);
   }
 
   deleteCompany(id) {

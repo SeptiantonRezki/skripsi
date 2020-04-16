@@ -32,6 +32,10 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { PayLaterRoutingModule } from "./pay-later-routing.module";
 import { PageGuard } from 'app/classes/auth.guard';
 import { PayLaterDeactivateComponent } from './pay-later-deactivate/paylater-deactivate.component';
+import { PayLaterPanelMitraComponent } from './pay-later-panel/create/pay-later-panel-mitra/pay-later-panel-mitra.component';
+import { PayLaterPanelSrcComponent } from './pay-later-panel/create/pay-later-panel-src/pay-later-panel-src.component';
+import { PayLaterPanelSrcEditComponent } from './pay-later-panel/edit/pay-later-panel-src-edit/pay-later-panel-src-edit.component';
+import { PayLaterPanelMitraEditComponent } from './pay-later-panel/edit/pay-later-panel-mitra-edit/pay-later-panel-mitra-edit.component';
 
 @NgModule({
   imports: [
@@ -57,8 +61,8 @@ import { PayLaterDeactivateComponent } from './pay-later-deactivate/paylater-dea
     NgxMatSelectSearchModule,
     MatMenuModule
   ],
-  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent],
+  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent],
   providers: [PageGuard],
-  exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent]
+  exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent]
 })
 export class PayLaterModule { }

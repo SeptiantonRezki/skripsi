@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Edit Perusahaan'"></page-content-header>
+  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Perusahaan'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">Edit Perusahaan</h2>
+        <h2 class="">{{ isDetail ? 'Detil' : 'Ubah' }} Perusahaan</h2>
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formCompany">
@@ -76,7 +76,7 @@
         </form>
       </div>
     </div>
-    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
       <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
         SIMPAN
       </button>

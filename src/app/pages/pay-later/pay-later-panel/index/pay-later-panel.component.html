@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Perusahaan'">
+  <page-content-header [contentTitle]="'Panel Bayar Nanti'">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/paylater', 'panel', 'create']">
@@ -13,7 +13,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Perusahaan</h2>
+        <h2 class="pl-8">Panel Bayar Nanti</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -28,7 +28,7 @@
 
         <ngx-datatable-column name="Nama Perusahaan" prop="paylater_company_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)">{{row.paylater_company_name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -59,6 +59,9 @@
             <div class="button-row pl-8">
               <button mat-icon-button color="" matTooltip="Ubah Perusahaan" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button type="button" mat-icon-button color="" matTooltip="Export All Panel" (click)="export(row.id)">
+                <mat-icon class="orange-500-fg">save_alt</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deleteCompany(row.id)">
                 <mat-icon>delete</mat-icon>

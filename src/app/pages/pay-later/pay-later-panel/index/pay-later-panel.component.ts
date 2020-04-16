@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-pay-later-panel',
@@ -131,7 +132,7 @@ export class PayLaterPanelComponent implements OnInit {
 
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_paylater_panel", param);
-    this.router.navigate(["paylater", "panel", "edit"]);
+    this.router.navigate(["paylater", "panel", "detail"]);
   }
 
   deleteCompany(id) {
@@ -146,14 +147,77 @@ export class PayLaterPanelComponent implements OnInit {
   }
 
   confirmDelete() {
-    // this.payLaterPanelServicer.delete({ company_id: this.id }).subscribe(res => {
-    //   if (res.status) {
-    //     this.dialogService.brodcastCloseConfirmation();
-    //     this.getCompanies();
+    this.payLaterPanelServicer.delete({ panel_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getCompanies();
 
-    //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-    //   }
-    // });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
+    });
+  }
+
+  async export(id) {
+
+    this.dataService.showLoading(true);
+    // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    // let area_id: any = areaSelected[areaSelected.length - 1].value;
+    let fd = new FormData();
+    fd.append('paylater_panel_id', id);
+    try {
+      const response = await this.payLaterPanelServicer.exportAllPanel(fd).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterAllPanel_${new Date().toLocaleString()}.xls`);
+      // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
 }

@@ -21,7 +21,7 @@ const routes: Routes = [
     path: "companies",
     component: PayLaterCompanyComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.company.index
     },
     // canActivate: [PageGuard]
   },
@@ -29,7 +29,7 @@ const routes: Routes = [
     path: "companies/create",
     component: PayLaterCompanyCreateComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.create
+      breadcrumbs: brConfig.paylater.company.create
     },
     // canActivate: [PageGuard]
   },
@@ -37,7 +37,15 @@ const routes: Routes = [
     path: "companies/edit",
     component: PayLaterCompanyEditComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.edit
+      breadcrumbs: brConfig.paylater.company.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "companies/detail",
+    component: PayLaterCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.paylater.company.detail
     },
     // canActivate: [PageGuard]
   },
@@ -45,35 +53,35 @@ const routes: Routes = [
     path: "deactivate",
     component: PayLaterDeactivateComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.deactivate.index
     }
   },
   {
     path: "panel",
     component: PayLaterPanelComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.panel.index
     }
   },
   {
     path: "panel/create",
     component: PayLaterPanelCreateComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.panel.create
     }
   },
   {
     path: "panel/edit",
     component: PayLaterPanelEditComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.panel.edit
     }
   },
   {
     path: "panel/detail",
     component: PayLaterPanelEditComponent,
     data: {
-      breadcrumbs: brConfig.settings.access.index
+      breadcrumbs: brConfig.paylater.panel.detail
     }
   },
 ];
