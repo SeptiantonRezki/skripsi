@@ -24,12 +24,14 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatToolbarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatMenuModule
 } from "@angular/material";
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { PayLaterRoutingModule } from "./pay-later-routing.module";
 import { PageGuard } from 'app/classes/auth.guard';
+import { PayLaterDeactivateComponent } from './pay-later-deactivate/paylater-deactivate.component';
 
 @NgModule({
   imports: [
@@ -53,8 +55,10 @@ import { PageGuard } from 'app/classes/auth.guard';
     MatDialogModule,
     ngfModule,
     NgxMatSelectSearchModule,
+    MatMenuModule
   ],
-  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent],
-  providers: [PageGuard]
+  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent],
+  providers: [PageGuard],
+  exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent]
 })
 export class PayLaterModule { }

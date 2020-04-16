@@ -1,3 +1,44 @@
-<p>
-  pay-later-deactivate-history works!
-</p>
+<!-- <div class="content p-24" *ngIf="!onLoad"> -->
+<div class="table-wrapper">
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+    <h2 class="pl-8">Riwayat Pengajuan Deaktivasi</h2>
+    <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="is-light tab-search">
+        <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+      </mat-form-field>
+    </div>
+  </div>
+  <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+    [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+    [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+    (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+
+    <ngx-datatable-column name="Nama Mitra" prop="name">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Kode iSMS" prop="isms_code">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.isms_code}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Zone" prop="division">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.division}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Region" prop="region">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.region}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Area" prop="area">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area}}
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+<!-- </div> -->

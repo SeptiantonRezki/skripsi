@@ -5,6 +5,10 @@ import { PageGuard } from "app/classes/auth.guard";
 import { PayLaterCompanyCreateComponent } from "./pay-later-company/create/pay-later-company-create.component";
 import { PayLaterCompanyEditComponent } from "./pay-later-company/edit/pay-later-company-edit.component";
 import { brConfig } from "app/classes/breadcrumbs.config";
+import { PayLaterDeactivateComponent } from "./pay-later-deactivate/paylater-deactivate.component";
+import { PayLaterPanelComponent } from "./pay-later-panel/index/pay-later-panel.component";
+import { PayLaterPanelEditComponent } from "./pay-later-panel/edit/pay-later-panel-edit.component";
+import { PayLaterPanelCreateComponent } from "./pay-later-panel/create/pay-later-panel-create.component";
 
 
 const routes: Routes = [
@@ -30,12 +34,47 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "companies/edit/:id",
+    path: "companies/edit",
     component: PayLaterCompanyEditComponent,
     data: {
       breadcrumbs: brConfig.settings.access.edit
     },
     // canActivate: [PageGuard]
+  },
+  {
+    path: "deactivate",
+    component: PayLaterDeactivateComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.index
+    }
+  },
+  {
+    path: "panel",
+    component: PayLaterPanelComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.index
+    }
+  },
+  {
+    path: "panel/create",
+    component: PayLaterPanelCreateComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.index
+    }
+  },
+  {
+    path: "panel/edit",
+    component: PayLaterPanelEditComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.index
+    }
+  },
+  {
+    path: "panel/detail",
+    component: PayLaterPanelEditComponent,
+    data: {
+      breadcrumbs: brConfig.settings.access.index
+    }
   },
 ];
 

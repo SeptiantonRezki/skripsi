@@ -408,6 +408,22 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
       },
+      paylater_company: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
+        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/update-status/${context.company_id}`
+      },
+      paylater_panel: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel`
+      },
+      paylater_deactivate: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation`,
+        history: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/history`,
+        approval: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/${context.deactivation_id}`,
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
