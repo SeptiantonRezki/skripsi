@@ -57,9 +57,19 @@ export class PayLaterPanelService extends BaseService {
     return this.getApi(url);
   }
 
-
   delete(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
   }
+
+  importFile(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import');
+    return this.postApi(url, body);
+  }
+
+  previewImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview");
+    return this.postApi(url, body);
+  }
+
 }

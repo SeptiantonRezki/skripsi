@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { DeactivateReasonDialogComponent } from '../deactivate-reason-dialog/deactivate-reason-dialog.component';
 
 @Component({
   selector: 'app-pay-later-deactivate-request',
@@ -30,12 +32,14 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
   offsetPagination: any;
+  dialogRef: any;
 
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private payLaterDeactivateService: PayLaterDeactivateService
+    private payLaterDeactivateService: PayLaterDeactivateService,
+    private dialog: MatDialog
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -121,6 +125,23 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+    });
+  }
+
+  approval(row, status) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { status: status, row: row };
+
+    this.dialogRef = this.dialog.open(
+      DeactivateReasonDialogComponent,
+      dialogConfig
+    );
+    this.dialogRef.afterClosed().subscribe(res => {
+
     });
   }
 

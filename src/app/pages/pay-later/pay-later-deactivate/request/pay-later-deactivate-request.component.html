@@ -16,7 +16,7 @@
 
     <ngx-datatable-column name="Nama Mitra" prop="name">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+        {{row.name}}
       </ng-template>
     </ngx-datatable-column>
 
@@ -39,15 +39,37 @@
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area}}
       </ng-template>
     </ngx-datatable-column>
+    <ngx-datatable-column name="Pengajuan Deaktivasi" prop="status">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.status}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Approved/Declined" prop="approved">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.approved}}
+      </ng-template>
+    </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+    <ngx-datatable-column name="Tanggal Pengajuan" prop="created_at">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.created_at | date: 'dd/MM/yyyy HH:mm'}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Reason" prop="reason">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.reason}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Tindakan" headerClass="textright" [sortable]="false">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
         style="justify-content: center !important">
-        <div class="button-row pl-8">
-          <button mat-button color="" matTooltip="TOLAK PENGAJUAN">
+        <div fxLayout="column" style="padding: 10px 10px 10px 0;">
+          <button mat-button matTooltip="Tolak Pengajuan"
+            style="margin-bottom: 10px;border: 1px solid #D0021B;background-color: #D0021B;color: white"
+            (click)="approval(row, 'declined')">
             TOLAK
           </button>
-          <button mat-button color="primary" matTooltip="SETUJUI PENGAJUAN">
+          <button mat-button style="border: 1px solid #10dd10; color: white;background-color: #10dd10;"
+            matTooltip="Setujui Pengajuan" (click)="approval(row, 'approved')">
             SETUJUI
           </button>
         </div>

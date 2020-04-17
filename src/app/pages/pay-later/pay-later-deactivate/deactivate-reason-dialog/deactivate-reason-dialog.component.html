@@ -1,0 +1,55 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <span>Konfirmasi Alasan</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <form [formGroup]="reasonForm">
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+      <!-- NAME -->
+      <h4 style="text-align: center;"><span>Anda akan <span
+            style="font-weight: bold;">{{ payload.status === 'declined' ? "Menolak" : "Menyetujui" }}</span> pengajuan
+          deaktivasi. Mohon masukan
+          alasan dan klik <span style="font-weight: bold;">KONFIRMASI</span> di bawah ini</span></h4>
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <div class="card-name pt-48">
+          <mat-form-field class="w-100-p otc" floatLabel="never" appearance="standard">
+            <textarea matInput rows="3" formControlName="reason" placeholder="Alasan"></textarea>
+            <mat-error
+              *ngIf="reasonForm.controls['reason'].hasError('required') && reasonForm.controls['reason'].touched">
+              Alasan harus diisi
+            </mat-error>
+            <mat-error
+              *ngIf="reasonForm.controls['reason'].hasError('minLength') && reasonForm.controls['reason'].touched">
+              Alasan minimal 20 karakter.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- / NAME -->
+
+      <div class="confirm pt-64 pb-24" fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button type="button" style="height: 50px !important;" class="confirmation-button"
+          fxFlex="100" (click)="submit()">
+          KONFIRMASI
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

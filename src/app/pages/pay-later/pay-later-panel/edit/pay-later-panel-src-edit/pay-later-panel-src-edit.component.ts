@@ -11,6 +11,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
 
 @Component({
   selector: 'app-pay-later-panel-src-edit',
@@ -455,26 +456,21 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
   }
 
   import(): void {
-    // const dialogConfig = new MatDialogConfig();
+    const dialogConfig = new MatDialogConfig();
 
-    // dialogConfig.disableClose = true;
-    // dialogConfig.autoFocus = true;
-    // dialogConfig.panelClass = 'scrumboard-card-dialog';
-    // dialogConfig.data = { password: 'P@ssw0rd' };
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { type: 'retailer' };
 
-    // this.dialogRef = this.dialog.open(ImportPanelMitraDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
-    // this.dialogRef.afterClosed().subscribe(response => {
-    //   if (response) {
-    //     this.selected = response;
-    //     if (response) {
-    //       this.selectedMitra = this.selectedMitra.concat(response);
-    //       console.log('this selected', this.selectedMitra);
-    //       this.onSelect({ selected: this.selectedMitra });
-    //       this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-    //     }
-    //   }
-    // });
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.onSelect({ selected: response });
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
   }
 
   handleError(error) {
