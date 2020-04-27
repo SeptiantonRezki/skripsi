@@ -259,7 +259,7 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
       },
       help: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=help`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,

@@ -53,27 +53,81 @@
               </mat-error>
             </mat-form-field>
           </div>
+
           <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="user" placeholder="Grup Pengguna">
-                <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="formHelp.controls['user'].hasError('required') && formHelp.controls['user'].touched">
-                Grup Pengguna Wajib Diisi
-              </mat-error>
-            </mat-form-field>
+            <!-- LEFT -->
+            <div fxFlex="50">
+
+              <!-- GRUP PENGGUNA -->
+              <div fxLayout="row">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select formControlName="user" placeholder="Grup Pengguna">
+                    <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formHelp.controls['user'].hasError('required') && formHelp.controls['user'].touched">
+                    Grup Pengguna Wajib Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- GRUP PENGGUNA -->
+
+              <!-- JENIS -->
+              <div fxLayout="row">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select formControlName="type" placeholder="Jenis" (selectionChange)="onTypeChange($event)">
+                    <mat-option *ngFor="let item of jenisGroup" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formHelp.controls['type'].hasError('required') && formHelp.controls['type'].touched">
+                    Jenis Wajib Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- JENIS -->
+
+              <!-- KATEGORY -->
+              <div fxLayout="row" *ngIf="formHelp.get('type').value === 'help'">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select formControlName="category" placeholder="Kategori">
+                    <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
+                    Kategori Wajib Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- KATEGORY -->
+
+              <!-- VIDEO URL -->
+              <div fxLayout="row" *ngIf="formHelp.get('type').value === 'video'">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="text" formControlName="video_url" placeholder="URL Video">
+                  <mat-error *ngIf="formHelp.controls['video_url'].hasError('required') && formHelp.controls['video_url'].touched">
+                    URL Video Wajib Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- VIDEO URL -->
+
+            </div>
+            <!-- LEFT -->
+
+            <!-- RIGHT -->
+            <div fxFlex="50">
+              <yt-video-preview [src]="formHelp.get('video_url').value" *ngIf="formHelp.get('type').value === 'video'"></yt-video-preview>
+              <info-preview *ngIf="formHelp.get('type').value === 'help'" [preview]="formHelp.get('body').value"></info-preview>
+            </div>
+            <!-- RIGHT -->
+
           </div>
-          <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="category" placeholder="Kategori">
-                <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
-              </mat-select>
-              <mat-error
-                *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
-                Kategori Wajib Diisi
-              </mat-error>
-            </mat-form-field>
-          </div>
+
+
+
+
+
+          <!-- KEYWORD -->
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <mat-chip-list #chipList aria-label="Keyword Selection">
@@ -91,6 +145,8 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <!-- KEYWORD -->
+
           <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">Konten Bantuan</h3>
           </div>

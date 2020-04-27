@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { FormGroup, FormBuilder, Validators } from '../../../../../../node_modules/@angular/forms';
@@ -16,6 +16,7 @@ import { Config } from 'app/classes/config';
 export class HelpCreateComponent {
 
   @ViewChild('chipList') chipList: MatChipList;
+  @ViewChild('youtubeFrame') youtubeFrame: ElementRef;
   formHelp: FormGroup;
   formHelpError: any;
 
@@ -33,6 +34,11 @@ export class HelpCreateComponent {
 
   categoryGroup: any[] = [
     { name: "Please Wait...", value: "" },
+  ];
+  jenisGroup: any[] = [
+    { name: "Jenis", value: "" },
+    { name: "Info", value: "help" },
+    { name: "Video", value: "video" },
   ];
 
   files: File;
@@ -61,6 +67,8 @@ export class HelpCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
+      video_url: [""],
+      type: ["", Validators.required],
       category: ["", Validators.required],
       otherkeyword: ["", Validators.required]
     });
@@ -150,8 +158,37 @@ export class HelpCreateComponent {
       }
     }, 500);
   }
+  onTypeChange({value}) {
+
+    if (value === 'video') {
+
+      this.formHelp.get('video_url').setValidators([Validators.required]);
+
+      const category = this.formHelp.get('category');
+      category.setValidators([]);
+      category.setValue('');
+      this.formHelp.updateValueAndValidity();
+
+    } else if (value === 'help') {
+
+      const video_url = this.formHelp.get('video_url');
+      const category = this.formHelp.get('category');
+      video_url.setValidators([]);
+      video_url.setValue('');
+      category.setValidators([Validators.required]);
+      this.formHelp.updateValueAndValidity();
+
+
+    }
+  }
 
   submit(): void {
+
+    if (this.formHelp.get('type').value === 'video') {
+      this.formHelp.get('category').setValidators([]);
+      this.formHelp.get('category').updateValueAndValidity();
+    }
+    console.log('FORM', this.formHelp);
     if (this.keywords.length == 0) {
       this.formHelp.get('otherkeyword').setValue('');
     }
@@ -165,11 +202,13 @@ export class HelpCreateComponent {
         body.append('body', this.formHelp.get("body").value);
         body.append('user', this.formHelp.get("user").value);
         body.append('content_category_id', this.formHelp.get("category").value);
+        body.append('type', this.formHelp.get('type').value);
         // body.append('keyword', this.formHelp.get("otherkeyword").value);
         body.append('keyword', JSON.stringify(this.keywords));
         body.append('is_notif', '0');
-        body.append('type', 'help');
+        // body.append('type', 'help');
         if (this.files) body.append('image', this.files);
+        body.append('video_url', this.formHelp.get('video_url').value);
 
         this.helpService.create(body).subscribe(
           res => {

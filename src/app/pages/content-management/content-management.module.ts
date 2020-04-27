@@ -42,6 +42,8 @@ import { ReporterListComponent } from './report-list/report-detail/reporter-list
 import { DetailReportComponent } from './report-list/report-detail/detail-report/detail-report.component';
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { PipesModule } from "app/pipe/pipes.module";
+import { YtVideoPreviewComponent } from './help/yt-video-preview/yt-video-preview.component';
+import { InfoPreviewComponent } from './help/info-preview/info-preview.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -96,7 +98,9 @@ export const MY_FORMATS = {
     ReportHistoryComponent,
     ReportDetailComponent,
     ReporterListComponent,
-    DetailReportComponent
+    DetailReportComponent,
+    YtVideoPreviewComponent,
+    InfoPreviewComponent,
   ],
   exports: [
     TncIndexComponent,

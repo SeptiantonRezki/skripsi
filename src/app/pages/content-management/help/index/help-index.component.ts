@@ -20,6 +20,7 @@ export class HelpIndexComponent {
   rows: any[];
   selected: any[];
   id: any[];
+  defaultType: string = 'video';
 
   loadingIndicator = true;
   reorderable = true;
@@ -49,6 +50,7 @@ export class HelpIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
+    this.pagination.setType(this.defaultType);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -74,6 +76,7 @@ export class HelpIndexComponent {
   }
 
   getHelp() {
+    console.log('PAGINATION', this.pagination);
     this.offsetPagination = 0;
 
     this.helpService.get(this.pagination).subscribe(
@@ -88,6 +91,14 @@ export class HelpIndexComponent {
         this.onLoad = false;
       }
     );
+  }
+
+  onChangeTab({index}) {
+    console.log({index});
+    let type = (index === 0) ? 'video' : 'help';
+    // this.helpType = helpType;
+    this.pagination.setType(type);
+    this.getHelp();
   }
 
   onSelect({ selected }) {
