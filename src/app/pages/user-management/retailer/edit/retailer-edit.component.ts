@@ -360,7 +360,8 @@ export class RetailerEditComponent {
       this.formRetailer.controls['business_code'].disable();
     }
 
-    this.formRetailer.controls['version'].disable();
+    this.formRetailer.controls['version_retailer'].disable();
+    this.formRetailer.controls['version_cashier'].disable();
 
     if (this.isDetail) {
       this.formRetailer.disable();
@@ -372,6 +373,7 @@ export class RetailerEditComponent {
 
   getAudienceArea(selection, id) {
     let item: any;
+    console.log('id area get', id);
     switch (selection) {
       case 'zone':
         this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
@@ -476,7 +478,8 @@ export class RetailerEditComponent {
   }
 
   getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
+    return areas && areas[0] ? areas[0] : '';
   }
 
   // setDetailRetailer() {
