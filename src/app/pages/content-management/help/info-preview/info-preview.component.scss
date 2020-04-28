@@ -1,0 +1,28 @@
+@import "src/scss/variable/variable.scss";
+.infoPreview {
+    margin: auto; width: 50%;
+}
+.infoPreviewNav {
+    height: 40px;
+    background-color: map-get($colors, primary-red) !important;
+}
+.infoPreviewTab {
+    -webkit-box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.19);
+    -moz-box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.19);
+    box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.19);
+}
+.wt {
+    color: white;
+}
+.activeTab {
+    border-bottom: solid 2px map-get($colors, primary-red);
+    // border: solid 2px red;
+}
+.tab > p {
+    font-size: smaller;
+}
+.infoPreviewContent {
+    height: 250px;
+    padding-top: 10px;
+    overflow-x: scroll;
+}

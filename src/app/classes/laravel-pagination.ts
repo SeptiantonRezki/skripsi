@@ -16,6 +16,7 @@ export class Page {
   user: any;
   product_id: any;
   category_id: any;
+  type: string;
   
   constructor() {
     this.per_page = 15;
@@ -32,11 +33,15 @@ export class Page {
     this.user = "";
     this.category_id = "";
     this.product_id = "";
+    this.type = '';
   }
 
   public static renderPagination(pagination, response) {
     pagination.page = response.page;
     pagination.per_page = response.per_page;
     pagination.total = response.total;
+  }
+  public setType(type) {
+    this.type = type;
   }
 }

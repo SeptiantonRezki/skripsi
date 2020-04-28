@@ -37,6 +37,11 @@ export class HelpEditComponent {
   categoryGroup: any[] = [
     { name: "Please Wait...", value: "" },
   ];
+  jenisGroup: any[] = [
+    { name: "Jenis", value: "" },
+    { name: "Info", value: "help" },
+    { name: "Video", value: "video" },
+  ];
 
   files: File;
   validComboDrag: Boolean;
@@ -76,6 +81,8 @@ export class HelpEditComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
+      video_url: [""],
+      type: ["", Validators.required],
       category: ["", Validators.required],
       otherkeyword: ["", Validators.required]
     });
@@ -164,6 +171,8 @@ export class HelpEditComponent {
           title: res.data.title,
           user: this.detailHelp.user,
           category: res.data.content_category_id,
+          type: res.data.type || '',
+          video_url: res.data.video_url,
           otherkeyword: res.data.keyword ? (JSON.parse(res.data.keyword).length > 0 ? res.data.keyword : "") : "",
           body: res.data.body,
         });
@@ -191,7 +200,32 @@ export class HelpEditComponent {
     }, 500);
   }
 
+  onTypeChange({value}) {
+
+    if (value === 'video') {
+
+      this.formHelp.get('video_url').setValidators([Validators.required]);
+
+      const category = this.formHelp.get('category');
+      category.setValidators([]);
+      category.setValue('');
+      this.formHelp.updateValueAndValidity();
+
+    } else if (value === 'help') {
+
+      const video_url = this.formHelp.get('video_url');
+      const category = this.formHelp.get('category');
+      video_url.setValidators([]);
+      video_url.setValue('');
+      category.setValidators([Validators.required]);
+      this.formHelp.updateValueAndValidity();
+
+
+    }
+  }
+
   submit(): void {
+    console.log('FormHelp', this.formHelp);
     if (this.keywords.length == 0) {
       this.formHelp.get('otherkeyword').setValue('');
     }
@@ -206,11 +240,13 @@ export class HelpEditComponent {
         body.append('body', this.formHelp.get("body").value);
         body.append('user', this.formHelp.get("user").value);
         body.append('content_category_id', this.formHelp.get("category").value);
+        body.append('type', this.formHelp.get('type').value);
         // body.append('keyword', this.formHelp.get("otherkeyword").value);
         body.append('keyword', JSON.stringify(this.keywords));
-        body.append('type', 'help');
+        // body.append('type', 'help');
         body.append('is_notif', '0');
         if (this.files) body.append('image', this.files);
+        body.append('video_url', this.formHelp.get('video_url').value);
 
         this.helpService.put(body, { content_id: this.detailHelp.id }).subscribe(
           res => {
