@@ -112,3 +112,40 @@
     background-color: #3a3a3a !important;
   }
 }
+
+:host {
+
+  .multiple-img-chip {
+    height: 60px;
+    border-radius: 10px !important;
+    margin: 5px;
+
+    .multiple-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  .icon-close {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAAAPFBMVEX///8AAAD9/f2CgoKAgIAAAAAAAAAAAABLS0sAAAAAAACqqqqqqqq6urpKSkpISEgAAAC7u7u5ubn////zbsMcAAAAE3RSTlMASv6rqwAWS5YMC7/AyZWVFcrJCYaKfAAAAHhJREFUeF590kkOgCAQRFEaFVGc+/53FYmbz6JqBbyQMFSYuoQuV+iTflnstI7ssLXRvMWRaEMs84e2uVckuZe6knL0hiSPObXhj6ChzoEkIolIIpKIO4joICAIeDd7QGIfCCjOKe9HEk8mnxpIAup/F31RPZP9fAG3IAyBSJe0igAAAABJRU5ErkJggg==) top right no-repeat;
+    width: 30px;
+    height: 30px;
+    opacity: 0.7;
+  }
+
+  .video-content-chip {
+    height: 270px; 
+    padding: 12px !important;
+    border-radius: 10px !important;
+    margin: 5px;
+
+    .video-content {
+      min-width: 250x;
+      min-height: 250px;
+      width: 250x;
+      height: 250px;
+    }
+  }
+}
