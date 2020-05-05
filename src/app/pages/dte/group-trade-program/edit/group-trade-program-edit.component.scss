@@ -1,0 +1,26 @@
+:host {
+  .image-sku {
+    float: left;
+    box-shadow: 0 0 1px black;
+    /** Interesting part starts here */
+    font-size: 0;
+    text-align: center;
+    width: 410px;
+    height: 210px;
+    padding: 10px;
+  }
+
+  .image-sku img {
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .image-sku:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+}

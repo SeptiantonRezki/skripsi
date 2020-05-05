@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
@@ -15,6 +15,14 @@ export class GroupTradeProgramCreateComponent implements OnInit {
   formGroupTradeProgram: FormGroup;
   formGroupTradeProgramError: any;
 
+  listUserGroup: any[] = [{ name: "HMS", value: "HMS" }, { name: "NON HMS", value: "NON-HMS" }];
+  files: File;
+  validComboDrag: boolean;
+
+  imageSku: any;
+  imageSkuConverted: any;
+  @ViewChild('screen') screen: ElementRef;
+
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -29,19 +37,26 @@ export class GroupTradeProgramCreateComponent implements OnInit {
 
   ngOnInit() {
     this.formGroupTradeProgram = this.formBuilder.group({
-      name: ["", Validators.required]
+      name: ["", Validators.required],
+      user_group: ["", Validators.required]
     });
   }
 
   submit() {
-    if (this.formGroupTradeProgram.valid) {
+    if (this.formGroupTradeProgram.valid && (this.files && this.files.size < 2000000)) {
       this.dataService.showLoading(true);
-      let body = {
-        name: this.formGroupTradeProgram.get('name').value,
-        status: 'active'
-      }
+      // let body = {
+      //   name: this.formGroupTradeProgram.get('name').value,
+      //   status: 'active'
+      // }
 
-      this.groupTradeProgramService.create(body).subscribe(res => {
+      let fd = new FormData();
+      fd.append('name', this.formGroupTradeProgram.get('name').value);
+      fd.append('status', 'active');
+      fd.append('type', this.formGroupTradeProgram.get('user_group').value);
+      fd.append('image', this.files);
+
+      this.groupTradeProgramService.create(fd).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: "Data berhasil disimpan!"
@@ -56,6 +71,32 @@ export class GroupTradeProgramCreateComponent implements OnInit {
 
       this.dialogService.openSnackBar({ message: "Silahkan lengkapi data terlebih dahulu!" });
     }
+  }
+
+  removeImage(): void {
+    this.files = undefined;
+  }
+
+  changeImage(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageSku = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+
+    return image.src;
   }
 
 }
