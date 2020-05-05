@@ -17,6 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/import-pop-up-audience/import-pop-up-audience.component';
 import { GeotreeService } from 'app/services/geotree.service';
+import { TemplateTaskService } from 'app/services/dte/template-task.service';
 
 @Component({
   selector: 'app-notification-create',
@@ -47,14 +48,18 @@ export class NotificationCreateComponent {
 
   listLevelArea: any[];
   list: any;
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
+  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
 
-  files: File;
   imageContentType: File;
   imageContentTypeBase64: any;
+
+  multipleImageContentType: any[];
+  videoContentType: File;
+  videoContentTypeURL: any;
+
   public options: Object = Config.FROALA_CONFIG;
 
   audienceSelected: any[] = [];
@@ -89,8 +94,10 @@ export class NotificationCreateComponent {
     private _lightbox: Lightbox,
     private retailerService: RetailerService,
     private dialog: MatDialog,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private taskTemplateService: TemplateTaskService,
   ) {
+    this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     console.log(this.areaType);
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -154,6 +161,11 @@ export class NotificationCreateComponent {
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
+      }
+      if (res === 'wholesaler') {
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+      } else {
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
       }
 
       if (this.formNotification.get("is_target_audience").value === true) {
@@ -971,12 +983,14 @@ export class NotificationCreateComponent {
     }
   }
 
-  removeImage(): void {
-    this.files = undefined;
+  removeImageVideo(): void {
+    this.imageContentType = undefined;
+    this.imageContentTypeBase64 = null;
+    // this.videoContentType = undefined;
+    this.videoContentTypeURL = null;
   }
 
-  submit(): void {
-    console.log(this.formNotification)
+  async submit() {
     if (this.formNotification.valid) {
       let _areas = [];
       let areas = [];
@@ -1021,7 +1035,81 @@ export class NotificationCreateComponent {
         if (this.imageContentTypeBase64) {
           body['image_value'] = this.imageContentTypeBase64;
         } else {
-          return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
+          if (this.multipleImageContentType.length > 0) {
+            this.dataService.showLoading(true);
+            return await new Promise(async (resolve, reject) => {
+              const bodyVideo = new FormData();
+              bodyVideo.append('title', body.title);
+              bodyVideo.append('body', body.body);
+              bodyVideo.append('type', body.type);
+              bodyVideo.append('content_type', body.content_type);
+              bodyVideo.append('area_id', body.area_id);
+              this.multipleImageContentType.forEach((element, i) => {
+                bodyVideo.append(`image_value[${i}]`, element);
+              });
+              if (this.formNotification.get('is_target_audience').value) {
+                bodyVideo.append('target_audience', '1');
+                const ta = await this.audienceSelected.map((aud, i) => {
+                  bodyVideo.append(`target_audiences[${i}]`, aud.id);
+                });
+              } else {
+                if (bodyVideo.get('target_audience')) {
+                  bodyVideo.delete('target_audience');
+                }
+              }
+              this.notificationService.create(bodyVideo).subscribe(
+                res => {
+                  this.router.navigate(["notifications"]);
+                  this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+                  this.dataService.showLoading(false);
+                  resolve(res);
+                },
+                err => {
+                  this.dataService.showLoading(false);
+                  reject(err);
+                }
+              );
+            });
+          } else {
+            return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
+          }
+        }
+      } else if (body.content_type === 'video') {
+        if (this.videoContentTypeURL) {
+          this.dataService.showLoading(true);
+          return await new Promise(async (resolve, reject) => {
+            const bodyVideo = new FormData();
+            bodyVideo.append('title', body.title);
+            bodyVideo.append('body', body.body);
+            bodyVideo.append('type', body.type);
+            bodyVideo.append('content_type', body.content_type);
+            bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('video_value', this.videoContentType);
+            if (this.formNotification.get('is_target_audience').value) {
+              bodyVideo.append('target_audience', '1');
+              const ta = await this.audienceSelected.map((aud, i) => {
+                bodyVideo.append(`target_audiences[${i}]`, aud.id);
+              });
+            } else {
+              if (bodyVideo.get('target_audience')) {
+                bodyVideo.delete('target_audience');
+              }
+            }
+            this.notificationService.create(bodyVideo).subscribe(
+              res => {
+                this.router.navigate(["notifications"]);
+                this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+                this.dataService.showLoading(false);
+                resolve(res);
+              },
+              err => {
+                this.dataService.showLoading(false);
+                reject(err);
+              }
+            );
+          });
+        } else {
+          return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
         }
       }
 
@@ -1055,6 +1143,16 @@ export class NotificationCreateComponent {
     if (this.imageContentTypeBase64 && this.imageContentType) {
       this.imageContentType = undefined;
       this.imageContentTypeBase64 = undefined;
+    }
+
+    if (this.multipleImageContentType && this.imageContentType) {
+      this.imageContentType = undefined;
+      this.multipleImageContentType = [];
+    }
+
+    if (this.videoContentType && this.videoContentTypeURL) {
+      this.videoContentType = undefined;
+      this.videoContentTypeURL = null;
     }
 
     if (value !== 'static_page') {
@@ -1110,25 +1208,90 @@ export class NotificationCreateComponent {
     return result;
   }
 
-  imagesContentType(image) {
-    var file: File = image;
-    var myReader: FileReader = new FileReader();
+  imagesContentType(event) {
+    if (this.imageContentType['length'] !== undefined && this.imageContentType['length'] !== null) {
+      if (this.imageContentType && this.imageContentType[0]) {
+        const filesAmount = this.imageContentType['length'];
+        for (let i = 0; i < filesAmount; i++) {
+          const reader = new FileReader();
+          reader.onloadend = (ev: any) => {
+            console.log('onloadend', ev);
+            this.multipleImageContentType.push(ev.target.result);
+            if (i == filesAmount - 1) {
+              console.log('SELESAI');
+              this.imageContentType = undefined;
+            }
+          }
+          reader.readAsDataURL(this.imageContentType[i]);
+        }
+      }
+    } else {
+      const file: File = event;
+      const myReader: FileReader = new FileReader();
+
+      this.multipleImageContentType = [];
+
+      myReader.onloadend = (e) => {
+        this.imageContentTypeBase64 = myReader.result;
+      }
+
+      myReader.readAsDataURL(file);
+    }
+  }
+
+  async previewImage(index = 0) {
+    if (this.multipleImageContentType['length'] > 0) {
+      const albums = [];
+      const filesAmount = this.multipleImageContentType['length'];
+      console.log('previewImage', albums)
+      for (let i = 0; i < filesAmount; i++) {
+        albums.push({
+          src: this.multipleImageContentType[i],
+          caption: '',
+          thumb: this.multipleImageContentType[i]
+        });
+        // return i;
+      }
+      console.log('album', albums)
+      this._lightbox.open(albums, index);
+    } else {
+      const album = {
+        src: this.imageContentTypeBase64,
+        caption: '',
+        thumb: this.imageContentTypeBase64
+      };
+
+      this._lightbox.open([album], 0);
+    }
+  }
+
+  removeImageMultiple(index) {
+    console.log('removeImageMultiple', index);
+    this.multipleImageContentType.splice(index, 1);
+    // delete this.imageContentType[index];
+    // const d = [];
+    // for (let i = 0; i < this.imageContentType['length']; i++) {
+    //   if ( i !== index) {
+    //     d.push(this.imageContentType[i]);
+    //   }
+    // }
+    // console.log('d', d);
+    // this.imageContentType = d;
+  }
+
+  onVideoContentTypeSelect(event) {
+    console.log('event video', event);
+
+    const file: File = event;
+    const myReader: FileReader = new FileReader();
+
+    this.multipleImageContentType = [];
 
     myReader.onloadend = (e) => {
-      this.imageContentTypeBase64 = myReader.result;
+      this.videoContentTypeURL = myReader.result;
     }
 
     myReader.readAsDataURL(file);
-  }
-
-  previewImage() {
-    let album = {
-      src: this.imageContentTypeBase64,
-      caption: '',
-      thumb: this.imageContentTypeBase64
-    };
-
-    this._lightbox.open([album], 0);
   }
 
   checkAreaLocation(area, lastSelfArea) {
