@@ -25,9 +25,28 @@
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
         (sort)="onSort($event)">
 
+        <ngx-datatable-column [width]="140" name="" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container m-8 product-image">
+              <img class="" *ngIf="row.image_url" [src]="row.image_url">
+              <!-- <img class="" *ngIf="!row.image_url" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Nama" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Non-HMS" prop="type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <mat-icon>{{ row.type == 'HMS' ? 'check_box_outline_blank' : 'check_box' }}</mat-icon>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nama Principal Non-HMS" prop="principal">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.principal}}
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="name">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
@@ -18,6 +18,14 @@ export class GroupTradeProgramEditComponent implements OnInit {
   detailGroupTradeProgram: any;
   listStatus: any[] = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }]
   formStatus: FormControl = new FormControl('');
+  listUserGroup: any[] = [{ name: "HMS", value: "HMS" }, { name: "NON HMS", value: "NON-HMS" }];
+
+  files: File;
+  validComboDrag: boolean;
+
+  imageSku: any;
+  imageSkuConverted: any;
+  @ViewChild('screen') screen: ElementRef;
 
   constructor(
     private router: Router,
@@ -39,11 +47,18 @@ export class GroupTradeProgramEditComponent implements OnInit {
 
   ngOnInit() {
     this.formGroupTradeProgram = this.formBuilder.group({
-      name: ["", Validators.required]
+      name: ["", Validators.required],
+      user_group: [false, Validators.required],
+      principal: [""]
     });
 
-    this.formGroupTradeProgram.get('name').setValue(this.detailGroupTradeProgram.name);
+    this.formGroupTradeProgram.setValue({
+      name: this.detailGroupTradeProgram.name,
+      user_group: this.detailGroupTradeProgram.type == 'HMS' ? false : true,
+      principal: this.detailGroupTradeProgram.principal
+    });
     this.formStatus.setValue(this.detailGroupTradeProgram.status);
+
     if (this.isDetail) {
       this.formGroupTradeProgram.disable();
       this.formStatus.disable();
@@ -53,12 +68,19 @@ export class GroupTradeProgramEditComponent implements OnInit {
   submit() {
     if (this.formGroupTradeProgram.valid) {
       this.dataService.showLoading(true);
-      let body = {
-        name: this.formGroupTradeProgram.get('name').value,
-        status: this.formStatus.value
-      }
+      // let body = {
+      //   name: this.formGroupTradeProgram.get('name').value,
+      //   status: this.formStatus.value
+      // }
 
-      this.groupTradeProgramService.put(body, { group_id: this.detailGroupTradeProgram.id }).subscribe(res => {
+      let fd = new FormData();
+      fd.append('name', this.formGroupTradeProgram.get('name').value);
+      fd.append('status', this.formStatus.value);
+      fd.append('type', this.formGroupTradeProgram.get('user_group').value ? 'NON-HMS' : 'HMS');
+      fd.append('image', this.files ? this.files : '');
+      fd.append('principal', this.formGroupTradeProgram.get('user_group').value ? this.formGroupTradeProgram.get('principal').value : '');
+
+      this.groupTradeProgramService.put(fd, { group_id: this.detailGroupTradeProgram.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: "Data berhasil disimpan!"
@@ -73,6 +95,32 @@ export class GroupTradeProgramEditComponent implements OnInit {
 
       this.dialogService.openSnackBar({ message: "Silahkan lengkapi data terlebih dahulu!" });
     }
+  }
+
+  removeImage(): void {
+    this.files = undefined;
+  }
+
+  changeImage(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageSku = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  convertCanvasToImage(canvas) {
+    let image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+
+    return image.src;
   }
 
 }

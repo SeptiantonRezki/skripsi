@@ -183,8 +183,10 @@
                   <strong>Jenis Produk</strong>
                 </div>
                 <div fxLayout="row" fxLayoutGap="20px">
-                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox>
-                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8" formControlName="is_private_label">Produk Prinsipal</mat-checkbox>
+                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo
+                    SRC</mat-checkbox>
+                  <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8"
+                    formControlName="is_private_label">Produk Prinsipal</mat-checkbox>
                 </div>
                 <!-- <mat-radio-group formControlName="jenisproduk" class="radio-group pb-16" fxLayout="row" fxLayoutGap="20px">
                   <mat-radio-button class="radio-button" *ngFor="let item of jenisProduk" [value]="item.value" (change)="jenisProdukChange($event)">
@@ -290,9 +292,13 @@
               </div>
               <div *ngIf="formProductGroup.get('is_private_label').value">
                 <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
-                  <div fxFlex="50"><h3 class="">Harga Produk</h3></div>
+                  <div fxFlex="50">
+                    <h3 class="">Harga Produk</h3>
+                  </div>
                   <div class="button-row">
-                    <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice()"><mat-icon>add</mat-icon></button>
+                    <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice()">
+                      <mat-icon>add</mat-icon>
+                    </button>
                   </div>
                 </div>
                 <div>
@@ -311,7 +317,8 @@
                       </div>
                     </mat-list-item>
                     <mat-divider></mat-divider>
-                    <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel" *ngFor="let item of formProductGroup.get('listProdukPrivateLabel')['controls']; let i = index;">
+                    <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel"
+                      *ngFor="let item of formProductGroup.get('listProdukPrivateLabel')['controls']; let i = index;">
                       <div [formGroupName]="i">
                         <mat-list-item class="custom-height mb-8">
                           <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
@@ -428,8 +435,8 @@
 
 
   <!-- Generate HTML to canvas-->
-  <div style="position: absolute; z-index: -2; top: 0; margin-left: -300px;" id="imageConverted" #screen
+  <!-- <div style="position: absolute; z-index: -2; top: 0; margin-left: -300px;" id="imageConverted" #screen
     class="image-sku">
     <img id="image" [src]='imageSku' />
-  </div>
+  </div> -->
 </div>

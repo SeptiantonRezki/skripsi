@@ -19,6 +19,54 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <div fxLayout="column" style="margin-bottom: 15px;">
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="user_group"> Merupakan Group Trade Program Principal
+              Non HMS
+            </mat-checkbox>
+            <!-- <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Tipe</strong>
+            </div>
+            <mat-radio-group formControlName="user_group" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error
+              *ngIf="formGroupTradeProgram.controls['user_group'].hasError('required') && formGroupTradeProgram.controls['user_group'].touched">
+              Tipe harus diisi
+            </mat-error> -->
+          </div>
+          <div fxLayout="row" *ngIf="formGroupTradeProgram.get('user_group').value">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="principal" placeholder="Nama Principal">
+            </mat-form-field>
+          </div>
+          <div fxLayout="column">
+            <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+              [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+              (fileChange)="changeImage($event)">
+              <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                <br>
+                <span matPrefix>Tarik Gambar Kesini atau
+                  <strong>Pilih File</strong>
+                </span>
+                <span matPrefix>Ukuran 410x210 piksel, Maksimum 2mb</span>
+              </div>
+            </div>
+
+            <div *ngIf="files" class="pt-48">
+              <div class="">
+                <div class="delete">
+                  <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+                </div>
+                <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
+                <div class="image-sku">
+                  <img id="image" [src]='imageSku' />
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -29,4 +77,9 @@
     </div>
     <a #downloadLink></a>
   </div>
+
+  <!-- <div style="position: absolute; z-index: -2; top: 0; margin-left: -300px;" id="imageConverted" #screen
+    class="image-sku">
+    <img id="image" [src]='imageSku' />
+  </div> -->
 </div>
