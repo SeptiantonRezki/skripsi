@@ -25,7 +25,10 @@
             </mat-form-field>
           </div>
           <div fxLayout="column" style="margin-bottom: 15px;">
-            <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="user_group"> Merupakan Group Trade Program Principal
+              Non HMS
+            </mat-checkbox>
+            <!-- <div class="" fxLayout="row" fxLayoutAlign="start center">
               <strong class="font-size-16">Tipe</strong>
             </div>
             <mat-radio-group formControlName="user_group" class="radio-group">
@@ -35,8 +38,13 @@
             </mat-radio-group>
             <mat-error
               *ngIf="formGroupTradeProgram.controls['user_group'].hasError('required') && formGroupTradeProgram.controls['user_group'].touched">
-              Tipe Pengguna harus diisi
-            </mat-error>
+              Tipe harus diisi
+            </mat-error> -->
+          </div>
+          <div fxLayout="row" *ngIf="formGroupTradeProgram.get('user_group').value">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="principal" placeholder="Nama Principal">
+            </mat-form-field>
           </div>
           <div fxLayout="column">
             <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"

@@ -39,6 +39,16 @@
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Non-HMS" prop="type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <mat-icon>{{ row.type == 'HMS' ? 'check_box_outline_blank' : 'check_box' }}</mat-icon>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nama Principal Non-HMS" prop="principal">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.principal}}
+          </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">

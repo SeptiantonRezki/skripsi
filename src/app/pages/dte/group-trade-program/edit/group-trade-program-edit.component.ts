@@ -48,12 +48,14 @@ export class GroupTradeProgramEditComponent implements OnInit {
   ngOnInit() {
     this.formGroupTradeProgram = this.formBuilder.group({
       name: ["", Validators.required],
-      user_group: ["", Validators.required]
+      user_group: [false, Validators.required],
+      principal: [""]
     });
 
     this.formGroupTradeProgram.setValue({
       name: this.detailGroupTradeProgram.name,
-      user_group: this.detailGroupTradeProgram.type
+      user_group: this.detailGroupTradeProgram.type == 'HMS' ? false : true,
+      principal: this.detailGroupTradeProgram.principal
     });
     this.formStatus.setValue(this.detailGroupTradeProgram.status);
 
@@ -74,8 +76,9 @@ export class GroupTradeProgramEditComponent implements OnInit {
       let fd = new FormData();
       fd.append('name', this.formGroupTradeProgram.get('name').value);
       fd.append('status', this.formStatus.value);
-      fd.append('type', this.formGroupTradeProgram.get('user_group').value);
+      fd.append('type', this.formGroupTradeProgram.get('user_group').value ? 'NON-HMS' : 'HMS');
       fd.append('image', this.files ? this.files : '');
+      fd.append('principal', this.formGroupTradeProgram.get('user_group').value ? this.formGroupTradeProgram.get('principal').value : '');
 
       this.groupTradeProgramService.put(fd, { group_id: this.detailGroupTradeProgram.id }).subscribe(res => {
         this.dataService.showLoading(false);
