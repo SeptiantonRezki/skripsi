@@ -80,8 +80,11 @@ export class HelpCreateComponent {
     this.formHelp.get('otherkeyword').statusChanges.subscribe(
       status => { console.log('STATUS', status); this.chipList.errorState = status === 'INVALID' }
     );
-
-    this.getListCategory();
+    this.formHelp.get('user').valueChanges.subscribe(value => {
+      this.getListCategory();
+      this.formHelp.get('category').setValue('');
+    })
+    // this.getListCategory();
     this.getListUser();
   }
 
@@ -113,7 +116,8 @@ export class HelpCreateComponent {
   }
 
   getListCategory() {
-    this.helpService.getListCategory().subscribe(
+    const user = this.formHelp.get('user').value;
+    this.helpService.getListCategory({user}).subscribe(
       (res: any) => {
         this.categoryGroup = res.data.map((item: any) => {
           return (
