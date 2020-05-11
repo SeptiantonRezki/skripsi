@@ -92,7 +92,7 @@ export class HelpEditComponent {
     });
 
     this.getShow();
-    this.getListCategory();
+    // this.getListCategory();
     this.getListUser();
 
     this.formHelp.get('otherkeyword').statusChanges.subscribe(
@@ -100,6 +100,10 @@ export class HelpEditComponent {
         this.chipList.errorState = status === 'INVALID';
       }
     );
+    this.formHelp.get('user').valueChanges.subscribe(value => {
+      this.formHelp.get('category').setValue('');
+      this.getListCategory();
+    })
 
   }
 
@@ -131,7 +135,8 @@ export class HelpEditComponent {
   }
 
   getListCategory() {
-    this.helpService.getListCategory().subscribe(
+    const user = this.formHelp.get('user').value;
+    this.helpService.getListCategory({user}).subscribe(
       (res: any) => {
         this.categoryGroup = res.data.map((item: any) => {
           return (

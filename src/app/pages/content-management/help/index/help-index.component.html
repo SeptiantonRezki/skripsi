@@ -46,7 +46,7 @@
             <!-- <ngx-datatable-column name="Halaman Tujuan" prop="slug"></ngx-datatable-column> -->
 
             <ngx-datatable-column [width]="100" name="Likes" prop="likes_count"></ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Dislikes" prop="unlikes_count"></ngx-datatable-column>
+            <!-- <ngx-datatable-column [width]="100" name="Dislikes" prop="unlikes_count"></ngx-datatable-column> -->
             <ngx-datatable-column [width]="100" name="Perubahan Terakhir" prop="updated_at">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name">{{row.updated_at | date:'dd MMM yyyy'}}</span>
