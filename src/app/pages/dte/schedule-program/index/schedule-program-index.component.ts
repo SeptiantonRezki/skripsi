@@ -32,6 +32,12 @@ export class ScheduleProgramIndexComponent {
     { name: 'Urutkan Perbulan', value: 'mounth' },
     { name: 'Urutkan Pertahun', value: 'year' }
   ]
+  listStatuses: any[] = [
+    { name: 'Semua Status', value: "" },
+    { name: 'Publish', value: 'publish' },
+    { name: 'Unpublish', value: 'unpublish' },
+    { name: 'Draft', value: 'draft' }
+  ];
 
   formFilter: FormGroup;
   keyUp = new Subject<string>();
@@ -75,7 +81,8 @@ export class ScheduleProgramIndexComponent {
     this.formFilter = this.formBuilder.group({
       filter: "day",
       start_date: "",
-      end_date: ""
+      end_date: "",
+      status: ""
     });
   }
 
@@ -158,6 +165,7 @@ export class ScheduleProgramIndexComponent {
     this.pagination['type'] = this.convertDate(this.formFilter.get('start_date').value) || this.convertDate(this.formFilter.get('end_date').value) ? this.formFilter.get('filter').value : '';
     this.pagination.start_date = this.convertDate(this.formFilter.get('start_date').value);
     this.pagination.end_date = this.convertDate(this.formFilter.get('end_date').value);
+    this.pagination['status'] = this.formFilter.get('status').value;
 
     this.scheduleTradeProgramService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
