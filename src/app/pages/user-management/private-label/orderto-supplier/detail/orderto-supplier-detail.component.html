@@ -56,6 +56,22 @@
                 </tbody>
               </table>
             </div>
+            <div class="customer pb-16">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Catatan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="pt-0 w-500">
+                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.note ? detailOrder.note : '-'}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">av_timer</mat-icon>
               <div class="h2 secondary-text">Status Pemesanan</div>
