@@ -50,7 +50,23 @@
                 <tbody>
                   <tr>
                     <td class="pt-0 w-500">
-                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.address}}</p>
+                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.note ? detailOrder.note : '-'}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="customer pb-16">
+              <table class="simple">
+                <thead>
+                  <tr>
+                    <th>Catatan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="pt-0 w-500">
+                      <p style="max-width: 500px; text-align: justify;">{{detailOrder.note}}</p>
                     </td>
                   </tr>
                 </tbody>
