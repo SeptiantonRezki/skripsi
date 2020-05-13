@@ -41,7 +41,7 @@
               <input matInput type="text" formControlName="principal" placeholder="Nama Principal">
             </mat-form-field>
           </div>
-          <div fxLayout="column">
+          <div fxLayout="column" *ngIf="formGroupTradeProgram.get('user_group').value">
             <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
               [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
               (fileChange)="changeImage($event)">
