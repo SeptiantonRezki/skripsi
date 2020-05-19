@@ -86,6 +86,10 @@ export class PayLaterPanelSrcComponent implements OnInit {
       territory: []
     }
 
+    this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
+    if (this.selected.length === 0) this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
+    else this.loaded = true;
+
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -114,6 +118,13 @@ export class PayLaterPanelSrcComponent implements OnInit {
     this.initAreaV2();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
+      this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
+      if (this.selected.length === 0) {
+        this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
+        this.loaded = false;
+      }
+      else this.loaded = true;
+      console.log('changed filter', this.selected);
       this.getPanelSrcList();
     });
 

@@ -38,7 +38,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
       contact_number: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       flowingly_id: ["", Validators.required],
-      status: ["", Validators.required]
+      status: ["", Validators.required],
+      minimum_transaction: [0, Validators.required]
     });
 
     let regex = new RegExp(/[0-9]/g);
@@ -65,7 +66,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
         email: res.data.email,
         contact_number: res.data.contact_number ? (res.data.contact_number.split("+62")[1] ? res.data.contact_number.split("+62")[1] : res.data.contact_number) : '',
         flowingly_id: res.data.flowingly_id,
-        status: res.data.status
+        status: res.data.status,
+        minimum_transaction: res.data.min_transaction ? res.data.min_transaction : 0
       });
       if (this.isDetail) {
         this.formCompany.disable();
@@ -92,7 +94,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
         contact_number: '+62' + this.formCompany.get('contact_number').value,
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
-        status: this.formCompany.get('status').value
+        status: this.formCompany.get('status').value,
+        min_transaction: this.formCompany.get('minimum_transaction').value
       }
 
       this.paylaterCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {

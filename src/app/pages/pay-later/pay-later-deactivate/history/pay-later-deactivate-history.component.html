@@ -20,8 +20,8 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Kode iSMS" prop="isms_code">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.isms_code}}
+    <ngx-datatable-column name="Kode iSMS" prop="code">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.code}}
       </ng-template>
     </ngx-datatable-column>
 
@@ -39,23 +39,23 @@
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area}}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Pengajuan Deaktivasi" prop="status">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.status}}
+    <ngx-datatable-column name="Pengajuan Deaktivasi" prop="paylater_deactivation_status">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.paylater_deactivation_status}}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Approved/Declined" prop="approved">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.approved}}
+    <ngx-datatable-column name="Approved/Declined" prop="paylater_approval_by">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.paylater_approval_by}}
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Tanggal Pengajuan" prop="created_at">
+    <ngx-datatable-column name="Tanggal Pengajuan" prop="paylater_deactivation_date">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        {{row.created_at | date: 'dd/MM/yyyy HH:mm'}}
+        {{row.paylater_deactivation_date | date: 'dd/MM/yyyy HH:mm'}}
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Reason" prop="reason">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.reason}}
+    <ngx-datatable-column name="Reason" prop="paylater_deactivation_reason">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.paylater_deactivation_reason}}
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>

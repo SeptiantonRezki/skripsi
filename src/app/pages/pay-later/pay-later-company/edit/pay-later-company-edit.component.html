@@ -64,6 +64,17 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="minimum_transaction"
+                placeholder="Minimum Transaksi" numericOnly>
+              <mat-error
+                *ngIf="formCompany.controls['minimum_transaction'].hasError('required') && formCompany.controls['minimum_transaction'].touched">
+                Minimum Transaksi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="status" placeholder="Status">
                 <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>

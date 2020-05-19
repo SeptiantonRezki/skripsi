@@ -31,7 +31,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
       contact_number: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       flowingly_id: ["", Validators.required],
-      status: ["", Validators.required]
+      status: ["", Validators.required],
+      minimum_transaction: [0, Validators.required]
     });
 
     let regex = new RegExp(/[0-9]/g);
@@ -61,7 +62,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
         contact_number: '+62' + this.formCompany.get('contact_number').value,
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
-        status: this.formCompany.get('status').value
+        status: this.formCompany.get('status').value,
+        min_transaction: this.formCompany.get('minimum_transaction').value
       }
 
       this.paylaterCompanyService.create(body).subscribe(res => {

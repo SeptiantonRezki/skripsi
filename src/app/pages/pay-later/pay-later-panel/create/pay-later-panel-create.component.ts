@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
 
@@ -7,7 +7,7 @@ import { MatTabChangeEvent } from '@angular/material';
   templateUrl: './pay-later-panel-create.component.html',
   styleUrls: ['./pay-later-panel-create.component.scss']
 })
-export class PayLaterPanelCreateComponent implements OnInit {
+export class PayLaterPanelCreateComponent implements OnInit, OnDestroy {
   selectedTab: any;
 
   constructor(
@@ -19,6 +19,16 @@ export class PayLaterPanelCreateComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  ngOnDestroy() {
+    if (this.dataService.getFromStorage('bussiness_id_selected')) {
+      localStorage.removeItem('bussiness_id_selected');
+    }
+
+    if (this.dataService.getFromStorage('company_selected')) {
+      localStorage.removeItem('company_selected');
+    }
   }
 
   setSelectedTab(tabChangeEvent: MatTabChangeEvent) {

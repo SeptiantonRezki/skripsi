@@ -47,6 +47,13 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Minimum Transaksi" prop="minimum_transaction">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span *ngIf="row.minimum_transaction">{{row.minimum_transaction| rupiahFormater }}</span>
+            <span *ngIf="!row.minimum_transaction">-</span>
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column [width]="100" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">

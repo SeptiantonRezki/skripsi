@@ -55,7 +55,7 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getListDeactivation();
+    this.getListDeactivation();
   }
 
   getListDeactivation() {
@@ -141,7 +141,9 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
       dialogConfig
     );
     this.dialogRef.afterClosed().subscribe(res => {
-
+      if (res) {
+        this.getListDeactivation();
+      }
     });
   }
 

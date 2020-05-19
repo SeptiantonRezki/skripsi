@@ -1564,43 +1564,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Panel Bayar Nanti"
+          name: "Panel Pojok Modal"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/paylater/panel",
-          name: "Panel Bayar Nanti"
+          name: "Panel Pojok Modal"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Panel Bayar Nanti"
+          name: "Buat Panel Pojok Modal"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/paylater/panel",
-          name: "Panel Bayar Nanti"
+          name: "Panel Pojok Modal"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Panel Bayar Nanti"
+          name: "Ubah Panel Pojok Modal"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/paylater/panel",
-          name: "Panel Bayar Nanti"
+          name: "Panel Pojok Modal"
         },
         {
           type: "current",
           url: "",
-          name: "Detil Panel Bayar Nanti"
+          name: "Detil Panel Pojok Modal"
         }
       ],
     },

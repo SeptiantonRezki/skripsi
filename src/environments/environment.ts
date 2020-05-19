@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
   server: "https://dev.ayo-api.dxtr.asia",
-  server_service: "http://dev.ayo-api.dxtr.asia",
+  server_service: "https://dev.ayo-api.dxtr.asia",
   label: "DEVELOPMENT",
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
@@ -16,7 +16,7 @@ export const environment = {
 };
 
 export const serviceServer = (server) => {
-  return `http://${server}.ayo-micro.dxtr.asia`;
+  return `https://${server}.ayo-micro.dxtr.asia`;
 }
 
 export const server = {

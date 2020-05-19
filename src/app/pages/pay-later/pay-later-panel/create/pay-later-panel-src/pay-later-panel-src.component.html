@@ -3,7 +3,7 @@
     <form autocomplete="off" [formGroup]="formPanelSrc">
       <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
         <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
-          <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
+          <!-- <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
             <mat-select placeholder="Pilih Perusahaan" formControlName="company">
               <mat-option *ngFor="let cr of listCompanies" [value]="cr.id">{{ cr.name }}</mat-option>
             </mat-select>
@@ -11,11 +11,11 @@
               *ngIf="formPanelSrc.controls['company'].hasError('required') && formPanelSrc.controls['company'].touched">
               Perusahaan harus diisi.
             </mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
           <div fxLayout="row" fxFlex="20" style="height: 35px;">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="100" (click)="aturPanelMitra()">
+            <!-- <button mat-raised-button type="button" class="confirmation-button" fxFlex="100" (click)="aturPanelMitra()">
               ATUR PANEL SRC
-            </button>
+            </button> -->
           </div>
         </div>
         <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">

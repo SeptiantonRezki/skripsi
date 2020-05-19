@@ -38,6 +38,20 @@ import { PayLaterPanelSrcEditComponent } from './pay-later-panel/edit/pay-later-
 import { PayLaterPanelMitraEditComponent } from './pay-later-panel/edit/pay-later-panel-mitra-edit/pay-later-panel-mitra-edit.component';
 import { DeactivateReasonDialogComponent } from './pay-later-deactivate/deactivate-reason-dialog/deactivate-reason-dialog.component';
 import { PayLaterPanelImportDialogComponent } from './pay-later-panel/pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
+import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
+import { NgxCurrencyModule } from 'ngx-currency';
+
+export const customCurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  allowZero: true,
+  decimal: ",",
+  precision: 0,
+  prefix: "",
+  suffix: "",
+  thousands: ".",
+  nullable: false
+};
 
 @NgModule({
   imports: [
@@ -61,10 +75,11 @@ import { PayLaterPanelImportDialogComponent } from './pay-later-panel/pay-later-
     MatDialogModule,
     ngfModule,
     NgxMatSelectSearchModule,
-    MatMenuModule
+    MatMenuModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent],
-  providers: [PageGuard],
+  providers: [RupiahFormaterPipe, PageGuard],
   exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent],
   entryComponents: [DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent]
 })

@@ -86,6 +86,7 @@ export class PayLaterPanelMitraComponent implements OnInit {
       territory: []
     }
 
+
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -97,6 +98,8 @@ export class PayLaterPanelMitraComponent implements OnInit {
   }
 
   ngOnInit() {
+    let company_selected = this.dataService.getFromStorage('company_selected');
+
     this.formPanelMitra = this.formBuilder.group({
       company: ["", Validators.required],
     });
@@ -110,6 +113,13 @@ export class PayLaterPanelMitraComponent implements OnInit {
       district: [""],
       territory: [""]
     })
+
+    if (company_selected) {
+      this.formPanelMitra.setValue({
+        company: company_selected
+      });
+      this.aturPanelMitra();
+    }
 
     this.initAreaV2();
 
@@ -281,7 +291,8 @@ export class PayLaterPanelMitraComponent implements OnInit {
         }
       }
     }
-
+    this.dataService.setToStorage('bussiness_id_selected', this.selected);
+    this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
     const page = this.dataService.getFromStorage("page_mitra");
     const sort_type = this.dataService.getFromStorage("sort_type_mitra");
     const sort = this.dataService.getFromStorage("sort_mitra");
