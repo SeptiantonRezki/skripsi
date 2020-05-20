@@ -60,7 +60,7 @@ export class GroupTradeProgramCreateComponent implements OnInit {
       fd.append('name', this.formGroupTradeProgram.get('name').value);
       fd.append('status', 'active');
       fd.append('type', this.formGroupTradeProgram.get('user_group').value ? 'NON-HMS' : 'HMS');
-      fd.append('image', this.files);
+      if (this.files) fd.append('image', this.files);
       fd.append('principal', this.formGroupTradeProgram.get('user_group').value ? this.formGroupTradeProgram.get('principal').value : '');
 
       this.groupTradeProgramService.create(fd).subscribe(res => {
