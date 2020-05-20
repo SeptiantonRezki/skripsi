@@ -48,7 +48,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
   ngOnInit() {
     this.formGroupTradeProgram = this.formBuilder.group({
       name: ["", Validators.required],
-      user_group: [false, Validators.required],
+      user_group: [false],
       principal: [""]
     });
 
@@ -74,6 +74,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
       // }
 
       let fd = new FormData();
+      // fd.append('_method', 'POST');
       fd.append('name', this.formGroupTradeProgram.get('name').value);
       fd.append('status', this.formStatus.value);
       fd.append('type', this.formGroupTradeProgram.get('user_group').value ? 'NON-HMS' : 'HMS');
