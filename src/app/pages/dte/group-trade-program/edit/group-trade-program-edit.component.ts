@@ -67,6 +67,10 @@ export class GroupTradeProgramEditComponent implements OnInit {
 
   submit() {
     if (this.formGroupTradeProgram.valid) {
+      if (this.files && this.files.size < 2000000) {
+        this.dialogService.openSnackBar({ message: "Ukuran Gambar Max 2mb" });
+        return;
+      }
       this.dataService.showLoading(true);
       // let body = {
       //   name: this.formGroupTradeProgram.get('name').value,
