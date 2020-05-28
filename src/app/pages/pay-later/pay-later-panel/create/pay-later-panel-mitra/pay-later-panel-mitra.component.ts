@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -55,6 +55,9 @@ export class PayLaterPanelMitraComponent implements OnInit {
   lastLevel: any;
   loaded: Boolean;
   currentMitraCount: number = 0;
+
+  @Output()
+  onRowsSelected = new EventEmitter<any>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -380,11 +383,13 @@ export class PayLaterPanelMitraComponent implements OnInit {
     // console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.onRowsSelected.emit({ isSelected: true, data: selected });
   }
 
   selectFn(allRowsSelected: boolean) {
     console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
+    this.onRowsSelected.emit({ allRowsSelected: allRowsSelected });
     if (!allRowsSelected) this.selected = [];
     else this.selected.length = this.totalData;
   }

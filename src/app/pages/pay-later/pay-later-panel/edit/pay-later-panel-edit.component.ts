@@ -10,11 +10,17 @@ import { MatTabChangeEvent } from '@angular/material';
 export class PayLaterPanelEditComponent implements OnInit {
   selectedTab: any;
 
+  allRowsSelected: boolean;
+  isSelectedRows: boolean;
+  selectedRowIds: any[];
+  mitraSelected: any;
+
   constructor(
     private dataService: DataService
   ) {
-    const selectedTab = dataService.getFromStorage("selected_tab_paylater_panel");
-    this.selectedTab = selectedTab ? selectedTab : 0;
+    // const selectedTab = dataService.getFromStorage("selected_tab_paylater_panel");
+    // this.selectedTab = selectedTab ? selectedTab : 0;
+    this.selectedTab = 0;
   }
 
   ngOnInit() {
@@ -32,6 +38,24 @@ export class PayLaterPanelEditComponent implements OnInit {
 
     this.selectedTab = tabChangeEvent.index;
     this.dataService.setToStorage("selected_tab_paylater_panel", this.selectedTab);
+  }
+
+  onRowsSelected(event: any) {
+    this.allRowsSelected = event.allRowsSelected || false;
+    if (event.allRowsSelected) {
+      this.mitraSelected = { allRowsSelected: true };
+    }
+    if (event.isSelected) {
+      if (event.data.length > 0) {
+        this.selectedRowIds = event.data.map((item: any) => item.id);
+        this.isSelectedRows = true;
+        this.mitraSelected = { isSelected: true, data: this.selectedRowIds };
+      } else {
+        this.selectedRowIds = [];
+        this.isSelectedRows = false;
+        this.mitraSelected = { isSelected: true, data: [] };
+      }
+    }
   }
 
 }

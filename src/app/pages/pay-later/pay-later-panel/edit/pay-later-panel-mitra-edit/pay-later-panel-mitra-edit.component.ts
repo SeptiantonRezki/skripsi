@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -58,6 +58,9 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
   shortDetail: any;
   detailPanel: any;
   isDetail: Boolean;
+
+  @Output()
+  onRowsSelected = new EventEmitter<any>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -291,6 +294,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
         }
       }
     }
+    
+    this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
 
     const page = this.dataService.getFromStorage("page_mitra");
     const sort_type = this.dataService.getFromStorage("sort_type_mitra");
@@ -380,11 +385,13 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     // console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.onRowsSelected.emit({ isSelected: true, data: selected });
   }
 
   selectFn(allRowsSelected: boolean) {
     console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
+    this.onRowsSelected.emit({ allRowsSelected: allRowsSelected });
     if (!allRowsSelected) this.selected = [];
     else this.selected.length = this.totalData;
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -19,8 +19,8 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   styleUrls: ['./pay-later-panel-src.component.scss']
 })
 export class PayLaterPanelSrcComponent implements OnInit {
-  formPanelSrc: FormGroup;
-  formPanelSrcError: any;
+  // formPanelSrc: FormGroup;
+  // formPanelSrcError: any;
   allRowsSelected: boolean;
   totalData: number = 0;
 
@@ -56,6 +56,34 @@ export class PayLaterPanelSrcComponent implements OnInit {
   loaded: Boolean;
   currentMitraCount: number = 0;
 
+  _data: any = null;
+  mitraSelected: any[] = [];
+  paylaterCompanyId: any;
+
+  @Input()
+  set data(event: any) {
+    console.log('data masuk', event);
+    if (event !== null) {
+      if (event.allRowsSelected) {
+        // this.mitraSelected = { allRowsSelected: true };
+        this.loaded = true;
+      }
+      if (event.isSelected) {
+        if (event.data.length > 0) {
+          this.mitraSelected = event.data;
+          this.loaded = true;
+        } else {
+          this.mitraSelected = [];
+          this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
+        }
+      }
+    } else {
+      this.mitraSelected = [];
+      this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
+    }
+  }
+  get data(): any { return this._data; }
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -67,6 +95,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    this.paylaterCompanyId = this.dataService.getFromStorage('company_selected') || null;
 
     this.listLevelArea = [
       {
@@ -86,9 +115,9 @@ export class PayLaterPanelSrcComponent implements OnInit {
       territory: []
     }
 
-    this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
-    if (this.selected.length === 0) this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
-    else this.loaded = true;
+    // this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
+    // if (this.selected.length === 0) this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
+    // else this.loaded = true;
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -101,9 +130,9 @@ export class PayLaterPanelSrcComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formPanelSrc = this.formBuilder.group({
-      company: ["", Validators.required],
-    });
+    // this.formPanelSrc = this.formBuilder.group({
+    //   company: ["", Validators.required],
+    // });
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -116,6 +145,13 @@ export class PayLaterPanelSrcComponent implements OnInit {
     })
 
     this.initAreaV2();
+
+    if (this.mitraSelected.length > 0 ) {
+      this.aturPanelMitra();
+      this.loaded = true;
+    } else {
+      this.loaded = false;
+    }
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
       this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
@@ -161,13 +197,13 @@ export class PayLaterPanelSrcComponent implements OnInit {
     this.getCompanies();
     // this.getPanelSrcList();
 
-    this.formPanelSrc.get('company')
-      .valueChanges
-      .subscribe(res => {
-        if (res && this.loaded) {
-          this.loaded = false;
-        }
-      })
+    // this.formPanelSrc.get('company')
+    //   .valueChanges
+    //   .subscribe(res => {
+    //     if (res && this.loaded) {
+    //       this.loaded = false;
+    //     }
+    //   })
   }
 
   getCompanies() {
@@ -193,15 +229,15 @@ export class PayLaterPanelSrcComponent implements OnInit {
   // }
 
   aturPanelMitra() {
-    if (this.formPanelSrc.valid) {
+    if (this.paylaterCompanyId !== null) {
       this.selectedMitra = [];
       this.onSelect({ selected: [] });
 
       this.dataService.showLoading(true);
-      this.panelService.checkPanel({ paylater_company_id: this.formPanelSrc.get('company').value }).subscribe(res => {
-        console.log('res', res);
-        this.getPanelSrcList();
-        console.log('res', res);
+      this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+        // console.log('res', res);
+        // this.getPanelSrcList();
+        // console.log('res', res);
         // this.getPanelMitraList();
         // console.log('res', res);
         let filteredSrc = [];
@@ -305,7 +341,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.panelService.getSrc(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -334,7 +370,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page_src");
     }
 
-    this.panelService.getSrc(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -351,7 +387,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
     this.dataService.setToStorage("sort_src", event.column.prop);
     this.dataService.setToStorage("sort_type_src", event.newValue);
 
-    this.panelService.getSrc(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -371,7 +407,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.panelService.getSrc(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -487,7 +523,8 @@ export class PayLaterPanelSrcComponent implements OnInit {
   }
 
   submit() {
-    if (this.formPanelSrc.valid) {
+    // if (this.formPanelSrc.valid) {
+    if (this.mitraSelected.length > 0) {
       if (this.selected.length === 0) {
         this.dialogService.openSnackBar({
           message: "Jumlah SRC yang dipilih tidak boleh kosong!"
@@ -497,7 +534,8 @@ export class PayLaterPanelSrcComponent implements OnInit {
 
       this.dataService.showLoading(true);
       let body = {
-        paylater_company_id: this.formPanelSrc.get('company').value,
+        // paylater_company_id: this.formPanelSrc.get('company').value,
+        paylater_company_id: this.dataService.getFromStorage('company_selected'),
         type: "retailer",
         detail: this.selected.map(mtr => {
           return { business_id: mtr.id };
@@ -511,7 +549,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
         body['all'] = '0';
         body['area'] = [1];
       }
-      console.log('my body', body);
+      // console.log('my body', body);
       this.panelService.store(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
@@ -523,8 +561,9 @@ export class PayLaterPanelSrcComponent implements OnInit {
         this.dataService.showLoading(false);
       })
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formPanelSrc);
+      // this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      // commonFormValidator.validateAllFields(this.formPanelSrc);
+      this.dialogService.openSnackBar({ message: "Belum ada Mitra yang terpilih!" });
     }
   }
 
