@@ -510,6 +510,7 @@ export class PayLaterPanelMitraComponent implements OnInit {
       if (this.allRowsSelected) {
         body['all'] = '1';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
+        delete body['detail'];
       } else {
         body['all'] = '0';
         body['area'] = [1];

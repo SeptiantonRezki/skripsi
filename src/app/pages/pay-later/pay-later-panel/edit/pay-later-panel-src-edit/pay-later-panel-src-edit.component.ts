@@ -257,8 +257,13 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     }
   }
 
-  getPanelSrcList() {
-    let wsIds = this.selectedMitra.map(mtr => mtr.id);
+  async getPanelSrcList() {
+    let businessIds = [];
+    if (this.selected.length > 0) {
+      businessIds = await this.selected.map(mtr => {
+        return mtr.id;
+      })
+    }
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
@@ -338,7 +343,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -356,7 +361,14 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     );
   }
 
-  setPage(pageInfo) {
+  async setPage(pageInfo) {
+    let businessIds = [];
+    if (this.selected.length > 0) {
+      businessIds = await this.selected.map(mtr => {
+        return mtr.id;
+      })
+    }
+
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
@@ -367,14 +379,21 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page_src");
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
-  onSort(event) {
+  async onSort(event) {
+    let businessIds = [];
+    if (this.selected.length > 0) {
+      businessIds = await this.selected.map(mtr => {
+        return mtr.id;
+      })
+    }
+
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
@@ -384,14 +403,21 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.dataService.setToStorage("sort_src", event.column.prop);
     this.dataService.setToStorage("sort_type_src", event.newValue);
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
-  updateFilter(string) {
+  async updateFilter(string) {
+    let businessIds = [];
+    if (this.selected.length > 0) {
+      businessIds = await this.selected.map(mtr => {
+        return mtr.id;
+      })
+    }
+
     this.loadingIndicator = true;
     this.pagination.search = string;
 
@@ -404,7 +430,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -519,7 +545,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     // alert('Open console to see the error')
   }
 
-  submit() {
+  async submit() {
     if (this.mitraSelected.length > 0) {
       if (this.selected.length === 0) {
         this.dialogService.openSnackBar({
@@ -532,7 +558,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       let body = {
         paylater_company_id: this.paylaterCompanyId,
         type: "retailer",
-        detail: this.selected.map(mtr => {
+        detail: await this.selected.map(mtr => {
           return { business_id: mtr.id };
         })
       };
@@ -540,6 +566,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       if (this.allRowsSelected) {
         body['all'] = '1';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
+        delete body['detail'];
       } else {
         body['all'] = '0';
         body['area'] = [1];
