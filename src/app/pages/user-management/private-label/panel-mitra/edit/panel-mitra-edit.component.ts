@@ -70,6 +70,7 @@ export class PanelMitraEditComponent implements OnInit {
   dialogRef: any;
   totalData: number = 0;
   isSort: boolean = false;
+  actionType: String = 'detail';
   
   constructor(
       private formBuilder: FormBuilder,
@@ -125,6 +126,8 @@ export class PanelMitraEditComponent implements OnInit {
     .subscribe(data => {
       this.getListMitra(data);
     });
+    // subs action type
+    this.activatedRoute.data.subscribe(({actionType}) => { this.actionType = actionType || 'detail'; });
   }
   
     ngOnInit() {

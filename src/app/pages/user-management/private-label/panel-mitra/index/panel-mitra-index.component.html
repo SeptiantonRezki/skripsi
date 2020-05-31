@@ -1,7 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <page-content-header [contentTitle]="'Panel Mitra'">
     <button style="width: 170px" [routerLink]="['/user-management', 'supplier-panel-mitra','create']" mat-raised-button
-      type="button">
+      type="button"
+      *ngIf="permission?.buat">
       <mat-icon>add</mat-icon> TAMBAH
     </button>
   </page-content-header>
@@ -49,13 +50,18 @@
 
         <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div fxLayout="row">
+            <span class="row-name" (click)="directDetail(row)" *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
+            <ng-template #elseDetail>
+              <span class="row-name">{{row.product_name}}</span>
+            </ng-template>
+            <!-- <div fxLayout="row"> -->
               <!-- <div class="inner-card name-container product-image my-8 mx-16">
                 <img class="" *ngIf="item.image_url" [src]="item.image_url">
               </div> -->
               <!-- <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span> -->
-              <span class="row-address" >{{row.product_name}}</span>
-            </div>
+              <!-- <span class="row-address">{{row.product_name}}</span> -->
+              <!-- <span class="row-name" (click)="directEdit(row)">{{row.product_name}}</span> -->
+            <!-- </div> -->
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Kategori" prop="kategori" [sortable]="false">
