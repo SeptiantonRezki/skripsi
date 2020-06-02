@@ -1,8 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <page-content-header [contentTitle]="'Panel Mitra'">
     <button style="width: 170px" [routerLink]="['/user-management', 'supplier-panel-mitra','create']" mat-raised-button
-      type="button"
-      *ngIf="permission?.buat">
+      type="button">
       <mat-icon>add</mat-icon> TAMBAH
     </button>
   </page-content-header>
@@ -50,7 +49,7 @@
 
         <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)" *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
+            <span class="row-name" (click)="directEdit(row)" *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
             <ng-template #elseDetail>
               <span class="row-name">{{row.product_name}}</span>
             </ng-template>
