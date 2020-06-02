@@ -66,4 +66,9 @@ export class OrdertoSupplierService extends BaseService {
     return this.getBlobAsJsonApi(url, queryParams);
   }
 
+  updateQty(body, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "updateQty", context);
+    return this.putApi(url, body);
+  }
+
 }
