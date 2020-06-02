@@ -673,7 +673,7 @@ export class TemplateEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { password: 'P@ssw0rd' };
+    dialogConfig.data = { password: 'P@ssw0rd', fileType: 'image' };
 
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
