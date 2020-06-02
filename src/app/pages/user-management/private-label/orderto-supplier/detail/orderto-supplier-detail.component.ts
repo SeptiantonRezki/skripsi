@@ -53,6 +53,7 @@ export class OrdertoSupplierDetailComponent {
   stateUpdated: Boolean;
   productsNota: any[] = [];
   total: any;
+  static EDITABLE_IF_STATUS = ['baru', 'diproses'];
 
 
   @HostListener('window:beforeunload')
@@ -181,7 +182,7 @@ export class OrdertoSupplierDetailComponent {
                 // [Validators.min(0), Validators.max(item.amount)]
                 [Validators.min(0)]
               ],
-              editable: true,
+              editable: OrdertoSupplierDetailComponent.EDITABLE_IF_STATUS.includes(this.detailOrder.status) ? true : false,
               edited: false,
               price_update_status: item.total_price // item.price_update_status
             })
@@ -211,7 +212,7 @@ export class OrdertoSupplierDetailComponent {
 
   showRedBG(status) {
     switch (status) {
-      case 'pesanan-baru':
+      case 'baru':
         return true;
       case 'konfirmasi-perubahan':
         return true
