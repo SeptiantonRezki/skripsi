@@ -20,7 +20,7 @@
               </mat-error>
             </mat-form-field>
             <div fxFlex="45%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-              <mat-form-field fxFlex="80%" class="is-light form-primary">
+              <mat-form-field fxFlex="30%" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
                   placeholder="Tanggal Terbit">
                 <mat-error
@@ -33,13 +33,35 @@
                 <mat-datepicker #tanggal_terbit></mat-datepicker>
               </mat-form-field>
               <mat-form-field fxFlex="20%" class="is-light form-primary" id="time">
-                <input matInput formControlName="time" placeholder="Waktu" [ngxTimepicker]="fullTime" [format]="24"
+                <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime" [format]="24"
                   readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
-                  Waktu harus diisi
+                  Jam Terbit harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="30%" class="is-light form-primary">
+                <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
+                  formControlName="enddate" placeholder="Tanggal Berakhir" [min]="formPopupGroup.get('date').value">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['enddate'].hasError('required') && formPopupGroup.controls['enddate'].touched">
+                  Tanggal Berakhir harus diisi
+                </mat-error>
+                <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #tanggal_berakhir></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field fxFlex="20%" class="is-light form-primary" id="time">
+                <input matInput formControlName="endtime" placeholder="Jam Berakhir" [ngxTimepicker]="endTime"
+                  [format]="24" readonly>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #endTime></ngx-material-timepicker>
+                <mat-error
+                  *ngIf="formPopupGroup.controls['endtime'].hasError('required') && formPopupGroup.controls['endtime'].touched">
+                  Jam Berakhir harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
