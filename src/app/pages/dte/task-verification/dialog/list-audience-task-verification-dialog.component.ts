@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatMenuTrigger } from '@angular/material';
-import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 
 @Component({
-  templateUrl: './list-audience-dialog.component.html',
-  styleUrls: ['./list-audience-dialog.component.scss'],
+  templateUrl: './list-audience-task-verification-dialog.component.html',
+  styleUrls: ['./list-audience-task-verification-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ListAudienceDialogComponent {
+export class ListAudienceTaskVerificationDialogComponent {
   rows: any[];
   loadingIndicator = true;
   reorderable = true;
@@ -19,22 +19,24 @@ export class ListAudienceDialogComponent {
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
-  @ViewChild("activeCell")
+  @ViewChild('activeCell')
   activeCellTemp: TemplateRef<any>;
 
   constructor(
-    public dialogRef: MatDialogRef<ListAudienceDialogComponent>,
+    public dialogRef: MatDialogRef<ListAudienceTaskVerificationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
-    public schedulerService: ScheduleTradeProgramService
+    public taskVerificationService: TaskVerificationService
   ) { }
 
   ngOnInit() {
     this.onLoad = true;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
-    this.schedulerService.getListRetailerSelected({ audience_id: this.data.id }, this.pagination).subscribe(
-      res => {
+    this.taskVerificationService.getListAudience({
+      audience_id: this.data.id,
+      template_id: this.data.scheduler_templates_id
+    }, this.pagination).subscribe(res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.onLoad = false;
@@ -51,7 +53,10 @@ export class ListAudienceDialogComponent {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.schedulerService.getListRetailerSelected({ audience_id: this.data.id }, this.pagination).subscribe(res => {
+    this.taskVerificationService.getListAudience({
+      audience_id: this.data.id,
+      template_id: this.data.scheduler_templates_id
+    }, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -64,9 +69,12 @@ export class ListAudienceDialogComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    console.log('check pagination', this.pagination);
 
-    this.schedulerService.getListRetailerSelected({ audience_id: this.data.id }, this.pagination).subscribe(res => {
+    this.taskVerificationService.getListAudience({
+      audience_id: this.data.id,
+      template_id: this.data.scheduler_templates_id
+    }, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;

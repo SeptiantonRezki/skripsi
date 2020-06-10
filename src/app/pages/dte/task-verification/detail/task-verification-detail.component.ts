@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
-import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';
+import { ListAudienceTaskVerificationDialogComponent } from '../dialog/list-audience-task-verification-dialog.component';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
@@ -284,7 +284,7 @@ export class TaskVerificationDetailComponent {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = item;
 
-    this.dialogRef = this.dialog.open(ListAudienceDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ListAudienceTaskVerificationDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => { })
   }
@@ -316,8 +316,10 @@ export class TaskVerificationDetailComponent {
 
   import() {
 
-    if (this.dataScheduler.status_berjalan === "expired") {
-      return this.dialogService.openSnackBar({ message: `Tidak dapat adjust coin karna status scheduler trade program telah ${this.dataScheduler.status_berjalan}` });
+    if (this.dataScheduler.status_berjalan === 'expired') {
+      return this.dialogService.openSnackBar({ 
+        message: `Tidak dapat adjust coin karna status scheduler trade program telah ${this.dataScheduler.status_berjalan}`
+      });
     }
 
     const dialogConfig = new MatDialogConfig();
@@ -331,7 +333,7 @@ export class TaskVerificationDetailComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
       }
     })
   }

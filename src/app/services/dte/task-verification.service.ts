@@ -24,6 +24,11 @@ export class TaskVerificationService extends BaseService {
     return this.getApi(url);
   }
 
+  getListAudience(context?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'listAudience', context);
+    return this.getApi(url, queryParams);
+  }
+
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
@@ -57,11 +62,6 @@ export class TaskVerificationService extends BaseService {
   getTemplate(): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_template');
     return this.getApi(url);
-  }
-
-  getListRetailerSelected(context?, queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'list_audience', context);
-    return this.getApi(url, queryParams);
   }
 
   previewExcel(body): Observable<any> {

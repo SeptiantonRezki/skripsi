@@ -70,6 +70,7 @@ import { GroupTradeProgramCreateComponent } from './group-trade-program/create/g
 import { GroupTradeProgramEditComponent } from './group-trade-program/edit/group-trade-program-edit.component';
 import { TaskVerificationIndexComponent } from './task-verification/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { ListAudienceTaskVerificationDialogComponent } from "./task-verification/dialog/list-audience-task-verification-dialog.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -155,6 +156,7 @@ export const MY_FORMATS = {
     GroupTradeProgramEditComponent,
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
+    ListAudienceTaskVerificationDialogComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -188,6 +190,12 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
   ],
-  entryComponents: [UploadImageComponent, ListAudienceDialogComponent, ImportAudienceDialogComponent, ImportCoinComponent]
+  entryComponents: [
+    UploadImageComponent,
+    ListAudienceDialogComponent,
+    ImportAudienceDialogComponent,
+    ImportCoinComponent,
+    ListAudienceTaskVerificationDialogComponent,
+  ]
 })
 export class DteModule { }
