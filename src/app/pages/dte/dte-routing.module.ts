@@ -23,6 +23,8 @@ import { AudienceTradeProgramEditComponent } from "./automation/edit/audience-tr
 import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
 import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/group-trade-program-create.component";
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
+import { TaskVerificationIndexComponent } from './task-verification/task-verification-index.component';
+import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
 
 const routes: Routes = [
   {
@@ -264,6 +266,24 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
+  },
+  {
+    path: 'taskverification',
+    component: TaskVerificationIndexComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskVerification.index
+    },
+  },
+  {
+    path: 'taskverification/detail/:id/:templateid',
+    component: TaskVerificationDetailComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskVerification.detail
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
   }
 ];
 

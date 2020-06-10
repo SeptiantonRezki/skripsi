@@ -38,6 +38,7 @@ export class TemplateEditComponent {
     { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
   shareable: FormControl = new FormControl(false);
+  isIRTemplate: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -195,6 +196,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('video').setValue(this.detailTask.video? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
+    this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
 
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
@@ -481,6 +483,7 @@ export class TemplateEditComponent {
         video: this.detailTask.video? this.detailTask.video : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
+        is_ir_template: this.isIRTemplate.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('item.type', item.type);

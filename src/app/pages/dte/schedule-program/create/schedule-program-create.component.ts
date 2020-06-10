@@ -47,6 +47,8 @@ export class ScheduleProgramCreateComponent {
   valueChange: Boolean;
   saveData: Boolean;
 
+  isIRTemplate: boolean;
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
@@ -137,8 +139,20 @@ export class ScheduleProgramCreateComponent {
       });
   }
 
-  onChangeTemplateTask(event, i) {
+  onChangeTemplateTask(event: any, i: number) {
     console.log('eventasdjaslkda', event, i);
+    this.isIRTemplate = event.is_ir_template === 1 ? true : false;
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(i);
+    if (this.isIRTemplate) {
+      template.get('is_verification_ir_toggle').setValue(true);
+      template.get('is_verification_hq_toggle').setValue(true);
+      template.get('is_verification_toggle').setValue(false);
+      template.get('is_verification').setValue(false);
+      template.get('is_backup').setValue(false);
+    } else {
+      template.get('is_verification').setValue(false);
+    }
   }
 
   filteringTP() {
@@ -191,6 +205,8 @@ export class ScheduleProgramCreateComponent {
       is_backup: [false, Validators.required],
       is_verification: [false, Validators.required],
       is_verification_toggle: [false, Validators.required],
+      is_verification_ir_toggle: [false, Validators.required],
+      is_verification_hq_toggle: [true, Validators.required],
       task_template_id_backup: [{ value: "", disabled: true }],
       coin_delivered_backup: [{ value: "", disabled: true }],
       coin_approved_backup: [{ value: "", disabled: true }],
@@ -305,6 +321,25 @@ export class ScheduleProgramCreateComponent {
     }
   }
 
+  isVerifIR(event, i) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(i);
+    template.get('is_verification_ir_toggle').setValue(true);
+  }
+
+
+  isVerifHQ(event, i) {
+    const templates = this.formSchedule.get('task_templates') as FormArray;
+    const template = templates.at(i);
+
+    if (event.checked) {
+      template.get('is_verification_toggle').setValue(false);
+      template.get('is_verification').setValue(false);
+      template.get('is_backup').setValue(false);
+      template.updateValueAndValidity();
+    }
+  }
+
   backupTask(evnt, idx) {
     const templates = this.formSchedule.get('task_templates') as FormArray;
     const template = templates.at(idx);
@@ -327,6 +362,7 @@ export class ScheduleProgramCreateComponent {
       template.get('is_verification').setValue(false);
       // template.get('is_verification').disable();
 
+      template.get('is_verification_hq_toggle').setValue(false);
       template.get('is_verification_toggle').setValue(false);
       // template.get('is_verification_toggle').disable();
 
@@ -359,6 +395,7 @@ export class ScheduleProgramCreateComponent {
     const template = templates.at(i);
 
     if (event.checked) {
+      template.get('is_verification_hq_toggle').setValue(false);
       template.get('is_verification').setValue(false);
       template.get('is_backup').setValue(false);
       template.updateValueAndValidity();
@@ -371,6 +408,7 @@ export class ScheduleProgramCreateComponent {
     const template = templates.at(i);
 
     if (event.checked) {
+      template.get('is_verification_hq_toggle').setValue(false);
       template.get('is_verification_toggle').setValue(false);
       template.get('is_backup').setValue(false);
       template.updateValueAndValidity();
@@ -412,6 +450,7 @@ export class ScheduleProgramCreateComponent {
             is_backup: item.is_backup ? 1 : 0,
             is_verification: item.is_verification ? 1 : 0,
             is_verification_toggle: item.is_verification_toggle ? 1 : 0,
+            is_verification_hq: item.is_verification_hq_toggle ? 1 : 0,
             notif: item.is_notif === 1 ? item.notif : 0,
             start_date: this.convertDate(item.start_date),
             end_date: this.convertDate(item.end_date)

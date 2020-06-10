@@ -519,6 +519,13 @@ export class Endpoint {
       PLPayMethod: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran`,
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
+      },
+      TaskVerification: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/list`,
+        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail/${context.id}/${context.template_id}`,
+        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/
+          ${context.audience_id}/${context.template_id}`,
+
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
