@@ -275,11 +275,15 @@ const routes: Routes = [
     },
   },
   {
-    path: 'taskverification/detail/:id',
+    path: 'taskverification/detail/:id/:templateid',
     component: TaskVerificationDetailComponent,
     data: {
       breadcrumbs: brConfig.dte.taskVerification.detail
-    }
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
   }
 ];
 

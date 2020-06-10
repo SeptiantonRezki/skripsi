@@ -19,8 +19,8 @@ export class TaskVerificationService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  getDetail(id): Observable<any> {
-    const url = this.getUrl(this.namespace, 'detail', {schedule_tp_id: id});
+  getDetail(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'detail', context);
     return this.getApi(url);
   }
 

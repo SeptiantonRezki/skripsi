@@ -119,7 +119,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button type="button" mat-icon-button color="" matTooltip="Lihat"
-                [routerLink]="['/dte', 'taskverification', 'detail', row.id]">
+                [routerLink]="['/dte', 'taskverification', 'detail', row.id, row.scheduler_templates_id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
               <button type="button" mat-icon-button color=""

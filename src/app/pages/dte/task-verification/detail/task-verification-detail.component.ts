@@ -3,7 +3,6 @@ import { DateAdapter, MatDialogConfig, MatDialog, MatSelect } from '@angular/mat
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
-import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
 import { ListAudienceTaskVerificationDialogComponent } from '../dialog/list-audience-task-verification-dialog.component';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
@@ -12,14 +11,16 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../../schedule-program/import-coin/import-coin.component';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
+import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 
 @Component({
   selector: 'app-task-verification-detail',
   templateUrl: './task-verification-detail.component.html',
   styleUrls: ['./task-verification-detail.component.scss']
 })
-export class TaskVerificationDetailComponent {
+export class TaskVerificationDetailComponent implements OnInit {
   idScheduler: any;
+  idTemplate: any;
   dataScheduler: any;
   dialogRef: any;
 
@@ -63,7 +64,7 @@ export class TaskVerificationDetailComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private scheduleTradeProgramService: ScheduleTradeProgramService,
+    private taskVerificationService: TaskVerificationService,
     private dataService: DataService
   ) {
     this.permission = this.roles.getRoles('principal.importcoin');
@@ -71,18 +72,19 @@ export class TaskVerificationDetailComponent {
 
     activatedRoute.url.subscribe(param => {
       this.idScheduler = param[2].path;
-    })
+      this.idTemplate = param[3].path;
+    });
 
     this.saveData = false;
-    this.adapter.setLocale("id");
-    this.listTemplateTask = this.activatedRoute.snapshot.data["listTemplate"].data;
-    this.listTradeProgram = this.activatedRoute.snapshot.data["listTradeProgram"].data;
+    this.adapter.setLocale('id');
+    this.listTemplateTask = this.activatedRoute.snapshot.data['listTemplate'].data;
+    this.listTradeProgram = this.activatedRoute.snapshot.data['listTradeProgram'].data;
 
     this.formScheduleError = {
       name: {},
       trade_creator_id: {},
       task_templates: []
-    }
+    };
 
     this.filteredTP.next(this.listTradeProgram.slice());
     this.filteredTask.next(this.listTemplateTask.slice());
@@ -90,24 +92,24 @@ export class TaskVerificationDetailComponent {
   }
 
   ngOnInit() {
-    this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
+    this.taskVerificationService.getDetail({ id: this.idScheduler, template_id: this.idTemplate }).subscribe(res => {
       this.dataScheduler = res;
       this.onLoad = false;
-    })
+    });
 
     this.formSchedule = this.formBuilder.group({
-      name: ["", Validators.required],
-      trade_creator_id: ["", Validators.required],
+      name: ['', Validators.required],
+      trade_creator_id: ['', Validators.required],
       task_templates: this.formBuilder.array([this.createTaskTemplate()], Validators.required),
-    })
+    });
 
     this.formSchedule.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formSchedule, this.formScheduleError);
-    })
+    });
 
     this.formSchedule.valueChanges.subscribe(res => {
       this.valueChange = true;
-    })
+    });
 
     this.filterTP.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -160,38 +162,38 @@ export class TaskVerificationDetailComponent {
 
   createTaskTemplate(): FormGroup {
     return this.formBuilder.group({
-      task_template_id: ["", Validators.required],
-      coin_delivered: ["", [Validators.required, Validators.min(0)]],
-      coin_approved: ["", [Validators.required, Validators.min(0)]],
-      start_date: ["", Validators.required],
-      end_date: ["", Validators.required],
-      repeated: ["by-weekly", Validators.required],
+      task_template_id: ['', Validators.required],
+      coin_delivered: ['', [Validators.required, Validators.min(0)]],
+      coin_approved: ['', [Validators.required, Validators.min(0)]],
+      start_date: ['', Validators.required],
+      end_date: ['', Validators.required],
+      repeated: ['by-weekly', Validators.required],
       is_backup: [1, Validators.required],
       is_verification_toggle: [false, Validators.required],
       notif: [1, Validators.required]
-    })
+    });
   }
 
   addTaskTemplate() {
-    let template = this.formSchedule.get('task_templates') as FormArray;
-    template.push(this.createTaskTemplate())
+    const template = this.formSchedule.get('task_templates') as FormArray;
+    template.push(this.createTaskTemplate());
   }
 
   deleteTaskTemplate(idx) {
-    let template = this.formSchedule.get('task_templates') as FormArray;
+    const template = this.formSchedule.get('task_templates') as FormArray;
     template.removeAt(idx);
   }
 
   getTradeProgram() {
-    let tradeProgramId = this.formSchedule.get('trade_creator_id').value;
-    let tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
+    const tradeProgramId = this.formSchedule.get('trade_creator_id').value;
+    const tradeProgram = this.listTradeProgram.filter(item => item.id === tradeProgramId)[0];
 
     this.minDate = tradeProgram['start_date'];
     this.maxStartDateTemplate = tradeProgram['end_date'];
   }
 
   setMinDate(idx) {
-    let template = this.formSchedule.get('task_templates') as FormArray;
+    const template = this.formSchedule.get('task_templates') as FormArray;
     template.at(idx).get('end_date').setValue('');
   }
 
@@ -200,12 +202,13 @@ export class TaskVerificationDetailComponent {
   }
 
   changeValue(idx) {
-    let template = this.formSchedule.get('task_templates') as FormArray;
+    const template = this.formSchedule.get('task_templates') as FormArray;
 
-    if (template.at(idx).get('is_backup').value === 0)
+    if (template.at(idx).get('is_backup').value === 0) {
       template.at(idx).get('notif').disable();
-    else
+    } else {
       template.at(idx).get('notif').enable();
+    }
   }
 
   submitUpdate() {
@@ -214,7 +217,7 @@ export class TaskVerificationDetailComponent {
       // let tradeProgram = this.formSchedule.get('trade_creator_id').value;
       // if (!tradeProgram['id']) return this.dialogService.openSnackBar({ message: `Data Trade Program "${tradeProgram}" tidak tersedia, mohon lakukan pencarian kembali!` })
 
-      let body = {
+      const body = {
         name: this.formSchedule.get('name').value,
         trade_creator_id: this.formSchedule.get('trade_creator_id').value,
         task_templates: this.formSchedule.get('task_templates').value.map(item => {
@@ -232,11 +235,11 @@ export class TaskVerificationDetailComponent {
             notif: item.is_backup === 1 ? item.notif : 0
           }
         })
-      }
+      };
 
-      let foundUndefined = body['task_templates'].some(item => item === undefined)
+      const foundUndefined = body['task_templates'].some(item => item === undefined);
       if (!foundUndefined) {
-        this.scheduleTradeProgramService.create(body).subscribe(
+        this.taskVerificationService.create(body).subscribe(
           res => {
             this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
             this.router.navigate(['dte', 'schedule-trade-program']);
@@ -244,7 +247,7 @@ export class TaskVerificationDetailComponent {
           err => {
             console.log(err.error.message);
           }
-        )
+        );
       }
     } else {
       this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
@@ -256,16 +259,16 @@ export class TaskVerificationDetailComponent {
       return moment(param).format('YYYY-MM-DD');
     }
 
-    return "";
+    return '';
   }
 
   submit(param) {
-    let body = {
+    const body = {
       _method: 'PUT',
       status_scheduler: param
-    }
+    };
 
-    this.scheduleTradeProgramService.put(body, { schedule_tp_id: this.idScheduler }).subscribe(
+    this.taskVerificationService.put(body, { schedule_tp_id: this.idScheduler }).subscribe(
       res => {
         this.dialogService.openSnackBar({ message: 'Status Berhasil diubah' });
         this.router.navigate(['dte', 'schedule-trade-program']);
@@ -273,7 +276,7 @@ export class TaskVerificationDetailComponent {
       err => {
         console.log(err.error.message)
       }
-    )
+    );
   }
 
   openListAudience(item) {
@@ -286,7 +289,7 @@ export class TaskVerificationDetailComponent {
 
     this.dialogRef = this.dialog.open(ListAudienceTaskVerificationDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { })
+    this.dialogRef.afterClosed().subscribe(response => { });
   }
 
   export() {
@@ -294,10 +297,10 @@ export class TaskVerificationDetailComponent {
     const body = {
       trade_scheduler_id: this.dataScheduler.id,
       trade_creator_id: this.dataScheduler.trade_creator_id
-    }
+    };
 
     this.dataService.showLoading(true);
-    this.scheduleTradeProgramService.downloadExcel(body).subscribe(res => {
+    this.taskVerificationService.downloadExcel(body).subscribe(res => {
       // window.open(res.data, "_blank");
       // const link = document.createElement('a');
       // link.target = '_blank';
@@ -311,7 +314,7 @@ export class TaskVerificationDetailComponent {
       // console.log(res);
     }, err => {
       this.dataService.showLoading(false);
-    })
+    });
   }
 
   import() {
@@ -327,7 +330,7 @@ export class TaskVerificationDetailComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'adjustment-coin-dialog';
-    dialogConfig.data = this.dataScheduler;;
+    dialogConfig.data = this.dataScheduler;
 
     this.dialogRef = this.dialog.open(ImportCoinComponent, dialogConfig);
 
@@ -335,6 +338,6 @@ export class TaskVerificationDetailComponent {
       if (response) {
         this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
       }
-    })
+    });
   }
 }

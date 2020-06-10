@@ -9,7 +9,7 @@ import { TaskVerificationService } from 'app/services/dte/task-verification.serv
   styleUrls: ['./list-audience-task-verification-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ListAudienceTaskVerificationDialogComponent {
+export class ListAudienceTaskVerificationDialogComponent implements OnInit {
   rows: any[];
   loadingIndicator = true;
   reorderable = true;

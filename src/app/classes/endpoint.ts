@@ -521,7 +521,7 @@ export class Endpoint {
       },
       TaskVerification: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/list`,
-        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail`,
+        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail/${context.id}/${context.template_id}`,
         listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/
           ${context.audience_id}/${context.template_id}`,
 
