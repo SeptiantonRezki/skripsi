@@ -87,6 +87,7 @@ import { QzTrayService } from "./services/qz-tray.service";
 import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.service";
 import { ProductCatalogueService } from "./services/src-catalogue/product-catalogue.service";
 import { StoreTemplateLayoutService } from "./services/src-catalogue/store-template-layout.service";
+import { TaskVerificationService } from "./services/dte/task-verification.service";
 
 @NgModule({
   declarations: [
@@ -170,6 +171,7 @@ import { StoreTemplateLayoutService } from "./services/src-catalogue/store-templ
     ProductCatalogueService,
     StoreTemplateLayoutService,
     PayMethodService,
+    TaskVerificationService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],

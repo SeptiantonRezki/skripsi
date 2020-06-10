@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detil Pengatur Jadwal Trade Program'"></page-content-header>
+  <page-content-header [contentTitle]="'Detil Verifikasi Misi'"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off">
         <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
-          <h2>Detil Pengatur Jadwal Trade Program</h2>
+          <h2>Detail Verifikasi Misi</h2>
           <div *ngIf="dataScheduler['audience']">
             <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px"
               (click)="export()">
