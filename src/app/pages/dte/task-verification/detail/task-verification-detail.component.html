@@ -5,10 +5,9 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
-      <form autocomplete="off">
-        <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
-          <h2>Detail Verifikasi Misi</h2>
-          <div *ngIf="dataScheduler['audience']">
+      <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
+        <h2>Detail Verifikasi Misi</h2>
+        <!-- <div *ngIf="dataScheduler['audience']">
             <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px"
               (click)="export()">
               <mat-icon>arrow_upward</mat-icon>
@@ -19,9 +18,10 @@
               <mat-icon>arrow_downward</mat-icon>
               IMPORT COIN
             </button>
-          </div>
-        </div>
-        <div class="ayo-middle py-24" fxLayout="column">
+          </div> -->
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off">
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" placeholder="Nama Pengatur Jadwal Program Dagang"
@@ -76,8 +76,7 @@
             </div>
           </div>
 
-          <div class="py-24" *ngFor="let item of dataScheduler['templates']; let i = index;">
-
+          <div class="py-24">
             <div>
               <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxFlex="20">
@@ -85,48 +84,47 @@
                 </div>
                 <div fxFlex="80" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <h3 *ngIf="item.is_verification_ir">
-                    <mat-slide-toggle disabled [checked]="item.is_verification_ir == 1 ? true : false">Verifikasi Oleh IR</mat-slide-toggle>
+                  <h3>
+                    <mat-slide-toggle disabled [checked]="dataScheduler.is_verification_hq == 1 ? true : false">
+                      Verifikasi Oleh HQ</mat-slide-toggle>
                   </h3>
                   <h3>
-                    <mat-slide-toggle disabled [checked]="item.is_verification_hq == 1 ? true : false">Verifikasi Oleh HQ</mat-slide-toggle>
-                  </h3>
-                  <h3>
-                    <mat-slide-toggle disabled [checked]="item.is_verification_toggle">Perlu Verifikasi
+                    <mat-slide-toggle disabled [checked]="dataScheduler.is_verification_toggle">Perlu Verifikasi
                     </mat-slide-toggle>
                   </h3>
                   <h3>
-                    <mat-slide-toggle disabled [checked]="item.is_verification">Push to FF?</mat-slide-toggle>
+                    <mat-slide-toggle disabled [checked]="dataScheduler.is_verification">Push to FF?</mat-slide-toggle>
                   </h3>
                 </div>
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="p-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Template Tugas" [value]="item.task_template_name" disabled>
+                  <input matInput type="text" placeholder="Template Tugas" [value]="dataScheduler.task_template_name"
+                    disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.coin_delivered"
+                  <input matInput type="text" min="0" [value]="dataScheduler.coin_delivered"
                     placeholder="Nilai Coin Tugas Terkirim" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.coin_approved"
+                  <input matInput type="text" min="0" [value]="dataScheduler.coin_approved"
                     placeholder="Nilai Coin Tugas Disetujui" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.start_date | dateToMoment" placeholder="Tanggal Mulai"
-                    disabled>
+                  <input matInput type="text" [value]="dataScheduler.start_date | dateToMoment"
+                    placeholder="Tanggal Mulai" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.end_date | dateToMoment" placeholder="Tanggal Berakhir"
-                    disabled>
+                  <input matInput type="text" [value]="dataScheduler.end_date | dateToMoment"
+                    placeholder="Tanggal Berakhir" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
             </div>
-            <div *ngIf="item.backup">
+            <div *ngIf="dataScheduler.backup">
               <mat-divider style="border-top-style: dashed"></mat-divider>
               <h3 class="px-24 text-bold">Backup Task</h3>
               <mat-divider style="border-top-style: dashed"></mat-divider>
@@ -134,53 +132,135 @@
               <div class="p-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="25px" fxLayoutGap.lt-md="0px"
                 fxLayoutAlign="start end">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Template Tugas (Backup)" [value]="item.backup?.name"
+                  <input matInput type="text" placeholder="Template Tugas (Backup)" [value]="dataScheduler.backup?.name"
                     disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.backup?.coin_delivered"
+                  <input matInput type="text" min="0" [value]="dataScheduler.backup?.coin_delivered"
                     placeholder="Nilai Coin Tugas Terkirim (Backup)" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
-                  <input matInput type="text" min="0" [value]="item.backup?.coin_approved"
+                  <input matInput type="text" min="0" [value]="dataScheduler.backup?.coin_approved"
                     placeholder="Nilai Coin Tugas Disetujui (Backup)" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.backup?.start_date | dateToMoment"
+                  <input matInput type="text" [value]="dataScheduler.backup?.start_date | dateToMoment"
                     placeholder="Tanggal Mulai (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.backup?.end_date | dateToMoment"
+                  <input matInput type="text" [value]="dataScheduler.backup?.end_date | dateToMoment"
                     placeholder="Tanggal Berakhir (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
             </div>
           </div>
-        </div>
+        </form>
 
-        <div class="confirm p-24"
-          *ngIf="dataScheduler['trade_audience_group_id'] && dataScheduler['status_scheduler'] === 'draft'"
-          fxLayout="row" fxLayoutGap="20px">
-          <!-- <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-            REJECT
-          </button> -->
+        <form [formGroup]="formFilter" autoComplete="off">
+          <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Zona' :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Regional'
+                    :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Area'
+                    :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                    'Semua
+                    Salespoint'
+                    :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    District'
+                    :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                    Territori'
+                    :
+                    item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="p-0">
+          <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+          <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+          [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+          [rowHeight]="auto" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
+          [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+          (sort)="onSort($event)">
+          <!-- class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [reorderable]="reorderable" [selected]="selected" [count]="pagination.total"
+            [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
+            (select)="onSelect($event)" fusePerfectScrollbar> -->
+            <ngx-datatable-column name="Retailer Id" prop="id" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Customer Code" [width]="180" prop="code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="No Hp" prop="nomor_hp" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Nama Retailer" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Area" prop="area" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Region" prop="region" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Division" prop="division" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="IR Check" prop="ir_check" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Status Misi" prop="status_misi" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Status Coin" prop="status_coin" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Tanggal Submit Misi" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span *ngIf="row.tgl_submit_misi !== null">{{row.tgl_submit_misi.date | date: 'dd/MM/yyy HH:mm'}} WIB</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Action" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="button-row" style="margin-left: -10px">
+                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi" (click)="openConfirmDialog(row, 'Verifikasi Misi')">
+                    <mat-icon class="secondary-text">assignment_turned_in</mat-icon>
+                  </button>
 
-          <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
-            SETUJUI
-          </button>
+                  <button type="button" mat-icon-button matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin')">
+                    <mat-icon class="secondary-text">call_made</mat-icon>
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
         </div>
+      </div>
 
-        <div class="confirm p-24" *ngIf="dataScheduler['status_scheduler'] === 'publish'" fxLayout="row"
-          fxLayoutGap="20px">
-          <button mat-raised-button type="button" class="confirmation-button" (click)="submit('unpublish')" fxFlex="20">
-            UNPUBLISH
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 </div>

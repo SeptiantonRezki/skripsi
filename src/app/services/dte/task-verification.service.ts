@@ -24,9 +24,44 @@ export class TaskVerificationService extends BaseService {
     return this.getApi(url);
   }
 
-  getListAudience(context?, queryParams?): Observable<any> {
+  getListAudience(context?: any, queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'listAudience', context);
     return this.getApi(url, queryParams);
+  }
+
+  listReason(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'listReason', context);
+    return this.getApi(url);
+  }
+
+  totalSRC(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'totalSRC', context);
+    return this.getApi(url);
+  }
+
+  verificationAll(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'verificationAll');
+    return this.postApi(url, body);
+  }
+
+  verification(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'verification');
+    return this.postApi(url, body);
+  }
+
+  releaseCoinAll(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'releaseCoinAll');
+    return this.postApi(url, body);
+  }
+
+  releaseCoin(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'releaseCoin');
+    return this.postApi(url, body);
+  }
+
+  submission(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'submission');
+    return this.postApi(url, body);
   }
 
   create(body): Observable<any> {

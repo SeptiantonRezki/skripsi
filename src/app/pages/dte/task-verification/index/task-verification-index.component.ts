@@ -4,12 +4,13 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import * as moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
+import { ConfirmDialogComponent } from '../dialog/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-task-verification-index',
@@ -44,6 +45,8 @@ export class TaskVerificationIndexComponent implements OnInit {
     { name: 'Draft', value: 'draft' }
   ];
 
+  dialogRef: any;
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -51,6 +54,7 @@ export class TaskVerificationIndexComponent implements OnInit {
     private dataService: DataService,
     private userIdle: IdleService,
     private taskVerificationService: TaskVerificationService,
+    private dialog: MatDialog,
   ) {
     this.adapter.setLocale("id");
     this.rows = [];
@@ -141,6 +145,19 @@ export class TaskVerificationIndexComponent implements OnInit {
     }
 
     return '';
+  }
+
+  openConfirmDialog(item: any, popupType: string) {
+    const dialogConfig = new MatDialogConfig();
+    item.popupType = popupType;
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = item;
+
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => { });
   }
 
 }

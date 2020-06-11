@@ -1,0 +1,119 @@
+<div class="dialog-content-wrapper" *ngIf="!onLoad">
+  <div *ngIf="data.popupType == 'Verification All Mission'">
+    <div class="p-16">
+      <div fxLayout="row" fxLayoutAlign="center center" class="info">
+        Apakah anda yakin untuk verifikasi (sebanyak {{jumlahMisi}}) misi ini?
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" class="p-8">
+        <mat-radio-group [formControl]="verificationConfirm" >
+          <mat-radio-button class="radio-button pr-20" *ngFor="let item of listConfirm;" [value]="item.value">
+            {{item.name}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div *ngIf="isDisagree" fxLayout="row" fxLayoutAlign="center center" class="reason-layout">
+        <mat-radio-group [formControl]="reasonConfirm">
+          <mat-radio-button class="radio-button pr-20" *ngFor="let item of listReason;" [value]="item.value">
+            {{item.name}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" >
+        <button mat-raised-button [disabled]="isDisagree && !reason || isDisagree == null" *ngIf="isDisagree && !reason || isDisagree == null">
+          Simpan
+        </button>
+        <button mat-raised-button class="primary-green" (click)="saveVerification()" *ngIf="isDisagree !== null && isDisagree && reason || !isDisagree && isDisagree !== null">
+          Simpan
+        </button>
+
+        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="data.popupType == 'Release Coin On Index'">
+    <div class="p-16">
+      <div fxLayout="row" fxLayoutAlign="center center" class="info">
+        Apakah anda yakin untuk mengirim coin untuk misi ini (Total {{totalSRC}} SRC)?
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <button mat-raised-button class="primary-green" (click)="saveCoin()" >
+          Simpan
+        </button>
+
+        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="data.popupType == 'Release Coin'">
+    <div class="p-16">
+      <div fxLayout="row" fxLayoutAlign="center center" class="info">
+        Apakah anda yakin untuk mengirim coin untuk SRC {{data.name}} - {{data.code}}?
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <button mat-raised-button class="primary-green" (click)="releaseCoin()" >
+          Simpan
+        </button>
+
+        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="data.popupType == 'Verifikasi Misi'">
+    <div class="p-16">
+      <div fxLayout="row" fxLayoutAlign="center center" class="info">
+        Apakah anda yakin untuk verifikasi ini
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <button mat-raised-button class="primary-green" (click)="verifikasiMisi()" >
+          Setujui
+        </button>
+
+        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+          Tolak
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="data.popupType == 'Verification'">
+    <div class="p-16">
+      <div fxLayout="row" fxLayoutAlign="center center" class="info">
+        verifikasi ini
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <button mat-raised-button class="primary-green" (click)="verifikasiMisi()" >
+          Setujui
+        </button>
+
+        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+          Tolak
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
