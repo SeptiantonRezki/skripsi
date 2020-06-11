@@ -115,7 +115,11 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
+
+        <ngx-datatable-column [sortable]="false" name="Status Coin" prop="status_coin" [flexGrow]="3">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button type="button" mat-icon-button color="" matTooltip="Lihat"
@@ -132,11 +136,17 @@
                 <mat-icon *ngIf="row.status_audience === 'approved'" class="orange-500-fg">save_alt</mat-icon>
                 <mat-icon *ngIf="row.status_audience !== 'approved'" class="secondary-text">save_alt</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="primary"
+              <button type="button" mat-icon-button color="" matTooltip="Verified All" (click)="openConfirmDialog(row, 'Verification All Mission')">
+                <mat-icon class="secondary-text">assignment_turned_in</mat-icon>
+              </button>
+              <button type="button" mat-icon-button color="" matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin On Index')">
+                <mat-icon class="secondary-text">call_made</mat-icon>
+              </button>
+              <!-- <button type="button" mat-icon-button color="primary"
                 [disabled]="row.status_scheduler === 'publish' || !permission?.hapus" matTooltip="Hapus"
                 (click)="deleteStp(row.id)">
                 <mat-icon>delete</mat-icon>
-              </button>
+              </button> -->
             </div>
           </ng-template>
         </ngx-datatable-column>
