@@ -532,6 +532,7 @@ export class Endpoint {
         releaseCoinAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin/all`,
         releaseCoin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin`,
         submission: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/submission`,
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

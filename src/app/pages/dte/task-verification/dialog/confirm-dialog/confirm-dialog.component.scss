@@ -25,6 +25,11 @@
     background-color: rgb(11, 121, 69) !important;
   }
 
+  .header-vm {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+  }
   .title {
     font-weight: 800;
     font-size: 14px;
@@ -33,6 +38,9 @@
     font-weight: 400;
     font-size: 12px;
     margin-bottom: 8px;
+  }
+  .coin {
+    font-size: 16px !important;
   }
   .number {
     min-width: 25px;
@@ -47,6 +55,12 @@
   }
   .mat-radio-label-content {
     font-size: 14px !important;
+  }
+  .answer-img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 8;
   }
 
 }

@@ -22,6 +22,11 @@ export class TaskVerificationIndexComponent implements OnInit {
   onLoad: boolean;
   loadingIndicator: boolean;
 
+  permissionVerifikasiMisi: any;
+  permissionVerifikasiMisiAll: any;
+  permissionReleaseCoin: any;
+  roles: PagesName = new PagesName();
+
   rows: any[];
   keyUp = new Subject<string>();
 
@@ -46,6 +51,7 @@ export class TaskVerificationIndexComponent implements OnInit {
   ];
 
   dialogRef: any;
+  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   constructor(
     private dialogService: DialogService,
@@ -56,12 +62,14 @@ export class TaskVerificationIndexComponent implements OnInit {
     private taskVerificationService: TaskVerificationService,
     private dialog: MatDialog,
   ) {
-    this.adapter.setLocale("id");
+    this.adapter.setLocale('id');
     this.rows = [];
     this.onLoad = true;
     this.loadingIndicator = true;
 
-    // this.permission = this.roles.getRoles('principal.verification');
+    this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
+    this.permissionVerifikasiMisiAll = this.roles.getRoles('principal.dtetaskverificationall');
+    this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {
@@ -158,6 +166,46 @@ export class TaskVerificationIndexComponent implements OnInit {
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => { });
+  }
+
+
+  async export(item) {
+    this.dataService.showLoading({ show: true });
+
+    let response: any = { rand: '' };
+    const params = {
+      trade_scheduler_id: item.id,
+      last: 'true',
+      rand: response.rand,
+      trade_scheduler_template_id: item.scheduler_templates_id
+    };
+
+    try {
+      // response = await this.taskVerificationService.export(params).toPromise();
+      this.taskVerificationService.export(params).subscribe(res => {
+        this.downloadLink.nativeElement.href = res.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      }, err => {
+        console.warn('err', err);
+        alert('Terjadi kesalahan saat mendownload misi')
+        this.dataService.showLoading(false);
+      })
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+
+    // if (response.data && response.status) {
+    //   setTimeout(() => {
+    //     this.downloadLink.nativeElement.href = response.data;
+    //     this.downloadLink.nativeElement.click();
+    //     this.dataService.showLoading(false);
+    //   }, 1000);
+    // } else {
+    //   this.dataService.showLoading(false);
+    //   alert('Terjadi kesalahan saat mendownload misi')
+    // }
   }
 
 }
