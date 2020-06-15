@@ -64,6 +64,11 @@ export class TaskVerificationService extends BaseService {
     return this.postApi(url, body);
   }
 
+  export(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export');
+    return this.postApi(url, body);
+  }
+
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
@@ -82,11 +87,6 @@ export class TaskVerificationService extends BaseService {
   delete(context): Observable<any> {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
-  }
-
-  export(body): Observable<any> {
-    const url = this.getUrl(this.namespace, 'export');
-    return this.postApi(url, body);
   }
 
   getTradeProgram(): Observable<any> {
