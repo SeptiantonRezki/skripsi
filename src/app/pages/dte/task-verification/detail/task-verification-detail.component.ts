@@ -149,15 +149,45 @@ export class TaskVerificationDetailComponent implements OnInit {
     });
     this.getDetail();
 
-
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      // this.searchingRetailer(res);
-      // this.getDetail();
+      console.log('getListAudienceww2222')
       this.getListAudience(this.trade_audience_group_id);
-    })
+    });
+
+    this.formFilter.get('zone').valueChanges.subscribe(res => {
+      console.log('zone', res);
+      if (res) {
+        this.getAudienceAreaV2('region', res);
+      }
+    });
+    this.formFilter.get('region').valueChanges.subscribe(res => {
+      console.log('region', res);
+      if (res) {
+        this.getAudienceAreaV2('area', res);
+      }
+    });
+    this.formFilter.get('area').valueChanges.subscribe(res => {
+      console.log('area', res, this.formFilter.value['area']);
+      if (res) {
+        this.getAudienceAreaV2('salespoint', res);
+      }
+    });
+    this.formFilter.get('salespoint').valueChanges.subscribe(res => {
+      console.log('salespoint', res);
+      if (res) {
+        this.getAudienceAreaV2('district', res);
+      }
+    });
+    this.formFilter.get('district').valueChanges.subscribe(res => {
+      console.log('district', res);
+      if (res) {
+        this.getAudienceAreaV2('territory', res);
+      }
+    });
   }
 
   getDetail() {
+    console.log('getListAudience1111')
     this.taskVerificationService.getDetail({ id: this.idScheduler, template_id: this.idTemplate }).subscribe(res => {
       this.dataScheduler = res;
       this.onLoad = false;
@@ -246,10 +276,10 @@ export class TaskVerificationDetailComponent implements OnInit {
   // NEW FEATURE
 
   getListAudience(id: any) {
-
+    console.log('getListAudience')
     this.dataService.showLoading(true);
     this.pagination.page = 1;
-    this.pagination.per_page = 25;
+    // this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>

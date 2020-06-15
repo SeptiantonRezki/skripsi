@@ -62,14 +62,14 @@
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
         [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="auto" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
+        [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
         (sort)="onSort($event)">
 
-        <ngx-datatable-column [sortable]="false" name="Nama Pengatur Jadwal Program" prop="nama_pengatur_jadwal_program" [flexGrow]="3">
+        <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Pengatur Jadwal Program" prop="nama_pengatur_jadwal_program" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]"> -->
-            <span class="row-name">
+            <span class="row">
               {{row.nama_pengatur_jadwal_program}}
             </span>
           </ng-template>
@@ -78,10 +78,10 @@
         <ngx-datatable-column [sortable]="false" name="Trade Program" prop="nama_trade_program" [flexGrow]="3">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Nama Group Trade Program" prop="nama_grup_trade_program" [flexGrow]="3">
+        <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program" prop="nama_grup_trade_program" [flexGrow]="3">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Nama Misi/Template Tugas" prop="nama_template" [flexGrow]="3">
+        <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas" prop="nama_template" [flexGrow]="3">
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
@@ -96,7 +96,7 @@
         <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="120" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
+        <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
