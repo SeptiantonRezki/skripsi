@@ -57,7 +57,8 @@ export class TaskVerificationDetailComponent implements OnInit {
   valueChange: Boolean;
   saveData: Boolean;
 
-  permission: any;
+  permissionVerifikasiMisi: any;
+  permissionReleaseCoin: any;
   roles: PagesName = new PagesName();
 
   formFilter: FormGroup;
@@ -84,8 +85,9 @@ export class TaskVerificationDetailComponent implements OnInit {
     private dataService: DataService,
     private geotreeService: GeotreeService,
   ) {
-    this.permission = this.roles.getRoles('principal.importcoin');
-    console.log(this.permission);
+    this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
+    this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
+    console.log(this.permissionVerifikasiMisi, this.permissionReleaseCoin);
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -150,7 +152,6 @@ export class TaskVerificationDetailComponent implements OnInit {
     this.getDetail();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      console.log('getListAudienceww2222')
       this.getListAudience(this.trade_audience_group_id);
     });
 
@@ -187,7 +188,6 @@ export class TaskVerificationDetailComponent implements OnInit {
   }
 
   getDetail() {
-    console.log('getListAudience1111')
     this.taskVerificationService.getDetail({ id: this.idScheduler, template_id: this.idTemplate }).subscribe(res => {
       this.dataScheduler = res;
       this.onLoad = false;
@@ -276,7 +276,6 @@ export class TaskVerificationDetailComponent implements OnInit {
   // NEW FEATURE
 
   getListAudience(id: any) {
-    console.log('getListAudience')
     this.dataService.showLoading(true);
     this.pagination.page = 1;
     // this.pagination.per_page = 25;
@@ -349,6 +348,37 @@ export class TaskVerificationDetailComponent implements OnInit {
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.taskVerificationService.getListAudience({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+
+  setPage(pageInfo) {
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+
+    this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event['newValue'];
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;

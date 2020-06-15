@@ -6,6 +6,7 @@ import { startWith, map, takeUntil } from 'rxjs/operators';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { environment } from 'environments/environment';
 
 @Component({
   templateUrl: './confirm-dialog.component.html',
@@ -13,6 +14,7 @@ import { DialogService } from 'app/services/dialog.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ConfirmDialogComponent implements OnInit {
+  environment: any;
   loadingIndicator = true;
   onLoad: boolean;
   verificationConfirm: FormControl = new FormControl();
@@ -41,6 +43,7 @@ export class ConfirmDialogComponent implements OnInit {
     this.totalSRC = 0;
     this.reason = null;
     this.dataSubmission = null;
+    this.environment = environment;
   }
 
   ngOnInit() {
@@ -110,6 +113,12 @@ export class ConfirmDialogComponent implements OnInit {
         this.onLoad = false;
         this.dataService.showLoading(false);
         this.dataSubmission = res;
+        if (this.dataSubmission.data.image) {
+          if (this.dataSubmission.data.image.indexOf('http') < 0) {
+            console.log('ok', this.dataSubmission.data.image.indexOf('http'))
+            this.dataSubmission.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + this.dataSubmission.data.image;
+          }
+        }
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);

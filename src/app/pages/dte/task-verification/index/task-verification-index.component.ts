@@ -22,6 +22,11 @@ export class TaskVerificationIndexComponent implements OnInit {
   onLoad: boolean;
   loadingIndicator: boolean;
 
+  permissionVerifikasiMisi: any;
+  permissionVerifikasiMisiAll: any;
+  permissionReleaseCoin: any;
+  roles: PagesName = new PagesName();
+
   rows: any[];
   keyUp = new Subject<string>();
 
@@ -62,7 +67,9 @@ export class TaskVerificationIndexComponent implements OnInit {
     this.onLoad = true;
     this.loadingIndicator = true;
 
-    // this.permission = this.roles.getRoles('principal.verification');
+    this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
+    this.permissionVerifikasiMisiAll = this.roles.getRoles('principal.dtetaskverificationall');
+    this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {
