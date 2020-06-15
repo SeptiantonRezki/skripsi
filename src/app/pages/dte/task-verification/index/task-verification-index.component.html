@@ -136,10 +136,10 @@
                 <mat-icon *ngIf="row.status_audience === 'approved'" class="orange-500-fg">save_alt</mat-icon>
                 <mat-icon *ngIf="row.status_audience !== 'approved'" class="secondary-text">save_alt</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="" matTooltip="Verified All" (click)="openConfirmDialog(row, 'Verification All Mission')">
+              <button type="button" mat-icon-button color="" matTooltip="Verified All" (click)="openConfirmDialog(row, 'Verification All Mission')" [disabled]="row.status_scheduler !== 'publish' || row.status_coin == 'Sudah Dikirim'">
                 <mat-icon class="secondary-text">assignment_turned_in</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="" matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin On Index')">
+              <button type="button" mat-icon-button color="" matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin On Index')" [disabled]="row.status_scheduler !== 'publish' || row.status_coin == 'Sudah Dikirim'">
                 <mat-icon class="secondary-text">call_made</mat-icon>
               </button>
               <!-- <button type="button" mat-icon-button color="primary"

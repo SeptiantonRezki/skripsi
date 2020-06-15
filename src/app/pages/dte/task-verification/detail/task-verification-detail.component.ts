@@ -67,6 +67,7 @@ export class TaskVerificationDetailComponent implements OnInit {
   listLevelArea: any[];
   list: any;
   areaFromLogin: any;
+  trade_audience_group_id: any;
 
   loadingIndicator: boolean;
   rows: any[];
@@ -117,6 +118,7 @@ export class TaskVerificationDetailComponent implements OnInit {
     this.adapter.setLocale('id');
     this.listTemplateTask = this.activatedRoute.snapshot.data['listTemplate'].data;
     this.listTradeProgram = this.activatedRoute.snapshot.data['listTradeProgram'].data;
+    this.trade_audience_group_id = null;
 
   }
 
@@ -145,11 +147,22 @@ export class TaskVerificationDetailComponent implements OnInit {
     this.formSchedule.valueChanges.subscribe(res => {
       this.valueChange = true;
     });
+    this.getDetail();
 
+
+    this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
+      // this.searchingRetailer(res);
+      // this.getDetail();
+      this.getListAudience(this.trade_audience_group_id);
+    })
+  }
+
+  getDetail() {
     this.taskVerificationService.getDetail({ id: this.idScheduler, template_id: this.idTemplate }).subscribe(res => {
       this.dataScheduler = res;
       this.onLoad = false;
       this.initAreaV2();
+      this.trade_audience_group_id = res.trade_audience_group_id;
       this.getListAudience(res.trade_audience_group_id);
     });
   }
@@ -652,25 +665,28 @@ export class TaskVerificationDetailComponent implements OnInit {
 
   openConfirmDialog(item: any, popupType: string) {
     const dialogConfig = new MatDialogConfig();
-    // if (popupType === 'Release Coin' ) {
-      const data = this.dataScheduler;
-      data.retailer_id = item.id;
-      data.popupType = popupType;
-      data.name = item.name;
-      data.code = item.code;
-      dialogConfig.data = data;
-    // } else {
-    //   item.popupType = popupType;
-    //   dialogConfig.data = item;
-    // }
+    const data = this.dataScheduler;
+    data.retailer_id = item.id;
+    data.popupType = popupType;
+    data.name = item.name;
+    data.code = item.code;
+    dialogConfig.data = data;
+    if (popupType === 'Verifikasi Misi') {
+      dialogConfig.disableClose = false;
+    } else {
+      dialogConfig.disableClose = true;
+    }
 
-    dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
 
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { });
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.getDetail();
+      }
+     });
   }
 
 }

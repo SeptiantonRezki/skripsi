@@ -22,7 +22,7 @@
 
     <div class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" >
-        <button mat-raised-button [disabled]="isDisagree && !reason || isDisagree == null" *ngIf="isDisagree && !reason || isDisagree == null">
+        <button mat-raised-button [disabled]="isDisagree && !reason || isDisagree == null" *ngIf="isDisagree && !reason || isDisagree == null" style="cursor: no-drop;">
           Simpan
         </button>
         <button mat-raised-button class="primary-green" (click)="saveVerification()" *ngIf="isDisagree !== null && isDisagree && reason || !isDisagree && isDisagree !== null">
@@ -77,43 +77,70 @@
   </div>
 
   <div *ngIf="data.popupType == 'Verifikasi Misi'">
-    <div class="p-16">
-      <div fxLayout="row" fxLayoutAlign="center center" class="info">
-        Apakah anda yakin untuk verifikasi ini
+    <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+      <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      </div>
+      <!-- CLOSE DIALOG BUTTON -->
+      <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+      <!-- / CLOSE DIALOG BUTTON -->
+  
+    </mat-toolbar>
+    <div class="p-16" fusePerfectScrollbar *ngIf="dataSubmission !== null">
+      <div *ngIf="dataSubmission.data.image">
+        <img src="{{dataSubmission.data.image}}"/>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" >
+        {{dataSubmission.data.name}}
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="title">
+       Deadline
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="desc">
+        {{dataSubmission.data.end_date}}
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="title">
+        Deskripsi
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="desc">
+        {{dataSubmission.data.description}}
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="title">
+        Coin yang akan diperoleh
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" class="desc">
+        {{dataSubmission.data.coin_approved}}
+      </div>
+      <div *ngFor="let item of dataSubmission.data.submission; let i = index;" fxLayout="row" fxLayoutAlign="start start" class="info mb-8">
+        <div class="number" fxLayout="column" fxLayoutAlign="start start">{{i + 1}}.</div>
+        <div class="question" fxLayout="column" fxLayoutAlign="start start">
+          <span>{{item.question}}</span>
+          <div *ngIf="item.type == 'radio'">
+            <mat-radio-group fxLayout="column" fxLayoutAlign="start start">
+              <mat-radio-button class="radio-button pr-20" *ngFor="let questions of dataSubmission.data.submission[i].additional" checked="false">
+                {{questions}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-        <button mat-raised-button class="primary-green" (click)="verifikasiMisi()" >
+        <button mat-raised-button class="primary-green" (click)="verifikasiMisi('setuju')" >
           Setujui
         </button>
 
-        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
+        <button mat-raised-button class="ml-20" color="primary" (click)="verifikasiMisi('tolak')">
           Tolak
         </button>
       </div>
     </div>
   </div>
 
-  <div *ngIf="data.popupType == 'Verification'">
-    <div class="p-16">
-      <div fxLayout="row" fxLayoutAlign="center center" class="info">
-        verifikasi ini
-      </div>
-    </div>
-
-    <div class="p-8">
-      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-        <button mat-raised-button class="primary-green" (click)="verifikasiMisi()" >
-          Setujui
-        </button>
-
-        <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
-          Tolak
-        </button>
-      </div>
-    </div>
-  </div>
-
+</div>
+<div *ngIf="onLoad">
+  <mat-progress-bar class="loading-bar" mode="indeterminate"></mat-progress-bar>
 </div>
