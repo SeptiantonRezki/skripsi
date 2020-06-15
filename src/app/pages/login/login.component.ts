@@ -100,9 +100,9 @@ export class LoginComponent implements OnInit {
     if (profile) {
       if (profile.id !== undefined && profile.id !== null) {
         const qiscusPayload = {
-          userId: profile.id + 'paghms' + profile.business_id,
+          // userId: profile.id + 'prinhms' + profile.business_id,
           userIdMC: profile.email,
-          userKey: 'paghms' + profile.id, //profile.qiscus_user_key,
+          userKey: 'prinhms' + profile.id, //profile.qiscus_user_key,
           userName: profile.fullname,
           avatarImage: profile.image_url || null,
         }

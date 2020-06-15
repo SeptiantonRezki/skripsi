@@ -24,4 +24,29 @@
     color: #fff !important;
     background-color: rgb(11, 121, 69) !important;
   }
+
+  .title {
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .desc {
+    font-weight: 400;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .number {
+    min-width: 25px;
+    margin-right: 10px;
+    text-align: 'left';
+    font-size: 14px;
+  }
+  .question {
+    line-height: normal;
+    white-space: pre-wrap;
+    font-size: 14px;
+  }
+  .mat-radio-label-content {
+    font-size: 14px !important;
+  }
+
 }

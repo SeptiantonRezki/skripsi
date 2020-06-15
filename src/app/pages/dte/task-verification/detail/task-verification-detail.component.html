@@ -247,11 +247,11 @@
             <ngx-datatable-column name="Action" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi" (click)="openConfirmDialog(row, 'Verifikasi Misi')">
+                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi" (click)="openConfirmDialog(row, 'Verifikasi Misi')" [disabled]="row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim'">
                     <mat-icon class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
 
-                  <button type="button" mat-icon-button matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin')">
+                  <button type="button" mat-icon-button matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release Coin')" [disabled]="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim'">
                     <mat-icon class="secondary-text">call_made</mat-icon>
                   </button>
                 </div>

@@ -71,7 +71,6 @@ import { GroupTradeProgramEditComponent } from './group-trade-program/edit/group
 import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
 import { ConfirmDialogComponent } from "./task-verification/dialog/confirm-dialog/confirm-dialog.component";
-import { ConfirmDialogIndialogComponent } from "./task-verification/dialog/confirm-dialog-indialog/confirm-dialog-indialog.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -158,7 +157,6 @@ export const MY_FORMATS = {
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
     ConfirmDialogComponent,
-    ConfirmDialogIndialogComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -198,7 +196,6 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportCoinComponent,
     ConfirmDialogComponent,
-    ConfirmDialogIndialogComponent,
   ]
 })
 export class DteModule { }

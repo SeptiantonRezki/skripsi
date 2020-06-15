@@ -4,7 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
-import { MatDialogModule, MatSnackBarModule } from "@angular/material";
+import { MatDialogModule, MatSnackBarModule, MatRadioModule } from "@angular/material";
 import "hammerjs";
 
 import { FuseModule } from "@fuse/fuse.module";
@@ -110,6 +110,7 @@ import { TaskVerificationService } from "./services/dte/task-verification.servic
       delay: 0,
       passThruUnknownUrl: true
     }),
+    MatRadioModule,
     MatDialogModule,
     MatSnackBarModule,
     UserIdleModule.forRoot({ idle: 1140, timeout: 60, ping: 60 }),

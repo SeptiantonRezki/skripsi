@@ -119,7 +119,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     }
 
     const profile = await this.dataService.getDecryptedProfile();
-    await this.qiscusLoginOrRegister(profile);
+    // await this.qiscusLoginOrRegister(profile);
   }
 
   async qiscusLoginOrRegister(profile: any){

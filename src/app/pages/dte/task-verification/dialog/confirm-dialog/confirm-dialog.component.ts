@@ -5,7 +5,7 @@ import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { startWith, map, takeUntil } from 'rxjs/operators';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 import { DataService } from 'app/services/data.service';
-import { ConfirmDialogIndialogComponent } from '../confirm-dialog-indialog/confirm-dialog-indialog.component';
+import { DialogService } from 'app/services/dialog.service';
 
 @Component({
   templateUrl: './confirm-dialog.component.html',
@@ -24,6 +24,7 @@ export class ConfirmDialogComponent implements OnInit {
   jumlahMisi: any;
   totalSRC: any;
   indialogRef: any;
+  dataSubmission: any;
 
   private _onDestroy = new Subject<void>();
 
@@ -33,11 +34,13 @@ export class ConfirmDialogComponent implements OnInit {
     public dialog: MatDialog,
     private taskVerificationService: TaskVerificationService,
     private dataService: DataService,
+    private dialogService: DialogService,
   ) {
     this.isDisagree = null;
     this.jumlahMisi = 0;
     this.totalSRC = 0;
     this.reason = null;
+    this.dataSubmission = null;
   }
 
   ngOnInit() {
@@ -64,8 +67,11 @@ export class ConfirmDialogComponent implements OnInit {
     if (this.data.popupType === 'Verification All Mission') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      this.jumlahMisi = this.data.verification_rate.substring(
+      const a = this.data.verification_rate.substring( 0,
+        this.data.verification_rate.indexOf('/'));
+      const b = this.data.verification_rate.substring(
         this.data.verification_rate.indexOf('/') + 1, this.data.verification_rate.length);
+      this.jumlahMisi = b - a;
       this.taskVerificationService.listReason({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -80,14 +86,30 @@ export class ConfirmDialogComponent implements OnInit {
         this.dataService.showLoading(false);
       });
     } else if (this.data.popupType === 'Release Coin On Index') {
+      // this.onLoad = true;
+      // this.dataService.showLoading(true);
+      this.totalSRC = this.data.verification_rate.substring(
+        this.data.verification_rate.indexOf('/') + 1, this.data.verification_rate.length);
+      // this.taskVerificationService.totalSRC({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
+      //   this.onLoad = false;
+      //   this.dataService.showLoading(false);
+      //   if (res.data) {
+      //   }
+      // }, err => {
+      //   this.onLoad = false;
+      //   this.dataService.showLoading(false);
+      // });
+    } else if (this.data.popupType === 'Verifikasi Misi') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      this.taskVerificationService.totalSRC({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
+      this.taskVerificationService.submission({
+        trade_scheduler_template_id: this.data.trade_scheduler_template_id,
+        trade_trade_scheduler_id: this.data.id,
+        retailer_id: this.data.retailer_id,
+      }).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
-        if (res.data) {
-          this.totalSRC = res.data;
-        }
+        this.dataSubmission = res;
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -155,48 +177,63 @@ export class ConfirmDialogComponent implements OnInit {
     });
   }
 
-  verifikasiMisi() {
-    // this.dataService.showLoading(true);
-    console.log('submission', this.data);
-    this.taskVerificationService.submission({
-      trade_scheduler_template_id: this.data.trade_scheduler_template_id,
-      // trade_trade_scheduler_id: this.data.trade_trade_scheduler_id,
-      retailer_id: this.data.retailer_id,
-    }).subscribe(res => {
-      this.dataService.showLoading(false);
-      this.dialogRef.close();
-    }, err => {
-      this.dataService.showLoading(false);
-    });
-    // this.dataService.showLoading(true);
-    // console.log('data', this.data);
-    // this.taskVerificationService.verification({
-    //   trade_scheduler_template_id: this.data.trade_scheduler_template_id,
-    //   trade_creator_id: this.data.trade_creator_id,
-    //   trade_creator_group_id: this.data.trade_creator_group_id,
-    //   retailer_id: this.data.retailer_id,
-    // }).subscribe(res => {
-    //   this.dataService.showLoading(false);
-    //   this.dialogRef.close();
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
-    // this.openConfirmDialog(this.data, 'Verification');
+  verifikasiMisi(statusConfirm: string) {
+
+    if (statusConfirm === 'setuju') {
+      console.log('SETUJU')
+      const data = {
+        titleDialog: 'Apakah anda yakin untuk menyetujui misi ini?',
+        captionDialog: null,
+        confirmCallback: this.confirmVerifikasiMisi.bind(this),
+        buttonText: ["Setujui", "Batal"]
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    } else {
+      console.log('TOLAK');
+      const data = {
+        titleDialog: 'Silahkan isi alasan penolakan',
+        captionDialog: null,
+        confirmCallback: this.confirmVerifikasiMisi.bind(this),
+        buttonText: ["Tolak", "Batal"],
+        isDisagree: true,
+        listRadio: this.listReason
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    }
   }
 
-  openConfirmDialog(item: any, popupType: string) {
-    console.log('ConfirmDialogIndialogComponent');
-    const dialogConfig = new MatDialogConfig();
-    item.popupType = popupType;
-
-    dialogConfig.data = item;
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-
-    const dialogRef = this.dialog.open(ConfirmDialogIndialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(response => { });
+  confirmVerifikasiMisi(reason: string) {
+    if (reason) {
+      console.log('TOLAK')
+      this.dataService.showLoading(true);
+      this.taskVerificationService.verification({
+        trade_scheduler_template_id: this.data.trade_scheduler_template_id,
+        verification:'rejected',
+        reason: reason,
+        retailer_id: this.data.retailer_id,
+      }).subscribe(res => {
+        // this.dataService.showLoading(false);
+        this.dialogService.closeModalEmitter.emit(true);
+        this.dialogRef.close('data');
+      }, err => {
+        this.dataService.showLoading(false);
+      });
+    } else {
+      console.log('SETUJU');
+      this.dataService.showLoading(true);
+      this.taskVerificationService.verification({
+        trade_scheduler_template_id: this.data.trade_scheduler_template_id,
+        verification: 'approved',
+        reason: null,
+        retailer_id: this.data.retailer_id,
+      }).subscribe(res => {
+        // this.dataService.showLoading(false);
+        this.dialogService.closeModalEmitter.emit(true);
+        this.dialogRef.close('data');
+      }, err => {
+        this.dataService.showLoading(false);
+      });
+    }
   }
  
 }
