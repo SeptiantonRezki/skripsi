@@ -147,7 +147,7 @@ export class ConfirmDialogComponent implements OnInit {
       reason: this.isDisagree ? this.reason : null,
     }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogRef.close();
+      this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
       alert('Terjadi Kesalahan saat verifikasi misi');
@@ -162,7 +162,7 @@ export class ConfirmDialogComponent implements OnInit {
       trade_creator_group_id: this.data.id_grup_trade_program
     }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogRef.close();
+      this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
       alert('Terjadi Kesalahan saat release coin');
@@ -179,7 +179,7 @@ export class ConfirmDialogComponent implements OnInit {
       retailer_id: this.data.retailer_id,
     }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogRef.close();
+      this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
       alert('Terjadi Kesalahan saat release coin');
