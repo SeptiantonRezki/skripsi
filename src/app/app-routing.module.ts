@@ -104,6 +104,11 @@ const appRoutes: Routes = [
     loadChildren: "./pages/500/access-denied.module#AccessDeniedModule",
     canActivate: [AuthGuard]
   },
+  {
+    path: "b2b-voucher",
+    loadChildren: "./pages/b2-bvoucher/b2-bvoucher.module#B2BVoucherModule",
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: "admin",
   //   loadChildren: "./pages/admin/admin.module#AdminModule",

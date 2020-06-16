@@ -518,6 +518,13 @@ export class Endpoint {
       PLPayMethod: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran`,
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
+      },
+      b2b_voucher: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,
+        create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}`,
+        redeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem`,
+        export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export_excel`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
