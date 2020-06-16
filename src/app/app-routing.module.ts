@@ -104,6 +104,10 @@ const appRoutes: Routes = [
     loadChildren: "./pages/500/access-denied.module#AccessDeniedModule",
     canActivate: [AuthGuard]
   },
+  {
+    path: "paylater",
+    loadChildren: "./pages/pay-later/pay-later.module#PayLaterModule"
+  },
   // {
   //   path: "admin",
   //   loadChildren: "./pages/admin/admin.module#AdminModule",

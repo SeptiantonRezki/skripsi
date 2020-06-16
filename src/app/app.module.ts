@@ -88,6 +88,9 @@ import { UserCatalogueService } from "./services/src-catalogue/user-catalogue.se
 import { ProductCatalogueService } from "./services/src-catalogue/product-catalogue.service";
 import { StoreTemplateLayoutService } from "./services/src-catalogue/store-template-layout.service";
 import { TaskVerificationService } from "./services/dte/task-verification.service";
+import { PayLaterCompanyService } from "./services/pay-later/pay-later-company.service";
+import { PayLaterPanelService } from "./services/pay-later/pay-later-panel.service";
+import { PayLaterDeactivateService } from "./services/pay-later/pay-later-deactivate.service";
 
 @NgModule({
   declarations: [
@@ -173,6 +176,9 @@ import { TaskVerificationService } from "./services/dte/task-verification.servic
     StoreTemplateLayoutService,
     PayMethodService,
     TaskVerificationService,
+    PayLaterCompanyService,
+    PayLaterPanelService,
+    PayLaterDeactivateService,
     { provide: HTTP_INTERCEPTORS, useClass: NgProgressInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
   ],

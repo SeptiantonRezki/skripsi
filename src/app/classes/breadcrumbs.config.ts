@@ -2103,4 +2103,141 @@ export const brConfig = {
       ],
     }
   },
+  paylater: {
+    company: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Perusahaan"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/paylater/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Perusahaan"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/paylater/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Perusahaan"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/paylater/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Perusahaan"
+        }
+      ],
+    },
+    panel: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Panel Pojok Modal"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/paylater/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Panel Pojok Modal"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/paylater/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Panel Pojok Modal"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/paylater/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Panel Pojok Modal"
+        }
+      ],
+    },
+    deactivate: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Pengajuan Deaktivasi"
+        }
+      ],
+      // create: [
+      //   {
+      //     type: "parent",
+      //     url: "/paylater/panel",
+      //     name: "Daftar Pengajuan Deaktivasi"
+      //   },
+      //   {
+      //     type: "current",
+      //     url: "",
+      //     name: "Buat Pengajuan Deaktivasi"
+      //   }
+      // ],
+      // edit: [
+      //   {
+      //     type: "parent",
+      //     url: "/paylater/panel",
+      //     name: "Daftar Pengajuan Deaktivasi"
+      //   },
+      //   {
+      //     type: "current",
+      //     url: "",
+      //     name: "Ubah Pengajuan Deaktivasi"
+      //   }
+      // ],
+      // detail: [
+      //   {
+      //     type: "parent",
+      //     url: "/paylater/panel",
+      //     name: "Daftar Pengajuan Deaktivasi"
+      //   },
+      //   {
+      //     type: "current",
+      //     url: "",
+      //     name: "Detil Pengajuan Deaktivasi"
+      //   }
+      // ],
+    }
+  },
 };
