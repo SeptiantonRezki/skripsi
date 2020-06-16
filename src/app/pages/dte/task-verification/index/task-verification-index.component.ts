@@ -165,7 +165,11 @@ export class TaskVerificationIndexComponent implements OnInit {
 
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => { });
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.getListTaskVerification();
+      }
+     });
   }
 
 
