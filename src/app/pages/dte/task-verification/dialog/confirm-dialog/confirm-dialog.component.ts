@@ -70,11 +70,7 @@ export class ConfirmDialogComponent implements OnInit {
     if (this.data.popupType === 'Verification All Mission') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      const a = this.data.verification_rate.substring( 0,
-        this.data.verification_rate.indexOf('/'));
-      const b = this.data.verification_rate.substring(
-        this.data.verification_rate.indexOf('/') + 1, this.data.verification_rate.length);
-      this.jumlahMisi = b - a;
+      this.jumlahMisi = this.data.task_need_verify;
       this.taskVerificationService.listReason({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -91,8 +87,7 @@ export class ConfirmDialogComponent implements OnInit {
     } else if (this.data.popupType === 'Release Coin On Index') {
       // this.onLoad = true;
       // this.dataService.showLoading(true);
-      this.totalSRC = this.data.verification_rate.substring(
-        this.data.verification_rate.indexOf('/') + 1, this.data.verification_rate.length);
+      this.totalSRC = this.data.task_need_coin;
       // this.taskVerificationService.totalSRC({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
       //   this.onLoad = false;
       //   this.dataService.showLoading(false);
