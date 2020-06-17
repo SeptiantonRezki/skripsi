@@ -80,17 +80,11 @@
 
             <div>
               <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
-                <div fxFlex="20">
+                <div fxFlex="50">
                   <h3 class="">Template Tugas</h3>
                 </div>
-                <div fxFlex="80" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <h3 *ngIf="item.is_verification_ir">
-                    <mat-slide-toggle disabled [checked]="item.is_verification_ir == 1 ? true : false">Verifikasi Oleh IR</mat-slide-toggle>
-                  </h3>
-                  <h3>
-                    <mat-slide-toggle disabled [checked]="item.is_verification_hq == 1 ? true : false">Verifikasi Oleh HQ</mat-slide-toggle>
-                  </h3>
                   <h3>
                     <mat-slide-toggle disabled [checked]="item.is_verification_toggle">Perlu Verifikasi
                     </mat-slide-toggle>

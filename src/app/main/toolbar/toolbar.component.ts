@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NavigationEnd, NavigationStart, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -9,13 +9,15 @@ import { navigation } from "../../navigation/navigation";
 import { DataService } from "../../services/data.service";
 import { AuthenticationService } from "../../services/authentication.service";
 import { environment } from "environments/environment";
+import { NotificationService } from "app/services/notification.service";
+import { Emitter } from "app/helper/emitter.helper";
 
 @Component({
   selector: "fuse-toolbar",
   templateUrl: "./toolbar.component.html",
   styleUrls: ["./toolbar.component.scss"]
 })
-export class FuseToolbarComponent {
+export class FuseToolbarComponent implements OnInit {
   userStatusOptions: any[];
   languages: any;
   selectedLanguage: any;
@@ -25,6 +27,8 @@ export class FuseToolbarComponent {
   navigation: any;
   profile: any;
   environment: any;
+  badge: any;
+  showBadge: boolean;
 
   constructor(
     private router: Router,
@@ -32,7 +36,9 @@ export class FuseToolbarComponent {
     private sidebarService: FuseSidebarService,
     private translate: TranslateService,
     private dataService: DataService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private notificationService: NotificationService,
+    private emitter: Emitter,
   ) {
     this.userStatusOptions = [
       {
@@ -98,8 +104,44 @@ export class FuseToolbarComponent {
     this.environment = environment;
   }
 
+  async ngOnInit() {
+    const session = await this.dataService.getAuthorization();
+    if (session) {
+      console.log(session);
+      try {
+        console.log('Init Notif');
+        this.getListNotif();
+        this.notificationService.currentMessage.subscribe(res => {
+          if (res) {
+            this.getListNotif();
+          }
+        });
+      } catch (e) {
+
+      }
+    }
+  }
+
   toggleSidebarOpened(key) {
     this.sidebarService.getSidebar(key).toggleOpen();
+  }
+
+  getListNotif() {
+    this.notificationService.getListNotif().subscribe(res => {
+      // this.dataService.setToStorage('notif', res.result.data.filter(item => item.status === 'unread').length);
+      if (res.unread !== null && res.unread > 0) {
+        this.dataService.setToStorage('notif', res.unread);
+      } else {
+        this.dataService.setToStorage('notif', 0);
+      }
+      this.emitter.emitNotifDetailEmitter({ isInitNotif: true, data: res.result.data });
+      this.badge = res.unread || 0;
+      if (this.badge > 0) {
+        this.showBadge = true;
+      } else {
+        this.showBadge = false;
+      }
+    });
   }
 
   search(value) {

@@ -23,8 +23,12 @@ import { AudienceTradeProgramEditComponent } from "./automation/edit/audience-tr
 import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
 import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/group-trade-program-create.component";
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
-import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
-import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
+import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
+import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
+import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
+import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
+
 
 const routes: Routes = [
   {
@@ -268,23 +272,39 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: 'taskverification',
-    component: TaskVerificationIndexComponent,
+    path: "pengaturan-attribute-misi",
+    component: PengaturanAttributeMisiIndexComponent,
     data: {
-      breadcrumbs: brConfig.dte.taskVerification.index
+      breadcrumbs: brConfig.dte.pengaturanAttributeMisi.index
     },
+    // canActivate: [PageGuard]
   },
   {
-    path: 'taskverification/detail/:id/:templateid',
-    component: TaskVerificationDetailComponent,
+    path: "task-sequencing",
+    component: TaskSequencingIndexComponent,
     data: {
-      breadcrumbs: brConfig.dte.taskVerification.detail
+      breadcrumbs: brConfig.dte.taskSequencing.index
     },
-    resolve: {
-      listTradeProgram: ListTradeProgramResolver,
-      listTemplate: ListTemplateResolver
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "task-sequencing/create",
+    component: TaskSequencingCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.create
     },
-  }
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "task-sequencing/edit",
+    component: TaskSequencingEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({

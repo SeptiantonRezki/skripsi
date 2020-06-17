@@ -59,6 +59,14 @@
 
       </mat-menu>
 
+      <button mat-icon-button class="quick-panel-toggle-button no-radius" (click)="getListNotif()"
+        fuseMatSidenavToggler="quick-panel" aria-label="Toggle quick panel">
+        <mat-icon *ngIf="showBadge && badge > 0" class="icon" [matBadge]="badge > 9 ? '9+' : badge" matBadgeSize="medium"
+          matBadgePosition="above after" matBadgeColor="accent">notifications</mat-icon>
+        <mat-icon *ngIf="showBadge && badge === 0" class="icon">notifications</mat-icon>
+        <mat-icon *ngIf="!showBadge" class="icon">notifications</mat-icon>
+      </button>
+
       <!-- <button mat-icon-button
                     class="quick-panel-toggle-button no-radius"
                     fuseMatSidenavToggler="quick-panel"

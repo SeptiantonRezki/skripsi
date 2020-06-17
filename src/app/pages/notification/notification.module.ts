@@ -24,7 +24,8 @@ import {
   MatTooltipModule,
   MatRadioModule,
   MatDialogModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatSlideToggleModule
 } from "@angular/material";
 
 import {
@@ -78,7 +79,8 @@ export const MY_FORMATS = {
     NgxMaterialTimepickerModule,
     MatIconModule,
     MatDialogModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSlideToggleModule
   ],
   declarations: [
     NotificationIndexComponent,

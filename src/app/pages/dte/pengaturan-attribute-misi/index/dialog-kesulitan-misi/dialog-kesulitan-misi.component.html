@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="submit(form)">
+  <h1 mat-dialog-title>Buat Tingkat Kesulitan Misi</h1>
+  <mat-dialog-content>
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Nama Tingkat Kesulitan Misi"
+      />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button color="success" type="submit">Simpan</button>
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      (click)="dialogRef.close()"
+    >
+      Batal
+    </button>
+  </mat-dialog-actions>
+</form>
