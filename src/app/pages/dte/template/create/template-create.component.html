@@ -15,9 +15,12 @@
         <div class="px-24 border-bottom" fxLayout="row wrap" fxLayoutAlign="space-between center"
           style="margin-top: 5px;">
 
-          <div fxFlex class="py-16 h3">Pertanyaan</div>
+          <div fxFlex class="p-16 h3">Pertanyaan</div>
           <div fxFlex="60" fxLayoutAlign="flex-end flex-end">
-            <div fxFlex class="py-16 h3" style="margin-bottom: 10px;">
+            <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
+              <mat-checkbox [formControl]="isIRTemplate">Template IR</mat-checkbox>
+            </div>
+            <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
               <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
             </div>
             <mat-form-field fxFlex="50" class="is-light form-primary">

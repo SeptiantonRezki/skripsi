@@ -75,6 +75,9 @@ import { EOrderEditComponent } from "./automation/edit/eorder-edit/eorder-edit.c
 import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
 import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/group-trade-program-create.component";
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
+import { TaskVerificationIndexComponent } from "./task-verification/index/task-verification-index.component";
+import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { ConfirmDialogComponent } from "./task-verification/dialog/confirm-dialog/confirm-dialog.component";
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { TaskSequencingIndexComponent } from './task-sequencing/index/task-sequencing-index.component';
 import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
@@ -176,6 +179,9 @@ export const MY_FORMATS = {
     GroupTradeProgramComponent,
     GroupTradeProgramCreateComponent,
     GroupTradeProgramEditComponent,
+    TaskVerificationIndexComponent,
+    TaskVerificationDetailComponent,
+    ConfirmDialogComponent,
     PengaturanAttributeMisiIndexComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
@@ -207,6 +213,8 @@ export const MY_FORMATS = {
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent,
+    TaskVerificationIndexComponent,
+    TaskVerificationDetailComponent,
     PengaturanAttributeMisiIndexComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
@@ -239,6 +247,7 @@ export const MY_FORMATS = {
     ListAudienceDialogComponent,
     ImportAudienceDialogComponent,
     ImportCoinComponent,
+    ConfirmDialogComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
     DialogKesulitanMisiComponent,

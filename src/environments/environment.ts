@@ -4,10 +4,8 @@
 
 export const environment = {
   production: true,
-  server: "https://sadewa.aturtoko.id",
-  // server: "https://dev.ayo-api.dxtr.asia",
-  server_service: "https://sadewa.aturtoko.id",
-  // server_service: "http://dev.ayo-api.dxtr.asia",
+  server: "https://dev.ayo-api.dxtr.asia",
+  server_service: "https://dev.ayo-api.dxtr.asia",
   label: "DEVELOPMENT",
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
@@ -17,29 +15,21 @@ export const environment = {
   qiscus_appIdMC: "zova-efc1mal9p9cjurph", //Staging
 };
 
-// export const serviceServer = (server) => {
-//   return `http://${server}.ayo-micro.dxtr.asia`;
-//   return `https://${server}.api.qa.src.id`;
-// };
-
 export const serviceServer = (server) => {
-  // return `https://${server}.ayo-micro.dxtr.asia`;
-  return `https://${server}.sadewa.aturtoko.id`;
+  return `https://${server}.ayo-micro.dxtr.asia`;
 };
 
 export const server = {
-  user: "users",
-  // user: "user",
-  business: "businesses",
-  area: "areas",
-  // area: "area",
+  user: "user",
+  business: "business",
+  area: "area",
   auth: "auth",
   newsfeed: "newsfeed",
   banner: "banner",
   content: "content",
   product: "product",
-  task: "task-management",
-  submission: "task-submission",
+  task: "task",
+  submission: "submission",
   coin: "coin",
   community: "community",
   order: "order",

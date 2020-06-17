@@ -38,6 +38,8 @@ export class TemplateCreateComponent {
   ];
   shareable: FormControl = new FormControl(false);
 
+  isIRTemplate: FormControl = new FormControl(false);
+
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
