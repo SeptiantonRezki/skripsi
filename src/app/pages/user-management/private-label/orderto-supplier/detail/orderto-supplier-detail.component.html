@@ -132,8 +132,7 @@
                 </thead>
                 <tbody [formGroup]="productsForm">
                   <tr class="product-row" formArrayName="listProducts"
-                    *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;"
-                    [ngStyle]="{ 'background-color': showRedBG(detailOrder.status) ? '#f28383' : 'white' }">
+                    *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;">
                     <td class="w-64">{{i+1}}</td>
                     <td class="w-100">
                       <div class="product-image name-container">

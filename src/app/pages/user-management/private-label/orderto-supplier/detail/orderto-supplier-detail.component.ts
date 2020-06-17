@@ -53,7 +53,7 @@ export class OrdertoSupplierDetailComponent {
   stateUpdated: Boolean;
   productsNota: any[] = [];
   total: any;
-  static EDITABLE_IF_STATUS = ['baru', 'diproses'];
+  static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
 
 
   @HostListener('window:beforeunload')
