@@ -251,8 +251,9 @@ export class TaskVerificationIndexComponent implements OnInit {
   }
 
   isDisableVerification(row) {
-    if (row.status_coin === '-' || row.status_scheduler !== 'publish' || row.status_coin === 'Sudah Dikirim' ||
-      row.task_need_verify === 0 && row.status_coin !== '-' && row.status_coin !== 'Sudah Dikirim') {
+    if (row.status_coin === '-' || row.status_scheduler !== 'publish' ||
+    row.status_coin === 'Sudah Dikirim' && row.task_need_verify === 0 ||
+    row.task_need_verify === 0 && row.status_coin !== '-' && row.status_coin !== 'Sudah Dikirim') {
       return true;
     } else {
       return false;
