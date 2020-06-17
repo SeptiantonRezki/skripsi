@@ -94,6 +94,7 @@ import { ListKategoriMisiComponent } from "./pengaturan-attribute-misi/index/lis
 import { DialogKategoriMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kategori-misi-edit/dialog-kategori-misi-edit.component";
 import { DialogKesulitanMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kesulitan-misi-edit/dialog-kesulitan-misi-edit.component";
 import { DialogTipeMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
+import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -183,6 +184,7 @@ export const MY_FORMATS = {
     TaskVerificationDetailComponent,
     ConfirmDialogComponent,
     PengaturanAttributeMisiIndexComponent,
+    PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
     DialogToolboxComponent,
@@ -216,6 +218,7 @@ export const MY_FORMATS = {
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
     PengaturanAttributeMisiIndexComponent,
+    PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
     TaskSequencingEditComponent,

@@ -97,6 +97,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { PopupNotifComponent } from "./shared/popup-notif/popup-notif.component";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -123,6 +124,7 @@ const config = {
     ErrorDialogComponent,
     ConfirmationDialogComponent,
     ToastInformationComponent,
+    PopupNotifComponent,
   ],
   imports: [
     BrowserModule,
@@ -220,6 +222,7 @@ const config = {
     ErrorDialogComponent,
     ConfirmationDialogComponent,
     ToastInformationComponent,
+    PopupNotifComponent,
   ],
 })
 export class AppModule {
