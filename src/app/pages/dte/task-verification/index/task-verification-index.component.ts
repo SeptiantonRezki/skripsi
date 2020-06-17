@@ -252,7 +252,7 @@ export class TaskVerificationIndexComponent implements OnInit {
 
   isDisableVerification(row) {
     if (row.status_coin === '-' || row.status_scheduler !== 'publish' || row.status_coin === 'Sudah Dikirim' ||
-      row.task_need_verify !== 0 && row.status_coin !== 'Sudah Dikirim') {
+      row.task_need_verify === 0 && row.status_coin !== '-' && row.status_coin !== 'Sudah Dikirim') {
       return true;
     } else {
       return false;
@@ -261,7 +261,7 @@ export class TaskVerificationIndexComponent implements OnInit {
 
   isDisableReleaseCoin(row) {
     if (row.status_coin === '-' || row.status_scheduler !== 'publish' || row.status_coin === 'Sudah Dikirim' ||
-      row.task_need_coin !== 0 && row.status_coin !== 'Sudah Dikirim') {
+      row.task_need_coin === 0 && row.status_coin !== '-' && row.status_coin !== 'Sudah Dikirim') {
       return true;
     } else {
       return false;
