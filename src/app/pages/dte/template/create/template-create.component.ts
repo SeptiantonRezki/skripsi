@@ -38,8 +38,6 @@ export class TemplateCreateComponent {
   ];
   shareable: FormControl = new FormControl(false);
 
-  isIRTemplate: FormControl = new FormControl(false);
-
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
@@ -480,7 +478,6 @@ export class TemplateCreateComponent {
         video: this.templateTaskForm.get('video').value? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
-        is_ir_template: this.isIRTemplate.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);

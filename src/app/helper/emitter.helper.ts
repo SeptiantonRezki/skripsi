@@ -53,4 +53,11 @@ export class Emitter {
   emitPrivateLabelEmitter(message: any) { this.privateLabelEmitter.next(message); }
   emitPayMethodDataEmitter(message: any) { this.payMethodDataEmitter.next(message); }
 
+  //NOTIFICATION - DETAIL
+  private notifDetailEmitter = new BehaviorSubject<object>({});
+  listenNotifDetailEmitter = this.notifDetailEmitter.asObservable();
+  emitNotifDetailEmitter(message: any) {
+    this.notifDetailEmitter.next(message);
+  }
+
 }

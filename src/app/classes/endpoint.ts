@@ -299,6 +299,12 @@ export class Endpoint {
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
         import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
       },
+      notif: {
+        list_notif: `${AYO_API}/api/general/user_notif`,
+        update: `${AYO_API}/api/general/user_notif/${context.id_notif}`,
+        popup: `${AYO_API}/api/wholesaler/pop-up-notification`,
+        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`
+      },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
@@ -452,7 +458,6 @@ export class Endpoint {
         showListPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/show-pesanan/${context.orderId}`,
         statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
         exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
-        updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}}`,
       },
       courier: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
@@ -520,47 +525,33 @@ export class Endpoint {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran`,
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
       },
-      TaskVerification: {
-        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/list`,
-        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail/${context.id}/${context.template_id}`,
-        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/
-          ${context.audience_id}/${context.template_id}`,
-        listReason: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/rejectedreason/${context.template_id}`,
-        totalSRC: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
-        verificationAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/verifikasi/all`,
-        verification: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/verifikasi`,
-        releaseCoinAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin/all`,
-        releaseCoin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin`,
-        submission: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/submission`,
-        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
+      sequencing: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
+        show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
+        put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        list_trade_program: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-program`,
+        list_trade_audience__group: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-audience`
       },
-      paylater_company: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
-        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
-        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/update-status/${context.company_id}`
+      pengaturan_attribute_misi: {
+        get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox`,
+        create_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox`,
+        put_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
+        delete_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
+        get_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi`,
+        create_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi`,
+        put_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
+        delete_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
+        get_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi`,
+        create_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi`,
+        put_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
+        delete_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
+        get_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi`,
+        create_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi`,
+        put_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
+        delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`
       },
-      paylater_panel: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel`,
-        get_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/mitra/list`,
-        get_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/src/list`,
-        check_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/check`,
-        panel_companies: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/company/list`,
-        export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/export`,
-        export_all_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/list/export`,
-        store: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel`,
-        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/${context.panel_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/${context.panel_id}`,
-        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/import`,
-        preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/preview-import`
-      },
-      paylater_deactivate: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation`,
-        history: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/history`,
-        approval: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/${context.deactivation_id}`,
-      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

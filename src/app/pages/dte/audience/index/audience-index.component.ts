@@ -36,7 +36,7 @@ export class AudienceIndexComponent {
   roles: PagesName = new PagesName();
 
   offsetPagination: any;
-  
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -95,7 +95,7 @@ export class AudienceIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
@@ -147,7 +147,7 @@ export class AudienceIndexComponent {
     this.audienceService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
-      
+
       this.loadingIndicator = false;
     });
   }

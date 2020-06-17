@@ -83,6 +83,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "task-sequencing",
+    loadChildren: "./pages/task-sequencing/task-sequencing.module#TaskSequencingModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "login",
     loadChildren: "./pages/login/login.module#LoginModule",
     canActivate: [NonAuthGuard]
@@ -103,10 +108,6 @@ const appRoutes: Routes = [
     path: "access-denied",
     loadChildren: "./pages/500/access-denied.module#AccessDeniedModule",
     canActivate: [AuthGuard]
-  },
-  {
-    path: "paylater",
-    loadChildren: "./pages/pay-later/pay-later.module#PayLaterModule"
   },
   // {
   //   path: "admin",

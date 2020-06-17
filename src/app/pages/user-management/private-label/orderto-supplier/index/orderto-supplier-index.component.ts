@@ -22,14 +22,11 @@ import { OrdertoSupplierService } from 'app/services/user-management/private-lab
   styleUrls: ['./orderto-supplier-index.component.scss']
 })
 export class OrdertoSupplierIndexComponent implements OnInit {
-  // 'baru','dibatalkan','diproses','dikirim','diterima','selesai','konfirmasi-perubahan','perubahan-disetujui'
   onLoad: boolean;
   formFilter: FormGroup;
   statusFilter: any[] = [
     { name: 'Semua Status', value: '' },
     { name: 'Pesanan Baru', value: 'baru' },
-    { name: 'Konfirmasi Perubahan', value: 'konfirmasi-perubahan' },
-    { name: 'Perubahan Disetujui', value: 'perubahan-disetujui' },
     { name: 'Pesanan Dibatalkan', value: 'dibatalkan' },
     { name: 'Pesanan Diproses', value: 'diproses' },
     { name: 'Pesanan Dikirim', value: 'dikirim' },

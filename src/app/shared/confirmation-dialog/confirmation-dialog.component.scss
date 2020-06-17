@@ -14,9 +14,6 @@
     &.reject {
       background-color: #DC1E2D;
     }
-    &.disable {
-      background-color: #ddd;
-    }
     padding: 0 12px;
     color: #fff;
     min-height: 36px;
@@ -25,14 +22,4 @@
       width: 40%;
     }
   }
-}
-
-.radio-layout {
-  padding: 12px;
-  border: 1px solid #dcdcdc;
-  border-radius: 5px;
-}
-
-button[disabled] {
-  cursor: no-drop;
 }

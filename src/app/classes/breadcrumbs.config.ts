@@ -1128,6 +1128,48 @@ export const brConfig = {
     }
   },
   dte: {
+    pengaturanAttributeMisi: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan Attribute Misi"
+        }
+      ]
+    },
+    taskSequencing: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Task Sequencing"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Task Sequencing"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Task Sequencing"
+        }
+      ],
+    },
     template: {
       index: [
         {
@@ -1383,27 +1425,6 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Group Trade Program"
-        }
-      ]
-    },
-    taskVerification: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "Verifikasi Misi"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/dte/taskverification",
-          name: "Verifikasi Misi"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detail Verifikasi Misi"
         }
       ]
     }
@@ -2103,141 +2124,27 @@ export const brConfig = {
       ],
     }
   },
-  paylater: {
-    company: {
+  taskSequencingManagement: {
+    taskSequencing: {
       index: [
         {
           type: "current",
           url: "",
-          name: "Daftar Perusahaan"
+          name: " Manajemen Task Sequencing"
         }
       ],
       create: [
         {
           type: "parent",
-          url: "/paylater/companies",
-          name: "Daftar Perusahaan"
+          url: "/task-sequencing/task-sequencing",
+          name: "Manajemen Task Sequencing"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Perusahaan"
+          name: "Buat Task Sequence"
         }
       ],
-      edit: [
-        {
-          type: "parent",
-          url: "/paylater/companies",
-          name: "Daftar Perusahaan"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Ubah Perusahaan"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/paylater/companies",
-          name: "Daftar Perusahaan"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detil Perusahaan"
-        }
-      ],
-    },
-    panel: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "Panel Pojok Modal"
-        }
-      ],
-      create: [
-        {
-          type: "parent",
-          url: "/paylater/panel",
-          name: "Panel Pojok Modal"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Buat Panel Pojok Modal"
-        }
-      ],
-      edit: [
-        {
-          type: "parent",
-          url: "/paylater/panel",
-          name: "Panel Pojok Modal"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Ubah Panel Pojok Modal"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/paylater/panel",
-          name: "Panel Pojok Modal"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detil Panel Pojok Modal"
-        }
-      ],
-    },
-    deactivate: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "Daftar Pengajuan Deaktivasi"
-        }
-      ],
-      // create: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Buat Pengajuan Deaktivasi"
-      //   }
-      // ],
-      // edit: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Ubah Pengajuan Deaktivasi"
-      //   }
-      // ],
-      // detail: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Detil Pengajuan Deaktivasi"
-      //   }
-      // ],
     }
   },
 };
