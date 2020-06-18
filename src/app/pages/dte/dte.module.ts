@@ -71,6 +71,7 @@ import { GroupTradeProgramEditComponent } from './group-trade-program/edit/group
 import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
 import { ConfirmDialogComponent } from "./task-verification/dialog/confirm-dialog/confirm-dialog.component";
+import { LightboxModule } from 'ngx-lightbox';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -127,6 +128,7 @@ export const MY_FORMATS = {
     MatProgressSpinnerModule,
     MatChipsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    LightboxModule,
   ],
   declarations: [
     TemplateIndexComponent,

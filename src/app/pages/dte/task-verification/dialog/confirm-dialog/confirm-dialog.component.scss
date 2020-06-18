@@ -58,9 +58,11 @@
   }
   .answer-img {
     width: 100%;
-    height: 200px;
+    min-height: 200px;
+    max-height: 400px;
     object-fit: contain;
     border-radius: 8;
+    margin: 0 auto;
   }
 
 }
