@@ -95,6 +95,7 @@ import { DialogKategoriMisiEditComponent } from "./pengaturan-attribute-misi/ind
 import { DialogKesulitanMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kesulitan-misi-edit/dialog-kesulitan-misi-edit.component";
 import { DialogTipeMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
+import { LightboxModule } from 'ngx-lightbox';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -153,6 +154,7 @@ export const MY_FORMATS = {
     MatBadgeModule,
     MatTableModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    LightboxModule,
   ],
   declarations: [
     TemplateIndexComponent,
