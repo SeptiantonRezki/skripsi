@@ -155,7 +155,7 @@
           </div>
 
           <div *ngIf="item.type == 'image'" fxLayout="column" fxLayoutAlign="start start">
-            <img src="{{item.answer_image}}" class="answer-img"/>
+            <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)"/>
           </div>
 
         </div>
