@@ -17,6 +17,9 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class TaskSequencingEditComponent implements OnInit {
 
+  minDateTask: any;
+  maxDateTask: any;
+  submitting: any;
   taskSequenceForm: FormGroup;
   programs: any[];
   audiences: any[];
