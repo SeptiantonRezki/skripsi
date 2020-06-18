@@ -7,6 +7,7 @@ import { TaskVerificationService } from 'app/services/dte/task-verification.serv
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { environment } from 'environments/environment';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   templateUrl: './confirm-dialog.component.html',
@@ -37,6 +38,7 @@ export class ConfirmDialogComponent implements OnInit {
     private taskVerificationService: TaskVerificationService,
     private dataService: DataService,
     private dialogService: DialogService,
+    private _lightbox: Lightbox,
   ) {
     this.isDisagree = null;
     this.jumlahMisi = 0;
@@ -238,6 +240,16 @@ export class ConfirmDialogComponent implements OnInit {
         this.dataService.showLoading(false);
       });
     }
+  }
+
+  previewImage(url) {
+    const album = {
+      src: url,
+      caption: '',
+      thumb: url
+    };
+
+    this._lightbox.open([album], 0);
   }
  
 }
