@@ -45,11 +45,6 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Jumlah SRC Eligible" prop="total_src_eligible">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_src_eligible}}
-      </ng-template>
-    </ngx-datatable-column>
-
     <ngx-datatable-column name="Jumlah SRC Pengguna" prop="total_src_pengguna">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_src_pengguna}}
       </ng-template>
@@ -57,7 +52,7 @@
 
     <ngx-datatable-column name="Total Transaksi" prop="total_transaction">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        {{row.total_transaction | rupiahFormater}}
+        {{row.total_transaction | rupiahFormaterWithoutRp}}
       </ng-template>
     </ngx-datatable-column>
 
