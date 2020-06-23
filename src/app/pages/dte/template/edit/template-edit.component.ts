@@ -38,6 +38,7 @@ export class TemplateEditComponent {
     { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
   shareable: FormControl = new FormControl(false);
+  isIRTemplate: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;

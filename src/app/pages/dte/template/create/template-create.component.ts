@@ -56,6 +56,7 @@ export class TemplateCreateComponent {
     { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
   shareable: FormControl = new FormControl(false);
+  isIRTemplate: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -79,6 +80,7 @@ export class TemplateCreateComponent {
 
   videoMaster: any = null;
   questionVideo: any[] = [];
+  
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
