@@ -15,6 +15,7 @@ import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.componen
 import { PageContentComponent } from "./page-content-header/page-content-header.component";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { DropdownTreeComponent } from "./dropdown-tree/dropdown-tree.component";
+import { PopupNotifComponent } from "./popup-notif/popup-notif.component";
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { DropdownTreeComponent } from "./dropdown-tree/dropdown-tree.component";
   declarations: [
     ToolbarSearchComponent,
     PageContentComponent,
-    DropdownTreeComponent
+    DropdownTreeComponent,
+    PopupNotifComponent
   ],
   exports: [
     ToolbarSearchComponent,

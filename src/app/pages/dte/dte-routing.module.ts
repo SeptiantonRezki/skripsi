@@ -23,8 +23,6 @@ import { AudienceTradeProgramEditComponent } from "./automation/edit/audience-tr
 import { GroupTradeProgramComponent } from "./group-trade-program/index/group-trade-program.component";
 import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/group-trade-program-create.component";
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
-import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
-import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
@@ -272,24 +270,6 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
-  },
-  {
-    path: 'taskverification',
-    component: TaskVerificationIndexComponent,
-    data: {
-      breadcrumbs: brConfig.dte.taskVerification.index
-    },
-  },
-  {
-    path: 'taskverification/detail/:id/:templateid',
-    component: TaskVerificationDetailComponent,
-    data: {
-      breadcrumbs: brConfig.dte.taskVerification.detail
-    },
-    resolve: {
-      listTradeProgram: ListTradeProgramResolver,
-      listTemplate: ListTemplateResolver
-    },
   },
   {
     path: "pengaturan-attribute-misi",

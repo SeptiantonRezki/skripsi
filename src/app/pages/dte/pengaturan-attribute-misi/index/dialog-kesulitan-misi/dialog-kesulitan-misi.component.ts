@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
 import { AudienceService } from "../../../../../services/dte/audience.service";
@@ -46,7 +46,7 @@ export class DialogKesulitanMisiComponent implements OnInit {
         this.router.navigate(["dte", "pengaturan-attribute-misi"]);
       },
       (err) => {
-        // this.dialogService.openSnackBar({ message: err.error.message })
+        this.dialogService.openSnackBar({ message: err.error.message })
         console.log(err.error.message);
       }
     )

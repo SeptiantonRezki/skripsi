@@ -13,11 +13,15 @@ export class FilterPipe implements PipeTransform {
   name: "dateToMoment"
 })
 export class DateToMomentPipe implements PipeTransform {
-  transform(value: any) {
+  transform(value: any, param: any) {
     moment.locale("id");
 
     if (!value) {
       return "";
+    }
+
+    if (param) {
+      return moment(value).format(param);
     }
 
     return moment(value).format("D MMMM YYYY");

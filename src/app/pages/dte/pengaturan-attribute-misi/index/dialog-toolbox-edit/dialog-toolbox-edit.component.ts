@@ -62,9 +62,15 @@ export class DialogToolboxEditComponent implements OnInit {
     console.log(form.value);
     this.pengaturanAttributeMisiService.putToolbox(form.value, { kategori_toolbox_id: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({
-        message: "Data berhasil disimpan!"
-      });
+      if (res.success) {
+        this.dialogService.openSnackBar({
+          message: "Data berhasil disimpan!"
+        });
+      } else {
+        this.dialogService.openSnackBar({
+          message: res.message
+        });
+      }
       this.router.navigate(['dte', 'pengaturan-attribute-misi']);
     }, err => {
       console.log('err', err);

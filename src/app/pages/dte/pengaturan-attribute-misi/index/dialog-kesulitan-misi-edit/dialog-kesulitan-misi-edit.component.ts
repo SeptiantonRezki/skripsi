@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
 import { AudienceService } from "../../../../../services/dte/audience.service";
@@ -63,9 +63,15 @@ export class DialogKesulitanMisiEditComponent implements OnInit {
     console.log(form.value);
     this.pengaturanAttributeMisiService.putKesulitanMisi(form.value, { kesulitan_misi_id: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({
-        message: "Data berhasil disimpan!"
-      });
+      if (res.success) {
+        this.dialogService.openSnackBar({
+          message: "Data berhasil disimpan!"
+        });
+      } else {
+        this.dialogService.openSnackBar({
+          message: res.message
+        });
+      }
       this.router.navigate(['dte', 'pengaturan-attribute-misi']);
     }, err => {
       console.log('err', err);

@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./task-sequencing-create.component.scss']
 })
 export class TaskSequencingCreateComponent implements OnInit {
-
+  
   minDateTask: any;
   maxDateTask: any;
   submitting: any;

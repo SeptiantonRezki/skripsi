@@ -238,7 +238,7 @@ export class NotificationService extends BaseService {
   }
 
   setToken(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'fcm_token');
+    const url = this.getUrl('authentication', 'fcm_token');
     return this.postApi(url, body);
   }
 

@@ -1427,27 +1427,6 @@ export const brConfig = {
           name: "Detail Group Trade Program"
         }
       ]
-    },
-    taskVerification: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "Verifikasi Misi"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/dte/taskverification",
-          name: "Verifikasi Misi"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detail Verifikasi Misi"
-        }
-      ]
     }
   },
   notification: {

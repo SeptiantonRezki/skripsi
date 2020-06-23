@@ -48,7 +48,7 @@ export class DialogTipeMisiComponent implements OnInit {
         this.router.navigate(["dte", "pengaturan-attribute-misi"]);
       },
       (err) => {
-        // this.dialogService.openSnackBar({ message: err.error.message })
+        this.dialogService.openSnackBar({ message: err.error.message })
         console.log(err.error.message);
       }
     )

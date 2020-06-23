@@ -97,17 +97,16 @@
 			<span class="text-bold" *ngIf="listNotif.length > 0">Notifikasi</span>
 		</h3>
 
-		<mat-list-item *ngFor="let item of listNotif" (click)="directNotif(item)" class="hover">
-			<span matLine style="font-size: .7em" class="secondary-text text-small">{{item.created_at | date: 'dd MMMM yyyy
-          HH:mm:ss'}}</span>
-			<div matLine [ngStyle]="{'font-weight': (item.status === 'unread' ? '900' : '500')}" class="item-content" ellipsis
-				[ellipsis-content] *ngIf="item.entity_type !== 'video' && item.entity_type !== 'image'">
+		<mat-list-item *ngFor="let item of listNotif" (click)="directNotif(item)" class="hover" style="margin-bottom: 15px;">
+			<div matLine [ngStyle]="{'white-space': 'normal'}" matLine style="font-size: .7em" class="secondary-text text-small">{{item.created_at | date: 'dd MMMM yyyy
+          HH:mm:ss'}}</div>
+			<div matLine [ngStyle]="{'font-weight': (item.status === 'unread' ? '900' : '500'), 'white-space': 'normal'}" class="item-content" *ngIf="item.entity_type !== 'video' && item.entity_type !== 'image'">
 				{{item.content | toCapitalize}}</div>
-			<div matLine [ngStyle]="{'font-weight': (item.status === 'unread' ? '900' : '500')}"
+			<div [ngStyle]="{'font-weight': (item.status === 'unread' ? '900' : '500')}"
 				*ngIf="item.entity_type == 'video' || item.entity_type == 'image'">
 				<div fxLayout="column" fxLayoutAlign="center start">
-					<div class="item-content" ellipsis [ellipsis-content]>{{item.title | toCapitalize}}</div>
-					<div class="item-content" ellipsis [ellipsis-content] [innerHtml]="item.content"
+					<div class="item-content">{{item.title | toCapitalize}}</div>
+					<div class="item-content" [innerHtml]="item.content"
 						style="font-size: 14px; opacity: 0.8;"></div>
 				</div>
 			</div>

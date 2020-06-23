@@ -124,10 +124,11 @@ export class FuseQuickPanelComponent implements OnInit {
 			this.notificationService.updateNotif(item.id).subscribe(res => {
 				this.getListNotif();
 			});
-			this.router.navigate(['/user-management/supplier-order', 'detail', item.id]);
-			// if (item.entity_type === 'matchmaking request' || item.notif_type === 'matchmaking_request') {
-			// 	this.router.navigate(['/b2b', 'request-user']);
-			// } else if (item.entity_type === 'request confirmed' || item.notif_type === 'request_confirmed') {
+
+			if (item.notif_type === 'supplier') {
+				this.router.navigate(['/user-management/supplier-order', 'detail', item.entity_id]);
+			}
+			//  else if (item.entity_type === 'request confirmed' || item.notif_type === 'request_confirmed') {
 			// 	this.router.navigate(['/b2b', 'user']);
 			// } else if (item.entity_type === 'video' || item.entity_type === 'image') {
 			// 	this.router.navigate(['/list-notifications', 'detail', item.id]);
@@ -136,17 +137,22 @@ export class FuseQuickPanelComponent implements OnInit {
 			// 	this.router.navigate(['/user-management/supplier-order', 'detail', item.id]);
 			// }
 		} else {
-			if (item.entity_type === 'matchmaking request' || item.notif_type === 'matchmaking_request') {
-				this.router.navigate(['/b2b', 'request-user']);
-			} else if (item.entity_type === 'request confirmed' || item.notif_type === 'request_confirmed') {
-				this.router.navigate(['/b2b', 'user']);
-			} else if (item.entity_type === 'video' || item.entity_type === 'image') {
-				this.router.navigate(['/list-notifications', 'detail', item.id]);
-				this.emitter.emitNotifDetailEmitter({ isDirectDetail: true, data: item });
-			} else {
-				this.router.navigate(['/orders', 'detail', item.entity_id]);
+			if (item.notif_type === 'supplier') {
+				this.router.navigate(['/user-management/supplier-order', 'detail', item.entity_id]);
 			}
+			// if (item.entity_type === 'matchmaking request' || item.notif_type === 'matchmaking_request') {
+			// 	this.router.navigate(['/b2b', 'request-user']);
+			// } else if (item.entity_type === 'request confirmed' || item.notif_type === 'request_confirmed') {
+			// 	this.router.navigate(['/b2b', 'user']);
+			// } else if (item.entity_type === 'video' || item.entity_type === 'image') {
+			// 	this.router.navigate(['/list-notifications', 'detail', item.id]);
+			// 	this.emitter.emitNotifDetailEmitter({ isDirectDetail: true, data: item });
+			// } else {
+			// 	this.router.navigate(['/orders', 'detail', item.entity_id]);
+			// }
 		}
+		
+			
 
 		this.fuseMatSidenavService.getSidenav('quick-panel').toggle();
 	}
