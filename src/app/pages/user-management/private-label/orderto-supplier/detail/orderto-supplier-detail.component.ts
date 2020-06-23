@@ -53,6 +53,7 @@ export class OrdertoSupplierDetailComponent {
   stateUpdated: Boolean;
   productsNota: any[] = [];
   total: any;
+  static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
 
 
   @HostListener('window:beforeunload')
@@ -178,9 +179,10 @@ export class OrdertoSupplierDetailComponent {
               price: item.price,
               amount: [
                 item.amount,
-                [Validators.min(0), Validators.max(item.amount)]
+                // [Validators.min(0), Validators.max(item.amount)]
+                [Validators.min(0)]
               ],
-              editable: false,
+              editable: OrdertoSupplierDetailComponent.EDITABLE_IF_STATUS.includes(this.detailOrder.status) ? true : false,
               edited: false,
               price_update_status: item.total_price // item.price_update_status
             })
@@ -188,15 +190,17 @@ export class OrdertoSupplierDetailComponent {
         });
         this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
           this.edited = true;
+          this.editable = true;
         });
-      }
-      }, err => {
+      }}, 
+      err => {
         console.log('err', err);
         this.loadingIndicator = false;
         // this.onLoad = false;
         // this.dialogService.openSnackBar({ message: err.error.message });
-      }
-    )
+      } // End Of Tag showListPesanan -> onError
+
+    ); // End Of Tag showListPesanan
   }
 
   updateQty(index): void {
@@ -208,7 +212,7 @@ export class OrdertoSupplierDetailComponent {
 
   showRedBG(status) {
     switch (status) {
-      case 'pesanan-baru':
+      case 'baru':
         return true;
       case 'konfirmasi-perubahan':
         return true
@@ -314,6 +318,31 @@ export class OrdertoSupplierDetailComponent {
           "Harap periksa kembali data yang Anda masukan, jumlah barang tidak boleh melebihi jumlah sebelumnya dan tidak boleh kurang dari 0"
       });
     }
+  }
+  saveUpdateQtyV2() {
+
+    const products = this.productsForm.get('listProducts').value;
+    console.log({products});
+    if (products.length) {
+
+      this.loadingIndicator = true;
+
+      const body = {products: products.map(({id, amount}) => ({product_id: id, amount})) }
+      console.log({body});
+
+      this.ordertoSupplierService.updateQty(body, {orderId: this.orderId}).subscribe(response => {
+        this.loadingIndicator = false;
+        this.dialogService.openSnackBar({ message: "Berhasil merubah data" });
+        this.getDetailOrder();
+
+      }, error => {
+        this.loadingIndicator = false;
+        console.log({error});
+
+      });
+
+    }
+
   }
 
   updateStatus() {

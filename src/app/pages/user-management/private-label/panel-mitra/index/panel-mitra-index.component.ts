@@ -265,10 +265,6 @@ export class PanelMitraIndexComponent implements OnInit {
     );
   }
 
-  directDetail(item?: any): void {
-    this.router.navigate(["user-management", "supplier-panel-mitra", "detail", item.id]);
-  }
-
   directEdit(item?: any): void {
     this.router.navigate(["user-management", "supplier-panel-mitra", "edit", item.id]);
   }

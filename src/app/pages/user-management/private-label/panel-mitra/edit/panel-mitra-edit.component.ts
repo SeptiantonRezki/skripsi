@@ -70,6 +70,9 @@ export class PanelMitraEditComponent implements OnInit {
   dialogRef: any;
   totalData: number = 0;
   isSort: boolean = false;
+  // defaultAreas is used for supplier type (if user don't have areas)
+  defaultAreas: Array<any> = [ [ { "id": 1, "parent_id": null, "code": "SLSNTL      ", "name": "SLSNTL", "level_desc": "national", "type": "national" } ] ];
+  defaultAreaType: Array<any> = [ { "id": 1, "parent_id": null, "code": "SLSNTL      ", "name": "SLSNTL", "level_desc": "national", "type": "national" } ];
   
   constructor(
       private formBuilder: FormBuilder,
@@ -97,7 +100,10 @@ export class PanelMitraEditComponent implements OnInit {
         this.panelMitraId = param[2].path;
       });
 
-      this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
+      this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'] || this.defaultAreas;
+      let area_id = this.dataService.getDecryptedProfile()['area_id'];
+      area_id = (area_id) ? area_id : [1]; // default area_id if type is supplier (last selected area_id eq 1 which mean national)
+
       this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
       this.listLevelArea = [
         {
@@ -115,7 +121,7 @@ export class PanelMitraEditComponent implements OnInit {
         district: [],
         territory: []
       }
-      this.area = dataService.getDecryptedProfile()['area_type'];
+      this.area = dataService.getDecryptedProfile()['area_type'] || this.defaultAreaType;
 
     const observable = this.keyUp.debounceTime(1000)
     .distinctUntilChanged()
@@ -933,7 +939,7 @@ export class PanelMitraEditComponent implements OnInit {
   
   
     initAreaV2() {
-      let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+      let areas = this.dataService.getDecryptedProfile()['areas'] || this.defaultAreas;
       this.geotreeService.getFilter2Geotree(areas);
       let sameArea = this.geotreeService.diffLevelStarted;
       let areasDisabled = this.geotreeService.disableArea(sameArea);

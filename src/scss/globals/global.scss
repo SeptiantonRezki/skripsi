@@ -443,6 +443,8 @@ mat-form-field.other-opsi:hover {
 }
 
 mat-form-field.orders {
+  min-width: 255px !important;
+  padding-bottom: 8px !important;
   &.dropdown {
     .mat-form-field-infix {
       border: 1px solid;

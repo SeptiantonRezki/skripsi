@@ -132,8 +132,7 @@
                 </thead>
                 <tbody [formGroup]="productsForm">
                   <tr class="product-row" formArrayName="listProducts"
-                    *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;"
-                    [ngStyle]="{ 'background-color': showRedBG(detailOrder.status) ? '#f28383' : 'white' }">
+                    *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;">
                     <td class="w-64">{{i+1}}</td>
                     <td class="w-100">
                       <div class="product-image name-container">
@@ -160,7 +159,7 @@
                         </mat-form-field>
                       </div>
                     </td>
-                    <td *ngIf="editable">
+                    <td *ngIf="false">
                       <div class="button-row" align="center">
                         <button mat-icon-button *ngIf="!product.get('editable').value" (click)="updateQty(i)">
                           <mat-icon>edit</mat-icon>
@@ -177,7 +176,7 @@
               </table>
               <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
                 <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
-                  (click)="saveUpdateQty()">
+                  (click)="saveUpdateQtyV2()">
                   SIMPAN
                 </button>
                 <button mat-raised-button *ngIf="showRedBG(detailOrder.status) && isAnyUpdate > -1" fxFlex="20"

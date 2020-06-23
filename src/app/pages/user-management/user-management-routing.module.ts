@@ -370,7 +370,8 @@ const routes: Routes = [
     path: "supplier-panel-mitra/edit/:id",
     component: PanelMitraEditComponent,
     data: {
-      breadcrumbs: brConfig.privatelabel.panelmitra.edit
+      breadcrumbs: brConfig.privatelabel.panelmitra.edit,
+      actionType: 'edit',
     },
     resolve: {
       listCategory: ListAllCategoryProdukResolver,
@@ -383,7 +384,8 @@ const routes: Routes = [
     path: "supplier-panel-mitra/detail/:id",
     component: PanelMitraEditComponent,
     data: {
-      breadcrumbs: brConfig.privatelabel.panelmitra.detail
+      breadcrumbs: brConfig.privatelabel.panelmitra.detail,
+      actionType: 'detail',
     },
     resolve: {
       listCategory: ListAllCategoryProdukResolver,
