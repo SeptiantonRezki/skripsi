@@ -41,7 +41,7 @@
             </mat-radio-group>
           </div>
 
-          <div fixlayout="row" style="margin-bottom: 10px;">
+          <!-- <div fixlayout="row" style="margin-bottom: 10px;">
             <mat-checkbox formControlName="business_checkbox"
               >Business Parameter</mat-checkbox
             >
@@ -61,7 +61,6 @@
             >
               <mat-icon>add</mat-icon>
             </button>
-            <!-- <button (click)="clickMe(fname, fname.value)">Click Me</button> -->
             <ul>
               <li
                 *ngFor="let paramter of parameters"
@@ -76,9 +75,9 @@
             <mat-checkbox formControlName="geotree_checkbox"
               >Geotree Parameter</mat-checkbox
             >
-          </div>
+          </div> -->
 
-          <!-- <div
+          <div
             fxLayout="row"
             *ngIf="formAudience.controls['audience_type'].value === 'mission'"
           >
@@ -112,9 +111,9 @@
                 Nama Pengatur Jadwal Trade Program harus diisi
               </mat-error>
             </mat-form-field>
-          </div> -->
+          </div>
 
-          <!-- <div
+          <div
             fxLayout="row"
             *ngIf="formAudience.get('audience_type').value === 'challenge'"
           >
@@ -148,9 +147,9 @@
                 Nama Trade Program harus diisi
               </mat-error>
             </mat-form-field>
-          </div> -->
+          </div>
 
-          <!-- <div fxLayout="row">
+          <div fxLayout="row">
             <mat-radio-group formControlName="type" (change)="changeValue()">
               <mat-radio-button
                 class="radio-button pr-48"
@@ -160,9 +159,9 @@
                 {{ item.name }}
               </mat-radio-button>
             </mat-radio-group>
-          </div> -->
+          </div>
 
-          <!-- <div
+          <div
             *ngIf="formAudience.get('type').value === 'limit'"
             fxLayout="row wrap"
             fxLayout.lt-md="column"
@@ -224,7 +223,7 @@
                 audience
               </mat-error>
             </mat-form-field>
-          </div> -->
+          </div>
         </form>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
@@ -342,6 +341,62 @@
               >
             </mat-select>
           </mat-form-field>
+          <!--[R]-->
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="Retail Classification"
+              formControlName="retail_classification"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="SRC Classification"
+              formControlName="src_classification"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="SRC Type"
+              formControlName="src_type"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <!--[R]-->
         </div>
       </form>
     </div>
@@ -441,6 +496,20 @@
           name="Tipe"
           prop="classification"
         ></ngx-datatable-column>
+        <!--[R]-->
+        <ngx-datatable-column
+          name="Retailer Classification"
+          prop="retail_classification"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Classification"
+          prop="src_classification"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Type"
+          prop="src_type"
+        ></ngx-datatable-column>
+        <!--[R]-->
         <ngx-datatable-column
           name="Field Force"
           prop="ff_name"

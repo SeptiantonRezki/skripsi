@@ -80,7 +80,7 @@ export class TemplateCreateComponent {
 
   videoMaster: any = null;
   questionVideo: any[] = [];
-  
+
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -360,6 +360,10 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
 
+    this.templateTaskForm.get('kategori_toolbox').setValue(this.duplicateTask.task_toolbox_id);
+    this.templateTaskForm.get('tipe_misi').setValue(this.duplicateTask.task_toolbox_type_id);
+    this.templateTaskForm.get('tingkat_kesulitan_misi').setValue(this.duplicateTask.task_toolbox_level_id);
+    this.templateTaskForm.get('kategori_misi').setValue(this.duplicateTask.task_toolbox_categories_id);
     this.templateTaskForm.get('name').setValue(this.duplicateTask.name);
     this.templateTaskForm.get('description').setValue(this.duplicateTask.description);
     this.templateTaskForm.get('material').setValue(this.duplicateTask.material === 'yes' ? true : false);
@@ -655,6 +659,10 @@ export class TemplateCreateComponent {
       let questionsIsEmpty = [];
       let questionVideoList = []
       let body = {
+        task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
+        task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
+        task_toolbox_level_id: this.templateTaskForm.get('tingkat_kesulitan_misi').value,
+        task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
         name: this.templateTaskForm.get('name').value,
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
@@ -663,6 +671,7 @@ export class TemplateCreateComponent {
         video: this.templateTaskForm.get('video').value? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
+        is_ir_template: this.isIRTemplate.value ? 1 : 0,
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
