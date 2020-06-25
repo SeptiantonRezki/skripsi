@@ -44,7 +44,12 @@ export class GroupTradeProgramCreateComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroupTradeProgram.valid && (this.files && this.files.size < 2000000)) {
+    if (this.formGroupTradeProgram.valid) {
+      if (this.files && this.files.size < 2000000) {
+        this.dialogService.openSnackBar({ message: "Ukuran Gambar Max 2mb" });
+        return;
+      }
+
       this.dataService.showLoading(true);
       // let body = {
       //   name: this.formGroupTradeProgram.get('name').value,
@@ -55,7 +60,7 @@ export class GroupTradeProgramCreateComponent implements OnInit {
       fd.append('name', this.formGroupTradeProgram.get('name').value);
       fd.append('status', 'active');
       fd.append('type', this.formGroupTradeProgram.get('user_group').value ? 'NON-HMS' : 'HMS');
-      fd.append('image', this.files);
+      if (this.files) fd.append('image', this.files);
       fd.append('principal', this.formGroupTradeProgram.get('user_group').value ? this.formGroupTradeProgram.get('principal').value : '');
 
       this.groupTradeProgramService.create(fd).subscribe(res => {

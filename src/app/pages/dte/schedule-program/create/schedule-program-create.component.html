@@ -51,11 +51,19 @@
             *ngFor="let item of formSchedule.get('task_templates')['controls']; let i = index;">
             <div class="py-24" [formGroupName]="i">
               <div class="px-24 template-task" fxLayout="row" fxLayoutAlign="space-between end">
-                <div fxFlex="50">
+                <div fxFlex="20">
                   <h3 class="">Template Tugas</h3>
                 </div>
-                <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                <div fxFlex="80" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <!-- <h3 *ngIf="isIRTemplate">
+                    <mat-slide-toggle formControlName="is_verification_ir_toggle" (change)="isVerifIR($event, i)">
+                      Verifikasi Oleh IR</mat-slide-toggle>
+                  </h3> -->
+                  <h3>
+                    <mat-slide-toggle formControlName="is_verification_hq" (change)="isVerifHQ($event, i)">
+                      Verifikasi Oleh HQ</mat-slide-toggle>
+                  </h3>
                   <h3>
                     <mat-slide-toggle formControlName="is_verification_toggle" (change)="isVerif($event, i)">Perlu
                       Verifikasi</mat-slide-toggle>
