@@ -92,11 +92,11 @@ export class ListKesulitanMisiComponent implements OnInit {
       });
   }
 
-  openDialogKesulitanMisiEdit(id,name) {
+  openDialogKesulitanMisiEdit(id,name, status) {
     console.log(id + ", " + name);
     this.dialogKesulitanMisiEditDialogRef = this.Dialog.open(DialogKesulitanMisiEditComponent, {
       width: "300px",
-      data: {id: id, name: name}
+      data: {id: id, name: name, status:status}
     });
 
     this.dialogKesulitanMisiEditDialogRef

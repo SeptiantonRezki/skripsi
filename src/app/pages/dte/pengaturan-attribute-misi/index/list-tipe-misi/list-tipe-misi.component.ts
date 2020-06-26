@@ -88,11 +88,11 @@ export class ListTipeMisiComponent implements OnInit {
       });
   }
 
-  openDialogTipeMisiEdit(id,name) {
-    console.log(id + ", " + name);
+  openDialogTipeMisiEdit(id,name, status) {
+    console.log(id + ", " + name + ", " + status);
     this.dialogTipeMisiEditDialogRef = this.Dialog.open(DialogTipeMisiEditComponent, {
       width: "300px",
-      data: {id: id, name: name}
+      data: {id: id, name: name, status: status}
     });
 
     this.dialogTipeMisiEditDialogRef

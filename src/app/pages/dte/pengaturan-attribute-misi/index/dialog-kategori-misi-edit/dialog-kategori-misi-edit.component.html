@@ -1,14 +1,21 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
   <h1 mat-dialog-title>Edit Kategori Misi</h1>
   <mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field style="width: 100%;">
       <input
         matInput
         formControlName="name"
         placeholder="Nama Kategori Misi"
         value="{{name}}"
         required
+        name="name"
       />
+    </mat-form-field>
+    <mat-form-field style="width: 100%;">
+      <mat-select placeholder="Pilih Status" formControlName="status">
+        <mat-option value="active">Aktif</mat-option>
+        <mat-option value="inactive">Tidak Aktif</mat-option>
+      </mat-select>
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>

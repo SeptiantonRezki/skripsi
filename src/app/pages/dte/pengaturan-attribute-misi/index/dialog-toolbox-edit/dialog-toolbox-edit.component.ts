@@ -25,6 +25,10 @@ export class DialogToolboxEditComponent implements OnInit {
   selected = [];
   name:string;
   id: number;
+  status: string;
+
+  nameChange = false;
+  statusChange = false;
 
   constructor(
     private router: Router,
@@ -39,24 +43,44 @@ export class DialogToolboxEditComponent implements OnInit {
   ) {
     this.name = data.name;
     this.id = data.id;
+    this.status= data.status;
   }
 
   ngOnInit() {
+    if (this.nameChange) {
+      this.form.removeControl('status');
+    }
+    if (this.statusChange) {
+      this.form.removeControl('name');
+    }
     this.form = this.formBuilder.group({
       // id: "",
       // name: ""
       name: this.name,
+      status: this.status,
       id: this.id
     });
     this.form.patchValue({
       name: this.name,
-      // status: this.status,
+      status: this.status,
       // id: this.id
     });
     console.log(this.form.value);
+    this.form.get('name').valueChanges.subscribe(x => {
+      this.nameChange = true;
+    })
+    this.form.get('status').valueChanges.subscribe(x => {
+      this.statusChange = true;
+    })
   }
 
   submit(form) {
+    if (this.nameChange) {
+      this.form.removeControl('status');
+    }
+    if (this.statusChange) {
+      this.form.removeControl('name');
+    }
     this.dialogRef.close(`${form.value}`);
     // console.log(`${form.value.name}`);
     console.log(form.value);

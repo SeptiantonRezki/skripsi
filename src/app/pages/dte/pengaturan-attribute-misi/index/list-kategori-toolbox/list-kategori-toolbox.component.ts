@@ -88,11 +88,11 @@ export class ListKategoriToolboxComponent implements OnInit {
       });
   }
 
-  openDialogToolboxEdit(id,name) {
-    console.log(id + ", " + name);
+  openDialogToolboxEdit(id,name,status) {
+    console.log(id + ", " + name + ", " + status);
     this.dialogToolboxEditDialogRef = this.Dialog.open(DialogToolboxEditComponent, {
       width: "300px",
-      data: {id: id, name: name}
+      data: {id: id, name: name, status: status}
     });
 
     this.dialogToolboxEditDialogRef

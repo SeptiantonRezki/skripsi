@@ -23,9 +23,12 @@ export class DialogKategoriMisiEditComponent implements OnInit {
   exportTemplate: Boolean;
   valueChange: Boolean;
   selected = [];
-  name:string;
+  name: string;
   id: number;
   status: string;
+
+  nameChange = false;
+  statusChange = false;
 
   constructor(
     private router: Router,
@@ -53,13 +56,25 @@ export class DialogKategoriMisiEditComponent implements OnInit {
     });
     this.form.patchValue({
       name: this.name,
-      // status: this.status,
+      status: this.status,
       // id: this.id
     });
     console.log(this.form.value);
+    this.form.get('name').valueChanges.subscribe(x => {
+      this.nameChange = true;
+    })
+    this.form.get('status').valueChanges.subscribe(x => {
+      this.statusChange = true;
+    })
   }
 
   submit(form) {
+    if (this.nameChange) {
+      this.form.removeControl('status');
+    }
+    if (this.statusChange) {
+      this.form.removeControl('name');
+    }
     this.dialogRef.close(`${form.value}`);
     // console.log(`${form.value.name}`);
     console.log(form.value);

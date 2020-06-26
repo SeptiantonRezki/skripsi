@@ -50,7 +50,7 @@
             <!-- <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
               <mat-icon class="secondary-text">edit</mat-icon>
             </button> -->
-            <button mat-icon-button color="" (click)="openDialogTipeMisiEdit(row.id,row.name)">
+            <button mat-icon-button color="" [disabled]="row.connected === true" (click)="openDialogTipeMisiEdit(row.id,row.name,row.status)">
               <mat-icon class="secondary-text">edit</mat-icon>
             </button>
             <!-- <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
