@@ -89,6 +89,16 @@ export class ScheduleProgramDetailComponent {
     this.minDate = moment();
   }
 
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
+  }
+
   ngOnInit() {
     this.scheduleTradeProgramService.getDetail(this.idScheduler).subscribe(res => {
       this.dataScheduler = res;
