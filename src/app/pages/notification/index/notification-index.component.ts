@@ -125,7 +125,7 @@ export class NotificationIndexComponent {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_notif", param);
-    this.router.navigate(["notifications", "edit"]);
+    this.router.navigate(["/notifications", "push-notification", "detail", param.id]);
   }
 
   // deleteUser(id): void {

@@ -1482,6 +1482,18 @@ export const brConfig = {
         name: "Ubah Notifikasi"
       }
     ],
+    detail: [
+      {
+        type: "parent",
+        url: "/notifications",
+        name: "Notifikasi"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Notifikasi"
+      }
+    ],
     popup: {
       index: [
         {
