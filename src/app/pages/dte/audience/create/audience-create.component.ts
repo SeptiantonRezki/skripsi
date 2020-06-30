@@ -47,8 +47,8 @@ export class AudienceCreateComponent {
     { name: "Batasi Audience", value: "limit" },
     { name: "Pilih Semua", value: "pick-all" },
   ];
-  // listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
-  listAudienceType: any[] = [{ name: "Misi", value: "mission" }];
+  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
+  // listAudienceType: any[] = [{ name: "Misi", value: "mission" }];
 
   selected = [];
   area: Array<any>;
