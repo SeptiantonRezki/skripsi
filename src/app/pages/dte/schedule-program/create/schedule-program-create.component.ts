@@ -137,7 +137,7 @@ export class ScheduleProgramCreateComponent {
       .subscribe(() => {
         this.filteringTask();
       });
-
+      
       const templates = this.formSchedule.get('task_templates') as FormArray;
       const template = templates.at(0);
       template.get('is_verification').disable();

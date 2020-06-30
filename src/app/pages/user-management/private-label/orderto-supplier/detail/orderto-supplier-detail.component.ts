@@ -192,7 +192,7 @@ export class OrdertoSupplierDetailComponent {
           this.edited = true;
           this.editable = true;
         });
-      }}, // End Of Tag showListPesanan -> onSuccess
+      }}, 
       err => {
         console.log('err', err);
         this.loadingIndicator = false;

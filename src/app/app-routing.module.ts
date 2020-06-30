@@ -83,6 +83,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "task-sequencing",
+    loadChildren: "./pages/task-sequencing/task-sequencing.module#TaskSequencingModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "login",
     loadChildren: "./pages/login/login.module#LoginModule",
     canActivate: [NonAuthGuard]

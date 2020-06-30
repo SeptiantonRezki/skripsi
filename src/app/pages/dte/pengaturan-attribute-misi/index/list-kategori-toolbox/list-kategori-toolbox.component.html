@@ -1,0 +1,76 @@
+<div class="content p-24" *ngIf="!onLoad">
+  <!-- <div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  class="top-table pt-8"
+  > -->
+    <button
+      style="width: 170px;"
+      mat-raised-button
+      type="button"
+      (click)="openDialogToolbox()"
+    >
+      <mat-icon>add</mat-icon> BUAT
+    </button>
+  <!-- </div> -->
+  <div class="table-wrapper">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+      <h2 class="pl-8">Kategori Toolbox</h2>
+      <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="is-light tab-search">
+          <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+    <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+      [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
+      [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+      (sort)="onSort($event)" (select)="onSelect($event)">
+
+      <ngx-datatable-column name="Nama" prop="fullname">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <!-- <a class="direct-edit" (click)="directDetail(row)"> -->
+            {{row.name}}
+          <!-- </a> -->
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [width]="100" name="Status" prop="status">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <div class="name-container">
+            <p class="status text-truncate h6 p-4"
+              style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+              {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+            </p>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [width]="130" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+          style="justify-content: center !important">
+          <div class="button-row" style="margin-left: -10px">
+            <!-- <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <mat-icon class="secondary-text">edit</mat-icon>
+            </button> -->
+            <button mat-icon-button color="" [disabled]="row.connected === true" (click)="openDialogToolboxEdit(row.id,row.name,row.status)">
+              <mat-icon class="secondary-text">edit</mat-icon>
+            </button>
+            <!-- <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
+              matTooltip="Hapus Kategori Toolbox" (click)="deleteAudience(row.id)">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+            <button mat-icon-button color="primary"
+              matTooltip="Hapus Kategori Toolbox" [disabled]="row.status === 'active'" (click)="deleteKategoriToolbox(row.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+    </ngx-datatable>
+  </div>
+</div>

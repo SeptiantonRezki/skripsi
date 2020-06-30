@@ -1128,6 +1128,48 @@ export const brConfig = {
     }
   },
   dte: {
+    pengaturanAttributeMisi: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan Attribute Misi"
+        }
+      ]
+    },
+    taskSequencing: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Task Sequencing"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Task Sequencing"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Task Sequencing"
+        }
+      ],
+    },
     template: {
       index: [
         {
@@ -2202,42 +2244,29 @@ export const brConfig = {
           name: "Daftar Pengajuan Deaktivasi"
         }
       ],
-      // create: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Buat Pengajuan Deaktivasi"
-      //   }
-      // ],
-      // edit: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Ubah Pengajuan Deaktivasi"
-      //   }
-      // ],
-      // detail: [
-      //   {
-      //     type: "parent",
-      //     url: "/paylater/panel",
-      //     name: "Daftar Pengajuan Deaktivasi"
-      //   },
-      //   {
-      //     type: "current",
-      //     url: "",
-      //     name: "Detil Pengajuan Deaktivasi"
-      //   }
-      // ],
+    }
+  },
+  taskSequencingManagement: {
+    taskSequencing: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: " Manajemen Task Sequencing"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/task-sequencing/task-sequencing",
+          name: "Manajemen Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Task Sequence"
+        }
+      ],
     }
   },
 };

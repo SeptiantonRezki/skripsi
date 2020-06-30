@@ -1,0 +1,13 @@
+<div>
+  <div class="close-btn">
+    <img (click)="close()" src="assets/images/ayo/close-btn.png" class="close-img-btn">
+  </div>
+  <div>
+    <img [src]="data?.image_url">
+  </div>
+  <div class="button" fxLayout="row">
+    <div (click)="submit()" fxFlex="50" class="positif-button">{{data?.positive_text}}</div>
+    <div (click)="close()" fxFlex="50" class="negatif-button">{{data?.negative_text}}</div>
+  </div>
+  <a target="blank" #openLink></a>
+</div>

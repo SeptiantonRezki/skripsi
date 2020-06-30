@@ -151,6 +151,12 @@
         <ngx-datatable-column name="Classification" prop="classification" summary-template="activeCell">
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="SCR Classification" prop="src_classification" summary-template="activeCell">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="SCR Type" prop="src_type" summary-template="activeCell">
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Kode WS" prop="wholesaler_code" summary-template="activeCell" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
           </ng-template>

@@ -31,7 +31,7 @@ export class DataService {
     }
 
     getAuthorization() {
-        let auth = JSON.parse(window.localStorage.getItem('auth'));
+        let auth = this.getDecryptedAuth();
         if (auth) {
             return auth;
         }

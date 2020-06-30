@@ -152,6 +152,62 @@
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <!--[R]-->
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="Retail Classification"
+              formControlName="retail_classification"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="SRC Classification"
+              formControlName="src_classification"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select
+              placeholder="SRC Type"
+              formControlName="src_type"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <!--[R]-->
           <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -249,6 +305,20 @@
         <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+        <!--[R]-->
+        <ngx-datatable-column
+          name="Retailer Classification"
+          prop="retail_classification"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Classification"
+          prop="src_classification"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Type"
+          prop="src_type"
+        ></ngx-datatable-column>
+        <!--[R]-->
         <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Daftar Ayo" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
