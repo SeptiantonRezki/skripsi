@@ -8,6 +8,7 @@ import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operator
 import { DialogService } from 'app/services/dialog.service';
 import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-audience-trade-program',
@@ -232,8 +233,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     if (this.formAutomation.valid) {
       let body = {
         type: this.formAutomation.get("automation").value,
-        start_date: this.formAutomation.get("startDate").value,
-        end_date: this.formAutomation.get("endDate").value,
+        start_date: this.convertDate(this.formAutomation.get("startDate").value),
+        end_date: this.convertDate(this.formAutomation.get("endDate").value),
         coin_reward: this.formAutomation.get("coin_reward").value,
         max_frequency: this.formAutomation.get("coin_max").value,
         trade_creator_id: this.formAutomation.get("trade_program_id").value,
@@ -308,6 +309,14 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       this.maxDateTradeProgram = this.tradeSelected.end_date;
       this.minDateTradeProgram = this.tradeSelected.start_date;
     }
+  }
+
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
   }
 
 }
