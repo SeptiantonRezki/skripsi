@@ -55,6 +55,7 @@ export class PagesName {
       "/notifications/popup-notification/create": "principal.popupnotification.buat",
       "/notifications/popup-notification/edit/": "principal.popupnotification.ubah",
       "/notifications/popup-notification/detail/": "principal.popupnotification.lihat",
+      "/notifications/push-notification/detail/": "principal.notifikasi.lihat",
       "/newsfeed-management/category": "principal.kategorinewsfeed.lihat",
       "/newsfeed-management/category/create": "principal.kategorinewsfeed.buat",
       "/newsfeed-management/category/edit": "principal.kategorinewsfeed.ubah",
@@ -114,12 +115,24 @@ export class PagesName {
 
     let query = name.toLowerCase();
     let filterPermission = permission.filter(item => item !== null).filter(item => item.indexOf(query) >= 0);
-
-    return {
+    let roles = {
       "lihat": filterPermission.filter(item => item.indexOf('lihat') >= 0)[0],
       "buat": filterPermission.filter(item => item.indexOf('buat') >= 0)[0],
       "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
+    const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
+    if ( Array.isArray(submenus) ) {
+      submenus.map((value) => {
+        
+        // split submenu , then take last index of array. ex: principal.retailer.submenu.status_business it will return status_business
+        let submenuKey = value.split('.');
+        submenuKey = submenuKey[submenuKey.length - 1];
+
+        roles[submenuKey] = value.replace('.submenu.', '.');
+      });
+    }
+
+    return roles
   }
 }

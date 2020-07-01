@@ -114,7 +114,9 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="ID Karyawan" prop="username" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column name="ID Karyawan" prop="id_number" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{ row.id_number || '-' }}</ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Teritori" prop="area_code" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code}}</ng-template>

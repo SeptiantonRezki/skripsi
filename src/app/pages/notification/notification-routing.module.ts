@@ -34,6 +34,14 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "push-notification/detail/:id",
+    component: NotificationCreateComponent,
+    data: {
+      breadcrumbs: brConfig.notification.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "popup-notification",
     component: PopupNotificationIndexComponent,
     data: {

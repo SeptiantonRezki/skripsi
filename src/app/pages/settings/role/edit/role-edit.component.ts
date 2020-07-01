@@ -325,4 +325,71 @@ export class RoleEditComponent {
     }
   }
 
+  clearTargetSubmenu(targetRole, targetItems) {
+
+    // drill until target submenu found, then set all submenu status to false
+    this.roles.map((roleValue) => {
+
+      if (roleValue['nama'] === targetRole['nama']) {
+        
+
+        roleValue['menu'].map((menuValue) => {
+
+          if (menuValue.nama === targetItems.nama) {
+
+
+            menuValue['value'].map( (targetValue) => {
+
+              if (targetValue.submenu) {
+
+                targetValue.status = false;
+                return targetValue;
+
+              }
+
+            });
+
+          }
+
+        })
+      }
+    });
+  }
+
+  onToggleChange(targetItem, targetItems, targetRole, event) {
+
+    let hasActiveParents = [];
+    let hasActiveChildren = [];
+
+
+    _.map(targetItems.value, (val) => {
+      if (!val.submenu) hasActiveParents.push(val.status);
+      else { hasActiveChildren.push(val.status); }
+    });
+
+    // if target is submenu, then target dont have active parents, then avoid action
+    if (targetItem.submenu) {
+      
+      if ( !hasActiveParents.includes(true) ) {
+    
+        console.log({event});
+        event.source.checked = false;
+      
+      }
+
+    }
+    // else targetItem is not submenu but have any submenu activated and dont have active parents, then clear all submenu
+    else {
+
+      if (!hasActiveParents.includes(true)) {
+        // deactive all submenu
+        this.clearTargetSubmenu(targetRole, targetItems);
+
+      }
+
+      
+    }
+
+  }
+
 }

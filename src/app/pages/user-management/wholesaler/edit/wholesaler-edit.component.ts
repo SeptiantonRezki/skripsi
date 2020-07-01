@@ -10,6 +10,7 @@ import { ReplaySubject, Subject } from "rxjs";
 import { MatSelect } from "@angular/material";
 import { takeUntil, distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { GeneralService } from "app/services/general.service";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -46,6 +47,15 @@ export class WholesalerEditComponent {
   private _onDestroy = new Subject<void>();
   bankAccountLength: number = 0;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+  seeStatus: boolean = false;
+  seeProfile: boolean = false;
+  seePhone: boolean = false;
+  seeSalestree: boolean = false;
+  seeRekening: boolean = false;
+  seeTokoCabang: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -54,7 +64,8 @@ export class WholesalerEditComponent {
     private dataService: DataService,
     private wholesalerService: WholesalerService,
     private generalService: GeneralService
-  ) {
+  ) {  
+    this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
       name: {},
       address: {},
@@ -173,7 +184,8 @@ export class WholesalerEditComponent {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringBanks();
-      });
+      });  
+    this.setFormAbility();
   }
 
   initArea() {
@@ -503,4 +515,92 @@ export class WholesalerEditComponent {
       return "";
     }
   }
+
+  disableFields(fields:any[], form: any = null) {
+    form = (form) ? form : this.formWs;
+    
+    if(fields.length) fields.map(field => { form.controls[field].disable(); })
+    form.updateValueAndValidity();
+  }
+  rmValidators(fields: any[], form: any = null) {
+    
+    form = (form) ? form : this.formWs;
+
+    if (fields.length) fields.map( field => { form.controls[field].setValidators([]) });
+    form.updateValueAndValidity();
+  }
+
+  isCan(roles: any[]) {
+
+    let permissions = [];
+    
+    permissions = Object.keys(this.permission);
+    
+    if (!permissions.length || !roles.length) return false;
+
+    const result = [];
+    roles.map(r =>{ result.push( permissions.includes(r) ) });
+    
+    if (result.includes(false)) return false;
+    else return true;
+
+  }
+
+  setFormAbility() {
+
+    this.seeStatus = ( this.isCan(['lihat', 'status_business']) ) ? true : false;
+    this.seeProfile = ( this.isCan(['lihat', 'profile_toko']) ) ? true : false;
+    this.seePhone = ( this.isCan(['lihat', 'phone_number']) ) ? true : false;
+    this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
+    this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
+    this.seeTokoCabang = ( this.isCan(['lihat', 'toko_cabang']) ) ? true : false;
+
+    if ( !this.isCan(['ubah', 'status_business']) ) {
+      
+      const fields = ['status'];
+      this.disableFields(fields);
+      this.rmValidators(fields);  
+
+    }
+    
+    if ( !this.isCan(['ubah','profile_toko']) ) {
+      
+      const fields = ['name', 'address', 'code', 'owner'];
+      
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+    };
+
+    if ( !this.isCan(['ubah', 'phone_number']) ) {
+      this.disableFields(['phone']);
+      this.rmValidators(['phone']);
+    }
+
+    if( !this.isCan(['ubah', 'rekening_toko']) ) {
+      
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      this.disableFields(fields, this.formBankAccount);
+      this.rmValidators(fields, this.formBankAccount);
+
+    }
+
+    if( !this.isCan(['ubah', 'salestree_toko']) ) {
+      const fields = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
+      this.disableFields(fields);
+      this.rmValidators(fields);
+    }
+
+    if ( !this.isCan(['ubah', 'toko_cabang']) ) {
+      const fields = ['branchShop'];
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+      this.frmTotalBranch.disable();
+      this.frmTotalBranch.setValidators([]);
+      this.frmTotalBranch.updateValueAndValidity();
+    }
+
+  }
+  
 }
