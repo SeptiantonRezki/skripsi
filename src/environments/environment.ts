@@ -26,7 +26,7 @@ export const server = {
   auth: "auth",
   newsfeed: "newsfeed",
   banner: "banner",
-  content: "content",
+  content: "contentstatic",
   product: "product",
   task: "task",
   submission: "submission",
