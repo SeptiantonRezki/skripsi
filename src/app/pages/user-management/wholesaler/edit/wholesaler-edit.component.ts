@@ -151,12 +151,26 @@ export class WholesalerEditComponent {
     this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
       this.detailWholesaler = resWS.data;
       console.log('wsss', this.detailWholesaler);
+      if (this.detailWholesaler.area_code) {
 
-      this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
-        this.detailAreaSelected = res.data;
+        this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
+          this.detailAreaSelected = res.data;
+          this.onLoad = false;
+  
+          this.initArea();
+          this.initFormGroup();
+          this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+            if (res.match(regex)) {
+              if (res.substring(0, 1) == '0') {
+                let phone = res.substring(1);
+                this.formWs.get('phone').setValue(phone, { emitEvent: false });
+              }
+            }
+          })
+        })
+
+      } else {
         this.onLoad = false;
-
-        this.initArea();
         this.initFormGroup();
         this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
           if (res.match(regex)) {
@@ -166,7 +180,8 @@ export class WholesalerEditComponent {
             }
           }
         })
-      })
+
+      }
     });
 
     this.formBankAccount
@@ -253,31 +268,35 @@ export class WholesalerEditComponent {
   }
 
   initFormGroup() {
-    this.detailAreaSelected.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
+    if(this.detailAreaSelected) {
 
+      this.detailAreaSelected.map(item => {
+        let level_desc = '';
+        switch (item.level_desc.trim()) {
+          case 'national':
+            level_desc = 'zone';
+            break
+          case 'division':
+            level_desc = 'region';
+            break;
+          case 'region':
+            level_desc = 'area';
+            break;
+          case 'area':
+            level_desc = 'salespoint';
+            break;
+          case 'salespoint':
+            level_desc = 'district';
+            break;
+          case 'district':
+            level_desc = 'territory';
+            break;
+        }
+        this.getAudienceArea(level_desc, item.id);
+      });
+
+    }
+    
     this.formWs.setValue({
       name: this.detailWholesaler.name,
       address: this.detailWholesaler.address,
@@ -442,7 +461,10 @@ export class WholesalerEditComponent {
   }
 
   getArea(selection) {
-    return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    if (this.detailAreaSelected) {
+      return this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    }
+    return '';
   }
 
   public findInvalidControls() {
