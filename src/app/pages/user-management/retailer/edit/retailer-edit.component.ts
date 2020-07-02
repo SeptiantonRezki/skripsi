@@ -74,12 +74,12 @@ export class RetailerEditComponent {
   permission: any;
   roles: PagesName = new PagesName();
 
-  seeStatus: boolean = false;
-  seeProfile: boolean = false;
-  seePhone: boolean = false;
-  seeSalestree: boolean = false;
-  seeRekening: boolean = false;
-  seeAksesKasir: boolean = false;
+  seeStatus: boolean = true;
+  seeProfile: boolean = true;
+  seePhone: boolean = true;
+  seeSalestree: boolean = true;
+  seeRekening: boolean = true;
+  seeAksesKasir: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -264,7 +264,9 @@ export class RetailerEditComponent {
           this.npwp.setValue(str, { emitEvent: false });
         }
       })
-    this.setFormAbility();
+    if (!this.isDetail) {
+      this.setFormAbility();
+    }
   }
 
   getBanks() {
