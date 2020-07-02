@@ -298,12 +298,12 @@ export class WholesalerEditComponent {
     }
     
     this.formWs.setValue({
-      name: this.detailWholesaler.name,
-      address: this.detailWholesaler.address,
-      code: this.detailWholesaler.code,
-      owner: this.detailWholesaler.owner,
+      name: this.detailWholesaler.name || '',
+      address: this.detailWholesaler.address || '',
+      code: this.detailWholesaler.code || '',
+      owner: this.detailWholesaler.owner || '',
       phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.formatPhoneNumber(this.detailWholesaler.phone) : parseInt(this.detailWholesaler.phone.split("+62")[1])) : '',
-      status: this.detailWholesaler.status,
+      status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
       region: this.getArea('region') ? this.getArea('region') : '',
@@ -317,10 +317,10 @@ export class WholesalerEditComponent {
     this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
 
     this.formBankAccount.setValue({
-      account_number: this.detailWholesaler.bank_account_number,
-      account_name: this.detailWholesaler.bank_account_name,
-      bank_name: this.detailWholesaler.bank_name,
-      branch: this.detailWholesaler.branch
+      account_number: this.detailWholesaler.bank_account_number || '',
+      account_name: this.detailWholesaler.bank_account_name || '',
+      bank_name: this.detailWholesaler.bank_name || '',
+      branch: this.detailWholesaler.branch || '',
     });
 
     if (this.isDetail) {
