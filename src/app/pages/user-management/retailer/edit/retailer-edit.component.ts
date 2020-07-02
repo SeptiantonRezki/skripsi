@@ -205,13 +205,27 @@ export class RetailerEditComponent {
         this.formRetailer.updateValueAndValidity();
       }
       this.onLoad = true;
-      this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
-        this.detailAreaSelected = res.data;
-        this.onLoad = false;
+      if(this.detailRetailer.area_code) {
 
-        this.initArea();
+        this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
+          this.detailAreaSelected = res.data;
+          this.onLoad = false;
+  
+          this.initArea();
+          this.initFormGroup();
+  
+          this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+            if (res.match(regex)) {
+              if (res.substring(0, 1) == '0') {
+                let phone = res.substring(1);
+                this.formRetailer.get('phone').setValue(phone, { emitEvent: false });
+              }
+            }
+          })
+        })
+
+      } else {
         this.initFormGroup();
-
         this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
           if (res.match(regex)) {
             if (res.substring(0, 1) == '0') {
@@ -220,7 +234,8 @@ export class RetailerEditComponent {
             }
           }
         })
-      })
+      }
+      
     });
 
     this.formBankAccount
@@ -315,30 +330,34 @@ export class RetailerEditComponent {
   }
 
   initFormGroup() {
-    this.detailAreaSelected.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
+    if(this.detailAreaSelected) {
+
+      this.detailAreaSelected.map(item => {
+        let level_desc = '';
+        switch (item.level_desc.trim()) {
+          case 'national':
+            level_desc = 'zone';
+            break
+          case 'division':
+            level_desc = 'region';
+            break;
+          case 'region':
+            level_desc = 'area';
+            break;
+          case 'area':
+            level_desc = 'salespoint';
+            break;
+          case 'salespoint':
+            level_desc = 'district';
+            break;
+          case 'district':
+            level_desc = 'territory';
+            break;
+        }
+        this.getAudienceArea(level_desc, item.id);
+      });
+      
+    }
     console.log(this.detailRetailer.phone);
     this.formRetailer.setValue({
       name: this.detailRetailer.name,
@@ -496,8 +515,11 @@ export class RetailerEditComponent {
   }
 
   getArea(selection) {
-    let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
-    return areas && areas[0] ? areas[0] : '';
+    if (this.detailAreaSelected) {
+      let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
+      return areas && areas[0] ? areas[0] : '';
+    }
+    return '';
   }
 
   // setDetailRetailer() {
