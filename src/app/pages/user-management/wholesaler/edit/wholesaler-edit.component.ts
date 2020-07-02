@@ -49,12 +49,12 @@ export class WholesalerEditComponent {
 
   permission: any;
   roles: PagesName = new PagesName();
-  seeStatus: boolean = false;
-  seeProfile: boolean = false;
-  seePhone: boolean = false;
-  seeSalestree: boolean = false;
-  seeRekening: boolean = false;
-  seeTokoCabang: boolean = false;
+  seeStatus: boolean = true;
+  seeProfile: boolean = true;
+  seePhone: boolean = true;
+  seeSalestree: boolean = true;
+  seeRekening: boolean = true;
+  seeTokoCabang: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -200,7 +200,11 @@ export class WholesalerEditComponent {
       .subscribe(() => {
         this.filteringBanks();
       });  
-    this.setFormAbility();
+    if (!this.isDetail) {
+
+      this.setFormAbility();
+
+    }
   }
 
   initArea() {
