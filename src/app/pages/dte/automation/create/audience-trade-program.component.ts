@@ -247,12 +247,10 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         case 'e-order':
           const barcodes = this.formAutomation.get('skus').value;
           if (barcodes && barcodes.length > 0) {
-            const bcsFiltered = barcodes.map(val => {
-              if (val.formSku && val.formSku !== '') {
-                return val.formSku;
-              }
-            });
-            console.log('bcsFiltered', bcsFiltered, barcodes);
+            const bcsFiltered = barcodes.filter(val => {
+              return (val.formSku && val.formSku !== '' && val.formSku !== null);
+            }).map(val => val.formSku);
+            // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;
             }
@@ -260,6 +258,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
             }
+          } else {
+            if (body['barcode']) delete body['barcode'];
           }
           break;
         case 'coupon':
@@ -273,7 +273,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       console.log(body, automationType, this.formAutomation.get('skus').value);
       this.audienceTradeProgramService.create(body).subscribe(res => {
         this.submitting = false;
-        console.log('ressadas', res);
+        // console.log('ressadas', res);
         if (res && res.status) {
           this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
           // this._resetForm();
