@@ -202,7 +202,7 @@ export class TemplateCreateComponent {
   }
 
   getListKategoriToolbox() {
-    this.pengaturanAttributeMisiService.getToolbox().subscribe(
+    this.pengaturanAttributeMisiService.getToolbox({status: 'active'}).subscribe(
       (res) => {
         // console.log("res trade listKategoriToolbox", res);
         this.listKategoriToolbox = res.data.data;
@@ -234,7 +234,7 @@ export class TemplateCreateComponent {
   }
 
   getListTipeMisi() {
-    this.pengaturanAttributeMisiService.getTipeMisi().subscribe(
+    this.pengaturanAttributeMisiService.getTipeMisi({status: 'active'}).subscribe(
       (res) => {
         // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
@@ -266,7 +266,7 @@ export class TemplateCreateComponent {
   }
 
   getListTingkatKesulitanMisi() {
-    this.pengaturanAttributeMisiService.getKesulitanMisi().subscribe(
+    this.pengaturanAttributeMisiService.getKesulitanMisi({status: 'active'}).subscribe(
       (res) => {
         // console.log("res Kesulitan Misi", res);
         this.listTingkatkesulitanMisi = res.data.data;
@@ -298,7 +298,7 @@ export class TemplateCreateComponent {
   }
 
   getListKategoriMisi() {
-    this.pengaturanAttributeMisiService.getKategoriMisi().subscribe(
+    this.pengaturanAttributeMisiService.getKategoriMisi({status: 'active'}).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
