@@ -360,17 +360,17 @@ export class RetailerEditComponent {
     }
     console.log(this.detailRetailer.phone);
     this.formRetailer.setValue({
-      name: this.detailRetailer.name,
-      address: this.detailRetailer.address,
+      name: this.detailRetailer.name || '',
+      address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification === 'SRC' ? this.detailRetailer.code : "",
-      owner: this.detailRetailer.owner,
+      owner: this.detailRetailer.owner || '',
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
-      status: this.detailRetailer.status,
+      status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
-      latitude: this.detailRetailer.latitude,
-      longitude: this.detailRetailer.longitude,
-      type: this.detailRetailer.type_hms,
-      InternalClassification: this.detailRetailer.classification,
+      latitude: this.detailRetailer.latitude || '',
+      longitude: this.detailRetailer.longitude || '',
+      type: this.detailRetailer.type_hms || '',
+      InternalClassification: this.detailRetailer.classification || '',
       national: this.getArea('national'),
       zone: this.getArea('division'),
       region: this.getArea('region'),
@@ -378,16 +378,16 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier,
-      version_retailer: this.detailRetailer.version_retailer,
-      version_cashier: this.detailRetailer.version_cashier,
+      cashier: this.detailRetailer.cashier || 0,
+      version_retailer: this.detailRetailer.version_retailer || '',
+      version_cashier: this.detailRetailer.version_cashier || '',
     });
 
     this.formBankAccount.setValue({
-      account_number: this.detailRetailer.bank_account_number,
-      account_name: this.detailRetailer.bank_account_name,
-      bank_name: this.detailRetailer.bank_name,
-      branch: this.detailRetailer.branch
+      account_number: this.detailRetailer.bank_account_number || '',
+      account_name: this.detailRetailer.bank_account_name || '',
+      bank_name: this.detailRetailer.bank_name || '',
+      branch: this.detailRetailer.branch || '',
     });
     console.log(this.detailRetailer.pkp);
     this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
