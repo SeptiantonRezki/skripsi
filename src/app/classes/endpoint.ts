@@ -288,6 +288,7 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/notification`,
         create: `${AYO_API}/api/${type_api}/notification`,
         delete: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
+        show: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
         get_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         show_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
