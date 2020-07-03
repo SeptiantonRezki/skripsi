@@ -35,7 +35,9 @@ export class TemplateEditComponent {
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+    { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
+    { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
   ];
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
@@ -63,6 +65,8 @@ export class TemplateEditComponent {
 
   videoMaster: any = null;
   questionVideo: any[] = [];
+  templateList: any[] = [];
+  templateListImageIR: any[] = [];
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -192,8 +196,8 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
-    this.templateTaskForm.get('image').setValue(this.detailTask.image? this.detailTask.image_url : '');
-    this.templateTaskForm.get('video').setValue(this.detailTask.video? this.detailTask.video_url : '');
+    this.templateTaskForm.get('image').setValue(this.detailTask.image ? this.detailTask.image_url : '');
+    this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
@@ -308,7 +312,21 @@ export class TemplateEditComponent {
     }
   }
 
+  selectedImageIR(selectedIR, template) {
+    console.log('selectedIR IR', selectedIR, template);
+    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
+    if (indexExist > -1) {
+      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
+    } else {
+      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name });
+    }
+
+    console.log('template image IR', this.templateListImageIR);
+  }
+
   changeType(item, idx?) {
+    this.checkIsIRExist();
+
     const questions = this.templateTaskForm.get('questions') as FormArray;
     const type = questions.at(idx).get('type').value;
     const typeSelection = this.listChoose.filter(item => item.value === type)[0];
@@ -325,6 +343,10 @@ export class TemplateEditComponent {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+  }
+
+  checkWording(selection) {
+    return selection.includes("_ir");
   }
 
   addQuestion(): void {
@@ -432,7 +454,19 @@ export class TemplateEditComponent {
     if (this.listProductSelected[idx]) {
       delete this.listProductSelected[idx];
     }
+    if (this.templateListImageIR[idx]) this.templateListImageIR.splice(idx, 1);
+    if (this.templateList[idx]) this.templateList.splice(idx, 1);
+    this.checkIsIRExist();
+
     this.findQuestionsHasNext();
+  }
+
+  checkIsIRExist() {
+    let rawValue = this.templateTaskForm.getRawValue();
+    console.log('value raw', rawValue);
+    let isIR = rawValue['questions'].map(tp => tp.type).find(typ => typ.includes("_ir"));
+    if (isIR) this.isIRTemplate.setValue(true);
+    else this.isIRTemplate.setValue(false);
   }
 
   checkHasLinked(idx, idQuestion): Boolean {
@@ -479,8 +513,8 @@ export class TemplateEditComponent {
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
-        image: this.templateTaskForm.get('image').value? this.templateTaskForm.get('image').value : '',
-        video: this.detailTask.video? this.detailTask.video : '',
+        image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        video: this.detailTask.video ? this.detailTask.video : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
@@ -531,36 +565,51 @@ export class TemplateEditComponent {
       }
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
-        let bodyMasterVideo = new FormData();
-        bodyMasterVideo.append('file', this.videoMaster);
-        this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
-          async res => {
-            body.video = res.data;
-            if (this.questionVideo.length > 0) {
-              const promise1 = await this.questionVideo.map(async(qv) => {
-                let bodyQuestionVideo = new FormData();
-                bodyQuestionVideo.append('file', qv.event);
-                await new Promise(async (resolve, reject) => { 
-                  this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                    resQuestionVideo => {
-                      resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                    }, err => {
-                      console.log(err.error);
-                      reject(err);
-                      this.dataService.showLoading(false);
-                      return;
+          let bodyMasterVideo = new FormData();
+          bodyMasterVideo.append('file', this.videoMaster);
+          this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
+            async res => {
+              body.video = res.data;
+              if (this.questionVideo.length > 0) {
+                const promise1 = await this.questionVideo.map(async (qv) => {
+                  let bodyQuestionVideo = new FormData();
+                  bodyQuestionVideo.append('file', qv.event);
+                  await new Promise(async (resolve, reject) => {
+                    this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+                      resQuestionVideo => {
+                        resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+                      }, err => {
+                        console.log(err.error);
+                        reject(err);
+                        this.dataService.showLoading(false);
+                        return;
+                      });
                   });
+                  return qv;
                 });
-                return qv;
-              });
-  
-              Promise.all(promise1).then(() => { 
+
+                Promise.all(promise1).then(() => {
+                  this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+                    res => {
+                      this.dataService.showLoading(false);
+                      this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                      this.router.navigate(['dte', 'template-task']);
+
+                      window.localStorage.removeItem('detail_template_task');
+                    },
+                    err => {
+                      console.log(err.error);
+                      this.dataService.showLoading(false);
+                    }
+                  )
+                });
+              } else {
                 this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                   res => {
                     this.dataService.showLoading(false);
                     this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                     this.router.navigate(['dte', 'template-task']);
-        
+
                     window.localStorage.removeItem('detail_template_task');
                   },
                   err => {
@@ -568,35 +617,20 @@ export class TemplateEditComponent {
                     this.dataService.showLoading(false);
                   }
                 )
-              });
-            } else {
-              this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
-                res => {
-                  this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-                  this.router.navigate(['dte', 'template-task']);
-      
-                  window.localStorage.removeItem('detail_template_task');
-                },
-                err => {
-                  console.log(err.error);
-                  this.dataService.showLoading(false);
-                }
-              )
+              }
+            },
+            err => {
+              console.log(err.error);
+              this.dataService.showLoading(false);
+              return;
             }
-          },
-          err => {
-            console.log(err.error);
-            this.dataService.showLoading(false);
-            return;
-          }
-        )
+          )
         } else {
           if (this.questionVideo.length > 0) {
-            const promise1 = await this.questionVideo.map(async(qv) => {
+            const promise1 = await this.questionVideo.map(async (qv) => {
               let bodyQuestionVideo = new FormData();
               bodyQuestionVideo.append('file', qv.event);
-              await new Promise(async (resolve, reject) => { 
+              await new Promise(async (resolve, reject) => {
                 this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
                   resQuestionVideo => {
                     resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
@@ -605,18 +639,18 @@ export class TemplateEditComponent {
                     reject(err);
                     this.dataService.showLoading(false);
                     return;
-                });
+                  });
               });
               return qv;
             });
 
-            Promise.all(promise1).then(() => { 
+            Promise.all(promise1).then(() => {
               this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                 res => {
                   this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                   this.router.navigate(['dte', 'template-task']);
-      
+
                   window.localStorage.removeItem('detail_template_task');
                 },
                 err => {
@@ -631,7 +665,7 @@ export class TemplateEditComponent {
                 this.dataService.showLoading(false);
                 this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                 this.router.navigate(['dte', 'template-task']);
-    
+
                 window.localStorage.removeItem('detail_template_task');
               },
               err => {
