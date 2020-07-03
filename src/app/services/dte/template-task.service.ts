@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class TemplateTaskService extends BaseService {
   public namespace = "template_task"
-  
-  constructor(http: HttpClient) { 
+
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -34,5 +34,15 @@ export class TemplateTaskService extends BaseService {
   uploadVideo(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'upload_video');
     return this.postApi(url, body);
+  }
+
+  getStockCheckIRTemplates(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'stock_check_ir');
+    return this.getApi(url, queryParams);
+  }
+
+  getPlanogramIRTemplates(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'planogram_ir');
+    return this.getApi(url, queryParams);
   }
 }

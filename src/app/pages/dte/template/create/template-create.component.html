@@ -209,7 +209,8 @@
                   </mat-autocomplete>
                 </mat-form-field>
 
-                <div fxFlex="5" fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto" >
+                <div fxFlex="5" fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto"
+                  *ngIf="!checkWording(item.get('type').value)">
                   <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below"
                     class="add-image secondary-text" (click)="uploadVideo('question', i)"
                     *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
@@ -279,6 +280,15 @@
                 <video class="template-task-video" [src]="item.get('question_video').value" controls> </video>
               </div>
               <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <ng-container *ngIf="checkWording(item.get('type').value)">
+                  <mat-form-field fxFlex="80" class="opsi is-light" *ngIf="templateList[i]">
+                    <mat-select placeholder="Pilih Template" (selectionChange)="selectedImageIR($event, item)">
+                      <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm">
+                        {{ itm.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ng-container>
                 <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
                   <mat-form-field fxFlex="60" class="question is-light">
                     <input matInput value="Teks jawaban singkat" disabled>
@@ -398,7 +408,8 @@
                       </button>
                     </div> -->
                     <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
-                      fxFlex="1 0 auto" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                      fxFlex="1 0 auto"
+                      *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
                       <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                         'radio' ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
@@ -414,6 +425,17 @@
                     </div>
                   </div>
                 </ng-container>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+                *ngIf="templateListImageIR[i]" style="margin-top: 25px;">
+                <div fxFlex="45">
+                  <div class="banner-image-template-selected">
+                    <div id="banner">
+                      <img [src]="templateListImageIR[i].image" style="height: 190px; width: 390px" alt="Gambar IR">
+                      <!-- <div class="title">{{bannerSelected.title}}</div> -->
+                    </div>
+                  </div>
+                </div>
               </div>
               <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
                 <!-- <section class="required-section secondary-text">

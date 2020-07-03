@@ -168,7 +168,9 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template/${context.template_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template/${context.template_id}`,
-        upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`
+        upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`,
+        planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
+        stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
