@@ -34,7 +34,7 @@ export class FuseQuickPanelComponent implements OnInit {
 		private fuseMatSidenavService: FuseMatSidenavHelperService,
 		private emitter: Emitter,
 	) {
-		console.log('V200623-1027');
+		console.log('V200706-1217');
 		this.isLastPage = false;
 		this.isLoadNotif = false;
 		this.page = 1;
