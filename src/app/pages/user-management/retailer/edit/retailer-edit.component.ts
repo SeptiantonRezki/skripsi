@@ -113,7 +113,7 @@ export class RetailerEditComponent {
       branch: {}
     };
 
-    this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
+    // this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     activatedRoute.url.subscribe(params => {
@@ -177,9 +177,9 @@ export class RetailerEditComponent {
     this.formRetailer.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
-
+    this.dataService.showLoading(true);
     this.retailerService.show({ retailer_id: this.dataService.getFromStorage("id_retailer") }).subscribe(async res => {
-
+      this.dataService.showLoading(false);
       // console.log('show', res);
       this.detailRetailer = res.data;
       console.log('detail_retailer', this.detailRetailer);
@@ -236,6 +236,8 @@ export class RetailerEditComponent {
         })
       }
       
+    }, error => {
+      this.dataService.showLoading(false);
     });
 
     this.formBankAccount

@@ -174,7 +174,7 @@
           <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
             fxLayoutAlign="space-between stretch">
 
-            <mat-form-field fxFlex="30" class="is-light paguyuban" *ngIf="detailRetailer?.paguyuban">
+            <mat-form-field fxFlex="30" class="is-light paguyuban" *ngIf="!onLoad && detailRetailer?.paguyuban">
               <input matInput type="text" placeholder="Tergabung dalam Paguyuban" disabled>
             </mat-form-field>
 
