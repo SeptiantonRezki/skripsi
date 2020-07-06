@@ -690,12 +690,12 @@ export class RetailerEditComponent {
 
   setFormAbility() {
 
-    this.seeStatus = ( this.isCan(['lihat', 'status_user_and_business']) ) ? true : false;
-    this.seeProfile = ( this.isCan(['lihat', 'profile_toko']) ) ? true : false;
-    this.seePhone = ( this.isCan(['lihat', 'phone_number']) ) ? true : false;
-    this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
-    this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
-    this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
+    // this.seeStatus = ( this.isCan(['lihat', 'status_user_and_business']) ) ? true : false;
+    // this.seeProfile = ( this.isCan(['lihat', 'profile_toko']) ) ? true : false;
+    // this.seePhone = ( this.isCan(['lihat', 'phone_number']) ) ? true : false;
+    // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
+    // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
+    // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
     
     
     console.log('SEE', this.seePhone);
