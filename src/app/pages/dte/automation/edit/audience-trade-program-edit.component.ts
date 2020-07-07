@@ -8,6 +8,7 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
 import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-audience-trade-program-edit',
@@ -286,8 +287,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     if (this.formAutomation.valid) {
       let body = {
         type: this.formAutomation.get("automation").value,
-        start_date: this.formAutomation.get("startDate").value,
-        end_date: this.formAutomation.get("endDate").value,
+        start_date: this.convertDate(this.formAutomation.get("startDate").value),
+        end_date: this.convertDate(this.formAutomation.get("endDate").value),
         coin_reward: this.formAutomation.get("coin_reward").value,
         max_frequency: this.formAutomation.get("coin_max").value,
         trade_creator_id: this.formAutomation.get("trade_program_id").value,
@@ -299,17 +300,12 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
 
       switch (automationType) {
         case 'e-order':
-          let barcodes = this.formAutomation.get('skus').value;
-          body['barcode'] = barcodes.map(bc => bc.formSku);
-          // if (barcodes.length === 1 && barcodes[0].formSku === "") {
-          //   delete body['barcode'];
-          // }
+          const barcodes = this.formAutomation.get('skus').value;
           if (barcodes && barcodes.length > 0) {
-            let bcsFiltered = barcodes.filter(val => {
-              console.log('filtering...', val, val.formSku === undefined);
-              return val.formSku && val.formSku !== ""
-            });
-            console.log('bcsFiltered', bcsFiltered, barcodes);
+            const bcsFiltered = barcodes.filter(val => {
+              return (val.formSku && val.formSku !== '' && val.formSku !== null);
+            }).map(val => val.formSku);
+            // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;
             }
@@ -317,6 +313,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
             }
+          } else {
+            if (body['barcode']) delete body['barcode'];
           }
           break;
         case 'coupon':
@@ -330,7 +328,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       console.log(body, automationType, this.formAutomation.get('skus').value);
       this.audienceTradeProgramService.put(body, { automation_id: this.detailAutomation.id }).subscribe(res => {
         this.submitting = false;
-        console.log('ressss', res);
+        // console.log('ressss', res);
         // if (res && res.status) {
         this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
         // this._resetForm();
@@ -363,5 +361,13 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       this.maxDateTradeProgram = this.tradeSelected.end_date;
       this.minDateTradeProgram = this.tradeSelected.start_date;
     }
+  }
+
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
   }
 }

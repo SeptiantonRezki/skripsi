@@ -99,6 +99,8 @@ export class PagesName {
       // "/delivery/courier/create": "principal.courier.buat",
       // "/delivery/courier/edit": "principal.courier.ubah",
       // "/delivery/courier/detail": "principal.courier.lihat",
+      "/task-sequencing/task-sequencing": "principal.task_sequencing.lihat",
+      "/task-sequencing/task-sequencing/create": "principal.task_sequencing.buat",
     }
     return PAGES[name];
   }

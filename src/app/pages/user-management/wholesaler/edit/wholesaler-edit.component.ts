@@ -64,7 +64,7 @@ export class WholesalerEditComponent {
     private dataService: DataService,
     private wholesalerService: WholesalerService,
     private generalService: GeneralService
-  ) {  
+  ) {
     this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
       name: {},
@@ -156,7 +156,7 @@ export class WholesalerEditComponent {
         this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
           this.detailAreaSelected = res.data;
           this.onLoad = false;
-  
+
           this.initArea();
           this.initFormGroup();
           this.formWs.get('phone').valueChanges.debounceTime(500).subscribe(res => {
@@ -199,7 +199,7 @@ export class WholesalerEditComponent {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringBanks();
-      });  
+      });
     if (!this.isDetail) {
 
       this.setFormAbility();
@@ -272,7 +272,7 @@ export class WholesalerEditComponent {
   }
 
   initFormGroup() {
-    if(this.detailAreaSelected) {
+    if (this.detailAreaSelected) {
 
       this.detailAreaSelected.map(item => {
         let level_desc = '';
@@ -300,7 +300,7 @@ export class WholesalerEditComponent {
       });
 
     }
-    
+
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
@@ -542,31 +542,31 @@ export class WholesalerEditComponent {
     }
   }
 
-  disableFields(fields:any[], form: any = null) {
+  disableFields(fields: any[], form: any = null) {
     form = (form) ? form : this.formWs;
-    
-    if(fields.length) fields.map(field => { form.controls[field].disable(); })
+
+    if (fields.length) fields.map(field => { form.controls[field].disable(); })
     form.updateValueAndValidity();
   }
   rmValidators(fields: any[], form: any = null) {
-    
+
     form = (form) ? form : this.formWs;
 
-    if (fields.length) fields.map( field => { form.controls[field].setValidators([]) });
+    if (fields.length) fields.map(field => { form.controls[field].setValidators([]) });
     form.updateValueAndValidity();
   }
 
   isCan(roles: any[]) {
 
     let permissions = [];
-    
+
     permissions = Object.keys(this.permission);
-    
+
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    
+    roles.map(r => { result.push(permissions.includes(r)) });
+
     if (result.includes(false)) return false;
     else return true;
 
@@ -581,43 +581,43 @@ export class WholesalerEditComponent {
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeTokoCabang = ( this.isCan(['lihat', 'toko_cabang']) ) ? true : false;
 
-    if ( !this.isCan(['ubah', 'status_business']) ) {
-      
+    if (!this.isCan(['ubah', 'status_business'])) {
+
       const fields = ['status'];
       this.disableFields(fields);
-      this.rmValidators(fields);  
+      this.rmValidators(fields);
 
     }
-    
-    if ( !this.isCan(['ubah','profile_toko']) ) {
-      
+
+    if (!this.isCan(['ubah', 'profile_toko'])) {
+
       const fields = ['name', 'address', 'code', 'owner'];
-      
+
       this.disableFields(fields);
       this.rmValidators(fields);
 
     };
 
-    if ( !this.isCan(['ubah', 'phone_number']) ) {
+    if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
     }
 
-    if( !this.isCan(['ubah', 'rekening_toko']) ) {
-      
+    if (!this.isCan(['ubah', 'rekening_toko'])) {
+
       const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
 
     }
 
-    if( !this.isCan(['ubah', 'salestree_toko']) ) {
+    if (!this.isCan(['ubah', 'salestree_toko'])) {
       const fields = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.disableFields(fields);
       this.rmValidators(fields);
     }
 
-    if ( !this.isCan(['ubah', 'toko_cabang']) ) {
+    if (!this.isCan(['ubah', 'toko_cabang'])) {
       const fields = ['branchShop'];
       this.disableFields(fields);
       this.rmValidators(fields);
@@ -628,5 +628,5 @@ export class WholesalerEditComponent {
     }
 
   }
-  
+
 }

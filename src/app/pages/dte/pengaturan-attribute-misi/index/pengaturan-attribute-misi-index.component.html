@@ -1,0 +1,36 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Pengaturan Attribute Misi'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <mat-tab-group>
+        <!-- KATEGORI TOOLBOX -->
+        <mat-tab label="Kategori ToolBox">
+          <app-list-kategori-toolbox></app-list-kategori-toolbox>
+        </mat-tab>
+
+        <!-- TIPE MISI -->
+        <mat-tab label="Tipe Misi">
+          <app-list-tipe-misi></app-list-tipe-misi>
+        </mat-tab>
+
+        <!-- TINGKAT KESULITAN MISI -->
+        <mat-tab label="Tingkat Kesulitan Misi">
+          <app-list-kesulitan-misi></app-list-kesulitan-misi>
+        </mat-tab>
+
+        <!-- KETEGORI MISI -->
+        <mat-tab label="Kategori Misi">
+          <app-list-kategori-misi></app-list-kategori-misi>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

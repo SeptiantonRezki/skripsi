@@ -38,7 +38,7 @@ export class GroupTradeProgramCreateComponent implements OnInit {
   ngOnInit() {
     this.formGroupTradeProgram = this.formBuilder.group({
       name: ["", Validators.required],
-      user_group: [false],
+      user_group: [false, Validators.required],
       principal: [""]
     });
   }

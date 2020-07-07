@@ -11,13 +11,14 @@
           <h3>Detil Retailer</h3>
           <!-- STATUS BUSINESS -->
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
-            
+
             <div fxFlex="50" class="px-8">
-              
+
               <mat-form-field
                 [class]="formRetailer.get('status_user').value === 'active' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="status_user">
-                  <mat-option [value]="statusUser.value" *ngFor="let statusUser of listStatusUser">{{statusUser.name}}</mat-option>
+                  <mat-option [value]="statusUser.value" *ngFor="let statusUser of listStatusUser">{{statusUser.name}}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
 
@@ -170,7 +171,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          
+
           <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
             fxLayoutAlign="space-between stretch">
 
@@ -180,7 +181,8 @@
 
           </div>
 
-          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="seeProfile">
+          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
+            fxLayoutAlign="space-between stretch" *ngIf="seeProfile">
             <mat-form-field fxFlex="100" class="is-light">
               <input matInput type="text" placeholder="Latitude" formControlName="latitude">
               <mat-error
@@ -209,7 +211,8 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="seeAksesKasir">
+          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
+            fxLayoutAlign="space-between stretch" *ngIf="seeAksesKasir">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <mat-select placeholder="Akses Kasir" formControlName="cashier">
                 <mat-option *ngFor="let item of listCashierAccess" [value]="item.value">{{item.name}}</mat-option>

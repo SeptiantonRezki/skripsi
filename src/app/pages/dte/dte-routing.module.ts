@@ -25,6 +25,12 @@ import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/g
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
 import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
+import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
+import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
+import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
+import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
+
 
 const routes: Routes = [
   {
@@ -284,7 +290,41 @@ const routes: Routes = [
       listTradeProgram: ListTradeProgramResolver,
       listTemplate: ListTemplateResolver
     },
-  }
+  },
+  {
+    path: "pengaturan-attribute-misi",
+    component: PengaturanAttributeMisiIndexComponent,
+    data: {
+      breadcrumbs: brConfig.dte.pengaturanAttributeMisi.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "task-sequencing",
+    component: TaskSequencingIndexComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "task-sequencing/create",
+    component: TaskSequencingCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.create
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "task-sequencing/edit",
+    component: TaskSequencingEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({

@@ -205,15 +205,15 @@ export class RetailerEditComponent {
         this.formRetailer.updateValueAndValidity();
       }
       this.onLoad = true;
-      if(this.detailRetailer.area_code) {
+      if (this.detailRetailer.area_code) {
 
         this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
           this.detailAreaSelected = res.data;
           this.onLoad = false;
-  
+
           this.initArea();
           this.initFormGroup();
-  
+
           this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
             if (res.match(regex)) {
               if (res.substring(0, 1) == '0') {
@@ -235,7 +235,7 @@ export class RetailerEditComponent {
           }
         })
       }
-      
+
     }, error => {
       this.dataService.showLoading(false);
     });
@@ -334,7 +334,7 @@ export class RetailerEditComponent {
   }
 
   initFormGroup() {
-    if(this.detailAreaSelected) {
+    if (this.detailAreaSelected) {
 
       this.detailAreaSelected.map(item => {
         let level_desc = '';
@@ -360,7 +360,7 @@ export class RetailerEditComponent {
         }
         this.getAudienceArea(level_desc, item.id);
       });
-      
+
     }
     console.log(this.detailRetailer.phone);
     this.formRetailer.setValue({
@@ -663,30 +663,30 @@ export class RetailerEditComponent {
   isCan(roles: any[]) {
 
     let permissions = [];
-    
+
     permissions = Object.keys(this.permission);
-    
+
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    
+    roles.map(r => { result.push(permissions.includes(r)) });
+
     if (result.includes(false)) return false;
     else return true;
 
   }
 
-  disableFields(fields:any[], form: any = null) {
+  disableFields(fields: any[], form: any = null) {
     form = (form) ? form : this.formRetailer;
-    
-    if(fields.length) fields.map(field => { form.controls[field].disable(); })
+
+    if (fields.length) fields.map(field => { form.controls[field].disable(); })
     form.updateValueAndValidity();
   }
   rmValidators(fields: any[], form: any = null) {
-    
+
     form = (form) ? form : this.formRetailer;
 
-    if (fields.length) fields.map( field => { form.controls[field].setValidators([]) });
+    if (fields.length) fields.map(field => { form.controls[field].setValidators([]) });
     form.updateValueAndValidity();
   }
 
@@ -698,42 +698,42 @@ export class RetailerEditComponent {
     // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
-    
-    
+
+
     console.log('SEE', this.seePhone);
-    
+
     // const fRtl = this.formRetailer;
-    
-    if ( !this.isCan(['ubah','profile_toko']) ) {
-      
+
+    if (!this.isCan(['ubah', 'profile_toko'])) {
+
       const fields = ['name', 'address', 'business_code', 'owner', 'latitude', 'longitude', 'InternalClassification'];
-      
+
       this.disableFields(fields);
       this.rmValidators(fields);
 
     };
 
-    if ( !this.isCan(['ubah', 'status_user_and_business']) ) {
-      
+    if (!this.isCan(['ubah', 'status_user_and_business'])) {
+
       const fields = ['status_user', 'status'];
       this.disableFields(fields);
-      this.rmValidators(fields);  
+      this.rmValidators(fields);
 
     }
 
-    if ( !this.isCan(['ubah', 'phone_number']) ) {
+    if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
     }
 
-    if( !this.isCan(['ubah', 'salestree_toko']) ) {
+    if (!this.isCan(['ubah', 'salestree_toko'])) {
       const fields = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.disableFields(fields);
       this.rmValidators(fields);
     }
 
-    if( !this.isCan(['ubah', 'rekening_toko']) ) {
-      
+    if (!this.isCan(['ubah', 'rekening_toko'])) {
+
       const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
@@ -745,7 +745,7 @@ export class RetailerEditComponent {
       this.pkp.updateValueAndValidity();
 
     }
-    if ( !this.isCan(['ubah', 'akses_kasir']) ) {
+    if (!this.isCan(['ubah', 'akses_kasir'])) {
       const fields = ['cashier'];
       this.disableFields(fields);
       this.rmValidators(fields);

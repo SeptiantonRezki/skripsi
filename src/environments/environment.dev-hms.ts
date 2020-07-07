@@ -23,9 +23,10 @@ export const server = {
   banner: "banner",
   content: "contentstatic",
   product: "product",
-  task: "task",
-  submission: "submission",
-  coin: "coin",
+  task: "task-management",
+  submission: "task-submission",
+  coin: "coin-management",
   community: "community",
   order: "order",
+  bora: "bora"
 }

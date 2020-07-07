@@ -17,12 +17,16 @@ import { FuseSidebarService } from "@fuse/components/sidebar/sidebar.service";
 import { navigation } from "app/navigation/navigation";
 import { FuseNavigationService } from "@fuse/components/navigation/navigation.service";
 import { FuseSidebarComponent } from "@fuse/components/sidebar/sidebar.component";
+import { PopupNotifComponent } from "app/shared/popup-notif/popup-notif.component";
 import { NavigationService } from "app/services/navigation.service";
 import { DataService } from "app/services/data.service";
 import { AuthenticationService } from "app/services/authentication.service";
 import { IdleService } from 'app/services/idle.service';
 import { GeneralService } from "app/services/general.service";
 import { QiscusService } from "app/services/qiscus.service";
+import { NotificationService } from "app/services/notification.service";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { DialogService } from "app/services/dialog.service";
 
 @Component({
   selector: "fuse-navbar",
@@ -67,6 +71,11 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private generalService: GeneralService,
     private qs: QiscusService,
+    private notificationService: NotificationService,
+    private matDialog: MatDialog,
+    // private gaService: GoogleAnalyticsService,
+    // private storageHelper: StorageHelper,
+    private dialogService: DialogService,
   ) {
     // Navigation data
     // this.navigation = navigation;
@@ -100,7 +109,15 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       const response = await this.generalService.getPermissions().toPromise();
       this.dataService.setEncryptedPermissions(response.data);
       // this.dataService.setToStorage("permissions", response.data);
-      this.getNav();
+      let token = session.access_token;
+      try {
+        this.notificationService.requestPermissions(token);
+        this.notificationService.receiveMessage();
+
+        // this.openPopup();
+      } catch (error) {
+        console.log('Unable to Instantiate Firebase Messaging ', error);
+      }
       this.userIdle.startWatching();
       this.userIdle.onTimerStart().subscribe(count => {
         // console.log(count)
@@ -116,10 +133,11 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
           });
         }
       });
+      return this.getNav();
     }
 
     const profile = await this.dataService.getDecryptedProfile();
-    // await this.qiscusLoginOrRegister(profile);
+    await this.qiscusLoginOrRegister(profile);
   }
 
   async qiscusLoginOrRegister(profile: any){
@@ -151,6 +169,34 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
       console.warn('Maaf, Terjadi Kesalahan Server! failed to redirecting realtime server');
       // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
       return false;
+    }
+  }
+
+  async openPopup() {
+    try {
+      const response = await this.notificationService.getPopupNotif().toPromise();
+      if (response.id) {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.autoFocus = true;
+        dialogConfig.disableClose = true;
+        dialogConfig.width = "350px";
+        dialogConfig.panelClass = "popup-notif";
+        dialogConfig.data = response;
+
+        /** TRACKING GA */
+        // this.gaService.eventTracking({
+        //   'event_category': 'PopUpBanner',
+        //   'event_action': 'SendView',
+        //   'event_label': `${response.id}`,
+        //   'event_value': 1,
+        //   'event_noninteraction': 0
+        // });
+
+        this.matDialog.open(PopupNotifComponent, dialogConfig);
+      }
+    } catch (error) {
+      throw error;
     }
   }
 
