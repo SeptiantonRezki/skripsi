@@ -15,6 +15,7 @@ import { startWith, map } from "rxjs/operators";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { takeUntil } from 'rxjs/operators';
+import { Page } from "app/classes/laravel-pagination";
 
 @Component({
   selector: "app-template-create",
@@ -79,6 +80,7 @@ export class TemplateCreateComponent {
   questionHasNext: any = {};
   childQuestions: any = {};
   filteredNext: any[] = [];
+  pagination: Page = new Page();
 
   videoMaster: any = null;
   questionVideo: any[] = [];
@@ -206,7 +208,9 @@ export class TemplateCreateComponent {
   }
 
   getListKategoriToolbox() {
-    this.pengaturanAttributeMisiService.getToolbox({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getToolbox(this.pagination).subscribe(
       (res) => {
         // console.log("res trade listKategoriToolbox", res);
         this.listKategoriToolbox = res.data.data;
@@ -238,7 +242,9 @@ export class TemplateCreateComponent {
   }
 
   getListTipeMisi() {
-    this.pengaturanAttributeMisiService.getTipeMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getTipeMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
@@ -270,7 +276,9 @@ export class TemplateCreateComponent {
   }
 
   getListTingkatKesulitanMisi() {
-    this.pengaturanAttributeMisiService.getKesulitanMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res Kesulitan Misi", res);
         this.listTingkatkesulitanMisi = res.data.data;
@@ -302,7 +310,9 @@ export class TemplateCreateComponent {
   }
 
   getListKategoriMisi() {
-    this.pengaturanAttributeMisiService.getKategoriMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
