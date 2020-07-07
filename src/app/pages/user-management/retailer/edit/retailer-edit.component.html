@@ -9,15 +9,36 @@
       <form [formGroup]="formRetailer">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
           <h3>Detil Retailer</h3>
-          <mat-form-field
-            [class]="formRetailer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
-            <mat-select formControlName="status">
-              <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="ayo-middle pt-24" fxLayout="column">
+          <!-- STATUS BUSINESS -->
+          <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
+            
+            <div fxFlex="50" class="px-8">
+              
+              <mat-form-field
+                [class]="formRetailer.get('status_user').value === 'active' ? 'radius-select green' : 'radius-select red'">
+                <mat-select formControlName="status_user">
+                  <mat-option [value]="statusUser.value" *ngFor="let statusUser of listStatusUser">{{statusUser.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
 
+            </div>
+
+            <div fxFlex="50" class="px-8">
+
+              <mat-form-field
+                [class]="formRetailer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+                <mat-select formControlName="status">
+                  <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput placeholder="Nama" type="text" formControlName="name">
             <mat-error
@@ -48,12 +69,13 @@
               Nama Pemilik harus diisi.
             </mat-error>
           </mat-form-field>
-
-          <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+        </div>
+        <div class="ayo-middle pt-24" fxLayout="column">
+          <mat-form-field *ngIf="isDetail && seePhone" class="is-light">
             <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
           </mat-form-field>
 
-          <div *ngIf="!isDetail" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div *ngIf="!isDetail && seePhone" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
             <small>Nomor Ponsel</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
@@ -70,7 +92,7 @@
           </div>
 
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-            fxLayoutAlign="space-between stretch">
+            fxLayoutAlign="space-between stretch" *ngIf="seeSalestree">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national"
@@ -148,45 +170,58 @@
               </mat-error>
             </mat-form-field>
           </div>
+          
+          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
+            fxLayoutAlign="space-between stretch">
 
-          <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Latitude" formControlName="latitude">
-            <mat-error
-              *ngIf="formRetailer.controls['latitude'].hasError('required') && formRetailer.controls['latitude'].touched ">
-              Latitude harus diisi.
-            </mat-error>
-          </mat-form-field>
+            <mat-form-field fxFlex="30" class="is-light paguyuban" *ngIf="!onLoad && detailRetailer?.paguyuban">
+              <input matInput type="text" placeholder="Tergabung dalam Paguyuban" disabled>
+            </mat-form-field>
 
-          <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Longitude" formControlName="longitude">
-            <mat-error
-              *ngIf="formRetailer.controls['longitude'].hasError('required') && formRetailer.controls['longitude'].touched ">
-              Longitude harus diisi.
-            </mat-error>
-          </mat-form-field>
+          </div>
 
-          <mat-form-field fxFlex="100" class="is-light">
-            <mat-select placeholder="Internal Classification" formControlName="InternalClassification"
-              (selectionChange)="classificationSelectionChange($event)">
-              <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error
-              *ngIf="formRetailer.controls['InternalClassification'].hasError('required') && formRetailer.controls['InternalClassification'].touched ">
-              Internal Classification harus diisi
-            </mat-error>
-          </mat-form-field>
+          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="seeProfile">
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Latitude" formControlName="latitude">
+              <mat-error
+                *ngIf="formRetailer.controls['latitude'].hasError('required') && formRetailer.controls['latitude'].touched ">
+                Latitude harus diisi.
+              </mat-error>
+            </mat-form-field>
 
-          <mat-form-field fxFlex="100" class="is-light form-primary">
-            <mat-select placeholder="Akses Kasir" formControlName="cashier">
-              <mat-option *ngFor="let item of listCashierAccess" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error
-              *ngIf="formRetailer.controls['cashier'].hasError('required') && formRetailer.controls['cashier'].touched ">
-              Akses Kasir harus diisi
-            </mat-error>
-          </mat-form-field>
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Longitude" formControlName="longitude">
+              <mat-error
+                *ngIf="formRetailer.controls['longitude'].hasError('required') && formRetailer.controls['longitude'].touched ">
+                Longitude harus diisi.
+              </mat-error>
+            </mat-form-field>
 
-          <div [formGroup]="formBankAccount">
+            <mat-form-field fxFlex="100" class="is-light">
+              <mat-select placeholder="Internal Classification" formControlName="InternalClassification"
+                (selectionChange)="classificationSelectionChange($event)">
+                <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formRetailer.controls['InternalClassification'].hasError('required') && formRetailer.controls['InternalClassification'].touched ">
+                Internal Classification harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="seeAksesKasir">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-select placeholder="Akses Kasir" formControlName="cashier">
+                <mat-option *ngFor="let item of listCashierAccess" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formRetailer.controls['cashier'].hasError('required') && formRetailer.controls['cashier'].touched ">
+                Akses Kasir harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div [formGroup]="formBankAccount" *ngIf="seeRekening">
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <div fxLayout="row wrap" fxFlex="50">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
@@ -264,6 +299,7 @@
               </mat-error>
             </div>
           </div>
+
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="40" class="is-light form-primary">
               <input matInput placeholder="Apps Version AYO SRC Toko" formControlName="version_retailer">

@@ -26,6 +26,11 @@ export class NotificationService extends BaseService {
     return this.deleteApi(url);
   }
 
+  show(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show', context);
+    return this.getApi(url);
+  }
+
   getParentArea(context?): Observable<any> {
     const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
