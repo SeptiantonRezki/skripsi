@@ -86,10 +86,12 @@
                 <div fxFlex="80" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <h3 *ngIf="item.is_verification_ir">
-                    <mat-slide-toggle disabled [checked]="item.is_verification_ir == 1 ? true : false">Verifikasi Oleh IR</mat-slide-toggle>
+                    <mat-slide-toggle disabled [checked]="item.is_verification_ir == 1 ? true : false">Verifikasi Oleh
+                      IR</mat-slide-toggle>
                   </h3>
                   <h3>
-                    <mat-slide-toggle disabled [checked]="item.is_verification_hq == 1 ? true : false">Verifikasi Oleh HQ</mat-slide-toggle>
+                    <mat-slide-toggle disabled [checked]="item.is_verification_hq == 1 ? true : false">Verifikasi Oleh
+                      HQ</mat-slide-toggle>
                   </h3>
                   <h3>
                     <mat-slide-toggle disabled [checked]="item.is_verification_toggle">Perlu Verifikasi
@@ -123,6 +125,13 @@
                   <input matInput type="text" [value]="item.end_date | dateToMoment" placeholder="Tanggal Berakhir"
                     disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
+                </mat-form-field>
+                <mat-form-field fxFlex="45%" class="is-light form-primary"
+                  *ngIf="item.link_misi && dataScheduler['status_scheduler'] === 'publish'">
+                  <input matInput type="text" placeholder="Link Misi" [value]="item.link_misi" disabled #linkMisi>
+                  <mat-icon matSuffix (click)="copyMessage(item.link_misi)" style="cursor: pointer;"
+                    matTooltip="Salin Link Misi">content_copy
+                  </mat-icon>
                 </mat-form-field>
               </div>
             </div>
