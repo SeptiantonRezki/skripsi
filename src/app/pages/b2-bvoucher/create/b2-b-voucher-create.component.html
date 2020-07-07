@@ -1,3 +1,87 @@
-<p>
-  b2-b-voucher-create works!
-</p>
+<div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Tambah Voucher'">
+    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+      type="button">SIMPAN</button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+
+      <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
+      <mat-tab-group>
+        <mat-tab label="Detil Voucher">
+          <div class="ayo-middle" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formDetilVoucher" (keydown.enter)="$event.preventDefault();">
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+                <mat-form-field fxFlex="50" class="is-light">
+                  <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
+                  <mat-error
+                    *ngIf="formDetilVoucher.controls['name'].hasError('required') && formDetilVoucher.controls['name'].touched ">
+                    Nama Voucher harus diisi.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" class="is-light">
+                  <input matInput type="number" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="coin">
+                  <mat-error
+                    *ngIf="formDetilVoucher.controls['coin'].hasError('required') && formDetilVoucher.controls['coin'].touched ">
+                    Nilai Penukaran untuk 1 Koin harus diisi.
+                  </mat-error>
+                </mat-form-field>
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                      placeholder="Tanggal Mulai" formControlName="startDate" [min]="minDateVoucher">
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formDetilVoucher.controls['startDate'].hasError('required') && formDetilVoucher.controls['startDate'].touched">
+                      Tanggal awal harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput (focus)="endDate.open()" [min]="minDateVoucher" [matDatepicker]="endDate"
+                      placeholder="Tanggal Berakhir" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formDetilVoucher.controls['endDate'].hasError('required') && formDetilVoucher.controls['endDate'].touched">
+                      Tanggal berakhir harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <h4 style="font-weight: bold;margin-left: 40px;">Batasan</h4>
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+                <div fxFlex="50">
+                  <mat-checkbox formControlName="limit_only" style="margin-right: 25px;">Batasi dengan Produk
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="limit_by">Batasi Dengan Kategori</mat-checkbox>
+                </div>
+                <mat-form-field fxFlex="50">
+                  <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" multiple>
+                    <mat-option>Produk 1</mat-option>
+                    <mat-option>Produk 2</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category">
+                    <mat-option>Kategori 1</mat-option>
+                    <mat-option>Kategori 2</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Panel Retailer">
+          <div class="ayo-middle p-24" fxLayout="column">
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
