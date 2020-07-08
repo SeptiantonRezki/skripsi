@@ -325,7 +325,7 @@ export class RoleEditComponent {
     }
   }
 
-  clearTargetSubmenu(targetRole, targetItems) {
+  setTargetSubmenu(targetRole, targetItems, status) {
 
     // drill until target submenu found, then set all submenu status to false
     this.roles.map((roleValue) => {
@@ -342,11 +342,35 @@ export class RoleEditComponent {
 
               if (targetValue.submenu) {
 
-                targetValue.status = false;
+                targetValue.status = status;
                 return targetValue;
 
               }
 
+            });
+
+          }
+
+        })
+      }
+    });
+  }
+
+  clearParents(targetRole, targetItems, name) {
+    this.roles.map((roleValue) => {
+
+      if (roleValue['nama'] === targetRole['nama']) {
+        
+
+        roleValue['menu'].map((menuValue) => {
+
+          if (menuValue.nama === targetItems.nama) {
+
+            menuValue['value'].map( (targetValue) => {
+              if (targetValue['nama'] === name) {
+                targetValue.status = false;
+                return targetValue;
+              }
             });
 
           }
@@ -363,7 +387,11 @@ export class RoleEditComponent {
 
 
     _.map(targetItems.value, (val) => {
-      if (!val.submenu) hasActiveParents.push(val.status);
+      if (!val.submenu) {
+        if (val.nama === 'ubah') {
+          hasActiveParents.push(val.status);
+        }
+      }
       else { hasActiveChildren.push(val.status); }
     });
 
@@ -376,6 +404,14 @@ export class RoleEditComponent {
         event.source.checked = false;
       
       }
+      else if (!hasActiveChildren.includes(true)) {
+        this.clearParents(targetRole, targetItems, 'ubah');
+      }
+
+    }
+    else if (targetItem.nama === 'ubah' && event.checked) {
+
+      this.setTargetSubmenu(targetRole, targetItems, true);
 
     }
     // else targetItem is not submenu but have any submenu activated and dont have active parents, then clear all submenu
@@ -383,11 +419,8 @@ export class RoleEditComponent {
 
       if (!hasActiveParents.includes(true)) {
         // deactive all submenu
-        this.clearTargetSubmenu(targetRole, targetItems);
-
+        this.setTargetSubmenu(targetRole, targetItems, false);
       }
-
-      
     }
 
   }

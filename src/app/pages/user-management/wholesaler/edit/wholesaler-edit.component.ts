@@ -55,6 +55,7 @@ export class WholesalerEditComponent {
   seeSalestree: boolean = true;
   seeRekening: boolean = true;
   seeTokoCabang: boolean = true;
+  disableSubmit: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -486,7 +487,7 @@ export class WholesalerEditComponent {
   submit() {
     // console.log(this.formWs);
     console.log('invalid form field', this.findInvalidControls());
-    if (this.formWs.valid && this.formBankAccount.valid) {
+    if (!this.formWs.invalid && !this.formBankAccount.invalid) {
       let body = {
         _method: "PUT",
         name: this.formWs.get("name").value,
@@ -556,7 +557,7 @@ export class WholesalerEditComponent {
     form.updateValueAndValidity();
   }
 
-  isCan(roles: any[]) {
+  isCan(roles: any[], cond: string = 'AND') {
 
     let permissions = [];
     
@@ -566,9 +567,17 @@ export class WholesalerEditComponent {
 
     const result = [];
     roles.map(r =>{ result.push( permissions.includes(r) ) });
-    
-    if (result.includes(false)) return false;
-    else return true;
+    if ( cond === 'AND' ) {
+      
+      if (result.includes(false)) return false;
+      else return true;
+
+    } else if ( cond === 'OR') {
+      
+      if (!result.includes(true)) return false;
+      else return true;
+      
+    }
 
   }
 
@@ -580,6 +589,7 @@ export class WholesalerEditComponent {
     // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeTokoCabang = ( this.isCan(['lihat', 'toko_cabang']) ) ? true : false;
+    const ALL_ROLES = ['status_business', 'profile_toko', 'phone_number', 'salestree_toko', 'rekening_toko', 'toko_cabang'];
 
     if ( !this.isCan(['ubah', 'status_business']) ) {
       
@@ -625,6 +635,9 @@ export class WholesalerEditComponent {
       this.frmTotalBranch.disable();
       this.frmTotalBranch.setValidators([]);
       this.frmTotalBranch.updateValueAndValidity();
+    }
+    if (!this.isCan(ALL_ROLES, 'OR')) {
+      this.disableSubmit = true;
     }
 
   }
