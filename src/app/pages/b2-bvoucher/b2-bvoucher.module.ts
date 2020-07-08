@@ -34,7 +34,7 @@ const routes: Routes = [
     path: "",
     component: B2BVoucherComponent,
     data: {
-      breadcrumbs: brConfig.deliveryManagement.courier_management.index
+      breadcrumbs: brConfig.b2b_voucher.index
     },
     // canActivate: [PageGuard]
   },
@@ -42,7 +42,7 @@ const routes: Routes = [
     path: "create",
     component: B2BVoucherCreateComponent,
     data: {
-      breadcrumbs: brConfig.deliveryManagement.courier_management.create
+      breadcrumbs: brConfig.b2b_voucher.create
     },
     // canActivate: [PageGuard]
   },
@@ -56,7 +56,7 @@ const routes: Routes = [
   },
   {
     path: "detail",
-    component: B2BVoucherEditComponent,
+    component: B2BVoucherCreateComponent,
     data: {
       breadcrumbs: brConfig.deliveryManagement.courier_management.detail
     },

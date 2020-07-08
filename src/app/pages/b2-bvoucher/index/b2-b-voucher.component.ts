@@ -144,4 +144,9 @@ export class B2BVoucherComponent implements OnInit {
     });
   }
 
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_voucher", param);
+    this.router.navigate(["b2b-voucher", "detail"]);
+  }
+
 }

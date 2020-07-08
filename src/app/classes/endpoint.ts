@@ -524,7 +524,11 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}`,
         redeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem`,
-        export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export_excel`,
+        export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-excel`,
+        export_invoice: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-invoice`,
+        list_retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/retailer`,
+        selected_retailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/retailer`,
+        update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

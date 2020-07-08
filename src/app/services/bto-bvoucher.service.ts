@@ -27,6 +27,35 @@ export class BtoBVoucherService extends BaseService {
     return this.postApi(url, body);
   }
 
+  getRetailer(queryParams?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_retailer");
+    return this.postApi(url, body, queryParams);
+  }
+
+  getSelectedRetailer(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "selected_retailer", context);
+    return this.getApi(url)
+  }
+
+  updatePanel(context?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_panel", context);
+    return this.postApi(url, body);
+  }
+
+  exportInvoice(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_invoice", context);
+    return this.getApi(url);
+  }
+
+  exportExcel(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_excel", context);
+    return this.getBlobAsJsonApi(url);
+  }
+
+  getRedeems(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "redeem", context);
+    return this.getApi(url);
+  }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
   //   return this.putApi(url, body);

@@ -1,8 +1,6 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Tambah Voucher'">
-    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
-      type="button">SIMPAN</button>
+  <page-content-header [contentTitle]="!isDetail ? 'Tambah Voucher' : 'Detil B2B Voucher'">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -14,6 +12,18 @@
         <mat-tab label="Detil Voucher">
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetilVoucher" (keydown.enter)="$event.preventDefault();">
+              <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportInvoice()">
+                    <mat-icon>vertical_align_bottom</mat-icon> Export Invoice
+                  </button>
+                </div>
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportExcel()">
+                    <mat-icon>vertical_align_top</mat-icon> Export XLS
+                  </button>
+                </div>
+              </div>
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
                 <mat-form-field fxFlex="50" class="is-light">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
@@ -22,13 +32,29 @@
                     Nama Voucher harus diisi.
                   </mat-error>
                 </mat-form-field>
-                <mat-form-field fxFlex="50" class="is-light">
-                  <input matInput type="number" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="coin">
-                  <mat-error
-                    *ngIf="formDetilVoucher.controls['coin'].hasError('required') && formDetilVoucher.controls['coin'].touched ">
-                    Nilai Penukaran untuk 1 Koin harus diisi.
-                  </mat-error>
-                </mat-form-field>
+                <div fxLayout="row" fxFlex="60" fxLayoutGap="20px">
+                  <mat-form-field fxFlex="20" class="is-light">
+                    <input matInput type="number" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency">
+                    <mat-error
+                      *ngIf="formDetilVoucher.controls['currency'].hasError('required') && formDetilVoucher.controls['currency'].touched ">
+                      Nilai Penukaran untuk 1 Koin harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="20" class="is-light">
+                    <input matInput type="number" placeholder="Jumlah Koin" formControlName="coin">
+                    <mat-error
+                      *ngIf="formDetilVoucher.controls['coin'].hasError('required') && formDetilVoucher.controls['coin'].touched ">
+                      Jumlah Koin harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="20" class="is-light">
+                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher">
+                    <mat-error
+                      *ngIf="formDetilVoucher.controls['voucher'].hasError('required') && formDetilVoucher.controls['voucher'].touched ">
+                      Nilai Voucher harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
@@ -52,33 +78,226 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
+                      placeholder="Tanggal Voucher Dibagikan" formControlName="voucherDate" [min]="minDateVoucher">
+                    <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherPicker></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formDetilVoucher.controls['voucherDate'].hasError('required') && formDetilVoucher.controls['voucherDate'].touched">
+                      Tanggal Voucher Dibagikan harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                    <input matInput (focus)="voucherExpiry.open()" [min]="minDateVoucher"
+                      [matDatepicker]="voucherExpiry" placeholder="Tanggal Kadaluarsa Voucher"
+                      formControlName="voucherExpiry">
+                    <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherExpiry></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formDetilVoucher.controls['voucherExpiry'].hasError('required') && formDetilVoucher.controls['voucherExpiry'].touched">
+                      Tanggal berakhirTanggal Kadaluarsa Voucher harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <mat-form-field fxFlex="50">
+                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program">
+                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
               <h4 style="font-weight: bold;margin-left: 40px;">Batasan</h4>
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
                 <div fxFlex="50">
-                  <mat-checkbox formControlName="limit_only" style="margin-right: 25px;">Batasi dengan Produk
+                  <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
+                    style="margin-right: 25px;">Batasi dengan Produk
                   </mat-checkbox>
-                  <mat-checkbox formControlName="limit_by">Batasi Dengan Kategori</mat-checkbox>
+                  <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">Batasi
+                    Dengan Kategori</mat-checkbox>
                 </div>
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" multiple>
+                  <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" [multiple]="true"
+                    #singleSelect [disabled]="!formDetilVoucher.get('limit_by_product').value">
+                    <ngx-mat-select-search [formControl]="filterProduct" [placeholderLabel]="'Cari Product...'"
+                      [noEntriesFoundLabel]="'Tidak ada product yang ditemukan'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of filteredProduct | async" [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <!-- <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" multiple
+                    [disabled]="!formDetilVoucher.get('limit_by_product').value">
                     <mat-option>Produk 1</mat-option>
                     <mat-option>Produk 2</mat-option>
-                  </mat-select>
+                  </mat-select> -->
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category">
-                    <mat-option>Kategori 1</mat-option>
-                    <mat-option>Kategori 2</mat-option>
+                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
+                    [disabled]="!formDetilVoucher.get('limit_by_category').value">
+                    <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
+              </div>
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+                  (click)="onSaveDetail()">
+                  SIMPAN
+                </button>
               </div>
             </form>
           </div>
         </mat-tab>
         <mat-tab label="Panel Retailer">
           <div class="ayo-middle p-24" fxLayout="column">
+            <div>
+              <!-- <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()">
+                    <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+                  </button>
+                </div>
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()">
+                    <mat-icon>vertical_align_top</mat-icon> Export XLS
+                  </button>
+                </div>
+              </div> -->
 
+              <form [formGroup]="formFilter" autoComplete="off">
+                <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center"
+                  fxLayoutGap="20px">
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="National" formControlName="national">
+                      <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="Zone" formControlName="zone" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+                      Zona' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="Regional" formControlName="region" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+                      Regional' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="Area" formControlName="area" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+                      Area' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name === 'all' ? 'Semua
+                      Salespoint' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="District" formControlName="district" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all' ? 'Semua
+                      District' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select placeholder="Territory" formControlName="territory" multiple>
+                      <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+                      Territory' :
+                      item.code}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+                    <mat-icon>search</mat-icon>
+                    <mat-form-field class="is-light tab-search">
+                      <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+
+              <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+                [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'"
+                [scrollbarH]="true" [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+                [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+                [selected]="selected" [selectAllRowsOnPage]="false" [selectionType]="'checkbox'"
+                (select)="onSelect($event)" [rowIdentity]="getId">
+
+                <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+                  <ng-template ngx-datatable-header-template>
+                    <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
+                  </ng-template>
+
+                  <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                    let-onCheckboxChangeFn="onCheckboxChangeFn">
+                    <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"
+                      [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+                    <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"
+                      class="mat-checkbox-all"></mat-checkbox>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.code || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="true">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.owner || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.classification || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Kode WS" prop="ws_code" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.ws_code || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Nama WS" prop="ws_name" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.ws_name || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Coin" prop="coin" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.coin || 0}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="isDetail">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+                  (click)="onSave()">
+                  SIMPAN
+                </button>
+              </div>
+            </div>
           </div>
         </mat-tab>
       </mat-tab-group>
