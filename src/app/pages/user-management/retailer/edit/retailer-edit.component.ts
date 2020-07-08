@@ -80,6 +80,7 @@ export class RetailerEditComponent {
   seeSalestree: boolean = true;
   seeRekening: boolean = true;
   seeAksesKasir: boolean = true;
+  disableSubmit: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -596,7 +597,7 @@ export class RetailerEditComponent {
 
   submit() {
     console.log('invalid form field', this.findInvalidControls());
-    if (this.formRetailer.valid) {
+    if (!this.formRetailer.invalid) {
       let body = {
         _method: "PUT",
         name: this.formRetailer.get("name").value,
@@ -660,7 +661,7 @@ export class RetailerEditComponent {
       return "";
     }
   }
-  isCan(roles: any[]) {
+  isCan(roles: any[], cond: string = 'AND') {
 
     let permissions = [];
 
@@ -669,10 +670,18 @@ export class RetailerEditComponent {
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r => { result.push(permissions.includes(r)) });
+    roles.map(r =>{ result.push( permissions.includes(r) ) });
+    
+    if (cond === 'AND') {
+      
+      if (result.includes(false)) return false;
+  
+      else return true;
 
-    if (result.includes(false)) return false;
-    else return true;
+    } else if (cond === 'OR') {
+      if (!result.includes(true)) return false;
+      else return true;
+    }
 
   }
 
@@ -698,8 +707,9 @@ export class RetailerEditComponent {
     // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
-
-
+    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
+    
+    
     console.log('SEE', this.seePhone);
 
     // const fRtl = this.formRetailer;
@@ -749,6 +759,10 @@ export class RetailerEditComponent {
       const fields = ['cashier'];
       this.disableFields(fields);
       this.rmValidators(fields);
+    }
+    // jika tidak memiliki submenu samasekali maka disable simpan
+    if (!this.isCan(ALL_ROLES, 'OR')) {
+      this.disableSubmit = true;
     }
   }
 }

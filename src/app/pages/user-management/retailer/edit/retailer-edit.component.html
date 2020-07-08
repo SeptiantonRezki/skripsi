@@ -343,7 +343,7 @@
             </ngx-datatable>
           </div>
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
-            <button *ngIf="!isDetail" mat-raised-button type="button" class="confirmation-button" fxFlex="20"
+            <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button" fxFlex="20"
               (click)="submit()">
               SIMPAN
             </button>
