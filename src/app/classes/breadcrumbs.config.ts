@@ -2101,6 +2101,18 @@ export const brConfig = {
         url: "",
         name: "Buat Voucher"
       }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/b2b-voucher",
+        name: "B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detil B2B Voucher"
+      }
     ]
   }
 };

@@ -12,7 +12,7 @@
         <mat-tab label="Detil Voucher">
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetilVoucher" (keydown.enter)="$event.preventDefault();">
-              <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+              <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" *ngIf="isDetail">
                 <div class="button-row">
                   <button mat-flat-button style="width: 160px" color="white" (click)="exportInvoice()">
                     <mat-icon>vertical_align_bottom</mat-icon> Export Invoice
@@ -299,6 +299,9 @@
               </div>
             </div>
           </div>
+        </mat-tab>
+        <mat-tab label="Penukaran Voucher">
+          <app-redeem-list></app-redeem-list>
         </mat-tab>
       </mat-tab-group>
     </div>

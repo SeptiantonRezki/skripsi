@@ -1,0 +1,64 @@
+<div class="ayo-middle p-24" fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+    <h2 class="pl-8">Penukaran Voucher</h2>
+    <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="is-light tab-search">
+        <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+      </mat-form-field>
+    </div>
+  </div>
+  <h4 style="text-align: center;">Page Under Construction!</h4>
+  <!-- <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+    [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+    [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
+    [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+    <ngx-datatable-column name="Nama Voucher" prop="name">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.panel_retailer_count}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Jumlah Panel WS" prop="panel_wholesaler_count">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.panel_wholesaler_count}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Toko Menukarkan Koin" prop="retailer_redeem_coin_count">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.retailer_redeem_coin_count}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Toko Menukarkan Voucher" prop="retailer_redeem_voucher_count">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.retailer_redeem_voucher_count}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Tanggal Awal" prop="start_date">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy
+        HH:mm:ss'}}</ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Tanggal Akhir" prop="end_date">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
+        HH:mm:ss'}}</ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Nilai Voucher" prop="nominal">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.nominal | rupiahFormater }}
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable> -->
+</div>

@@ -15,6 +15,7 @@ import { PageGuard } from 'app/classes/auth.guard';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { NgxMaskModule } from "ngx-mask";
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { RedeemListComponent } from './redeem-list/redeem-list.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -58,7 +59,7 @@ const routes: Routes = [
     path: "detail",
     component: B2BVoucherCreateComponent,
     data: {
-      breadcrumbs: brConfig.deliveryManagement.courier_management.detail
+      breadcrumbs: brConfig.b2b_voucher.detail
     },
     // canActivate: [PageGuard]
   },
@@ -104,7 +105,7 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatMenuModule
   ],
-  declarations: [B2BVoucherComponent, B2BVoucherCreateComponent, B2BVoucherEditComponent],
+  declarations: [B2BVoucherComponent, B2BVoucherCreateComponent, B2BVoucherEditComponent, RedeemListComponent],
   providers: [
     {
       provide: DateAdapter,
@@ -113,6 +114,8 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
-  ]
+  ],
+  entryComponents: [RedeemListComponent],
+  exports: [RedeemListComponent]
 })
 export class B2BVoucherModule { }
