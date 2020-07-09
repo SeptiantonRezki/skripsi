@@ -172,10 +172,13 @@
           </div>
           
           <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
-            fxLayoutAlign="space-between stretch">
+            fxLayoutAlign="left stretch" *ngIf="!onLoad && detailRetailer?.paguyuban">
 
-            <mat-form-field fxFlex="30" class="is-light paguyuban" *ngIf="!onLoad && detailRetailer?.paguyuban">
+            <mat-form-field fxFlex="20" class="is-light paguyuban">
               <input matInput type="text" placeholder="Tergabung dalam Paguyuban" disabled>
+            </mat-form-field>
+            <mat-form-field fxFlex="30" class="is-light paguyuban">
+              <input matInput type="text" placeholder="Nama Paguyuban" disabled [value]="detailRetailer?.paguyuban_name">
             </mat-form-field>
 
           </div>
