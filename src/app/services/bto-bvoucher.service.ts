@@ -27,13 +27,28 @@ export class BtoBVoucherService extends BaseService {
     return this.postApi(url, body);
   }
 
+  update(context?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "update", context);
+    return this.putApi(url, body);
+  }
+
   getRetailer(queryParams?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_retailer");
     return this.postApi(url, body, queryParams);
   }
 
+  getMitra(queryParams?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_mitra");
+    return this.postApi(url, body, queryParams);
+  }
+
   getSelectedRetailer(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "selected_retailer", context);
+    return this.getApi(url)
+  }
+
+  getSelectedMitra(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "selected_mitra", context);
     return this.getApi(url)
   }
 

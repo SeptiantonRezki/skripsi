@@ -16,6 +16,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { NgxMaskModule } from "ngx-mask";
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { RedeemListComponent } from './redeem-list/redeem-list.component';
+import { PanelMitraVoucherComponent } from './panel-mitra-voucher/panel-mitra-voucher.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -105,7 +106,7 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatMenuModule
   ],
-  declarations: [B2BVoucherComponent, B2BVoucherCreateComponent, B2BVoucherEditComponent, RedeemListComponent],
+  declarations: [B2BVoucherComponent, B2BVoucherCreateComponent, B2BVoucherEditComponent, RedeemListComponent, PanelMitraVoucherComponent],
   providers: [
     {
       provide: DateAdapter,
@@ -115,7 +116,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
   ],
-  entryComponents: [RedeemListComponent],
-  exports: [RedeemListComponent]
+  entryComponents: [RedeemListComponent, PanelMitraVoucherComponent],
+  exports: [RedeemListComponent, PanelMitraVoucherComponent]
 })
 export class B2BVoucherModule { }

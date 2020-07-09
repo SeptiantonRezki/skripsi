@@ -522,12 +522,15 @@ export class Endpoint {
       b2b_voucher: {
         get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,
         create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}`,
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}`,
         redeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem`,
         export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-excel`,
         export_invoice: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-invoice`,
         list_retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/retailer`,
+        list_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/mitra`,
         selected_retailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/retailer`,
+        selected_mitra: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/mitra`,
         update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}`
       }
     };

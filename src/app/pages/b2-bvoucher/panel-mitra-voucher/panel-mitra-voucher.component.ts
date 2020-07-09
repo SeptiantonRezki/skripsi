@@ -1,31 +1,21 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
+import { Page } from 'app/classes/laravel-pagination';
+import { PagesName } from 'app/classes/pages-name';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
-import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { Page } from 'app/classes/laravel-pagination';
-import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
-import { ProductService } from 'app/services/sku-management/product.service';
-import { MatSelect, MatDialogConfig } from '@angular/material';
-import { takeUntil, take } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from "moment";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-b2-b-voucher-create',
-  templateUrl: './b2-b-voucher-create.component.html',
-  styleUrls: ['./b2-b-voucher-create.component.scss']
+  selector: 'app-panel-mitra-voucher',
+  templateUrl: './panel-mitra-voucher.component.html',
+  styleUrls: ['./panel-mitra-voucher.component.scss']
 })
-export class B2BVoucherCreateComponent implements OnInit {
-  isDetail: Boolean;
-  formDetilVoucher: FormGroup;
+export class PanelMitraVoucherComponent implements OnInit {
   formFilter: FormGroup;
-  minDateVoucher: any = new Date();
-
   onLoad: boolean;
   @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
@@ -58,16 +48,8 @@ export class B2BVoucherCreateComponent implements OnInit {
   totalData: number = 0;
   wholesalerIds: any = [];
   isSort: boolean = false;
-
-  groupTradePrograms: any[] = [];
-  listCategories: any[] = [];
-  listProduct: any[] = [];
-  filterProduct: FormControl = new FormControl("");
-  public filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-
-  @ViewChild('singleSelect') singleSelect: MatSelect;
-
   detailVoucher: any;
+  isDetail: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -75,10 +57,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     private dialogService: DialogService,
     private b2bVoucherService: BtoBVoucherService,
     private geotreeService: GeotreeService,
-    private groupTradeProgramService: GroupTradeProgramService,
-    private productService: ProductService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -86,7 +66,6 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
       }
     });
-    this.onLoad = false;
     this.selected = [];
     // this.permission = this.roles.getRoles('principal.supplierpanelmitra');
     this.allRowsSelected = false;
@@ -119,129 +98,11 @@ export class B2BVoucherCreateComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe(data => {
-        this.getListRetailer(data);
+        this.getListMitra(data);
       });
-  }
-
-  getProducts() {
-    this.productService.get({ page: 'all' }).subscribe(res => {
-      this.listProduct = res.data ? res.data.data : [];
-      this.filteredProduct.next(res.data ? res.data.data : []);
-    })
-  }
-
-  getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
-      this.listCategories = res.data ? res.data.data : [];
-    })
-  }
-
-  getGroupTradeProgram() {
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
-      this.groupTradePrograms = res.data ? res.data.data : [];
-    })
-  }
-
-  isChecked(type, event) {
-    console.log('type', type);
-    if (type === 'product') this.formDetilVoucher.get('limit_by_category').setValue(false);
-    else this.formDetilVoucher.get('limit_by_product').setValue(false);
-  }
-
-  setInitialValue() {
-    this.filteredProduct
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        // setting the compareWith property to a comparison function
-        // triggers initializing the selection according to the initial value of
-        // the form control (i.e. _initializeSelection())
-        // this needs to be done after the filteredBanks are loaded initially
-        // and after the mat-option elements are available
-        this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id === b.id;
-      });
-  }
-
-  filterProductList() {
-    if (!this.listProduct) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterProduct.value;
-    if (!search) {
-      this.filteredProduct.next(this.listProduct.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the listProduct
-    this.filteredProduct.next(
-      this.listProduct.filter(prd => prd.name.toLowerCase().indexOf(search) > -1)
-    );
-  }
-
-  getRetailerSelected() {
-    this.b2bVoucherService.getSelectedRetailer({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
-      this.onSelect({
-        selected: res.data.map(slc => ({
-          ...slc,
-          id: slc.business_id
-        }))
-      });
-    })
-  }
-
-  getDetail() {
-    this.b2bVoucherService.show({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      this.detailVoucher = res.data;
-      this.formDetilVoucher.setValue({
-        name: res.data.name,
-        coin: res.data.coin,
-        currency: res.data.currency,
-        voucher: res.data.nominal,
-        startDate: res.data.start_date,
-        endDate: res.data.end_date,
-        voucherDate: res.data.available_at,
-        voucherExpiry: res.data.expired_at,
-        group_trade_program: res.data.group_id && res.data.group_id[0] ? res.data.group_id[0] : null,
-        limit_by_product: res.data.limit_by === 'product',
-        limit_by_category: res.data.limit_by === 'category',
-        limit_only: res.data.limit_only,
-        product: res.data.limit_by === 'product' ? res.data.limit_only : "",
-        category: res.data.limit_by === 'category' && res.data.limit_only[0] ? Number(res.data.limit_only[0]) : "",
-      });
-    })
-  }
-
-  getDetailRedeem() {
-    this.b2bVoucherService.getRedeems({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('redeeems detail', res);
-    })
   }
 
   ngOnInit() {
-    this.getProducts();
-    this.getCategories();
-    this.getGroupTradeProgram();
-
-
-    this.formDetilVoucher = this.formBuilder.group({
-      name: ["", Validators.required],
-      coin: [0, Validators.required],
-      currency: [0, Validators.required],
-      voucher: [0, Validators.required],
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      voucherDate: [null, Validators.required],
-      voucherExpiry: [null, Validators.required],
-      limit_only: [""],
-      limit_by_product: [false],
-      limit_by_category: [false],
-      product: [""],
-      category: [""],
-      group_trade_program: [""]
-    });
-
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
@@ -252,27 +113,16 @@ export class B2BVoucherCreateComponent implements OnInit {
       territory: [""]
     })
 
+    this.initAreaV2();
+    this.getListMitra();
+
     if (this.isDetail) {
-      this.getDetail();
-      this.getRetailerSelected();
-      this.getDetailRedeem();
+      this.getMitraSelected();
     }
 
-    this.initAreaV2();
-    this.getListRetailer();
-
-    this.filteredProduct.next(this.listProduct.slice());
-
-    // listen for search field value changes
-    this.filterProduct.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterProductList();
-      });
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      // this.getListMitra();
-      this.getListRetailer();
+      this.getListMitra();
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -574,7 +424,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     }
   }
 
-  getListRetailer(string?: any) {
+  getListMitra(string?: any) {
     console.log('Search', string);
     try {
       this.dataService.showLoading(true);
@@ -647,7 +497,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       }
       this.loadingIndicator = true;
 
-      this.b2bVoucherService.getRetailer(this.pagination).subscribe(res => {
+      this.b2bVoucherService.getMitra(this.pagination).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -685,7 +535,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.getListRetailer();
+    this.getListMitra();
   }
 
   onSort(event) {
@@ -699,7 +549,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.dataService.setToStorage("sort_type", event.newValue);
     this.isSort = true;
 
-    this.getListRetailer();
+    this.getListMitra();
   }
 
   checkAreaLocation(area, lastSelfArea) {
@@ -788,54 +638,22 @@ export class B2BVoucherCreateComponent implements OnInit {
     });
   }
 
-  onSaveDetail() {
-    let body = {
-      name: this.formDetilVoucher.get('name').value,
-      currency: this.formDetilVoucher.get('currency').value,
-      coin: this.formDetilVoucher.get('coin').value,
-      start_date: this.formDetilVoucher.get('startDate').value,
-      end_date: this.formDetilVoucher.get('endDate').value,
-      available_at: this.formDetilVoucher.get('voucherDate').value,
-      expired_at: this.formDetilVoucher.get('voucherExpiry').value,
-      group_id: [this.formDetilVoucher.get('group_trade_program').value],
-      limit_by: this.formDetilVoucher.get('limit_by_product') ? (this.formDetilVoucher.get('limit_by_category') ? 'category' : 'product') : null
-    }
-
-    if (body['limit_by'] !== null) {
-      body['limit_only'] = body['limit_by'] === 'product' ? this.formDetilVoucher.get('product').value : [this.formDetilVoucher.get('category').value]
-    }
-    this.dataService.showLoading(true);
-    if (this.isDetail) {
-      this.b2bVoucherService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
-        if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
-        else {
-          this.getDetail();
-          this.getRetailerSelected();
-        }
-      }, err => {
-        this.dataService.showLoading(false);
-      })
-    } else {
-      this.b2bVoucherService.create(body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
-        if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
-        else {
-          this.getDetail();
-          this.getRetailerSelected();
-        }
-      }, err => {
-        this.dataService.showLoading(false);
-      })
-    }
+  getMitraSelected() {
+    this.b2bVoucherService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+      console.log('retailer selected', res);
+      this.onSelect({
+        selected: res.data.map(slc => ({
+          ...slc,
+          id: slc.business_id
+        }))
+      });
+    })
   }
 
   onSave() {
     let body = {
       _method: "PUT",
-      type: "retailer"
+      type: "wholesaler"
     }
     if (this.allRowsSelected) {
       body['type_business'] = 'all';
@@ -849,107 +667,12 @@ export class B2BVoucherCreateComponent implements OnInit {
       this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
       if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
       else {
-        this.getDetail();
-        this.getRetailerSelected();
+        // this.getDetail();
+        this.getMitraSelected();
       }
     }, err => {
       this.dataService.showLoading(false);
     });
   }
 
-  async exportInvoice() {
-    // let fileName = `Export_Invoice_Panel_Retailer_CN_REWARD_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
-    try {
-      const response = await this.b2bVoucherService.exportInvoice({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response);
-      if (response && response.data) window.open(response.data.url, "_blank");
-      // this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-      this.dataService.showLoading(false);
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-    }
-  }
-
-  // importMitra(): void {
-  //   const dialogConfig = new MatDialogConfig();
-
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.autoFocus = true;
-  //   dialogConfig.panelClass = 'scrumboard-card-dialog';
-  //   dialogConfig.data = {};
-
-  //   this.dialogRef = this.dialog.open(ImportPanelMitraDialogComponent, dialogConfig);
-
-  //   this.dialogRef.afterClosed().subscribe(response => {
-  //     if (response) {
-  //       if (response.data) {
-  //         this.selected = response.data.map((item: any) => { return({ id: item.id })});
-  //         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-  //         console.log('thisSELECTED', this.selected)
-  //       }
-  //     }
-  //   });
-  // }
-
-  convertDate(param?: Date) {
-    if (param) {
-      return moment(param).format("YYYY-MM-DD");
-    }
-    return "";
-  }
-
-  async exportExcel() {
-    this.dataService.showLoading(true);
-    let fileName = `B2B_CN_Reward_Panel_Retailer_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
-    try {
-      const response = await this.b2bVoucherService.exportExcel({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-      this.dataService.showLoading(false);
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-    }
-  }
-
-  downLoadFile(data: any, type: string, fileName: string) {
-    // It is necessary to create a new blob object with mime-type explicitly set
-    // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
-
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
-    }
-
-    // For other browsers: 
-    // Create a link pointing to the ObjectURL containing the blob.
-    const url = window.URL.createObjectURL(newBlob);
-
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    // this is necessary as link.click() does not work on the latest firefox
-    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-    setTimeout(function () {
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    }, 100);
-  }
-
-  handleError(error) {
-    console.log('Here')
-    console.log(error)
-
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    }
-    console.log(error);
-    // alert('Open console to see the error')
-  }
 }
