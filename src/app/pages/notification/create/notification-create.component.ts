@@ -51,7 +51,7 @@ export class NotificationCreateComponent {
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   listLandingPage: any[] = [];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
 
   imageContentType: File;
   imageContentTypeBase64: any;
@@ -131,7 +131,7 @@ export class NotificationCreateComponent {
       territory: []
     }
     route.url.subscribe(params => {
-      console.log({params});
+      console.log({ params });
       this.idNotif = params[2].path;
       this.actionType = params[1].path;
     })
@@ -173,7 +173,7 @@ export class NotificationCreateComponent {
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
       } else {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
       }
 
       if (this.formNotification.get("is_target_audience").value === true) {
@@ -1410,6 +1410,12 @@ export class NotificationCreateComponent {
     else {
       if (this.pagination['age']) delete this.pagination['age'];
     }
+
+    if (this.formNotification.get("user_group").value === 'retailer') {
+      this.pagination['type'] = 'pojok-modal'
+    } else {
+      delete this.pagination['type'];
+    }
     // if (this.formPopupGroup.get("user_group").value === 'retailer') {
     //   this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
     //   delete this.pagination['customer_smoking'];
@@ -1799,10 +1805,10 @@ export class NotificationCreateComponent {
   }
   async getDetails() {
     try {
-      
+
       this.dataService.showLoading(true);
-      const {title, static_page_slug, body, age, type, audience} = await this.notificationService.show({notification_id: this.idNotif}).toPromise();
-      console.log({audience});
+      const { title, static_page_slug, body, age, type, audience } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      console.log({ audience });
 
       const frm = this.formNotification;
       frm.controls['title'].setValue(title);
@@ -1816,13 +1822,13 @@ export class NotificationCreateComponent {
       frm.controls['landing_page_value'].setValue('');
       frm.controls['url_iframe'].setValue('');
       frm.controls['is_target_audience'].setValue(true);
-      
+
       setTimeout(() => { this.audienceSelected = audience; }, 400);
-      
+
       // end request
       this.dataService.showLoading(false);
     } catch (error) {
-      console.log({error});
+      console.log({ error });
       this.dataService.showLoading(false);
 
     }

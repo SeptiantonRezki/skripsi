@@ -40,6 +40,8 @@ import { DeactivateReasonDialogComponent } from './pay-later-deactivate/deactiva
 import { PayLaterPanelImportDialogComponent } from './pay-later-panel/pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { NgxCurrencyModule } from 'ngx-currency';
+import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation.component';
+import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -78,7 +80,7 @@ export const customCurrencyMaskConfig = {
     MatMenuModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
-  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent],
+  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent],
   providers: [RupiahFormaterPipe, PageGuard],
   exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent],
   entryComponents: [DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent]

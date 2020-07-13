@@ -598,6 +598,10 @@ export class Endpoint {
         put_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
         delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`
       },
+      paylater_activate: {
+        activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
+        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
