@@ -148,7 +148,9 @@ export class PopupNotificationEditComponent {
   ngOnInit() {
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
+      enddate: [moment(), Validators.required],
       time: ["00:00", Validators.required],
+      endtime: ["00:00", Validators.required],
       date_ws_downline: [moment(), Validators.required],
       time_ws_downline: ["00:00", Validators.required],
       positive_button: ["", Validators.required],
@@ -849,6 +851,11 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('date').setValue(date);
         this.formPopupGroup.get('time').setValue(date.format('HH:mm'));
       }
+      if (response.end_date) {
+        const date = moment(response.end_date);
+        this.formPopupGroup.get('enddate').setValue(date);
+        this.formPopupGroup.get('endtime').setValue(date.format('HH:mm'));
+      }
 
       if (response.type === 'retailer') {
         const group_type = response.areas.map(item => item.pivot.type)[0];
@@ -1279,9 +1286,11 @@ export class PopupNotificationEditComponent {
           body['date_ws_downline'] = `${moment(this.formPopupGroup.get('date_ws_downline').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time_ws_downline').value}:00`;
         } else {
           body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+          body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
         }
       } else {
         body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+        body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
       }
 
       if (body.type === 'customer') {
