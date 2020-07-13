@@ -44,7 +44,9 @@ export class BannerCreateComponent {
   listStatus: any[] = [{ name: 'Status Aktif', value: 'publish' }, { name: 'Status Non Aktif', value: 'draft' }];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }];
+  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" },
+    {name: "Link to Web Browser", value: "link_web"}
+  ];
   listContentWallet: any[];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
@@ -160,6 +162,7 @@ export class BannerCreateComponent {
       age: ["18+", Validators.required],
       status: ["publish", Validators.required],
       promo: ["yes", Validators.required],
+      transfer_token_credential: ["yes", Validators.required],
       areas: this.formBuilder.array([]),
       content_type: ["static_page", Validators.required],
       content_wallet: ["ovo", Validators.required],
@@ -199,12 +202,15 @@ export class BannerCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
-        this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
+        this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value) );
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         this.formBannerGroup.controls['age_consumer_from'].enable();
         this.formBannerGroup.controls['age_consumer_to'].enable();
-        this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
+        this.listContentType.push(
+          { name: "E-Wallet", value: "e_wallet" },
+          { name: "Link to Web Browser", value: "link_web" }
+        );
       }
       if (this.formBannerGroup.get("is_target_audience").value === true) {
         this.getAudience();
@@ -968,7 +974,7 @@ export class BannerCreateComponent {
       this.formBannerGroup.controls['body'].enable();
     }
 
-    if (value === 'iframe') {
+    if (value === 'iframe' || value === 'link_web') {
       this.formBannerGroup.controls['url_iframe'].enable();
     } else {
       this.formBannerGroup.controls['url_iframe'].disable();
@@ -1040,7 +1046,11 @@ export class BannerCreateComponent {
         fd.append('body', this.formBannerGroup.get('body').value);
         fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
         fd.append('button_text', this.formBannerGroup.get('button_text').value);
-      } else {
+      } else if(body.content_type === 'link_web') {
+        fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+        fd.append('transfer_token_credential', this.formBannerGroup.get('transfer_token_credential').value);
+      }
+      else {
 
       }
 
