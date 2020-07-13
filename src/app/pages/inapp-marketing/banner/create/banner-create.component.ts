@@ -162,7 +162,7 @@ export class BannerCreateComponent {
       age: ["18+", Validators.required],
       status: ["publish", Validators.required],
       promo: ["yes", Validators.required],
-      transfer_token_credential: ["yes", Validators.required],
+      transfer_token: ["yes", Validators.required],
       areas: this.formBuilder.array([]),
       content_type: ["static_page", Validators.required],
       content_wallet: ["ovo", Validators.required],
@@ -1047,8 +1047,8 @@ export class BannerCreateComponent {
         fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
         fd.append('button_text', this.formBannerGroup.get('button_text').value);
       } else if(body.content_type === 'link_web') {
-        fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
-        fd.append('transfer_token_credential', this.formBannerGroup.get('transfer_token_credential').value);
+        fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
+        fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       }
       else {
 
