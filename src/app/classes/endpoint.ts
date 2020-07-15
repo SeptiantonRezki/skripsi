@@ -602,6 +602,16 @@ export class Endpoint {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
         activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`
       },
+      new_sign_menu: {
+        icon_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/icon`,
+        menu_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/menu`,
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu`,
+        show: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        general_new_sign: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/sign-menu`
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

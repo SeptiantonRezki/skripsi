@@ -1,66 +1,36 @@
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DialogService } from 'app/services/dialog.service';
-import { NotificationService } from 'app/services/notification.service';
-import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DataService } from 'app/services/data.service';
-import { Lightbox } from 'ngx-lightbox';
-
-import * as _ from 'underscore';
-import { Config } from 'app/classes/config';
+import { DialogService } from 'app/services/dialog.service';
+import { NewSignService } from 'app/services/settings/new-sign.service';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
-import { RetailerService } from 'app/services/user-management/retailer.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MatDialogConfig, MatDialog } from '@angular/material';
-import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/import-pop-up-audience/import-pop-up-audience.component';
 import { GeotreeService } from 'app/services/geotree.service';
-import { TemplateTaskService } from 'app/services/dte/template-task.service';
+import { NotificationService } from 'app/services/notification.service';
+import { RetailerService } from 'app/services/user-management/retailer.service';
+import * as _ from "lodash";
+import * as moment from "moment";
+import { Router } from '@angular/router';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
-  selector: 'app-notification-create',
-  templateUrl: './notification-create.component.html',
-  styleUrls: ['./notification-create.component.scss']
+  selector: 'app-new-sign',
+  templateUrl: './new-sign.component.html',
+  styleUrls: ['./new-sign.component.scss']
 })
-export class NotificationCreateComponent {
+export class NewSignComponent implements OnInit {
+  listApplication: any[] = [{ name: 'Retailer', value: 'retailer' }, { name: 'Customer', value: 'customer' }, { name: 'Wholesaler', value: 'wholesaler' }];
+  formNewSign: FormGroup;
+  formFilter: FormGroup;
   onLoad: boolean;
   loadingIndicator: boolean;
-  formFilter: FormGroup;
-
-  formNotification: FormGroup;
-  formArea: FormGroup;
-  formNotificationError: any;
-
-  userGroup: any[] = [
-    { name: "Field Force", value: "field-force" },
-    { name: "Wholesaler", value: "wholesaler" },
-    { name: "Retailer", value: "retailer" },
-    // { name: "Paguyuban", value: "paguyuban" },
-    { name: "Customer", value: "customer" }
-  ];
-
-  dialogRef: any;
+  showLoading: Boolean;
+  listLevelArea: any[];
+  indexDelete: any;
+  list: any;
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
-  indexDelete: any;
-
-  listLevelArea: any[];
-  list: any;
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
-  listLandingPage: any[] = [];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
-
-  imageContentType: File;
-  imageContentTypeBase64: any;
-
-  multipleImageContentType: any[];
-  videoContentType: File;
-  videoContentTypeURL: any;
-
-  public options: Object = Config.FROALA_CONFIG;
 
   audienceSelected: any[] = [];
 
@@ -78,40 +48,28 @@ export class NotificationCreateComponent {
   pagination: Page = new Page();
 
   keyUp = new Subject<string>();
+  areaType: any[] = [];
 
   // 2 geotree property
   endArea: String;
   area_id_list: any = [];
-  areaType: any;
   lastLevel: any;
-  actionType: string = 'create';
-  idNotif: any = '';
+  menuList: any[] = [];
+  iconList: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private dataService: DataService,
     private dialogService: DialogService,
-    private notificationService: NotificationService,
-    private _lightbox: Lightbox,
-    private retailerService: RetailerService,
-    private dialog: MatDialog,
+    private newSignService: NewSignService,
     private geotreeService: GeotreeService,
-    private taskTemplateService: TemplateTaskService,
-    private route: ActivatedRoute,
+    private notificationService: NotificationService,
+    private retailerService: RetailerService,
+    private router: Router
   ) {
-    this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
-    console.log(this.areaType);
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
-    this.formNotificationError = {
-      title: {},
-      body: {},
-      user: {},
-      user_group: {},
-      age: {}
-    };
 
     this.listLevelArea = [
       {
@@ -122,6 +80,8 @@ export class NotificationCreateComponent {
       }
     ];
 
+    this.selected = [];
+
     this.list = {
       zone: [],
       region: [],
@@ -130,26 +90,19 @@ export class NotificationCreateComponent {
       district: [],
       territory: []
     }
-    route.url.subscribe(params => {
-      console.log({ params });
-      this.idNotif = params[2].path;
-      this.actionType = params[1].path;
-    })
   }
 
   ngOnInit() {
-    this.formNotification = this.formBuilder.group({
-      title: ["", Validators.required],
-      body: ["", Validators.required],
-      user_group: ["retailer", Validators.required],
-      age: ["18+", Validators.required],
-      content_type: ["static_page", Validators.required],
-      static_page_title: ["", Validators.required],
-      static_page_body: ["", Validators.required],
-      landing_page_value: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+    this.formNewSign = this.formBuilder.group({
+      application: ["retailer", Validators.required],
+      menu: ["", Validators.required],
+      date: [null, Validators.required],
+      time: [null, Validators.required],
+      endDate: [null, Validators.required],
+      endTime: [null, Validators.required],
+      is_target_audience: [false],
       areas: this.formBuilder.array([]),
-      is_target_audience: [false]
+      icon: ["", Validators.required]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -162,56 +115,11 @@ export class NotificationCreateComponent {
       territory: [""]
     })
 
-    this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'retailer') {
-        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
-        // this.formNotification.controls['landing_page_value'].disable();
-      } else {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-        // this.formNotification.controls['landing_page_value'].enable();
-      }
-      if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
-      } else {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
-      }
-
-      if (this.formNotification.get("is_target_audience").value === true) {
-        this.getAudience();
-      };
-
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
-      this.contentType(this.formNotification.controls['content_type'].value);
-    });
-
-    this.formNotification.controls['age'].valueChanges.debounceTime(50).subscribe(res => {
-      if (this.formNotification.get("is_target_audience").value === true) {
-        this.getAudience();
-      };
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
-    });
-
-    this.formNotification.controls['user_group'].setValue('retailer');
-    this.formNotification.controls['url_iframe'].disable();
-
-    this.formNotification.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(this.formNotification, this.formNotificationError);
-    });
-
-    // this.formFilter.valueChanges.subscribe(filter => {
-    //   if (this.formNotification.get("is_target_audience").value === false) {
-    //     this.getAudience();
-    //   };
-    // });
-
+    this.getIconList();
+    this.getMenuList();
     this.addArea();
     // this.initFilterArea();
     this.initAreaV2();
-    if (this.actionType === 'detail') {
-      this.getDetails();
-    }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
@@ -248,7 +156,6 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
-
     this.formFilter.get('territory').valueChanges.subscribe(res => {
       console.log('territory', res);
       if (res) {
@@ -256,6 +163,85 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+
+    this.formNewSign.get('application').valueChanges.subscribe(res => {
+      this.getMenuList();
+      if (this.formNewSign.get('is_target_audience').value === true) {
+        this.getAudienceAreaV2('region', res);
+        this.getAudience();
+      }
+    })
+  }
+
+  getMenuList() {
+    this.newSignService.getMenuList({ type: this.formNewSign.get('application').value }).subscribe(res => {
+      console.log('menuList', res);
+      this.menuList = res && res.data ? res.data : [];
+    })
+  }
+
+  getIconList() {
+    this.newSignService.getIconList().subscribe(res => {
+      console.log('iconList', res);
+      this.iconList = res && res.data ? res.data : [];
+    })
+  }
+
+  submit() {
+    if (this.formNewSign.valid) {
+
+      let body = {
+        type: this.formNewSign.get('application').value,
+        menu: this.formNewSign.get('menu').value,
+        start_date: moment(this.formNewSign.get('date').value).format("YYYY-MM-DD").toString() + " " + this.formNewSign.get('time').value + ":00",
+        end_date: moment(this.formNewSign.get('endDate').value).format("YYYY-MM-DD") + " " + this.formNewSign.get('endTime').value + ":00",
+        sign: this.formNewSign.get("icon").value
+      }
+
+      if (this.formNewSign.get('is_target_audience').value === true) {
+        body['target_audience'] = 1;
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      } else {
+        if (body['target_audience']) {
+          body['target_audience'] = 0;
+          let _areas = [];
+          let areas = [];
+          let value = this.formNewSign.getRawValue();
+
+          value.areas.map(item => {
+            let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+            for (const val of this.typeArea) {
+              const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
+              if (filteredValue) _areas.push(filteredValue)
+            }
+
+            areas.push(_.last(_areas));
+            _areas = [];
+          })
+
+          let same = this.findDuplicate(areas.map(item => item.value));
+          if (same.length > 0) {
+            this.dataService.showLoading(false);
+            return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+          }
+
+          body['areas'] = areas.map(item => item.value);
+        }
+      }
+      this.dataService.showLoading(true);
+      this.newSignService.create(body).subscribe(res => {
+        this.dialogService.openSnackBar({
+          message: "Data berhasil disimpan!"
+        })
+        this.dataService.showLoading(false);
+        window.location.reload();
+      }, err => {
+        this.dataService.showLoading(false);
+      })
+    } else {
+      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan, Silahkan lengkapi kembali data anda!" });
+      commonFormValidator.validateAllFields(this.formNewSign);
+    }
   }
 
   initAreaV2() {
@@ -571,6 +557,154 @@ export class NotificationCreateComponent {
     return areaList;
   }
 
+  initFilterArea() {
+    this.areaFromLogin.map(item => {
+      let level_desc = '';
+      switch (item.type.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          this.formFilter.get('national').setValue(item.id);
+          this.formFilter.get('national').disable();
+          break
+        case 'division':
+          level_desc = 'region';
+          this.formFilter.get('zone').setValue(item.id);
+          this.formFilter.get('zone').disable();
+          break;
+        case 'region':
+          level_desc = 'area';
+          this.formFilter.get('region').setValue(item.id);
+          this.formFilter.get('region').disable();
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          this.formFilter.get('area').setValue(item.id);
+          this.formFilter.get('area').disable();
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          this.formFilter.get('salespoint').setValue(item.id);
+          this.formFilter.get('salespoint').disable();
+          break;
+        case 'district':
+          level_desc = 'territory';
+          this.formFilter.get('district').setValue(item.id);
+          this.formFilter.get('district').disable();
+          break;
+        case 'territory':
+          this.formFilter.get('territory').setValue(item.id);
+          this.formFilter.get('territory').disable();
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+  }
+
+  getAudienceArea(selection, id) {
+    let item: any;
+    switch (selection) {
+      case 'zone':
+        this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
+        });
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['region'] = [];
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'region':
+        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['area'] = [];
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'area':
+        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['salespoint'] = [];
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'salespoint':
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['district'] = [];
+        this.list['territory'] = [];
+        break;
+      case 'district':
+        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
+        this.list['territory'] = [];
+        break;
+      case 'territory':
+        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            this.list[selection] = res;
+          });
+        } else {
+          this.list[selection] = []
+        }
+
+        this.formFilter.get('territory').setValue('');
+        break;
+
+      default:
+        break;
+    }
+  }
+
   createArea(): FormGroup {
     return this.formBuilder.group({
       national: [1, Validators.required],
@@ -591,7 +725,7 @@ export class NotificationCreateComponent {
   }
 
   addArea() {
-    let wilayah = this.formNotification.controls['areas'] as FormArray;
+    let wilayah = this.formNewSign.controls['areas'] as FormArray;
     wilayah.push(this.createArea());
     const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
     this.initArea(index);
@@ -610,7 +744,7 @@ export class NotificationCreateComponent {
   }
 
   initArea(index) {
-    let wilayah = this.formNotification.controls['areas'] as FormArray;
+    let wilayah = this.formNewSign.controls['areas'] as FormArray;
     this.areaType.map(item => {
       switch (item.type.trim()) {
         case 'national':
@@ -663,13 +797,11 @@ export class NotificationCreateComponent {
       }
       this.generataList(level_desc, item.id, index, 'render');
     });
-    // this.getAudience();
   }
 
   async generataList(selection, id, index, type) {
     let item: any;
-    let wilayah = this.formNotification.controls['areas'] as FormArray;
-    console.log('wilayah', wilayah);
+    let wilayah = this.formNewSign.controls['areas'] as FormArray;
     switch (selection) {
       case 'zone':
         const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
@@ -832,362 +964,17 @@ export class NotificationCreateComponent {
     return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
-  initFilterArea() {
-    this.areaFromLogin.map(item => {
-      let level_desc = '';
-      switch (item.type.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          this.formFilter.get('national').setValue(item.id);
-          this.formFilter.get('national').disable();
-          break
-        case 'division':
-          level_desc = 'region';
-          this.formFilter.get('zone').setValue(item.id);
-          this.formFilter.get('zone').disable();
-          break;
-        case 'region':
-          level_desc = 'area';
-          this.formFilter.get('region').setValue(item.id);
-          this.formFilter.get('region').disable();
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          this.formFilter.get('area').setValue(item.id);
-          this.formFilter.get('area').disable();
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          this.formFilter.get('salespoint').setValue(item.id);
-          this.formFilter.get('salespoint').disable();
-          break;
-        case 'district':
-          level_desc = 'territory';
-          this.formFilter.get('district').setValue(item.id);
-          this.formFilter.get('district').disable();
-          break;
-        case 'territory':
-          this.formFilter.get('territory').setValue(item.id);
-          this.formFilter.get('territory').disable();
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
-  }
-
-  getAudienceArea(selection, id) {
-    let item: any;
-    switch (selection) {
-      case 'zone':
-        this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-          this.list[selection] = res;
-        });
-
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['region'] = [];
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'region':
-        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'area':
-        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'salespoint':
-        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'district':
-        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['territory'] = [];
-        break;
-      case 'territory':
-        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('territory').setValue('');
-        break;
-
-      default:
-        break;
-    }
-  }
-
   confirmDelete() {
-    let wilayah = this.formNotification.controls['areas'] as FormArray;
+    let wilayah = this.formNewSign.controls['areas'] as FormArray;
     wilayah.removeAt(this.indexDelete);
     this.dialogService.brodcastCloseConfirmation();
   }
 
   clearFormArray = (index, selection) => {
-    let wilayah = this.formNotification.controls['areas'] as FormArray;
+    let wilayah = this.formNewSign.controls['areas'] as FormArray;
     let list = wilayah.at(index).get(selection) as FormArray;
     while (list.length > 0) {
       list.removeAt(list.length - 1);
-    }
-  }
-
-  removeImageVideo(): void {
-    this.imageContentType = undefined;
-    this.imageContentTypeBase64 = null;
-    // this.videoContentType = undefined;
-    this.videoContentTypeURL = null;
-  }
-
-  async submit() {
-    if (this.formNotification.valid) {
-      let _areas = [];
-      let areas = [];
-      let value = this.formNotification.getRawValue();
-
-      value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-        for (const val of this.typeArea) {
-          const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
-          if (filteredValue) _areas.push(filteredValue)
-        }
-
-        areas.push(_.last(_areas));
-        _areas = [];
-      })
-
-      let same = this.findDuplicate(areas.map(item => item.value));
-      if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
-      }
-
-      let body = {
-        title: this.formNotification.get("title").value,
-        body: this.formNotification.get("body").value,
-        type: this.formNotification.get("user_group").value,
-        content_type: this.formNotification.get('content_type').value,
-        area_id: areas[0].value
-      };
-
-      if (body.type === 'customer') {
-        body['age'] = this.formNotification.get("age").value;
-      }
-
-      if (body.content_type === 'static_page') {
-        body['static_page_title'] = this.formNotification.get("static_page_title").value
-        body['static_page_body'] = this.formNotification.get("static_page_body").value
-      } else if (body.content_type === 'landing_page') {
-        body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
-      } else if (body.content_type === 'iframe') {
-        body['iframe_value'] = this.formNotification.get('url_iframe').value;
-      } else if (body.content_type === 'image') {
-        if (this.imageContentTypeBase64) {
-          body['image_value'] = this.imageContentTypeBase64;
-        } else {
-          if (this.multipleImageContentType.length > 0) {
-            this.dataService.showLoading(true);
-            return await new Promise(async (resolve, reject) => {
-              const bodyVideo = new FormData();
-              bodyVideo.append('title', body.title);
-              bodyVideo.append('body', body.body);
-              bodyVideo.append('type', body.type);
-              bodyVideo.append('content_type', body.content_type);
-              bodyVideo.append('area_id', body.area_id);
-              this.multipleImageContentType.forEach((element, i) => {
-                bodyVideo.append(`image_value[${i}]`, element);
-              });
-              if (this.formNotification.get('is_target_audience').value) {
-                bodyVideo.append('target_audience', '1');
-                const ta = await this.audienceSelected.map((aud, i) => {
-                  bodyVideo.append(`target_audiences[${i}]`, aud.id);
-                });
-              } else {
-                if (bodyVideo.get('target_audience')) {
-                  bodyVideo.delete('target_audience');
-                }
-              }
-              this.notificationService.create(bodyVideo).subscribe(
-                res => {
-                  this.router.navigate(["notifications"]);
-                  this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-                  this.dataService.showLoading(false);
-                  resolve(res);
-                },
-                err => {
-                  this.dataService.showLoading(false);
-                  reject(err);
-                }
-              );
-            });
-          } else {
-            return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
-          }
-        }
-      } else if (body.content_type === 'video') {
-        if (this.videoContentTypeURL) {
-          this.dataService.showLoading(true);
-          return await new Promise(async (resolve, reject) => {
-            const bodyVideo = new FormData();
-            bodyVideo.append('title', body.title);
-            bodyVideo.append('body', body.body);
-            bodyVideo.append('type', body.type);
-            bodyVideo.append('content_type', body.content_type);
-            bodyVideo.append('area_id', body.area_id);
-            bodyVideo.append('video_value', this.videoContentType);
-            if (this.formNotification.get('is_target_audience').value) {
-              bodyVideo.append('target_audience', '1');
-              const ta = await this.audienceSelected.map((aud, i) => {
-                bodyVideo.append(`target_audiences[${i}]`, aud.id);
-              });
-            } else {
-              if (bodyVideo.get('target_audience')) {
-                bodyVideo.delete('target_audience');
-              }
-            }
-            this.notificationService.create(bodyVideo).subscribe(
-              res => {
-                this.router.navigate(["notifications"]);
-                this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-                this.dataService.showLoading(false);
-                resolve(res);
-              },
-              err => {
-                this.dataService.showLoading(false);
-                reject(err);
-              }
-            );
-          });
-        } else {
-          return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
-        }
-      }
-
-      if (this.formNotification.get("is_target_audience").value) {
-        body['target_audience'] = 1;
-        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
-      } else {
-        if (body['target_audience']) delete body['target_audience'];
-      }
-
-      this.dataService.showLoading(true);
-      this.notificationService.create(body).subscribe(
-        res => {
-          this.router.navigate(["notifications"]);
-          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-          this.dataService.showLoading(false);
-        },
-        err => {
-          // this.dialogService.openSnackBar({ message: err.error.message });
-          // this.loadingIndicator = false;
-          this.dataService.showLoading(false);
-        }
-      );
-    } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formNotification);
-    }
-  }
-
-  contentType(value) {
-    if (this.imageContentTypeBase64 && this.imageContentType) {
-      this.imageContentType = undefined;
-      this.imageContentTypeBase64 = undefined;
-    }
-
-    if (this.multipleImageContentType && this.imageContentType) {
-      this.imageContentType = undefined;
-      this.multipleImageContentType = [];
-    }
-
-    if (this.videoContentType && this.videoContentTypeURL) {
-      this.videoContentType = undefined;
-      this.videoContentTypeURL = null;
-    }
-
-    if (value !== 'static_page') {
-      this.formNotification.controls['static_page_title'].setValue('');
-      this.formNotification.controls['static_page_body'].setValue('');
-      this.formNotification.controls['static_page_title'].disable();
-      this.formNotification.controls['static_page_body'].disable();
-    } else {
-      this.formNotification.controls['static_page_title'].enable();
-      this.formNotification.controls['static_page_body'].enable();
-    }
-
-    if (value === 'iframe') {
-      this.formNotification.controls['url_iframe'].setValue('');
-      this.formNotification.controls['url_iframe'].enable();
-    } else {
-      this.formNotification.controls['url_iframe'].disable();
-    }
-
-    if (value === 'landing_page') {
-      this.formNotification.controls['landing_page_value'].setValue('');
-      this.formNotification.controls['landing_page_value'].enable();
-    } else {
-      this.formNotification.controls['landing_page_value'].disable();
     }
   }
 
@@ -1219,92 +1006,6 @@ export class NotificationCreateComponent {
     return result;
   }
 
-  imagesContentType(event) {
-    if (this.imageContentType['length'] !== undefined && this.imageContentType['length'] !== null) {
-      if (this.imageContentType && this.imageContentType[0]) {
-        const filesAmount = this.imageContentType['length'];
-        for (let i = 0; i < filesAmount; i++) {
-          const reader = new FileReader();
-          reader.onloadend = (ev: any) => {
-            console.log('onloadend', ev);
-            this.multipleImageContentType.push(ev.target.result);
-            if (i == filesAmount - 1) {
-              console.log('SELESAI');
-              this.imageContentType = undefined;
-            }
-          }
-          reader.readAsDataURL(this.imageContentType[i]);
-        }
-      }
-    } else {
-      const file: File = event;
-      const myReader: FileReader = new FileReader();
-
-      this.multipleImageContentType = [];
-
-      myReader.onloadend = (e) => {
-        this.imageContentTypeBase64 = myReader.result;
-      }
-
-      myReader.readAsDataURL(file);
-    }
-  }
-
-  async previewImage(index = 0) {
-    if (this.multipleImageContentType['length'] > 0) {
-      const albums = [];
-      const filesAmount = this.multipleImageContentType['length'];
-      console.log('previewImage', albums)
-      for (let i = 0; i < filesAmount; i++) {
-        albums.push({
-          src: this.multipleImageContentType[i],
-          caption: '',
-          thumb: this.multipleImageContentType[i]
-        });
-        // return i;
-      }
-      console.log('album', albums)
-      this._lightbox.open(albums, index);
-    } else {
-      const album = {
-        src: this.imageContentTypeBase64,
-        caption: '',
-        thumb: this.imageContentTypeBase64
-      };
-
-      this._lightbox.open([album], 0);
-    }
-  }
-
-  removeImageMultiple(index) {
-    console.log('removeImageMultiple', index);
-    this.multipleImageContentType.splice(index, 1);
-    // delete this.imageContentType[index];
-    // const d = [];
-    // for (let i = 0; i < this.imageContentType['length']; i++) {
-    //   if ( i !== index) {
-    //     d.push(this.imageContentType[i]);
-    //   }
-    // }
-    // console.log('d', d);
-    // this.imageContentType = d;
-  }
-
-  onVideoContentTypeSelect(event) {
-    console.log('event video', event);
-
-    const file: File = event;
-    const myReader: FileReader = new FileReader();
-
-    this.multipleImageContentType = [];
-
-    myReader.onloadend = (e) => {
-      this.videoContentTypeURL = myReader.result;
-    }
-
-    myReader.readAsDataURL(file);
-  }
-
   checkAreaLocation(area, lastSelfArea) {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -1331,8 +1032,6 @@ export class NotificationCreateComponent {
 
     return newLastSelfArea;
   }
-
-  // Targeted Audience
 
   getAudience() {
     this.dataService.showLoading(true);
@@ -1402,43 +1101,10 @@ export class NotificationCreateComponent {
       }
     }
 
-    this.pagination['audience'] = this.formNotification.get("user_group").value;
-    if (this.formNotification.get("user_group").value === 'customer') {
-      let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
-      this.pagination['age'] = age;
-    }
-    else {
-      if (this.pagination['age']) delete this.pagination['age'];
-    }
+    this.pagination['audience'] = this.formNewSign.get('application').value;
 
-    if (this.formNotification.get("user_group").value === 'retailer') {
-      this.pagination['type'] = 'pojok-modal'
-    } else {
-      delete this.pagination['type'];
-    }
-    // if (this.formPopupGroup.get("user_group").value === 'retailer') {
-    //   this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
-    //   delete this.pagination['customer_smoking'];
-    //   delete this.pagination['customer_gender'];
-    //   delete this.pagination['customer_age_from'];
-    //   delete this.pagination['customer_age_to'];
-    // }
-    // if (this.formPopupGroup.get("user_group").value === 'customer') {
-    //   delete this.pagination['customer_smoking'];
-    //   delete this.pagination['customer_gender'];
-    //   delete this.pagination['customer_age_from'];
-    //   delete this.pagination['customer_age_to'];
-    //   delete this.pagination['retailer_type'];
-    // }
-    // if (this.formPopupGroup.get("user_group").value === 'customer') {
-    //   delete this.pagination['retailer_type'];
-    //   this.pagination['customer_smoking'] = this.formPopupGroup.get("is_smoker").value;
-    //   this.pagination['customer_gender'] = this.formPopupGroup.get("gender").value;
-    //   this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
-    //   this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
-    // }
 
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.dataService.showLoading(false);
@@ -1456,7 +1122,6 @@ export class NotificationCreateComponent {
   setPage(pageInfo) {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
@@ -1521,7 +1186,7 @@ export class NotificationCreateComponent {
     }
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1535,7 +1200,6 @@ export class NotificationCreateComponent {
     this.loadingIndicator = true;
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
@@ -1599,7 +1263,7 @@ export class NotificationCreateComponent {
       }
     }
 
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1613,7 +1277,6 @@ export class NotificationCreateComponent {
     this.pagination.page = 1;
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
@@ -1677,7 +1340,7 @@ export class NotificationCreateComponent {
       }
     }
 
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -1717,120 +1380,4 @@ export class NotificationCreateComponent {
     if (event.checked) this.getAudience();
   }
 
-  async export() {
-    if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
-      return;
-    }
-    this.dataService.showLoading(true);
-    let body = this.audienceSelected.map(aud => aud.id);
-    let age = null
-    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
-    else {
-      if (age) age = null
-    }
-    try {
-      const response = await this.notificationService.exportPushNotifAudience({ selected: body, audience: this.formNotification.get("user_group").value, age: age }).toPromise();
-      console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PushNotification_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-      // throw error;
-    }
-  }
-
-  downLoadFile(data: any, type: string, fileName: string) {
-    // It is necessary to create a new blob object with mime-type explicitly set
-    // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
-
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
-    }
-
-    // For other browsers: 
-    // Create a link pointing to the ObjectURL containing the blob.
-    const url = window.URL.createObjectURL(newBlob);
-
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    // this is necessary as link.click() does not work on the latest firefox
-    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-    setTimeout(function () {
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    }, 100);
-  }
-
-  handleError(error) {
-    console.log('Here')
-    console.log(error)
-
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    }
-    console.log(error);
-    // alert('Open console to see the error')
-  }
-
-  import(): void {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formNotification.get("user_group").value, type: 'push_notification' };
-
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
-
-    this.dialogRef.afterClosed().subscribe(response => {
-      if (response) {
-        this.audienceSelected = this.audienceSelected.concat(response);
-        this.onSelect({ selected: this.audienceSelected });
-        if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        }
-      }
-    });
-  }
-  async getDetails() {
-    try {
-
-      this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, type, audience } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      console.log({ audience });
-
-      const frm = this.formNotification;
-      frm.controls['title'].setValue(title);
-      frm.controls['body'].setValue(body);
-      frm.controls['user_group'].setValue(type);
-      frm.controls['age'].setValue(age);
-      frm.controls['content_type'].setValue('');
-      frm.controls['static_page_title'].setValue(static_page_slug);
-      frm.controls['static_page_body'].setValue('');
-      frm.controls['landing_page_value'].setValue('');
-      frm.controls['landing_page_value'].setValue('');
-      frm.controls['url_iframe'].setValue('');
-      frm.controls['is_target_audience'].setValue(true);
-
-      setTimeout(() => { this.audienceSelected = audience; }, 400);
-
-      // end request
-      this.dataService.showLoading(false);
-    } catch (error) {
-      console.log({ error });
-      this.dataService.showLoading(false);
-
-    }
-  }
 }
