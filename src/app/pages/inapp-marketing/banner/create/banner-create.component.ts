@@ -1036,6 +1036,7 @@ export class BannerCreateComponent {
         fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
       } else if (body.content_type === 'iframe') {
         fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+        fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       } else if (body.content_type === 'image') {
         if (this.imageContentTypeBase64) {
           fd.append('content_image', this.imageContentTypeBase64);

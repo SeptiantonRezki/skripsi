@@ -299,7 +299,7 @@ export class BannerEditComponent {
     // this.formBannerGroup.controls['url_iframe'].disable();
 
     this.formBannerGroup.controls['content_type'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'iframe') {
+      if (res === 'iframe' || res === 'link_web') {
         this.formBannerGroup.controls['url_iframe'].enable();
       }
     })
@@ -743,11 +743,13 @@ export class BannerEditComponent {
       this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
     }
 
-    if (this.detailBanner.target_page.type === 'iframe') {
+    if (this.detailBanner.target_page.type === 'iframe' || this.detailBanner.target_page.type === 'link_web') {
       this.formBannerGroup.get('url_iframe').enable();
       this.formBannerGroup.get('url_iframe').setValue(this.detailBanner.target_page.url);
+      this.formBannerGroup.get('transfer_token').setValue(this.detailBanner.transfer_token);
     } else {
       this.formBannerGroup.controls['url_iframe'].disable();
+      this.formBannerGroup.controls['transfer_token'].disable();
     }
 
     if (this.detailBanner.target_page.type === 'e_wallet') {
@@ -1200,6 +1202,7 @@ export class BannerEditComponent {
         fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
       } else if (body.content_type === 'iframe') {
         fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+        fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       } else if (body.content_type === 'image') {
         if (this.imageContentTypeFromDetail) {
           if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
@@ -1339,7 +1342,7 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['body'].enable();
     }
 
-    if (value === 'iframe') {
+    if (value === 'iframe' || value === 'link_web') {
       this.formBannerGroup.controls['url_iframe'].enable();
     } else {
       this.formBannerGroup.controls['url_iframe'].setValue('');
