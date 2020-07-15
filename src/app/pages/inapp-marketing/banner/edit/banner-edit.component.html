@@ -394,6 +394,15 @@
               <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
             </mat-radio-group>
           </div>
+          <div class="pb-16 px-24" *ngIf="formBannerGroup.get('content_type').value === 'link_web'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Transfer Token Credential</strong>
+            </div>
+            <mat-radio-group formControlName="transfer_token" class="radio-group">
+              <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
+              <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
+            </mat-radio-group>
+          </div>
 
           <div fxLayout="row" class="pb-24 px-24">
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
