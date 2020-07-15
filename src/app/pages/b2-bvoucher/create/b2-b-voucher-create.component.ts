@@ -203,7 +203,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         endDate: res.data.end_date,
         voucherDate: res.data.available_at,
         voucherExpiry: res.data.expired_at,
-        group_trade_program: res.data.group_id && res.data.group_id[0] ? res.data.group_id[0] : null,
+        group_trade_program: res.data.group_id.map(rs => Number(rs)),
         limit_by_product: res.data.limit_by === 'product',
         limit_by_category: res.data.limit_by === 'category',
         limit_only: res.data.limit_only,
@@ -269,6 +269,14 @@ export class B2BVoucherCreateComponent implements OnInit {
       .subscribe(() => {
         this.filterProductList();
       });
+
+    this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
+      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('coin').value);
+    })
+
+    this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
+      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
+    })
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.getListMitra();
@@ -793,11 +801,11 @@ export class B2BVoucherCreateComponent implements OnInit {
       name: this.formDetilVoucher.get('name').value,
       currency: this.formDetilVoucher.get('currency').value,
       coin: this.formDetilVoucher.get('coin').value,
-      start_date: this.formDetilVoucher.get('startDate').value,
-      end_date: this.formDetilVoucher.get('endDate').value,
-      available_at: this.formDetilVoucher.get('voucherDate').value,
-      expired_at: this.formDetilVoucher.get('voucherExpiry').value,
-      group_id: [this.formDetilVoucher.get('group_trade_program').value],
+      start_date: new Date(this.formDetilVoucher.get('startDate').value),
+      end_date: new Date(this.formDetilVoucher.get('endDate').value),
+      available_at: new Date(this.formDetilVoucher.get('voucherDate').value),
+      expired_at: new Date(this.formDetilVoucher.get('voucherExpiry').value),
+      group_id: this.formDetilVoucher.get('group_trade_program').value,
       limit_by: this.formDetilVoucher.get('limit_by_product') ? (this.formDetilVoucher.get('limit_by_category') ? 'category' : 'product') : null
     }
 
@@ -821,11 +829,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       this.b2bVoucherService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
-        if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
-        else {
-          this.getDetail();
-          this.getRetailerSelected();
-        }
+        this.router.navigate(['b2b-voucher']);
       }, err => {
         this.dataService.showLoading(false);
       })

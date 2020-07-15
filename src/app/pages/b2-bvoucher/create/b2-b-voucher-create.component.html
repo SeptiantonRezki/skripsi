@@ -48,7 +48,7 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="20" class="is-light">
-                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher">
+                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher" readonly>
                     <mat-error
                       *ngIf="formDetilVoucher.controls['voucher'].hasError('required') && formDetilVoucher.controls['voucher'].touched ">
                       Nilai Voucher harus diisi.
@@ -103,7 +103,7 @@
                   </mat-form-field>
                 </div>
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program">
+                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple>
                     <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
