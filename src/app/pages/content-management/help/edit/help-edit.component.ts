@@ -102,6 +102,7 @@ export class HelpEditComponent {
     );
     this.formHelp.get('user').valueChanges.subscribe(value => {
       this.formHelp.get('category').setValue('');
+      this.formHelp.get('category').setValidators([]);
       this.getListCategory();
     })
 
