@@ -2290,4 +2290,37 @@ export const brConfig = {
       ],
     }
   },
+  b2b_voucher: {
+    index: [
+      {
+        type: "current",
+        url: "/b2b-voucher",
+        name: "B2B Voucher"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/b2b-voucher",
+        name: "B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Voucher"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/b2b-voucher",
+        name: "B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detil B2B Voucher"
+      }
+    ]
+  }
 };
