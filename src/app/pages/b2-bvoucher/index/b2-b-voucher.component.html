@@ -56,12 +56,12 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Awal" prop="start_date">
+        <ngx-datatable-column name="Tanggal Awal Penukaran" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Akhir" prop="end_date">
+        <ngx-datatable-column name="Tanggal Akhir Penukaran" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
@@ -69,6 +69,26 @@
         <ngx-datatable-column name="Nilai Voucher" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.nominal | rupiahFormater }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Expiry" prop="expired_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
+            HH:mm:ss'}}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 

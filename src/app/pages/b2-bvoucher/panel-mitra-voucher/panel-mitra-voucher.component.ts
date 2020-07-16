@@ -8,6 +8,9 @@ import { DialogService } from 'app/services/dialog.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ImportPanelDialogComponent } from '../import-panel-dialog/import-panel-dialog.component';
 
 @Component({
   selector: 'app-panel-mitra-voucher',
@@ -58,7 +61,8 @@ export class PanelMitraVoucherComponent implements OnInit {
     private b2bVoucherService: BtoBVoucherService,
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -672,6 +676,98 @@ export class PanelMitraVoucherComponent implements OnInit {
       }
     }, err => {
       this.dataService.showLoading(false);
+    });
+  }
+
+  async exportMitra() {
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+      })
+      return;
+    }
+
+    this.dataService.showLoading(true);
+    let fd = {
+      business_id: this.selected.map(item => item.id),
+      type: 'wholesaler'
+    }
+    try {
+      const response = await this.b2bVoucherService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PanelMitra_${new Date().toLocaleString()}.xls`);
+      // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
+  }
+
+  importMitra(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler' };
+
+    this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        if (response) {
+          this.selected = this.selected.concat(response);
+          console.log('this selected', this.selected);
+          this.onSelect({ selected: this.selected });
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
     });
   }
 

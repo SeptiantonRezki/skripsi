@@ -531,7 +531,10 @@ export class Endpoint {
         list_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/mitra`,
         selected_retailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/retailer`,
         selected_mitra: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/mitra`,
-        update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}`
+        update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}`,
+        export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/export`,
+        import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/import`,
+        preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

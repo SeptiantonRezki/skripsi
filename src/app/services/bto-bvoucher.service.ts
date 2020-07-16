@@ -67,9 +67,29 @@ export class BtoBVoucherService extends BaseService {
     return this.getBlobAsJsonApi(url);
   }
 
-  getRedeems(context?): Observable<any> {
+  getRedeems(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "redeem", context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
+  }
+
+  exportRetailer(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_panel", context);
+    return this.postBlobAsJsonApi(url, body);
+  }
+
+  exportMitra(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_panel", context);
+    return this.postBlobAsJsonApi(url, body);
+  }
+
+  importFile(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import_panel');
+    return this.postApi(url, body);
+  }
+
+  previewImport(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview_import");
+    return this.getApi(url, queryParams);
   }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);

@@ -9,11 +9,14 @@ import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { ProductService } from 'app/services/sku-management/product.service';
-import { MatSelect, MatDialogConfig } from '@angular/material';
+import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import * as moment from "moment";
+import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-dialog/import-panel-dialog.component';
+import { startWith, map } from "rxjs/operators";
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-b2-b-voucher-create',
@@ -44,6 +47,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   isSelected: boolean;
 
   keyUp = new Subject<string>();
+  keyUpProduct = new Subject<string>();
   permission: any;
   roles: PagesName = new PagesName();
 
@@ -68,6 +72,17 @@ export class B2BVoucherCreateComponent implements OnInit {
   @ViewChild('singleSelect') singleSelect: MatSelect;
 
   detailVoucher: any;
+  product: FormControl = new FormControl("");
+  listProductSkuBank: Array<any> = [];
+  filteredSkuOptions: Observable<string[]>;
+  productList: any[] = [];
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,7 +93,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     private groupTradeProgramService: GroupTradeProgramService,
     private productService: ProductService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -121,6 +137,65 @@ export class B2BVoucherCreateComponent implements OnInit {
       .subscribe(data => {
         this.getListRetailer(data);
       });
+  }
+
+  _filterSku(value): any[] {
+    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
+  }
+
+  // add(event: MatChipInputEvent): void {
+  //   const input = event.input;
+  //   const value = event.value;
+
+  //   console.log('value', value);
+
+  //   // Reset the input value
+  //   if (input) {
+  //     input.value = '';
+  //   }
+
+  //   this.product.setValue(null);
+  // }
+
+  // remove(id: string): void {
+  //   const index = this.productList.findIndex((prd: any) => prd.id === id);
+
+  //   if (index >= 0) {
+  //     this.productList.splice(index, 1);
+  //   }
+  // }
+
+  // selectedProduct(event: MatAutocompleteSelectedEvent): void {
+  //   console.log('eventtt selec', event);
+  //   // this.productList.push(event.option.viewValue);
+  //   // this.productInput.nativeElement.value = '';
+  //   // this.product.setValue(null);
+  // }
+
+  getListProduct(param?): void {
+    console.log(param);
+    if (param.length >= 3) {
+      this.productService.get({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
   }
 
   getProducts() {
@@ -179,6 +254,11 @@ export class B2BVoucherCreateComponent implements OnInit {
     );
   }
 
+  getProductObj(event, obj) {
+    console.log('evehaksjdhasikj', event, obj);
+    this.productList = [event.source.value.id];
+  }
+
   getRetailerSelected() {
     this.b2bVoucherService.getSelectedRetailer({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       console.log('retailer selected', res);
@@ -220,7 +300,16 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getProducts();
+    this.keyUpProduct.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        console.log('reas ngetik cuk', res);
+        this.getListProduct(res);
+        this.resetField(res);
+      });
+    // this.getProducts();
     this.getCategories();
     this.getGroupTradeProgram();
 
@@ -806,11 +895,11 @@ export class B2BVoucherCreateComponent implements OnInit {
       available_at: new Date(this.formDetilVoucher.get('voucherDate').value),
       expired_at: new Date(this.formDetilVoucher.get('voucherExpiry').value),
       group_id: this.formDetilVoucher.get('group_trade_program').value,
-      limit_by: this.formDetilVoucher.get('limit_by_product') ? (this.formDetilVoucher.get('limit_by_category') ? 'category' : 'product') : null
+      limit_by: this.formDetilVoucher.get('limit_by_product') ? 'product' : 'category'
     }
-
+    console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {
-      body['limit_only'] = body['limit_by'] === 'product' ? this.formDetilVoucher.get('product').value : [this.formDetilVoucher.get('category').value]
+      body['limit_only'] = body['limit_by'] === 'product' ? this.productList : [this.formDetilVoucher.get('category').value]
     }
     this.dataService.showLoading(true);
     if (this.isDetail) {
@@ -896,6 +985,35 @@ export class B2BVoucherCreateComponent implements OnInit {
   //   });
   // }
 
+  async exportRetailer() {
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+      })
+      return;
+    }
+
+    this.dataService.showLoading(true);
+    let fd = {
+      business_id: this.selected.map(item => item.id),
+      type: 'retailer'
+    }
+    try {
+      const response = await this.b2bVoucherService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PanelRetailer_${new Date().toLocaleString()}.xls`);
+      // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
   convertDate(param?: Date) {
     if (param) {
       return moment(param).format("YYYY-MM-DD");
@@ -956,4 +1074,29 @@ export class B2BVoucherCreateComponent implements OnInit {
     console.log(error);
     // alert('Open console to see the error')
   }
+
+  importRetailer(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer' };
+
+    this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        if (response) {
+          this.selected = this.selected.concat(response);
+          console.log('this selected', this.selected);
+          this.onSelect({ selected: this.selected });
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        }
+      }
+    });
+  }
+
+
 }

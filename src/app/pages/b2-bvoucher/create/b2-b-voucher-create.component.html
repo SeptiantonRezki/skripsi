@@ -117,20 +117,27 @@
                   <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">Batasi
                     Dengan Kategori</mat-checkbox>
                 </div>
-                <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" [multiple]="true"
-                    #singleSelect [disabled]="!formDetilVoucher.get('limit_by_product').value">
-                    <ngx-mat-select-search [formControl]="filterProduct" [placeholderLabel]="'Cari Product...'"
-                      [noEntriesFoundLabel]="'Tidak ada product yang ditemukan'"></ngx-mat-select-search>
-                    <mat-option *ngFor="let item of filteredProduct | async" [value]="item.id">
+                <mat-form-field fxFlex="50" style="margin-top: 50px;">
+                  <!-- <mat-chip-list #chipList aria-label="Product List">
+                    <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(product)">
+                      {{product.name}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
+                      (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                      [disabled]="!formDetilVoucher.get('limit_by_product').value" [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list> -->
+                  <input matInput type="text" placeholder="Batasan Berdasarkan Produk"
+                    (input)="keyUpProduct.next($event.target.value)" [formControl]="products" [matAutocomplete]="auto"
+                    [disabled]="!formDetilVoucher.get('limit_by_product').value">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
+                    <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                      (onSelectionChange)="getProductObj($event, item)">
                       {{item.name}}
                     </mat-option>
-                  </mat-select>
-                  <!-- <mat-select placeholder="Batasan Berdasarkan Produk" formControlName="product" multiple
-                    [disabled]="!formDetilVoucher.get('limit_by_product').value">
-                    <mat-option>Produk 1</mat-option>
-                    <mat-option>Produk 2</mat-option>
-                  </mat-select> -->
+                  </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                   <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
@@ -148,24 +155,24 @@
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Panel Mitra">
+        <mat-tab label="Panel Mitra" *ngIf="isDetail">
           <app-panel-mitra-voucher></app-panel-mitra-voucher>
         </mat-tab>
-        <mat-tab label="Panel Retailer">
+        <mat-tab label="Panel Retailer" *ngIf="isDetail">
           <div class="ayo-middle p-24" fxLayout="column">
             <div>
-              <!-- <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+              <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
                 <div class="button-row">
-                  <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="importRetailer()">
                     <mat-icon>vertical_align_bottom</mat-icon> Import XLS
                   </button>
                 </div>
                 <div class="button-row">
-                  <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportRetailer()">
                     <mat-icon>vertical_align_top</mat-icon> Export XLS
                   </button>
                 </div>
-              </div> -->
+              </div>
 
               <form [formGroup]="formFilter" autoComplete="off">
                 <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center"
@@ -303,7 +310,7 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Penukaran Voucher">
+        <mat-tab label="Penukaran Voucher" *ngIf="isDetail">
           <app-redeem-list></app-redeem-list>
         </mat-tab>
       </mat-tab-group>
