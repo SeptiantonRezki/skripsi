@@ -204,7 +204,7 @@ export class NewSignComponent implements OnInit {
         body['target_audience'] = 1;
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
       } else {
-        body['area_id'] = this.areaIdNonTargetAudience;
+        body['area_id'] = [this.areaIdNonTargetAudience];
         if (body['target_audience']) {
           body['target_audience'] = 0;
           let _areas = [];
