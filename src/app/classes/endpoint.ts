@@ -534,7 +534,8 @@ export class Endpoint {
         update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}`,
         export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/export`,
         import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/import`,
-        preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`
+        preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`,
+        product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

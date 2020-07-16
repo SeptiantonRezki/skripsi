@@ -118,20 +118,21 @@
                     Dengan Kategori</mat-checkbox>
                 </div>
                 <mat-form-field fxFlex="50" style="margin-top: 50px;">
-                  <!-- <mat-chip-list #chipList aria-label="Product List">
+                  <mat-chip-list #chipList aria-label="Product List"
+                    [disabled]="!formDetilVoucher.get('limit_by_product').value">
                     <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
                       (removed)="remove(product)">
                       {{product.name}}
-                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
                     </mat-chip>
                     <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
                       (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
-                      [disabled]="!formDetilVoucher.get('limit_by_product').value" [matChipInputFor]="chipList"
-                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
-                  </mat-chip-list> -->
-                  <input matInput type="text" placeholder="Batasan Berdasarkan Produk"
+                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list>
+                  <!-- <input matInput type="text" placeholder="Batasan Berdasarkan Produk"
                     (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
-                    [disabled]="!formDetilVoucher.get('limit_by_product').value">
+                    [disabled]="!formDetilVoucher.get('limit_by_product').value"> -->
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
                       (onSelectionChange)="getProductObj($event, item)">

@@ -760,13 +760,10 @@ export class PanelMitraVoucherComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.selected = response;
-        if (response) {
-          this.selected = this.selected.concat(response);
-          console.log('this selected', this.selected);
-          this.onSelect({ selected: this.selected });
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        }
+        // this.selected = this.selected.concat(response);
+        this.onSelect({ selected: response });
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        console.log('this', this.selected)
       }
     });
   }

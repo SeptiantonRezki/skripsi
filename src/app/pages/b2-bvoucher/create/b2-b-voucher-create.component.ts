@@ -137,10 +137,15 @@ export class B2BVoucherCreateComponent implements OnInit {
       .subscribe(data => {
         this.getListRetailer(data);
       });
+
+    this.filteredSkuOptions = this.product.valueChanges.pipe(
+      startWith(null),
+      map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
   }
 
   _filterSku(value): any[] {
-    const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
+    console.log('valueee', value);
+    const filterValue = value && typeof value == "object" ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
@@ -152,40 +157,49 @@ export class B2BVoucherCreateComponent implements OnInit {
     }
   }
 
-  // add(event: MatChipInputEvent): void {
-  //   const input = event.input;
-  //   const value = event.value;
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-  //   console.log('value', value);
+    return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
 
-  //   // Reset the input value
-  //   if (input) {
-  //     input.value = '';
-  //   }
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
 
-  //   this.product.setValue(null);
-  // }
+    console.log('value', value);
+    if (value) {
+      this.productList.push(value);
+    }
 
-  // remove(id: string): void {
-  //   const index = this.productList.findIndex((prd: any) => prd.id === id);
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
 
-  //   if (index >= 0) {
-  //     this.productList.splice(index, 1);
-  //   }
-  // }
+    this.product.setValue(null);
+  }
 
-  // selectedProduct(event: MatAutocompleteSelectedEvent): void {
-  //   console.log('eventtt selec', event);
-  //   // this.productList.push(event.option.viewValue);
-  //   // this.productInput.nativeElement.value = '';
-  //   // this.product.setValue(null);
-  // }
+  remove(id: string): void {
+    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productList.splice(index, 1);
+    }
+  }
+
+  selectedProduct(event: MatAutocompleteSelectedEvent): void {
+    console.log('evenaksdjlak', event);
+    this.productList.push(event.option.viewValue);
+    this.productInput.nativeElement.value = '';
+    this.product.setValue(null);
+  }
 
   getListProduct(param?): void {
     console.log(param);
     if (param.length >= 3) {
-      this.productService.get({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBank = res.data ? res.data.data : [];
+      this.b2bVoucherService.getProductList({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data : [];
         this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
       })
     } else {
@@ -199,9 +213,9 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.get({ page: 'all' }).subscribe(res => {
-      this.listProduct = res.data ? res.data.data : [];
-      this.filteredProduct.next(res.data ? res.data.data : []);
+    this.b2bVoucherService.getProductList({ page: 'all' }).subscribe(res => {
+      this.listProduct = res.data ? res.data : [];
+      this.filteredProduct.next(res.data ? res.data : []);
     })
   }
 
@@ -255,8 +269,12 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   getProductObj(event, obj) {
-    console.log('evehaksjdhasikj', event, obj);
-    this.productList = [event.source.value.id];
+    let index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productList.push(obj);
+    }
+    this.productInput.nativeElement.value = '';
+    this.product.setValue(null);
   }
 
   getRetailerSelected() {
@@ -290,6 +308,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : "",
         category: res.data.limit_by === 'category' && res.data.limit_only[0] ? Number(res.data.limit_only[0]) : "",
       });
+      this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
     })
   }
 
@@ -328,7 +347,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       limit_by_category: [false],
       product: [""],
       category: [""],
-      group_trade_program: [""]
+      group_trade_program: [""],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -402,6 +421,12 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  createFormProduct() {
+    return this.formBuilder.group({
+      product: [""]
+    })
   }
 
   onSelect({ selected }) {
@@ -890,16 +915,16 @@ export class B2BVoucherCreateComponent implements OnInit {
       name: this.formDetilVoucher.get('name').value,
       currency: this.formDetilVoucher.get('currency').value,
       coin: this.formDetilVoucher.get('coin').value,
-      start_date: new Date(this.formDetilVoucher.get('startDate').value),
-      end_date: new Date(this.formDetilVoucher.get('endDate').value),
-      available_at: new Date(this.formDetilVoucher.get('voucherDate').value),
-      expired_at: new Date(this.formDetilVoucher.get('voucherExpiry').value),
+      start_date: moment(this.formDetilVoucher.get('startDate').value).format("YYYY-MM-DD"),
+      end_date: moment(this.formDetilVoucher.get('endDate').value).format("YYYY-MM-DD"),
+      available_at: moment(this.formDetilVoucher.get('voucherDate').value).format("YYYY-MM-DD"),
+      expired_at: moment(this.formDetilVoucher.get('voucherExpiry').value).format("YYYY-MM-DD"),
       group_id: this.formDetilVoucher.get('group_trade_program').value,
       limit_by: this.formDetilVoucher.get('limit_by_product') ? 'product' : 'category'
     }
     console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {
-      body['limit_only'] = body['limit_by'] === 'product' ? this.productList : [this.formDetilVoucher.get('category').value]
+      body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : [this.formDetilVoucher.get('category').value]
     }
     this.dataService.showLoading(true);
     if (this.isDetail) {
@@ -1087,13 +1112,10 @@ export class B2BVoucherCreateComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.selected = response;
-        if (response) {
-          this.selected = this.selected.concat(response);
-          console.log('this selected', this.selected);
-          this.onSelect({ selected: this.selected });
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        }
+        // this.selected = this.selected.concat(response);
+        this.onSelect({ selected: response });
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        console.log('this', this.selected)
       }
     });
   }

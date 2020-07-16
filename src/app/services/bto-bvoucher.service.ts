@@ -91,6 +91,11 @@ export class BtoBVoucherService extends BaseService {
     const url = this.getUrl(this.namespace, "preview_import");
     return this.getApi(url, queryParams);
   }
+
+  getProductList(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "product_list");
+    return this.getApi(url, queryParams);
+  }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
   //   return this.putApi(url, body);
