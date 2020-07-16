@@ -312,7 +312,7 @@
           </div>
 
           <!-- iframe -->
-          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'iframe'">
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'iframe' || formBannerGroup.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
@@ -390,6 +390,15 @@
               <strong class="font-size-16">Promo</strong>
             </div>
             <mat-radio-group formControlName="promo" class="radio-group">
+              <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
+              <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="pb-16 px-24" *ngIf="formBannerGroup.get('content_type').value === 'link_web' || formBannerGroup.get('content_type').value === 'iframe'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Transfer Token Credential</strong>
+            </div>
+            <mat-radio-group formControlName="transfer_token" class="radio-group">
               <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
               <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
             </mat-radio-group>
