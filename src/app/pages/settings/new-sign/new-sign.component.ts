@@ -56,6 +56,7 @@ export class NewSignComponent implements OnInit {
   lastLevel: any;
   menuList: any[] = [];
   iconList: any[] = [];
+  areaIdNonTargetAudience: any = 1;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -122,42 +123,42 @@ export class NewSignComponent implements OnInit {
     this.initAreaV2();
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
+      // console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
         this.getAudience();
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
+      // console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
         this.getAudience();
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
+      // console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
         this.getAudience();
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
+      // console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
         this.getAudience();
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
+      // console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
         this.getAudience();
       }
     });
     this.formFilter.get('territory').valueChanges.subscribe(res => {
-      console.log('territory', res);
+      // console.log('territory', res);
       if (res) {
         // this.getAudienceAreaV2('territory', res);
         this.getAudience();
@@ -175,19 +176,20 @@ export class NewSignComponent implements OnInit {
 
   getMenuList() {
     this.newSignService.getMenuList({ type: this.formNewSign.get('application').value }).subscribe(res => {
-      console.log('menuList', res);
+      // console.log('menuList', res);
       this.menuList = res && res.data ? res.data : [];
     })
   }
 
   getIconList() {
     this.newSignService.getIconList().subscribe(res => {
-      console.log('iconList', res);
+      // console.log('iconList', res);
       this.iconList = res && res.data ? res.data : [];
     })
   }
 
   submit() {
+    // console.log('this.pagination.area', this.pagination.area);
     if (this.formNewSign.valid) {
 
       let body = {
@@ -196,13 +198,13 @@ export class NewSignComponent implements OnInit {
         start_date: moment(this.formNewSign.get('date').value).format("YYYY-MM-DD").toString() + " " + this.formNewSign.get('time').value + ":00",
         end_date: moment(this.formNewSign.get('endDate').value).format("YYYY-MM-DD") + " " + this.formNewSign.get('endTime').value + ":00",
         sign: this.formNewSign.get("icon").value,
-        area_id: this.pagination.area
       }
 
       if (this.formNewSign.get('is_target_audience').value === true) {
         body['target_audience'] = 1;
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
       } else {
+        body['area_id'] = this.areaIdNonTargetAudience;
         if (body['target_audience']) {
           body['target_audience'] = 0;
           let _areas = [];
@@ -268,7 +270,7 @@ export class NewSignComponent implements OnInit {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
+            // console.log('ff value', this.formFilter.value);
             // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
@@ -278,7 +280,7 @@ export class NewSignComponent implements OnInit {
 
             if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
           let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -287,7 +289,7 @@ export class NewSignComponent implements OnInit {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
 
           if (i === area.length - 1) {
@@ -323,7 +325,7 @@ export class NewSignComponent implements OnInit {
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -335,7 +337,7 @@ export class NewSignComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -360,7 +362,7 @@ export class NewSignComponent implements OnInit {
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -415,7 +417,7 @@ export class NewSignComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
+        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -452,7 +454,7 @@ export class NewSignComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
+          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -481,7 +483,7 @@ export class NewSignComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
+          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -801,6 +803,7 @@ export class NewSignComponent implements OnInit {
   }
 
   async generataList(selection, id, index, type) {
+    this.areaIdNonTargetAudience = id;
     let item: any;
     let wilayah = this.formNewSign.controls['areas'] as FormArray;
     switch (selection) {
@@ -1038,7 +1041,6 @@ export class NewSignComponent implements OnInit {
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
@@ -1079,11 +1081,11 @@ export class NewSignComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -1163,11 +1165,11 @@ export class NewSignComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -1241,11 +1243,11 @@ export class NewSignComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -1318,11 +1320,11 @@ export class NewSignComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -1353,7 +1355,7 @@ export class NewSignComponent implements OnInit {
   }
 
   onSelectAudience(event, row) {
-    console.log('onnnnnn', event);
+    // console.log('onnnnnn', event);
     let index = this.audienceSelected.findIndex(r => r.id === row.id);
     if (index > - 1) {
       this.audienceSelected.splice(index, 1);
@@ -1361,11 +1363,11 @@ export class NewSignComponent implements OnInit {
       this.audienceSelected.push(row);
     }
     this.onSelect({ selected: this.audienceSelected });
-    console.log('asdasd', this.audienceSelected);
+    // console.log('asdasd', this.audienceSelected);
   }
 
   selectCheck(row, column, value) {
-    console.log('selectcheck', row, column, value);
+    // console.log('selectcheck', row, column, value);
     return row.id !== null;
   }
 
