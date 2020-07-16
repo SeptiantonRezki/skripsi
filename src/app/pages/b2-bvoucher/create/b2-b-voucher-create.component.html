@@ -130,7 +130,7 @@
                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
                   </mat-chip-list> -->
                   <input matInput type="text" placeholder="Batasan Berdasarkan Produk"
-                    (input)="keyUpProduct.next($event.target.value)" [formControl]="products" [matAutocomplete]="auto"
+                    (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
                     [disabled]="!formDetilVoucher.get('limit_by_product').value">
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
