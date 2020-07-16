@@ -1795,6 +1795,15 @@ export const brConfig = {
         }
       ]
     },
+    new_sign: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Buat Tanda"
+        }
+      ]
+    },
     force_update: [
       {
         type: "current",

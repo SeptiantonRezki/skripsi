@@ -87,7 +87,7 @@ const routes: Routes = [
     path: "newsignmenu",
     component: NewSignComponent,
     data: {
-      breadcrumbs: brConfig.settings.otp
+      breadcrumbs: brConfig.settings.new_sign
     }
   },
 ];
