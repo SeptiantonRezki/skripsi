@@ -9,6 +9,7 @@ import { PayLaterDeactivateComponent } from "./pay-later-deactivate/paylater-dea
 import { PayLaterPanelComponent } from "./pay-later-panel/index/pay-later-panel.component";
 import { PayLaterPanelEditComponent } from "./pay-later-panel/edit/pay-later-panel-edit.component";
 import { PayLaterPanelCreateComponent } from "./pay-later-panel/create/pay-later-panel-create.component";
+import { PayLaterActivationComponent } from "./pay-later-activation/pay-later-activation.component";
 
 
 const routes: Routes = [
@@ -48,6 +49,13 @@ const routes: Routes = [
       breadcrumbs: brConfig.paylater.company.detail
     },
     // canActivate: [PageGuard]
+  },
+  {
+    path: "activate",
+    component: PayLaterActivationComponent,
+    data: {
+      breadcrumbs: brConfig.paylater.deactivate.index
+    }
   },
   {
     path: "deactivate",

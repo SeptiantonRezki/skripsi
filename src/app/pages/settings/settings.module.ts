@@ -25,6 +25,11 @@ import {
   MatProgressSpinnerModule,
   MatTabsModule,
   MatAutocompleteModule,
+  MatDatepickerModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS,
+  MatTooltipModule,
 } from "@angular/material";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
@@ -40,6 +45,22 @@ import { OTPSettingsComponent } from './otpsettings/otpsettings.component';
 import { UploadImageComponent } from "./support/content/pesan-bantuan/dialog/upload-image/upload-image.component";
 import { EllipsisModule } from 'ngx-ellipsis';
 import { ngfModule } from "angular-file";
+import { NewSignComponent } from './new-sign/new-sign.component';
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @NgModule({
   imports: [
@@ -67,9 +88,11 @@ import { ngfModule } from "angular-file";
     MatTabsModule,
     MatAutocompleteModule,
     PipesModule,
-
+    MatDatepickerModule,
     EllipsisModule,
     ngfModule,
+    NgxMaterialTimepickerModule,
+    MatTooltipModule
   ],
   declarations: [
     RoleIndexComponent,
@@ -81,7 +104,8 @@ import { ngfModule } from "angular-file";
     PesanBantuan,
     DialogOtherHelp,
     OTPSettingsComponent,
-    UploadImageComponent
+    UploadImageComponent,
+    NewSignComponent
   ],
   exports: [
     RoleIndexComponent,
@@ -92,7 +116,10 @@ import { ngfModule } from "angular-file";
     SupportComponent,
     PesanBantuan
   ],
-  providers: [ListMenuResolver, PageGuard],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ListMenuResolver, PageGuard],
   entryComponents: [DialogOtherHelp, UploadImageComponent]
 })
 export class SettingsModule { }

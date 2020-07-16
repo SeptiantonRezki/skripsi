@@ -10,6 +10,7 @@ import { PageGuard } from "app/classes/auth.guard";
 import { ForceUpdateAppsComponent } from "./force-update-apps/force-update-apps.component";
 import { SupportComponent } from "./support/support.component";
 import { OTPSettingsComponent } from "./otpsettings/otpsettings.component";
+import { NewSignComponent } from "./new-sign/new-sign.component";
 
 const routes: Routes = [
   {
@@ -81,7 +82,14 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.settings.otp
     }
-  }
+  },
+  {
+    path: "newsignmenu",
+    component: NewSignComponent,
+    data: {
+      breadcrumbs: brConfig.settings.new_sign
+    }
+  },
 ];
 
 @NgModule({
