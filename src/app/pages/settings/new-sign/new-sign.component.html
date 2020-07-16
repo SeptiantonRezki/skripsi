@@ -61,7 +61,7 @@
             </mat-datepicker-toggle> -->
             <mat-datepicker #tanggal_berakhir></mat-datepicker>
           </mat-form-field>
-          <mat-form-field fxFlex="15" class="is-light form-primary" id="time1">
+          <mat-form-field fxFlex="20" class="is-light form-primary" id="time1">
             <input matInput formControlName="endTime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1"
               [format]="24" readonly>
             <!-- <mat-icon matSuffix>access_time</mat-icon> -->
@@ -77,7 +77,7 @@
           style="margin-left: 10px;margin-bottom: 20px;margin-top: 20px;">
           <mat-radio-group class="is-light form-primary" fxFlex="100" formControlName="icon">
             <mat-radio-button class="radio-button pr-48" *ngFor="let item of iconList" [value]="item.value">
-              <img [src]="item.image_url" alt="gambar icon new">
+              <img class="img-sign" [src]="item.image_url" alt="gambar icon new">
             </mat-radio-button>
           </mat-radio-group>
           <mat-error *ngIf="formNewSign.controls['icon'].hasError('required') && formNewSign.controls['icon'].touched">
@@ -150,7 +150,7 @@
           </div>
 
           <div class="p-0" *ngIf="formNewSign.get('is_target_audience').value === true">
-            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+            <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
               <a #downloadLink></a>
               <button mat-raised-button type="button" class="is-danger" (click)="import()">
@@ -159,7 +159,7 @@
               <button mat-raised-button type="button" class="is-danger" (click)="export()">
                 <mat-icon>arrow_upward</mat-icon> Export XLS
               </button>
-            </div>
+            </div> -->
             <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
             <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
               [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"

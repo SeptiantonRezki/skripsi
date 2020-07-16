@@ -195,7 +195,8 @@ export class NewSignComponent implements OnInit {
         menu: this.formNewSign.get('menu').value,
         start_date: moment(this.formNewSign.get('date').value).format("YYYY-MM-DD").toString() + " " + this.formNewSign.get('time').value + ":00",
         end_date: moment(this.formNewSign.get('endDate').value).format("YYYY-MM-DD") + " " + this.formNewSign.get('endTime').value + ":00",
-        sign: this.formNewSign.get("icon").value
+        sign: this.formNewSign.get("icon").value,
+        area_id: this.pagination.area
       }
 
       if (this.formNewSign.get('is_target_audience').value === true) {
