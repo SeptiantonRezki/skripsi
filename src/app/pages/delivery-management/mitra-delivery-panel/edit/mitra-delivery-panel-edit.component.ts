@@ -35,6 +35,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
 
   offsetPagination: Number = null;
   selectedMitra: any[] = [];
+  allRowsSelected: boolean;
 
   keyUp = new Subject<string>();
   dialogRef: any;
@@ -69,6 +70,8 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    this.selected = [];
+    this.allRowsSelected = false;
 
     this.listLevelArea = [
       {
@@ -303,15 +306,15 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
       }
     }
 
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    // const page = this.dataService.getFromStorage("page");
+    // const sort_type = this.dataService.getFromStorage("sort_type");
+    // const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.pagination.page = 1;
+    // this.pagination.sort_type = sort_type;
+    // this.pagination.sort = sort;
 
-    this.offsetPagination = page ? (page - 1) : 0;
+    // this.offsetPagination = page ? (page - 1) : 0;
     let wsIds = this.detailPanelMitra && this.detailPanelMitra.mitra ? this.detailPanelMitra.mitra.map(mt => mt.wholesaler_id) : [];
 
     this.mitraPanelService.getMitraList(this.pagination, { wholesaler_id: wsIds }).subscribe(
@@ -409,9 +412,14 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
     // this.onSelect({ selected: this.selectedMitra });
   }
 
-  mySelectFn(selectFn: Function, allRowsSelected) {
-    this.allSelected = !allRowsSelected;
-    selectFn(!allRowsSelected);
+  mySelectFn(allRowsSelected: boolean) {
+    // this.allSelected = !allRowsSelected;
+    // selectFn(!allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (!allRowsSelected) { this.selected = [];
+    } else { 
+      this.selectedMitra = this.selected;
+    }
   }
 
   onSelect({ selected }) {
@@ -420,6 +428,10 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
     this.selected.push(...selected);
     this.selectedMitra = this.selected;
     console.log('selecteds', this.selected);
+  }
+
+  getId(row) {
+    return row.id;
   }
 
   async export() {
@@ -519,7 +531,7 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
 
   submit() {
     // if (this.formPanelMitra.valid) {
-    if (this.selectedMitra.length === 0) {
+    if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
         message: "Jumlah Mitra yang dipilih tidak boleh kosong!"
       });
@@ -530,11 +542,11 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
     let body = {
       delivery_courier_id: rawValue['courier'],
       delivery_courier_service_id: rawValue['service'],
-      mitra: this.selectedMitra.map(item => ({
+      mitra: this.selected.map(item => ({
         wholesaler_id: item.id
       }))
     };
-    if (this.allSelected) {
+    if (this.allRowsSelected) {
       body['type'] = 'all';
       body['area_id'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
     } else {

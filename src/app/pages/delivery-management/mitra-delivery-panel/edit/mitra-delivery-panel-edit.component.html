@@ -36,7 +36,7 @@
           </div>
           <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">
             <small>Mitra Terpilih</small>
-            <h1 style="margin-top: -4px;font-size: 30px;">{{ selectedMitra.length | rupiahFormaterWithoutRp }}</h1>
+            <h1 style="margin-top: -4px;font-size: 30px;">{{ (allRowsSelected ? pagination.total :  selected.length) | rupiahFormaterWithoutRp }}</h1>
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
@@ -122,10 +122,19 @@
             [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
             [count]="pagination.total" [selected]="selected" [limit]="pagination.per_page" [externalPaging]="true"
             [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selectionType]="'checkbox'"
-            (select)='onSelect($event)'>
+            (select)='onSelect($event)' [rowIdentity]="getId">
 
             <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+              <ng-template ngx-datatable-header-template >
+                <mat-checkbox [checked]="allRowsSelected" (change)="mySelectFn(!allRowsSelected);"></mat-checkbox>
+              </ng-template>
+
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+                <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
+              </ng-template>
+              <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                 let-selectFn="selectFn">
                 <mat-checkbox [checked]="allRowsSelected" (change)="mySelectFn(selectFn, allRowsSelected)">
                 </mat-checkbox>
@@ -135,7 +144,7 @@
                 let-onCheckboxChangeFn="onCheckboxChangeFn">
                 <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onCheckboxChangeFn($event)">
                 </mat-checkbox>
-              </ng-template>
+              </ng-template> -->
 
               <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
                 let-onCheckboxChangeFn="onCheckboxChangeFn">

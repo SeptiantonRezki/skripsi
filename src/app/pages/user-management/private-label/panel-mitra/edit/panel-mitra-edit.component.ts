@@ -307,7 +307,7 @@ export class PanelMitraEditComponent implements OnInit {
       console.log('allRowsSelected_', allRowsSelected);
       this.allRowsSelected = allRowsSelected;
       if (!allRowsSelected) this.selected = [];
-      else this.selected.length = this.totalData;
+      // else this.selected.length = this.totalData;
     }
   
     setPage(pageInfo) {
