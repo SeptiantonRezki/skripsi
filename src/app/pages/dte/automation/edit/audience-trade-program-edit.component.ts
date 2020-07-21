@@ -44,6 +44,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   maxDateTradeProgram: any;
   minDateTradeProgram: any;
 
+  shareable: FormControl = new FormControl(false);
+
   constructor(
     private dataService: DataService,
     private formBuilder: FormBuilder,
@@ -60,6 +62,16 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
+  }
+
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
   }
 
   ngOnInit() {

@@ -8,6 +8,9 @@
       <form autocomplete="off" [formGroup]="formAutomation">
         <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
           <h2 class="">DTE Automation</h2>
+          <div fxFlex class="p-16 h3" style="margin-left: 80px;">
+            <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
+          </div>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -15,6 +18,12 @@
               <mat-select placeholder="Automation" formControlName="automation">
                 <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="text" placeholder="Link Misi" disabled #linkMisi>
+              <mat-icon matSuffix (click)="copyMessage('hello world')" style="cursor: pointer;"
+                matTooltip="Salin Link Misi">content_copy
+              </mat-icon>
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row">
