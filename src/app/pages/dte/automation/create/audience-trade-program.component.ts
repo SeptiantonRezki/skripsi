@@ -55,17 +55,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     this.selectedTab = 0;
   }
 
-  copyMessage(linkMisi: any) {
-    document.addEventListener('copy', (e: ClipboardEvent) => {
-      e.clipboardData.setData('text/plain', (linkMisi));
-      e.preventDefault();
-      document.removeEventListener('copy', null);
-    });
-    document.execCommand('copy');
-    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
-  }
-
-
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
@@ -252,7 +241,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         trade_creator_id: this.formAutomation.get("trade_program_id").value,
         title: this.formAutomation.get("title_challenge").value,
         description: this.formAutomation.get("description_challenge").value,
-        text_button: this.formAutomation.get("button_text").value
+        text_button: this.formAutomation.get("button_text").value,
+        is_shareable: this.shareable.value ? 1 : 0
       };
 
       switch (automationType) {

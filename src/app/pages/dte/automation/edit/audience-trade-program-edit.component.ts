@@ -306,7 +306,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         title: this.formAutomation.get("title_challenge").value,
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
-        _method: 'PUT'
+        _method: 'PUT',
+        is_shareable: this.shareable.value ? 1 : 0
       };
 
       switch (automationType) {

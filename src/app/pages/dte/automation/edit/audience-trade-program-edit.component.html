@@ -20,8 +20,9 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="text" placeholder="Link Misi" disabled #linkMisi>
-              <mat-icon matSuffix (click)="copyMessage('hello world')" style="cursor: pointer;"
+              <input matInput type="text" [value]="detailAutomation.link_tantangan" placeholder="Link Misi" disabled
+                #linkMisi>
+              <mat-icon matSuffix (click)="copyMessage(detailAutomation.link_tantangan)" style="cursor: pointer;"
                 matTooltip="Salin Link Misi">content_copy
               </mat-icon>
             </mat-form-field>
