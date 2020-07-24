@@ -4,12 +4,8 @@
 
 export const environment = {
   production: true,
-  server: "https://sadewa.aturtoko.id",
-  server_service: "https://sadewa.aturtoko.id",
-  // server: "https://api.dev.src.id",
-  // server_service: "https://api.dev.src.id",
-  // server: "https://api.qa.src.id",
-  // server_service: "https://api.qa.src.id",
+  server: "https://api.dev.src.id",
+  server_service: "https://api.dev.src.id",
   label: 'DEVELOPMENT',
   show_label: true,
   image: 'assets/images/ayo/icon/dev.png',
@@ -20,9 +16,7 @@ export const environment = {
 };
 
 export const serviceServer = (server) => {
-  return `https://${server}.sadewa.aturtoko.id`;
-  // return `https://${server}.api.dev.src.id`;
-  // return `https://${server}.api.qa.src.id`;
+  return `https://${server}.api.dev.src.id`;
 }
 
 export const server = {
