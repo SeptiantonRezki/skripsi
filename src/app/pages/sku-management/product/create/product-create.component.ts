@@ -157,7 +157,7 @@ export class ProductCreateComponent {
       .subscribe(() => {
         this.filteringSubCategory();
       });
-    
+
     this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
       let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
         (res || []).map((item, index) => {
@@ -165,7 +165,7 @@ export class ProductCreateComponent {
             listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
             listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
           }
-  
+
           if (item.price_discount) {
             listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
           } else {
@@ -249,9 +249,11 @@ export class ProductCreateComponent {
       start_date_pin_up: [""],
       end_date_pin_up: [""],
       status_pin_up: [""],
+      priority_product: ["", Validators.required],
       // convertion: ["", [Validators.min(0)]]
       // jenisproduk: "",
       is_private_label: [false],
+      // prioritas_produk: ["", Validators.required],
       listProdukPrivateLabel: this.formBuilder.array([])
     });
   }
@@ -588,6 +590,15 @@ export class ProductCreateComponent {
     return invalid;
   }
 
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
+
   async submit() {
     try {
       // console.log('validator', this.findInvalidControls());
@@ -615,6 +626,7 @@ export class ProductCreateComponent {
         alias: aliasChip,
         image: this.imageSkuConverted,
         brand_id: this.formProductGroup.get("brand").value,
+        priority_product: this.formProductGroup.get("priority_product").value,
         category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
         // sub_category_id: this.formProductGroup.get("subCategory").value,
         barcode: this.formProductGroup.get("barcode").value,
@@ -624,10 +636,10 @@ export class ProductCreateComponent {
         is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
         // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
         // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
-        
+
         // convertion: this.formProductGroup.get("convertion").value
       };
-      
+
 
       let fd = new FormData();
       fd.append("name", body.name);
@@ -635,11 +647,13 @@ export class ProductCreateComponent {
       fd.append("image", body.image);
       fd.append("description", "");
       fd.append("brand_id", body.brand_id);
+      fd.append("priority_product", body.priority_product);
       fd.append("category_id", body.category_id);
       // fd.append("sub_category_id", body.sub_category_id);
       fd.append("packaging_id", body.packaging_id);
       fd.append("status", body.status);
       fd.append("is_promo_src", body.is_promo_src);
+      fd.append("priority_product", body.priority_product);
 
       if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
         fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
@@ -698,20 +712,20 @@ export class ProductCreateComponent {
             fd.append(`product_prices[${index}][packaging]`, item.packaging);
             fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
             fd.append(`product_prices[${index}][price]`, item.price);
-    
+
             if (item.price_discount_expires_at)
               fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
             else
               fd.append(`product_prices[${index}][price_discount]`, '0');
-    
+
             fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
           });
-    
+
           let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
           if (primaryNamePackaging.length > 0) {
             this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
             this.loadingIndicator = false;
-    
+
             return;
           }
         } else {
@@ -862,10 +876,10 @@ export class ProductCreateComponent {
       this.goToBottom();
     } else {
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset(); 
+      packaging.reset();
       while (packaging.length > 0) {
         packaging.removeAt(packaging.length - 1);
-      } 
+      }
     }
   }
 
@@ -891,7 +905,7 @@ export class ProductCreateComponent {
 
   openProductPrice() {
     let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-    packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]); 
+    packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]);
   }
 
   addProductPrice() {

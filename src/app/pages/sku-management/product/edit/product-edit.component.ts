@@ -193,7 +193,7 @@ export class ProductEditComponent {
               listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
               listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
             }
-    
+
             if (parseInt(item.price_discount) > 0 ) {
               listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
             } else {
@@ -223,6 +223,7 @@ export class ProductEditComponent {
       this.formProductGroup.get("brand").setValue(res.data.brand_id);
       this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
       this.formProductGroup.get("status").setValue(res.data.status);
+      this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
       this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
       if (res && res.data.status_pin_up) {
         this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
@@ -649,6 +650,7 @@ export class ProductEditComponent {
       start_date_pin_up: [""],
       end_date_pin_up: [""],
       status_pin_up: [""],
+      priority_product: ["", Validators.required],
       // convertion: ["", [Validators.min(0)]]
       is_private_label: [false],
       listProdukPrivateLabel: this.formBuilder.array([])
@@ -712,6 +714,15 @@ export class ProductEditComponent {
     return invalid;
   }
 
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
+
   async submit() {
     if (this.formProductGroup.get('status_pin_up').value != '1') {
       this.formProductGroup.get('start_date_pin_up').clearValidators();
@@ -747,6 +758,7 @@ export class ProductEditComponent {
         alias: aliasChip,
         image: this.imageSkuConverted,
         brand_id: this.formProductGroup.get("brand").value,
+        priority_product: this.formProductGroup.get("priority_product").value,
         category_id: this.formProductGroup.get("subCategory").value ? this.formProductGroup.get("subCategory").value : this.formProductGroup.get("category").value,
         // sub_category_id: this.formProductGroup.get("subCategory").value,
         barcode: this.formProductGroup.get("barcode").value,
@@ -793,6 +805,7 @@ export class ProductEditComponent {
 
       fd.append("description", "");
       fd.append("brand_id", body.brand_id);
+      fd.append("priority_product", body.priority_product);
       fd.append("category_id", body.category_id);
       // fd.append("sub_category_id", body.sub_category_id);
       fd.append("packaging_id", body.packaging_id);
@@ -830,20 +843,20 @@ export class ProductEditComponent {
             fd.append(`product_prices[${index}][packaging]`, item.packaging);
             fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
             fd.append(`product_prices[${index}][price]`, item.price);
-    
+
             if (item.price_discount_expires_at)
               fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
             else
               fd.append(`product_prices[${index}][price_discount]`, '0');
-    
+
             fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
           });
-    
+
           let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
           if (primaryNamePackaging.length > 0) {
             this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
             this.loadingIndicator = false;
-    
+
             return;
           }
         } else {
@@ -991,7 +1004,7 @@ export class ProductEditComponent {
       this.goToBottom();
     } else {
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset();  
+      packaging.reset();
       while (packaging.length > 0) {
         packaging.removeAt(packaging.length - 1);
       }
@@ -1020,7 +1033,7 @@ export class ProductEditComponent {
 
   openProductPrice() {
     let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-    packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]); 
+    packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]);
   }
 
   addProductPrice() {

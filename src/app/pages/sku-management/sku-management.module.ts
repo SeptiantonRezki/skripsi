@@ -63,6 +63,7 @@ import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
+import { ImportFileDialogComponent } from './product/index/import-file-dialog/import-file-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -134,7 +135,8 @@ export const MY_FORMATS = {
     DetailRetailerComponent,
     RetailerComponent,
     ProgramComponent,
-    ImportAdjustmentCoinDialogComponent
+    ImportAdjustmentCoinDialogComponent,
+    ImportFileDialogComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -146,14 +148,15 @@ export const MY_FORMATS = {
     RewardHistoryIndexComponent,
     CoinIndexComponent,
     DetailTradeProgramComponent,
-    DetailRetailerComponent
+    DetailRetailerComponent,
+    ImportFileDialogComponent
   ],
-  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent],
+  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent],
   providers: [
-    ListBrandResolver, 
-    ListCategoryResolver, 
-    ListPackagingResolver, 
-    PageGuard, 
+    ListBrandResolver,
+    ListCategoryResolver,
+    ListPackagingResolver,
+    PageGuard,
     RupiahFormaterPipe,
     {
       provide: DateAdapter,

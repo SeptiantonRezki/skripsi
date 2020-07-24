@@ -65,4 +65,15 @@ export class ProductService extends BaseService {
     const url = this.getUrl(this.namespace, "products_sku_bank", { param: queryParams });
     return this.getApi(url);
   }
+
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.getApi(url, queryParams);
+  }
+
+  import(context?, body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import");
+    return this.multipartPost(url, body)
+}
+
 }
