@@ -51,7 +51,7 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('valid', this.validComboDrag);
+    // console.log('valid', this.validComboDrag);
   }
 
   ngOnDestroy() {
@@ -63,13 +63,13 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   preview(event) {
-    console.log('valid', this.validComboDrag);
+    // console.log('valid', this.validComboDrag);
     // console.log(event);
 
     this.files = undefined;
     this.files = event;
 
-    console.log('test: ',this.files);
+    // console.log('test: ',this.files);
 
     let fd = new FormData();
     fd.append('file', this.files);
@@ -91,8 +91,8 @@ export class ImportFileDialogComponent implements OnInit {
     // )
   }
 
-  async submit(event) {
-    console.log('test: ',this.files);
+  async submit() {
+    // console.log('test: ',this.files);
     // const validData = this.rows.filter(item => item.is_valid === true);
     // if (this.files && validData.length > 0 && validData.length <= 10000) {
 
