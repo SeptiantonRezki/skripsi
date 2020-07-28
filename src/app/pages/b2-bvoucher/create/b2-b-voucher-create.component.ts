@@ -920,7 +920,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       available_at: moment(this.formDetilVoucher.get('voucherDate').value).format("YYYY-MM-DD"),
       expired_at: moment(this.formDetilVoucher.get('voucherExpiry').value).format("YYYY-MM-DD"),
       group_id: this.formDetilVoucher.get('group_trade_program').value,
-      limit_by: this.formDetilVoucher.get('limit_by_product') ? 'product' : 'category'
+      limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' : 'category'
     }
     console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {
@@ -931,6 +931,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       delete body['limit_by'];
       delete body['limit_only'];
     }
+
     this.dataService.showLoading(true);
     if (this.isDetail) {
       this.b2bVoucherService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
