@@ -89,7 +89,6 @@ export class BaseService {
     return this.http.post(url, request, { ...requestConfig, headers, params: query });
   }
 
-
   protected multipartPost(url, request) {
     return this.http.post(url, request)
   }

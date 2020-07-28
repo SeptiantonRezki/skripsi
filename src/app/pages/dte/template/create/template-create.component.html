@@ -82,6 +82,70 @@
             </mat-form-field>
           </div>
 
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="kategori_toolbox" placeholder="Pilih Kategori Toolbox" id="kategori_toolbox" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterLKT" [placeholderLabel]="'Cari Kategori Toolbox...'"
+                  [noEntriesFoundLabel]="'Tidak ada kategori toolbox yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredLKT | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="templateTaskForm.controls['kategori_toolbox'].hasError('required') && templateTaskForm.controls['kategori_toolbox'].touched">
+                Pilih salah satu Kategori Toolbox.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="tipe_misi" placeholder="Pilih Tipe Misi" id="tipe_misi" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterLTM" [placeholderLabel]="'Cari Tipe Misi...'"
+                  [noEntriesFoundLabel]="'Tidak ada tipe misi yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredLTM | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="templateTaskForm.controls['tipe_misi'].hasError('required') && templateTaskForm.controls['tipe_misi'].touched">
+                Pilih salah satu Tipe Misi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="tingkat_kesulitan_misi" placeholder="Pilih Tingkat Kesulitan Misi" id="tingkat_kesulitan_misi" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterLTKM" [placeholderLabel]="'Cari Tingkat Kesulitan Misi...'"
+                  [noEntriesFoundLabel]="'Tidak ada tingkat kesulitan misi yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredLTKM | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="templateTaskForm.controls['tingkat_kesulitan_misi'].hasError('required') && templateTaskForm.controls['tingkat_kesulitan_misi'].touched">
+                Pilih salah satu Tingkat Kesulitan Misi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="kategori_misi" placeholder="Pilih Kategori Misi" id="kategori_misi" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterLKM" [placeholderLabel]="'Cari Kategori Misi...'"
+                  [noEntriesFoundLabel]="'Tidak ada kategori misi yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredLKM | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="templateTaskForm.controls['kategori_misi'].hasError('required') && templateTaskForm.controls['kategori_misi'].touched">
+                Pilih salah satu Kategori Misi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
           <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto"
             *ngIf="templateTaskForm.get('image').value">
             <div fxLayout="row" fxLayoutAlign="start start">
@@ -145,7 +209,8 @@
                   </mat-autocomplete>
                 </mat-form-field>
 
-                <div fxFlex="5" fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto" >
+                <div fxFlex="5" fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto"
+                  *ngIf="!checkWording(item.get('type').value)">
                   <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below"
                     class="add-image secondary-text" (click)="uploadVideo('question', i)"
                     *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
@@ -215,6 +280,15 @@
                 <video class="template-task-video" [src]="item.get('question_video').value" controls> </video>
               </div>
               <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <ng-container *ngIf="checkWording(item.get('type').value)">
+                  <mat-form-field fxFlex="80" class="opsi is-light" *ngIf="templateList[i]">
+                    <mat-select placeholder="Pilih Template" (selectionChange)="selectedImageIR($event, item)">
+                      <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm">
+                        {{ itm.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ng-container>
                 <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
                   <mat-form-field fxFlex="60" class="question is-light">
                     <input matInput value="Teks jawaban singkat" disabled>
@@ -334,7 +408,8 @@
                       </button>
                     </div> -->
                     <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
-                      fxFlex="1 0 auto" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                      fxFlex="1 0 auto"
+                      *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
                       <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
                         'radio' ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
@@ -350,6 +425,17 @@
                     </div>
                   </div>
                 </ng-container>
+              </div>
+              <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+                *ngIf="templateListImageIR[i]" style="margin-top: 25px;">
+                <div fxFlex="45">
+                  <div class="banner-image-template-selected">
+                    <div id="banner">
+                      <img [src]="templateListImageIR[i].image" style="height: 190px; width: 390px" alt="Gambar IR">
+                      <!-- <div class="title">{{bannerSelected.title}}</div> -->
+                    </div>
+                  </div>
+                </div>
               </div>
               <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
                 <!-- <section class="required-section secondary-text">
@@ -405,7 +491,7 @@
           <mat-icon>crop_original</mat-icon>
         </button>
 
-        <button mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text" 
+        <button mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text"
           (click)="uploadVideo('master', null)">
           <mat-icon class="secondary-text">videocam</mat-icon>
         </button>

@@ -9,9 +9,10 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { UploadImageComponent } from '../dialog/upload-image/upload-image.component';
 import { DataService } from '../../../../services/data.service';
 import * as _ from 'underscore';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { ProductService } from 'app/services/sku-management/product.service';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, takeUntil } from 'rxjs/operators';
+import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 
 @Component({
   selector: 'app-template-edit',
@@ -26,6 +27,19 @@ export class TemplateEditComponent {
   detailTask: any;
   frmIsBranching: FormControl = new FormControl(false);
   listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
+  listKategoriToolbox: any[];
+  listTipeMisi: any[];
+  listTingkatkesulitanMisi: any[];
+  listKategoriMisi: any[];
+  private _onDestroy = new Subject<void>();
+  public filterLKT: FormControl = new FormControl();
+  public filteredLKT: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterLTM: FormControl = new FormControl();
+  public filteredLTM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterLTKM: FormControl = new FormControl();
+  public filteredLTKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterLKM: FormControl = new FormControl();
+  public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   listChoose: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
@@ -35,7 +49,9 @@ export class TemplateEditComponent {
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+    { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
+    { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
   ];
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
@@ -63,6 +79,8 @@ export class TemplateEditComponent {
 
   videoMaster: any = null;
   questionVideo: any[] = [];
+  templateList: any[] = [];
+  templateListImageIR: any[] = [];
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -86,7 +104,8 @@ export class TemplateEditComponent {
     private dataService: DataService,
     private taskTemplateService: TemplateTaskService,
     private activatedRoute: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
   ) {
     this.saveData = false;
     this.templateTaskFormError = {
@@ -103,6 +122,36 @@ export class TemplateEditComponent {
   }
 
   ngOnInit() {
+
+    this.getListKategoriToolbox();
+    this.getListTipeMisi();
+    this.getListTingkatKesulitanMisi();
+    this.getListKategoriMisi();
+
+    this.filterLKT.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringLKT();
+      });
+
+    this.filterLTM.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringLTM();
+      });
+
+    this.filterLTKM.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringLTKM();
+      });
+
+    this.filterLKM.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringLKM();
+      });
+
     this.keyUp.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
@@ -115,6 +164,10 @@ export class TemplateEditComponent {
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
+      kategori_toolbox: ["", Validators.required],
+      tipe_misi: ["", Validators.required],
+      tingkat_kesulitan_misi: ["", Validators.required],
+      kategori_misi: ["", Validators.required],
       image: [""],
       video: [""],
       material: false,
@@ -135,6 +188,134 @@ export class TemplateEditComponent {
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+  }
+
+  filteringLKT() {
+    if (!this.listKategoriToolbox) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterLKT.value;
+    if (!search) {
+      this.filteredLKT.next(this.listKategoriToolbox.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredLKT.next(
+      this.listKategoriToolbox.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListKategoriToolbox() {
+    this.pengaturanAttributeMisiService.getToolbox({ status: 'active' }).subscribe(
+      (res) => {
+        // console.log("res trade listKategoriToolbox", res);
+        this.listKategoriToolbox = res.data.data;
+        this.filteredLKT.next(this.listKategoriToolbox.slice());
+        // this.listKategoriToolbox = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Toolbox", err);
+      }
+    );
+  }
+
+  filteringLTM() {
+    if (!this.listTipeMisi) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterLTM.value;
+    if (!search) {
+      this.filteredLTM.next(this.listTipeMisi.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredLTM.next(
+      this.listTipeMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListTipeMisi() {
+    this.pengaturanAttributeMisiService.getTipeMisi({ status: 'active' }).subscribe(
+      (res) => {
+        // console.log("res trade List Tipe Misi", res);
+        this.listTipeMisi = res.data.data;
+        this.filteredLTM.next(this.listTipeMisi.slice());
+        // this.listTipeMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Tipe Misi", err);
+      }
+    );
+  }
+
+  filteringLTKM() {
+    if (!this.listTingkatkesulitanMisi) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterLTKM.value;
+    if (!search) {
+      this.filteredLTKM.next(this.listTingkatkesulitanMisi.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredLTKM.next(
+      this.listTingkatkesulitanMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListTingkatKesulitanMisi() {
+    this.pengaturanAttributeMisiService.getKesulitanMisi({ status: 'active' }).subscribe(
+      (res) => {
+        // console.log("res Kesulitan Misi", res);
+        this.listTingkatkesulitanMisi = res.data.data;
+        this.filteredLTKM.next(this.listTingkatkesulitanMisi.slice());
+        // this.listTingkatkesulitanMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kesulitan Misi", err);
+      }
+    );
+  }
+
+  filteringLKM() {
+    if (!this.listKategoriMisi) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterLKM.value;
+    if (!search) {
+      this.filteredLKM.next(this.listKategoriMisi.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredLKM.next(
+      this.listKategoriMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListKategoriMisi() {
+    this.pengaturanAttributeMisiService.getKategoriMisi({ status: 'active' }).subscribe(
+      (res) => {
+        // console.log("res Kategori Misi", res);
+        this.listKategoriMisi = res.data.data;
+        this.filteredLKM.next(this.listKategoriMisi.slice());
+        // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
+      }
+    );
   }
 
   _filterSku(value): any[] {
@@ -188,12 +369,16 @@ export class TemplateEditComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
 
+    this.templateTaskForm.get('kategori_toolbox').setValue(this.detailTask.task_toolbox_id);
+    this.templateTaskForm.get('tipe_misi').setValue(this.detailTask.task_toolbox_type_id);
+    this.templateTaskForm.get('tingkat_kesulitan_misi').setValue(this.detailTask.task_toolbox_level_id);
+    this.templateTaskForm.get('kategori_misi').setValue(this.detailTask.task_toolbox_categories_id);
     this.templateTaskForm.get('name').setValue(this.detailTask.name);
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
-    this.templateTaskForm.get('image').setValue(this.detailTask.image? this.detailTask.image_url : '');
-    this.templateTaskForm.get('video').setValue(this.detailTask.video? this.detailTask.video_url : '');
+    this.templateTaskForm.get('image').setValue(this.detailTask.image ? this.detailTask.image_url : '');
+    this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
@@ -308,7 +493,21 @@ export class TemplateEditComponent {
     }
   }
 
+  selectedImageIR(selectedIR, template) {
+    console.log('selectedIR IR', selectedIR, template);
+    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
+    if (indexExist > -1) {
+      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
+    } else {
+      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name });
+    }
+
+    console.log('template image IR', this.templateListImageIR);
+  }
+
   changeType(item, idx?) {
+    this.checkIsIRExist();
+
     const questions = this.templateTaskForm.get('questions') as FormArray;
     const type = questions.at(idx).get('type').value;
     const typeSelection = this.listChoose.filter(item => item.value === type)[0];
@@ -325,6 +524,10 @@ export class TemplateEditComponent {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+  }
+
+  checkWording(selection) {
+    return selection.includes("_ir");
   }
 
   addQuestion(): void {
@@ -432,7 +635,19 @@ export class TemplateEditComponent {
     if (this.listProductSelected[idx]) {
       delete this.listProductSelected[idx];
     }
+    if (this.templateListImageIR[idx]) this.templateListImageIR.splice(idx, 1);
+    if (this.templateList[idx]) this.templateList.splice(idx, 1);
+    this.checkIsIRExist();
+
     this.findQuestionsHasNext();
+  }
+
+  checkIsIRExist() {
+    let rawValue = this.templateTaskForm.getRawValue();
+    console.log('value raw', rawValue);
+    let isIR = rawValue['questions'].map(tp => tp.type).find(typ => typ.includes("_ir"));
+    if (isIR) this.isIRTemplate.setValue(true);
+    else this.isIRTemplate.setValue(false);
   }
 
   checkHasLinked(idx, idQuestion): Boolean {
@@ -475,12 +690,16 @@ export class TemplateEditComponent {
       let questionsIsEmpty = [];
       let body = {
         _method: 'PUT',
+        task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
+        task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
+        task_toolbox_level_id: this.templateTaskForm.get('tingkat_kesulitan_misi').value,
+        task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
         name: this.templateTaskForm.get('name').value,
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
-        image: this.templateTaskForm.get('image').value? this.templateTaskForm.get('image').value : '',
-        video: this.detailTask.video? this.detailTask.video : '',
+        image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        video: this.detailTask.video ? this.detailTask.video : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
@@ -531,36 +750,51 @@ export class TemplateEditComponent {
       }
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
-        let bodyMasterVideo = new FormData();
-        bodyMasterVideo.append('file', this.videoMaster);
-        this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
-          async res => {
-            body.video = res.data;
-            if (this.questionVideo.length > 0) {
-              const promise1 = await this.questionVideo.map(async(qv) => {
-                let bodyQuestionVideo = new FormData();
-                bodyQuestionVideo.append('file', qv.event);
-                await new Promise(async (resolve, reject) => { 
-                  this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                    resQuestionVideo => {
-                      resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                    }, err => {
-                      console.log(err.error);
-                      reject(err);
-                      this.dataService.showLoading(false);
-                      return;
+          let bodyMasterVideo = new FormData();
+          bodyMasterVideo.append('file', this.videoMaster);
+          this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
+            async res => {
+              body.video = res.data;
+              if (this.questionVideo.length > 0) {
+                const promise1 = await this.questionVideo.map(async (qv) => {
+                  let bodyQuestionVideo = new FormData();
+                  bodyQuestionVideo.append('file', qv.event);
+                  await new Promise(async (resolve, reject) => {
+                    this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+                      resQuestionVideo => {
+                        resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+                      }, err => {
+                        console.log(err.error);
+                        reject(err);
+                        this.dataService.showLoading(false);
+                        return;
+                      });
                   });
+                  return qv;
                 });
-                return qv;
-              });
-  
-              Promise.all(promise1).then(() => { 
+
+                Promise.all(promise1).then(() => {
+                  this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
+                    res => {
+                      this.dataService.showLoading(false);
+                      this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+                      this.router.navigate(['dte', 'template-task']);
+
+                      window.localStorage.removeItem('detail_template_task');
+                    },
+                    err => {
+                      console.log(err.error);
+                      this.dataService.showLoading(false);
+                    }
+                  )
+                });
+              } else {
                 this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                   res => {
                     this.dataService.showLoading(false);
                     this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                     this.router.navigate(['dte', 'template-task']);
-        
+
                     window.localStorage.removeItem('detail_template_task');
                   },
                   err => {
@@ -568,35 +802,20 @@ export class TemplateEditComponent {
                     this.dataService.showLoading(false);
                   }
                 )
-              });
-            } else {
-              this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
-                res => {
-                  this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-                  this.router.navigate(['dte', 'template-task']);
-      
-                  window.localStorage.removeItem('detail_template_task');
-                },
-                err => {
-                  console.log(err.error);
-                  this.dataService.showLoading(false);
-                }
-              )
+              }
+            },
+            err => {
+              console.log(err.error);
+              this.dataService.showLoading(false);
+              return;
             }
-          },
-          err => {
-            console.log(err.error);
-            this.dataService.showLoading(false);
-            return;
-          }
-        )
+          )
         } else {
           if (this.questionVideo.length > 0) {
-            const promise1 = await this.questionVideo.map(async(qv) => {
+            const promise1 = await this.questionVideo.map(async (qv) => {
               let bodyQuestionVideo = new FormData();
               bodyQuestionVideo.append('file', qv.event);
-              await new Promise(async (resolve, reject) => { 
+              await new Promise(async (resolve, reject) => {
                 this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
                   resQuestionVideo => {
                     resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
@@ -605,18 +824,18 @@ export class TemplateEditComponent {
                     reject(err);
                     this.dataService.showLoading(false);
                     return;
-                });
+                  });
               });
               return qv;
             });
 
-            Promise.all(promise1).then(() => { 
+            Promise.all(promise1).then(() => {
               this.taskTemplateService.put(body, { template_id: this.detailTask.id }).subscribe(
                 res => {
                   this.dataService.showLoading(false);
                   this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                   this.router.navigate(['dte', 'template-task']);
-      
+
                   window.localStorage.removeItem('detail_template_task');
                 },
                 err => {
@@ -631,7 +850,7 @@ export class TemplateEditComponent {
                 this.dataService.showLoading(false);
                 this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
                 this.router.navigate(['dte', 'template-task']);
-    
+
                 window.localStorage.removeItem('detail_template_task');
               },
               err => {
@@ -676,7 +895,7 @@ export class TemplateEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { password: 'P@ssw0rd', fileType: 'image' };
+    dialogConfig.data = { password: 'P@ssw0rd' };
 
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 

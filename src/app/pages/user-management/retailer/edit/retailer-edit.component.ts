@@ -9,6 +9,7 @@ import { ReplaySubject, Subject } from "rxjs";
 import { MatSelect } from "@angular/material";
 import { GeneralService } from "app/services/general.service";
 import { takeUntil, distinctUntilChanged } from "rxjs/operators";
+import { PagesName } from "app/classes/pages-name";
 
 @Component({
   selector: 'app-retailer-edit',
@@ -28,6 +29,10 @@ export class RetailerEditComponent {
     { name: "Status Aktif", value: "active" },
     { name: "Status Non Aktif", value: "inactive" },
     { name: "Status Belum terdaftar", value: "passive" }
+  ];
+  listStatusUser: any[] = [
+    { name: "Aktif", value: "active" },
+    { name: "Non Aktif", value: "inactive" }
   ];
 
   listType: any[] = [
@@ -65,7 +70,17 @@ export class RetailerEditComponent {
     { key: "", value: "Belum Diisi" },
     { key: 0, value: "Tidak" },
     { key: 1, value: "Ya" }
-  ]
+  ];
+  permission: any;
+  roles: PagesName = new PagesName();
+
+  seeStatus: boolean = true;
+  seeProfile: boolean = true;
+  seePhone: boolean = true;
+  seeSalestree: boolean = true;
+  seeRekening: boolean = true;
+  seeAksesKasir: boolean = true;
+  disableSubmit: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,6 +92,7 @@ export class RetailerEditComponent {
     private generalService: GeneralService
   ) {
     this.onLoad = false;
+    this.permission = this.roles.getRoles('principal.retailer');
     this.formdataErrors = {
       name: {},
       address: {},
@@ -98,7 +114,7 @@ export class RetailerEditComponent {
       branch: {}
     };
 
-    this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
+    // this.detailRetailer = this.dataService.getFromStorage("detail_retailer");
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     activatedRoute.url.subscribe(params => {
@@ -135,6 +151,7 @@ export class RetailerEditComponent {
       owner: ["", Validators.required],
       phone: [""],
       status: ["", Validators.required],
+      status_user: ["", Validators.required],
       national: ["", Validators.required],
       zone: ["", Validators.required],
       salespoint: ["", Validators.required],
@@ -161,9 +178,9 @@ export class RetailerEditComponent {
     this.formRetailer.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
-
+    this.dataService.showLoading(true);
     this.retailerService.show({ retailer_id: this.dataService.getFromStorage("id_retailer") }).subscribe(async res => {
-
+      this.dataService.showLoading(false);
       // console.log('show', res);
       this.detailRetailer = res.data;
       console.log('detail_retailer', this.detailRetailer);
@@ -189,13 +206,27 @@ export class RetailerEditComponent {
         this.formRetailer.updateValueAndValidity();
       }
       this.onLoad = true;
-      this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
-        this.detailAreaSelected = res.data;
-        this.onLoad = false;
+      if (this.detailRetailer.area_code) {
 
-        this.initArea();
+        this.retailerService.getParentArea({ parent: this.detailRetailer.area_code[0] }).subscribe(res => {
+          this.detailAreaSelected = res.data;
+          this.onLoad = false;
+
+          this.initArea();
+          this.initFormGroup();
+
+          this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
+            if (res.match(regex)) {
+              if (res.substring(0, 1) == '0') {
+                let phone = res.substring(1);
+                this.formRetailer.get('phone').setValue(phone, { emitEvent: false });
+              }
+            }
+          })
+        })
+
+      } else {
         this.initFormGroup();
-
         this.formRetailer.get('phone').valueChanges.debounceTime(500).subscribe(res => {
           if (res.match(regex)) {
             if (res.substring(0, 1) == '0') {
@@ -204,7 +235,10 @@ export class RetailerEditComponent {
             }
           }
         })
-      })
+      }
+
+    }, error => {
+      this.dataService.showLoading(false);
     });
 
     this.formBankAccount
@@ -233,6 +267,9 @@ export class RetailerEditComponent {
           this.npwp.setValue(str, { emitEvent: false });
         }
       })
+    if (!this.isDetail) {
+      this.setFormAbility();
+    }
   }
 
   getBanks() {
@@ -298,42 +335,47 @@ export class RetailerEditComponent {
   }
 
   initFormGroup() {
-    this.detailAreaSelected.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
+    if (this.detailAreaSelected) {
+
+      this.detailAreaSelected.map(item => {
+        let level_desc = '';
+        switch (item.level_desc.trim()) {
+          case 'national':
+            level_desc = 'zone';
+            break
+          case 'division':
+            level_desc = 'region';
+            break;
+          case 'region':
+            level_desc = 'area';
+            break;
+          case 'area':
+            level_desc = 'salespoint';
+            break;
+          case 'salespoint':
+            level_desc = 'district';
+            break;
+          case 'district':
+            level_desc = 'territory';
+            break;
+        }
+        this.getAudienceArea(level_desc, item.id);
+      });
+
+    }
     console.log(this.detailRetailer.phone);
     this.formRetailer.setValue({
-      name: this.detailRetailer.name,
-      address: this.detailRetailer.address,
+      name: this.detailRetailer.name || '',
+      address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification === 'SRC' ? this.detailRetailer.code : "",
-      owner: this.detailRetailer.owner,
+      owner: this.detailRetailer.owner || '',
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
-      status: this.detailRetailer.status,
-      latitude: this.detailRetailer.latitude,
-      longitude: this.detailRetailer.longitude,
-      type: this.detailRetailer.type_hms,
-      InternalClassification: this.detailRetailer.classification,
+      status: this.detailRetailer.status || '',
+      status_user: this.detailRetailer.status_user || 'active',
+      latitude: this.detailRetailer.latitude || '',
+      longitude: this.detailRetailer.longitude || '',
+      type: this.detailRetailer.type_hms || '',
+      InternalClassification: this.detailRetailer.classification || '',
       national: this.getArea('national'),
       zone: this.getArea('division'),
       region: this.getArea('region'),
@@ -341,16 +383,16 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier,
-      version_retailer: this.detailRetailer.version_retailer,
-      version_cashier: this.detailRetailer.version_cashier,
+      cashier: this.detailRetailer.cashier || 0,
+      version_retailer: this.detailRetailer.version_retailer || '',
+      version_cashier: this.detailRetailer.version_cashier || '',
     });
 
     this.formBankAccount.setValue({
-      account_number: this.detailRetailer.bank_account_number,
-      account_name: this.detailRetailer.bank_account_name,
-      bank_name: this.detailRetailer.bank_name,
-      branch: this.detailRetailer.branch
+      account_number: this.detailRetailer.bank_account_number || '',
+      account_name: this.detailRetailer.bank_account_name || '',
+      bank_name: this.detailRetailer.bank_name || '',
+      branch: this.detailRetailer.branch || '',
     });
     console.log(this.detailRetailer.pkp);
     this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
@@ -478,8 +520,11 @@ export class RetailerEditComponent {
   }
 
   getArea(selection) {
-    let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
-    return areas && areas[0] ? areas[0] : '';
+    if (this.detailAreaSelected) {
+      let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
+      return areas && areas[0] ? areas[0] : '';
+    }
+    return '';
   }
 
   // setDetailRetailer() {
@@ -552,7 +597,7 @@ export class RetailerEditComponent {
 
   submit() {
     console.log('invalid form field', this.findInvalidControls());
-    if (this.formRetailer.valid) {
+    if (!this.formRetailer.invalid) {
       let body = {
         _method: "PUT",
         name: this.formRetailer.get("name").value,
@@ -570,7 +615,8 @@ export class RetailerEditComponent {
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
-        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value
+        branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
+        status_user: this.formRetailer.get('status_user').value,
       };
 
       console.log(body);
@@ -613,6 +659,110 @@ export class RetailerEditComponent {
       return msg;
     } else {
       return "";
+    }
+  }
+  isCan(roles: any[], cond: string = 'AND') {
+
+    let permissions = [];
+
+    permissions = Object.keys(this.permission);
+
+    if (!permissions.length || !roles.length) return false;
+
+    const result = [];
+    roles.map(r =>{ result.push( permissions.includes(r) ) });
+    
+    if (cond === 'AND') {
+      
+      if (result.includes(false)) return false;
+  
+      else return true;
+
+    } else if (cond === 'OR') {
+      if (!result.includes(true)) return false;
+      else return true;
+    }
+
+  }
+
+  disableFields(fields: any[], form: any = null) {
+    form = (form) ? form : this.formRetailer;
+
+    if (fields.length) fields.map(field => { form.controls[field].disable(); })
+    form.updateValueAndValidity();
+  }
+  rmValidators(fields: any[], form: any = null) {
+
+    form = (form) ? form : this.formRetailer;
+
+    if (fields.length) fields.map(field => { form.controls[field].setValidators([]) });
+    form.updateValueAndValidity();
+  }
+
+  setFormAbility() {
+
+    // this.seeStatus = ( this.isCan(['lihat', 'status_user_and_business']) ) ? true : false;
+    // this.seeProfile = ( this.isCan(['lihat', 'profile_toko']) ) ? true : false;
+    // this.seePhone = ( this.isCan(['lihat', 'phone_number']) ) ? true : false;
+    // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
+    // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
+    // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
+    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
+    
+    
+    console.log('SEE', this.seePhone);
+
+    // const fRtl = this.formRetailer;
+
+    if (!this.isCan(['ubah', 'profile_toko'])) {
+
+      const fields = ['name', 'address', 'business_code', 'owner', 'latitude', 'longitude', 'InternalClassification'];
+
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+    };
+
+    if (!this.isCan(['ubah', 'status_user_and_business'])) {
+
+      const fields = ['status_user', 'status'];
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+    }
+
+    if (!this.isCan(['ubah', 'phone_number'])) {
+      this.disableFields(['phone']);
+      this.rmValidators(['phone']);
+    }
+
+    if (!this.isCan(['ubah', 'salestree_toko'])) {
+      const fields = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
+      this.disableFields(fields);
+      this.rmValidators(fields);
+    }
+
+    if (!this.isCan(['ubah', 'rekening_toko'])) {
+
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      this.disableFields(fields, this.formBankAccount);
+      this.rmValidators(fields, this.formBankAccount);
+      this.npwp.disable();
+      this.npwp.setValidators([]);
+      this.npwp.updateValueAndValidity();
+      this.pkp.disable();
+      this.pkp.setValidators([]);
+      this.pkp.updateValueAndValidity();
+
+    }
+    if (!this.isCan(['ubah', 'akses_kasir'])) {
+      const fields = ['cashier'];
+      this.disableFields(fields);
+      this.rmValidators(fields);
+    }
+    // jika tidak memiliki submenu samasekali maka disable simpan
+    if (!this.isCan(ALL_ROLES, 'OR')) {
+      this.disableSubmit = true;
     }
   }
 }

@@ -35,7 +35,7 @@
         <ngx-datatable-column name="Judul Notifikasi" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
-            {{row.title}}
+            <a class="direct-edit" (click)="directEdit(row)">{{row.title}}</a>
           </ng-template>
         </ngx-datatable-column>
 

@@ -325,4 +325,104 @@ export class RoleEditComponent {
     }
   }
 
+  setTargetSubmenu(targetRole, targetItems, status) {
+
+    // drill until target submenu found, then set all submenu status to false
+    this.roles.map((roleValue) => {
+
+      if (roleValue['nama'] === targetRole['nama']) {
+        
+
+        roleValue['menu'].map((menuValue) => {
+
+          if (menuValue.nama === targetItems.nama) {
+
+
+            menuValue['value'].map( (targetValue) => {
+
+              if (targetValue.submenu) {
+
+                targetValue.status = status;
+                return targetValue;
+
+              }
+
+            });
+
+          }
+
+        })
+      }
+    });
+  }
+
+  clearParents(targetRole, targetItems, name) {
+    this.roles.map((roleValue) => {
+
+      if (roleValue['nama'] === targetRole['nama']) {
+        
+
+        roleValue['menu'].map((menuValue) => {
+
+          if (menuValue.nama === targetItems.nama) {
+
+            menuValue['value'].map( (targetValue) => {
+              if (targetValue['nama'] === name) {
+                targetValue.status = false;
+                return targetValue;
+              }
+            });
+
+          }
+
+        })
+      }
+    });
+  }
+
+  onToggleChange(targetItem, targetItems, targetRole, event) {
+
+    let hasActiveParents = [];
+    let hasActiveChildren = [];
+
+
+    _.map(targetItems.value, (val) => {
+      if (!val.submenu) {
+        if (val.nama === 'ubah') {
+          hasActiveParents.push(val.status);
+        }
+      }
+      else { hasActiveChildren.push(val.status); }
+    });
+
+    // if target is submenu, then target dont have active parents, then avoid action
+    if (targetItem.submenu) {
+      
+      if ( !hasActiveParents.includes(true) ) {
+    
+        console.log({event});
+        event.source.checked = false;
+      
+      }
+      else if (!hasActiveChildren.includes(true)) {
+        this.clearParents(targetRole, targetItems, 'ubah');
+      }
+
+    }
+    else if (targetItem.nama === 'ubah' && event.checked) {
+
+      this.setTargetSubmenu(targetRole, targetItems, true);
+
+    }
+    // else targetItem is not submenu but have any submenu activated and dont have active parents, then clear all submenu
+    else {
+
+      if (!hasActiveParents.includes(true)) {
+        // deactive all submenu
+        this.setTargetSubmenu(targetRole, targetItems, false);
+      }
+    }
+
+  }
+
 }

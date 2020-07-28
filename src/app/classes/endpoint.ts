@@ -52,6 +52,7 @@ export class Endpoint {
         change_password_edit_profile: `${AYO_API_SERVICE(SERVER.user)}/oauth/password/change`,
         logout: `${AYO_API_SERVICE(SERVER.auth)}/api/v1/auth/remove-token`,
         check_token: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/token`,
+        fcm_token: `${AYO_API}/api/general/user_notif`,
       },
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
@@ -167,7 +168,9 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template/${context.template_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template/${context.template_id}`,
-        upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`
+        upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`,
+        planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
+        stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
@@ -287,6 +290,7 @@ export class Endpoint {
         get: `${AYO_API}/api/${type_api}/notification`,
         create: `${AYO_API}/api/${type_api}/notification`,
         delete: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
+        show: `${AYO_API}/api/${type_api}/notification/${context.notification_id}`,
         get_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
         show_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         create_popup: `${AYO_API}/api/${type_api}/pop-up-notification`,
@@ -298,6 +302,12 @@ export class Endpoint {
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
         import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
+      },
+      notif: {
+        list_notif: `${AYO_API}/api/general/user_notif`,
+        update: `${AYO_API}/api/general/user_notif/${context.id_notif}`,
+        popup: `${AYO_API}/api/wholesaler/pop-up-notification`,
+        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
@@ -560,6 +570,47 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation`,
         history: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/history`,
         approval: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/deactivation/${context.deactivation_id}`,
+      },
+      sequencing: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
+        show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
+        put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
+        list_trade_program: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-program`,
+        list_trade_audience__group: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-audience`
+      },
+      pengaturan_attribute_misi: {
+        get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
+        create_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox`,
+        put_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
+        delete_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
+        get_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi${context.status ? '?status=active' : ''}`,
+        create_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi`,
+        put_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
+        delete_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
+        get_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi${context.status ? '?status=active' : ''}`,
+        create_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi`,
+        put_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
+        delete_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
+        get_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi${context.status ? '?status=active' : ''}`,
+        create_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi`,
+        put_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
+        delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`
+      },
+      paylater_activate: {
+        activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
+        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`
+      },
+      new_sign_menu: {
+        icon_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/icon`,
+        menu_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/menu`,
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu`,
+        show: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/${context.sign_id}`,
+        general_new_sign: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/sign-menu`
       },
       b2b_voucher: {
         get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher`,

@@ -9,14 +9,21 @@
       <form [formGroup]="formWs">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
           <h3>Detil Wholesaler</h3>
-          <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
-            <mat-select formControlName="status">
-              <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="ayo-middle pt-24" fxLayout="column">
+          <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
 
+            <div fxFlex="50" class="px-8">
+              
+              <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+                <mat-select formControlName="status">
+                  <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput placeholder="Nama" type="text" formControlName="name">
             <mat-error *ngIf="formWs.controls['name'].hasError('required') && formWs.controls['name'].touched ">
@@ -43,12 +50,14 @@
               Nama Pemilik harus diisi.
             </mat-error>
           </mat-form-field>
+        </div>
+        <div class="ayo-middle pt-24" fxLayout="column">
 
-          <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+          <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">
             <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
           </mat-form-field>
 
-          <div *ngIf="!isDetail" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div *ngIf="!isDetail && seePhone" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
             <small>Nomor Ponsel</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
@@ -63,7 +72,7 @@
             </mat-error>
           </div>
 
-          <div [formGroup]="formBankAccount">
+          <div [formGroup]="formBankAccount" *ngIf="seeRekening">
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input matInput type="text" maxlength="16" pattern="[0-9]*" inputmode="numeric"
@@ -125,7 +134,7 @@
                 </mat-error>
               </mat-form-field> -->
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-            fxLayoutAlign="space-between stretch">
+            fxLayoutAlign="space-between stretch" *ngIf="seeSalestree">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national"
@@ -201,12 +210,12 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row">
+          <div fxLayout="row" *ngIf="seeTokoCabang">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
               Toko Cabang</mat-checkbox>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 5px;"
-            *ngIf="formWs.get('branchShop').value === true">
+            *ngIf="formWs.get('branchShop').value === true && seeTokoCabang">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <input matInput type="number" [formControl]="frmTotalBranch" placeholder="Jumlah Toko Cabang">
             </mat-form-field>
@@ -223,7 +232,7 @@
               <button mat-stroked-button>Reset Password</button>
             </div> -->
 
-          <div *ngIf="!isDetail" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+          <div *ngIf="!isDetail && !disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>

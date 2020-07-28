@@ -29,7 +29,7 @@ import { DropdownTreeComponent } from "./dropdown-tree/dropdown-tree.component";
   declarations: [
     ToolbarSearchComponent,
     PageContentComponent,
-    DropdownTreeComponent
+    DropdownTreeComponent,
   ],
   exports: [
     ToolbarSearchComponent,

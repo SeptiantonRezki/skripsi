@@ -48,7 +48,7 @@
         </div>
         <div fxLayout="column">
           <label style="font-size: 10px;">Mitra Terpilih</label>
-          <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
+          <span style="font-size: 32px;">{{(allRowsSelected ? pagination.total :  selected.length) | rupiahFormaterWithoutRp}}</span>
         </div>
       </div>
       <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
