@@ -106,7 +106,13 @@ const appRoutes: Routes = [
   },
   {
     path: "paylater",
-    loadChildren: "./pages/pay-later/pay-later.module#PayLaterModule"
+    loadChildren: "./pages/pay-later/pay-later.module#PayLaterModule",
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "b2b-voucher",
+    loadChildren: "./pages/b2-bvoucher/b2-bvoucher.module#B2BVoucherModule",
+    canActivate: [AuthGuard]
   },
   // {
   //   path: "admin",
