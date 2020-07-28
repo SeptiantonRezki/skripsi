@@ -926,6 +926,11 @@ export class B2BVoucherCreateComponent implements OnInit {
     if (body['limit_by'] !== null) {
       body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : [this.formDetilVoucher.get('category').value]
     }
+
+    if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {
+      delete body['limit_by'];
+      delete body['limit_only'];
+    }
     this.dataService.showLoading(true);
     if (this.isDetail) {
       this.b2bVoucherService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
