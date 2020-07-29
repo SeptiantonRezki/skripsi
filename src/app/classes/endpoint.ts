@@ -159,6 +159,8 @@ export class Endpoint {
         list_packaging: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/packaging?page=all`,
         // parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
+        export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
+        import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${
           context.param
           }&status=active`
@@ -578,7 +580,16 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
         list_trade_program: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-program`,
-        list_trade_audience__group: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-audience`
+        list_trade_audience__group: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-audience-tsm`,
+        check_budget: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/check/budget`,
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing-data/export`,
+        get_popup: `${AYO_API}/api/principal/sequencing/list/pop-up-notification`,
+        get_push: `${AYO_API}/api/principal/sequencing/list/notification`,
+        update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
+        download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/download`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/preview`,
+        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/import`,
+        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,

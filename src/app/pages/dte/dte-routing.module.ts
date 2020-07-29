@@ -29,8 +29,11 @@ import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-mi
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
 import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
-import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
-
+import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component";
+import { TaskSequencingDuplicateComponent } from "./task-sequencing/duplicate/task-sequencing-duplicate.component"
+import { MissionBuilderCreateComponent } from "./mission-builder/create/mission-builder-create.component";
+import { MissionBuilderEditComponent } from "./mission-builder/edit/mission-builder-edit.component";
+import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mission-builder-duplicate.component";
 
 const routes: Routes = [
   {
@@ -325,6 +328,41 @@ const routes: Routes = [
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
+  {
+    path: "task-sequencing/duplicate",
+    component: TaskSequencingDuplicateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.duplicate
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/create",
+    component: MissionBuilderCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/edit",
+    component: MissionBuilderEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/duplicate",
+    component: MissionBuilderDuplicateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.duplicate
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  }
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { CoinService } from 'app/services/sku-management/coin.service';
 import { DataService } from 'app/services/data.service';
 import { FormControl } from '@angular/forms';
+import { SequencingService } from 'app/services/dte/sequencing.service';
 
 @Component({
   // selector: 'app-import-adjustment-coin-dialog',
@@ -29,6 +30,7 @@ export class ImportAdjustmentCoinDialogComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private coinService: CoinService,
+    private sequencingService: SequencingService,
     private dataService: DataService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
@@ -98,7 +100,7 @@ export class ImportAdjustmentCoinDialogComponent implements OnInit {
           trade_creator: item.trade_creator
         }))
       }
-      this.coinService.adjustCoin(body)
+      this.sequencingService.adjustRetailerCoin(body)
         .subscribe(res => {
           this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
           this.dialogRef.close(res);

@@ -38,6 +38,8 @@ import {
   MatChipsModule,
   MatBadgeModule,
   MatTableModule,
+  MatCardModule,
+  MatGridListModule
 } from "@angular/material";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
@@ -59,6 +61,9 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from "@angular/material/core";
+
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+
 import { ListAudienceDialogComponent } from "./schedule-program/dialog/list-audience-dialog.component";
 import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 import { NgxMatSelectSearchModule } from "../../../../node_modules/ngx-mat-select-search";
@@ -81,6 +86,7 @@ import { ConfirmDialogComponent } from "./task-verification/dialog/confirm-dialo
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { TaskSequencingIndexComponent } from './task-sequencing/index/task-sequencing-index.component';
 import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
+import { TaskSequencingDuplicateComponent } from './task-sequencing/duplicate/task-sequencing-duplicate.component';
 import { DialogToolboxComponent } from "./pengaturan-attribute-misi/index/dialog-toolbox/dialog-toolbox.component";
 import { DialogTipeMisiComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi/dialog-tipe-misi.component";
 import { DialogKesulitanMisiComponent } from "./pengaturan-attribute-misi/index/dialog-kesulitan-misi/dialog-kesulitan-misi.component";
@@ -96,6 +102,30 @@ import { DialogKesulitanMisiEditComponent } from "./pengaturan-attribute-misi/in
 import { DialogTipeMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { LightboxModule } from 'ngx-lightbox';
+import { MissionBuilderCreateComponent } from "./mission-builder/create/mission-builder-create.component";
+import { MissionBuilderEditComponent } from "./mission-builder/edit/mission-builder-edit.component";
+import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mission-builder-duplicate.component";
+import { DiaglogMisiComponent } from "./mission-builder/create/diaglog-misi/diaglog-misi.component";
+import { DiaglogPopUpNotifComponent } from "./mission-builder/create/diaglog-pop-up-notif/diaglog-pop-up-notif.component";
+import { DiaglogPushNotifComponent } from "./mission-builder/create/diaglog-push-notif/diaglog-push-notif.component";
+import { DiaglogWaktuTungguComponent } from "./mission-builder/create/diaglog-waktu-tunggu/diaglog-waktu-tunggu.component";
+import { DialogYesNoComponent } from "./mission-builder/create/dialog-yes-no/dialog-yes-no.component"
+import { NgxGraphModule } from '@swimlane/ngx-graph';
+import { DialogMisiEditComponent } from "./mission-builder/edit/dialog-misi-edit/dialog-misi-edit.component";
+import { DialogPopUpNotifEditComponent } from "./mission-builder/edit/dialog-pop-up-notif-edit/dialog-pop-up-notif-edit.component";
+import { DialogPushNotifEditComponent } from "./mission-builder/edit/dialog-push-notif-edit/dialog-push-notif-edit.component";
+import { DialogWaktuTungguEditComponent } from "./mission-builder/edit/dialog-waktu-tunggu-edit/dialog-waktu-tunggu-edit.component";
+import { DialogYesNoEditComponent } from "./mission-builder/edit/dialog-yes-no-edit/dialog-yes-no-edit.component";
+import { DialogCoinComponent } from "./mission-builder/create/dialog-coin/dialog-coin.component";
+import { DialogCoinEditComponent } from "./mission-builder/edit/dialog-coin-edit/dialog-coin-edit.component";
+import { ImportTsmCoinComponent } from "./task-sequencing/import-coin/import-tsm-coin.component";
+import { DialogCoinDuplicateComponent } from "./mission-builder/duplicate/dialog-coin-duplicate/dialog-coin-duplicate.component";
+import { DialogMisiDuplicateComponent } from "./mission-builder/duplicate/dialog-misi-duplicate/dialog-misi-duplicate.component";
+import { DialogPopUpNotifDuplicateComponent } from "./mission-builder/duplicate/dialog-pop-up-notif-duplicate/dialog-pop-up-notif-duplicate.component";
+import { DialogWaktuTungguDuplicateComponent } from "./mission-builder/duplicate/dialog-waktu-tunggu-duplicate/dialog-waktu-tunggu-duplicate.component";
+import { DialogPushNotifDuplicateComponent } from "./mission-builder/duplicate/dialog-push-notif-duplicate/dialog-push-notif-duplicate.component";
+
+
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -153,8 +183,12 @@ export const MY_FORMATS = {
     MatChipsModule,
     MatBadgeModule,
     MatTableModule,
+    MatCardModule,
+    MatGridListModule,
+    NgxMaterialTimepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
+    NgxGraphModule,
   ],
   declarations: [
     TemplateIndexComponent,
@@ -174,6 +208,7 @@ export const MY_FORMATS = {
     ListAudienceDialogComponent,
     ImportAudienceDialogComponent,
     ImportCoinComponent,
+    ImportTsmCoinComponent,
     AudienceTradeProgramComponent,
     EOrderComponent,
     AudienceTradeProgramIndexComponent,
@@ -189,6 +224,7 @@ export const MY_FORMATS = {
     PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
+    TaskSequencingDuplicateComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
     DialogKesulitanMisiComponent,
@@ -201,7 +237,27 @@ export const MY_FORMATS = {
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
     DialogKesulitanMisiEditComponent,
-    DialogTipeMisiEditComponent
+    DialogTipeMisiEditComponent,
+    MissionBuilderCreateComponent,
+    MissionBuilderEditComponent,
+    MissionBuilderDuplicateComponent,
+    DiaglogMisiComponent,
+    DiaglogPopUpNotifComponent,
+    DiaglogPushNotifComponent,
+    DiaglogWaktuTungguComponent,
+    DialogYesNoComponent,
+    DialogMisiEditComponent,
+    DialogPopUpNotifEditComponent,
+    DialogPushNotifEditComponent,
+    DialogWaktuTungguEditComponent,
+    DialogYesNoEditComponent,
+    DialogCoinComponent,
+    DialogCoinEditComponent,
+    DialogCoinDuplicateComponent,
+    DialogMisiDuplicateComponent,
+    DialogPopUpNotifDuplicateComponent,
+    DialogWaktuTungguDuplicateComponent,
+    DialogPushNotifDuplicateComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -223,6 +279,7 @@ export const MY_FORMATS = {
     PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
     TaskSequencingCreateComponent,
+    TaskSequencingDuplicateComponent,
     TaskSequencingEditComponent,
     ListKategoriToolboxComponent,
     ListTipeMisiComponent,
@@ -230,7 +287,26 @@ export const MY_FORMATS = {
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
     DialogKesulitanMisiEditComponent,
-    DialogTipeMisiEditComponent
+    DialogTipeMisiEditComponent,
+    MissionBuilderCreateComponent,
+    MissionBuilderEditComponent,
+    MissionBuilderDuplicateComponent,
+    DiaglogMisiComponent,
+    DiaglogPopUpNotifComponent,
+    DiaglogPushNotifComponent,
+    DiaglogWaktuTungguComponent,
+    DialogMisiEditComponent,
+    DialogPopUpNotifEditComponent,
+    DialogPushNotifEditComponent,
+    DialogWaktuTungguEditComponent,
+    DialogYesNoEditComponent,
+    DialogCoinComponent,
+    DialogCoinEditComponent,
+    DialogCoinDuplicateComponent,
+    DialogMisiDuplicateComponent,
+    DialogPopUpNotifDuplicateComponent,
+    DialogWaktuTungguDuplicateComponent,
+    DialogPushNotifDuplicateComponent
   ],
   providers: [
     RupiahFormaterPipe,
@@ -252,6 +328,7 @@ export const MY_FORMATS = {
     ListAudienceDialogComponent,
     ImportAudienceDialogComponent,
     ImportCoinComponent,
+    ImportTsmCoinComponent,
     ConfirmDialogComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
@@ -260,7 +337,24 @@ export const MY_FORMATS = {
     DialogToolboxEditComponent,
     DialogKategoriMisiEditComponent,
     DialogKesulitanMisiEditComponent,
-    DialogTipeMisiEditComponent
+    DialogTipeMisiEditComponent,
+    DiaglogMisiComponent,
+    DiaglogPopUpNotifComponent,
+    DiaglogPushNotifComponent,
+    DiaglogWaktuTungguComponent,
+    DialogYesNoComponent,
+    DialogMisiEditComponent,
+    DialogPopUpNotifEditComponent,
+    DialogPushNotifEditComponent,
+    DialogWaktuTungguEditComponent,
+    DialogYesNoEditComponent,
+    DialogCoinComponent,
+    DialogCoinEditComponent,
+    DialogCoinDuplicateComponent,
+    DialogMisiDuplicateComponent,
+    DialogPopUpNotifDuplicateComponent,
+    DialogWaktuTungguDuplicateComponent,
+    DialogPushNotifDuplicateComponent
   ],
 })
 export class DteModule {}

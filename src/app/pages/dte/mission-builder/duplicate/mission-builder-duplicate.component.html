@@ -1,0 +1,220 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Duplicate Mission Builder'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
+        <div fxFlex="50">
+          <mat-card style="padding: 0px; height:120px">
+            <div fxLayout="row" fxLayoutGap="16px" class="stats-cards content p-12" style="margin-left: 100px;">
+              <div fxFlex="30" style="margin-right: 0px;">
+                <p class="paragraph">Nama  </p>
+                <p class="paragraph">Trade Program </p>
+                <p class="paragraph">Group Audience </p>
+              </div>
+              <div fxFlex="3" style="margin-right: 0px;">
+                <p class="paragraph">:</p>
+                <p class="paragraph">:</p>
+                <p class="paragraph">:</p>
+              </div>
+              <div fxFlex="40">
+                <p class="paragraph">{{task.name}}</p>
+                <p class="paragraph">{{task.trade_creator_name}}</p>
+                <p class="paragraph">{{task.trade_audience_group_name}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <div fxFlex="50">
+          <mat-card style="padding: 0px; height:120px">
+            <div fxLayout="row" fxLayoutGap="16px" class="stats-cards content p-12" style="margin-left: 100px;">
+              <div fxFlex="30" style="margin-right: 0px;">
+                <p class="paragraph">Start Date </p>
+                <p class="paragraph">End Date </p>
+              </div>
+              <div fxFlex="3" style="margin-right: 0px;">
+                <p class="paragraph">:</p>
+                <p class="paragraph">:</p>
+              </div>
+              <div fxFlex="40">
+                <p class="paragraph">{{task.start_date}}</p>
+                <p class="paragraph">{{task.end_date}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+
+      <mat-grid-list cols="2" rowHeight="45px">
+        <mat-grid-tile>
+        <h2>Event :</h2>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+        <h2>Flow Control :</h2>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <mat-grid-list cols="2" rowHeight="85px">
+        <mat-grid-tile>
+          <div class="button-row">
+            <button
+              mat-fab
+              class="mr-2"
+              color="primary"
+              matTooltip="Misi"
+              (click)="newDialog('mission')"
+              [disabled]="noMission"
+            >
+              <mat-icon>assignment</mat-icon>
+            </button>
+
+            <button
+              mat-fab
+              class="mr-2"
+              color="primary"
+              matTooltip="Push Notification"
+              (click)="newDialog('push-notification')"
+              [disabled]="noPush"
+            >
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+
+            <button
+              mat-fab
+              class="mr-2"
+              color="primary"
+              matTooltip="Pop Up Notification"
+              (click)="newDialog('pop-up-notification')"
+              [disabled]="noPopup"
+            >
+              <mat-icon>notifications_active</mat-icon>
+            </button>
+
+            <button mat-fab class="mr-2" color="primary" matTooltip="Coin" (click)="newDialog('coin')" [disabled]="noCoin">
+              <mat-icon>monetization_on</mat-icon>
+            </button>
+
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="button-row">
+            <button mat-fab class="mr-2" color="primary" matTooltip="Split Decision" (click)="newDialog('decision')" [disabled]="noDecision">
+              <mat-icon>help</mat-icon>
+            </button>
+
+            <button mat-fab class="mr-2" color="primary" matTooltip="Waktu Tunggu" (click)="newDialog('time')" [disabled]="noTime"
+            >
+              <mat-icon>access_time</mat-icon>
+            </button>
+
+            <button
+              mat-fab
+              class="mr-2"
+              color="primary"
+              matTooltip="End"
+              (click)="newDialog('finish')"
+              [disabled]="noFinish"
+            >
+              <mat-icon>login</mat-icon>
+            </button>
+
+          </div>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <div fxLayout="row" fxLayoutAlign="space-around" *ngIf="task">
+        <ngx-graph class="chart-container"
+          layout="dagreCluster"
+          [links]="links"
+          [nodes]="nodes"
+          [curve]="curve"
+          [layout]="layout"
+          [nodeWidth]=150
+          [nodeHeight]=100
+          [layoutSettings]="layoutSettings"
+          [enableZoom]="true"
+          [autoZoom]="true"
+          [update$]="update$"
+          [draggingEnabled]="task.is_editable === 1"
+          style="background-color: #eee; height: 600px;">
+          <ng-template #defsTemplate>
+            <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+              <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+            </svg:marker>
+          </ng-template>
+
+          <ng-template #nodeTemplate let-node>
+            <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="100">
+              <svg:foreignObject width="150" height="100">
+                <xhtml:div class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
+                  <button class="closeNode" (click)="delNode(node, $event);"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
+                  <label class="activeNode" *ngIf="currentNode === node.data.component_id"><mat-icon style="font-size: 16px;">check</mat-icon></label>
+                  <label *ngIf="node.data.type === 'mission'"><mat-icon>assignment</mat-icon></label>
+                  <label *ngIf="node.data.type === 'pop-up-notification'"><mat-icon>notifications_active</mat-icon></label>
+                  <label *ngIf="node.data.type === 'coin'"><mat-icon>monetization_on</mat-icon></label>
+                  <label *ngIf="node.data.type === 'decision'"><mat-icon>help</mat-icon></label>
+                  <label *ngIf="node.data.type === 'finish'"><mat-icon>login</mat-icon></label>
+                  <label *ngIf="node.data.type === 'time'"><mat-icon>access_time</mat-icon></label>
+                  <label *ngIf="node.data.type === 'push-notification'"><mat-icon>more_horiz</mat-icon></label>
+                  <br/>
+                  <label class="name">{{node.label}}</label>
+                  <br/>
+                  <div *ngIf="node.data.type === 'decision'" fxLayoutAlign="space-between" class="yesNo">
+                    <button (click)="setYesNo(node, 'yes')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'yes' ? 'underline' : 'none'}">Yes</span></button>
+                    <button (click)="setYesNo(node, 'no')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'no' ? 'underline' : 'none'}">No</span></button>
+                  </div>
+                </xhtml:div>
+              </svg:foreignObject>
+            </svg:g>
+          </ng-template>
+
+          <ng-template #linkTemplate let-link>
+            <svg:g class="edge">
+              <svg:path class="line" stroke-width="2" marker-end="url(#arrow)">
+              </svg:path>
+              <svg:text class="edge-label" text-anchor="middle">
+                <textPath class="text-path" [attr.href]="'#' + link.id" [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">{{link.label}}</textPath>
+              </svg:text>
+            </svg:g>
+            <svg:g class="linkMidpoint" *ngIf="link.midPoint"
+                   [attr.transform]="'translate(' + (link.midPoint.x) + ',' + (link.midPoint.y) + ')'">
+              <ellipse rx="30" ry="10" style="fill: #eee; stroke: #000;" *ngIf="link.data.linkText" />
+              <svg:text alignment-baseline="central">{{ link.data.linkText }}</svg:text>
+          </svg:g>
+          </ng-template>
+        </ngx-graph>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
+        <div fxFlex="40">
+          <mat-card style="padding: 0px;">
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
+              <div fxFlex="50" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
+              <div fxFlex="50" class="h2">IDR {{task.total_budget}}</div>
+            </div>
+          </mat-card>
+        </div>
+        <div fxFlex="40">
+          <mat-card style="padding: 0px;">
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
+              <div fxFlex="50" class="h2" style="margin-right: 0px; text-align: right;">Total Week Duration : </div>
+              <div fxFlex="50" class="h2">{{task.current_week}}/{{task.total_week}}</div>
+            </div>
+          </mat-card>
+        </div>
+        <div fxFlex="10">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

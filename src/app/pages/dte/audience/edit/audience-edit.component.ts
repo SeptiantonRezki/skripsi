@@ -221,9 +221,12 @@ export class AudienceEditComponent {
       .subscribe(data => {
         console.log('audience type', data);
         if (data === 'mission') {
-          this.getListScheduler();
-          this.formAudience.get("trade_scheduler_id").setValidators(Validators.required);
-          this.formAudience.get("trade_creator_id").setValidators(Validators.nullValidator);
+          // this.getListScheduler();
+          // this.formAudience.get("trade_scheduler_id").setValidators(Validators.required);
+          // this.formAudience.get("trade_creator_id").setValidators(Validators.nullValidator);
+          this.formAudience.get("trade_creator_id").setValidators([]);
+          this.formAudience.get("trade_creator_id").clearValidators();
+          this.formAudience.get("trade_creator_id").updateValueAndValidity();
         } else {
           this.getTradePrograms();
           this.formAudience.get("trade_creator_id").setValidators(Validators.required);
@@ -1110,116 +1113,155 @@ export class AudienceEditComponent {
       else if (limit && selectedRetailer > max)
         return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebih dari ${max} Audience` });
 
-      let budget = {
-        total_retailer: limit ? this.selected.length : this.pagination.total,
-        trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
+      let body = {
+        _method: 'PUT',
+        name: this.formAudience.get('name').value,
+        trade_creator_id: this.formAudience.get("audience_type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
       }
 
-      if (this.formAudience.get("audience_type").value === 'mission') {
-        this.audienceService.validateBudget(budget).subscribe(res => {
-          if (res.selisih < 0)
-            return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+      if (this.formAudience.get('type').value !== 'pick-all') {
+        body['retailer_id'] = this.selected.map(item => item.id);
+        body['min'] = this.formAudience.get('min').value;
+        body['max'] = this.formAudience.get('max').value;
 
-          let body = {
-            _method: 'PUT',
-            name: this.formAudience.get('name').value,
-            trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
-            // min: limit ? this.formAudience.get('min').value : '',
-            // max: limit ? this.formAudience.get('max').value : '',
-            // retailer_id: this.selected.map(item => item.id)
-          }
-
-          if (this.formAudience.get('type').value !== 'pick-all') {
-            body['retailer_id'] = this.selected.map(item => item.id);
-            body['min'] = this.formAudience.get('min').value;
-            body['max'] = this.formAudience.get('max').value;
-
-          } else {
-            body['area_id'] = this.pagination.area;
-
-            if (this.pagination.area !== 1) {
-              body['min'] = 1;
-              body['max'] = this.pagination.total;
-            } else {
-              body['min'] = "";
-              body['max'] = "";
-            }
-          }
-
-          body['type'] = this.formAudience.get("audience_type").value;
-
-          if (body['type'] === 'mission') {
-            body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
-            if (body['trade_creator_id']) delete body['trade_creator_id'];
-          } else {
-            body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
-            if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
-          }
-          console.log(this.findInvalidControls());
-
-          this.saveData = !this.saveData;
-          this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
-            res => {
-              this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
-              this.router.navigate(['dte', 'audience']);
-              window.localStorage.removeItem('detail_audience');
-            },
-            err => {
-              // this.dialogService.openSnackBar({ message: err.error.message })
-              console.log(err.error.message);
-            }
-          )
-        })
       } else {
-        let body = {
-          _method: 'PUT',
-          name: this.formAudience.get('name').value,
-          trade_creator_id: this.formAudience.get('trade_creator_id').value,
-          // min: limit ? this.formAudience.get('min').value : '',
-          // max: limit ? this.formAudience.get('max').value : '',
-          // retailer_id: this.selected.map(item => item.id)
-        }
+        body['area_id'] = this.pagination.area;
 
-        if (this.formAudience.get('type').value !== 'pick-all') {
-          body['retailer_id'] = this.selected.map(item => item.id);
-          body['min'] = this.formAudience.get('min').value;
-          body['max'] = this.formAudience.get('max').value;
-
+        if (this.pagination.area !== 1) {
+          body['min'] = 1;
+          body['max'] = this.pagination.total;
         } else {
-          body['area_id'] = this.pagination.area;
-
-          if (this.pagination.area !== 1) {
-            body['min'] = 1;
-            body['max'] = this.pagination.total;
-          } else {
-            body['min'] = "";
-            body['max'] = "";
-          }
+          body['min'] = "";
+          body['max'] = "";
         }
-
-        body['type'] = this.formAudience.get("audience_type").value;
-
-        if (body['type'] === 'mission') {
-          body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
-          if (body['trade_creator_id']) delete body['trade_creator_id'];
-        } else {
-          body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
-          if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
-        }
-        console.log(this.findInvalidControls());
-        this.saveData = !this.saveData;
-        this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
-          res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
-            this.router.navigate(['dte', 'audience']);
-            window.localStorage.removeItem('detail_audience');
-          },
-          err => {
-            // this.dialogService.openSnackBar({ message: err.error.message })
-            console.log(err.error.message);
-          }
-        )
       }
+
+      body['type'] = this.formAudience.get("audience_type").value;
+
+      this.saveData = !this.saveData;
+      this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+        res => {
+          this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+          this.router.navigate(['dte', 'audience']);
+          window.localStorage.removeItem('detail_audience');
+        },
+        err => {
+          // this.dialogService.openSnackBar({ message: err.error.message })
+          console.log(err.error.message);
+        }
+      )
+
+
+      // let budget = {
+      //   total_retailer: limit ? this.selected.length : this.pagination.total,
+      //   trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
+      // }
+
+      // if (this.formAudience.get("audience_type").value === 'mission') {
+      //   this.audienceService.validateBudget(budget).subscribe(res => {
+      //     if (res.selisih < 0)
+      //       return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+
+      //     let body = {
+      //       _method: 'PUT',
+      //       name: this.formAudience.get('name').value,
+      //       trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
+      //       // min: limit ? this.formAudience.get('min').value : '',
+      //       // max: limit ? this.formAudience.get('max').value : '',
+      //       // retailer_id: this.selected.map(item => item.id)
+      //     }
+
+      //     if (this.formAudience.get('type').value !== 'pick-all') {
+      //       body['retailer_id'] = this.selected.map(item => item.id);
+      //       body['min'] = this.formAudience.get('min').value;
+      //       body['max'] = this.formAudience.get('max').value;
+
+      //     } else {
+      //       body['area_id'] = this.pagination.area;
+
+      //       if (this.pagination.area !== 1) {
+      //         body['min'] = 1;
+      //         body['max'] = this.pagination.total;
+      //       } else {
+      //         body['min'] = "";
+      //         body['max'] = "";
+      //       }
+      //     }
+
+      //     body['type'] = this.formAudience.get("audience_type").value;
+
+      //     if (body['type'] === 'mission') {
+      //       body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+      //       if (body['trade_creator_id']) delete body['trade_creator_id'];
+      //     } else {
+      //       body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+      //       if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+      //     }
+      //     console.log(this.findInvalidControls());
+
+      //     this.saveData = !this.saveData;
+      //     this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+      //       res => {
+      //         this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+      //         this.router.navigate(['dte', 'audience']);
+      //         window.localStorage.removeItem('detail_audience');
+      //       },
+      //       err => {
+      //         // this.dialogService.openSnackBar({ message: err.error.message })
+      //         console.log(err.error.message);
+      //       }
+      //     )
+      //   })
+      // } else {
+      //   let body = {
+      //     _method: 'PUT',
+      //     name: this.formAudience.get('name').value,
+      //     trade_creator_id: this.formAudience.get('trade_creator_id').value,
+      //     // min: limit ? this.formAudience.get('min').value : '',
+      //     // max: limit ? this.formAudience.get('max').value : '',
+      //     // retailer_id: this.selected.map(item => item.id)
+      //   }
+
+      //   if (this.formAudience.get('type').value !== 'pick-all') {
+      //     body['retailer_id'] = this.selected.map(item => item.id);
+      //     body['min'] = this.formAudience.get('min').value;
+      //     body['max'] = this.formAudience.get('max').value;
+
+      //   } else {
+      //     body['area_id'] = this.pagination.area;
+
+      //     if (this.pagination.area !== 1) {
+      //       body['min'] = 1;
+      //       body['max'] = this.pagination.total;
+      //     } else {
+      //       body['min'] = "";
+      //       body['max'] = "";
+      //     }
+      //   }
+
+      //   body['type'] = this.formAudience.get("audience_type").value;
+
+      //   if (body['type'] === 'mission') {
+      //     body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+      //     if (body['trade_creator_id']) delete body['trade_creator_id'];
+      //   } else {
+      //     body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+      //     if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+      //   }
+      //   console.log(this.findInvalidControls());
+      //   this.saveData = !this.saveData;
+      //   this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+      //     res => {
+      //       this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+      //       this.router.navigate(['dte', 'audience']);
+      //       window.localStorage.removeItem('detail_audience');
+      //     },
+      //     err => {
+      //       // this.dialogService.openSnackBar({ message: err.error.message })
+      //       console.log(err.error.message);
+      //     }
+      //   )
+      // }
     } else {
       commonFormValidator.validateAllFields(this.formAudience);
 

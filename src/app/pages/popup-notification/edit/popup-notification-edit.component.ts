@@ -40,7 +40,8 @@ export class PopupNotificationEditComponent {
 
   lvl: any[];
   minDate: any;
-  listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+  // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
+  listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
   listContentType: any[] = [];
   listLandingPage: any[] = [];
@@ -88,6 +89,7 @@ export class PopupNotificationEditComponent {
   area_id_list: any = [];
   lastLevel: any;
 
+  is_mission_builder: FormControl = new FormControl(true);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -168,7 +170,8 @@ export class PopupNotificationEditComponent {
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
-      is_target_audience: [false]
+      is_target_audience: [false],
+      is_mission_builder: this.is_mission_builder
     });
 
     this.formFilter = this.formBuilder.group({
@@ -181,9 +184,42 @@ export class PopupNotificationEditComponent {
       territory: [""]
     })
 
+    if(this.formPopupGroup.value.is_mission_builder === true) {
+      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+    } else {
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+    }
+
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
+
+      if (res === 'tsm') {
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+        this.formPopupGroup.controls['age_consumer_from'].setValue('');
+        this.formPopupGroup.controls['age_consumer_to'].setValue('');
+        this.formPopupGroup.controls['landing_page'].setValue('');
+        // this.formPopupGroup.controls['url_iframe'].setValue('');
+        this.formPopupGroup.controls['body'].setValue('');
+        this.formPopupGroup.controls['date_ws_downline'].setValue('');
+
+        this.formPopupGroup.controls['age_consumer_from'].disable();
+        this.formPopupGroup.controls['age_consumer_to'].disable();
+        this.formPopupGroup.controls['landing_page'].disable();
+        this.formPopupGroup.controls['url_iframe'].disable();
+        this.formPopupGroup.controls['body'].disable();
+        this.formPopupGroup.controls['date_ws_downline'].disable();
+
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
+          this.formPopupGroup.controls['url_iframe'].enable();
+        }
+      }
+
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -836,6 +872,16 @@ export class PopupNotificationEditComponent {
       const response = await this.notificationService.getById({}, { popup_notif_id: this.idPopup }).toPromise();
       this.detailPopup = response;
 
+      console.log(response.is_mission_builder);
+
+      if(response.is_mission_builder === 1) {
+        this.formPopupGroup.controls["is_mission_builder"].setValue(true);
+        this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      } else {
+        this.formPopupGroup.controls["is_mission_builder"].setValue(false);
+        this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+      }
+
       this.formPopupGroup.controls['positive_button'].setValue(response.positive_text);
       this.formPopupGroup.controls['negative_button'].setValue(response.negative_text);
       this.formPopupGroup.controls['title'].setValue(response.title);
@@ -1260,11 +1306,26 @@ export class PopupNotificationEditComponent {
     }
   }
 
+  selectChange(e: any) {
+    if (e.source.name === 'is_mission_builder' && e.checked) {
+      this.formPopupGroup.get('is_mission_builder').patchValue(true);
+      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+    } else {
+      this.formPopupGroup.get('is_mission_builder').patchValue(false);
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+    }
+    console.log(this.formPopupGroup.value.is_mission_builder);
+  }
+
   submit() {
     console.log(this.formPopupGroup);
     if ((this.formPopupGroup.valid && this.imageConverted === undefined) || (this.formPopupGroup.valid && this.imageConverted)) {
 
       this.dataService.showLoading(true);
+
+      this.formPopupGroup.get('is_mission_builder').patchValue(
+        this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
+      );
 
       let body = {
         _method: 'PUT',
@@ -1273,6 +1334,7 @@ export class PopupNotificationEditComponent {
         action: this.formPopupGroup.get('content_type').value,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
       }
 
       if (this.imageConverted) {
@@ -1662,7 +1724,7 @@ export class PopupNotificationEditComponent {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 
