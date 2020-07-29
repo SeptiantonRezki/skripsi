@@ -8,7 +8,7 @@ import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
-import * as html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 import * as _ from 'underscore';
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';

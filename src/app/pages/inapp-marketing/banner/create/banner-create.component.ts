@@ -9,7 +9,7 @@ import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { TemplateBanner } from 'app/classes/banner-template';
-import * as html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
