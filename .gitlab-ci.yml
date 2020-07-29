@@ -2,33 +2,32 @@ stages:
     - build:toDXTR
     - deploy:toDXTR
   
-  build_app_for_dev_DXTR:
-    stage: build:toDXTR
-    image: trion/ng-cli:7.2.3
-    before_script:
-      - npm ci
-    script:
-      - node --max-old-space-size=2048 ./node_modules/@angular/cli/bin/ng build --prod
-    artifacts:
-      paths:
-        - dist/
-    only:
-      - DEVDXTR
+build_app_for_dev_DXTR:
+  stage: build:toDXTR
+  image: trion/ng-cli:7.2.3
+  before_script:
+    - npm ci
+  script:
+    - node --max-old-space-size=2048 ./node_modules/@angular/cli/bin/ng build --prod
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - DEVDXTR
   
   
-  deploy_to_dev_DXTR:
-    image: alpine
-    stage: deploy:toDXTR
-    dependencies:
-      - build_app_for_dev_DXTR
-    script:
-      - apk add --no-cache rsync openssh
-      - mkdir -p /root/.ssh
-      - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
-      - chmod 600 /root/.ssh/id_dsa
-      - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
-      - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
-    
-    only:
-      - DEVDXTR
+deploy_to_dev_DXTR:
+  image: alpine
+  stage: deploy:toDXTR
+  dependencies:
+    - build_app_for_dev_DXTR
+  script:
+    - apk add --no-cache rsync openssh
+    - mkdir -p /root/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
+    - chmod 600 /root/.ssh/id_dsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
+    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
 
+  only:
+    - DEVDXTR
