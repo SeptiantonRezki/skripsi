@@ -27,7 +27,9 @@ deploy_to_dev_DXTR:
     - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
     - chmod 600 /root/.ssh/id_dsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
-    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service "$USER"@"$TARGET_SERVER":/var/www/backup-ayo-hms-service
+    - mkdir backup/ayo-hms-service/
+    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service/ backup/ayo-hms-service
+    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete backup/ayo-hms-service/ "$USER"@"$TARGET_SERVER":/var/www/backup-ayo-hms-service
     - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
 
   only:
