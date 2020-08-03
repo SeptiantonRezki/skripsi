@@ -16,8 +16,8 @@ import { DiaglogMisiComponent } from "./diaglog-misi/diaglog-misi.component";
 import { DiaglogPopUpNotifComponent } from "./diaglog-pop-up-notif/diaglog-pop-up-notif.component";
 import { DiaglogPushNotifComponent } from "./diaglog-push-notif/diaglog-push-notif.component";
 import { DiaglogWaktuTungguComponent } from "./diaglog-waktu-tunggu/diaglog-waktu-tunggu.component";
-import { Edge, Node, Layout } from '@swimlane/ngx-graph';
-import { DagreNodesOnlyLayout } from './dagre';
+// import { Edge, Node, Layout } from '@swimlane/ngx-graph';
+// import { DagreNodesOnlyLayout } from './dagre';
 import * as shape from 'd3-shape';
 import { sample } from './sample';
 import { DialogYesNoComponent } from "./dialog-yes-no/dialog-yes-no.component";
@@ -46,8 +46,9 @@ export class MissionBuilderCreateComponent implements OnInit {
   actions: any[];
 
   // Objects for nodes and links in graph
-  public nodes: Node[] = [];
-  public links: Edge[] = [];
+  // public nodes: Node[] = [];
+  // public links: Edge[] = [];
+  hierarchialGraph: { links: any[any]; nodes: any[any] };
 
   // Default layout orientation - Left to Right
   public layoutSettings = {
@@ -56,7 +57,7 @@ export class MissionBuilderCreateComponent implements OnInit {
   // Default curve shape - Linear
   public curve: any = shape.curveLinear;
 
-  public layout: Layout = new DagreNodesOnlyLayout();
+  // public layout: Layout = new DagreNodesOnlyLayout();
 
   update$: Subject<boolean> = new Subject();
   prev_node: string;
@@ -85,6 +86,10 @@ export class MissionBuilderCreateComponent implements OnInit {
     private sequencingService: SequencingService,
     private dialogService: DialogService,
   ) {
+    this.hierarchialGraph = {
+      links: [],
+      nodes: []
+    }
     this.actions = [];
   }
 
@@ -170,7 +175,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       this.dataService.showLoading(true);
       this.sequencingService.create(data).subscribe(res => {
         this.dataService.showLoading(false);
-  
+
         this.dialogService.openSnackBar({
           message: "Data berhasil disimpan!"
         });
@@ -316,6 +321,8 @@ export class MissionBuilderCreateComponent implements OnInit {
           next_step_component_yes: null,
           next_step_component_no: null,
           decision_type: this.yesNo,
+          min_date: this.task.start_date,
+          max_date: this.task.end_date,
         }
         this.actions.push(missionObject);
         break;
@@ -511,9 +518,9 @@ export class MissionBuilderCreateComponent implements OnInit {
     console.log(this.task.total_coin);
     this.checkBudget();
     // Nodes creation
-    this.nodes = [];
+    this.hierarchialGraph.nodes = [];
     for (const a of this.actions) {
-      const node: Node = {
+      const node = {
         id: a.component_id.toString(),
         label: a.name,
         data: {
@@ -525,22 +532,24 @@ export class MissionBuilderCreateComponent implements OnInit {
           decision_type: a.decision_type,
           component_id: a.component_id,
           id: a.id ? a.id : null,
+          min_date: a.min_date,
+          max_date: a.max_date,
         }
       };
 
-      this.nodes.push(node);
+      this.hierarchialGraph.nodes.push(node);
     }
     // console.log(this.nodes);
     if (this.actions.length > 0) {
-      this.updateCurrentNode(this.nodes[this.nodes.length - 1].data.component_id);
-      this.setCurrentNode(this.nodes[this.nodes.length - 1]);
+      this.updateCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1].data.component_id);
+      this.setCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1]);
     } else {
       this.updateCurrentNode(null);
       this.setCurrentNode(null);
     }
 
     // Links creation
-    this.links = [];
+    this.hierarchialGraph.links = [];
 
     for (const a of this.actions) {
       // Define source and target node id
@@ -554,7 +563,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       if (a.next_step_component !== null) {
         source = a.component_id;
         target = a.next_step_component;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -563,13 +572,13 @@ export class MissionBuilderCreateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
       if (a.next_step_component === null && a.next_step_component_no) {
         source = a.component_id;
         target = a.next_step_component_no;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -578,13 +587,13 @@ export class MissionBuilderCreateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
       if (a.next_step_component === null && a.next_step_component_yes) {
         source = a.component_id;
         target = a.next_step_component_yes;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -593,7 +602,7 @@ export class MissionBuilderCreateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
     }
@@ -617,7 +626,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     })
   }
 
-  public getStyles(node: Node): any {
+  public getStyles(node: any): any {
     const styles = { 'border': '1px solid #999', 'height': '100px', 'text-align': 'center', 'padding': '20px', 'font-size': '1.5rem', 'border-radius': '10px' };
     let temp = {}
     switch (node.data.type) {
@@ -689,7 +698,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     return formData;
   }
 
-  cardClick(node: Node) {
+  cardClick(node: any) {
     this.clickTimer = setTimeout(() => {
       if (node.data.type === 'decision') {
 
@@ -698,7 +707,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       this.updateCurrentNode(node.data.component_id);
     }, 300);
   }
-  cardDoubleClick(node: Node): void {
+  cardDoubleClick(node: any): void {
     clearTimeout(this.clickTimer);
     this.clickTimer = undefined;
     if (node.data.type === 'mission') {

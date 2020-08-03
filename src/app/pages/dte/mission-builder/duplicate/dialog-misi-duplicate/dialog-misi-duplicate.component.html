@@ -14,13 +14,13 @@
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input matInput formControlName="start_date" placeholder="Tanggal Awal" [matDatepicker]="start_date" (focus)="start_date.open()" [min]="minDate" readonly/>
+      <input matInput formControlName="start_date" placeholder="Tanggal Awal" [matDatepicker]="start_date" (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly/>
       <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
       <mat-datepicker #start_date></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input matInput formControlName="end_date" placeholder="Tanggal Berakhir" [matDatepicker]="end_date" (focus)="end_date.open()" [min]="minDate" readonly/>
+      <input matInput formControlName="end_date" placeholder="Tanggal Berakhir" [matDatepicker]="end_date" (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly/>
       <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
       <mat-datepicker #end_date></mat-datepicker>
     </mat-form-field>

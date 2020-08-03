@@ -12,10 +12,8 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
-import { Edge, Node, Layout } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import { DagreNodesOnlyLayout } from './dagre';
 import * as moment from 'moment';
 import { DialogCoinDuplicateComponent } from "./dialog-coin-duplicate/dialog-coin-duplicate.component";
 import { DialogMisiDuplicateComponent } from "./dialog-misi-duplicate/dialog-misi-duplicate.component";
@@ -42,8 +40,9 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   actions: any[];
 
   // Objects for nodes and links in graph
-  public nodes: Node[] = [];
-  public links: Edge[] = [];
+  // public nodes: Node[] = [];
+  // public links: Edge[] = [];
+  hierarchialGraph: { links: any[any]; nodes: any[any] };
 
   // Default layout orientation - Left to Right
   public layoutSettings = {
@@ -52,7 +51,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   // Default curve shape - Linear
   public curve: any = shape.curveLinear;
 
-  public layout: Layout = new DagreNodesOnlyLayout();
+  // public layout: Layout = new DagreNodesOnlyLayout();
 
   update$: Subject<boolean> = new Subject();
   prev_node: string;
@@ -82,7 +81,10 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     private dialogService: DialogService,
   ) {
     // this.actions = [];
-
+    this.hierarchialGraph = {
+      links: [],
+      nodes: []
+    }
   }
 
   misi = [];
@@ -112,8 +114,12 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         this.countWeeks(this.actions);
         this.task.total_week = Math.ceil(moment(this.task.end_date).diff(moment(this.task.start_date), 'week', true));
         this.actions.forEach(x => {
-          if(x.type === "mission" || x.type === "push-notification" || x.type === "pop-up-notification") {
+          if(x.type === "mission") {
+            x.min_date = this.task.start_date;
+            x.max_date = this.task.end_date;
             x.attribute.task_template_id = parseInt(x.attribute.task_template_id, 10);
+          }
+          if(x.type === "push-notification" || x.type === "pop-up-notification") {
             x.attribute.notification_id = parseInt(x.attribute.notification_id, 10);
           }
         });
@@ -189,7 +195,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
       this.dataService.showLoading(true);
       this.sequencingService.create(data).subscribe(res => {
         this.dataService.showLoading(false);
-  
+
         this.dialogService.openSnackBar({
           message: "Data berhasil disimpan!"
         });
@@ -335,6 +341,8 @@ export class MissionBuilderDuplicateComponent implements OnInit {
           next_step_component_yes: null,
           next_step_component_no: null,
           decision_type: this.yesNo,
+          min_date: this.task.start_date,
+          max_date: this.task.end_date,
         }
         this.actions.push(missionObject);
         break;
@@ -530,9 +538,9 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     console.log(this.task.total_coin);
     this.checkBudget();
     // Nodes creation
-    this.nodes = [];
+    this.hierarchialGraph.nodes = [];
     for (const a of this.actions) {
-      const node: Node = {
+      const node = {
         id: a.component_id.toString(),
         label: a.name,
         data: {
@@ -544,22 +552,24 @@ export class MissionBuilderDuplicateComponent implements OnInit {
           decision_type: a.decision_type,
           component_id: a.component_id,
           id: a.id ? a.id : null,
+          min_date: a.min_date,
+          max_date: a.max_date,
         }
       };
 
-      this.nodes.push(node);
+      this.hierarchialGraph.nodes.push(node);
     }
     // console.log(this.nodes);
     if (this.actions.length > 0) {
-      this.updateCurrentNode(this.nodes[this.nodes.length - 1].data.component_id);
-      this.setCurrentNode(this.nodes[this.nodes.length - 1]);
+      this.updateCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1].data.component_id);
+      this.setCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1]);
     } else {
       this.updateCurrentNode(null);
       this.setCurrentNode(null);
     }
 
     // Links creation
-    this.links = [];
+    this.hierarchialGraph.links = [];
 
     for (const a of this.actions) {
       // Define source and target node id
@@ -573,7 +583,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
       if (a.next_step_component !== null) {
         source = a.component_id;
         target = a.next_step_component;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -582,13 +592,13 @@ export class MissionBuilderDuplicateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
       if (a.next_step_component === null && a.next_step_component_no) {
         source = a.component_id;
         target = a.next_step_component_no;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -597,13 +607,13 @@ export class MissionBuilderDuplicateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
       if (a.next_step_component === null && a.next_step_component_yes) {
         source = a.component_id;
         target = a.next_step_component_yes;
-        const edge: Edge = {
+        const edge = {
           source: source.toString(),
           target: target.toString(),
           label: '',
@@ -612,7 +622,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
           }
         };
 
-        this.links.push(edge);
+        this.hierarchialGraph.links.push(edge);
       }
 
     }
@@ -634,7 +644,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     })
   }
 
-  public getStyles(node: Node): any {
+  public getStyles(node: any): any {
     const styles = { 'border': '1px solid #999', 'height': '100px', 'text-align': 'center', 'padding': '20px', 'font-size': '1.5rem', 'border-radius': '10px' };
     let temp = {}
     switch (node.data.type) {
@@ -706,7 +716,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     return formData;
   }
 
-  cardClick(node: Node) {
+  cardClick(node: any) {
     this.clickTimer = setTimeout(() => {
       if (node.data.type === 'decision') {
 
@@ -715,7 +725,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
       this.updateCurrentNode(node.data.component_id);
     }, 300);
   }
-  cardDoubleClick(node: Node): void {
+  cardDoubleClick(node: any): void {
     clearTimeout(this.clickTimer);
     this.clickTimer = undefined;
     if (node.data.type === 'mission') {

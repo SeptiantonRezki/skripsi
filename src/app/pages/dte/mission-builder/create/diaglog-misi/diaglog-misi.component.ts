@@ -25,6 +25,7 @@ export class DiaglogMisiComponent implements OnInit {
 
   missions: any[];
   minDate: any;
+  maxDate: any;
   private _onDestroy = new Subject<void>();
   public filterMission: FormControl = new FormControl();
   public filteredMission: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -54,8 +55,6 @@ export class DiaglogMisiComponent implements OnInit {
       coin_verification: null,
     });
 
-    this.setMinDate();
-
     this.filterMission.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -72,6 +71,8 @@ export class DiaglogMisiComponent implements OnInit {
         coin_verification: this.data.data.attribute.coin_verification,
         is_push_to_ff: this.data.data.attribute.is_push_to_ff
       });
+      this.minDate = this.data.data.min_date;
+      this.maxDate = this.data.data.max_date;
 
       if (this.data.data.attribute.verification_type === null) {
         // this.form.get('push').patchValue(false);
@@ -127,10 +128,6 @@ export class DiaglogMisiComponent implements OnInit {
         console.log("err ", err);
       }
     );
-  }
-
-  setMinDate(): void {
-    this.minDate = moment(new Date()).format('YYYY-MM-DD');
   }
 
   selectChangeFF(e: any) {

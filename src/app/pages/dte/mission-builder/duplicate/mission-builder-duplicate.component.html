@@ -134,14 +134,11 @@
 
       <div fxLayout="row" fxLayoutAlign="space-around" *ngIf="task">
         <ngx-graph class="chart-container"
-          layout="dagreCluster"
-          [links]="links"
-          [nodes]="nodes"
+          [links]="hierarchialGraph.links"
+          [nodes]="hierarchialGraph.nodes"
           [curve]="curve"
-          [layout]="layout"
           [nodeWidth]=150
           [nodeHeight]=100
-          [layoutSettings]="layoutSettings"
           [enableZoom]="true"
           [autoZoom]="true"
           [update$]="update$"
