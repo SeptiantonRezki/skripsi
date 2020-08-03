@@ -73,7 +73,7 @@ export class ImportFileDialogComponent implements OnInit {
     fd.append('file', this.files);
   }
 
-  async submit(event) {
+  async submit() {
     console.log('test: ',this.files);
       let fd = new FormData();
       fd.append('file', this.files);
