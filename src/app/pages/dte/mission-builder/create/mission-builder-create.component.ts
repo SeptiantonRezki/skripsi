@@ -19,7 +19,6 @@ import { DiaglogWaktuTungguComponent } from "./diaglog-waktu-tunggu/diaglog-wakt
 // import { Edge, Node, Layout } from '@swimlane/ngx-graph';
 // import { DagreNodesOnlyLayout } from './dagre';
 import * as shape from 'd3-shape';
-import { sample } from './sample';
 import { DialogYesNoComponent } from "./dialog-yes-no/dialog-yes-no.component";
 import { SequencingService } from '../../../../services/dte/sequencing.service';
 import * as moment from 'moment';
