@@ -197,7 +197,9 @@ export class DialogMisiEditComponent implements OnInit {
       next_step_component: this.data.data.next_step_component,
       next_step_component_yes: this.data.data.next_step_component_yes,
       next_step_component_no: this.data.data.next_step_component_no,
-      decision_type: this.data.data.decision_type
+      decision_type: this.data.data.decision_type,
+      min_date: this.minDate,
+      max_date: this.maxDate
     }
     console.log(returnObject);
     this.dialogRef.close(returnObject);
