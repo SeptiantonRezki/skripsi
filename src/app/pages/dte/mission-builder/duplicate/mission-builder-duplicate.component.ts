@@ -627,6 +627,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
 
     }
     this.update$.next(true);
+    this.countWeeks(this.actions);
   }
 
   checkBudget() {
