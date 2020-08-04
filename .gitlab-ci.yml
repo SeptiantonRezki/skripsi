@@ -17,21 +17,15 @@ build_app_for_DEV_HMS:
     - DEVHMS
 
 deploy_to_DEV_HMS:
-  image: alpine
+  image: python:latest
   stage: deploy:toDEV-HMS
   dependencies:
     - build_app_for_DEV_HMS  
   script:
-    - apk add --no-cache rsync openssh
-    - mkdir -p /root/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
-    - chmod 600 /root/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV
-    - apk add --update --no-cache py-pip
     - pip install awscli
-    - aws s3 sync s3://dev-ayo-hms "$USER"@"$TARGET_SERVER":/var/www/backup-dev-ayo-hms --delete
+    - aws s3 sync s3://dev-ayo-hms s3://src-assets-dev/backup-dev-ayo-hms --delete
     - aws s3 sync dist/ayo-principal/ s3://dev-ayo-hms/ --delete
   only:
     - DEVHMS
