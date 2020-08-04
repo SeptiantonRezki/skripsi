@@ -13,8 +13,8 @@ build_app_for_DEV_HMS:
     paths:
       - dist/
       - backup-hms-dev/
-    only:
-      - DEVHMS
+  only:
+    - DEVHMS
 
 deploy_to_DEV_HMS:
   image: python:latest
