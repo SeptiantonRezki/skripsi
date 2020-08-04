@@ -31,7 +31,7 @@ deploy_to_DEV_HMS:
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV
     - apk add --update --no-cache py-pip
     - pip install awscli
-    - aws s3 sync s3://dev-ayo-hms "$USER"@"$TARGET_SERVER":/var/www/backup-dev-ayo-hms/ --delete
+    - aws s3 sync s3://dev-ayo-hms "$USER"@"$TARGET_SERVER":/var/www/backup-dev-ayo-hms --delete
     - aws s3 sync dist/ayo-principal/ s3://dev-ayo-hms/ --delete
   only:
     - DEVHMS
