@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { DialogService } from "app/services/dialog.service";
 import { FormGroup, FormBuilder, FormArray, Validators } from "@angular/forms";
 import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
-import * as html2canvas from "html2canvas";
+import html2canvas from "html2canvas";
 import * as moment from "moment";
 import { QzTrayService } from "app/services/qz-tray.service";
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";

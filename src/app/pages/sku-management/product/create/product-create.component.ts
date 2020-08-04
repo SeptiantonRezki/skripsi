@@ -12,7 +12,7 @@ import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDial
 import * as moment from "moment";
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "./dialog/scan-barcode-dialog.component";
-import * as html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 
