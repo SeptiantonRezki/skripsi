@@ -51,7 +51,6 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('valid', this.validComboDrag);
   }
 
   ngOnDestroy() {
@@ -63,72 +62,28 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   preview(event) {
-    // console.log('valid', this.validComboDrag);
-    // console.log(event);
-
     this.files = undefined;
     this.files = event;
 
-    // console.log('test: ',this.files);
-
     let fd = new FormData();
     fd.append('file', this.files);
-    // this.dataService.showLoading(true);
-
-    // this.productService.previewImport({ company_id: this.payload.company_id ? this.payload.company_id : this.vendorCompany.value }, fd).subscribe(
-    //   res => {
-    //     this.rows = res && res.data ? res.data.data : [];
-    //     this.isInvalid = res.data.is_valid ? false : true;
-    //     this.dataService.showLoading(false);
-    //   },
-    //   err => {
-    //     this.dataService.showLoading(false);
-    //     this.files = undefined;
-
-    //     if (err.status === 404 || err.status === 500)
-    //       this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
-    //   }
-    // )
   }
 
   async submit() {
-    // console.log('test: ',this.files);
-    // const validData = this.rows.filter(item => item.is_valid === true);
-    // if (this.files && validData.length > 0 && validData.length <= 10000) {
+    let fd = new FormData();
+    fd.append('file', this.files);
 
-      // console.log('valid', this.validComboDrag);
-      // console.log(event);
-
-      // this.files = undefined;
-      // this.files = event;
-
-
-      let fd = new FormData();
-      fd.append('file', this.files);
-
-      this.dataService.showLoading(true);
-      this.productService.import(null, fd).subscribe(
-        res => {
-          this.dialogRef.close(res);
-          this.dataService.showLoading(false);
-        },
-        err => {
-          this.dataService.showLoading(false);
-          // this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
-        }
-      )
-
-    // } else {
-    //   let msg: string;
-
-    //   if (validData.length > 10000) {
-    //     msg = 'Jumlah SKU melebihi 10.000 baris';
-    //   } else {
-    //     msg = 'Data tidak valid';
-    //   }
-
-    //   this.dialogService.openSnackBar({ message: msg });
-    // }
+    this.dataService.showLoading(true);
+    this.productService.import(null, fd).subscribe(
+      res => {
+        this.dialogRef.close(res);
+        this.dataService.showLoading(false);
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
+      }
+    )
   }
 
   convert(array) {
