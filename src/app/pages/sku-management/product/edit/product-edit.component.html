@@ -148,6 +148,16 @@
                         </mat-form-field>
                       </div>
                     </div>
+                    <div class="pt-16" fxLayout="column" style="margin-left: 50px;">
+                      <mat-form-field fxFlex="100" class="is-light form-primary">
+                        <!-- <strong>Prioritas Produk</strong> -->
+                        <input matInput type="text" (keypress)="numberOnly($event)" placeholder="Prioritas Produk" formControlName="priority_product">
+                        <!-- <mat-error
+                          *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
+                          Nama Produk harus diisi
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
                 <div class="pt-16">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { Page } from "app/classes/laravel-pagination";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
@@ -6,13 +6,15 @@ import { ProductService } from "app/services/sku-management/product.service";
 import { DialogService } from "app/services/dialog.service";
 import { PagesName } from "app/classes/pages-name";
 import { DataService } from "app/services/data.service";
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ImportFileDialogComponent } from "./import-file-dialog/import-file-dialog.component"
 
 @Component({
   selector: "app-product-index",
   templateUrl: "./product-index.component.html",
   styleUrls: ["./product-index.component.scss"]
 })
-export class ProductIndexComponent {
+export class ProductIndexComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any[];
@@ -28,16 +30,20 @@ export class ProductIndexComponent {
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   permission: any;
   roles: PagesName = new PagesName();
 
+
+  dialogRef: any;
   offsetPagination: any;
 
   constructor(
     private productService: ProductService,
     private dialogService: DialogService,
-    private dataService: DataService
+    private dataService: DataService,
+    private dialog: MatDialog
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -182,4 +188,43 @@ export class ProductIndexComponent {
       }
     );
   }
+
+  async  export() {
+    const response = await this.productService.export().toPromise();
+    this.downloadLink.nativeElement.href = response.data;
+    this.downloadLink.nativeElement.click();
+
+    // this.dataService.showLoading(true);
+    // this.productService.export().subscribe(
+    //   res => {
+    //     console.log('resss', res.data);
+    //     this.downloadLink.nativeElement.href = res.data;
+    //     this.downloadLink.nativeElement.click();
+    //     this.dataService.showLoading(false);
+    //   },
+    //   err => {
+    //     this.dataService.showLoading(false);
+    //   }
+    // )
+  }
+
+  import() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    // dialogConfig.data = { password: 'P@ssw0rd', company_id: this.vendor_id };
+
+    this.dialogRef = this.dialog.open(ImportFileDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.getProducts();
+      }
+    });
+  }
+
+
 }

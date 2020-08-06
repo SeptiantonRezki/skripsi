@@ -159,6 +159,8 @@ export class Endpoint {
         list_packaging: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/packaging?page=all`,
         // parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
+        export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
+        import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${
           context.param
           }&status=active`
