@@ -1,121 +1,123 @@
 stages:
-    - build:toDXTR
-    - deploy:toDXTR
-    - build:toDEV-HMS
-    - deploy:toDEV-HMS
-    - build:toQA-HMS
-    - deploy:toQA-HMS
-    - build:toPROD
-    - deploy:toPROD
+  - build:toDXTR
+  - deploy:toDXTR
+  - build:toDEV-HMS
+  - deploy:toDEV-HMS
+  - build:toQA-HMS
+  - deploy:toQA-HMS
+  - build:toPROD
+  - deploy:toPROD
 
 build_app_for_dev_DXTR:
-  stage: build:toDXTR
-  image: trion/ng-cli:7.2.3
-  before_script:
-    - npm ci
-  script:
-    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false
-  artifacts:
-    paths:
-      - dist/
-      - backup-principal/
-  only:
-    - DEVDXTR
+stage: build:toDXTR
+image: trion/ng-cli:7.2.3
+before_script:
+  - npm ci
+script:
+  - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false
+artifacts:
+  paths:
+    - dist/
+    - backup-principal/
+only:
+  - DEVDXTR
 
 deploy_to_dev_DXTR:
-  image: alpine
-  stage: deploy:toDXTR
-  dependencies:
-    - build_app_for_dev_DXTR
-  script:
-    - apk add --no-cache rsync openssh
-    - mkdir -p /root/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
-    - chmod 600 /root/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
-    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service/ backup-principal
-    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete backup-principal/ "$USER"@"$TARGET_SERVER":/var/www/backup-ayo-hms-service
-    - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
-  only:
-    - DEVDXTR
-    
+image: alpine
+stage: deploy:toDXTR
+dependencies:
+  - build_app_for_dev_DXTR
+script:
+  - apk add --no-cache rsync openssh
+  - mkdir -p /root/.ssh
+  - echo "$SSH_PRIVATE_KEY" >> /root/.ssh/id_dsa
+  - chmod 600 /root/.ssh/id_dsa
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > /root/.ssh/config
+  - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service/ backup-principal
+  - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete backup-principal/ "$USER"@"$TARGET_SERVER":/var/www/backup-ayo-hms-service
+  - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
+only:
+  - DEVDXTR
+
 build_app_for_DEV_HMS:
-  stage: build:toDEV-HMS
-  image: trion/ng-cli:7.2.3
-  before_script:
-    - npm ci
-  script:
-    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=dev-hms
-  artifacts:
-    paths:
-      - dist/
-  only:
-    - DEVHMS
+stage: build:toDEV-HMS
+image: trion/ng-cli:7.2.3
+before_script:
+  - npm ci
+script:
+  - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=dev-hms
+artifacts:
+  paths:
+    - dist/
+only:
+  - DEVHMS
 
 deploy_to_DEV_HMS:
-  image: python:latest
-  stage: deploy:toDEV-HMS
-  dependencies:
-    - build_app_for_DEV_HMS  
-  script:
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV
-    - pip install awscli
-    - aws s3 sync s3://dev-ayo-hms/ s3://src-assets-dev/backup-dev-ayo-hms --delete
-    - aws s3 sync dist/ayo-principal/ s3://dev-ayo-hms/ --delete
-  only:
-    - DEVHMS
+image: python:latest
+stage: deploy:toDEV-HMS
+dependencies:
+  - build_app_for_DEV_HMS  
+script:
+  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV
+  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV
+  - pip install awscli
+  - aws s3 sync s3://dev-ayo-hms/ s3://src-assets-dev/backup-dev-ayo-hms --delete
+  - aws s3 sync dist/ayo-principal/ s3://dev-ayo-hms/ --delete
+only:
+  - DEVHMS
 
 build_app_for_QA_HMS:
-  stage: build:toQA-HMS
-  image: trion/ng-cli:7.2.3
-  before_script:
-    - npm ci
-  script:
-    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=qa
-  artifacts:
-    paths:
-      - dist/
-  only:
-    - QA-HMS
-  
+stage: build:toQA-HMS
+image: trion/ng-cli:7.2.3
+before_script:
+  - npm ci
+script:
+  - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=qa
+artifacts:
+  paths:
+    - dist/
+only:
+  - QA-HMS
+
 deploy_to_QA_HMS:
-  image: python:latest
-  stage: deploy:toQA-HMS
-  dependencies:
-    - build_app_for_QA_HMS  
-  script:
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
-    - pip install awscli
-    - aws s3 sync s3://qa-ayo-hms/ s3://src-assets-qa/backup-qa-ayo-hms --delete
-    - aws s3 sync dist/ayo-principal/ s3://qa-ayo-hms/ --delete
-  only:
-    - QA-HMS
+image: python:latest
+stage: deploy:toQA-HMS
+dependencies:
+  - build_app_for_QA_HMS  
+script:
+  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
+  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
+  - pip install awscli
+  - aws s3 sync s3://qa-ayo-hms/ s3://src-assets-qa/backup-qa-ayo-hms --delete
+  - aws s3 sync dist/ayo-principal/ s3://qa-ayo-hms/ --delete
+only:
+  - QA-HMS
 
 build_app_for_PROD:
-  stage: build:toPROD
-  image: trion/ng-cli:7.2.3
-  before_script:
-    - npm ci
-  script:
-    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --prod
-  artifacts:
-    paths:
-      - dist/
-  only:
-    - PROD
-      
+stage: build:toPROD
+image: trion/ng-cli:7.2.3
+before_script:
+  - npm ci
+script:
+  - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --prod
+artifacts:
+  paths:
+    - dist/
+    - backup-principal-prod/
+only:
+  - PROD
+  
 deploy_to_PROD:
-  image: python:latest
-  stage: deploy:toPROD
-  dependencies:
-    - build_app_for_PROD  
-  script:
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
-    - pip install awscli
-    - aws s3 sync s3://qa-ayo-hms/_Deployment_PRD/ s3://src-assets-qa/backup-prod-ayo-hms --delete
-    - aws s3 sync dist/ayo-principal/ s3://qa-ayo-hms/_Deployment_PRD/ --delete
-  only:
-    - PROD
+image: python:latest
+stage: deploy:toPROD
+dependencies:
+  - build_app_for_PROD  
+script:
+  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
+  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_QA
+  - pip install awscli
+  - aws s3 sync s3://qa-ayo-hms/_Deployment_PRD/ backup-principal-prod
+  - aws s3 sync backup-principal-prod/ s3://src-assets-qa/backup-prod-ayo-hms --delete
+  - aws s3 sync dist/ayo-principal/ s3://qa-ayo-hms/_Deployment_PRD/ --delete
+only:
+  - PROD
