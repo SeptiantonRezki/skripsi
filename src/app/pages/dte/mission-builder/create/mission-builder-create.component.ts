@@ -66,6 +66,7 @@ export class MissionBuilderCreateComponent implements OnInit {
   noFinish: boolean;
 
   budget: number = 0;
+  overBudget: boolean = false;
 
   constructor(
     private router: Router,
@@ -141,7 +142,6 @@ export class MissionBuilderCreateComponent implements OnInit {
   }
 
   submit() {
-    this.task.total_coin = 0;
     this.task.actions = this.actions;
     const data = this.task;
     let notifValid = 0;
@@ -156,7 +156,11 @@ export class MissionBuilderCreateComponent implements OnInit {
         }
       }
     }
-    if (notifValid < 0) {
+    if (this.overBudget) {
+      this.dialogService.openSnackBar({
+        message: "Budget trade program tidak mencukupi!"
+      });
+    } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
         message: "Ada notifikasi yang belum diset!"
       });
@@ -608,6 +612,14 @@ export class MissionBuilderCreateComponent implements OnInit {
     this.sequencingService.checkBudget(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.budget = res.data.current_budget;
+      if (res.data.remaining_budget < 0) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi"
+        });
+        this.overBudget = true;
+      } else {
+        this.overBudget = false;
+      }
       this.task.total_budget = this.budget;
     }, err => {
       console.log('err', err);

@@ -74,6 +74,7 @@ export class MissionBuilderEditComponent implements OnInit {
   noFinish: boolean;
 
   budget: number = 0;
+  overBudget: boolean = false;
 
   constructor(
     private router: Router,
@@ -162,7 +163,6 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   submit(status?: string){
-    this.task.total_coin = 0;
     this.task.status = status;
     this.task.actions = this.actions;
     const data = this.task;
@@ -179,8 +179,12 @@ export class MissionBuilderEditComponent implements OnInit {
         }
       }
     }
-    console.log(notifValid);
-    if (notifValid < 0) {
+
+    if (this.overBudget) {
+      this.dialogService.openSnackBar({
+        message: "Budget trade program tidak mencukupi!"
+      });
+    } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
         message: "Ada notifikasi yang belum diset!"
       });
@@ -201,7 +205,6 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   updateStatus() {
-    this.task.total_coin = 0;
     this.task.actions = this.actions;
     const data = this.task;
 
@@ -220,7 +223,11 @@ export class MissionBuilderEditComponent implements OnInit {
         }
       }
 
-      if (notifValid < 0) {
+      if (this.overBudget) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi!"
+        });
+      } else if (notifValid < 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: "Ada notifikasi yang belum diset!"
@@ -689,6 +696,15 @@ export class MissionBuilderEditComponent implements OnInit {
     }
     this.sequencingService.checkBudget(body).subscribe(res => {
       this.dataService.showLoading(false);
+      if (res.data.remaining_budget < 0) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi"
+        });
+        this.overBudget = true;
+      } else {
+        this.overBudget = false;
+      }
+      console.log(this.overBudget);
       this.task.total_budget = res.data.current_budget;
     }, err => {
       console.log('err', err);
