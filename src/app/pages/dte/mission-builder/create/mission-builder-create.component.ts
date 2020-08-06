@@ -1,23 +1,13 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
-import { MatDialog, MatDialogRef, VERSION, MatDialogConfig } from "@angular/material";
-import { filter } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { DataService } from "../../../../services/data.service";
 import { Router } from "@angular/router";
-import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import { DialogService } from "../../../../services/dialog.service";
-import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from "rxjs/Observable";
-import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { PagesName } from 'app/classes/pages-name';
 import { DiaglogMisiComponent } from "./diaglog-misi/diaglog-misi.component";
 import { DiaglogPopUpNotifComponent } from "./diaglog-pop-up-notif/diaglog-pop-up-notif.component";
 import { DiaglogPushNotifComponent } from "./diaglog-push-notif/diaglog-push-notif.component";
 import { DiaglogWaktuTungguComponent } from "./diaglog-waktu-tunggu/diaglog-waktu-tunggu.component";
-// import { Edge, Node, Layout } from '@swimlane/ngx-graph';
-// import { DagreNodesOnlyLayout } from './dagre';
 import * as shape from 'd3-shape';
 import { DialogYesNoComponent } from "./dialog-yes-no/dialog-yes-no.component";
 import { SequencingService } from '../../../../services/dte/sequencing.service';
@@ -76,11 +66,11 @@ export class MissionBuilderCreateComponent implements OnInit {
   noFinish: boolean;
 
   budget: number = 0;
+  overBudget: boolean = false;
 
   constructor(
     private router: Router,
     public Dialog: MatDialog,
-    private http: HttpClient,
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
@@ -118,7 +108,8 @@ export class MissionBuilderCreateComponent implements OnInit {
         });
         this.router.navigate(['dte', 'task-sequencing']);
       } else {
-        this.task.total_week = Math.ceil(moment(this.task.end_date).diff(moment(this.task.start_date), 'week', true));
+        const tempArray = this.getDaysArray(this.task.start_date, this.task.end_date);
+        this.task.total_week = Math.ceil(tempArray.length / 7);
         this.task.current_week = 0;
       }
     });
@@ -151,7 +142,6 @@ export class MissionBuilderCreateComponent implements OnInit {
   }
 
   submit() {
-    this.task.total_coin = 0;
     this.task.actions = this.actions;
     const data = this.task;
     let notifValid = 0;
@@ -166,7 +156,11 @@ export class MissionBuilderCreateComponent implements OnInit {
         }
       }
     }
-    if (notifValid < 0) {
+    if (this.overBudget) {
+      this.dialogService.openSnackBar({
+        message: "Budget trade program tidak mencukupi!"
+      });
+    } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
         message: "Ada notifikasi yang belum diset!"
       });
@@ -580,7 +574,7 @@ export class MissionBuilderCreateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'No',
           data: {
             linkText: 'N'
           }
@@ -595,7 +589,7 @@ export class MissionBuilderCreateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'Yes',
           data: {
             linkText: 'Y'
           }
@@ -618,6 +612,14 @@ export class MissionBuilderCreateComponent implements OnInit {
     this.sequencingService.checkBudget(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.budget = res.data.current_budget;
+      if (res.data.remaining_budget < 0) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi"
+        });
+        this.overBudget = true;
+      } else {
+        this.overBudget = false;
+      }
       this.task.total_budget = this.budget;
     }, err => {
       console.log('err', err);

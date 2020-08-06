@@ -186,6 +186,7 @@ export class PopupNotificationEditComponent {
 
     if(this.formPopupGroup.value.is_mission_builder === true) {
       this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      this.formPopupGroup.controls['user_group'].setValue('tsm');
     } else {
       this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
     }
@@ -197,22 +198,16 @@ export class PopupNotificationEditComponent {
       if (res === 'tsm') {
         this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
-        this.formPopupGroup.controls['age_consumer_from'].setValue('');
-        this.formPopupGroup.controls['age_consumer_to'].setValue('');
-        this.formPopupGroup.controls['landing_page'].setValue('');
-        // this.formPopupGroup.controls['url_iframe'].setValue('');
-        this.formPopupGroup.controls['body'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
-
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-        this.formPopupGroup.controls['landing_page'].disable();
-        this.formPopupGroup.controls['url_iframe'].disable();
-        this.formPopupGroup.controls['body'].disable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
+          this.formPopupGroup.controls['landing_page'].enable();
         }
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
@@ -291,7 +286,7 @@ export class PopupNotificationEditComponent {
       }
 
       if (!this.onLoad) {
-        this.formPopupGroup.controls['landing_page'].setValue('');
+        // this.formPopupGroup.controls['landing_page'].setValue('');
       }
 
       if (this.formPopupGroup.controls["is_target_audience"].value === true) this.getAudience();

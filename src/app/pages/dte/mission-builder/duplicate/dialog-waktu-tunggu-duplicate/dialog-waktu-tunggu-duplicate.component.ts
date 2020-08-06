@@ -1,12 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { DataService } from "../../../../../services/data.service";
-import { AudienceService } from "../../../../../services/dte/audience.service";
-import { DialogService } from "../../../../../services/dialog.service";
-import { Router } from "@angular/router";
-import { Subject, Observable, ReplaySubject } from "rxjs";
 
 @Component({
   selector: 'app-dialog-waktu-tunggu-duplicate',
@@ -18,7 +12,6 @@ export class DialogWaktuTungguDuplicateComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogWaktuTungguDuplicateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,

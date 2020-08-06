@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DateAdapter, MatDialogConfig, MatDialog, MatSelect } from '@angular/material';
+import { MatDialogConfig, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
-import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import { DialogService } from "../../../../services/dialog.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import { Subject, Observable, ReplaySubject } from "rxjs";
+import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
@@ -51,7 +49,6 @@ export class TaskSequencingEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private dialog: MatDialog,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private sequencingService: SequencingService
@@ -121,18 +118,10 @@ export class TaskSequencingEditComponent implements OnInit {
         status: this.data.status,
       });
       this.actions = res.data.actions;
-      // if (this.data.is_editable === 0) {
-      //   this.taskSequenceForm.get("name").disable();
-      //   this.taskSequenceForm.get("trade_creator_id").disable();
-      //   this.taskSequenceForm.get("trade_audience_group_id").disable();
-      //   this.taskSequenceForm.get("start_date").disable();
-      //   this.taskSequenceForm.get("end_date").disable();
-      // }
     });
   }
 
   selectChange(e: any){
-    // console.log(e);
     const theIndex = this.programs.findIndex(x => x.id === e.value);
     console.log(this.programs[theIndex]);
     this.setDate(this.programs[theIndex].end_date);
@@ -152,7 +141,6 @@ export class TaskSequencingEditComponent implements OnInit {
   }
 
   selectChangeAudince(e: any){
-    // console.log(e);
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
     console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
@@ -175,7 +163,6 @@ export class TaskSequencingEditComponent implements OnInit {
     });
 
     console.log(this.taskSequenceForm.value);
-    // console.log(this.actions);
   }
 
   filteringGTP() {
@@ -266,18 +253,10 @@ export class TaskSequencingEditComponent implements OnInit {
       task_sequencing_management_id: this.data.id
     }
     this.sequencingService.downloadAdjustmentCoin(body).subscribe(res => {
-      // window.open(res.data, "_blank");
-      // const link = document.createElement('a');
-      // link.target = '_blank';
-      // link.href = res.data;
-      // link.setAttribute('visibility', 'hidden');
-      // link.click();
-      console.log(res);
 
       this.downloadLink.nativeElement.href = res.data;
       this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
-      // console.log(res);
     }, err => {
       this.dataService.showLoading(false);
     })
@@ -285,9 +264,6 @@ export class TaskSequencingEditComponent implements OnInit {
 
   import() {
 
-    // if (this.data.status_berjalan === "expired") {
-    //   return this.dialogService.openSnackBar({ message: `Tidak dapat adjust coin karna status scheduler trade program telah ${this.dataScheduler.status_berjalan}` });
-    // }
 
     const dialogConfig = new MatDialogConfig();
 
