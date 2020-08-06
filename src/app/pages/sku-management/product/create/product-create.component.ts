@@ -249,7 +249,7 @@ export class ProductCreateComponent {
       start_date_pin_up: [""],
       end_date_pin_up: [""],
       status_pin_up: [""],
-      priority_product: ["", Validators.required],
+      priority_product: [""],
       // convertion: ["", [Validators.min(0)]]
       // jenisproduk: "",
       is_private_label: [false],

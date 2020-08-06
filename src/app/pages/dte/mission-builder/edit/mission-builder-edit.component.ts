@@ -74,6 +74,7 @@ export class MissionBuilderEditComponent implements OnInit {
   noFinish: boolean;
 
   budget: number = 0;
+  overBudget: boolean = false;
 
   constructor(
     private router: Router,
@@ -115,7 +116,8 @@ export class MissionBuilderEditComponent implements OnInit {
       } else {
         this.actions = this.task.actions;
         this.countWeeks(this.actions);
-        this.task.total_week = Math.ceil(moment(this.task.end_date).diff(moment(this.task.start_date), 'week', true));
+        const tempArray = this.getDaysArray(this.task.start_date, this.task.end_date);
+        this.task.total_week = Math.ceil(tempArray.length / 7);
         this.actions.forEach(x => {
           if(x.type === "mission") {
             x.min_date = this.task.start_date;
@@ -161,32 +163,9 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   submit(status?: string){
-    this.task.total_coin = 0;
     this.task.status = status;
     this.task.actions = this.actions;
     const data = this.task;
-    // const data = this.objectToFormData(this.task, null, null);
-    // console.log(data);
-    // this.dataService.showLoading(true);
-    // this.sequencingService.put(data, { sequencing_id: this.task.id }).subscribe(res => {
-    //   this.dataService.showLoading(false);
-    //   // if (res.success) {
-    //   //   this.dialogService.openSnackBar({
-    //   //     message: "Data berhasil disimpan!"
-    //   //   });
-    //   // } else {
-    //   //   this.dialogService.openSnackBar({
-    //   //     message: res.message
-    //   //   });
-    //   // }
-    //   this.dialogService.openSnackBar({
-    //     message: "Data berhasil disimpan!"
-    //   });
-    //   this.router.navigate(['dte', 'task-sequencing']);
-    // }, err => {
-    //   console.log('err', err);
-    //   this.dataService.showLoading(false);
-    // })
 
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
@@ -200,8 +179,12 @@ export class MissionBuilderEditComponent implements OnInit {
         }
       }
     }
-    console.log(notifValid);
-    if (notifValid < 0) {
+
+    if (this.overBudget) {
+      this.dialogService.openSnackBar({
+        message: "Budget trade program tidak mencukupi!"
+      });
+    } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
         message: "Ada notifikasi yang belum diset!"
       });
@@ -222,17 +205,64 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   updateStatus() {
-    this.dataService.showLoading(false);
-    this.sequencingService.updateStatus({sequencing_id: this.task.id}, {status: this.task.status === 'publish' ? 'unpublish' : 'publish'}).subscribe(res => {
-      this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({
-        message: "Status berhasil di-update!"
-      });
-      this.router.navigate(['dte', 'task-sequencing']);
-    }, err => {
-      console.log('err', err);
-      this.dataService.showLoading(false);
-    })
+    this.task.actions = this.actions;
+    const data = this.task;
+
+    this.dataService.showLoading(true);
+    if(this.task.is_editable === 1){
+      let notifValid = 0;
+      for (let i = 0; i < data.actions.length; i++) {
+        const element = data.actions[i];
+        if (element.attribute !== null && 'notification_id' in element.attribute) {
+          if (element.attribute.notification_id > 0) {
+            notifValid++;
+          } else {
+            notifValid = -1;
+            break;
+          }
+        }
+      }
+
+      if (this.overBudget) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi!"
+        });
+      } else if (notifValid < 0) {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Ada notifikasi yang belum diset!"
+        });
+      } else {
+        this.sequencingService.put(data, { sequencing_id: this.task.id }).subscribe(res => {
+          this.sequencingService.updateStatus({sequencing_id: this.task.id}, {status: this.task.status === 'publish' ? 'unpublish' : 'publish'}).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: "Status berhasil di-update!"
+            });
+            this.router.navigate(['dte', 'task-sequencing']);
+          }, err => {
+            console.log('err', err);
+            this.dataService.showLoading(false);
+          })
+        }, err => {
+          console.log('err', err);
+          this.dataService.showLoading(false);
+        })
+      }
+
+    } else {
+      this.sequencingService.updateStatus({sequencing_id: this.task.id}, {status: this.task.status === 'publish' ? 'unpublish' : 'publish'}).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Status berhasil di-update!"
+        });
+        this.router.navigate(['dte', 'task-sequencing']);
+      }, err => {
+        console.log('err', err);
+        this.dataService.showLoading(false);
+      })
+    }
+
   }
 
   nodeDisabler(type: any) {
@@ -629,7 +659,7 @@ export class MissionBuilderEditComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'No',
           data: {
             linkText: 'N'
           }
@@ -644,7 +674,7 @@ export class MissionBuilderEditComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'Yes',
           data: {
             linkText: 'Y'
           }
@@ -666,6 +696,15 @@ export class MissionBuilderEditComponent implements OnInit {
     }
     this.sequencingService.checkBudget(body).subscribe(res => {
       this.dataService.showLoading(false);
+      if (res.data.remaining_budget < 0) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi"
+        });
+        this.overBudget = true;
+      } else {
+        this.overBudget = false;
+      }
+      console.log(this.overBudget);
       this.task.total_budget = res.data.current_budget;
     }, err => {
       console.log('err', err);

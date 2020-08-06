@@ -1,13 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { DataService } from "../../../../../services/data.service";
-import { AudienceService } from "../../../../../services/dte/audience.service";
-import { DialogService } from "../../../../../services/dialog.service";
-import { Router } from "@angular/router";
-import { Subject, Observable, ReplaySubject } from "rxjs";
-import { NotificationService } from '../../../../../services/notification.service';
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { SequencingService } from '../../../../../services/dte/sequencing.service';
 import { Page } from 'app/classes/laravel-pagination';
@@ -29,13 +23,10 @@ export class DialogPopUpNotifDuplicateComponent implements OnInit {
   pagination: Page = new Page();
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogPopUpNotifDuplicateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private notificationService: NotificationService,
     private sequencingService: SequencingService,
-    private dataService: DataService,
   ) { }
 
   ngOnInit() {

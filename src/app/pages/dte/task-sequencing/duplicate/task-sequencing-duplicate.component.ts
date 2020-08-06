@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
-import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
-import { DialogService } from "../../../../services/dialog.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import { Subject, Observable, ReplaySubject } from "rxjs";
+import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
@@ -44,8 +41,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogService: DialogService,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private sequencingService: SequencingService
@@ -113,13 +108,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
         status: this.data.status,
       });
       this.actions = res.data.actions;
-      // if (this.data.is_editable === 0) {
-      //   this.taskSequenceForm.get("name").disable();
-      //   this.taskSequenceForm.get("trade_creator_id").disable();
-      //   this.taskSequenceForm.get("trade_audience_group_id").disable();
-      //   this.taskSequenceForm.get("start_date").disable();
-      //   this.taskSequenceForm.get("end_date").disable();
-      // }
     });
   }
 
@@ -144,7 +132,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   selectChangeAudince(e: any){
-    // console.log(e);
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
     console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
@@ -166,8 +153,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
       data: this.taskSequenceForm.value,
     });
 
-    console.log(this.taskSequenceForm.value);
-    // console.log(this.actions);
   }
 
   filteringGTP() {

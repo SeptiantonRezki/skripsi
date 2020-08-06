@@ -182,6 +182,9 @@ export class PopupNotificationCreateComponent {
 
     if(this.formPopupGroup.value.is_mission_builder === true) {
       this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('tsm');
+      }, 1);
     } else {
       this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
     }
@@ -1175,9 +1178,15 @@ export class PopupNotificationCreateComponent {
     if (e.source.name === 'is_mission_builder' && e.checked) {
       this.formPopupGroup.get('is_mission_builder').patchValue(true);
       this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('tsm');
+      }, 1);
     } else {
       this.formPopupGroup.get('is_mission_builder').patchValue(false);
       this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('wholesaler');
+      }, 1);
     }
     console.log(this.formPopupGroup.value.is_mission_builder);
   }

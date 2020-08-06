@@ -184,8 +184,8 @@
             </svg:g>
             <svg:g class="linkMidpoint" *ngIf="link.midPoint"
                    [attr.transform]="'translate(' + (link.midPoint.x) + ',' + (link.midPoint.y) + ')'">
-              <ellipse rx="30" ry="10" style="fill: #eee; stroke: #000;" *ngIf="link.data.linkText" />
-              <svg:text alignment-baseline="central">{{ link.data.linkText }}</svg:text>
+              <ellipse rx="30" ry="10" style="fill: #eee; stroke: #000;" *ngIf="link.label" />
+              <svg:text alignment-baseline="central">{{ link.label }}</svg:text>
           </svg:g>
           </ng-template>
         </ngx-graph>

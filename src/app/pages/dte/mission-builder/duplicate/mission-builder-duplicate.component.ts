@@ -1,17 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
-import { MatDialog, MatDialogRef, VERSION, MatDialogConfig } from "@angular/material";
-import { filter } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { DataService } from "../../../../services/data.service";
 import { Router } from "@angular/router";
-import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import { DialogService } from "../../../../services/dialog.service";
-import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from "rxjs/Observable";
-import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { PagesName } from 'app/classes/pages-name';
 import * as shape from 'd3-shape';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
 import * as moment from 'moment';
@@ -71,11 +63,11 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   noFinish: boolean;
 
   budget: number = 0;
+  overBudget: boolean = false;
 
   constructor(
     private router: Router,
     public Dialog: MatDialog,
-    private http: HttpClient,
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
@@ -112,7 +104,8 @@ export class MissionBuilderDuplicateComponent implements OnInit {
       } else {
         this.actions = this.task.actions;
         this.countWeeks(this.actions);
-        this.task.total_week = Math.ceil(moment(this.task.end_date).diff(moment(this.task.start_date), 'week', true));
+        const tempArray = this.getDaysArray(this.task.start_date, this.task.end_date);
+        this.task.total_week = Math.ceil(tempArray.length / 7);
         this.actions.forEach(x => {
           if(x.type === "mission") {
             x.min_date = this.task.start_date;
@@ -158,23 +151,9 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   submit(){
-    this.task.total_coin = 0;
     this.task.status = "unpublish";
     this.task.actions = this.actions;
     const data = this.task;
-    // // const data = this.objectToFormData(this.task, null, null);
-    // console.log(data);
-    // this.sequencingService.create(data).subscribe(res => {
-    //   this.dataService.showLoading(false);
-
-    //   this.dialogService.openSnackBar({
-    //     message: "Data berhasil disimpan!"
-    //   });
-    //   this.router.navigate(['dte', 'task-sequencing']);
-    // }, err => {
-    //   console.log('err', err);
-    //   this.dataService.showLoading(false);
-    // })
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
       const element = data.actions[i];
@@ -187,7 +166,11 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         }
       }
     }
-    if (notifValid < 0) {
+    if (this.overBudget) {
+      this.dialogService.openSnackBar({
+        message: "Budget trade program tidak mencukupi!"
+      });
+    } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
         message: "Ada notifikasi yang belum diset!"
       });
@@ -449,9 +432,6 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     const delNode = node.data.component_id;
 
     function deleteNode(arr: any, i: any) {
-      console.log((arr));
-      console.log(i);
-
       let c = arr.length;
       while (c--) {
         const ca = arr.findIndex(x => x.component_id === i);
@@ -474,42 +454,32 @@ export class MissionBuilderDuplicateComponent implements OnInit {
             }
           }
           arr.splice(ca, 1);
-          console.log(arr);
           return;
         } else {
           let newIndex = null;
           if (arr[ca].next_step_component) {
-            console.log(arr);
             newIndex = arr.findIndex((x: any) => { return x.component_id === arr[ca].next_step_component }); // 3
-            console.log(newIndex);
             const newNode = arr[newIndex].component_id;
             deleteNode(arr, newNode);
           }
           if (arr[ca].next_step_component_yes) {
-            console.log(arr);
             newIndex = arr.findIndex((x: any) => { return x.component_id === arr[ca].next_step_component_yes }); // 3
-            console.log(newIndex);
             const newNode = arr[newIndex].component_id;
             deleteNode(arr, newNode);
           }
           if (arr[ca].next_step_component_no) {
-            console.log(arr);
             newIndex = arr.findIndex((x: any) => { return x.component_id === arr[ca].next_step_component_no }); // 3
-            console.log(newIndex);
             const newNode = arr[newIndex].component_id;
             deleteNode(arr, newNode);
           }
         }
-        console.log(arr);
       }
     }
 
     deleteNode(a, delNode);
     this.actions = a;
-    console.log(this.actions);
 
     this.updateGraph();
-    // this.setCurrentNode(null);
   }
 
   updateCurrentNode(index: number) {
@@ -517,7 +487,6 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   setCurrentNode(node: any) {
-    console.log(node);
     this.activeNode = node;
     const nodeUpdate = node ? node.data.type : null
 
@@ -525,7 +494,6 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   updateGraph() {
-    console.log(this.actions);
     this.task.total_coin = 0;
     for (const a of this.actions) {
       if (a.type === 'mission') {
@@ -535,7 +503,6 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         this.task.total_coin += parseInt(a.attribute.total_coin, 10) ? parseInt(a.attribute.total_coin, 10) : 0;
       }
     }
-    console.log(this.task.total_coin);
     this.checkBudget();
     // Nodes creation
     this.hierarchialGraph.nodes = [];
@@ -559,7 +526,6 @@ export class MissionBuilderDuplicateComponent implements OnInit {
 
       this.hierarchialGraph.nodes.push(node);
     }
-    // console.log(this.nodes);
     if (this.actions.length > 0) {
       this.updateCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1].data.component_id);
       this.setCurrentNode(this.hierarchialGraph.nodes[this.hierarchialGraph.nodes.length - 1]);
@@ -601,7 +567,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'No',
           data: {
             linkText: 'N'
           }
@@ -616,7 +582,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: '',
+          label: 'Yes',
           data: {
             linkText: 'Y'
           }
@@ -638,6 +604,14 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     }
     this.sequencingService.checkBudget(body).subscribe(res => {
       this.dataService.showLoading(false);
+      if (res.data.remaining_budget < 0) {
+        this.dialogService.openSnackBar({
+          message: "Budget trade program tidak mencukupi"
+        });
+        this.overBudget = true;
+      } else {
+        this.overBudget = false;
+      }
       this.task.total_budget = res.data.current_budget;
     }, err => {
       console.log('err', err);
@@ -747,17 +721,9 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   setYesNo(node: any, yn: any) {
-    console.log(yn);
     this.yesNo = yn;
     this.cardClick(node);
   }
-
-  // openDialogYesNo() {
-  //   this.dialogYesNo = this.Dialog.open(
-  //     DialogYesNoEditComponent,
-  //   );
-  //   return this.dialogYesNo.afterClosed()
-  // }
 
   openDialogMisi(node: any) {
     this.dialogMisiRef = this.Dialog.open(

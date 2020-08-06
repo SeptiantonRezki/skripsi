@@ -1,16 +1,11 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialogRef, DateAdapter } from "@angular/material";
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { DataService } from "../../../../../services/data.service";
-import { AudienceService } from "../../../../../services/dte/audience.service";
-import { DialogService } from "../../../../../services/dialog.service";
-import { Router } from "@angular/router";
-import { Subject, Observable, ReplaySubject } from "rxjs";
-import * as moment from 'moment';
+import { MatDialogRef } from "@angular/material";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { Page } from 'app/classes/laravel-pagination';
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -30,11 +25,11 @@ export class DiaglogMisiComponent implements OnInit {
   public filterMission: FormControl = new FormControl();
   public filteredMission: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  pagination: Page = new Page();
+
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DiaglogMisiComponent>,
-    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
   ) { }
@@ -44,7 +39,7 @@ export class DiaglogMisiComponent implements OnInit {
     this.getMission();
     this.form = this.formBuilder.group({
       task_template_id: "",
-      start_date: [moment(), Validators.required],
+      start_date: "",
       end_date: "",
       pushFF: this.pushFF,
       verifikasi: this.verifikasi,
@@ -53,6 +48,7 @@ export class DiaglogMisiComponent implements OnInit {
       is_push_to_ff: 0,
       coin_submission: null,
       coin_verification: null,
+      is_ir_template: null,
     });
 
     this.filterMission.valueChanges
@@ -64,26 +60,24 @@ export class DiaglogMisiComponent implements OnInit {
     if (this.data !== null) {
       this.form.patchValue({
         task_template_id: parseInt(this.data.data.attribute.task_template_id,10),
-        start_date: this.data.data.attribute.start_date,
-        end_date: this.data.data.attribute.end_date,
+        start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
+        end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
         verification_type: this.data.data.attribute.verification_type,
-        coin_submission: this.data.data.attribute.coin_submission,
-        coin_verification: this.data.data.attribute.coin_verification,
-        is_push_to_ff: this.data.data.attribute.is_push_to_ff
+        coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
+        coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
+        is_push_to_ff: this.data.data.attribute.is_push_to_ff,
+        is_ir_template: this.data.data.attribute.is_ir_template
       });
       this.minDate = this.data.data.min_date;
       this.maxDate = this.data.data.max_date;
 
       if (this.data.data.attribute.verification_type === null) {
-        // this.form.get('push').patchValue(false);
         this.form.get('verifikasi').patchValue(false);
         this.form.get('verifikasiFF').patchValue(false);
       } else if (this.data.data.attribute.verification_type === 'principal') {
-        // this.form.get('push').patchValue(false);
         this.form.get('verifikasi').patchValue(true);
         this.form.get('verifikasiFF').patchValue(false);
       } else if (this.data.data.attribute.verification_type === 'field-force') {
-        // this.form.get('push').patchValue(true);
         this.form.get('verifikasi').patchValue(false);
         this.form.get('verifikasiFF').patchValue(true);
       }
@@ -96,6 +90,24 @@ export class DiaglogMisiComponent implements OnInit {
         this.form.get('coin_verification').patchValue(0);
       }
 
+    }
+  }
+
+  selectChangeMisi(e: any){
+    // console.log(e);
+    const theIndex = this.missions.findIndex(x => x.id === e.value);
+    // console.log(this.missions[theIndex]);
+    console.log("is ir template: "+this.missions[theIndex].is_ir_template);
+    this.form.patchValue({
+      is_ir_template: this.missions[theIndex].is_ir_template
+    });
+
+    if(this.missions[theIndex].is_ir_template === 1){
+      this.form.get('verifikasiFF').patchValue(false);
+      this.form.get('pushFF').patchValue(false);
+      this.form.get('verifikasi').patchValue(true);
+    } else {
+      this.form.get('verifikasi').patchValue(false);
     }
   }
 
@@ -118,7 +130,8 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   getMission() {
-    this.templateTaskService.get().subscribe(
+    this.pagination.per_page = 999999;
+    this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         console.log("res missions", res.data.data);
         this.missions = res.data.data;
@@ -143,14 +156,22 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   selectChange(e: any) {
-    // console.log(e);
     if (e.source.name === 'verifikasi' && e.checked) {
-      // this.form.get('push').patchValue(false);
       this.form.get('verifikasiFF').patchValue(false);
+      this.form.get('pushFF').patchValue(false);
     }
     if (e.source.name === 'verifikasi-ff' && e.checked) {
       this.form.get('verifikasi').patchValue(false);
-      // this.form.get('push').patchValue(false);
+      this.form.get('pushFF').patchValue(false);
+    }
+    if (e.source.name === 'push-to-ff' && e.checked) {
+      this.form.get('is_push_to_ff').patchValue(1);
+      this.form.get('coin_submission').patchValue(0);
+      this.form.get('coin_verification').patchValue(0);
+      this.form.get('verifikasiFF').patchValue(false);
+      this.form.get('verifikasi').patchValue(false);
+    } else if (e.source.name === 'push-to-ff' && e.checked === false) {
+      this.form.get('is_push_to_ff').patchValue(0);
     }
   }
 
