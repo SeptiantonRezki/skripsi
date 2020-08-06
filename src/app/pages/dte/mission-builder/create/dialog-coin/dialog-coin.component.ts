@@ -1,15 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, DateAdapter } from "@angular/material";
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { DataService } from "../../../../../services/data.service";
-import { AudienceService } from "../../../../../services/dte/audience.service";
-import { DialogService } from "../../../../../services/dialog.service";
-import { Router } from "@angular/router";
-import { Subject, Observable, ReplaySubject } from "rxjs";
-import * as moment from 'moment';
-import { takeUntil } from 'rxjs/operators';
-import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 
@@ -23,10 +14,8 @@ export class DialogCoinComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogCoinComponent>,
-    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 

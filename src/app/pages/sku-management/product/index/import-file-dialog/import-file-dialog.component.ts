@@ -51,7 +51,6 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('valid', this.validComboDrag);
   }
 
   ngOnDestroy() {
@@ -63,32 +62,28 @@ export class ImportFileDialogComponent implements OnInit {
   }
 
   preview(event) {
-    console.log('valid', this.validComboDrag);
     this.files = undefined;
     this.files = event;
-
-    console.log('test: ',this.files);
 
     let fd = new FormData();
     fd.append('file', this.files);
   }
 
   async submit() {
-    console.log('test: ',this.files);
-      let fd = new FormData();
-      fd.append('file', this.files);
+    let fd = new FormData();
+    fd.append('file', this.files);
 
-      this.dataService.showLoading(true);
-      this.productService.import(null, fd).subscribe(
-        res => {
-          this.dialogRef.close(res);
-          this.dataService.showLoading(false);
-        },
-        err => {
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
-        }
-      )
+    this.dataService.showLoading(true);
+    this.productService.import(null, fd).subscribe(
+      res => {
+        this.dialogRef.close(res);
+        this.dataService.showLoading(false);
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
+      }
+    )
   }
 
   convert(array) {

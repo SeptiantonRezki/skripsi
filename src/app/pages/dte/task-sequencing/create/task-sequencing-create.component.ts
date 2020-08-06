@@ -1,18 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-} from "@angular/forms";
-import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
-import { DialogService } from "../../../../services/dialog.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { DataService } from "app/services/data.service";
 import * as _ from "underscore";
 import { SequencingService } from "../../../../services/dte/sequencing.service";
-import { Subject, Observable, ReplaySubject } from "rxjs";
+import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import * as moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
@@ -42,9 +33,6 @@ export class TaskSequencingCreateComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogService: DialogService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private sequencingService: SequencingService
   ) {}
