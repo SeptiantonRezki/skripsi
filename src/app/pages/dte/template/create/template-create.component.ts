@@ -756,6 +756,15 @@ export class TemplateCreateComponent {
             //   directly: this.listDirectBelanja[index]
             // }) : null
           };
+
+          if (item.type === 'stock_check_ir') {
+            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['id'] : null;
+            mockup['type'] = 'stock_check_ir';
+            mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['code'] : null;
+            mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['name'] : null;
+            mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
+          }
+
           if (item.type === 'planogram_ir') {
             mockup['type'] = 'planogram';
             mockup['planogram_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
