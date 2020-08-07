@@ -181,4 +181,8 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     });
   }
 
+  export() {
+    console.log('Wow You Exported Me!!!');
+  }
+
 }
