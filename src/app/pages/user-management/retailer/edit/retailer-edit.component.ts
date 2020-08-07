@@ -42,7 +42,10 @@ export class RetailerEditComponent {
 
   listIC: any[] = [
     { name: "NON-SRC", value: "NON-SRC" },
-    { name: "SRC", value: "SRC" }
+    { name: "SRC", value: "SRC" },
+    { name: "GT", value: "GT" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" }
   ];
 
   listCashierAccess: any[] = [
@@ -609,7 +612,7 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value ? this.formRetailer.get("latitude").value : null,
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
-        type: "General Trade",
+        type: (this.formRetailer.get("InternalClassification").value === 'SRC' || this.formRetailer.get("InternalClassification").value === 'NON-SRC') ? "General Trade" : this.formRetailer.get("InternalClassification").value,
         InternalClassification: this.formRetailer.get("InternalClassification").value,
         cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
