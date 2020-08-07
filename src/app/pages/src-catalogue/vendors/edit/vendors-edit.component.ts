@@ -325,7 +325,7 @@ export class VendorsEditComponent implements OnInit {
     }
   }
 
-  submit() {
+  submit(force = false) {
     if (this.formVendor.valid) {
       this.dataService.showLoading(true);
       this.submitting = true;
@@ -349,23 +349,53 @@ export class VendorsEditComponent implements OnInit {
         status: 'active'
       };
       console.log('body', body);
+      if (!force) {
+        this.vendorsService.update({ vendor_id: this.detailVendor.id }, body).subscribe(
+          res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan"
+            });
+            this.router.navigate(["src-catalogue", "vendors"]);
+          },
+          err => {
+            if (err && err.status === 403) {
+              this.dialogService.brodcastCloseConfirmation();
+              let data = {
+                titleDialog: "Hapus Vendor secara Paksa",
+                captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan",
+                confirmCallback: this.forceUpdate.bind(this),
+                buttonText: ["Hapus Sekarang", "Batal"]
+              };
+              this.dialogService.openCustomConfirmationDialog(data);
+            }
+            this.submitting = false;
+            this.dataService.showLoading(false);
+          }
+        );
+      } else {
+        this.vendorsService.updateWithParams({ vendor_id: this.detailVendor.id }, body, { force_update: 1 }).subscribe(
+          res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan"
+            });
+            this.router.navigate(["src-catalogue", "vendors"]);
+          },
+          err => {
+            this.submitting = false;
+            this.dataService.showLoading(false);
+          }
+        );
+      }
 
-      this.vendorsService.update({ vendor_id: this.detailVendor.id }, body).subscribe(
-        res => {
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
-          });
-          this.router.navigate(["src-catalogue", "vendors"]);
-        },
-        err => {
-          this.submitting = false;
-          this.dataService.showLoading(false);
-        }
-      );
     } else {
       commonFormValidator.validateAllFields(this.formVendor);
     }
+  }
+
+  forceUpdate() {
+    this.submit(true);
   }
 
 }

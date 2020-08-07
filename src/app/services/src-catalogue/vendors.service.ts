@@ -33,8 +33,18 @@ export class VendorsService extends BaseService {
     return this.putApi(url, body);
   }
 
-  delete(context): Observable<any> {
+  updateWithParams(context?, body?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update', context);
+    return this.putWithParamsApi(url, body, queryParams);
+  }
+
+  delete(context, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'delete', context);
-    return this.deleteApi(url);
+    return this.deleteApi(url, queryParams);
+  }
+
+  forceDelete(context, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete', context);
+    return this.deleteWithParamsApi(url, null, queryParams);
   }
 }
