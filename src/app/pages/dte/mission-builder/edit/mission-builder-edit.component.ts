@@ -238,14 +238,17 @@ export class MissionBuilderEditComponent implements OnInit {
       }
 
       if (!validCoinNode) {
+        this.dataService.showLoading(true);
         this.dialogService.openSnackBar({
           message: "Tidak boleh ada activity coin jika misi tidak bertipe Push to FF"
         });
       } else if (mixedVerification) {
+        this.dataService.showLoading(true);
         this.dialogService.openSnackBar({
           message: "Kombinasi tipe verifikasi tidak diperbolehkan dalam satu task sequence"
         });
       } else if (this.overBudget) {
+        this.dataService.showLoading(true);
         this.dialogService.openSnackBar({
           message: "Budget trade program tidak mencukupi!"
         });
