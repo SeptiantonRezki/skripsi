@@ -157,6 +157,32 @@ export class VendorsIndexComponent implements OnInit {
         this.getVendors();
       },
       err => {
+        if (err && err.status === 403) {
+          this.dialogService.brodcastCloseConfirmation();
+          let data = {
+            titleDialog: "Hapus Vendor secara Paksa",
+            captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan",
+            confirmCallback: this.forceDelete.bind(this),
+            buttonText: ["Hapus Sekarang", "Batal"]
+          };
+          this.dialogService.openCustomConfirmationDialog(data);
+        }
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
+
+  forceDelete() {
+    this.dataService.showLoading(true);
+    this.vendorsService.forceDelete({ vendor_id: this.id }, { force_delete: 1 }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dataService.showLoading(false);
+        this.getVendors();
+      },
+      err => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: err.error.message });
       }
