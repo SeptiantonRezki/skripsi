@@ -1,17 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
-import { MatDialog, MatDialogRef, VERSION, MatDialogConfig } from "@angular/material";
-import { filter } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { DataService } from "../../../../services/data.service";
 import { Router } from "@angular/router";
-import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import { DialogService } from "../../../../services/dialog.service";
-import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from "rxjs/Observable";
-import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { PagesName } from 'app/classes/pages-name';
 import * as shape from 'd3-shape';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
 import { DialogMisiEditComponent } from "./dialog-misi-edit/dialog-misi-edit.component";
@@ -38,24 +30,10 @@ export class MissionBuilderEditComponent implements OnInit {
   dialogCoinRef: MatDialogRef<DialogCoinEditComponent>;
 
   task: any = null;
-
-  // Original actions object to API
   actions: any[];
-
-  // Objects for nodes and links in graph
-  // public nodes: Node[] = [];
-  // public links: Edge[] = [];
   hierarchialGraph: { links: any[any]; nodes: any[any] };
-
-  // Default layout orientation - Left to Right
-  public layoutSettings = {
-    orientation: 'LR'
-  };
-  // Default curve shape - Linear
+  public layoutSettings = { orientation: 'LR' };
   public curve: any = shape.curveLinear;
-
-  // public layout: Layout = new DagreNodesOnlyLayout();
-
   update$: Subject<boolean> = new Subject();
   prev_node: string;
   next_node: string;
@@ -79,7 +57,6 @@ export class MissionBuilderEditComponent implements OnInit {
   constructor(
     private router: Router,
     public Dialog: MatDialog,
-    private http: HttpClient,
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
@@ -106,6 +83,7 @@ export class MissionBuilderEditComponent implements OnInit {
     this.noFinish = false;
     this.currentNode = 0;
     this.maxNode = 0;
+
     this.dataService.getDataSequencingInfo().subscribe((res) => {
       this.task = res.data;
       if (this.task == null) {
@@ -163,13 +141,27 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   submit(status?: string){
+    // Set Task Status
     this.task.status = status;
+    // Set Task Actions
     this.task.actions = this.actions;
     const data = this.task;
+    // Filter Nodes with type 'mission'
+    let missionNodes = data.actions.filter(v => v.type === 'mission');
+    let coinNodes = data.actions.filter(v => v.type === 'coin');
+    // Are there any mixed verification type?
+    let mixedVerification = !(missionNodes.every((v: any) => v.attribute.verification_type === missionNodes[0].attribute.verification_type)) || !(missionNodes.every((v: any) => v.attribute.is_push_to_ff === missionNodes[0].attribute.is_push_to_ff));
+    // Check if coin activity is used in non-Push to FF sequence
+    let validCoinNode = true;
 
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
       const element = data.actions[i];
+      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && element.attribute.is_push_to_ff === 0) {
+        if (coinNodes.length > 0) {
+          validCoinNode = false;
+        }
+      }
       if (element.attribute !== null && 'notification_id' in element.attribute) {
         if (element.attribute.notification_id > 0) {
           notifValid++;
@@ -180,7 +172,15 @@ export class MissionBuilderEditComponent implements OnInit {
       }
     }
 
-    if (this.overBudget) {
+    if (!validCoinNode) {
+      this.dialogService.openSnackBar({
+        message: "Tidak boleh ada activity coin jika misi tidak bertipe Push to FF"
+      });
+    } else if (mixedVerification) {
+      this.dialogService.openSnackBar({
+        message: "Kombinasi tipe verifikasi tidak diperbolehkan dalam satu task sequence"
+      });
+    } else if (this.overBudget) {
       this.dialogService.openSnackBar({
         message: "Budget trade program tidak mencukupi!"
       });
@@ -210,9 +210,23 @@ export class MissionBuilderEditComponent implements OnInit {
 
     this.dataService.showLoading(true);
     if(this.task.is_editable === 1){
+      // Filter Nodes with type 'mission'
+      let missionNodes = data.actions.filter(v => v.type === 'mission');
+      let coinNodes = data.actions.filter(v => v.type === 'coin');
+      // Are there any mixed verification type?
+      let mixedVerification = !(missionNodes.every((v: any) => v.attribute.verification_type === missionNodes[0].attribute.verification_type)) || !(missionNodes.every((v: any) => v.attribute.is_push_to_ff === missionNodes[0].attribute.is_push_to_ff));
+      // Check if coin activity is used in non-Push to FF sequence
+      let validCoinNode = true;
+      
+      // Use to validate notification nodes
       let notifValid = 0;
       for (let i = 0; i < data.actions.length; i++) {
         const element = data.actions[i];
+        if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && element.attribute.is_push_to_ff === 0) {
+          if (coinNodes.length > 0) {
+            validCoinNode = false;
+          }
+        }
         if (element.attribute !== null && 'notification_id' in element.attribute) {
           if (element.attribute.notification_id > 0) {
             notifValid++;
@@ -223,7 +237,18 @@ export class MissionBuilderEditComponent implements OnInit {
         }
       }
 
-      if (this.overBudget) {
+      if (!validCoinNode) {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Tidak boleh ada activity coin jika misi tidak bertipe Push to FF"
+        });
+      } else if (mixedVerification) {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Kombinasi tipe verifikasi tidak diperbolehkan dalam satu task sequence"
+        });
+      } else if (this.overBudget) {
+        this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: "Budget trade program tidak mencukupi!"
         });
