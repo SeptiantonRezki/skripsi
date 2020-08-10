@@ -8,10 +8,10 @@ export const environment = {
   server_service: 'https://dev.ayo-api.dxtr.asia',
   label: 'DEVELOPMENT',
   show_label: true,
-  image: 'assets/images/ayo/icon/dev.png',
-  image_2x: 'assets/images/ayo/icon/dev@2x.png 2x',
-  backgroundImage: 'assets/images/ayo/header/Header-Color-Blue@2x.jpg',
-  localDev: 'http://sampoerna.local',
+  image: "assets/images/ayo/icon/dev.png",
+  image_2x: "assets/images/ayo/icon/dev@2x.png 2x",
+  backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg",
+  localDev: "http://sampoerna.local",
   qiscus_appIdMC: 'zova-efc1mal9p9cjurph', //Staging
 };
 
@@ -34,6 +34,7 @@ export const server = {
   community: 'community',
   order: 'order',
 }
+
 
 /*
  * In development mode, to ignore zone related error stack frames such as

@@ -268,59 +268,57 @@
               >
             </mat-select>
           </mat-form-field>
+          
+        </div>
+      </form>
+      <form [formGroup]="formFilterRetailer">
+        <div
+          fxLayout="row wrap"
+          fxLayoutAlign="space-between stretch"
+          fxLayout.lt-md="column"
+          class="pt-16"
+          fxLayoutGap="20px"
+          fxLayoutGap.lt-md="0px"
+          *ngIf="formAudience.controls['geotree_checkbox'].value === true"
+        >
           <!--[R]-->
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
               placeholder="Retail Classification"
               formControlName="retail_classification"
-              multiple
             >
               <mat-option
-                *ngFor="let item of filteringGeotree(list['territory'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Territori"
-                    : item.code
-                }}</mat-option
+                *ngFor="let item of retailClassification"
+                [value]="item.value"
               >
+                {{item.name}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
               placeholder="SRC Classification"
               formControlName="src_classification"
-              multiple
             >
               <mat-option
-                *ngFor="let item of filteringGeotree(list['territory'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Territori"
-                    : item.code
-                }}</mat-option
+                *ngFor="let item of srcClassification"
+                [value]="item.value"
               >
+                {{item.name}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
               placeholder="SRC Type"
               formControlName="src_type"
-              multiple
             >
               <mat-option
-                *ngFor="let item of filteringGeotree(list['territory'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Territori"
-                    : item.code
-                }}</mat-option
+                *ngFor="let item of srcType"
+                [value]="item.value"
               >
+                {{item.name}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
           <!--[R]-->
