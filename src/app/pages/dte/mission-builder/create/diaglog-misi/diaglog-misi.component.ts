@@ -130,7 +130,7 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   getMission() {
-    this.pagination.per_page = 999999;
+    this.pagination.per_page = 30;
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         console.log("res missions", res.data.data);

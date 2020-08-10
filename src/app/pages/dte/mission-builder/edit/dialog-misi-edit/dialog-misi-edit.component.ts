@@ -133,7 +133,7 @@ export class DialogMisiEditComponent implements OnInit {
   }
 
   getMission() {
-    this.pagination.per_page = 999999;
+    this.pagination.per_page = 30;
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
