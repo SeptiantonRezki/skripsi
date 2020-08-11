@@ -88,6 +88,8 @@ export class DialogMisiDuplicateComponent implements OnInit {
         this.form.get('pushFF').patchValue(true);
         this.form.get('coin_submission').patchValue(0);
         this.form.get('coin_verification').patchValue(0);
+        this.form.get('verifikasi').patchValue(false);
+        this.form.get('verifikasiFF').patchValue(false);
       }
 
     }
