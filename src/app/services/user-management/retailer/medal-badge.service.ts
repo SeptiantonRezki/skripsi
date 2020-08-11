@@ -11,9 +11,9 @@ export class MedalBadgeService extends BaseService {
     super(http);
   }
 
-  getMedalList(): Observable<any> {
+  getMedalList(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'medal');
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   show(context?): Observable<any> {

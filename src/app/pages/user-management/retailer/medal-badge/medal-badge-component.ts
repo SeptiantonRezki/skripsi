@@ -7,13 +7,15 @@ import { Component } from '@angular/core';
 })
 export class MedalBadgeComponent {
 
+  onLoad: boolean;
+
   medalSelected: any;
   dataIndexMedal: any;
   dataCreateMedal: any;
 
   constructor() {
     this.medalSelected = 'MEDAL_LIST';
-
+    this.onLoad = false;
   }
   medalChanges(event: any) {
     if (event !== null) {
