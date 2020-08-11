@@ -51,7 +51,7 @@ import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/us
 import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
 import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
 import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
-// import { PendingChangesGuard } from "../dte/dte.guard";
+import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-component";
 
 const routes: Routes = [
   {
@@ -481,6 +481,13 @@ const routes: Routes = [
       breadcrumbs: brConfig.privatelabel.paymentmethod.edit
     },
     // canActivate: [PageGuard]
+  },
+  {
+    path: 'medal-badge',
+    component: MedalBadgeComponent,
+    data: {
+      breadcrumbs: brConfig.retailer.medalBadge
+    },
   },
 ];
 

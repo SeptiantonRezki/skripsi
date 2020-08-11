@@ -640,6 +640,15 @@ export class Endpoint {
         import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/import`,
         preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`,
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`
+      },
+      medalBadge: {
+        medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
+        putMedal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/${context.id}`,
+        retailerList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer`,
+        medalCategory: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/category`,
+        exportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/export`,
+        importRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/import`,
+        previewImportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/preview-import`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
