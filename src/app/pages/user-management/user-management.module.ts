@@ -71,6 +71,12 @@ import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/
 import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
 import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
 
+import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-component";
+import { MedalIndexComponent } from "./retailer/medal-badge/medal/index/medal-index-component";
+import { MedalCreateComponent } from "./retailer/medal-badge/medal/create/medal-create-component";
+import { RetailerListIndexComponent } from "./retailer/medal-badge/retailer-list/retailer-list-index-component";
+import { ImportRetailerListDialogComponent } from "./retailer/medal-badge/retailer-list/import-retailer-list-dialog/import-retailer-list-dialog.component"
+
 import { PageGuard } from "app/classes/auth.guard";
 
 import {
@@ -171,6 +177,8 @@ export const MY_FORMATS = {
     PayMethodEditComponent,
     PayMethodIndexComponent,
 
+    MedalBadgeComponent,
+
   ],
   declarations: [
     AdminPrincipalIndexComponent,
@@ -214,12 +222,23 @@ export const MY_FORMATS = {
     PayMethodEditComponent,
     PayMethodIndexComponent,
 
+    MedalBadgeComponent,
+    MedalIndexComponent,
+    MedalCreateComponent,
+    RetailerListIndexComponent,
+    ImportRetailerListDialogComponent,
+
     ImportAccessCashierDialogComponent,
     ImportPanelMitraDialogComponent,
     ReasonDialogComponent,
-    
+
   ],
-  entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent, ReasonDialogComponent],
+  entryComponents: [
+    ImportAccessCashierDialogComponent,
+    ImportPanelMitraDialogComponent,
+    ReasonDialogComponent,
+    ImportRetailerListDialogComponent
+  ],
   providers: [
     // PendingChangesGuard,
     {

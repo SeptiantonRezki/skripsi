@@ -444,7 +444,14 @@ export const brConfig = {
         url: "",
         name: "Detail Retailer"
       }
-    ]
+    ],
+    medalBadge: [
+      {
+        type: "current",
+        url: "",
+        name: "Medal & Badge"
+      }
+    ],
   },
   customer: {
     index: [
