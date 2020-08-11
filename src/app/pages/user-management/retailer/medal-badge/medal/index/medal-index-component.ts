@@ -9,6 +9,7 @@ import { MedalBadgeService } from 'app/services/user-management/retailer/medal-b
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { FuseCopierService } from '@fuse/services/copier.service';
+import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-medal-index-component',
@@ -38,7 +39,8 @@ export class MedalIndexComponent implements OnInit {
   constructor(
     private medalBadgeService: MedalBadgeService,
     private dialogService: DialogService,
-    private fuseCopierService: FuseCopierService
+    private fuseCopierService: FuseCopierService,
+    private dataService: DataService,
   ) {
     this.rows = [];
     this.onLoad = true;
@@ -59,7 +61,55 @@ export class MedalIndexComponent implements OnInit {
       }
     }, (err: any) => {
       console.log('error', err);
-      this.onLoad = true;
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
+  }
+
+  setPage(pageInfo: any) {
+    this.offsetPagination = pageInfo.offset;
+    this.loadingIndicator = true;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage('page', pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage('page');
+    }
+
+    this.medalBadgeService.getMedalList(this.pagination).subscribe((res: any) => {
+      if (res.status === 'success') {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data.data;
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      }
+    }, (err: any) => {
+      console.log('error', err);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event: any) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage('page', this.pagination.page);
+    this.dataService.setToStorage('sort', event.column.prop);
+    this.dataService.setToStorage('sort_type', event.newValue);
+    this.medalBadgeService.getMedalList(this.pagination).subscribe((res: any) => {
+      if (res.status === 'success') {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data.data;
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      }
+    }, (err: any) => {
+      console.log('error', err);
+      this.onLoad = false;
       this.loadingIndicator = false;
     });
   }
