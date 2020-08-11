@@ -64,7 +64,7 @@
       <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Kategori Medal" formControlName="medalCategory" multiple>
-            <mat-option [value]="all" selected>Semua Kategori Medal</mat-option>
+            <mat-option [value]="'all'" selected>Semua Kategori Medal</mat-option>
             <mat-option *ngFor="let medal of medalCategories" [value]="medal.value">{{ medal.name }}</mat-option>
           </mat-select>
         </mat-form-field>

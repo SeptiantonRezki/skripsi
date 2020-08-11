@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { Subject, Observable } from "rxjs";
+import { Subject, Observable } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MedalBadgeService } from 'app/services/user-management/retailer/medal-badge.service';
 import { Page } from 'app/classes/laravel-pagination';
@@ -213,25 +213,49 @@ export class RetailerListIndexComponent implements OnInit {
     });
   }
 
+  setPage(pageInfo: any) {
+    this.offsetPagination = pageInfo.offset;
+    this.loadingIndicator = true;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage('page', pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage('page');
+    }
+    this.getRetailerList();
+  }
+
+  onSort(event: any) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage('page', this.pagination.page);
+    this.dataService.setToStorage('sort', event.column.prop);
+    this.dataService.setToStorage('sort_type', event.newValue);
+    this.getRetailerList();
+  }
+
   getRetailerList(searchValue?: any) {
     console.log('Search', searchValue);
     try {
     this.dataService.showLoading(true);
     this.pagination.per_page = 25;
-    if (searchValue) { this.pagination.search = searchValue; }
-    else { delete this.pagination.search; }
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    let area_id = areaSelected[areaSelected.length - 1].value;
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    if (searchValue) { this.pagination.search = searchValue; } else { delete this.pagination.search; }
+    const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+    const area_id = areaSelected[areaSelected.length - 1].value;
+    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     this.pagination.area = area_id;
 
     // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
       let is_area_2 = false;
 
       let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
@@ -241,7 +265,7 @@ export class RetailerListIndexComponent implements OnInit {
       }
 
       if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
+        const second_areas = this.areaFromLogin[1];
         last_self_area = [
           ...last_self_area,
           second_areas[second_areas.length - 1].id
@@ -252,25 +276,23 @@ export class RetailerListIndexComponent implements OnInit {
         ];
       }
 
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+      const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
 
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
+      if (this.pagination['after_level']) { delete this.pagination['after_level']; }
       this.pagination['self_area'] = self_area;
       this.pagination['last_self_area'] = last_self_area;
       let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        const oneAreaSelected = lastSelectedArea.value[0];
+        const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
         console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
+        if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
 
         console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
+          if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]]; } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
         } else {
           // console.log('its hitted [other level]');
           this.pagination['after_level'] = true;
@@ -291,7 +313,7 @@ export class RetailerListIndexComponent implements OnInit {
     // }
 
     this.medalBadgeService.getRetailerList(this.pagination, { medal: this.medalKategoriSelected }).subscribe(res => {
-      if (res.status == 'success') {
+      if (res.status === 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
         this.loadingIndicator = false;
@@ -300,7 +322,7 @@ export class RetailerListIndexComponent implements OnInit {
         this.pagination.sort_type = 'asc';
         this.dataService.showLoading(false);
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
@@ -308,27 +330,27 @@ export class RetailerListIndexComponent implements OnInit {
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     });
-    } catch(ex) {
-      console.log('ex',ex);
+    } catch (ex) {
+      console.log('ex', ex);
     }
 
   }
 
   checkAreaLocation(area, lastSelfArea) {
-    let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
-    let indexAreaSelected = areaList.indexOf(area.key);
-    let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
-    let newLastSelfArea = []
+    const lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    const areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
+    const indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
+    const indexAreaSelected = areaList.indexOf(area.key);
+    const rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
+    let newLastSelfArea = [];
     if (area.value !== 1) {
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
+        const areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
       }
     }
@@ -338,8 +360,8 @@ export class RetailerListIndexComponent implements OnInit {
 
   getAudienceAreaV2(selection, id, event?) {
     let item: any;
-    let fd = new FormData();
-    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
+    const fd = new FormData();
+    const lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
     console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
@@ -349,23 +371,23 @@ export class RetailerListIndexComponent implements OnInit {
       if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
-        })
+        });
         // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
         if (areaSelected[0].value.length === 0) {
-          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
           console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
-            })
+            });
           } else {
             fd.append('area_id[]', newAreaSelected[0].value);
           }
         }
       }
     } else {
-      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
+      const beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
       // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
@@ -374,16 +396,16 @@ export class RetailerListIndexComponent implements OnInit {
         if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
-          })
+          });
           // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
-            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+            const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
             console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
-              })
+              });
             } else {
               fd.append('area_id[]', newAreaSelected[0].value);
             }
@@ -398,17 +420,18 @@ export class RetailerListIndexComponent implements OnInit {
     let expectedArea = [];
     if (!this.formFilter.get(this.parseArea(selection)).disabled) {
       thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) thisAreaOnSet = [
+      if (this.areaFromLogin[1]) { thisAreaOnSet = [
         ...thisAreaOnSet,
         ...this.areaFromLogin[1]
       ];
+      }
 
       thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
       if (id && id.length > 1) {
         areaNumber = 1;
       }
 
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') { expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id)); }
       // console.log('on set', thisAreaOnSet, selection, id);
     }
 
@@ -450,7 +473,7 @@ export class RetailerListIndexComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['region'] = [];
@@ -480,7 +503,7 @@ export class RetailerListIndexComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['area'] = [];
@@ -509,7 +532,7 @@ export class RetailerListIndexComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['salespoint'] = [];
@@ -534,7 +557,7 @@ export class RetailerListIndexComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['district'] = [];
@@ -559,7 +582,7 @@ export class RetailerListIndexComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['territory'] = [];
@@ -591,14 +614,14 @@ export class RetailerListIndexComponent implements OnInit {
   }
 
   initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+    const areas = this.dataService.getDecryptedProfile()['areas'] || [];
     this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
+    const sameArea = this.geotreeService.diffLevelStarted;
+    const areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    let levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+    const levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    const lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
       this.formFilter.get('national').setValue(1);
@@ -607,10 +630,10 @@ export class RetailerListIndexComponent implements OnInit {
     }
     areas.map((area, index) => {
       area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
+        const level_desc = level.level_desc;
+        const levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
         if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
+          if (!this.list[level.type]) { this.list[level.type] = []; }
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
             console.log('ff value', this.formFilter.value);
@@ -621,19 +644,19 @@ export class RetailerListIndexComponent implements OnInit {
               this.formFilter.get(this.parseArea(level.type)).disable();
             }
 
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
+            if (areasDisabled.indexOf(level.type) > -1) { this.formFilter.get(this.parseArea(level.type)).disable(); }
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
             console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
+          const isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
           level['area_type'] = `area_${index + 1}`;
           this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
             ...this.list[this.parseArea(level.type)],
             level
           ];
           console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) { this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id); }
 
           if (i === area.length - 1) {
             this.endArea = this.parseArea(level.type);
@@ -671,7 +694,7 @@ export class RetailerListIndexComponent implements OnInit {
     try {
       const response = await this.medalBadgeService.exportRetailer().toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_MedalBadge_Retailer_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_MedalBadge_Retailer_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);
@@ -683,7 +706,7 @@ export class RetailerListIndexComponent implements OnInit {
   downLoadFile(data: any, type: string, fileName: string) {
     // It is necessary to create a new blob object with mime-type explicitly set
     // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
+    const newBlob = new Blob([data], { type: type });
 
     // IE doesn't allow using a blob object directly as link href
     // instead it is necessary to use msSaveOrOpenBlob
@@ -692,11 +715,11 @@ export class RetailerListIndexComponent implements OnInit {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 
-    var link = document.createElement('a');
+    const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
     // this is necessary as link.click() does not work on the latest firefox
@@ -711,8 +734,8 @@ export class RetailerListIndexComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
-    console.log(error)
+    console.log('Here');
+    console.log(error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
