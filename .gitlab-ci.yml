@@ -38,6 +38,7 @@ deploy_to_dev_DXTR:
     - rsync -rav -e "ssh -i /root/.ssh/id_dsa" --delete dist/ayo-principal/ "$USER"@"$TARGET_SERVER":/var/www/ayo-hms-service
   only:
     - DEVDXTR
+  
 build_app_for_DEV_HMS:
   stage: build:toDEV-HMS
   image: trion/ng-cli:7.2.3
@@ -105,7 +106,11 @@ build_app_for_PROD:
       - backup-principal-prod/
   only:
     - PROD
+    
 deploy_to_PROD:
+  image: python:latest
+  stage: deploy:toPROD
+  dependencies:
     - build_app_for_PROD  
   script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_QA
