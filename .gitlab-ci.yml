@@ -14,7 +14,7 @@ build_app_for_dev_DXTR:
   before_script:
     - npm ci
   script:
-    - node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false
+    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false
   artifacts:
     paths:
       - dist/
@@ -45,7 +45,7 @@ build_app_for_DEV_HMS:
   before_script:
     - npm ci
   script:
-    - node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --configuration=dev-hms
+    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=dev-hms
   artifacts:
     paths:
       - dist/
@@ -72,7 +72,7 @@ build_app_for_QA_HMS:
   before_script:
     - npm ci
   script:
-    - node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --configuration=qa
+    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration=qa
   artifacts:
     paths:
       - dist/
@@ -99,7 +99,7 @@ build_app_for_PROD:
   before_script:
     - npm ci
   script:
-    - node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --prod
+    - node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --prod
   artifacts:
     paths:
       - dist/
