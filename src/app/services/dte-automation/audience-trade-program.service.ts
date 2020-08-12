@@ -46,4 +46,9 @@ export class AudienceTradeProgramService extends BaseService {
     const url = this.getUrl(this.namespace, "list_sku");
     return this.getApi(url, queryParams);
   }
+
+  export(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export');
+    return this.postApi(url, body);
+  }
 }
