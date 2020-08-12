@@ -1425,39 +1425,46 @@ export class AudienceCreateComponent {
   }
 
   submit() {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get("limit").value === "limit";
       const min = this.formAudience.get("min").value;
       const max = this.formAudience.get("max").value;
 
-      if (limit && selectedRetailer < min)
+      if (limit && selectedRetailer < min) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
           message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
         });
-      else if (limit && selectedRetailer > max)
+      }
+      else if (limit && selectedRetailer > max) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
           message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
         });
+      }
 
-      
       // Audience Type = TSM, Type = any
       if (this.formAudience.get("audience_type").value === "tsm") {
         let body = {
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
         };
-  
+
         body["type"] = this.formAudience.get("type").value;
         body["audience_type"] = this.formAudience.get("audience_type").value;
-  
+
         if (this.formAudience.get("limit").value !== "pick-all") {
           body["retailer_id"] = this.selected.map((item) => item.id);
           body["min"] = this.formAudience.get("min").value;
           body["max"] = this.formAudience.get("max").value;
         } else {
           body["area_id"] = this.pagination.area;
-  
+
           if (this.pagination.area !== 1) {
             body["min"] = 1;
             body["max"] = this.pagination.total;
@@ -1466,10 +1473,14 @@ export class AudienceCreateComponent {
             body["max"] = "";
           }
         }
-        
+
         this.saveData = true;
+        // this.loadingIndicator = false;
+        // this.dataService.showLoading(false);
         this.audienceService.create(body).subscribe(
           (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
             });
@@ -1488,12 +1499,15 @@ export class AudienceCreateComponent {
           trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
         };
         this.audienceService.validateBudget(budget).subscribe((res) => {
-          if (res.selisih < 0)
+          if (res.selisih < 0) {
+            this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             return this.dialogService.openSnackBar({
               message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
                 res.selisih
               )}!`,
             });
+          }
 
           let body = {
             name: this.formAudience.get("name").value,
@@ -1536,6 +1550,7 @@ export class AudienceCreateComponent {
           this.saveData = true;
           this.audienceService.create(body).subscribe(
             (res) => {
+              this.loadingIndicator = false;
               this.dialogService.openSnackBar({
                 message: "Data Berhasil Disimpan",
               });
@@ -1588,6 +1603,7 @@ export class AudienceCreateComponent {
         this.saveData = true;
         this.audienceService.create(body).subscribe(
           (res) => {
+            this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
             });
@@ -1599,8 +1615,10 @@ export class AudienceCreateComponent {
           }
         );
       }
-    
+
     } else {
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
       commonFormValidator.validateAllFields(this.formAudience);
 
       if (this.formAudience.valid && this.selected.length === 0) {
