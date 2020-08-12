@@ -162,7 +162,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     // get the search keyword
     let search = this.filterGTP.value;
 
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.pagination.search = search;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
@@ -181,7 +181,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   getTradePrograms() {
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         // console.log("res trade programs", res);
@@ -202,7 +202,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     // get the search keyword
     let search = this.filterGTA.value;
 
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.pagination.search = search;
     this.sequencingService.getListTradeAudienceGroup(this.pagination).subscribe(
       (res) => {
@@ -221,7 +221,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   getTradeAudience() {
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.sequencingService.getListTradeAudienceGroup(this.pagination).subscribe(
       (res) => {
         // console.log("res trade programs", res);
