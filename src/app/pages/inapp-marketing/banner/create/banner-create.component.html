@@ -299,7 +299,8 @@
           </div>
 
           <!-- iframe -->
-          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'iframe' || formBannerGroup.get('content_type').value === 'link_web'">
+          <div class="px-24"
+            *ngIf="formBannerGroup.get('content_type').value === 'iframe' || formBannerGroup.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
@@ -308,7 +309,7 @@
                   URL harus diisi
                 </mat-error>
                 <mat-error
-                  *ngIf="formBannerGroup.controls['url_iframe'].invalid && formBannerGroup.get('url_iframe').value !== ''">
+                  *ngIf="formBannerGroup.controls['url_iframe'].hasError('pattern') && formBannerGroup.get('url_iframe').value !== ''">
                   URL tidak valid
                 </mat-error>
               </mat-form-field>
@@ -370,7 +371,8 @@
               <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
             </mat-radio-group>
           </div>
-          <div class="pb-16 px-24" *ngIf="formBannerGroup.get('content_type').value === 'link_web' || formBannerGroup.get('content_type').value === 'iframe'">
+          <div class="pb-16 px-24"
+            *ngIf="formBannerGroup.get('content_type').value === 'link_web' || formBannerGroup.get('content_type').value === 'iframe'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <strong class="font-size-16">Transfer Token Credential</strong>
             </div>
