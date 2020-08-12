@@ -143,6 +143,8 @@ export class PopupNotificationCreateComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
@@ -159,7 +161,7 @@ export class PopupNotificationCreateComponent {
       content_type: ["iframe", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       is_smoker: ["both"],
       gender: ["both"],
@@ -180,8 +182,8 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
-    if(this.formPopupGroup.value.is_mission_builder === true) {
-      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+    if (this.formPopupGroup.value.is_mission_builder === true) {
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       setTimeout(() => {
         this.formPopupGroup.controls['user_group'].setValue('tsm');
       }, 1);
@@ -1177,7 +1179,7 @@ export class PopupNotificationCreateComponent {
   selectChange(e: any) {
     if (e.source.name === 'is_mission_builder' && e.checked) {
       this.formPopupGroup.get('is_mission_builder').patchValue(true);
-      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       setTimeout(() => {
         this.formPopupGroup.controls['user_group'].setValue('tsm');
       }, 1);
