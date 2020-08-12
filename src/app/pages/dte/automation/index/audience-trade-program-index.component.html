@@ -70,12 +70,11 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <!-- attribut button edit harus ada permission *ngIf="permission?.ubah" -->
-              <button type="button" mat-icon-button color="" [disabled]="row.status_audience !== 'approved'"
-                matTooltip="Eksport" (click)="export()">
+              <button type="button" mat-icon-button color="" matTooltip="Eksport" (click)="export(row)">
                 <mat-icon class="orange-500-fg">save_alt</mat-icon>
               </button>
               <button mat-icon-button color="" (click)="directEdit(row)" *ngIf="row.status !== 'berjalan'">
@@ -89,6 +88,7 @@
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>
+      <a #downloadLink></a>
     </div>
   </div>
 </div>
