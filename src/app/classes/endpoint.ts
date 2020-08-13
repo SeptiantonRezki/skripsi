@@ -545,7 +545,19 @@ export class Endpoint {
         releaseCoinAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin/all`,
         releaseCoin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin`,
         submission: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/submission`,
-        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
+        getTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/list`,
+        detailTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/detail/${context.id}/${context.template_id}`,
+        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/
+          ${context.audience_id}/${context.template_id}`,
+        listReasonTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/rejectedreason/${context.template_id}`,
+        // totalSRCTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
+        verificationAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi/all`,
+        verificationTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi`,
+        releaseCoinAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin/all`,
+        releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
+        submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
+        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,

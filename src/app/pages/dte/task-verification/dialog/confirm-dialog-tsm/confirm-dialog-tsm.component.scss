@@ -1,0 +1,68 @@
+@import "src/@fuse/scss/fuse";
+
+.scrumboard-card-dialog {
+  @include media-breakpoint("xs") {
+    width: 100%;
+  }
+
+  @include media-breakpoint-up("xs") {
+    width: 540px;
+  }
+
+  .info {
+    font-size: 18px !important;
+    text-align: center !important;
+  }
+
+  .reason-layout {
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+  }
+
+  .primary-green {
+    color: #fff !important;
+    background-color: rgb(11, 121, 69) !important;
+  }
+
+  .header-vm {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+  }
+  .title {
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .desc {
+    font-weight: 400;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .coin {
+    font-size: 16px !important;
+  }
+  .number {
+    min-width: 25px;
+    margin-right: 10px;
+    text-align: 'left';
+    font-size: 14px;
+  }
+  .question {
+    line-height: normal;
+    white-space: pre-wrap;
+    font-size: 14px;
+  }
+  .mat-radio-label-content {
+    font-size: 14px !important;
+  }
+  .answer-img {
+    width: 100%;
+    min-height: 200px;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 8;
+    margin: 0 auto;
+  }
+
+}
