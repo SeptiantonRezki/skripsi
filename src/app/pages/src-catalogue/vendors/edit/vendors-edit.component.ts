@@ -202,7 +202,7 @@ export class VendorsEditComponent implements OnInit {
           this.detailAreaSelected2 = parent2ndArea.data;
           this.two_geotree = true;
         }
-        this.setDetailAdminPrincipal();
+        this.setDetailVendor();
       } catch (error) {
         if (error.status === 404) {
           this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
@@ -226,7 +226,7 @@ export class VendorsEditComponent implements OnInit {
     })
   }
 
-  setDetailAdminPrincipal() {
+  setDetailVendor() {
     this.initArea();
     if (this.detailVendor && this.detailVendor.area_id && this.detailVendor.area_id.length > 1) this.initArea2();
     this.initFormGroup();
