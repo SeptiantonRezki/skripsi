@@ -89,7 +89,7 @@ export class PopupNotificationEditComponent {
   area_id_list: any = [];
   lastLevel: any;
 
-  is_mission_builder: FormControl = new FormControl(true);
+  is_mission_builder: FormControl = new FormControl(false);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -194,8 +194,14 @@ export class PopupNotificationEditComponent {
     }
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
+      // console.log('is selected cukkkkk ini kebaca lgi');
+      if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+        this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+        this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+      } else {
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
 
       if (res === 'tsm') {
         this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
@@ -314,8 +320,13 @@ export class PopupNotificationEditComponent {
 
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     })
 
@@ -324,8 +335,13 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.updateValueAndValidity();
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     })
 
@@ -346,8 +362,13 @@ export class PopupNotificationEditComponent {
 
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     });
 
@@ -886,7 +907,8 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['content_type'].setValue(response.action);
       if (this.detailPopup.target_audience && this.detailPopup.target_audience === 1) {
         this.formPopupGroup.controls["is_target_audience"].setValue(true);
-        this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        this.audienceSelected = this.detailPopup.audience.map(id => ({ id: id.audience_id }));
+        this.onSelect({ selected: this.detailPopup.audience.map(id => ({ id: id.audience_id })) })
         console.log('this auddd', this.audienceSelected);
       }
       if (response.date) {
@@ -1336,6 +1358,8 @@ export class PopupNotificationEditComponent {
 
       if (this.imageConverted) {
         body['image'] = this.imageConverted;
+      } else {
+        body['image'] = this.detailPopup.image;
       }
 
       if (body.type === 'retailer') {
@@ -1415,6 +1439,7 @@ export class PopupNotificationEditComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
+      console.log('body', body);
       this.notificationService.updatePopup(body, { popup_notif_id: this.idPopup }).subscribe(
         res => {
           this.dataService.showLoading(false);
@@ -1518,6 +1543,7 @@ export class PopupNotificationEditComponent {
   }
 
   getAudience() {
+    console.log('audience', this.audienceSelected, this.selected);
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
