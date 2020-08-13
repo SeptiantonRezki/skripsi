@@ -53,8 +53,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getTradePrograms();
-    this.getTradeAudience();
 
     this.taskSequenceForm = this.formBuilder.group({
       id: ["", Validators.required],
@@ -108,6 +106,8 @@ export class TaskSequencingDuplicateComponent implements OnInit {
         status: this.data.status,
       });
       this.actions = res.data.actions;
+      this.getTradePrograms(this.data.trade_creator_name);
+      this.getTradeAudience(this.data.trade_audience_group_name);
     });
   }
 
@@ -180,7 +180,8 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     );
   }
 
-  getTradePrograms() {
+  getTradePrograms(param?: any) {
+    this.pagination.search = !!param ? param : null;
     this.pagination.per_page = 30;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
@@ -220,7 +221,8 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     );
   }
 
-  getTradeAudience() {
+  getTradeAudience(param?: any) {
+    this.pagination.search = !!param ? param : null;
     this.pagination.per_page = 30;
     this.sequencingService.getListTradeAudienceGroup(this.pagination).subscribe(
       (res) => {
