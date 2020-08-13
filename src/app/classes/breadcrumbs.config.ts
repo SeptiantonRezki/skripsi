@@ -1489,18 +1489,6 @@ export const brConfig = {
           url: "",
           name: "Detail Verifikasi Misi"
         }
-      ],
-      detailtsm: [
-        {
-          type: "parent",
-          url: "/dte/taskverification",
-          name: "Verifikasi Misi"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detail Verifikasi Misi TSM"
-        }
       ]
     }
   },

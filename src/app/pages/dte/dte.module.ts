@@ -82,10 +82,7 @@ import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/g
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
 import { TaskVerificationIndexComponent } from "./task-verification/index/task-verification-index.component";
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
-import { TaskVerificationIndexTsmComponent } from "./task-verification/index-tsm/task-verification-index-tsm.component";
-import { TaskVerificationDetailTsmComponent } from "./task-verification/detail-tsm/task-verification-detail-tsm.component";
 import { ConfirmDialogComponent } from "./task-verification/dialog/confirm-dialog/confirm-dialog.component";
-import { ConfirmDialogTsmComponent } from "./task-verification/dialog/confirm-dialog-tsm/confirm-dialog-tsm.component";
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { TaskSequencingIndexComponent } from './task-sequencing/index/task-sequencing-index.component';
 import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
@@ -222,10 +219,7 @@ export const MY_FORMATS = {
     GroupTradeProgramEditComponent,
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
-    TaskVerificationIndexTsmComponent,
-    TaskVerificationDetailTsmComponent,
     ConfirmDialogComponent,
-    ConfirmDialogTsmComponent,
     PengaturanAttributeMisiIndexComponent,
     PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
@@ -281,8 +275,6 @@ export const MY_FORMATS = {
     AudienceEditComponent,
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
-    TaskVerificationIndexTsmComponent,
-    TaskVerificationDetailTsmComponent,
     PengaturanAttributeMisiIndexComponent,
     PengaturanAttributeMisiCreateComponent,
     TaskSequencingIndexComponent,
@@ -338,7 +330,6 @@ export const MY_FORMATS = {
     ImportCoinComponent,
     ImportTsmCoinComponent,
     ConfirmDialogComponent,
-    ConfirmDialogTsmComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
     DialogKesulitanMisiComponent,
