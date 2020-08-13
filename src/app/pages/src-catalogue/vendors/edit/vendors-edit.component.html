@@ -151,8 +151,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div
-              *ngIf="(detailAdminPrincipal && detailAdminPrincipal.area_id && detailAdminPrincipal.area_id.length > 1) || two_geotree">
+            <div *ngIf="(detailVendor && detailVendor.area && detailVendor.area.length > 1) || two_geotree">
               <!-- <div fxLayout="row" fxLayoutGap="25px">
                 <h2>Area 2</h2>
                 <div *ngIf="two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
