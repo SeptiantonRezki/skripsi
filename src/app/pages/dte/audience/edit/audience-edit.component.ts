@@ -1151,17 +1151,27 @@ export class AudienceEditComponent {
   }
 
   submit() {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get('limit').value === 'limit';
       const min = this.formAudience.get('min').value;
       const max = this.formAudience.get('max').value;
 
-      if (limit && selectedRetailer < min)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
-      else if (limit && selectedRetailer > max)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebih dari ${max} Audience` });
-
+      if (limit && selectedRetailer < min) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return this.dialogService.openSnackBar({
+          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
+        });
+      } else if (limit && selectedRetailer > max) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return this.dialogService.openSnackBar({
+          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
+        });
+      }
       // Audience Type = TSM, Type = any
       if (this.formAudience.get("audience_type").value === "tsm") {
         let body = {
@@ -1192,6 +1202,8 @@ export class AudienceEditComponent {
         this.saveData = true;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
             });
@@ -1211,12 +1223,15 @@ export class AudienceEditComponent {
           trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
         };
         this.audienceService.validateBudget(budget).subscribe((res) => {
-          if (res.selisih < 0)
+          if (res.selisih < 0) {
+            this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             return this.dialogService.openSnackBar({
               message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
                 res.selisih
               )}!`,
             });
+          }
 
           let body = {
             _method: 'PUT',
@@ -1260,6 +1275,7 @@ export class AudienceEditComponent {
           this.saveData = true;
           this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
             (res) => {
+              this.loadingIndicator = false;
               this.dialogService.openSnackBar({
                 message: "Data Berhasil Disimpan",
               });
@@ -1313,6 +1329,7 @@ export class AudienceEditComponent {
         this.saveData = true;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           (res) => {
+            this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
             });
@@ -1475,6 +1492,8 @@ export class AudienceEditComponent {
       //   )
       // }
     } else {
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
       commonFormValidator.validateAllFields(this.formAudience);
 
       if (this.formAudience.valid && this.selected.length === 0) {
