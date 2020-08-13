@@ -38,6 +38,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
   formFilter: FormGroup;
 
+  minDate: any;
+
   statusFilter: any[] = [
     { name: 'Urutkan Perhari', value: 'day' },
     { name: 'Urutkan Perbulan', value: 'mounth' },
@@ -93,7 +95,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     });
   }
 
-  updateFilter(string) {
+  updateFilter(string?) {
     this.loadingIndicator = true;
     this.pagination.search = string;
 
@@ -156,6 +158,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
     return '';
   }
+
+  setMinDate(e) {}
 
   openConfirmDialog(item: any, popupType: string) {
     const dialogConfig = new MatDialogConfig();
