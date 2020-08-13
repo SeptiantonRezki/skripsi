@@ -1,0 +1,150 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+  <h2 class="pl-8">Verifikasi Misi TSM</h2>
+  <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon>search</mat-icon>
+    <mat-form-field autoComplete="off" class="is-light tab-search">
+      <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+    </mat-form-field>
+  </div>
+</div>
+<form [formGroup]="formFilter" autoComplete="off">
+  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+    class="top-table p-8">
+    <mat-form-field fxFlex="16" class="orders dropdown">
+      <mat-select formControlName="filter">
+        <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div fxFlex="1"></div>
+    <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
+      <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+        formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
+      <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button aria-label="Clear"
+        (click)="formFilter.get('start_date').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-datepicker-toggle matSuffix [for]="dari">
+        <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #dari></mat-datepicker>
+    </mat-form-field>
+    <div fxFlex="1"></div>
+    <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
+      <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
+        placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+      <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
+        (click)="formFilter.get('end_date').setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-datepicker-toggle matSuffix [for]="sampai">
+        <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #sampai></mat-datepicker>
+    </mat-form-field>
+    <div fxFlex="1"></div>
+    <mat-form-field fxFlex="16" class="orders dropdown">
+      <mat-select formControlName="status">
+        <mat-option [value]="item.value" *ngFor="let item of listStatuses">{{item.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div fxFlex="1"></div>
+    <div class="button-row pb-16">
+      <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+    </div>
+  </div>
+</form>
+<ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+  [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+  [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
+  [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+  (sort)="onSort($event)">
+
+  <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Task Sequencing Management" prop="nama_task_sequencing_management" [flexGrow]="3">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <!-- <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]"> -->
+      <span class="row">
+        {{row.task_sequencing_management_name}}
+      </span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [sortable]="false" name="Trade Program" prop="trade_creator_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program" prop="trade_creator_group_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas" prop="task_sequencing_management_template_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span>{{row.start_date | dateToMoment}} s/d {{ row.end_date | dateToMoment}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [sortable]="false" name="Audience Group" prop="audience_group_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="task_sequencing_management_status" [flexGrow]="3">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <div class="name-container">
+        <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
+          *ngIf="row.task_sequencing_management_status == 'publish'">
+          {{row.task_sequencing_management_status}}
+        </p>
+        <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg" style="text-transform: uppercase;"
+          *ngIf="row.task_sequencing_management_status == 'draft'">
+          {{row.task_sequencing_management_status}}
+        </p>
+        <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
+          *ngIf="row.task_sequencing_management_status == 'unpublish'">
+          {{row.task_sequencing_management_status}}
+        </p>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+
+
+  <ngx-datatable-column [sortable]="false" name="Status Coin" prop="status_coin" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <div class="button-row" style="margin-left: -10px">
+        <button type="button" mat-icon-button color="" matTooltip="Lihat"
+          [routerLink]="['/dte', 'taskverification', 'detailtsm', row.task_sequencing_management_id, row.task_sequencing_management_template_id]"
+          [disabled]="!permissionVerifikasiMisi?.lihat">
+          <mat-icon class="secondary-text">assignment</mat-icon>
+        </button>
+        <!-- <button type="button" mat-icon-button color=""
+          [routerLink]="['/dte', 'taskverification', 'edit', row.id]"
+          [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah" matTooltip="Ubah Tanggal Penjadwalan">
+          <mat-icon class="secondary-text">update</mat-icon>
+        </button> -->
+        <button type="button" mat-icon-button color="" [disabled]="row.task_sequencing_management_status !== 'publish'"
+          matTooltip="Export Misi" (click)="export(row)">
+          <mat-icon *ngIf="row.task_sequencing_management_status == 'publish'" class="orange-500-fg">save_alt</mat-icon>
+          <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt</mat-icon>
+        </button>
+        <button type="button" mat-icon-button color="" matTooltip="Verified All" (click)="openConfirmDialog(row, 'Verification All TSM Mission')" [disabled]="isDisableVerification(row)">
+          <mat-icon *ngIf="!isDisableVerification(row)" class="orange-500-fg">assignment_turned_in</mat-icon>
+          <mat-icon *ngIf="isDisableVerification(row)" class="secondary-text">assignment_turned_in</mat-icon>
+        </button>
+        <button type="button" mat-icon-button color="" matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release TSM Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
+          <mat-icon *ngIf="!isDisableReleaseCoin(row)" class="orange-500-fg">call_made</mat-icon>
+          <mat-icon *ngIf="isDisableReleaseCoin(row)" class="secondary-text">call_made</mat-icon>
+        </button>
+        <!-- <button type="button" mat-icon-button color="primary"
+          [disabled]="row.status_scheduler === 'publish' || !permission?.hapus" matTooltip="Hapus"
+          (click)="deleteStp(row.id)">
+          <mat-icon>delete</mat-icon>
+        </button> -->
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
+<a #downloadLink></a>
