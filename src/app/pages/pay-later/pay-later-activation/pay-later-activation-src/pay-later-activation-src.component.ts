@@ -49,8 +49,10 @@ export class PayLaterActivationSrcComponent implements OnInit {
   end_date: FormControl = new FormControl('');
   listStatus: any[] = [
     { name: "Semua Status", value: "" },
-    { name: "AKTIF", value: "active" },
-    { name: "TIDAK AKTIF", value: "inactive" },
+    { name: "BELUM MENGAJUKAN", value: "belum-mengajukan" },
+    { name: "PENGAJUAN", value: "pengajuan" },
+    { name: "DITOLAK", value: "ditolak" },
+    { name: "DISETUJUI", value: "disetujui" },
   ]
 
   constructor(
