@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-pay-later-activation-src',
@@ -159,8 +160,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
     this.pagination['status'] = this.status.value;
-    this.pagination['start_date'] = this.start_date.value;
-    this.pagination['end_date'] = this.end_date.value;
+    this.pagination['start_date'] = moment(this.start_date.value).format("YYYY-MM-DD");
+    this.pagination['end_date'] = moment(this.end_date.value).format("YYYY-MM-DD");
 
     this.offsetPagination = page ? (page - 1) : 0;
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(
