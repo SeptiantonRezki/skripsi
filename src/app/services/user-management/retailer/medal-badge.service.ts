@@ -28,7 +28,7 @@ export class MedalBadgeService extends BaseService {
 
   put(body?: any, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'putMedal', context);
-    return this.putApi(url, body);
+    return this.postApi(url, body);
   }
 
   delete(context: any): Observable<any> {
