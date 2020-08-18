@@ -66,6 +66,11 @@ export class ProductCreateComponent {
     { name: "Promo SRC", value: "promo_src" },
     { name: "Produk Prinsipal", value: "private_label" }
   ];
+  listTipe: any[] = [
+    { name: "Distribusi", value: "distribusi" },
+    { name: "SRO", value: "SRO" },
+    { name: "Kanvas", value: "kanvas" },
+  ]
 
   filteredSkuOptions: Observable<string[]>;
 
@@ -710,7 +715,8 @@ export class ProductCreateComponent {
               packaging_amount: item.packaging_amount,
               price: item.price,
               price_discount: item.price_discount || 0,
-              price_discount_expires_at: this.convertDate(item.price_discount_expires_at)
+              price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
+              tipe: item.tipe
             })
           });
 
@@ -726,6 +732,7 @@ export class ProductCreateComponent {
                 fd.append(`product_prices[${index}][price_discount]`, '0');
 
               fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+              fd.append(`product_prices[${index}][price_type]`, item.tipe);
             });
 
             let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
@@ -928,6 +935,7 @@ export class ProductCreateComponent {
       price: ["", Validators.required],
       price_discount: "",
       price_discount_expires_at: ["", Validators.required],
+      tipe: [""]
     })
   }
 
