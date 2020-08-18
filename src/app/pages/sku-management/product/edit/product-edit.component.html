@@ -311,6 +311,7 @@
                         <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
                         <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
                         <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                        <span fxFlex="15" class="h6 text-semibold">Tipe</span>
                         <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
                           <span class="h6 text-semibold">Hapus</span>
                         </div>
@@ -382,6 +383,14 @@
                                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #dp></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging">
+                                <mat-select formControlName="tipe">
+                                  <mat-option *ngFor="let item of listTipe" [value]="item.value">
+                                    {{item.name}}</mat-option>
+                                </mat-select>
                               </mat-form-field>
                             </div>
                             <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
