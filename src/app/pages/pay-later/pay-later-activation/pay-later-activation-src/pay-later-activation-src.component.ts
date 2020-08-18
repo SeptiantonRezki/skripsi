@@ -50,9 +50,9 @@ export class PayLaterActivationSrcComponent implements OnInit {
   listStatus: any[] = [
     { name: "Semua Status", value: "" },
     { name: "BELUM MENGAJUKAN", value: "belum-mengajukan" },
-    { name: "PENGAJUAN", value: "pengajuan" },
-    { name: "DITOLAK", value: "ditolak" },
-    { name: "DISETUJUI", value: "disetujui" },
+    { name: "PENGAJUAN", value: "pending" },
+    { name: "DITOLAK", value: "rejected" },
+    { name: "DISETUJUI", value: "approved" },
   ]
 
   constructor(
@@ -165,6 +165,9 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination['start_date'] = moment(this.start_date.value).format("YYYY-MM-DD");
     this.pagination['end_date'] = moment(this.end_date.value).format("YYYY-MM-DD");
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
+
     this.offsetPagination = page ? (page - 1) : 0;
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(
       res => {
@@ -250,6 +253,9 @@ export class PayLaterActivationSrcComponent implements OnInit {
     }
     this.pagination.page = pageInfo.offset + 1;
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
+
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -324,6 +330,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
 
     console.log("check pagination", this.pagination);
 
@@ -402,6 +410,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.page = 1;
 
     console.log(this.pagination);
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
 
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
