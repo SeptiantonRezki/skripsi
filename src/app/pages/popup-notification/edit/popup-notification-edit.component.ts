@@ -1356,8 +1356,6 @@ export class PopupNotificationEditComponent {
 
       if (this.imageConverted) {
         body['image'] = this.imageConverted;
-      } else {
-        body['image'] = this.detailPopup.image;
       }
 
       if (body.type === 'retailer') {
