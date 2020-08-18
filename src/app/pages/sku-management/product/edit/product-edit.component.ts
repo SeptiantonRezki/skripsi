@@ -64,6 +64,11 @@ export class ProductEditComponent {
     { name: "Ya", value: 1 },
     { name: "Tidak", value: 0 }
   ]
+  listTipe: any[] = [
+    { name: "Distribusi", value: "distribusi" },
+    { name: "SRO", value: "SRO" },
+    { name: "Kanvas", value: "kanvas" },
+  ]
   minDate: any;
 
   filteredSkuOptions: Observable<string[]>;
@@ -187,119 +192,120 @@ export class ProductEditComponent {
       });
 
     this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
-        let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-          (res || []).map((item, index) => {
-            if (item.price) {
-              listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
-              listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
-            }
+      let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
+      (res || []).map((item, index) => {
+        if (item.price) {
+          listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+          listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+        }
 
-            if (parseInt(item.price_discount) > 0 ) {
-              listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
-            } else {
-              listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
-              listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
-              listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
-            }
-          })
+        if (parseInt(item.price_discount) > 0) {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+        } else {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
+        }
+      })
     });
 
   }
 
   getDetails() {
     try {
-    this.productService.getdetail(this.idProduct).subscribe(async (res) => {
-      this.detailProduct = res.data;
+      this.productService.getdetail(this.idProduct).subscribe(async (res) => {
+        this.detailProduct = res.data;
 
-      let alias = this.formProductGroup.get("alias") as FormArray;
-      if (res.data.alias) {
-        (res.data.alias).map(item => {
-          alias.push(this.formBuilder.group({ alias: item.trim() }));
-        });
-      }
-
-      this.formProductGroup.get("name").setValue(res.data.name);
-      this.formProductGroup.get("barcode").setValue(res.data.barcode);
-      this.formProductGroup.get("brand").setValue(res.data.brand_id);
-      this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
-      this.formProductGroup.get("status").setValue(res.data.status);
-      this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
-      this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
-      if (res && res.data.status_pin_up) {
-        this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
-        if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
-        if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(new Date(res.data.end_date_pin_up));
-      }
-      this.formProductGroup.get("is_private_label").setValue(res.data.is_private_label === 1 ? true : false);
-      console.log(this.formProductGroup);
-      if (res.data.category.parent_id) {
-        this.formProductGroup.get("category").setValue(res.data.category_all[0]);
-        this.selectionChange();
-
-        this.formProductGroup.get("subCategory").setValue(res.data.category_all[1]);
-      } else {
-        this.formProductGroup.get("category").setValue(res.data.category_id);
-      }
-
-      for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
-        console.log('hitted me');
-        const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
-        let wilayah = this.formProductGroup.controls['areas'] as FormArray;
-
-        wilayah.push(this.formBuilder.group({
-          national: [this.getArea(response, 'national'), Validators.required],
-          zone: [this.getArea(response, 'division')],
-          region: [this.getArea(response, 'region')],
-          area: [this.getArea(response, 'area')],
-          salespoint: [this.getArea(response, 'salespoint')],
-          district: [this.getArea(response, 'district')],
-          territory: [this.getArea(response, 'teritory')],
-          list_national: this.formBuilder.array(this.listLevelArea),
-          list_zone: this.formBuilder.array([]),
-          list_region: this.formBuilder.array([]),
-          list_area: this.formBuilder.array([]),
-          list_salespoint: this.formBuilder.array([]),
-          list_district: this.formBuilder.array([]),
-          list_territory: this.formBuilder.array([])
-        }))
-
-        this.initArea(index);
-        this.initFormGroup(response, index);
-
-        if (this.detailProduct.areas.length === (index + 1)) {
-          this.onLoad = false;
+        let alias = this.formProductGroup.get("alias") as FormArray;
+        if (res.data.alias) {
+          (res.data.alias).map(item => {
+            alias.push(this.formBuilder.group({ alias: item.trim() }));
+          });
         }
-      }
 
-      // if (this.detailProduct.areas.length === 0) {
-      //   this.addArea();
-      // }
+        this.formProductGroup.get("name").setValue(res.data.name);
+        this.formProductGroup.get("barcode").setValue(res.data.barcode);
+        this.formProductGroup.get("brand").setValue(res.data.brand_id);
+        this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
+        this.formProductGroup.get("status").setValue(res.data.status);
+        this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
+        this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
+        if (res && res.data.status_pin_up) {
+          this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
+          if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
+          if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(new Date(res.data.end_date_pin_up));
+        }
+        this.formProductGroup.get("is_private_label").setValue(res.data.is_private_label === 1 ? true : false);
+        console.log(this.formProductGroup);
+        if (res.data.category.parent_id) {
+          this.formProductGroup.get("category").setValue(res.data.category_all[0]);
+          this.selectionChange();
 
-      if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
-        let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-        let idx = 0;
-        for (const item of res.data.product_prices ) {
-          priceProduct.push(this.formBuilder.group({
-            packaging: [item.packaging, Validators.required],
-            packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
-            price: [item.price, Validators.required],
-            price_discount: [item.price_discount, Validators.required],
-            price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
-          }));
-          idx++;
-        };
-      }
+          this.formProductGroup.get("subCategory").setValue(res.data.category_all[1]);
+        } else {
+          this.formProductGroup.get("category").setValue(res.data.category_id);
+        }
 
-      setTimeout(() => {
-        this.onLoad = false;
-      }, 500);
+        for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
+          console.log('hitted me');
+          const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
+          let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
-      if (this.isDetail) this.formProductGroup.disable();
+          wilayah.push(this.formBuilder.group({
+            national: [this.getArea(response, 'national'), Validators.required],
+            zone: [this.getArea(response, 'division')],
+            region: [this.getArea(response, 'region')],
+            area: [this.getArea(response, 'area')],
+            salespoint: [this.getArea(response, 'salespoint')],
+            district: [this.getArea(response, 'district')],
+            territory: [this.getArea(response, 'teritory')],
+            list_national: this.formBuilder.array(this.listLevelArea),
+            list_zone: this.formBuilder.array([]),
+            list_region: this.formBuilder.array([]),
+            list_area: this.formBuilder.array([]),
+            list_salespoint: this.formBuilder.array([]),
+            list_district: this.formBuilder.array([]),
+            list_territory: this.formBuilder.array([])
+          }))
 
-    })
-  } catch(ex) {
-    console.log('ex', ex);
-  }
+          this.initArea(index);
+          this.initFormGroup(response, index);
+
+          if (this.detailProduct.areas.length === (index + 1)) {
+            this.onLoad = false;
+          }
+        }
+
+        // if (this.detailProduct.areas.length === 0) {
+        //   this.addArea();
+        // }
+
+        if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
+          let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+          let idx = 0;
+          for (const item of res.data.product_prices) {
+            priceProduct.push(this.formBuilder.group({
+              packaging: [item.packaging, Validators.required],
+              packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
+              price: [item.price, Validators.required],
+              price_discount: [item.price_discount, Validators.required],
+              price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+              tipe: [item.price_type]
+            }));
+            idx++;
+          };
+        }
+
+        setTimeout(() => {
+          this.onLoad = false;
+        }, 500);
+
+        if (this.isDetail) this.formProductGroup.disable();
+
+      })
+    } catch (ex) {
+      console.log('ex', ex);
+    }
   }
 
   createArea(): FormGroup {
@@ -730,7 +736,7 @@ export class ProductEditComponent {
       this.formProductGroup.get('end_date_pin_up').clearValidators();
       this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
     }
-    if (this.formProductGroup.get("is_promo_src").value !== true ) {
+    if (this.formProductGroup.get("is_promo_src").value !== true) {
       // this.formProductGroup.get("is_promo_src").disable();
       this.formProductGroup.get("is_promo_src").setValue(false);
     }
@@ -834,7 +840,8 @@ export class ProductEditComponent {
             packaging_amount: item.packaging_amount,
             price: item.price,
             price_discount: item.price_discount || 0,
-            price_discount_expires_at: this.convertDate(item.price_discount_expires_at)
+            price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
+            tipe: item.tipe
           })
         });
 
@@ -850,6 +857,7 @@ export class ProductEditComponent {
               fd.append(`product_prices[${index}][price_discount]`, '0');
 
             fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+            fd.append(`product_prices[${index}][price_type]`, item.tipe);
           });
 
           let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
@@ -1049,6 +1057,7 @@ export class ProductEditComponent {
       price: ["", Validators.required],
       price_discount: "",
       price_discount_expires_at: ["", Validators.required],
+      tipe: [""]
     })
   }
 
