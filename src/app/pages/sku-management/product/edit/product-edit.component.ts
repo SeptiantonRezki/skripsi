@@ -223,6 +223,7 @@ export class ProductEditComponent {
           });
         }
 
+        this.formProductGroup.get("code").setValue(res.data.code);
         this.formProductGroup.get("name").setValue(res.data.name);
         this.formProductGroup.get("barcode").setValue(res.data.barcode);
         this.formProductGroup.get("brand").setValue(res.data.brand_id);
@@ -642,6 +643,7 @@ export class ProductEditComponent {
 
   createFormGroup(): void {
     this.formProductGroup = this.formBuilder.group({
+      code: ["", Validators.required],
       name: ["", Validators.required],
       alias: this.formBuilder.array([]),
       status: ["active", Validators.required],
@@ -760,6 +762,7 @@ export class ProductEditComponent {
       }
 
       let body = {
+        code: this.formProductGroup.get("code").value,
         name: this.formProductGroup.get("name").value,
         alias: aliasChip,
         image: this.imageSkuConverted,
@@ -777,6 +780,7 @@ export class ProductEditComponent {
 
       let fd = new FormData();
       fd.append("_method", "PUT");
+      fd.append("code", body.code);
       fd.append("name", body.name);
 
       if (body.barcode) fd.append("barcode", body.barcode);
