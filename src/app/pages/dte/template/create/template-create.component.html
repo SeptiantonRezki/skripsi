@@ -171,9 +171,11 @@
                         </div>
                       </div>
                     </mat-select-trigger>
-                    <mat-option *ngFor="let selection of listChoose" [value]="selection.value">
-                      <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
-                    </mat-option>
+                    <ng-container>
+                      <mat-option *ngFor="let selection of listChoose" [value]="selection.value">
+                        <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
+                      </mat-option>
+                    </ng-container>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -364,12 +366,21 @@
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
                 *ngIf="templateListImageIR[i]" style="margin-top: 25px;">
-                <div fxFlex="45">
+                <div fxFlex="45" *ngIf="item.get('type').value !== 'stock_check_ir'">
                   <div class="banner-image-template-selected">
                     <div id="banner">
                       <img [src]="templateListImageIR[i].image" alt="Gambar IR">
                       <!-- <div class="title">{{bannerSelected.title}}</div> -->
                     </div>
+                  </div>
+                </div>
+                <div fxFlex="45" *ngIf="item.get('type').value === 'stock_check_ir'">
+                  <div class="banner-image-template-selected">
+                    <ol style="font-size: 16px;">
+                      <li *ngFor="let lst of templateListImageIR[i]['check_list']">Nama Produk: {{ lst.PRODUCT_NAME }} -
+                        QTY:
+                        {{ lst.QUANTITY }}</li>
+                    </ol>
                   </div>
                 </div>
               </div>

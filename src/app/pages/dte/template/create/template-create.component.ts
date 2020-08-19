@@ -34,10 +34,22 @@ export class TemplateCreateComponent {
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
     { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
-    { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
-    { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" }
   ];
+
+  listChooseWithIr: Array<any> = [
+    { name: "Jawaban Singkat", value: "text", icon: "short_text" },
+    { name: "Paragraf", value: "textarea", icon: "notes" },
+    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
+    { name: "Angka", value: "numeric", icon: "dialpad" },
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+    { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box", ir: true },
+    { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload", ir: true },
+  ];
+
   shareable: FormControl = new FormControl(false);
 
   isIRTemplate: FormControl = new FormControl(false);
@@ -108,7 +120,6 @@ export class TemplateCreateComponent {
         this.getListProduct(res);
         this.resetField(res);
       });
-
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
@@ -131,6 +142,10 @@ export class TemplateCreateComponent {
     this.templateTaskForm.valueChanges.subscribe(res => {
       this.valueChange = true;
     })
+  }
+
+  splitCheckList(template) {
+    console.log('template', template);
   }
 
   _filterSku(value): any[] {
@@ -265,8 +280,9 @@ export class TemplateCreateComponent {
     let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
     if (indexExist > -1) {
       this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
+      this.templateListImageIR['check_list'] = selectedIR.value.check_list ? JSON.parse(selectedIR.value.check_list) : [];
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name });
+      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name, check_list: JSON.parse(selectedIR.value.check_list) });
     }
 
     console.log('template image IR', this.templateListImageIR);
