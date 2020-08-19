@@ -66,9 +66,9 @@ export class ProductCreateComponent {
     { name: "Produk Prinsipal", value: "private_label" }
   ];
   listTipe: any[] = [
-    { name: "Distribusi", value: "distribusi" },
+    { name: "Distribusi", value: "Distribusi" },
     { name: "SRO", value: "SRO" },
-    { name: "Kanvas", value: "kanvas" },
+    { name: "Kanvas", value: "Kanvas" },
   ]
 
   filteredSkuOptions: Observable<string[]>;
