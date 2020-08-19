@@ -23,6 +23,8 @@ export class MedalBadgeComponent {
         this.medalSelected = event.selected;
         if (event.selected === 'MEDAL_EDIT') {
           this.dataCreateMedal = event.data;
+        } else {
+          this.dataCreateMedal = null;
         }
       }
     }
