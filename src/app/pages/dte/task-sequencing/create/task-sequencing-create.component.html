@@ -46,9 +46,9 @@
               <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="trade_creator_id" placeholder="Pilih Group Trade Program" id="trade_creator_id" (selectionChange)="selectChange($event)" #singleSelect>
+              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" id="trade_creator_id" (selectionChange)="selectChange($event)" #singleSelect>
                 <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Group Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Trade Program yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
+                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>

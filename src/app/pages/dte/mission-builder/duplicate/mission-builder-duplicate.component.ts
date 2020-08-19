@@ -152,7 +152,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
       const element = data.actions[i];
-      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && element.attribute.is_push_to_ff === 0) {
+      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && (element.attribute.is_push_to_ff === 0 || element.attribute.is_push_to_ff === '0')) {
         if (coinNodes.length > 0) {
           validCoinNode = false;
         }
@@ -199,91 +199,102 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   nodeDisabler(type: any) {
-    switch (type) {
-      case 'mission':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'pop-up-notification':
-        this.noMission = false;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'push-notification':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'coin':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'decision':
-        if (this.yesNo === 'yes') {
+    if (this.task.is_editable === 0) {
+      this.noMission = true;
+      this.noPopup = true;
+      this.noPush = true;
+      this.noCoin = true;
+      this.noDecision = true;
+      this.noTime = true;
+      this.noFinish = true;
+    }
+    if (this.task.is_editable === 1) {
+      switch (type) {
+        case 'mission':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'pop-up-notification':
+          this.noMission = false;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'push-notification':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'coin':
           this.noMission = false;
           this.noPopup = false;
           this.noPush = false;
-          this.noCoin = false;
+          this.noCoin = true;
           this.noDecision = true;
           this.noTime = false;
           this.noFinish = false;
-        }
-        if (this.yesNo === 'no') {
+          break;
+        case 'decision':
+          if (this.yesNo === 'yes') {
+            this.noMission = false;
+            this.noPopup = false;
+            this.noPush = false;
+            this.noCoin = false;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = false;
+          }
+          if (this.yesNo === 'no') {
+            this.noMission = true;
+            this.noPopup = true;
+            this.noPush = true;
+            this.noCoin = true;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = true;
+          }
+          break;
+        case 'time':
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'finish':
           this.noMission = true;
           this.noPopup = true;
           this.noPush = true;
           this.noCoin = true;
           this.noDecision = true;
-          this.noTime = false;
+          this.noTime = true;
           this.noFinish = true;
-        }
-        break;
-      case 'time':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'finish':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = true;
-        this.noFinish = true;
-        break;
-      case null:
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = false;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-      default:
-        break;
+          break;
+        case null:
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = false;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+        default:
+          break;
+      }
     }
   }
 
