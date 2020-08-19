@@ -65,9 +65,9 @@ export class ProductEditComponent {
     { name: "Tidak", value: 0 }
   ]
   listTipe: any[] = [
-    { name: "Distribusi", value: "distribusi" },
+    { name: "Distribusi", value: "Distribusi" },
     { name: "SRO", value: "SRO" },
-    { name: "Kanvas", value: "kanvas" },
+    { name: "Kanvas", value: "Kanvas" },
   ]
   minDate: any;
 
@@ -649,7 +649,7 @@ export class ProductEditComponent {
 
   createFormGroup(): void {
     this.formProductGroup = this.formBuilder.group({
-      code: ["", Validators.required],
+      code: [""],
       name: ["", Validators.required],
       alias: this.formBuilder.array([]),
       status: ["active", Validators.required],
