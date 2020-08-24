@@ -286,7 +286,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
 
   updateStatus(): void {
     console.log('selected stat', this.statusForm.get('newStatus').value);
-    if ((this.detailOrder.status === 'baru' || this.detailOrder.status === 'diproses') && this.statusForm.get('newStatus').value !== 'dibatalkan') {
+    if ((this.detailOrder.status === 'baru') && this.statusForm.get('newStatus').value !== 'dibatalkan') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
