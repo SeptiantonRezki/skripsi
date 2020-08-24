@@ -183,6 +183,8 @@ export class PayLaterActivationComponent implements OnInit {
     this.pagination['start_date'] = moment(this.start_date.value).format("YYYY-MM-DD");
     this.pagination['end_date'] = moment(this.end_date.value).format("YYYY-MM-DD");
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
     this.offsetPagination = page ? (page - 1) : 0;
     this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(
       res => {
@@ -269,6 +271,8 @@ export class PayLaterActivationComponent implements OnInit {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
     this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -344,6 +348,8 @@ export class PayLaterActivationComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
     console.log('check pagination', this.pagination);
 
     this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
@@ -420,6 +426,8 @@ export class PayLaterActivationComponent implements OnInit {
     this.pagination.search = string;
     this.pagination.page = 1;
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
     console.log(this.pagination);
 
     this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
