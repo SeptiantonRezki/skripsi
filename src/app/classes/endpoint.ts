@@ -640,7 +640,14 @@ export class Endpoint {
         import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/import`,
         preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`,
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`
-      }
+      },
+      panel_partnership: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
+        list_suppliers: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

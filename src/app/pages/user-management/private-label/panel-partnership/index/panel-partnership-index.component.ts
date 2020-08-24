@@ -7,15 +7,16 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
+import { PanelPartnershipService } from "app/services/user-management/private-label/panel-partnership.service";
 
 import { Endpoint } from '../../../../../classes/endpoint';
 
 @Component({
-  selector: 'app-supplier-company-index',
-  templateUrl: './supplier-company-index.component.html',
-  styleUrls: ['./supplier-company-index.component.scss']
+  selector: 'app-panel-partnership-index',
+  templateUrl: './panel-partnership-index.component.html',
+  styleUrls: ['./panel-partnership-index.component.scss']
 })
-export class SupplierCompanyIndexComponent implements OnInit {
+export class PanelPartnershipIndexComponent {
   onLoad: boolean;
 
   rows: any[];
@@ -47,7 +48,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private supplierCompanyService: SupplierCompanyService,
+    private panelPartnershipService: PanelPartnershipService,
     private dialogService: DialogService,
     private router: Router,
   ) {
@@ -82,7 +83,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.supplierCompanyService.getList(this.pagination).subscribe(res => {
+    this.panelPartnershipService.get(this.pagination).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -111,7 +112,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.supplierCompanyService.getList(this.pagination).subscribe(
+    this.panelPartnershipService.get(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
           if (res.data.total < res.data.per_page && page !== 1) {
@@ -142,56 +143,29 @@ export class SupplierCompanyIndexComponent implements OnInit {
     );
   }
 
-  directDetail(item?: any): void {
-    this.router.navigate(["user-management", "supplier-company", "detail", item.id]);
-  }
+  // selectionStatus(event: any, item: any, i: number) {
+  //   const e = event.value;
+  //   const body = {
+  //     name: item.name,
+  //     address: item.address,
+  //     telephone: item.telephone,
+  //     cellphone: item.cellphone,
+  //     note: item.note,
+  //     products: item.products,
+  //     status: e
+  //   };
+  //   this.panelPartnershipService.updateStatus(body, { supplierId: item.id }).subscribe(res => {
+  //     this.dialogService.openSnackBar({ message: "Berhasil mengubah status" });
+  //     }, err => {
+  //       this.dialogService.openSnackBar({ message: "Gagal mengubah status" });
+  //       this.get();
+  //     }
+  //   );
+  // }
 
-  selectionStatus(event: any, item: any, i: number) {
-    const e = event.value;
-    const body = {
-      name: item.name,
-      address: item.address,
-      telephone: item.telephone,
-      cellphone: item.cellphone,
-      note: item.note,
-      products: item.products,
-      status: e
-    };
-    this.supplierCompanyService.updateStatus(body, { supplierId: item.id }).subscribe(res => {
-      this.dialogService.openSnackBar({ message: "Berhasil mengubah status" });
-      }, err => {
-        this.dialogService.openSnackBar({ message: "Gagal mengubah status" });
-        this.getList();
-      }
-    );
-  }
-
-  directEdit(item?: any): void {
-    this.router.navigate(["user-management", "supplier-company", "edit", item.id]);
-  }
-
-  deleteById(id: any) {
-    this.id = id;
-    let data = {
-      titleDialog: "Hapus Perusahaan",
-      captionDialog: "Apakah anda yakin untuk menghapus Perusahaan ini?",
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
-
-  confirmDelete() {
-    this.supplierCompanyService.delete({ supplierId: this.id }).subscribe(
-      res => {
-        this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-        this.getList();
-      },
-      err => {
-        this.dialogService.openSnackBar({ message: err.error.message });
-      }
-    );
+  directEdit(param?: any): void {
+    this.dataService.setToStorage('detail_partnership', param);
+    this.router.navigate(['user-management', 'panel-partnership', 'edit']);
   }
 
   onSelect({ selected }) {
@@ -211,7 +185,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.supplierCompanyService.getList(this.pagination).subscribe(res => {
+    this.panelPartnershipService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
@@ -228,10 +202,30 @@ export class SupplierCompanyIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.supplierCompanyService.getList(this.pagination).subscribe(res => {
+    this.panelPartnershipService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
     });
   }
+
+  deletePartnership(id) {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Panel Partnership",
+      captionDialog: "Apakah anda yakin untuk menghapus Partnership ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.panelPartnershipService.delete({ partnership_id: this.id }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.getList();
+      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+    });
+  }
+
 }

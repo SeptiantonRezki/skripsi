@@ -30,6 +30,8 @@ import {
   MatDatepickerModule,
   MatDividerModule,
   MatListModule,
+  MatSlideToggleModule,
+  MatRadioModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -98,6 +100,12 @@ import { DetailPengajuanSrcComponent } from './pengajuan-src/detail/detail-penga
 import { ReasonDialogComponent } from './pengajuan-src/reason-dialog/reason-dialog.component';
 import { PengajuanSrcEditComponent } from './pengajuan-src/edit/pengajuan-src-edit.component';
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
+import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
+import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
+import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
+import { ImportAudienceDialogComponent } from "./private-label/panel-partnership/import/import-audience-dialog.component";
+
+import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 
 export const MY_FORMATS = {
   parse: {
@@ -137,6 +145,10 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatDividerModule,
     MatListModule,
+    MatSlideToggleModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
+    MatRadioModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -170,6 +182,10 @@ export const MY_FORMATS = {
     UserSupplierIndexComponent,
     PayMethodEditComponent,
     PayMethodIndexComponent,
+    PanelPartnershipIndexComponent,
+    PanelPartnershipCreateComponent,
+    PanelPartnershipEditComponent,
+    ImportAudienceDialogComponent
 
   ],
   declarations: [
@@ -217,9 +233,13 @@ export const MY_FORMATS = {
     ImportAccessCashierDialogComponent,
     ImportPanelMitraDialogComponent,
     ReasonDialogComponent,
-    
+    PanelPartnershipIndexComponent,
+    PanelPartnershipCreateComponent,
+    PanelPartnershipEditComponent,
+    ImportAudienceDialogComponent
+
   ],
-  entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent, ReasonDialogComponent],
+  entryComponents: [ImportAccessCashierDialogComponent, ImportPanelMitraDialogComponent, ReasonDialogComponent, ImportAudienceDialogComponent],
   providers: [
     // PendingChangesGuard,
     {
