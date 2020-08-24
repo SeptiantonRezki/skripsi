@@ -78,17 +78,6 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
-            *ngIf="formAutomation.get('jenis_tantangan').value === 'minimum_transaction_frequency'">
-            <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Total Koin" formControlName="total_coin">
-            </mat-form-field>
-
-            <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Total Frequency yang dibutuhkan"
-                formControlName="total_frequency">
-            </mat-form-field>
-          </div>
           <div class="mt-8 px-24" fxLayout="row" *ngIf="formAutomation.get('automation').value === 'coupon'">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" placeholder="Total Kupon" formControlName="coupon_total">
@@ -99,21 +88,19 @@
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-            <mat-form-field fxFlex="45%" class="is-light form-primary"
-              *ngIf="formAutomation.get('jenis_tantangan').value !== 'extra_coin'">
-              <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi"
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number"
+                [placeholder]="formAutomation.get('jenis_tantangan').value === 'default' ? 'Jumlah Coin Reward per Frekuensi' : (formAutomation.get('jenis_tantangan').value === 'extra_coin' ? 'Baseline Coin' : 'Total Koin')"
                 formControlName="coin_reward">
               <mat-error class="mt-8 px-24"
                 *ngIf="formAutomation.controls['coin_reward'].hasError('required') && formAutomation.controls['coin_reward'].touched">
                 Jumlah Coin Reward per Frekuensi harus diisi.
               </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="45%" class="is-light form-primary"
-              *ngIf="formAutomation.get('jenis_tantangan').value === 'extra_coin'">
-              <input matInput type="number" placeholder="Baseline Coin" formControlName="baseline_coin">
-            </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Jumlah Frekuensi" formControlName="coin_max">
+              <input matInput type="number"
+                [placeholder]="(formAutomation.get('jenis_tantangan').value !== 'minimum_transaction_frequency') ? 'Jumlah Frekuensi' : 'Total Frequency yang dibutuhkan'"
+                formControlName="coin_max">
               <mat-error class="mt-8 px-24"
                 *ngIf="formAutomation.controls['coin_max'].hasError('required') && formAutomation.controls['coin_max'].touched">
                 Jumlah Frekuensi harus diisi.
