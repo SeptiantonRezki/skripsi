@@ -86,7 +86,7 @@ export class PopupNotificationCreateComponent {
   area_id_list: any = [];
   lastLevel: any;
 
-  is_mission_builder: FormControl = new FormControl(true);
+  is_mission_builder: FormControl = new FormControl(false);
 
   constructor(
     private activatedRoute: ActivatedRoute,
