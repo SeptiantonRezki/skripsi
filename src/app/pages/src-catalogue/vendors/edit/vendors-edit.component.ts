@@ -228,9 +228,9 @@ export class VendorsEditComponent implements OnInit {
 
   setDetailVendor() {
     this.initArea();
-    if (this.detailVendor && this.detailVendor.area_id && this.detailVendor.area_id.length > 1) this.initArea2();
+    if (this.detailVendor && this.detailVendor.area && this.detailVendor.area.length > 1) this.initArea2();
     this.initFormGroup();
-    if (this.detailVendor && this.detailVendor.area_id && this.detailVendor.area_id.length > 1) this.initFormGroup2();
+    if (this.detailVendor && this.detailVendor.area && this.detailVendor.area.length > 1) this.initFormGroup2();
   }
 
   getArea(selection) {
