@@ -87,6 +87,7 @@ export class MissionBuilderCreateComponent implements OnInit {
 
     this.dataService.getDataSequencingInfo().subscribe((res) => {
       this.task = res.data;
+      this.task.is_editable = 1;
       if (this.task == null) {
         this.dialogService.openSnackBar({
           message: "Tidak dapat mengakses halaman ini secara langsung!!!"
