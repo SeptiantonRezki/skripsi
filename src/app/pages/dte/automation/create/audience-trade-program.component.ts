@@ -273,6 +273,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         is_shareable: this.shareable.value ? 1 : 0,
         is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
         notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0,
+        jenis_tantangan: this.formAutomation.get('jenis_tantangan').value,
         kombinasi_brand: this.formAutomation.get('jenis_tantangan').value === 'extra_coin' ? this.formAutomation.get('brand_combination').value : 'or'
       };
 
