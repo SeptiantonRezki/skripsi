@@ -286,7 +286,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
 
   updateStatus(): void {
     console.log('selected stat', this.statusForm.get('newStatus').value);
-    if ((this.detailOrder.status === 'baru') && this.statusForm.get('newStatus').value !== 'dibatalkan') {
+    if ((this.detailOrder.status === 'dalam-pengiriman') && this.statusForm.get('newStatus').value !== 'dibatalkan') {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
@@ -308,6 +308,7 @@ export class OrderCatalogueDetailComponent implements OnInit {
         }
       });
     } else {
+      console.log('elseeee cukkk!!!');
       let body: Object = {
         _method: "PUT",
         status: this.statusForm.get("newStatus").value,
@@ -363,7 +364,6 @@ export class OrderCatalogueDetailComponent implements OnInit {
   }
 
   checkOngkirWithProductExisting(item) {
-    console.log('cek ongkir', item);
     if (item.title === 'Ongkos Pengiriman' || item.title === 'Total Pembayaran') {
       return this.productsNota.length === 0 ? 0 : item.value.split('Rp ')[1];
     } else {
