@@ -47,6 +47,20 @@ export class TemplateCreateComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   listChoose: Array<any> = [
+  ];
+
+  listChooseOriginal: Array<any> = [
+    { name: "Jawaban Singkat", value: "text", icon: "short_text" },
+    { name: "Paragraf", value: "textarea", icon: "notes" },
+    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
+    { name: "Angka", value: "numeric", icon: "dialpad" },
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+  ];
+
+  listChooseWithIr: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
@@ -58,6 +72,7 @@ export class TemplateCreateComponent {
     { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
     { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
   ];
+
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
 
@@ -151,6 +166,7 @@ export class TemplateCreateComponent {
         this.filteringLKM();
       });
 
+    this.listChoose = this.listChooseOriginal.slice();
     this.keyUp.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
@@ -160,7 +176,6 @@ export class TemplateCreateComponent {
         this.getListProduct(res);
         this.resetField(res);
       });
-
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
@@ -326,6 +341,10 @@ export class TemplateCreateComponent {
   }
 
 
+  splitCheckList(template) {
+    console.log('template', template);
+  }
+
   _filterSku(value): any[] {
     const filterValue = typeof value == "object" ? value.name.toLowerCase() : value.toLowerCase();
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
@@ -461,12 +480,22 @@ export class TemplateCreateComponent {
     console.log('selectedIR IR', selectedIR, template);
     let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
     if (indexExist > -1) {
+      this.templateListImageIR[indexExist]['ir_id'] = selectedIR.value.id;
+      this.templateListImageIR[indexExist]['ir_code'] = selectedIR.value.code;
+      this.templateListImageIR[indexExist]['ir_name'] = selectedIR.value.name;
       this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
+      this.templateListImageIR[indexExist]['check_list'] = selectedIR.value.check_list ? JSON.parse(selectedIR.value.check_list) : [];
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name });
+      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name, check_list: JSON.parse(selectedIR.value.check_list) });
     }
 
     console.log('template image IR', this.templateListImageIR);
+  }
+
+  onChangeTemplateIR(event) {
+    console.log('the event dude!!!', event);
+    if (event.checked) this.listChoose = [...this.listChooseWithIr]
+    else this.listChoose = [...this.listChooseOriginal]
   }
 
   changeType(item, idx?) {
@@ -665,8 +694,8 @@ export class TemplateCreateComponent {
     let rawValue = this.templateTaskForm.getRawValue();
     console.log('value raw', rawValue);
     let isIR = rawValue['questions'].map(tp => tp.type).find(typ => typ.includes("_ir"));
-    if (isIR) this.isIRTemplate.setValue(true);
-    else this.isIRTemplate.setValue(false);
+    // if (isIR) this.isIRTemplate.setValue(true);
+    // else this.isIRTemplate.setValue(false);
   }
 
   checkHasLinked(idx, idQuestion): Boolean {
@@ -758,10 +787,10 @@ export class TemplateCreateComponent {
           };
 
           if (item.type === 'stock_check_ir') {
-            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['id'] : null;
+            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
             mockup['type'] = 'stock_check_ir';
-            mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['code'] : null;
-            mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['name'] : null;
+            mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
+            mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
             mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
           }
 
