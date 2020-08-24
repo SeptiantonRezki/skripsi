@@ -46,6 +46,18 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   minDateTradeProgram: any;
 
   shareable: FormControl = new FormControl(false);
+  exclude_gsm: FormControl = new FormControl(false);
+
+  listJenisTantangan: Array<any> = [
+    { name: "Default", value: "default" },
+    { name: "Minimum Transaction Frequency", value: "minimum_transaction_frequency" },
+    { name: "Extra Coin", value: "extra_coin" },
+  ];
+
+  listKombinasiBrand: Array<any> = [
+    { name: "OR", value: "or" },
+    { name: "AND", value: "and" }
+  ];
 
   constructor(
     private dataService: DataService,
@@ -78,6 +90,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
+      jenis_tantangan: [''],
       startDate: [new Date(), Validators.required],
       endDate: [new Date(), Validators.required],
       coin_max: [null, Validators.required],
@@ -87,6 +100,11 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
+      total_coin: [0],
+      total_frequency: [0],
+      baseline_coin: [0],
+      extra_coin: [0],
+      brand_combination: ["or"],
       skus: this.formBuilder.array([])
     });
 
@@ -106,6 +124,16 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.formAutomation.get("description_challenge").setValue(this.detailAutomation.description);
     this.formAutomation.get("title_challenge").setValue(this.detailAutomation.title);
     this.formAutomation.get("button_text").setValue(this.detailAutomation.text_button);
+    this.formAutomation.get('total_coin').setValue(this.detailAutomation.total_coin);
+    this.formAutomation.get('total_frequency').setValue(this.detailAutomation.total_frequency);
+    this.formAutomation.get('baseline_coin').setValue(this.detailAutomation.baseline_coin);
+    this.formAutomation.get('extra_coin').setValue(this.detailAutomation.coin_extra);
+    this.formAutomation.get('brand_combination').setValue(this.detailAutomation.kombinasi_brand);
+    this.formAutomation.get('jenis_tantangan').setValue(this.detailAutomation.jenis_tantangan);
+
+    this.shareable.setValue(this.detailAutomation.is_shareable === 1 ? true : false);
+    this.exclude_gsm.setValue(this.detailAutomation.is_exclude_gsm === 1 ? true : false);
+
     if (this.detailAutomation.type === 'e-order') {
       let skus = this.formAutomation.get('skus') as FormArray;
       if (this.detailAutomation.barcode) {
@@ -308,7 +336,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
         _method: 'PUT',
-        is_shareable: this.shareable.value ? 1 : 0
+        is_shareable: this.shareable.value ? 1 : 0,
+        is_exclude_gsm: this.exclude_gsm.value ? 1 : 0
       };
 
       switch (automationType) {
@@ -328,6 +357,17 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
             }
           } else {
             if (body['barcode']) delete body['barcode'];
+          }
+
+          if (this.formAutomation.get('jenis_tantangan').value === 'minimum_transaction_frequency') {
+            body['total_coin'] = this.formAutomation.get('total_coin').value;
+            body['total_frequency'] = this.formAutomation.get('total_frequency').value;
+          }
+
+          if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
+            body['baseline_coin'] = this.formAutomation.get('baseline_coin').value;
+            body['coin_extra'] = this.formAutomation.get('extra_coin').value;
+            body['kombinasi_brand'] = this.formAutomation.get('brand_combination').value;
           }
           break;
         case 'coupon':

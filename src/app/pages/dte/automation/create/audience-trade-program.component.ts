@@ -44,6 +44,21 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
   minDateTradeProgram: any;
 
   shareable: FormControl = new FormControl(false);
+  exclude_gsm: FormControl = new FormControl(false);
+  is_notif: FormControl = new FormControl(1);
+
+  listJenisTantangan: Array<any> = [
+    { name: "Default", value: "default" },
+    { name: "Minimum Transaction Frequency", value: "minimum_transaction_frequency" },
+    { name: "Extra Coin", value: "extra_coin" },
+  ];
+
+  listKombinasiBrand: Array<any> = [
+    { name: "OR", value: "or" },
+    { name: "AND", value: "and" }
+  ];
+  listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
+  listAddNotif: Array<any> = [{ name: 'H+1', value: 1 }, { name: 'H+2', value: 2 }, { name: 'H+3', value: 3 }];
 
   constructor(
     private dataService: DataService,
@@ -59,6 +74,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
+      jenis_tantangan: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       coin_max: [null, Validators.required],
@@ -68,6 +84,12 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
+      total_coin: [0],
+      total_frequency: [0],
+      baseline_coin: [0],
+      extra_coin: [0],
+      brand_combination: ["or"],
+      notif: [""],
       skus: this.formBuilder.array([this.createFormSku()])
     });
 
@@ -148,6 +170,14 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     //   ).subscribe(res => {
     //     this.filteredSku.next(res.data);
     //   });
+  }
+
+  changeValue() {
+    if (this.is_notif.value === 0) {
+      this.formAutomation.get('notif').disable();
+    } else {
+      this.formAutomation.get('notif').enable();
+    }
   }
 
   ngOnDestroy() {
@@ -243,7 +273,9 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         title: this.formAutomation.get("title_challenge").value,
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
-        is_shareable: this.shareable.value ? 1 : 0
+        is_shareable: this.shareable.value ? 1 : 0,
+        is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
+        notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0
       };
 
       switch (automationType) {
@@ -263,6 +295,16 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
             }
           } else {
             if (body['barcode']) delete body['barcode'];
+          }
+          if (this.formAutomation.get('jenis_tantangan').value === 'minimum_transaction_frequency') {
+            body['total_coin'] = this.formAutomation.get('total_coin').value;
+            body['total_frequency'] = this.formAutomation.get('total_frequency').value;
+          }
+
+          if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
+            body['baseline_coin'] = this.formAutomation.get('baseline_coin').value;
+            body['coin_extra'] = this.formAutomation.get('extra_coin').value;
+            body['kombinasi_brand'] = this.formAutomation.get('brand_combination').value;
           }
           break;
         case 'coupon':
