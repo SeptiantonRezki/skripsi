@@ -74,7 +74,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
-      jenis_tantangan: [''],
+      jenis_tantangan: ['default'],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       coin_max: [null, Validators.required],
@@ -84,9 +84,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
-      total_coin: [0],
-      total_frequency: [0],
-      baseline_coin: [0],
       extra_coin: [0],
       brand_combination: ["or"],
       notif: [""],
@@ -275,7 +272,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         text_button: this.formAutomation.get("button_text").value,
         is_shareable: this.shareable.value ? 1 : 0,
         is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
-        notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0
+        notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0,
+        kombinasi_brand: this.formAutomation.get('jenis_tantangan').value === 'extra_coin' ? this.formAutomation.get('brand_combination').value : 'or'
       };
 
       switch (automationType) {
@@ -296,15 +294,9 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
           } else {
             if (body['barcode']) delete body['barcode'];
           }
-          if (this.formAutomation.get('jenis_tantangan').value === 'minimum_transaction_frequency') {
-            body['total_coin'] = this.formAutomation.get('total_coin').value;
-            body['total_frequency'] = this.formAutomation.get('total_frequency').value;
-          }
 
           if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
-            body['baseline_coin'] = this.formAutomation.get('baseline_coin').value;
             body['coin_extra'] = this.formAutomation.get('extra_coin').value;
-            body['kombinasi_brand'] = this.formAutomation.get('brand_combination').value;
           }
           break;
         case 'coupon':
