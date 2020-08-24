@@ -370,7 +370,7 @@ export class RetailerEditComponent {
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
-      business_code: this.detailRetailer.classification === 'SRC' ? this.detailRetailer.code : "",
+      business_code: this.detailRetailer.classification === 'NON-SRC' ? "" : this.detailRetailer.code,
       owner: this.detailRetailer.owner || '',
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
       status: this.detailRetailer.status || '',
