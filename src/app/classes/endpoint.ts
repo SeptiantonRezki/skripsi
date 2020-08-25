@@ -226,7 +226,8 @@ export class Endpoint {
         list_sku: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
-        update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`
+        update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`
       },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
