@@ -101,13 +101,13 @@
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
-            *ngIf="formAutomation.get('jenis_tantangan').value === 'extra_coin'">
+            *ngIf="formAutomation.get('automation').value === 'e-order' && formAutomation.get('jenis_tantangan').value === 'extra_coin'">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" placeholder="Extra Coin" formControlName="extra_coin">
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
-            *ngIf="formAutomation.get('jenis_tantangan').value === 'extra_coin'">
+            *ngIf="formAutomation.get('automation').value === 'e-order' && formAutomation.get('jenis_tantangan').value === 'extra_coin'">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <mat-select placeholder="Kombinasi Brand" formControlName="brand_combination">
                 <mat-option *ngFor="let item of listKombinasiBrand" [value]="item.value">{{item.name}}</mat-option>
