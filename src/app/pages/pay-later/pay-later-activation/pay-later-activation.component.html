@@ -76,6 +76,30 @@
                 </mat-form-field>
               </div>
             </form>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px" style="margin-bottom: 25px;">
+              <mat-form-field fxFlex="20" class="is-light form-primary">
+                <mat-select placeholder="Status" [formControl]="status">
+                  <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="20%" class="is-light form-primary">
+                <input matInput [matDatepicker]="dari" (focus)="dari.open()" [formControl]="start_date"
+                  placeholder="Tanggal Mulai">
+                <mat-datepicker-toggle matSuffix [for]="dari">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #dari></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field fxFlex="20%" class="is-light form-primary">
+                <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [formControl]="end_date"
+                  placeholder="Tanggal Berakhir">
+                <mat-datepicker-toggle matSuffix [for]="sampai">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #sampai></mat-datepicker>
+              </mat-form-field>
+            </div>
             <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
               [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
               [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
