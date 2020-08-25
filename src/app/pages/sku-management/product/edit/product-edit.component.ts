@@ -64,6 +64,11 @@ export class ProductEditComponent {
     { name: "Ya", value: 1 },
     { name: "Tidak", value: 0 }
   ]
+  listTipe: any[] = [
+    { name: "Distribusi", value: "Distribusi" },
+    { name: "SRO", value: "SRO" },
+    { name: "Kanvas", value: "Kanvas" },
+  ]
   minDate: any;
 
   filteredSkuOptions: Observable<string[]>;
@@ -218,6 +223,7 @@ export class ProductEditComponent {
           });
         }
 
+        this.formProductGroup.get("code").setValue(res.data.code);
         this.formProductGroup.get("name").setValue(res.data.name);
         this.formProductGroup.get("barcode").setValue(res.data.barcode);
         this.formProductGroup.get("brand").setValue(res.data.brand_id);
@@ -242,7 +248,7 @@ export class ProductEditComponent {
         }
 
         for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
-          console.log('hitted me', val, index);
+          console.log('hitted me');
           const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
           let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
@@ -288,6 +294,7 @@ export class ProductEditComponent {
               price: [item.price, Validators.required],
               price_discount: [item.price_discount, Validators.required],
               price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+              tipe: [item.price_type]
             }));
             idx++;
           };
@@ -642,6 +649,7 @@ export class ProductEditComponent {
 
   createFormGroup(): void {
     this.formProductGroup = this.formBuilder.group({
+      code: [""],
       name: ["", Validators.required],
       alias: this.formBuilder.array([]),
       status: ["active", Validators.required],
@@ -760,6 +768,7 @@ export class ProductEditComponent {
       }
 
       let body = {
+        code: this.formProductGroup.get("code").value,
         name: this.formProductGroup.get("name").value,
         alias: aliasChip,
         image: this.imageSkuConverted,
@@ -777,6 +786,7 @@ export class ProductEditComponent {
 
       let fd = new FormData();
       fd.append("_method", "PUT");
+      fd.append("code", body.code);
       fd.append("name", body.name);
 
       if (body.barcode) fd.append("barcode", body.barcode);
@@ -842,7 +852,8 @@ export class ProductEditComponent {
             packaging_amount: item.packaging_amount,
             price: item.price,
             price_discount: item.price_discount || 0,
-            price_discount_expires_at: this.convertDate(item.price_discount_expires_at)
+            price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
+            tipe: item.tipe
           })
         });
 
@@ -858,6 +869,7 @@ export class ProductEditComponent {
               fd.append(`product_prices[${index}][price_discount]`, '0');
 
             fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+            fd.append(`product_prices[${index}][price_type]`, item.tipe);
           });
 
           let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
@@ -1057,6 +1069,7 @@ export class ProductEditComponent {
       price: ["", Validators.required],
       price_discount: "",
       price_discount_expires_at: ["", Validators.required],
+      tipe: [""]
     })
   }
 
