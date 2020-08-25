@@ -98,9 +98,23 @@ export class BaseService {
     return this.http.put(url, request, { headers });
   }
 
+  protected putWithParamsApi(url, request, params) {
+    let query = this.loopParams(params);
+    this.clean(request);
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    return this.http.put(url, request, { headers, params: query });
+  }
+
   protected deleteApi(url, request: any = null) {
     let headers = new HttpHeaders().set('Accept', 'application/json');
     return this.http.request('delete', url, { body: request, headers });
+  }
+
+  protected deleteWithParamsApi(url, request: any = null, params) {
+    let query = this.loopParams(params);
+    this.clean(request);
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    return this.http.request('delete', url, { body: request, headers, params: query });
   }
 
   protected extractData(res: HttpResponse<any>) {
