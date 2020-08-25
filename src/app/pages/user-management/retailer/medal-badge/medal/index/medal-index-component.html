@@ -1,0 +1,56 @@
+<div class="content">
+  <div class="p-24 add-btn-medal">
+    <button style="width: 170px" (click)="openCreateMedal()" mat-raised-button
+      type="button">
+      Buat Medal
+    </button>
+  </div>
+  <div>
+    <div class="table-wrapper">
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="rows.length" [limit]="50" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Medal" prop="name" [sortable]="true">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Deskripsi" prop="description" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.description || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.created_at | date: 'dd/mm/yyyy HH:mm' }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Id_Medal" prop="Id_Medal" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div>
+              <button mat-icon-button matTooltip="Copy Id_Medal" (click)="copyTextIdMedal(row.id)">
+                <mat-icon class="secondary-text" size="20">file_copy</mat-icon>
+              </button>
+              <span class="row-address">{{row.id}}</span>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Tindakan" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button matTooltip="Edit" (click)="openEditMedal(row)">
+                <mat-icon class="secondary-text" outline>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteMedalById(row.id)">
+                <!-- [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus"> -->
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
