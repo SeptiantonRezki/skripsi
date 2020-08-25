@@ -20,33 +20,37 @@
             </mat-form-field>
           </div>
 
-          <!--<div fxLayout="row" *ngIf="formAudience.get('audience_type').value === 'mission'">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select formControlName="trade_scheduler_id" placeholder="Nama Pengatur Jadwal Trade Program"
-                #singleSelect>
-                <ngx-mat-select-search [formControl]="filterScheduler"
-                  [placeholderLabel]="'Cari Jadwal Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Jadwal Trade Program yang ditemukan'"></ngx-mat-select-search>
-                <mat-option *ngFor="let item of filteredScheduler | async" [value]="item.id">
-                  {{item.name}}
-                </mat-option>
-              </mat-select>
-              <mat-error
-                *ngIf="formAudience.controls['trade_scheduler_id'].hasError('required') && formAudience.controls['trade_scheduler_id'].touched">
-                Nama Pengatur Jadwal Trade Program harus diisi
-              </mat-error>
-            </mat-form-field>
-          </div>-->
+          <div fxLayout="row">
+            <label id="ts">Jenis Audience</label>
+          </div>
 
           <div fxLayout="row">
-            <mat-radio-group formControlName="type" (change)="changeValue()">
-              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listType" [value]="item.value">
-                {{item.name}}
+            <mat-radio-group formControlName="audience_type" (change)="tsmOrScheduler()">
+              <mat-radio-button
+                class="radio-button pr-48"
+                *ngFor="let item of tsmScheduler"
+                [value]="item.value"
+              >
+                {{ item.name }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
 
-          <div *ngIf="formAudience.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
+          <br>
+          
+          <div fxLayout="row">
+            <mat-radio-group formControlName="limit" (change)="changeValue()">
+              <mat-radio-button
+                class="radio-button pr-48"
+                *ngFor="let item of listType"
+                [value]="item.value"
+              >
+                {{ item.name }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="formAudience.get('limit').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
             class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
@@ -71,14 +75,53 @@
             </mat-form-field>
           </div>
           <div fxLayout="row" style="margin-bottom: 10px;">
-            <mat-radio-group formControlName="audience_type">
+            <mat-radio-group formControlName="type">
               <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAudienceType" [value]="item.value">
                 {{item.name}}
               </mat-radio-button>
             </mat-radio-group>
           </div>
 
-          <div fxLayout="row" *ngIf="formAudience.get('audience_type').value === 'challenge'">
+          <div
+            fxLayout="row"
+            *ngIf="formAudience.get('type').value === 'mission' && formAudience.get('audience_type').value === 'scheduler'"
+          >
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select
+                formControlName="trade_scheduler_id"
+                placeholder="Nama Pengatur Jadwal Trade Program"
+                #singleSelect
+              >
+                <ngx-mat-select-search
+                  [formControl]="filterScheduler"
+                  [placeholderLabel]="'Cari Jadwal Trade Program...'"
+                  [noEntriesFoundLabel]="
+                    'Tidak ada Jadwal Trade Program yang ditemukan'
+                  "
+                ></ngx-mat-select-search>
+                <mat-option
+                  *ngFor="let item of filteredScheduler | async"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  formAudience.controls['trade_scheduler_id'].hasError(
+                    'required'
+                  ) && formAudience.controls['trade_scheduler_id'].touched
+                "
+              >
+                Nama Pengatur Jadwal Trade Program harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div
+            fxLayout="row"
+            *ngIf="formAudience.get('type').value === 'challenge'"
+          >
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="trade_creator_id" placeholder="Nama Trade Program">
                 <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
@@ -282,15 +325,15 @@
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <ngx-datatable class="material" [rows]="rows" [selected]="selected" [columnMode]="'force'" [headerHeight]="48"
         [footerHeight]="56" [rowHeight]="'auto'" [reorderable]="reorderable"
-        [selectionType]="formAudience.get('type').value !== 'pick-all' ? 'checkbox' : ''" [count]="pagination.total"
+        [selectionType]="formAudience.get('limit').value !== 'pick-all' ? 'checkbox' : ''" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
         (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
         [rowIdentity]="getId" (sort)="onSort($event)" fusePerfectScrollbar>
-        <ngx-datatable-column [width]="68" *ngIf="formAudience.get('type').value !== 'pick-all'" [canAutoResize]="false"
+        <ngx-datatable-column [width]="68" *ngIf="formAudience.get('limit').value !== 'pick-all'" [canAutoResize]="false"
           [sortable]="true" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true">
           <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected" [disabled]="formAudience.get('type').value === 'pick-all'"
+            <mat-checkbox [checked]="allRowsSelected" [disabled]="formAudience.get('limit').value === 'pick-all'"
               (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template> -->
 

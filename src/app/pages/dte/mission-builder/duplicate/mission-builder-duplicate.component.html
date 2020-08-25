@@ -10,42 +10,40 @@
 
   <div class="content p-24">
     <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
+      <div fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap="16px" class="stats-cards content p-12">
         <div fxFlex="50">
-          <mat-card style="padding: 0px; height:120px">
-            <div fxLayout="row" fxLayoutGap="16px" class="stats-cards content p-12" style="margin-left: 100px;">
-              <div fxFlex="30" style="margin-right: 0px;">
-                <p class="paragraph">Nama  </p>
-                <p class="paragraph">Trade Program </p>
-                <p class="paragraph">Group Audience </p>
+          <mat-card style="padding: 0px; height:100%">
+            <div fxLayout="column" fxLayoutGap="8px" class="stats-cards content p-12" style="margin-left: 70px; margin-right: 70px;">
+              <div fxLayout="row" fxFlex="100">
+                <p fxFlex="30" class="paragraph">Nama  </p>
+                <p fxFlex="5" class="paragraph">:</p>
+                <p fxFlex="65" class="paragraph">{{task.name}}</p>
               </div>
-              <div fxFlex="3" style="margin-right: 0px;">
-                <p class="paragraph">:</p>
-                <p class="paragraph">:</p>
-                <p class="paragraph">:</p>
+              <div fxLayout="row" fxFlex="100">
+                <p fxFlex="30" class="paragraph">Trade Program </p>
+                <p fxFlex="5" class="paragraph">:</p>
+                <p fxFlex="65" class="paragraph">{{task.trade_creator_name}}</p>
               </div>
-              <div fxFlex="40">
-                <p class="paragraph">{{task.name}}</p>
-                <p class="paragraph">{{task.trade_creator_name}}</p>
-                <p class="paragraph">{{task.trade_audience_group_name}}</p>
+              <div fxLayout="row" fxFlex="100">
+                <p fxFlex="30" class="paragraph">Group Audience </p>
+                <p fxFlex="5" class="paragraph">:</p>
+                <p fxFlex="65" class="paragraph">{{task.trade_audience_group_name}}</p>
               </div>
             </div>
           </mat-card>
         </div>
         <div fxFlex="50">
-          <mat-card style="padding: 0px; height:120px">
-            <div fxLayout="row" fxLayoutGap="16px" class="stats-cards content p-12" style="margin-left: 100px;">
-              <div fxFlex="30" style="margin-right: 0px;">
-                <p class="paragraph">Start Date </p>
-                <p class="paragraph">End Date </p>
+          <mat-card style="padding: 0px; height:100%">
+            <div fxLayout="column" fxLayoutGap="8px" class="stats-cards content p-12" style="margin-left: 100px; margin-right: 100px;">
+              <div fxLayout="row" fxFlex="100">
+                <p fxFlex="30" class="paragraph">Start Date </p>
+                <p fxFlex="5" class="paragraph">:</p>
+                <p fxFlex="65" class="paragraph">{{task.start_date}}</p>
               </div>
-              <div fxFlex="3" style="margin-right: 0px;">
-                <p class="paragraph">:</p>
-                <p class="paragraph">:</p>
-              </div>
-              <div fxFlex="40">
-                <p class="paragraph">{{task.start_date}}</p>
-                <p class="paragraph">{{task.end_date}}</p>
+              <div fxLayout="row" fxFlex="100">
+                <p fxFlex="30" class="paragraph">End Date </p>
+                <p fxFlex="5" class="paragraph">:</p>
+                <p fxFlex="65" class="paragraph">{{task.end_date}}</p>
               </div>
             </div>
           </mat-card>
@@ -154,7 +152,7 @@
             <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="100">
               <svg:foreignObject width="150" height="100">
                 <xhtml:div class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
-                  <button class="closeNode" (click)="delNode(node, $event);"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
+                  <button class="closeNode" (click)="delNode(node, $event);" *ngIf="task.is_editable === 1"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
                   <label class="activeNode" *ngIf="currentNode === node.data.component_id"><mat-icon style="font-size: 16px;">check</mat-icon></label>
                   <label *ngIf="node.data.type === 'mission'"><mat-icon>assignment</mat-icon></label>
                   <label *ngIf="node.data.type === 'pop-up-notification'"><mat-icon>notifications_active</mat-icon></label>
@@ -192,19 +190,19 @@
         </ngx-graph>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
-        <div fxFlex="40">
+        <div fxFlex="45">
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
-              <div fxFlex="50" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
-              <div fxFlex="50" class="h2">IDR {{task.total_budget}}</div>
+              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
+              <div fxFlex="40" class="h2">IDR {{task.total_budget}}</div>
             </div>
           </mat-card>
         </div>
-        <div fxFlex="40">
+        <div fxFlex="45">
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
-              <div fxFlex="50" class="h2" style="margin-right: 0px; text-align: right;">Total Week Duration : </div>
-              <div fxFlex="50" class="h2">{{task.current_week}}/{{task.total_week}}</div>
+              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Week Duration : </div>
+              <div fxFlex="40" class="h2">{{task.current_week}}/{{task.total_week}}</div>
             </div>
           </mat-card>
         </div>

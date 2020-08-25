@@ -27,24 +27,10 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   dialogCoinRef: MatDialogRef<DialogCoinDuplicateComponent>;
 
   task: any = null;
-
-  // Original actions object to API
   actions: any[];
-
-  // Objects for nodes and links in graph
-  // public nodes: Node[] = [];
-  // public links: Edge[] = [];
   hierarchialGraph: { links: any[any]; nodes: any[any] };
-
-  // Default layout orientation - Left to Right
-  public layoutSettings = {
-    orientation: 'LR'
-  };
-  // Default curve shape - Linear
+  public layoutSettings = { orientation: 'LR' };
   public curve: any = shape.curveLinear;
-
-  // public layout: Layout = new DagreNodesOnlyLayout();
-
   update$: Subject<boolean> = new Subject();
   prev_node: string;
   next_node: string;
@@ -154,9 +140,23 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     this.task.status = "unpublish";
     this.task.actions = this.actions;
     const data = this.task;
+    // Filter Nodes with type 'mission'
+    let missionNodes = data.actions.filter(v => v.type === 'mission');
+    let coinNodes = data.actions.filter(v => v.type === 'coin');
+    // Are there any mixed verification type?
+    let mixedVerification = !(missionNodes.every((v: any) => v.attribute.verification_type === missionNodes[0].attribute.verification_type)) || !(missionNodes.every((v: any) => v.attribute.is_push_to_ff === missionNodes[0].attribute.is_push_to_ff));
+    // Check if coin activity is used in non-Push to FF sequence
+    let validCoinNode = true;
+    
+    // Use to validate notification nodes
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
       const element = data.actions[i];
+      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && (element.attribute.is_push_to_ff === 0 || element.attribute.is_push_to_ff === '0')) {
+        if (coinNodes.length > 0) {
+          validCoinNode = false;
+        }
+      }
       if (element.attribute !== null && 'notification_id' in element.attribute) {
         if (element.attribute.notification_id > 0) {
           notifValid++;
@@ -166,7 +166,15 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         }
       }
     }
-    if (this.overBudget) {
+    if (!validCoinNode) {
+      this.dialogService.openSnackBar({
+        message: "Tidak boleh ada activity coin jika misi tidak bertipe Push to FF"
+      });
+    } else if (mixedVerification) {
+      this.dialogService.openSnackBar({
+        message: "Kombinasi tipe verifikasi tidak diperbolehkan dalam satu task sequence"
+      });
+    } else if (this.overBudget) {
       this.dialogService.openSnackBar({
         message: "Budget trade program tidak mencukupi!"
       });
@@ -191,91 +199,102 @@ export class MissionBuilderDuplicateComponent implements OnInit {
   }
 
   nodeDisabler(type: any) {
-    switch (type) {
-      case 'mission':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'pop-up-notification':
-        this.noMission = false;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'push-notification':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'coin':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'decision':
-        if (this.yesNo === 'yes') {
+    if (this.task.is_editable === 0) {
+      this.noMission = true;
+      this.noPopup = true;
+      this.noPush = true;
+      this.noCoin = true;
+      this.noDecision = true;
+      this.noTime = true;
+      this.noFinish = true;
+    }
+    if (this.task.is_editable === 1) {
+      switch (type) {
+        case 'mission':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'pop-up-notification':
+          this.noMission = false;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'push-notification':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'coin':
           this.noMission = false;
           this.noPopup = false;
           this.noPush = false;
-          this.noCoin = false;
+          this.noCoin = true;
           this.noDecision = true;
           this.noTime = false;
           this.noFinish = false;
-        }
-        if (this.yesNo === 'no') {
+          break;
+        case 'decision':
+          if (this.yesNo === 'yes') {
+            this.noMission = false;
+            this.noPopup = false;
+            this.noPush = false;
+            this.noCoin = false;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = false;
+          }
+          if (this.yesNo === 'no') {
+            this.noMission = true;
+            this.noPopup = true;
+            this.noPush = true;
+            this.noCoin = true;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = true;
+          }
+          break;
+        case 'time':
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'finish':
           this.noMission = true;
           this.noPopup = true;
           this.noPush = true;
           this.noCoin = true;
           this.noDecision = true;
-          this.noTime = false;
+          this.noTime = true;
           this.noFinish = true;
-        }
-        break;
-      case 'time':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'finish':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = true;
-        this.noFinish = true;
-        break;
-      case null:
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = false;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-      default:
-        break;
+          break;
+        case null:
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = false;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+        default:
+          break;
+      }
     }
   }
 
