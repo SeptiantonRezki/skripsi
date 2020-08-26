@@ -175,7 +175,7 @@
                 </div>
               </div>
               <div [formGroup]="formArea2" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
-                fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="two_geotree">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
                   <mat-select placeholder="National" formControlName="national"
                     matTooltip="{{getToolTipData(formArea2.get('national').value, listLevelArea)}}" id="area2_national">

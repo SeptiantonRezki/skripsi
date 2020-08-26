@@ -12,7 +12,7 @@ import { DataService } from 'app/services/data.service';
 	encapsulation: ViewEncapsulation.None
 })
 export class EstShippingDialogComponent implements OnInit {
-	est_shipping: FormControl = new FormControl('', Validators.required);
+	est_shipping: FormControl = new FormControl('', [Validators.required, Validators.min(0), Validators.max(31)]);
 	constructor(
 		public dialogRef: MatDialogRef<EstShippingDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
@@ -27,16 +27,17 @@ export class EstShippingDialogComponent implements OnInit {
 	}
 
 	submit() {
-		if (!this.data.shipping_cost || this.data.shipping_cost == 0) {
-			let data = {
-				titleDialog: "Biaya Pengiriman Belum Ditambahkan",
-				captionDialog: "Anda belum menambahkan Biaya Pengiriman pada Pesanan ini, apakah melanjutkan transaksi tanpa biaya kirim",
-				confirmCallback: this.onConfirm.bind(this),
-				buttonText: ["Ya, Lanjutkan", "Tidak, Perbarui Dulu"]
-			};
-			this.dialogService.openCustomConfirmationDialog(data);
-		} else {
-			if (this.est_shipping.valid) {
+		if (this.est_shipping.valid) {
+			if (!this.data.shipping_cost || this.data.shipping_cost == 0) {
+				let data = {
+					titleDialog: "Biaya Pengiriman Belum Ditambahkan",
+					captionDialog: "Anda belum menambahkan Biaya Pengiriman pada Pesanan ini, apakah melanjutkan transaksi tanpa biaya kirim",
+					confirmCallback: this.onConfirm.bind(this),
+					buttonText: ["Ya, Lanjutkan", "Tidak, Perbarui Dulu"]
+				};
+				this.dialogService.openCustomConfirmationDialog(data);
+			} else {
+
 				this.dataService.showLoading(true);
 				let body = {
 					"_method": "PUT",
@@ -53,7 +54,6 @@ export class EstShippingDialogComponent implements OnInit {
 				})
 			}
 		}
-
 	}
 
 	onConfirm() {

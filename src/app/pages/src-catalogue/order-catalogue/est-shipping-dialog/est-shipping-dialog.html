@@ -5,7 +5,16 @@
     <div mat-dialog-content fxLayoutAlign="center center" style="min-height: 50px;min-width: 300px;">
         <div fxLayout="row" style="width: 300px;">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" [formControl]="est_shipping">
+                <input matInput type="number" [formControl]="est_shipping" min="0" max="31">
+                <mat-error *ngIf="est_shipping.hasError('required') && est_shipping.touched ">
+                    Estimasi Pengiriman harus Diisi
+                </mat-error>
+                <mat-error *ngIf="est_shipping.hasError('min') && est_shipping.touched ">
+                    Estimasi Pengiriman Minimal 0 Hari
+                </mat-error>
+                <mat-error *ngIf="est_shipping.hasError('max') && est_shipping.touched ">
+                    Estimasi Pengiriman Maksimal 31 Hari
+                </mat-error>
             </mat-form-field>
         </div>
         <p>Hari</p>

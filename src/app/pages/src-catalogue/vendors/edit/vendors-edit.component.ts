@@ -683,6 +683,7 @@ export class VendorsEditComponent implements OnInit {
       } else {
         this.vendorsService.updateWithParams({ vendor_id: this.detailVendor.id }, body, { force_update: 1 }).subscribe(
           res => {
+            this.dialogService.brodcastCloseConfirmation();
             this.dataService.showLoading(false);
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan"
