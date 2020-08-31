@@ -33,6 +33,7 @@ export class NotificationCreateComponent {
   formArea: FormGroup;
   formNotificationError: any;
 
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   userGroup: any[] = [
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
@@ -142,6 +143,7 @@ export class NotificationCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user_group: ["retailer", Validators.required],
+      verification: ["all"],
       age: ["18+", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
@@ -1040,6 +1042,7 @@ export class NotificationCreateComponent {
       };
 
       if (body.type === 'customer') {
+        body['verification'] = this.formNotification.get('verification').value;
         body['age'] = this.formNotification.get("age").value;
       }
 

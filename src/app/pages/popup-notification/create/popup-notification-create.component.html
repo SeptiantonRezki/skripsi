@@ -138,6 +138,21 @@
 
           <!-- Consumer -->
           <div *ngIf="formPopupGroup.get('user_group').value === 'customer'">
+
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="verification" placeholder="Jenis Konsumen">
+                    <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['verification'].hasError('required') && formPopupGroup.controls['verification'].touched">
+                    Jenis Konsumen harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
