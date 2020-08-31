@@ -647,6 +647,11 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
         list_suppliers: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        list_retailer_selected: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/${context.partnership_id}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/status/${context.partnership_id}`,
+        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/import-audience`,
+        show_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/import/show-import-audience`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/export-audience`
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

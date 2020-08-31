@@ -744,7 +744,7 @@ export class PanelPartnershipEditComponent {
   initPartnership() {
     console.log(this.detailPartnership);
     this.createForm.get('namaSupplier').setValue(this.detailPartnership.supplier_company_id);
-    this.createForm.get('title').setValue(this.detailPartnership.name);
+    this.createForm.get('title').setValue(this.detailPartnership.name_partnership);
     this.createForm.get('startDate').setValue(this.detailPartnership.start_date);
     this.createForm.get('endDate').setValue(this.detailPartnership.end_date);
     this.createForm.get('status').setValue(this.detailPartnership.status);
@@ -922,7 +922,7 @@ export class PanelPartnershipEditComponent {
   }
 
   detailPartnershipSelect() {
-    this.audienceService.getListRetailerIdSelected({ partnership_id: this.detailPartnership.id }).subscribe(
+    this.panelPartnershipService.getListRetailerIdSelected({ partnership_id: this.detailPartnership.id }).subscribe(
       res => {
         console.log('this.selected', res);
         this.selected = res;
@@ -1090,7 +1090,7 @@ export class PanelPartnershipEditComponent {
       }
     )
   }
-  
+
 
   importAudience() {
     const dialogConfig = new MatDialogConfig();

@@ -143,25 +143,27 @@ export class PanelPartnershipIndexComponent {
     );
   }
 
-  // selectionStatus(event: any, item: any, i: number) {
-  //   const e = event.value;
-  //   const body = {
-  //     name: item.name,
-  //     address: item.address,
-  //     telephone: item.telephone,
-  //     cellphone: item.cellphone,
-  //     note: item.note,
-  //     products: item.products,
-  //     status: e
-  //   };
-  //   this.panelPartnershipService.updateStatus(body, { supplierId: item.id }).subscribe(res => {
-  //     this.dialogService.openSnackBar({ message: "Berhasil mengubah status" });
-  //     }, err => {
-  //       this.dialogService.openSnackBar({ message: "Gagal mengubah status" });
-  //       this.get();
-  //     }
-  //   );
-  // }
+  selectionStatus(event: any, item: any, i: number) {
+    console.log(item);
+    const e = event.value;
+    const body = {
+      retailer_id: null,
+      supplier_company_id: item.supplier_company_id,
+      name: item.name,
+      start_date: item.start_date,
+      end_date: item.end_date,
+      detail_mechanism: item.detail_mechanism,
+      total_audience: item.total_audience,
+      status: e
+    };
+    this.panelPartnershipService.updateStatus(body, { partnership_id: item.id }).subscribe(res => {
+      this.dialogService.openSnackBar({ message: "Berhasil mengubah status" });
+      }, err => {
+        this.dialogService.openSnackBar({ message: "Gagal mengubah status" });
+        this.getList();
+      }
+    );
+  }
 
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_partnership', param);

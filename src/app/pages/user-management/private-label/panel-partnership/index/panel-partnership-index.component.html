@@ -21,34 +21,34 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Supplier" prop="name">
+        <ngx-datatable-column name="Nama Supplier" prop="name_supplier">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name">{{row.name}}</span>
+            <span class="row-name">{{row.name_supplier}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Partnership" prop="partnership">
+        <ngx-datatable-column name="Nama Partnership" prop="name_partnership">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-partnership">{{row.name_partnership}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Audience" prop="jml_audience">
+        <ngx-datatable-column name="Jumlah Audience" prop="total_audience">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-total_audience">{{row.total_audience}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Mulai" prop="tgl_mulai">
+        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-start_date">{{row.start_date}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Berakhir" prop="tgl_berakhir">
+        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-end_date">{{row.end_date}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status Program" prop="status_program">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-address"></span>
+            <span class="row-address">{{row.status_program}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" [width]="120" prop="status">

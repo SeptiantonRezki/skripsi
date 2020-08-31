@@ -25,7 +25,7 @@ export class PanelPartnershipService extends BaseService {
 
   update(body, context): Observable<any> {
     const url = this.getUrl(this.namespace, 'update', context);
-    return this.postApi(url, body);
+    return this.putApi(url, body);
   }
 
   delete(context): Observable<any> {
@@ -36,6 +36,26 @@ export class PanelPartnershipService extends BaseService {
   getListSuppliers(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_suppliers");
     return this.getApi(url, queryParams);
+  }
+
+  updateStatus(body?: any, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "updateStatus", context);
+    return this.postApi(url, body);
+  }
+
+  importExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "import");
+    return this.postApi(url, body);
+  }
+
+  showImport(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_import");
+    return this.getApi(url, queryParams);
+  }
+
+  exportExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postApi(url, body);
   }
 
   // getListAudience(): Observable<any> {

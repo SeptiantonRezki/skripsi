@@ -8,6 +8,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
+import { PanelPartnershipService } from 'app/services/user-management/private-label/panel-partnership.service';
 
 @Component({
   // selector: 'app-import-audience-dialog',
@@ -60,7 +61,8 @@ export class ImportAudienceDialogComponent {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private panelPartnershipService: PanelPartnershipService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -77,12 +79,12 @@ export class ImportAudienceDialogComponent {
     this.idbService.reset();
     fd.append('file', this.files);
     this.dataService.showLoading(true);
-    this.audienceService.importExcel(fd).subscribe(
+    this.panelPartnershipService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
           // this.recursiveImport(res);
           this.pagination['per_page'] = 250;
-          this.audienceService.showImport(this.pagination).subscribe(response => {
+          this.panelPartnershipService.showImport(this.pagination).subscribe(response => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
             this.totalData = response.data.total;
@@ -122,7 +124,7 @@ export class ImportAudienceDialogComponent {
 
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+      this.panelPartnershipService.showImport({ page: this.currPage }).subscribe(response => {
         if (response && response.data) {
           this.idbService.bulkUpdate(response.data.data).then(res => {
             console.log('page', this.currPage - 1, res);
@@ -195,7 +197,7 @@ export class ImportAudienceDialogComponent {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial });
+      let response = this.panelPartnershipService.showImport({ page: trial });
       trialsRes.push(response);
     })
 
