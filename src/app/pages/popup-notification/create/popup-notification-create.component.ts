@@ -41,6 +41,7 @@ export class PopupNotificationCreateComponent {
 
   lvl: any[];
   minDate: any;
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
@@ -86,7 +87,7 @@ export class PopupNotificationCreateComponent {
   area_id_list: any = [];
   lastLevel: any;
 
-  is_mission_builder: FormControl = new FormControl(true);
+  is_mission_builder: FormControl = new FormControl(false);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -143,6 +144,8 @@ export class PopupNotificationCreateComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
@@ -159,8 +162,8 @@ export class PopupNotificationCreateComponent {
       content_type: ["iframe", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
-      // is_smoker: this.formBuilder.array([]),
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      verification: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
@@ -180,8 +183,8 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
-    if(this.formPopupGroup.value.is_mission_builder === true) {
-      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+    if (this.formPopupGroup.value.is_mission_builder === true) {
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       setTimeout(() => {
         this.formPopupGroup.controls['user_group'].setValue('tsm');
       }, 1);
@@ -1177,7 +1180,7 @@ export class PopupNotificationCreateComponent {
   selectChange(e: any) {
     if (e.source.name === 'is_mission_builder' && e.checked) {
       this.formPopupGroup.get('is_mission_builder').patchValue(true);
-      this.listUserGroup = [{ name: "TSM", value: "tsm"}];
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       setTimeout(() => {
         this.formPopupGroup.controls['user_group'].setValue('tsm');
       }, 1);
@@ -1241,6 +1244,7 @@ export class PopupNotificationCreateComponent {
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
+        body['verification'] = this.formPopupGroup.get('verification').value;
       }
 
       if (body.action === 'static-page') {

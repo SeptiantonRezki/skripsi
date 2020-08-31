@@ -678,7 +678,6 @@ export class ProductCreateComponent {
           let value = this.formProductGroup.getRawValue();
 
           value.areas.map(item => {
-            console.log('itemasdas areas', item);
             let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
             for (const val of this.typeArea) {
               const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");

@@ -87,6 +87,7 @@ export class MissionBuilderCreateComponent implements OnInit {
 
     this.dataService.getDataSequencingInfo().subscribe((res) => {
       this.task = res.data;
+      this.task.is_editable = 1;
       if (this.task == null) {
         this.dialogService.openSnackBar({
           message: "Tidak dapat mengakses halaman ini secara langsung!!!"
@@ -189,91 +190,102 @@ export class MissionBuilderCreateComponent implements OnInit {
   }
 
   nodeDisabler(type: any) {
-    switch (type) {
-      case 'mission':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'pop-up-notification':
-        this.noMission = false;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'push-notification':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'coin':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = false;
-        this.noFinish = false;
-        break;
-      case 'decision':
-        if (this.yesNo === 'yes') {
+    if (this.task.is_editable === 0) {
+      this.noMission = true;
+      this.noPopup = true;
+      this.noPush = true;
+      this.noCoin = true;
+      this.noDecision = true;
+      this.noTime = true;
+      this.noFinish = true;
+    }
+    if (this.task.is_editable === 1) {
+      switch (type) {
+        case 'mission':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'pop-up-notification':
+          this.noMission = false;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'push-notification':
+          this.noMission = true;
+          this.noPopup = true;
+          this.noPush = true;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+          break;
+        case 'coin':
           this.noMission = false;
           this.noPopup = false;
           this.noPush = false;
-          this.noCoin = false;
+          this.noCoin = true;
           this.noDecision = true;
           this.noTime = false;
           this.noFinish = false;
-        }
-        if (this.yesNo === 'no') {
+          break;
+        case 'decision':
+          if (this.yesNo === 'yes') {
+            this.noMission = false;
+            this.noPopup = false;
+            this.noPush = false;
+            this.noCoin = false;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = false;
+          }
+          if (this.yesNo === 'no') {
+            this.noMission = true;
+            this.noPopup = true;
+            this.noPush = true;
+            this.noCoin = true;
+            this.noDecision = true;
+            this.noTime = false;
+            this.noFinish = true;
+          }
+          break;
+        case 'time':
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = true;
+          this.noDecision = false;
+          this.noTime = true;
+          this.noFinish = false;
+          break;
+        case 'finish':
           this.noMission = true;
           this.noPopup = true;
           this.noPush = true;
           this.noCoin = true;
           this.noDecision = true;
-          this.noTime = false;
+          this.noTime = true;
           this.noFinish = true;
-        }
-        break;
-      case 'time':
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = true;
-        this.noDecision = false;
-        this.noTime = true;
-        this.noFinish = false;
-        break;
-      case 'finish':
-        this.noMission = true;
-        this.noPopup = true;
-        this.noPush = true;
-        this.noCoin = true;
-        this.noDecision = true;
-        this.noTime = true;
-        this.noFinish = true;
-        break;
-      case null:
-        this.noMission = false;
-        this.noPopup = false;
-        this.noPush = false;
-        this.noCoin = false;
-        this.noDecision = false;
-        this.noTime = false;
-        this.noFinish = false;
-      default:
-        break;
+          break;
+        case null:
+          this.noMission = false;
+          this.noPopup = false;
+          this.noPush = false;
+          this.noCoin = false;
+          this.noDecision = false;
+          this.noTime = false;
+          this.noFinish = false;
+        default:
+          break;
+      }
     }
   }
 

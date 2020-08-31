@@ -370,7 +370,7 @@ export class RetailerEditComponent {
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
-      business_code: this.detailRetailer.classification === 'NON-SRC' ? "" : this.detailRetailer.code,
+      business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : "",
       owner: this.detailRetailer.owner || '',
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
       status: this.detailRetailer.status || '',
@@ -673,12 +673,12 @@ export class RetailerEditComponent {
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    
+    roles.map(r => { result.push(permissions.includes(r)) });
+
     if (cond === 'AND') {
-      
+
       if (result.includes(false)) return false;
-  
+
       else return true;
 
     } else if (cond === 'OR') {
@@ -711,8 +711,8 @@ export class RetailerEditComponent {
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
     const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
-    
-    
+
+
     console.log('SEE', this.seePhone);
 
     // const fRtl = this.formRetailer;

@@ -40,6 +40,7 @@ export class PopupNotificationEditComponent {
 
   lvl: any[];
   minDate: any;
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
@@ -148,6 +149,8 @@ export class PopupNotificationEditComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       enddate: [moment(), Validators.required],
@@ -164,8 +167,8 @@ export class PopupNotificationEditComponent {
       content_type: ["", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
-      // is_smoker: this.formBuilder.array([]),
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      verification: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
@@ -945,6 +948,7 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('age_consumer_from').setValue(response.age_from);
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('is_smoker').setValue(smoker_type);
+        this.formPopupGroup.get('verification').setValue(response.verification || 'all');
       }
 
       if (response.action === 'static-page') {
@@ -1387,6 +1391,7 @@ export class PopupNotificationEditComponent {
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
+        body['verification'] = this.formPopupGroup.get('verification').value;
       }
 
       if (body.action === 'static-page') {

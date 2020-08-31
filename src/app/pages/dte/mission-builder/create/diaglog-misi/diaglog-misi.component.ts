@@ -119,12 +119,18 @@ export class DiaglogMisiComponent implements OnInit {
     }
     // get the search keyword
     let search = this.filterMission.value;
-    if (!search) {
-      this.filteredMission.next(this.missions.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
+    this.pagination.per_page = 30;
+    this.pagination.search = search;
+    this.templateTaskService.get(this.pagination).subscribe(
+      (res) => {
+        console.log("res missions", res.data.data);
+        this.missions = res.data.data;
+        this.filteredMission.next(this.missions.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
     // filter the banks
     this.filteredMission.next(
       this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)

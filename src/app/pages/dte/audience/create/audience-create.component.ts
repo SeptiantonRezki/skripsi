@@ -1521,6 +1521,8 @@ export class AudienceCreateComponent {
             this.router.navigate(["dte", "audience"]);
           },
           (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             // this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
           }
@@ -1584,6 +1586,7 @@ export class AudienceCreateComponent {
           this.saveData = true;
           this.audienceService.create(body).subscribe(
             (res) => {
+              this.dataService.showLoading(false);
               this.loadingIndicator = false;
               this.dialogService.openSnackBar({
                 message: "Data Berhasil Disimpan",
@@ -1591,6 +1594,8 @@ export class AudienceCreateComponent {
               this.router.navigate(["dte", "audience"]);
             },
             (err) => {
+              this.dataService.showLoading(false);
+              this.loadingIndicator = false;
               // this.dialogService.openSnackBar({ message: err.error.message })
               console.log(err.error.message);
             }
@@ -1637,6 +1642,7 @@ export class AudienceCreateComponent {
         this.saveData = true;
         this.audienceService.create(body).subscribe(
           (res) => {
+            this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
@@ -1644,6 +1650,8 @@ export class AudienceCreateComponent {
             this.router.navigate(["dte", "audience"]);
           },
           (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             // this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
           }

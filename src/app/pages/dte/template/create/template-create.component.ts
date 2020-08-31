@@ -760,9 +760,9 @@ export class TemplateCreateComponent {
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
-          // if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
-          //   questionsIsEmpty.push({ qId: item.id });
-          // }
+          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+            questionsIsEmpty.push({ qId: item.id });
+          }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
           let mockup = {
             id: item.id,
@@ -779,11 +779,11 @@ export class TemplateCreateComponent {
             question_image: item.question_image || '',
             question_video: item.question_video || '',
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
-            // stock_check_data: item.type === 'stock_check' ? ({
-            //   sku_id: this.listProductSelected[index].sku_id,
-            //   name: this.listProductSelected[index].name,
-            //   directly: this.listDirectBelanja[index]
-            // }) : null
+            stock_check_data: item.type === 'stock_check' ? ({
+              sku_id: this.listProductSelected[index].sku_id,
+              name: this.listProductSelected[index].name,
+              directly: this.listDirectBelanja[index]
+            }) : null
           };
 
           if (item.type === 'stock_check_ir') {
