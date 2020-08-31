@@ -40,7 +40,8 @@ export class PopupNotificationEditComponent {
 
   lvl: any[];
   minDate: any;
-  listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+  // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
+  listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
   listContentType: any[] = [];
   listLandingPage: any[] = [];
@@ -88,6 +89,7 @@ export class PopupNotificationEditComponent {
   area_id_list: any = [];
   lastLevel: any;
 
+  is_mission_builder: FormControl = new FormControl(false);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -146,6 +148,8 @@ export class PopupNotificationEditComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       enddate: [moment(), Validators.required],
@@ -162,13 +166,14 @@ export class PopupNotificationEditComponent {
       content_type: ["", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
-      is_target_audience: [false]
+      is_target_audience: [false],
+      is_mission_builder: this.is_mission_builder
     });
 
     this.formFilter = this.formBuilder.group({
@@ -181,9 +186,43 @@ export class PopupNotificationEditComponent {
       territory: [""]
     })
 
+    if (this.formPopupGroup.value.is_mission_builder === true) {
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
+      this.formPopupGroup.controls['user_group'].setValue('tsm');
+    } else {
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+    }
+
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
+      // console.log('is selected cukkkkk ini kebaca lgi');
+      if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+        this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+        this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+      } else {
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
+      }
+
+      if (res === 'tsm') {
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+        this.formPopupGroup.controls['age_consumer_from'].disable();
+        this.formPopupGroup.controls['age_consumer_to'].disable();
+        this.formPopupGroup.controls['date_ws_downline'].disable();
+
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
+          this.formPopupGroup.controls['landing_page'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
+          this.formPopupGroup.controls['url_iframe'].enable();
+        }
+      }
+
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -255,7 +294,7 @@ export class PopupNotificationEditComponent {
       }
 
       if (!this.onLoad) {
-        this.formPopupGroup.controls['landing_page'].setValue('');
+        // this.formPopupGroup.controls['landing_page'].setValue('');
       }
 
       if (this.formPopupGroup.controls["is_target_audience"].value === true) this.getAudience();
@@ -281,8 +320,13 @@ export class PopupNotificationEditComponent {
 
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     })
 
@@ -291,8 +335,13 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.updateValueAndValidity();
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     })
 
@@ -313,8 +362,13 @@ export class PopupNotificationEditComponent {
 
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
       }
     });
 
@@ -836,6 +890,16 @@ export class PopupNotificationEditComponent {
       const response = await this.notificationService.getById({}, { popup_notif_id: this.idPopup }).toPromise();
       this.detailPopup = response;
 
+      console.log(response.is_mission_builder);
+
+      if (response.is_mission_builder === 1) {
+        this.formPopupGroup.controls["is_mission_builder"].setValue(true);
+        this.listUserGroup = [{ name: "TSM", value: "tsm" }];
+      } else {
+        this.formPopupGroup.controls["is_mission_builder"].setValue(false);
+        this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+      }
+
       this.formPopupGroup.controls['positive_button'].setValue(response.positive_text);
       this.formPopupGroup.controls['negative_button'].setValue(response.negative_text);
       this.formPopupGroup.controls['title'].setValue(response.title);
@@ -843,7 +907,8 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['content_type'].setValue(response.action);
       if (this.detailPopup.target_audience && this.detailPopup.target_audience === 1) {
         this.formPopupGroup.controls["is_target_audience"].setValue(true);
-        this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        this.audienceSelected = this.detailPopup.audience.map(id => ({ id: id.audience_id }));
+        this.onSelect({ selected: this.detailPopup.audience.map(id => ({ id: id.audience_id })) })
         console.log('this auddd', this.audienceSelected);
       }
       if (response.date) {
@@ -1260,11 +1325,26 @@ export class PopupNotificationEditComponent {
     }
   }
 
+  selectChange(e: any) {
+    if (e.source.name === 'is_mission_builder' && e.checked) {
+      this.formPopupGroup.get('is_mission_builder').patchValue(true);
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
+    } else {
+      this.formPopupGroup.get('is_mission_builder').patchValue(false);
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+    }
+    console.log(this.formPopupGroup.value.is_mission_builder);
+  }
+
   submit() {
     console.log(this.formPopupGroup);
     if ((this.formPopupGroup.valid && this.imageConverted === undefined) || (this.formPopupGroup.valid && this.imageConverted)) {
 
       this.dataService.showLoading(true);
+
+      this.formPopupGroup.get('is_mission_builder').patchValue(
+        this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
+      );
 
       let body = {
         _method: 'PUT',
@@ -1273,6 +1353,7 @@ export class PopupNotificationEditComponent {
         action: this.formPopupGroup.get('content_type').value,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
       }
 
       if (this.imageConverted) {
@@ -1356,6 +1437,7 @@ export class PopupNotificationEditComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
+      console.log('body', body);
       this.notificationService.updatePopup(body, { popup_notif_id: this.idPopup }).subscribe(
         res => {
           this.dataService.showLoading(false);
@@ -1459,6 +1541,7 @@ export class PopupNotificationEditComponent {
   }
 
   getAudience() {
+    console.log('audience', this.audienceSelected, this.selected);
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
@@ -1662,7 +1745,7 @@ export class PopupNotificationEditComponent {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 

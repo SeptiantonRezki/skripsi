@@ -18,10 +18,26 @@
 
           <div fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="start">
 
-            <mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama" formControlName="nama">
+            <!--<mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Nama Trade Program" formControlName="namaTrade">
               <mat-error
-                *ngIf="taskSequenceForm.controls['nama'].hasError('required') && taskSequenceForm.controls['nama'].touched ">
+                *ngIf="taskSequenceForm.controls['namaTrade'].hasError('required') && taskSequenceForm.controls['namaTrade'].touched ">
+                Nama Trade harus diisi.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Budget" formControlName="budget">
+              <mat-error
+                *ngIf="taskSequenceForm.controls['budget'].hasError('required') && taskSequenceForm.controls['budget'].touched ">
+                Budget harus diisi.
+              </mat-error>
+            </mat-form-field>-->
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <input matInput type="text" placeholder="Nama" formControlName="name">
+              <mat-error
+                *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
                 Nama harus diisi.
               </mat-error>
             </mat-form-field>
@@ -30,15 +46,15 @@
               <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="trade_program" placeholder="Pilih Group Trade Program" id="trade_program" #singleSelect>
-                <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Group Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Trade Program yang ditemukan'"></ngx-mat-select-search>
+              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" id="trade_creator_id" (selectionChange)="selectChange($event)" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
+                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
-                *ngIf="taskSequenceForm.controls['trade_program'].hasError('required') && taskSequenceForm.controls['trade_program'].touched">
+                *ngIf="taskSequenceForm.controls['trade_creator_id'].hasError('required') && taskSequenceForm.controls['trade_creator_id'].touched">
                 Pilih salah satu trade program.
               </mat-error>
             </mat-form-field>
@@ -47,15 +63,15 @@
               <!-- <mat-select placeholder="Pilih Group Audience" formControlName="group_audience" id="group_audience">
                 <mat-option *ngFor="let item of audiences" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="group_audience" placeholder="Pilih Group Audience" id="group_audience" #singleSelect>
+              <mat-select formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="trade_audience_group_id" (selectionChange)="selectChangeAudince($event)" #singleSelect>
                 <ngx-mat-select-search [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'"></ngx-mat-select-search>
+                  [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTA | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
-                *ngIf="taskSequenceForm.controls['group_audience'].hasError('required') && taskSequenceForm.controls['group_audience'].touched">
+                *ngIf="taskSequenceForm.controls['trade_audience_group_id'].hasError('required') && taskSequenceForm.controls['trade_audience_group_id'].touched">
                 Pilih salah satu group audience.
               </mat-error>
             </mat-form-field>
@@ -63,29 +79,29 @@
             <h3 class="h3"><strong>Masa Berlaku Task Sequence</strong></h3>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="startDate.open()" [max]="maxDateTask" [min]="minDateTask"
-                [matDatepicker]="startDate" placeholder="Pilih Tanggal Mulai" formControlName="startDate">
-              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-              <mat-datepicker #startDate></mat-datepicker>
+              <input matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate"
+                [matDatepicker]="start_date" placeholder="Pilih Tanggal Mulai" formControlName="start_date">
+              <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+              <mat-datepicker #start_date></mat-datepicker>
               <mat-error class="mt-8 px-24"
-                *ngIf="taskSequenceForm.controls['startDate'].hasError('required') && taskSequenceForm.controls['startDate'].touched">
+                *ngIf="taskSequenceForm.controls['start_date'].hasError('required') && taskSequenceForm.controls['start_date'].touched">
                 Tanggal mulai harus diisi.
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="endDate.open()" [max]="maxDateTask" [min]="minDateTask"
-                [matDatepicker]="endDate" placeholder="Pilih Tanggal Berakhir" formControlName="endDate">
-              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-              <mat-datepicker #endDate></mat-datepicker>
+              <input matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate"
+                [matDatepicker]="end_date" placeholder="Pilih Tanggal Berakhir" formControlName="end_date">
+              <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
+              <mat-datepicker #end_date></mat-datepicker>
               <mat-error class="mt-8 px-24"
-                *ngIf="taskSequenceForm.controls['endDate'].hasError('required') && taskSequenceForm.controls['endDate'].touched">
+                *ngIf="taskSequenceForm.controls['end_date'].hasError('required') && taskSequenceForm.controls['end_date'].touched">
                 Tanggal berakhir harus diisi.
               </mat-error>
             </mat-form-field>
 
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
-              [disabled]="submitting">
+              [disabled]="taskSequenceForm.valid === false" [routerLink]="['/dte','mission-builder','create']">
               SUBMIT
             </button>
 

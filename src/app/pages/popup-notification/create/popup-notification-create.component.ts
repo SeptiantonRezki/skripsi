@@ -41,7 +41,8 @@ export class PopupNotificationCreateComponent {
 
   lvl: any[];
   minDate: any;
-  listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+  // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
+  listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
   listContentType: any[] = [];
   listLandingPage: any[] = [];
@@ -84,6 +85,8 @@ export class PopupNotificationCreateComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+
+  is_mission_builder: FormControl = new FormControl(false);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -140,6 +143,8 @@ export class PopupNotificationCreateComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
@@ -156,14 +161,15 @@ export class PopupNotificationCreateComponent {
       content_type: ["iframe", Validators.required],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
       type: ["limit"],
-      is_target_audience: [false]
+      is_target_audience: [false],
+      is_mission_builder: this.is_mission_builder
     })
 
     this.formFilter = this.formBuilder.group({
@@ -176,9 +182,45 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
+    if (this.formPopupGroup.value.is_mission_builder === true) {
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('tsm');
+      }, 1);
+    } else {
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+    }
+
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
+
+      if (res === 'tsm') {
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+        this.formPopupGroup.controls['age_consumer_from'].setValue('');
+        this.formPopupGroup.controls['age_consumer_to'].setValue('');
+        this.formPopupGroup.controls['landing_page'].setValue('');
+        this.formPopupGroup.controls['url_iframe'].setValue('');
+        this.formPopupGroup.controls['body'].setValue('');
+        this.formPopupGroup.controls['date_ws_downline'].setValue('');
+
+        this.formPopupGroup.controls['age_consumer_from'].disable();
+        this.formPopupGroup.controls['age_consumer_to'].disable();
+        this.formPopupGroup.controls['landing_page'].disable();
+        this.formPopupGroup.controls['url_iframe'].disable();
+        this.formPopupGroup.controls['body'].disable();
+        this.formPopupGroup.controls['date_ws_downline'].disable();
+
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
+          this.formPopupGroup.controls['url_iframe'].enable();
+        }
+      }
+
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Iframe", value: "iframe" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -1134,10 +1176,31 @@ export class PopupNotificationCreateComponent {
     }
   }
 
+  selectChange(e: any) {
+    if (e.source.name === 'is_mission_builder' && e.checked) {
+      this.formPopupGroup.get('is_mission_builder').patchValue(true);
+      this.listUserGroup = [{ name: "TSM", value: "tsm" }];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('tsm');
+      }, 1);
+    } else {
+      this.formPopupGroup.get('is_mission_builder').patchValue(false);
+      this.listUserGroup = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
+      setTimeout(() => {
+        this.formPopupGroup.controls['user_group'].setValue('wholesaler');
+      }, 1);
+    }
+    console.log(this.formPopupGroup.value.is_mission_builder);
+  }
+
   submit() {
     if (this.formPopupGroup.valid && this.files) {
 
       this.dataService.showLoading(true);
+
+      this.formPopupGroup.get('is_mission_builder').patchValue(
+        this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
+      );
 
       let body = {
         title: this.formPopupGroup.get('title').value,
@@ -1146,6 +1209,7 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
       }
 
       if (body.type === 'retailer') {
@@ -1730,7 +1794,7 @@ export class PopupNotificationCreateComponent {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 

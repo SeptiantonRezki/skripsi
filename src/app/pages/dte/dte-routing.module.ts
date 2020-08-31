@@ -25,12 +25,17 @@ import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/g
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
 import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { TaskVerificationIndexTsmComponent } from './task-verification/index-tsm/task-verification-index-tsm.component';
+import { TaskVerificationDetailTsmComponent } from "./task-verification/detail-tsm/task-verification-detail-tsm.component";
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
 import { TaskSequencingCreateComponent } from './task-sequencing/create/task-sequencing-create.component';
-import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
-
+import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component";
+import { TaskSequencingDuplicateComponent } from "./task-sequencing/duplicate/task-sequencing-duplicate.component"
+import { MissionBuilderCreateComponent } from "./mission-builder/create/mission-builder-create.component";
+import { MissionBuilderEditComponent } from "./mission-builder/edit/mission-builder-edit.component";
+import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mission-builder-duplicate.component";
 
 const routes: Routes = [
   {
@@ -292,6 +297,17 @@ const routes: Routes = [
     },
   },
   {
+    path: 'taskverification/detailtsm/:id/:templateid',
+    component: TaskVerificationDetailTsmComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskVerification.detailtsm
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
+  },
+  {
     path: "pengaturan-attribute-misi",
     component: PengaturanAttributeMisiIndexComponent,
     data: {
@@ -325,6 +341,41 @@ const routes: Routes = [
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
+  {
+    path: "task-sequencing/duplicate",
+    component: TaskSequencingDuplicateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.duplicate
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/create",
+    component: MissionBuilderCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/edit",
+    component: MissionBuilderEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.edit
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/duplicate",
+    component: MissionBuilderDuplicateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.duplicate
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  }
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../services/data.service";
 import { Router } from "@angular/router";
@@ -10,6 +10,7 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { SequencingService } from 'app/services/dte/sequencing.service';
+import { IdleService } from 'app/services/idle.service';
 
 @Component({
   selector: 'app-task-sequencing-index',
@@ -18,35 +19,6 @@ import { SequencingService } from 'app/services/dte/sequencing.service';
 })
 
 export class TaskSequencingIndexComponent implements OnInit {
-  idDummy: number;
-  fullname: string;
-  status: string;
-  trade_program: string;
-  total_budget_used: number;
-  total_week_duration: string;
-  last_update: string;
-  created: string;
-
-  dataDummy = {
-    "status": "success",
-    "data": {
-        "current_page": 1,
-        "data": [
-          {idDummy: 1,fullname: "Rizal", status: "active", trade_program: "Lorem", total_budget_used: 200000, total_week_duration: "5 hari", last_update: "10 Juni 2020", created: "10 Juni 2020"},
-          {idDummy: 2,fullname: "Fadilah", status: "active", trade_program: "Ipsum", total_budget_used: 5000000, total_week_duration: "5 hari", last_update: "10 Juni 2020", created: "10 Juni 2020"}
-        ],
-        "first_page_url": "https://task.ayo-micro.dxtr.asia/api/v1/task/principal/sequencing?page=1",
-        "from": null,
-        "last_page": 1,
-        "last_page_url": "https://task.ayo-micro.dxtr.asia/api/v1/task/principal/sequencing?page=1",
-        "next_page_url": null,
-        "path": "https://task.ayo-micro.dxtr.asia/api/v1/task/principal/sequencing",
-        "per_page": 15,
-        "prev_page_url": null,
-        "to": null,
-        "total": 2
-    }
-  }
 
   rows: any[];
   selected: any[];
@@ -63,6 +35,8 @@ export class TaskSequencingIndexComponent implements OnInit {
   @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
   @ViewChild('table') table: DatatableComponent;
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+
   permission: any;
   roles: PagesName = new PagesName();
 
@@ -72,7 +46,8 @@ export class TaskSequencingIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private userIdle: IdleService
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -101,47 +76,23 @@ export class TaskSequencingIndexComponent implements OnInit {
     const sort = this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.pagination.sort_type = "desc";
+    this.pagination.sort = 'created_at';
 
     this.offsetPagination = page ? (page - 1) : 0;
 
     this.sequencingService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, this.dataDummy.data);
-        this.rows = this.dataDummy.data.data;
-        // this.rows = this.dataDummy.data.data;
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data.data;
         this.onLoad = false;
         this.loadingIndicator = false;
-        console.log(this.rows);
+        console.log(res.data);
       },
       err => {
         this.onLoad = false;
       }
     );
-
-    // const page = this.dataService.getFromStorage("page");
-    // const sort_type = this.dataService.getFromStorage("sort_type");
-    // const sort = this.dataService.getFromStorage("sort");
-
-    // this.pagination.page = page;
-    // this.pagination.sort_type = sort_type;
-    // this.pagination.sort = sort;
-
-    // this.offsetPagination = page ? (page - 1) : 0;
-
-    // this.sequencingService.get(this.pagination).subscribe(
-    //   res => {
-    //     Page.renderPagination(this.pagination, res.data);
-    //     this.rows = res.data.data;
-    //     this.onLoad = false;
-    //     this.loadingIndicator = false;
-    //     console.log(res.data);
-    //   },
-    //   err => {
-    //     this.onLoad = false;
-    //   }
-    // );
   }
 
   onSelect({ selected }) {
@@ -159,19 +110,17 @@ export class TaskSequencingIndexComponent implements OnInit {
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
       this.pagination.page = this.dataService.getFromStorage("page");
+      this.dataService.setToStorage("sort", 'created_at');
+      this.dataService.setToStorage("sort_type", 'desc');
     }
 
-    this.sequencingService.get(this.pagination).subscribe(
-      res => {
-        Page.renderPagination(this.pagination, this.dataDummy.data);
-        this.rows = this.dataDummy.data.data;
-        this.onLoad = false;
-        this.loadingIndicator = false;
-      },
-      err => {
-        this.onLoad = false;
-      }
-    );
+    this.sequencingService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+
+      this.loadingIndicator = false;
+    });
+
   }
 
   onSort(event) {
@@ -184,17 +133,12 @@ export class TaskSequencingIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.sequencingService.get(this.pagination).subscribe(
-      res => {
-        Page.renderPagination(this.pagination, this.dataDummy.data);
-        this.rows = this.dataDummy.data.data;
-        this.onLoad = false;
-        this.loadingIndicator = false;
-      },
-      err => {
-        this.onLoad = false;
-      }
-    );
+    this.sequencingService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+
+      this.loadingIndicator = false;
+    });
   }
 
   updateFilter(string) {
@@ -210,17 +154,13 @@ export class TaskSequencingIndexComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.sequencingService.get(this.pagination).subscribe(
-      res => {
-        Page.renderPagination(this.pagination, this.dataDummy.data);
-        this.rows = this.dataDummy.data.data;
-        this.onLoad = false;
-        this.loadingIndicator = false;
-      },
-      err => {
-        this.onLoad = false;
-      }
-    );
+    this.sequencingService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
+
+      this.loadingIndicator = false;
+    });
+
   }
 
   getActives() {
@@ -228,20 +168,25 @@ export class TaskSequencingIndexComponent implements OnInit {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage('detail_task-sequencing', param);
+    this.dataService.setToStorage('detail_task_sequencing', param);
     this.router.navigate(['dte', 'task-sequencing', 'edit']);
   }
 
+  duplicate(param?: any): void {
+    this.dataService.setToStorage('detail_task_sequencing', param);
+    this.router.navigate(['dte', 'task-sequencing', 'duplicate']);
+  }
+
   directDetail(param?: any): void {
-    this.dataService.setToStorage('detail_task-sequencing', param);
+    this.dataService.setToStorage('detail_task_sequencing', param);
     this.router.navigate(['dte', 'task-sequencing', 'detail']);
   }
 
-  deleteAudience(id) {
+  deleteTaskSequencing(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Audience",
-      captionDialog: "Apakah anda yakin untuk menghapus audience ini ?",
+      titleDialog: "Hapus Task Sequencing",
+      captionDialog: "Apakah anda yakin untuk menghapus task sequencing ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -249,14 +194,75 @@ export class TaskSequencingIndexComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.sequencingService.delete({ idDummy: this.id }).subscribe(res => {
-      if (res.data.status) {
-        this.dialogService.brodcastCloseConfirmation();
+    this.sequencingService.delete({ sequencing_id: this.id }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
         this.getSequencing();
 
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-      }
     });
+  }
+
+  export(item) {
+    // const length = 100 / item.trade_scheduler_templates.length === Infinity ? 0 : 100 / item.trade_scheduler_templates.length;
+    // let current_progress = 0;
+
+    this.dataService.showLoading({ show: true });
+    // this.dataService.setProgress({ progress: current_progress.toFixed(0) });
+
+    let response: any = { rand: "" };
+
+    // if (item.trade_scheduler_templates.length === 0) {
+    //   this.dataService.setProgress({ progress: 100 });
+    //   this.dataService.showLoading(false);
+    //   this.dialogService.openSnackBar({ message: "Task Sequencing kosong" });
+    //   return;
+    // }
+
+    let params = {
+      task_sequencing_management_id: item.id,
+      // last: null,
+      rand: 1,
+      // task_sequencing_management_template_id: item.id
+    }
+
+    this.sequencingService.export(params).subscribe(
+      (response) => {
+        if (response.data && response.status) {
+          setTimeout(() => {
+            this.downloadLink.nativeElement.href = response.data;
+            this.downloadLink.nativeElement.click();
+            this.dataService.showLoading(false);
+          }, 1000);
+        }
+      }, (error) => {
+        this.dataService.showLoading(false);
+      }
+    )
+
+    // for (const { val, index } of item.trade_scheduler_templates.map((val, index) => ({ val, index }))) {
+
+    //   try {
+    //     this.userIdle.onHitEvent();
+    //     response = await this.sequencingService.export(params).toPromise();
+
+    //     current_progress = current_progress === 0 ? length : current_progress + length;
+    //     this.dataService.setProgress({ progress: current_progress.toFixed(0) });
+
+    //   } catch (error) {
+    //     this.dataService.showLoading(false);
+    //     throw error;
+    //   }
+    // }
+
+    // this.dataService.setProgress({ progress: 100 });
+
+    // if (response.data && response.status) {
+    //   setTimeout(() => {
+    //     this.downloadLink.nativeElement.href = response.data;
+    //     this.downloadLink.nativeElement.click();
+    //     this.dataService.showLoading(false);
+    //   }, 1000);
+    // }
   }
 
 }

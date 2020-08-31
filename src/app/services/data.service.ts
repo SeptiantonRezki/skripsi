@@ -1,4 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import * as SJCL from "sjcl";
 
 @Injectable()
@@ -7,6 +8,8 @@ export class DataService {
     show: any;
     progress: any;
     @Output() change: EventEmitter<boolean> = new EventEmitter();
+
+    private newData = new BehaviorSubject<any>({});
 
     showLoading(show) {
         this.show = show;
@@ -85,4 +88,11 @@ export class DataService {
         return JSON.parse(enc);
     }
 
+    setDataSequencing(data: any) {
+        this.newData.next(data);
+      }
+    
+      getDataSequencingInfo() {
+        return this.newData.asObservable();
+      }
 }

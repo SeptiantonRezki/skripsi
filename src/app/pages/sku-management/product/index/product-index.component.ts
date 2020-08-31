@@ -189,23 +189,23 @@ export class ProductIndexComponent implements OnInit {
     );
   }
 
-  async  export() {
-    const response = await this.productService.export().toPromise();
-    this.downloadLink.nativeElement.href = response.data;
-    this.downloadLink.nativeElement.click();
+  async export() {
+    // const response = await this.productService.export().toPromise();
+    // this.downloadLink.nativeElement.href = response.data;
+    // this.downloadLink.nativeElement.click();
 
-    // this.dataService.showLoading(true);
-    // this.productService.export().subscribe(
-    //   res => {
-    //     console.log('resss', res.data);
-    //     this.downloadLink.nativeElement.href = res.data;
-    //     this.downloadLink.nativeElement.click();
-    //     this.dataService.showLoading(false);
-    //   },
-    //   err => {
-    //     this.dataService.showLoading(false);
-    //   }
-    // )
+    this.dataService.showLoading(true);
+    this.productService.export().subscribe(
+      res => {
+        console.log('resss', res.data);
+        this.downloadLink.nativeElement.href = res.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      },
+      err => {
+        this.dataService.showLoading(false);
+      }
+    )
   }
 
   import() {

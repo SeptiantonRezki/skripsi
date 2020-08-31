@@ -4,9 +4,9 @@
 
 export const environment = {
   production: true,
-  server: "https://dev.ayo-api.dxtr.asia",
-  server_service: "https://dev.ayo-api.dxtr.asia",
-  label: "DEVELOPMENT",
+  server: 'https://dev.ayo-api.dxtr.asia',
+  server_service: 'https://dev.ayo-api.dxtr.asia',
+  label: 'DEVELOPMENT',
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
   image_2x: "assets/images/ayo/icon/dev@2x.png 2x",
@@ -20,19 +20,19 @@ export const serviceServer = (server) => {
 }
 
 export const server = {
-  user: "user",
-  business: "business",
-  area: "area",
-  auth: "auth",
-  newsfeed: "newsfeed",
-  banner: "banner",
-  content: "content",
-  product: "product",
-  task: "task",
-  submission: "submission",
-  coin: "coin",
-  community: "community",
-  order: "order",
+  user: 'user',
+  business: 'business',
+  area: 'area',
+  auth: 'auth',
+  newsfeed: 'newsfeed',
+  banner: 'banner',
+  content: 'content',
+  product: 'product',
+  task: 'task',
+  submission: 'submission',
+  coin: 'coin',
+  community: 'community',
+  order: 'order',
 }
 
 

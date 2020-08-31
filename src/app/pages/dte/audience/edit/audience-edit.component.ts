@@ -32,6 +32,7 @@ export class AudienceEditComponent {
   listTradePrograms: any[];
   rows: any[];
   listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }];
+  tsmScheduler: any[] = [{ name: "TSM", value: "tsm" }, { name: "Scheduler", value: "scheduler" },];
   listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
 
   retailClassification: any[] = [
@@ -177,8 +178,9 @@ export class AudienceEditComponent {
       name: ["", Validators.required],
       min: ["", [Validators.required, Validators.min(0)]],
       max: ["", [Validators.required, Validators.min(0)]],
-      type: [""],
-      audience_type: ["mission", Validators.required],
+      limit: [""],
+      type: ["", Validators.required],
+      audience_type: ["", Validators.required],
       // national: [""],
       // division: [""],
       // region: [""],
@@ -210,7 +212,7 @@ export class AudienceEditComponent {
     this.initAreaV2();
     this.getRetailer();
 
-    this.formAudience.controls['type'].valueChanges.subscribe(res => {
+    this.formAudience.controls['limit'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
         this.formAudience.get('min').disable({ emitEvent: false });
         this.formAudience.get('max').disable({ emitEvent: false });
@@ -238,14 +240,25 @@ export class AudienceEditComponent {
       this.getTradePrograms();
     }
 
-    this.formAudience.get('audience_type')
+    this.formAudience.get("audience_type").valueChanges.subscribe((data) => {
+      if (data === 'scheduler' && this.formAudience.get("type").value === 'mission') {
+        this.getListScheduler();
+      }
+    })
+    this.formAudience.get('type')
       .valueChanges
       .subscribe(data => {
         console.log('audience type', data);
         if (data === 'mission') {
-          this.getListScheduler();
-          this.formAudience.get("trade_scheduler_id").setValidators(Validators.required);
-          this.formAudience.get("trade_creator_id").setValidators(Validators.nullValidator);
+          if (this.formAudience.get("audience_type").value === 'scheduler') {
+            this.getListScheduler();
+            this.formAudience
+              .get("trade_scheduler_id")
+              .setValidators(Validators.required);
+          }
+          this.formAudience.get("trade_creator_id").setValidators([]);
+          this.formAudience.get("trade_creator_id").clearValidators();
+          this.formAudience.get("trade_creator_id").updateValueAndValidity();
         } else {
           this.getTradePrograms();
           this.formAudience.get("trade_creator_id").setValidators(Validators.required);
@@ -837,11 +850,12 @@ export class AudienceEditComponent {
 
   initAudience() {
     this.formAudience.get('name').setValue(this.detailAudience.name);
-    // this.formAudience.get('min').setValue(this.detailAudience.min);
-    // this.formAudience.get('max').setValue(this.detailAudience.max);
-    this.formAudience.get('type').setValue('limit');
-    this.formAudience.get('audience_type').setValue(this.detailAudience.type);
-    if (this.detailAudience.type === 'mission') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
+    this.formAudience.get('min').setValue(this.detailAudience.min);
+    this.formAudience.get('max').setValue(this.detailAudience.max);
+    this.formAudience.get('limit').setValue('limit');
+    this.formAudience.get('audience_type').setValue(this.detailAudience.audience_type);
+    this.formAudience.get('type').setValue(this.detailAudience.type);
+    if (this.detailAudience.type === 'mission' && this.detailAudience.audience_type === 'scheduler') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
     if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
 
     if (!this.detailAudience.min) {
@@ -972,7 +986,7 @@ export class AudienceEditComponent {
     }
 
     this.loadingIndicator = true;
-    // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
+    this.pagination.area = this.formAudience.get('limit').value === 'pick-all' ? 1 : area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -1097,9 +1111,9 @@ export class AudienceEditComponent {
 
     this.audienceService.getListRetailerSelected({ audience_id: this.detailAudience.id }, { area: area_id }).subscribe(
       res => {
-        // this.rows = res['data'];
-        // this.selected = [];
-        // this.loadingIndicator = false;
+        this.rows = res['data'];
+        this.selected = [];
+        this.loadingIndicator = false;
 
         if (res['data'].length === 0) {
           this.loadingIndicator = false;
@@ -1114,11 +1128,15 @@ export class AudienceEditComponent {
   }
 
   changeValue() {
-    if (this.formAudience.get('type').value === 'pick-all') {
+    if (this.formAudience.get('limit').value === 'pick-all') {
       this.selected = this.rows;
     } else {
       this.selected = []
     }
+  }
+
+  tsmOrScheduler() {
+    console.log('');
   }
 
   onSelect({ selected }) {
@@ -1133,128 +1151,357 @@ export class AudienceEditComponent {
   }
 
   submit() {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
-      const limit = this.formAudience.get('type').value === 'limit';
+      const limit = this.formAudience.get('limit').value === 'limit';
       const min = this.formAudience.get('min').value;
       const max = this.formAudience.get('max').value;
 
-      if (limit && selectedRetailer < min)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
-      else if (limit && selectedRetailer > max)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebih dari ${max} Audience` });
-
-      let budget = {
-        total_retailer: limit ? this.selected.length : this.pagination.total,
-        trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
+      if (limit && selectedRetailer < min) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return this.dialogService.openSnackBar({
+          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
+        });
+      } else if (limit && selectedRetailer > max) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return this.dialogService.openSnackBar({
+          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
+        });
       }
-
-      if (this.formAudience.get("audience_type").value === 'mission') {
-        this.audienceService.validateBudget(budget).subscribe(res => {
-          if (res.selisih < 0)
-            return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
-
-          let body = {
-            _method: 'PUT',
-            name: this.formAudience.get('name').value,
-            trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
-            // min: limit ? this.formAudience.get('min').value : '',
-            // max: limit ? this.formAudience.get('max').value : '',
-            // retailer_id: this.selected.map(item => item.id)
-          }
-
-          if (this.formAudience.get('type').value !== 'pick-all') {
-            body['retailer_id'] = this.selected.map(item => item.id);
-            body['min'] = this.formAudience.get('min').value;
-            body['max'] = this.formAudience.get('max').value;
-
-          } else {
-            body['area_id'] = this.pagination.area;
-
-            if (this.pagination.area !== 1) {
-              body['min'] = 1;
-              body['max'] = this.pagination.total;
-            } else {
-              body['min'] = "";
-              body['max'] = "";
-            }
-          }
-
-          body['type'] = this.formAudience.get("audience_type").value;
-
-          if (body['type'] === 'mission') {
-            body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
-            if (body['trade_creator_id']) delete body['trade_creator_id'];
-          } else {
-            body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
-            if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
-          }
-          console.log(this.findInvalidControls());
-
-          this.saveData = !this.saveData;
-          this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
-            res => {
-              this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
-              this.router.navigate(['dte', 'audience']);
-              window.localStorage.removeItem('detail_audience');
-            },
-            err => {
-              // this.dialogService.openSnackBar({ message: err.error.message })
-              console.log(err.error.message);
-            }
-          )
-        })
-      } else {
+      // Audience Type = TSM, Type = any
+      if (this.formAudience.get("audience_type").value === "tsm") {
         let body = {
           _method: 'PUT',
-          name: this.formAudience.get('name').value,
-          trade_creator_id: this.formAudience.get('trade_creator_id').value,
-          // min: limit ? this.formAudience.get('min').value : '',
-          // max: limit ? this.formAudience.get('max').value : '',
-          // retailer_id: this.selected.map(item => item.id)
-        }
-
-        if (this.formAudience.get('type').value !== 'pick-all') {
-          body['retailer_id'] = this.selected.map(item => item.id);
-          body['min'] = this.formAudience.get('min').value;
-          body['max'] = this.formAudience.get('max').value;
-
+          name: this.formAudience.get("name").value,
+          trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
+        };
+  
+        body["type"] = this.formAudience.get("type").value;
+        body["audience_type"] = this.formAudience.get("audience_type").value;
+  
+        if (this.formAudience.get("limit").value !== "pick-all") {
+          body["retailer_id"] = this.selected.map((item) => item.id);
+          body["min"] = this.formAudience.get("min").value;
+          body["max"] = this.formAudience.get("max").value;
         } else {
-          body['area_id'] = this.pagination.area;
-
+          body["area_id"] = this.pagination.area;
+  
           if (this.pagination.area !== 1) {
-            body['min'] = 1;
-            body['max'] = this.pagination.total;
+            body["min"] = 1;
+            body["max"] = this.pagination.total;
           } else {
-            body['min'] = "";
-            body['max'] = "";
+            body["min"] = "";
+            body["max"] = "";
           }
         }
-
-        body['type'] = this.formAudience.get("audience_type").value;
-
-        if (body['type'] === 'mission') {
-          body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
-          if (body['trade_creator_id']) delete body['trade_creator_id'];
-        } else {
-          body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
-          if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
-        }
-        console.log(this.findInvalidControls());
-        this.saveData = !this.saveData;
+        
+        this.saveData = true;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
-          res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
-            this.router.navigate(['dte', 'audience']);
-            window.localStorage.removeItem('detail_audience');
+          (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan",
+            });
+            this.router.navigate(["dte", "audience"]);
           },
-          err => {
+          (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             // this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
           }
-        )
+        );
       }
+
+      // Audience Type = Scheduler, Type = Mission
+      if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "mission") {
+        let budget = {
+          total_retailer: limit ? this.selected.length : this.pagination.total,
+          trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
+        };
+        this.audienceService.validateBudget(budget).subscribe((res) => {
+          if (res.selisih < 0) {
+            this.loadingIndicator = false;
+            this.dataService.showLoading(false);
+            return this.dialogService.openSnackBar({
+              message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
+                res.selisih
+              )}!`,
+            });
+          }
+
+          let body = {
+            _method: 'PUT',
+            name: this.formAudience.get("name").value,
+            trade_scheduler_id: this.formAudience.get("trade_scheduler_id")
+              .value,
+          };
+
+          if (this.formAudience.get("limit").value !== "pick-all") {
+            body["retailer_id"] = this.selected.map((item) => item.id);
+            body["min"] = this.formAudience.get("min").value;
+            body["max"] = this.formAudience.get("max").value;
+          } else {
+            body["area_id"] = this.pagination.area;
+
+            if (this.pagination.area !== 1) {
+              body["min"] = 1;
+              body["max"] = this.pagination.total;
+            } else {
+              body["min"] = "";
+              body["max"] = "";
+            }
+          }
+
+          body["type"] = this.formAudience.get("type").value;
+          body["audience_type"] = this.formAudience.get("audience_type").value;
+
+          if (body["type"] === "mission") {
+            body["trade_scheduler_id"] = this.formAudience.get(
+              "trade_scheduler_id"
+            ).value;
+            if (body["trade_creator_id"]) delete body["trade_creator_id"];
+          } else {
+            body["trade_creator_id"] = this.formAudience.get(
+              "trade_creator_id"
+            ).value;
+            if (body["trade_scheduler_id"]) delete body["trade_scheduler_id"];
+          }
+          console.log(this.findInvalidControls());
+          // this.saveData = !this.saveData;
+          this.saveData = true;
+          this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+            (res) => {
+              this.dataService.showLoading(false);
+              this.loadingIndicator = false;
+              this.dialogService.openSnackBar({
+                message: "Data Berhasil Disimpan",
+              });
+              this.router.navigate(["dte", "audience"]);
+            },
+            (err) => {
+              this.dataService.showLoading(false);
+              this.loadingIndicator = false;
+              // this.dialogService.openSnackBar({ message: err.error.message })
+              console.log(err.error.message);
+            }
+          );
+        });
+      } else if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "challenge") {
+        let body = {
+          _method: 'PUT',
+          name: this.formAudience.get("name").value,
+          trade_creator_id: this.formAudience.get("trade_creator_id").value,
+        };
+
+        if (this.formAudience.get("limit").value !== "pick-all") {
+          body["retailer_id"] = this.selected.map((item) => item.id);
+          body["min"] = this.formAudience.get("min").value;
+          body["max"] = this.formAudience.get("max").value;
+        } else {
+          body["area_id"] = this.pagination.area;
+
+          if (this.pagination.area !== 1) {
+            body["min"] = 1;
+            body["max"] = this.pagination.total;
+          } else {
+            body["min"] = "";
+            body["max"] = "";
+          }
+        }
+
+        body["type"] = this.formAudience.get("type").value;
+        body["audience_type"] = this.formAudience.get("audience_type").value;
+
+        if (body["type"] === "mission") {
+          body["trade_scheduler_id"] = this.formAudience.get(
+            "trade_scheduler_id"
+          ).value;
+          if (body["trade_creator_id"]) delete body["trade_creator_id"];
+        } else {
+          body["trade_creator_id"] = this.formAudience.get(
+            "trade_creator_id"
+          ).value;
+          if (body["trade_scheduler_id"]) delete body["trade_scheduler_id"];
+        }
+        console.log(this.findInvalidControls());
+        // this.saveData = !this.saveData;
+        this.saveData = true;
+        this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+          (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan",
+            });
+            this.router.navigate(["dte", "audience"]);
+          },
+          (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            // this.dialogService.openSnackBar({ message: err.error.message })
+            console.log(err.error.message);
+          }
+        );
+      }
+
+      // let body = {
+      //   _method: 'PUT',
+      //   name: this.formAudience.get('name').value,
+      //   trade_creator_id: this.formAudience.get("audience_type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
+      // }
+
+      // if (this.formAudience.get('type').value !== 'pick-all') {
+      //   body['retailer_id'] = this.selected.map(item => item.id);
+      //   body['min'] = this.formAudience.get('min').value;
+      //   body['max'] = this.formAudience.get('max').value;
+
+      // } else {
+      //   body['area_id'] = this.pagination.area;
+
+      //   if (this.pagination.area !== 1) {
+      //     body['min'] = 1;
+      //     body['max'] = this.pagination.total;
+      //   } else {
+      //     body['min'] = "";
+      //     body['max'] = "";
+      //   }
+      // }
+
+      // body['type'] = this.formAudience.get("audience_type").value;
+
+      // this.saveData = !this.saveData;
+      // this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+      //   res => {
+      //     this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+      //     this.router.navigate(['dte', 'audience']);
+      //     window.localStorage.removeItem('detail_audience');
+      //   },
+      //   err => {
+      //     // this.dialogService.openSnackBar({ message: err.error.message })
+      //     console.log(err.error.message);
+      //   }
+      // )
+
+
+      // let budget = {
+      //   total_retailer: limit ? this.selected.length : this.pagination.total,
+      //   trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value
+      // }
+
+      // if (this.formAudience.get("audience_type").value === 'mission') {
+      //   this.audienceService.validateBudget(budget).subscribe(res => {
+      //     if (res.selisih < 0)
+      //       return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+
+      //     let body = {
+      //       _method: 'PUT',
+      //       name: this.formAudience.get('name').value,
+      //       trade_scheduler_id: this.formAudience.get('trade_scheduler_id').value,
+      //       // min: limit ? this.formAudience.get('min').value : '',
+      //       // max: limit ? this.formAudience.get('max').value : '',
+      //       // retailer_id: this.selected.map(item => item.id)
+      //     }
+
+      //     if (this.formAudience.get('type').value !== 'pick-all') {
+      //       body['retailer_id'] = this.selected.map(item => item.id);
+      //       body['min'] = this.formAudience.get('min').value;
+      //       body['max'] = this.formAudience.get('max').value;
+
+      //     } else {
+      //       body['area_id'] = this.pagination.area;
+
+      //       if (this.pagination.area !== 1) {
+      //         body['min'] = 1;
+      //         body['max'] = this.pagination.total;
+      //       } else {
+      //         body['min'] = "";
+      //         body['max'] = "";
+      //       }
+      //     }
+
+      //     body['type'] = this.formAudience.get("audience_type").value;
+
+      //     if (body['type'] === 'mission') {
+      //       body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+      //       if (body['trade_creator_id']) delete body['trade_creator_id'];
+      //     } else {
+      //       body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+      //       if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+      //     }
+      //     console.log(this.findInvalidControls());
+
+      //     this.saveData = !this.saveData;
+      //     this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+      //       res => {
+      //         this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+      //         this.router.navigate(['dte', 'audience']);
+      //         window.localStorage.removeItem('detail_audience');
+      //       },
+      //       err => {
+      //         // this.dialogService.openSnackBar({ message: err.error.message })
+      //         console.log(err.error.message);
+      //       }
+      //     )
+      //   })
+      // } else {
+      //   let body = {
+      //     _method: 'PUT',
+      //     name: this.formAudience.get('name').value,
+      //     trade_creator_id: this.formAudience.get('trade_creator_id').value,
+      //     // min: limit ? this.formAudience.get('min').value : '',
+      //     // max: limit ? this.formAudience.get('max').value : '',
+      //     // retailer_id: this.selected.map(item => item.id)
+      //   }
+
+      //   if (this.formAudience.get('type').value !== 'pick-all') {
+      //     body['retailer_id'] = this.selected.map(item => item.id);
+      //     body['min'] = this.formAudience.get('min').value;
+      //     body['max'] = this.formAudience.get('max').value;
+
+      //   } else {
+      //     body['area_id'] = this.pagination.area;
+
+      //     if (this.pagination.area !== 1) {
+      //       body['min'] = 1;
+      //       body['max'] = this.pagination.total;
+      //     } else {
+      //       body['min'] = "";
+      //       body['max'] = "";
+      //     }
+      //   }
+
+      //   body['type'] = this.formAudience.get("audience_type").value;
+
+      //   if (body['type'] === 'mission') {
+      //     body['trade_scheduler_id'] = this.formAudience.get('trade_scheduler_id').value;
+      //     if (body['trade_creator_id']) delete body['trade_creator_id'];
+      //   } else {
+      //     body['trade_creator_id'] = this.formAudience.get('trade_creator_id').value;
+      //     if (body['trade_scheduler_id']) delete body['trade_scheduler_id'];
+      //   }
+      //   console.log(this.findInvalidControls());
+      //   this.saveData = !this.saveData;
+      //   this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
+      //     res => {
+      //       this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+      //       this.router.navigate(['dte', 'audience']);
+      //       window.localStorage.removeItem('detail_audience');
+      //     },
+      //     err => {
+      //       // this.dialogService.openSnackBar({ message: err.error.message })
+      //       console.log(err.error.message);
+      //     }
+      //   )
+      // }
     } else {
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
       commonFormValidator.validateAllFields(this.formAudience);
 
       if (this.formAudience.valid && this.selected.length === 0) {

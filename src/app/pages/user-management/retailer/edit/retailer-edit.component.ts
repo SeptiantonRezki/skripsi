@@ -42,7 +42,10 @@ export class RetailerEditComponent {
 
   listIC: any[] = [
     { name: "NON-SRC", value: "NON-SRC" },
-    { name: "SRC", value: "SRC" }
+    { name: "SRC", value: "SRC" },
+    { name: "GT", value: "GT" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" }
   ];
 
   listCashierAccess: any[] = [
@@ -367,7 +370,7 @@ export class RetailerEditComponent {
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
-      business_code: this.detailRetailer.classification === 'NON-SRC' ? "" : this.detailRetailer.code,
+      business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : "",
       owner: this.detailRetailer.owner || '',
       phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split("+62")[1]) : '',
       status: this.detailRetailer.status || '',
@@ -609,7 +612,7 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get("territory").value],
         latitude: this.formRetailer.get("latitude").value ? this.formRetailer.get("latitude").value : null,
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
-        type: "General Trade",
+        type: (this.formRetailer.get("InternalClassification").value === 'SRC' || this.formRetailer.get("InternalClassification").value === 'NON-SRC') ? "General Trade" : this.formRetailer.get("InternalClassification").value,
         InternalClassification: this.formRetailer.get("InternalClassification").value,
         cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
@@ -670,12 +673,12 @@ export class RetailerEditComponent {
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    
+    roles.map(r => { result.push(permissions.includes(r)) });
+
     if (cond === 'AND') {
-      
+
       if (result.includes(false)) return false;
-  
+
       else return true;
 
     } else if (cond === 'OR') {
@@ -708,8 +711,8 @@ export class RetailerEditComponent {
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
     const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
-    
-    
+
+
     console.log('SEE', this.seePhone);
 
     // const fRtl = this.formRetailer;

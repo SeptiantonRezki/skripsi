@@ -47,8 +47,11 @@ export class AudienceCreateComponent {
     { name: "Batasi Audience", value: "limit" },
     { name: "Pilih Semua", value: "pick-all" },
   ];
+  tsmScheduler: any[] = [
+    { name: "TSM", value: "tsm" },
+    { name: "Scheduler", value: "scheduler" },
+  ];
   listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
-  // listAudienceType: any[] = [{ name: "Misi", value: "mission" }];
 
   retailClassification: any[] = [
     { name: "Semua Tipe", value: "all" },
@@ -194,8 +197,9 @@ export class AudienceCreateComponent {
       name: ["", Validators.required],
       min: ["", [Validators.required, Validators.min(0)]],
       max: ["", [Validators.required, Validators.min(0)]],
-      type: ["limit"],
-      audience_type: ["mission", Validators.required],
+      limit: ["limit"],
+      type: ["mission", Validators.required],
+      audience_type: ["tsm", Validators.required],
       business_checkbox: true,
       geotree_checkbox: true,
       // national: [""],
@@ -228,7 +232,7 @@ export class AudienceCreateComponent {
     this.initAreaV2();
     this.getRetailer();
 
-    this.formAudience.controls["type"].valueChanges.subscribe((res) => {
+    this.formAudience.controls["limit"].valueChanges.subscribe((res) => {
       if (res === "pick-all") {
         this.formAudience.get("min").disable({ emitEvent: false });
         this.formAudience.get("max").disable({ emitEvent: false });
@@ -251,15 +255,22 @@ export class AudienceCreateComponent {
         }
       });
 
-    this.getListScheduler();
+    // this.getListScheduler();
 
     this.formAudience.get("audience_type").valueChanges.subscribe((data) => {
-      console.log("audience type", data);
-      if (data === "mission") {
+      if (data === 'scheduler' && this.formAudience.get("type").value === 'mission') {
         this.getListScheduler();
-        this.formAudience
-          .get("trade_scheduler_id")
-          .setValidators(Validators.required);
+      }
+    })
+    this.formAudience.get("type").valueChanges.subscribe((data) => {
+      console.log("type", data);
+      if (data === "mission") {
+        if (this.formAudience.get("audience_type").value === 'scheduler') {
+          this.getListScheduler();
+          this.formAudience
+            .get("trade_scheduler_id")
+            .setValidators(Validators.required);
+        }
         this.formAudience.get("trade_creator_id").setValidators([]);
         this.formAudience.get("trade_creator_id").clearValidators();
         this.formAudience.get("trade_creator_id").updateValueAndValidity();
@@ -1422,11 +1433,15 @@ export class AudienceCreateComponent {
   }
 
   changeValue() {
-    if (this.formAudience.get("type").value === "pick-all") {
+    if (this.formAudience.get("limit").value === "pick-all") {
       this.selected = this.rows;
     } else {
       this.selected = [];
     }
+  }
+
+  tsmOrScheduler() {
+    console.log('');
   }
 
   onSelect({ selected }) {
@@ -1444,34 +1459,91 @@ export class AudienceCreateComponent {
   }
 
   submit() {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
-      const limit = this.formAudience.get("type").value === "limit";
+      const limit = this.formAudience.get("limit").value === "limit";
       const min = this.formAudience.get("min").value;
       const max = this.formAudience.get("max").value;
 
-      if (limit && selectedRetailer < min)
+      if (limit && selectedRetailer < min) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
           message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
         });
-      else if (limit && selectedRetailer > max)
+      }
+      else if (limit && selectedRetailer > max) {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
           message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
         });
+      }
 
-      let budget = {
-        total_retailer: limit ? this.selected.length : this.pagination.total,
-        trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
-      };
+      // Audience Type = TSM, Type = any
+      if (this.formAudience.get("audience_type").value === "tsm") {
+        let body = {
+          name: this.formAudience.get("name").value,
+          trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
+        };
 
-      if (this.formAudience.get("audience_type").value === "mission") {
+        body["type"] = this.formAudience.get("type").value;
+        body["audience_type"] = this.formAudience.get("audience_type").value;
+
+        if (this.formAudience.get("limit").value !== "pick-all") {
+          body["retailer_id"] = this.selected.map((item) => item.id);
+          body["min"] = this.formAudience.get("min").value;
+          body["max"] = this.formAudience.get("max").value;
+        } else {
+          body["area_id"] = this.pagination.area;
+
+          if (this.pagination.area !== 1) {
+            body["min"] = 1;
+            body["max"] = this.pagination.total;
+          } else {
+            body["min"] = "";
+            body["max"] = "";
+          }
+        }
+
+        this.saveData = true;
+        // this.loadingIndicator = false;
+        // this.dataService.showLoading(false);
+        this.audienceService.create(body).subscribe(
+          (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan",
+            });
+            this.router.navigate(["dte", "audience"]);
+          },
+          (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            // this.dialogService.openSnackBar({ message: err.error.message })
+            console.log(err.error.message);
+          }
+        );
+      }
+      // Audience Type = Scheduler, Type = Mission
+      if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "mission") {
+        let budget = {
+          total_retailer: limit ? this.selected.length : this.pagination.total,
+          trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
+        };
         this.audienceService.validateBudget(budget).subscribe((res) => {
-          if (res.selisih < 0)
+          if (res.selisih < 0) {
+            this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             return this.dialogService.openSnackBar({
               message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
                 res.selisih
               )}!`,
             });
+          }
 
           let body = {
             name: this.formAudience.get("name").value,
@@ -1479,7 +1551,7 @@ export class AudienceCreateComponent {
               .value,
           };
 
-          if (this.formAudience.get("type").value !== "pick-all") {
+          if (this.formAudience.get("limit").value !== "pick-all") {
             body["retailer_id"] = this.selected.map((item) => item.id);
             body["min"] = this.formAudience.get("min").value;
             body["max"] = this.formAudience.get("max").value;
@@ -1495,7 +1567,8 @@ export class AudienceCreateComponent {
             }
           }
 
-          body["type"] = this.formAudience.get("audience_type").value;
+          body["type"] = this.formAudience.get("type").value;
+          body["audience_type"] = this.formAudience.get("audience_type").value;
 
           if (body["type"] === "mission") {
             body["trade_scheduler_id"] = this.formAudience.get(
@@ -1513,24 +1586,28 @@ export class AudienceCreateComponent {
           this.saveData = true;
           this.audienceService.create(body).subscribe(
             (res) => {
+              this.dataService.showLoading(false);
+              this.loadingIndicator = false;
               this.dialogService.openSnackBar({
                 message: "Data Berhasil Disimpan",
               });
               this.router.navigate(["dte", "audience"]);
             },
             (err) => {
+              this.dataService.showLoading(false);
+              this.loadingIndicator = false;
               // this.dialogService.openSnackBar({ message: err.error.message })
               console.log(err.error.message);
             }
           );
         });
-      } else {
+      } else if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "challenge") {
         let body = {
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("trade_creator_id").value,
         };
 
-        if (this.formAudience.get("type").value !== "pick-all") {
+        if (this.formAudience.get("limit").value !== "pick-all") {
           body["retailer_id"] = this.selected.map((item) => item.id);
           body["min"] = this.formAudience.get("min").value;
           body["max"] = this.formAudience.get("max").value;
@@ -1546,7 +1623,8 @@ export class AudienceCreateComponent {
           }
         }
 
-        body["type"] = this.formAudience.get("audience_type").value;
+        body["type"] = this.formAudience.get("type").value;
+        body["audience_type"] = this.formAudience.get("audience_type").value;
 
         if (body["type"] === "mission") {
           body["trade_scheduler_id"] = this.formAudience.get(
@@ -1564,18 +1642,25 @@ export class AudienceCreateComponent {
         this.saveData = true;
         this.audienceService.create(body).subscribe(
           (res) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             this.dialogService.openSnackBar({
               message: "Data Berhasil Disimpan",
             });
             this.router.navigate(["dte", "audience"]);
           },
           (err) => {
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
             // this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
           }
         );
       }
+
     } else {
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
       commonFormValidator.validateAllFields(this.formAudience);
 
       if (this.formAudience.valid && this.selected.length === 0) {

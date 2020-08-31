@@ -444,7 +444,14 @@ export const brConfig = {
         url: "",
         name: "Detail Retailer"
       }
-    ]
+    ],
+    medalBadge: [
+      {
+        type: "current",
+        url: "",
+        name: "Medal & Badge"
+      }
+    ],
   },
   customer: {
     index: [
@@ -1137,6 +1144,29 @@ export const brConfig = {
         }
       ]
     },
+    missionBuilder: {
+      create: [
+        {
+          type: "current",
+          url: "",
+          name: "Buat Mission Builder"
+        }
+      ],
+      edit: [
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Mission Builder"
+        }
+      ],
+      duplicate: [
+        {
+          type: "current",
+          url: "",
+          name: "Duplicate Mission Builder"
+        }
+      ],
+    },
     taskSequencing: {
       index: [
         {
@@ -1167,6 +1197,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah Task Sequencing"
+        }
+      ],
+      duplicate: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Duplicate Task Sequencing"
         }
       ],
     },
@@ -1446,6 +1488,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Verifikasi Misi"
+        }
+      ],
+      detailtsm: [
+        {
+          type: "parent",
+          url: "/dte/taskverification",
+          name: "Verifikasi Misi"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Verifikasi Misi TSM"
         }
       ]
     }

@@ -48,7 +48,7 @@ export class NotificationCreateComponent {
 
   listLevelArea: any[];
   list: any;
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }];
+  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
@@ -163,7 +163,7 @@ export class NotificationCreateComponent {
     })
 
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'retailer') {
+      if (res === 'retailer' || res === 'tsm') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
       } else {
@@ -999,6 +999,14 @@ export class NotificationCreateComponent {
     this.imageContentTypeBase64 = null;
     // this.videoContentType = undefined;
     this.videoContentTypeURL = null;
+  }
+
+  selectChange(e: any) {
+    // console.log(e);
+    if (e.source.value === 'tsm') {
+      this.formNotification.get('user_group').patchValue('tsm');
+    }
+    console.log(this.formNotification.value.user_group);
   }
 
   async submit() {

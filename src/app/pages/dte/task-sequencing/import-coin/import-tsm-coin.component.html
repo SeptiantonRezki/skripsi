@@ -1,0 +1,100 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah File XLS</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+        <br>
+        <span matPrefix>Tarik File Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+      </div>
+    </div>
+    <br>
+    <div class="">
+      <small>Total Row : {{rows ? rows.length : '-'}}</small>
+    </div>
+    <div class="responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th nowrap>Nama Trade Program</th>
+            <th nowrap>Nama Audience</th>
+            <th nowrap>Nama Retailer</th>
+            <th nowrap>Status Retailer</th>
+            <th nowrap>Current Coin</th>
+            <th nowrap>Coin Adjusted</th>
+            <th nowrap>Alasan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rows"
+            [ngStyle]="{ 'background-color': setRedIfDuplicate(item), color: item.flag === 'duplicate' ? 'white' : 'black' }">
+            <td nowrap>
+              {{ item.trade_program_name }}
+            </td>
+            <td nowrap>
+              {{ item.audience_name }}
+            </td>
+            <td nowrap>
+              {{ item.name }}
+            </td>
+            <td nowrap>
+              {{ item.status }}
+            </td>
+            <td nowrap>
+              {{ item.current_coin }}
+            </td>
+            <td nowrap>
+              {{ item.coin }}
+            </td>
+            <td nowrap>
+              {{ item.flag_reason }}
+            </td>
+          </tr>
+          <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="6">
+              Tidak ada file yang dipilih
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div fxLayout="row" style="margin-left: 16px;margin-top: 5px;">
+      <mat-form-field fxFlex="50" class="is-light form-primary">
+        <textarea matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="p-8">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="!files || rows.length === 0 || !isValid">Kirim</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
