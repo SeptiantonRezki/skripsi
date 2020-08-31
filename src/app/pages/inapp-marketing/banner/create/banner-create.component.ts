@@ -50,6 +50,7 @@ export class BannerCreateComponent {
   listContentWallet: any[];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
@@ -171,6 +172,7 @@ export class BannerCreateComponent {
       landing_page: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       // is_smoker: this.formBuilder.array([]),
+      verification: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: [""],
@@ -1060,6 +1062,7 @@ export class BannerCreateComponent {
       }
 
       if (body.user_group === 'customer') {
+        fd.append('verification', this.formBannerGroup.get('verification').value);
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
