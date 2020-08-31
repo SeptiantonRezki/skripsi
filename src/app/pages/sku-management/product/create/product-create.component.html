@@ -181,7 +181,8 @@
                   <div class="pt-16" fxLayout="column" style="margin-left: 50px;">
                     <mat-form-field fxFlex="100" class="is-light form-primary">
                       <!-- <strong>Prioritas Produk</strong> -->
-                      <input matInput type="text" (keypress)="numberOnly($event)" placeholder="Prioritas Produk" formControlName="priority_product">
+                      <input matInput type="text" (keypress)="numberOnly($event)" placeholder="Prioritas Produk"
+                        formControlName="priority_product">
                       <!-- <mat-error
                         *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
                         Nama Produk harus diisi
@@ -193,7 +194,8 @@
                   <strong>Jenis Produk</strong>
                 </div>
                 <div fxLayout="row" fxLayoutGap="20px">
-                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo
+                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Produk
+                    Pilihan
                     SRC</mat-checkbox>
                   <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8"
                     formControlName="is_private_label">Produk Prinsipal</mat-checkbox>
@@ -215,6 +217,26 @@
                       <button *ngIf="formProductGroup.get('areas').value.length === 1 || i === (formProductGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea(i)"><mat-icon>add</mat-icon></button>
                       <button *ngIf="formProductGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)"><mat-icon>delete</mat-icon></button>
                     </div> -->
+                  </div>
+                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap">
+                    <div fxFlex="10" style="margin-top: 15px;">
+                      <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
+                    </div>
+                    <div fxLayout="row" fxFlex="85" *ngIf="wil.get('time_period').value === true">
+                      <mat-form-field fxFlex="20" class="is-light form-primary">
+                        <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                          placeholder="Tanggal Mulai" formControlName="start_date">
+                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startPicker></mat-datepicker>
+                      </mat-form-field>
+                      <div fxFlex="2"></div>
+                      <mat-form-field fxFlex="20" class="is-light form-primary">
+                        <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
+                          placeholder="Tanggal Berakhir" formControlName="end_date">
+                        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                        <mat-datepicker #endDate></mat-datepicker>
+                      </mat-form-field>
+                    </div>
                   </div>
                   <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
                     fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
@@ -321,6 +343,7 @@
                         <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
                         <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
                         <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                        <span fxFlex="15" class="h6 text-semibold">Tipe</span>
                         <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
                           <span class="h6 text-semibold">Hapus</span>
                         </div>
@@ -392,6 +415,14 @@
                                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #dp></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                            <div fxFlex="15">
+                              <mat-form-field class="is-light packaging">
+                                <mat-select formControlName="tipe">
+                                  <mat-option *ngFor="let item of listTipe" [value]="item.value">
+                                    {{item.name}}</mat-option>
+                                </mat-select>
                               </mat-form-field>
                             </div>
                             <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">

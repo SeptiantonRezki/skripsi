@@ -167,7 +167,7 @@
                     <!-- <th>Kode Lacak</th> -->
                     <th>Jenis Pengiriman</th>
                     <th>Harga Pengiriman</th>
-                    <th>Tanggal</th>
+                    <th>Estimasi Pesanan akan Sampai pada Tanggal</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -179,7 +179,7 @@
                       <span class="email text-truncate">{{detailOrder.shipping_price | rupiahFormater}}</span>
                     </td>
                     <td>
-                      <span class="email text-truncate">{{(detailOrder.shipping_date | date:'dd/MM/yyyy HH:mm') ||
+                      <span class="email text-truncate">{{(detailOrder.shipping_date_estimation) ||
                         '-'}}</span>
                     </td>
                   </tr>

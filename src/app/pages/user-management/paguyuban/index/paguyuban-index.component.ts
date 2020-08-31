@@ -852,7 +852,23 @@ export class PaguyubanIndexComponent {
   }
 
   confirmDelete() {
-    this.paguyubanService.delete({ paguyuban_id: this.id }).subscribe(
+    // this.paguyubanService.delete({ paguyuban_id: this.id }).subscribe(
+    //   res => {
+    //     this.dialogService.brodcastCloseConfirmation();
+    //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+
+    //     this.getPaguyubanList();
+    //     this.selected = [];
+    //   },
+    //   err => {
+    //     this.dialogService.openSnackBar({ message: err.error.message });
+    //   }
+    // );
+    const body = {
+      ids: [this.id]
+    };
+
+    this.paguyubanService.deleteMultiple(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });

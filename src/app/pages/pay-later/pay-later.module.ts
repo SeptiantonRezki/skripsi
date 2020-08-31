@@ -25,7 +25,11 @@ import {
   MatTooltipModule,
   MatToolbarModule,
   MatDialogModule,
-  MatMenuModule
+  MatMenuModule,
+  MatDatepickerModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS
 } from "@angular/material";
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -42,6 +46,7 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation.component';
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -53,6 +58,18 @@ export const customCurrencyMaskConfig = {
   suffix: "",
   thousands: ".",
   nullable: false
+};
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: "LL"
+  },
+  display: {
+    dateInput: "LL",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
 };
 
 @NgModule({
@@ -78,10 +95,18 @@ export const customCurrencyMaskConfig = {
     ngfModule,
     NgxMatSelectSearchModule,
     MatMenuModule,
+    MatDatepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent],
-  providers: [RupiahFormaterPipe, PageGuard],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    RupiahFormaterPipe, PageGuard],
   exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent],
   entryComponents: [DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent]
 })

@@ -16,17 +16,32 @@ import * as _ from "lodash";
 export class VendorsCreateComponent implements OnInit {
   // Vertical Stepper
   verticalStepperStep1: FormGroup;
+  verticalStepperStep4: FormGroup;
   wilayah: FormGroup;
+  wilayah_2: FormGroup;
+
 
   verticalStepperStep1Errors: any;
+  verticalStepperStep4Errors: any;
+
 
   submitting: Boolean;
 
   listLevelArea: any[];
   list: any;
+  list2: any;
+
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
+
+  listIC: any[] = [
+    { name: "NON-SRC", value: "NON-SRC" },
+    { name: "SRC", value: "SRC" },
+    { name: "GT", value: "GT" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" }
+  ];
   constructor(
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
@@ -45,6 +60,11 @@ export class VendorsCreateComponent implements OnInit {
     //   email: {}
     // };
 
+    this.verticalStepperStep4Errors = {
+      // type: {},
+      InternalClassification: {}
+    };
+
     this.listLevelArea = [
       {
         "id": 1,
@@ -55,6 +75,15 @@ export class VendorsCreateComponent implements OnInit {
     ];
 
     this.list = {
+      zone: [],
+      region: [],
+      area: [],
+      salespoint: [],
+      district: [],
+      territory: []
+    }
+
+    this.list2 = {
       zone: [],
       region: [],
       area: [],
@@ -83,10 +112,32 @@ export class VendorsCreateComponent implements OnInit {
       territory: [""]
     })
 
+    this.wilayah_2 = this.formBuilder.group({
+      national: ["", Validators.required],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
+    })
+
+    this.verticalStepperStep4 = this.formBuilder.group({
+      // type: ["", Validators.required],
+      InternalClassification: ["", Validators.required]
+    });
+
     this.verticalStepperStep1.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(
         this.verticalStepperStep1,
         this.verticalStepperStep1Errors
+      );
+    });
+
+    this.verticalStepperStep4.valueChanges.subscribe(() => {
+      commonFormValidator.parseFormChanged(
+        this.verticalStepperStep4,
+        this.verticalStepperStep4Errors
       );
     });
 
@@ -101,6 +152,7 @@ export class VendorsCreateComponent implements OnInit {
     })
 
     this.initArea();
+    this.initArea2();
   }
 
   initArea() {
@@ -143,6 +195,49 @@ export class VendorsCreateComponent implements OnInit {
           break;
       }
       this.getAudienceArea(level_desc, item.id);
+    });
+  }
+
+  initArea2() {
+    this.areaFromLogin.map(item => {
+      let level_desc = '';
+      switch (item.type.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          this.wilayah_2.get('national').setValue(item.id);
+          this.wilayah_2.get('national').disable();
+          break
+        case 'division':
+          level_desc = 'region';
+          this.wilayah_2.get('zone').setValue(item.id);
+          this.wilayah_2.get('zone').disable();
+          break;
+        case 'region':
+          level_desc = 'area';
+          this.wilayah_2.get('region').setValue(item.id);
+          this.wilayah_2.get('region').disable();
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          this.wilayah_2.get('area').setValue(item.id);
+          this.wilayah_2.get('area').disable();
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          this.wilayah_2.get('salespoint').setValue(item.id);
+          this.wilayah_2.get('salespoint').disable();
+          break;
+        case 'district':
+          level_desc = 'territory';
+          this.wilayah_2.get('district').setValue(item.id);
+          this.wilayah_2.get('district').disable();
+          break;
+        case 'territory':
+          this.wilayah_2.get('territory').setValue(item.id);
+          this.wilayah_2.get('territory').disable();
+          break;
+      }
+      this.getAudienceArea2(level_desc, item.id);
     });
   }
 
@@ -257,6 +352,117 @@ export class VendorsCreateComponent implements OnInit {
     }
   }
 
+  getAudienceArea2(selection, id) {
+    let item: any;
+    switch (selection) {
+      case 'zone':
+        this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          // this.list2[selection] = res.filter(item => item.name !== 'all');
+          this.list2[selection] = res;
+        });
+
+        this.wilayah_2.get('region').setValue('');
+        this.wilayah_2.get('area').setValue('');
+        this.wilayah_2.get('salespoint').setValue('');
+        this.wilayah_2.get('district').setValue('');
+        this.wilayah_2.get('territory').setValue('');
+        this.list2['region'] = [];
+        this.list2['area'] = [];
+        this.list2['salespoint'] = [];
+        this.list2['district'] = [];
+        this.list2['territory'] = [];
+        break;
+      case 'region':
+        item = this.list2['zone'].length > 0 ? this.list2['zone'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list2[selection] = res.filter(item => item.name !== 'all');
+            this.list2[selection] = res;
+          });
+        } else {
+          this.list2[selection] = []
+        }
+
+        this.wilayah_2.get('region').setValue('');
+        this.wilayah_2.get('area').setValue('');
+        this.wilayah_2.get('salespoint').setValue('');
+        this.wilayah_2.get('district').setValue('');
+        this.wilayah_2.get('territory').setValue('');
+        this.list2['area'] = [];
+        this.list2['salespoint'] = [];
+        this.list2['district'] = [];
+        this.list2['territory'] = [];
+        break;
+      case 'area':
+        item = this.list2['region'].length > 0 ? this.list2['region'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list2[selection] = res.filter(item => item.name !== 'all');
+            this.list2[selection] = res;
+          });
+        } else {
+          this.list2[selection] = []
+        }
+
+        this.wilayah_2.get('area').setValue('');
+        this.wilayah_2.get('salespoint').setValue('');
+        this.wilayah_2.get('district').setValue('');
+        this.wilayah_2.get('territory').setValue('');
+        this.list2['salespoint'] = [];
+        this.list2['district'] = [];
+        this.list2['territory'] = [];
+        break;
+      case 'salespoint':
+        item = this.list2['area'].length > 0 ? this.list2['area'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list2[selection] = res.filter(item => item.name !== 'all');
+            this.list2[selection] = res;
+          });
+        } else {
+          this.list2[selection] = []
+        }
+
+        this.wilayah_2.get('salespoint').setValue('');
+        this.wilayah_2.get('district').setValue('');
+        this.wilayah_2.get('territory').setValue('');
+        this.list2['district'] = [];
+        this.list2['territory'] = [];
+        break;
+      case 'district':
+        item = this.list2['salespoint'].length > 0 ? this.list2['salespoint'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list2[selection] = res.filter(item => item.name !== 'all');
+            this.list2[selection] = res;
+          });
+        } else {
+          this.list2[selection] = []
+        }
+
+        this.wilayah_2.get('district').setValue('');
+        this.wilayah_2.get('territory').setValue('');
+        this.list2['territory'] = [];
+        break;
+      case 'territory':
+        item = this.list2['district'].length > 0 ? this.list2['district'].filter(item => item.id === id)[0] : {};
+        if (item.name !== 'all') {
+          this.adminPrincipalService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+            // this.list2[selection] = res.filter(item => item.name !== 'all');
+            this.list2[selection] = res;
+          });
+        } else {
+          this.list2[selection] = []
+        }
+
+        this.wilayah_2.get('territory').setValue('');
+        break;
+
+      default:
+        break;
+    }
+  }
+
   step1() {
     commonFormValidator.validateAllFields(this.verticalStepperStep1);
   }
@@ -266,22 +472,28 @@ export class VendorsCreateComponent implements OnInit {
       this.submitting = true;
 
       let areas = [];
+      let areas2 = [];
       let value = this.wilayah.getRawValue();
+      let area2Value = this.wilayah_2.getRawValue();
       value = Object.entries(value).map(([key, value]) => ({ key, value }));
+      area2Value = Object.entries(area2Value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
         if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
+        const filteredValueArea2 = area2Value.filter(item => item.key === type && item.value);
+        if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
       });
 
       let body = {
         name: this.verticalStepperStep1.get("nama").value,
         pic_name: this.verticalStepperStep1.get("pic_name").value,
         pic_email: this.verticalStepperStep1.get("pic_email").value,
-        area_id: _.last(areas),
+        area_id: [_.last(areas), _.last(areas2)],
         address: this.verticalStepperStep1.get("address").value,
         phone_number: "+62" + this.verticalStepperStep1.get("phone").value,
-        status: 'active'
+        status: 'active',
+        classification: this.verticalStepperStep4.get('InternalClassification').value
       };
       console.log('body', body);
 

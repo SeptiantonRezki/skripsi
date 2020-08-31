@@ -91,6 +91,8 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('pushFF').patchValue(true);
         this.form.get('coin_submission').patchValue(0);
         this.form.get('coin_verification').patchValue(0);
+        this.form.get('verifikasi').patchValue(false);
+        this.form.get('verifikasiFF').patchValue(false);
       }
 
     }
@@ -120,12 +122,17 @@ export class DialogMisiEditComponent implements OnInit {
     }
     // get the search keyword
     let search = this.filterMission.value;
-    if (!search) {
-      this.filteredMission.next(this.missions.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
+    this.pagination.per_page = 30;
+    this.pagination.search = search;
+    this.templateTaskService.get(this.pagination).subscribe(
+      (res) => {
+        this.missions = res.data.data;
+        this.filteredMission.next(this.missions.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
     // filter the banks
     this.filteredMission.next(
       this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
@@ -133,7 +140,7 @@ export class DialogMisiEditComponent implements OnInit {
   }
 
   getMission() {
-    this.pagination.per_page = 999999;
+    this.pagination.per_page = 30;
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
@@ -196,7 +203,7 @@ export class DialogMisiEditComponent implements OnInit {
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
 
     form.get('verification_type').patchValue(
-      (form.value.verifikasiFF === false && form.value.verifikasi === false) ? null :
+      (form.value.verifikasiFF === false && form.value.verifikasi === false) ? 'field-force' :
       (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
       (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
       form.get('is_push_to_ff').patchValue(

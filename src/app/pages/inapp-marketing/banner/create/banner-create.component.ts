@@ -45,7 +45,7 @@ export class BannerCreateComponent {
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" },
-    {name: "Link to Web Browser", value: "link_web"}
+  { name: "Link to Web Browser", value: "link_web" }
   ];
   listContentWallet: any[];
   listLandingPage: any[] = [];
@@ -152,6 +152,7 @@ export class BannerCreateComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
     this.formBannerGroup = this.formBuilder.group({
       name: ["", Validators.required],
       from: [moment(), Validators.required],
@@ -170,7 +171,7 @@ export class BannerCreateComponent {
       button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       verification: ["all"],
       is_smoker: ["both"],
@@ -204,7 +205,7 @@ export class BannerCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
-        this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value) );
+        this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value));
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         this.formBannerGroup.controls['age_consumer_from'].enable();
@@ -1049,7 +1050,7 @@ export class BannerCreateComponent {
         fd.append('body', this.formBannerGroup.get('body').value);
         fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
         fd.append('button_text', this.formBannerGroup.get('button_text').value);
-      } else if(body.content_type === 'link_web') {
+      } else if (body.content_type === 'link_web') {
         fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       }

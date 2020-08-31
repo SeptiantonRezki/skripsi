@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, Observable } from 'rxjs';
@@ -38,6 +38,8 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
   roles: PagesName = new PagesName();
 
   offsetPagination: any;
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -179,6 +181,23 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
     });
+  }
+
+  export(item) {
+    this.dataService.showLoading(true);
+    console.log('Wow You Exported Me!!!', item);
+    this.audienceTradeProgramService.export({ id: item.id, type: item.type }).subscribe(res => {
+      if (res.data && res.status) {
+        setTimeout(() => {
+          this.downloadLink.nativeElement.href = res.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, 1000);
+      }
+    }, err => {
+      console.log('ress', err);
+      this.dataService.showLoading(false);
+    })
   }
 
 }

@@ -10,6 +10,7 @@
           <h2 class="">DTE Automation</h2>
           <div fxFlex class="p-16 h3" style="margin-left: 80px;">
             <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
+            <mat-checkbox [formControl]="exclude_gsm" style="margin-left: 50px;">Exclude Transaction GSM</mat-checkbox>
           </div>
         </div>
         <div class="ayo-middle" fxLayout="column">
@@ -17,6 +18,14 @@
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <mat-select placeholder="Automation" formControlName="automation">
                 <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
+            *ngIf="formAutomation.get('automation').value === 'e-order'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="Jenis Tantangan E-Order" formControlName="jenis_tantangan">
+                <mat-option *ngFor="let item of listJenisTantangan" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -73,7 +82,8 @@
           </div>
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Jumlah Coin Reward per Frekuensi"
+              <input matInput type="number"
+                [placeholder]="formAutomation.get('jenis_tantangan').value === 'default' ? 'Jumlah Coin Reward per Frekuensi' : (formAutomation.get('jenis_tantangan').value === 'extra_coin' ? 'Baseline Coin' : 'Total Koin')"
                 formControlName="coin_reward">
               <mat-error class="mt-8 px-24"
                 *ngIf="formAutomation.controls['coin_reward'].hasError('required') && formAutomation.controls['coin_reward'].touched">
@@ -81,11 +91,27 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" placeholder="Jumlah Frekuensi" formControlName="coin_max">
+              <input matInput type="number"
+                [placeholder]="(formAutomation.get('jenis_tantangan').value !== 'minimum_transaction_frequency') ? 'Jumlah Frekuensi' : 'Total Frequency yang dibutuhkan'"
+                formControlName="coin_max">
               <mat-error class="mt-8 px-24"
                 *ngIf="formAutomation.controls['coin_max'].hasError('required') && formAutomation.controls['coin_max'].touched">
                 Jumlah Frekuensi harus diisi.
               </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
+            *ngIf="formAutomation.get('automation').value === 'e-order' && formAutomation.get('jenis_tantangan').value === 'extra_coin'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <input matInput type="number" placeholder="Extra Coin" formControlName="extra_coin">
+            </mat-form-field>
+          </div>
+          <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
+            *ngIf="formAutomation.get('automation').value === 'e-order' && formAutomation.get('jenis_tantangan').value === 'extra_coin'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="Kombinasi Brand" formControlName="brand_combination">
+                <mat-option *ngFor="let item of listKombinasiBrand" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <!-- <span style="margin-top: -20px;" class="mat-error" *ngIf="coinRewardInvalid">
@@ -153,6 +179,23 @@
                 Teks Pada Button harus diisi.
               </mat-error>
             </mat-form-field>
+          </div>
+          <div class="px-24" fxLayout="column">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Notifikasi Tambahan</strong>
+              </h3>
+            </div>
+            <mat-radio-group [formControl]="is_notif" (change)="changeValue()">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification" [value]="item.value">
+                {{item.name}}&nbsp;&nbsp;
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-radio-group *ngIf="is_notif.value === 1" formControlName="notif">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAddNotif" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
           </div>
           <div class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"

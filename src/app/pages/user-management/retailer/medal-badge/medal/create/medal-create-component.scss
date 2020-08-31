@@ -1,0 +1,31 @@
+.add-btn-medal {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.attachment-layout {
+  .delete-img:hover {
+    cursor: pointer;
+    .mat-icon {
+      color: #dc1d2d;
+    }
+  }
+  .delete-img {
+    height: 20px;
+    width: 20px;
+    top: -5px;
+    position: relative;
+  }
+  .attachment-img {
+    height: auto;
+    max-height: 160px;
+    background-color: #ffffff;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center;
+    padding: 10px;
+    margin: 0 auto;
+  }
+}

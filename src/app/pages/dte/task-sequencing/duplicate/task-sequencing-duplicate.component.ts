@@ -53,8 +53,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getTradePrograms();
-    this.getTradeAudience();
 
     this.taskSequenceForm = this.formBuilder.group({
       id: ["", Validators.required],
@@ -64,7 +62,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
       start_date: ["", Validators.required],
       end_date: ["", Validators.required],
       trade_creator_name: ["", Validators.required],
-      is_editable: [0],
+      is_editable: [1],
       total_budget: ["", Validators.required],
       endDateTrade: ["", Validators.required],
       trade_audience_group_name: ["", Validators.required],
@@ -99,7 +97,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
         trade_audience_group_id: this.data.trade_audience_group_id,
         start_date: this.data.start_date,
         end_date: this.data.end_date,
-        is_editable: this.data.is_editable,
+        is_editable: 1,
         trade_creator_name: this.data.trade_creator_name,
         total_budget: this.data.total_budget,
         trade_audience_group_name: this.data.trade_audience_group_name,
@@ -108,6 +106,8 @@ export class TaskSequencingDuplicateComponent implements OnInit {
         status: this.data.status,
       });
       this.actions = res.data.actions;
+      this.getTradePrograms(this.data.trade_creator_name);
+      this.getTradeAudience(this.data.trade_audience_group_name);
     });
   }
 
@@ -162,7 +162,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     // get the search keyword
     let search = this.filterGTP.value;
 
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.pagination.search = search;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
@@ -180,8 +180,9 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     );
   }
 
-  getTradePrograms() {
-    this.pagination.per_page = 99999999;
+  getTradePrograms(param?: any) {
+    this.pagination.search = !!param ? param : null;
+    this.pagination.per_page = 30;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         // console.log("res trade programs", res);
@@ -202,7 +203,7 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     // get the search keyword
     let search = this.filterGTA.value;
 
-    this.pagination.per_page = 99999999;
+    this.pagination.per_page = 30;
     this.pagination.search = search;
     this.sequencingService.getListTradeAudienceGroup(this.pagination).subscribe(
       (res) => {
@@ -220,8 +221,9 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     );
   }
 
-  getTradeAudience() {
-    this.pagination.per_page = 99999999;
+  getTradeAudience(param?: any) {
+    this.pagination.search = !!param ? param : null;
+    this.pagination.per_page = 30;
     this.sequencingService.getListTradeAudienceGroup(this.pagination).subscribe(
       (res) => {
         // console.log("res trade programs", res);

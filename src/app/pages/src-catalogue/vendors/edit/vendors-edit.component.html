@@ -65,8 +65,43 @@
                 Nomor Telepon harus diisi.
               </mat-error>
             </div>
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-              fxLayoutAlign="space-between stretch" [formGroup]="formWilayah">
+
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="Internal Classification" formControlName="InternalClassification" multiple>
+                  <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formVendor.controls['InternalClassification'].hasError('required') && formVendor.controls['InternalClassification'].touched ">
+                  Internal Classification harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="!first_geotree && !two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px"
+              style="margin-bottom: 25px;">
+              <button mat-raised-button color="" matTooltip="Tambah Area" (click)="setArea1(false)">
+                <span>
+                  Tambah Area
+                </span>
+              </button>
+            </div>
+            <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="first_geotree">
+              <div fxFlex="50">
+                <h3 class="">Area 1</h3>
+              </div>
+              <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <button mat-raised-button type="button" (click)="setArea2(false)" *ngIf="!two_geotree">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-raised-button color="primary" type="button" (click)="setArea1(true)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="first_geotree" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" [formGroup]="formWilayah">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="National" formControlName="national" id="area1_national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -115,6 +150,89 @@
                     {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
+            </div>
+            <div *ngIf="(detailVendor && detailVendor.area && detailVendor.area.length > 1) || two_geotree">
+              <!-- <div fxLayout="row" fxLayoutGap="25px">
+                <h2>Area 2</h2>
+                <div *ngIf="two_geotree" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+                  <button mat-icon-button color="" matTooltip="Hapus Area 2" (click)="setArea2(true)">
+                    <mat-icon class="secondary-text">close</mat-icon>
+                  </button>
+                </div>
+              </div> -->
+              <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="two_geotree">
+                <div fxFlex="50">
+                  <h3 class="">Area 2</h3>
+                </div>
+                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                  fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                  <button mat-raised-button type="button" (click)="setArea1(false)" *ngIf="!first_geotree">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-raised-button color="primary" type="button" (click)="setArea2(true)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div [formGroup]="formArea2" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
+                fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="two_geotree">
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national"
+                    matTooltip="{{getToolTipData(formArea2.get('national').value, listLevelArea)}}" id="area2_national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone"
+                    matTooltip="{{getToolTipData(formArea2.get('zone').value, list2['zone'])}}"
+                    (selectionChange)="getAudienceArea2('region', formArea2.get('zone').value)" id="area2_zone">
+                    <mat-option *ngFor="let item of list2['zone']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region"
+                    matTooltip="{{getToolTipData(formArea2.get('region').value, list2['region'])}}"
+                    (selectionChange)="getAudienceArea2('area', formArea2.get('region').value)" id="area2_region">
+                    <mat-option *ngFor="let item of list2['region']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area"
+                    matTooltip="{{getToolTipData(formArea2.get('area').value, list2['area'])}}"
+                    (selectionChange)="getAudienceArea2('salespoint', formArea2.get('area').value)" id="area2_area">
+                    <mat-option *ngFor="let item of list2['area']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                    matTooltip="{{getToolTipData(formArea2.get('salespoint').value, list2['salespoint'])}}"
+                    (selectionChange)="getAudienceArea2('district', formArea2.get('salespoint').value)"
+                    id="area2_salespoint">
+                    <mat-option *ngFor="let item of list2['salespoint']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district"
+                    matTooltip="{{getToolTipData(formArea2.get('district').value, list2['district'])}}"
+                    (selectionChange)="getAudienceArea2('territory', formArea2.get('district').value)"
+                    id="area2_district">
+                    <mat-option *ngFor="let item of list2['district']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory"
+                    matTooltip="{{getToolTipData(formArea2.get('territory').value, list2['territory'])}}"
+                    id="area2_territory">
+                    <mat-option *ngFor="let item of list2['territory']" [value]="item.id">
+                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
             <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
               <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">

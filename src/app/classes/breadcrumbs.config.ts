@@ -444,7 +444,14 @@ export const brConfig = {
         url: "",
         name: "Detail Retailer"
       }
-    ]
+    ],
+    medalBadge: [
+      {
+        type: "current",
+        url: "",
+        name: "Medal & Badge"
+      }
+    ],
   },
   customer: {
     index: [
@@ -1481,6 +1488,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Verifikasi Misi"
+        }
+      ],
+      detailtsm: [
+        {
+          type: "parent",
+          url: "/dte/taskverification",
+          name: "Verifikasi Misi"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Verifikasi Misi TSM"
         }
       ]
     }
