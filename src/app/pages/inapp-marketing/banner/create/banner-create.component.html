@@ -142,8 +142,22 @@
             </mat-radio-group>
           </div>
 
-          <!-- Consumer -->
+          <!-- Consumer --> 
           <div *ngIf="formBannerGroup.get('user_group').value === 'customer'">
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="verification" placeholder="Jenis Konsumen">
+                    <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['verification'].hasError('required') && formBannerGroup.controls['verification'].touched">
+                    Jenis Konsumen harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            
             <!-- <div class="pb-2 px-24" fxLayout="row" fxLayoutAlign="start center">
               <strong class="font-size-16">Tipe Consumer</strong>
             </div>

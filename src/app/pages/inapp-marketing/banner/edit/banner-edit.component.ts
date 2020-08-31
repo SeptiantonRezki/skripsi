@@ -52,6 +52,7 @@ export class BannerEditComponent {
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
@@ -182,6 +183,7 @@ export class BannerEditComponent {
       landing_page: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
+      verification: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: [""],
@@ -725,8 +727,10 @@ export class BannerEditComponent {
       this.formBannerGroup.get('gender').setValue(this.detailBanner.gender || 'both');
       this.formBannerGroup.get('age_consumer_from').setValue(this.detailBanner.age_from);
       this.formBannerGroup.get('age_consumer_to').setValue(this.detailBanner.age_to);
+      this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
       this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
 
+      this.formBannerGroup.get('verification').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
@@ -1232,6 +1236,7 @@ export class BannerEditComponent {
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+        fd.append('verification', this.formBannerGroup.get('verification').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
       }
 
