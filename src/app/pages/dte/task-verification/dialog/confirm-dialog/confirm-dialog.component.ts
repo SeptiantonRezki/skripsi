@@ -109,13 +109,28 @@ export class ConfirmDialogComponent implements OnInit {
       }).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
-        this.dataSubmission = res;
-        if (this.dataSubmission.data.image) {
-          if (this.dataSubmission.data.image.indexOf('http') < 0) {
-            console.log('ok', this.dataSubmission.data.image.indexOf('http'))
-            this.dataSubmission.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + this.dataSubmission.data.image;
+        const dataSubmission_ = res;
+        if (dataSubmission_.data.image) {
+          if (dataSubmission_.data.image.indexOf('http') < 0) {
+            console.log('ok', dataSubmission_.data.image.indexOf('http'))
+            dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
           }
         }
+
+        if (dataSubmission_.data.submission !== null || dataSubmission_.data.submission.length > 0) {
+          dataSubmission_.data.submission = dataSubmission_.data.submission.map((item: any) => {
+            if (item.type === 'stock_check_ir') {
+              try {
+                item.stock_check_ir_list = JSON.parse(item.stock_check_ir_list);
+              } catch (ex) {
+                console.log('error - stock_check_ir', ex);
+              }
+            }
+            return item;
+          });
+        }
+        this.dataSubmission = dataSubmission_;
+        console.log('DATASUBMISSION', this.dataSubmission)
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);
