@@ -1063,11 +1063,13 @@ export class BannerCreateComponent {
       }
 
       if (body.user_group === 'customer') {
-        fd.append('verification', this.formBannerGroup.get('verification').value);
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+        if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
+          fd.append('verification', this.formBannerGroup.get('verification').value);
+        }
       }
 
       let _areas = [];

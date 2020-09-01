@@ -948,7 +948,9 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('age_consumer_from').setValue(response.age_from);
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('is_smoker').setValue(smoker_type);
-        this.formPopupGroup.get('verification').setValue(response.verification || 'all');
+        if (smoker_type !==  'yes') {
+          this.formPopupGroup.get('verification').setValue(response.verification || 'all');
+        }
       }
 
       if (response.action === 'static-page') {
@@ -1391,7 +1393,9 @@ export class PopupNotificationEditComponent {
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
-        body['verification'] = this.formPopupGroup.get('verification').value;
+        if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
+          body['verification'] = this.formPopupGroup.get('verification').value;
+        }
       }
 
       if (body.action === 'static-page') {
