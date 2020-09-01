@@ -250,6 +250,7 @@ export const MY_FORMATS = {
     PanelPartnershipIndexComponent,
     PanelPartnershipCreateComponent,
     PanelPartnershipEditComponent,
+    ImportAudienceDialogComponent
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
