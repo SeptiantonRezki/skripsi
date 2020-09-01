@@ -1244,7 +1244,10 @@ export class PopupNotificationCreateComponent {
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
-        body['verification'] = this.formPopupGroup.get('verification').value;
+
+        if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
+          body['verification'] = this.formPopupGroup.get('verification').value;
+        }
       }
 
       if (body.action === 'static-page') {
