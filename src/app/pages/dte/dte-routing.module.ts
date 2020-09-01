@@ -25,6 +25,8 @@ import { GroupTradeProgramCreateComponent } from "./group-trade-program/create/g
 import { GroupTradeProgramEditComponent } from "./group-trade-program/edit/group-trade-program-edit.component";
 import { TaskVerificationIndexComponent } from './task-verification/index/task-verification-index.component';
 import { TaskVerificationDetailComponent } from "./task-verification/detail/task-verification-detail.component";
+import { TaskVerificationIndexTsmComponent } from './task-verification/index-tsm/task-verification-index-tsm.component';
+import { TaskVerificationDetailTsmComponent } from "./task-verification/detail-tsm/task-verification-detail-tsm.component";
 import { PengaturanAttributeMisiIndexComponent } from "./pengaturan-attribute-misi/index/pengaturan-attribute-misi-index.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { TaskSequencingIndexComponent } from "./task-sequencing/index/task-sequencing-index.component";
@@ -288,6 +290,17 @@ const routes: Routes = [
     component: TaskVerificationDetailComponent,
     data: {
       breadcrumbs: brConfig.dte.taskVerification.detail
+    },
+    resolve: {
+      listTradeProgram: ListTradeProgramResolver,
+      listTemplate: ListTemplateResolver
+    },
+  },
+  {
+    path: 'taskverification/detailtsm/:id/:templateid',
+    component: TaskVerificationDetailTsmComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskVerification.detailtsm
     },
     resolve: {
       listTradeProgram: ListTradeProgramResolver,

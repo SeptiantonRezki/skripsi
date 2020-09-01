@@ -91,6 +91,7 @@ import { TaskVerificationService } from "./services/dte/task-verification.servic
 import { PayLaterCompanyService } from "./services/pay-later/pay-later-company.service";
 import { PayLaterPanelService } from "./services/pay-later/pay-later-panel.service";
 import { PayLaterDeactivateService } from "./services/pay-later/pay-later-deactivate.service";
+import { MedalBadgeService } from "./services/user-management/retailer/medal-badge.service";
 
 // firebase notification
 import { AngularFireModule } from "@angular/fire";
@@ -210,6 +211,7 @@ const config = {
     PayLaterCompanyService,
     PayLaterPanelService,
     PayLaterDeactivateService,
+    MedalBadgeService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

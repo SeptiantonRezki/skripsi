@@ -7,7 +7,8 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { GeotreeService } from 'app/services/geotree.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-pay-later-activation-src',
@@ -43,6 +44,17 @@ export class PayLaterActivationSrcComponent implements OnInit {
   endArea: String;
   lastLevel: any;
 
+  status: FormControl = new FormControl('');
+  start_date: FormControl = new FormControl('');
+  end_date: FormControl = new FormControl('');
+  listStatus: any[] = [
+    { name: "Semua Status", value: "" },
+    { name: "BELUM MENGAJUKAN", value: "belum-mengajukan" },
+    { name: "PENGAJUAN", value: "pending" },
+    { name: "DITOLAK", value: "rejected" },
+    { name: "DISETUJUI", value: "approved" },
+  ]
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -66,11 +78,22 @@ export class PayLaterActivationSrcComponent implements OnInit {
 
   ngOnInit() {
     this.initFormFilter();
+
+    this.status.valueChanges.subscribe(res => {
+      if (res) this.getSRCList();
+    })
+
+    this.start_date.valueChanges.subscribe(res => {
+      if (res) this.getSRCList();
+    })
+    this.end_date.valueChanges.subscribe(res => {
+      if (res) this.getSRCList();
+    })
   }
 
   getSRCList() {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).
-    filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
@@ -138,6 +161,12 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination['status'] = this.status.value;
+    this.pagination['start_date'] = moment(this.start_date.value).format("YYYY-MM-DD");
+    this.pagination['end_date'] = moment(this.end_date.value).format("YYYY-MM-DD");
+
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
 
     this.offsetPagination = page ? (page - 1) : 0;
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(
@@ -161,7 +190,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
 
   setPage(pageInfo) {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).
-    filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
@@ -224,6 +253,9 @@ export class PayLaterActivationSrcComponent implements OnInit {
     }
     this.pagination.page = pageInfo.offset + 1;
 
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
+
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -233,7 +265,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
 
   onSort(event) {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).
-    filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
@@ -298,6 +330,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
 
     console.log("check pagination", this.pagination);
 
@@ -310,7 +344,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
 
   updateFilter(string) {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).
-    filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     this.loadingIndicator = true;
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
@@ -376,6 +410,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.pagination.page = 1;
 
     console.log(this.pagination);
+    if (!this.start_date.value) delete this.pagination['start_date'];
+    if (!this.end_date.value) delete this.pagination['end_date'];
 
     this.payLaterDeactivateService.getActivateSRC(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -383,7 +419,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
       this.loadingIndicator = false;
     });
   }
-  
+
   initFormFilter() {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -615,7 +651,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ?
-          res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+            res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -642,8 +678,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? 
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = expectedArea.length > 0 ?
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -673,8 +709,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? 
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = expectedArea.length > 0 ?
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -703,8 +739,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? 
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = expectedArea.length > 0 ?
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -730,7 +766,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -754,8 +790,8 @@ export class PayLaterActivationSrcComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? 
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = expectedArea.length > 0 ?
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -789,7 +825,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
     if (area.value !== 1) {
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
         const areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
-        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => 
+        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar =>
           areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
       }
     }

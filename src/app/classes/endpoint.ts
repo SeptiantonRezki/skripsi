@@ -226,7 +226,8 @@ export class Endpoint {
         list_sku: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
-        update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`
+        update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`
       },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
@@ -544,7 +545,19 @@ export class Endpoint {
         releaseCoinAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin/all`,
         releaseCoin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/release-coin`,
         submission: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/submission`,
-        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
+        getTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/list`,
+        detailTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/detail/${context.id}/${context.template_id}`,
+        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/
+          ${context.audience_id}/${context.template_id}`,
+        listReasonTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/rejectedreason/${context.template_id}`,
+        // totalSRCTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
+        verificationAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi/all`,
+        verificationTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi`,
+        releaseCoinAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin/all`,
+        releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
+        submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
+        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
@@ -640,6 +653,15 @@ export class Endpoint {
         import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/import`,
         preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/preview`,
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`
+      },
+      medalBadge: {
+        medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
+        putMedal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/${context.id}`,
+        retailerList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer`,
+        medalCategory: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/category`,
+        exportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/export`,
+        importRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/import`,
+        previewImportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/preview-import`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

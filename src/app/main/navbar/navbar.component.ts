@@ -94,7 +94,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     }
   }
   async ngOnInit() {
-    this.qs.qiscusMC.realtimeAdapter.connected;
+    // this.qs.qiscusMC.realtimeAdapter.connected;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.sidebarService.getSidebar("navbar")) {

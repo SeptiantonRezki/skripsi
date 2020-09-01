@@ -10,7 +10,8 @@
           <h2 class="">Ubah Popup Notifikasi</h2>
           <div>
             Notifikasi Journey Builder
-            <mat-slide-toggle [formControl]="is_mission_builder" name="is_mission_builder" (change)="selectChange($event)"></mat-slide-toggle>
+            <mat-slide-toggle [formControl]="is_mission_builder" name="is_mission_builder"
+              (change)="selectChange($event)"></mat-slide-toggle>
           </div>
         </div>
         <div class="ayo-middle" fxLayout="column">
@@ -23,7 +24,8 @@
                 Judul Popup Notifikasi harus diisi
               </mat-error>
             </mat-form-field>
-            <div fxFlex="45%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="formPopupGroup.value.is_mission_builder === false">
+            <div fxFlex="45%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+              *ngIf="formPopupGroup.value.is_mission_builder === false">
               <mat-form-field fxFlex="32%" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
                   placeholder="Tanggal Terbit">
@@ -47,8 +49,8 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="32%" class="is-light form-primary">
-                <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()" formControlName="enddate"
-                  placeholder="Tanggal Berakhir">
+                <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
+                  formControlName="enddate" placeholder="Tanggal Berakhir">
                 <mat-error
                   *ngIf="formPopupGroup.controls['enddate'].hasError('required') && formPopupGroup.controls['enddate'].touched">
                   Tanggal Terbit harus diisi
@@ -59,8 +61,8 @@
                 <mat-datepicker #tanggal_berakhir></mat-datepicker>
               </mat-form-field>
               <mat-form-field fxFlex="15%" class="is-light form-primary" id="time1">
-                <input matInput formControlName="endtime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1" [format]="24"
-                  readonly>
+                <input matInput formControlName="endtime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1"
+                  [format]="24" readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
                 <mat-error
@@ -150,6 +152,20 @@
                   <mat-error
                     *ngIf="formPopupGroup.controls['is_smoker'].hasError('required') && formPopupGroup.controls['is_smoker'].touched">
                     Tipe Consumer harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="px-24" *ngIf="formPopupGroup.get('is_smoker').value !== 'yes'">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="verification" placeholder="Jenis Konsumen">
+                    <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['verification'].hasError('required') && formPopupGroup.controls['verification'].touched">
+                    Jenis Konsumen harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -250,7 +266,7 @@
                   URL harus diisi
                 </mat-error>
                 <mat-error
-                  *ngIf="formPopupGroup.controls['url_iframe'].invalid && formPopupGroup.get('url_iframe').value !== ''">
+                  *ngIf="formPopupGroup.controls['url_iframe'].hasError('pattern') && formPopupGroup.get('url_iframe').value !== ''">
                   URL tidak valid
                 </mat-error>
               </mat-form-field>
@@ -299,7 +315,7 @@
           <div *ngIf="formPopupGroup.value.is_mission_builder === false">
             <div fxLayout="row" class="pb-24 px-24">
               <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
-              formControlName="is_target_audience">Target Audience</mat-checkbox>
+                formControlName="is_target_audience">Target Audience</mat-checkbox>
             </div>
             <div [formGroup]="formFilter" *ngIf="formPopupGroup.controls['is_target_audience'].value === true">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
@@ -429,12 +445,13 @@
                   <mat-icon>arrow_upward</mat-icon> Export XLS
                 </button>
               </div>
-              <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+              <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator">
+              </mat-progress-bar>
               <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
                 [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
                 [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
                 [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
-                (select)="onSelect($event)" [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
+                [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
                 [selectCheck]='selectCheck'>
 
                 <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
@@ -521,7 +538,8 @@
                       <mat-select placeholder="Regional" formControlName="region"
                         matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
                         (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
+                        <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">
+                          {{item.name}}
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">

@@ -47,11 +47,12 @@ export class BannerEditComponent {
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" },
-    {name: "Link to Web Browser", value: "link_web"}
+  { name: "Link to Web Browser", value: "link_web" }
   ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
@@ -162,6 +163,8 @@ export class BannerEditComponent {
   }
 
   ngOnInit() {
+    var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+
     this.formBannerGroup = this.formBuilder.group({
       name: ["", Validators.required],
       from: [moment(), Validators.required],
@@ -178,8 +181,9 @@ export class BannerEditComponent {
       button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
+      verification: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: [""],
@@ -724,7 +728,11 @@ export class BannerEditComponent {
       this.formBannerGroup.get('age_consumer_from').setValue(this.detailBanner.age_from);
       this.formBannerGroup.get('age_consumer_to').setValue(this.detailBanner.age_to);
       this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
-
+      if (this.detailBanner.smoker !== 'yes') {
+        try {
+        this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
+        } catch (ex) {console.log(ex)}
+      }
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
@@ -1214,7 +1222,7 @@ export class BannerEditComponent {
         fd.append('body', this.formBannerGroup.get('body').value);
         fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
         fd.append('button_text', this.formBannerGroup.get('button_text').value);
-      } else if(body.content_type === 'link_web') {
+      } else if (body.content_type === 'link_web') {
         fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       }
@@ -1231,6 +1239,9 @@ export class BannerEditComponent {
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+        if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
+          fd.append('verification', this.formBannerGroup.get('verification').value);
+        }
       }
 
       let _areas = [];

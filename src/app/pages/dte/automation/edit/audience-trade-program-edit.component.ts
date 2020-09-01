@@ -46,6 +46,18 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   minDateTradeProgram: any;
 
   shareable: FormControl = new FormControl(false);
+  exclude_gsm: FormControl = new FormControl(false);
+
+  listJenisTantangan: Array<any> = [
+    { name: "Default", value: "default" },
+    { name: "Minimum Transaction Frequency", value: "minimum_transaction_frequency" },
+    { name: "Extra Coin", value: "extra_coin" },
+  ];
+
+  listKombinasiBrand: Array<any> = [
+    { name: "OR", value: "or" },
+    { name: "AND", value: "and" }
+  ];
 
   constructor(
     private dataService: DataService,
@@ -78,6 +90,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
+      jenis_tantangan: ['default'],
       startDate: [new Date(), Validators.required],
       endDate: [new Date(), Validators.required],
       coin_max: [null, Validators.required],
@@ -87,6 +100,8 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
       title_challenge: ["", Validators.required],
       description_challenge: ["", Validators.required],
       button_text: ["", Validators.required],
+      extra_coin: [0],
+      brand_combination: ["or"],
       skus: this.formBuilder.array([])
     });
 
@@ -106,6 +121,13 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
     this.formAutomation.get("description_challenge").setValue(this.detailAutomation.description);
     this.formAutomation.get("title_challenge").setValue(this.detailAutomation.title);
     this.formAutomation.get("button_text").setValue(this.detailAutomation.text_button);
+    this.formAutomation.get('extra_coin').setValue(this.detailAutomation.coin_extra);
+    this.formAutomation.get('brand_combination').setValue(this.detailAutomation.kombinasi_brand);
+    this.formAutomation.get('jenis_tantangan').setValue(this.detailAutomation.jenis_tantangan);
+
+    this.shareable.setValue(this.detailAutomation.is_shareable === 1 ? true : false);
+    this.exclude_gsm.setValue(this.detailAutomation.is_exclude_gsm === 1 ? true : false);
+
     if (this.detailAutomation.type === 'e-order') {
       let skus = this.formAutomation.get('skus') as FormArray;
       if (this.detailAutomation.barcode) {
@@ -308,7 +330,10 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
         _method: 'PUT',
-        is_shareable: this.shareable.value ? 1 : 0
+        is_shareable: this.shareable.value ? 1 : 0,
+        is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
+        jenis_tantangan: this.formAutomation.get('jenis_tantangan').value,
+        kombinasi_brand: this.formAutomation.get('jenis_tantangan').value === 'extra_coin' ? this.formAutomation.get('brand_combination').value : 'or'
       };
 
       switch (automationType) {
@@ -328,6 +353,10 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
             }
           } else {
             if (body['barcode']) delete body['barcode'];
+          }
+
+          if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
+            body['coin_extra'] = this.formAutomation.get('extra_coin').value;
           }
           break;
         case 'coupon':
