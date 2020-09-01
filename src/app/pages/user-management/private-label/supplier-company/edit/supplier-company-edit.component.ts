@@ -75,7 +75,7 @@ export class SupplierCompanyEditComponent implements OnInit {
       alamat: ["", Validators.required],
       telepon: ["", [Validators.required, Validators.minLength(6)]],
       ponsel: ["", [Validators.required, Validators.minLength(6)]],
-      // catatan: "", 
+      // catatan: "",
     })
     this.catatanControl.setValue('');
 
@@ -89,7 +89,7 @@ export class SupplierCompanyEditComponent implements OnInit {
         console.log('response', response);
         this.detailSupplier = response.data;
         this.createForm.get('namasupplier').setValue(this.detailSupplier.name);
-        this.products = this.detailSupplier.products;
+        // this.products = this.detailSupplier.products;
         this.createForm.get('alamat').setValue(this.detailSupplier.address);
         this.createForm.get('telepon').setValue(this.detailSupplier.telephone);
         this.createForm.get('ponsel').setValue(this.detailSupplier.cellphone);
@@ -102,8 +102,8 @@ export class SupplierCompanyEditComponent implements OnInit {
         this.router.navigate(["user-management", "supplier-company"]);
       }
       throw error;
-    }  
-    
+    }
+
     this.productOptions = this.productControl.valueChanges.pipe(
       startWith(''),
       debounceTime(400),
@@ -111,7 +111,7 @@ export class SupplierCompanyEditComponent implements OnInit {
       distinctUntilChanged(),
       switchMap(value => this._filter(value)
       )
-    )  
+    )
   }
 
   // private _filter(value: string) {
@@ -202,18 +202,18 @@ export class SupplierCompanyEditComponent implements OnInit {
       this.createForm.get('namasupplier').markAsTouched({ onlySelf: true });
       this.namasupplier.nativeElement.focus();
       console.log('#001');
-    } else if (this.products.length == 0) {
-      this.chipList.errorState = true;
-      this.chipList.focus();
-      console.log('#002');
+    // } else if (this.products.length == 0) {
+    //   this.chipList.errorState = true;
+    //   this.chipList.focus();
+    //   console.log('#002');
     } else if (this.createForm.controls['alamat'].hasError('required')) {
       this.createForm.get('alamat').markAsTouched({ onlySelf: true });
       this.alamat.nativeElement.focus();
-      console.log('#003');    
+      console.log('#003');
     } else if (this.createForm.controls['telepon'].hasError('required') || this.createForm.get("telepon").errors) {
       this.createForm.get('telepon').markAsTouched({ onlySelf: true });
       this.telepon.nativeElement.focus();
-      console.log('#004');    
+      console.log('#004');
     } else if (this.createForm.controls['ponsel'].hasError('required') || this.createForm.get("ponsel").errors) {
       this.createForm.get('ponsel').markAsTouched({ onlySelf: true });
       this.ponsel.nativeElement.focus();
@@ -223,7 +223,8 @@ export class SupplierCompanyEditComponent implements OnInit {
 
   onSave() {
     this.isLoadingSave = true;
-    if (this.createForm.valid && this.products.length > 0) {
+    // if (this.createForm.valid && this.products.length > 0) {
+    if (this.createForm.valid) {
       const products = this.products.map((item) => item.id);
       const body = {
         name: this.createForm.get("namasupplier").value,
@@ -231,7 +232,7 @@ export class SupplierCompanyEditComponent implements OnInit {
         telephone: this.createForm.get("telepon").value,
         cellphone: this.createForm.get("ponsel").value,
         note: this.catatanControl.value,
-        products: products,
+        // products: products,
         status: this.supplierStatusSelected
       };
       this.supplierCompanyService.update(body, { supplierId: this.detailSupplier.id }).subscribe(res => {
@@ -259,4 +260,3 @@ export class SupplierCompanyEditComponent implements OnInit {
   }
 }
 
-  
