@@ -73,10 +73,10 @@ export class PanelPartnershipService extends BaseService {
   //   return this.getApi(url, queryParams);
   // }
 
-  // getListRetailerIdSelected(context): Observable<any> {
-  //   const url = this.getUrl(this.namespace, 'list_retailer_selected', context);
-  //   return this.getApi(url);
-  // }
+  getListRetailerIdSelected(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_retailer_selected', context);
+    return this.getApi(url);
+  }
 
   // getListLevel(): Observable<any> {
   //   const url = this.getUrl(this.namespace, "list_level");
