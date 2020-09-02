@@ -13,7 +13,7 @@ import { DataService } from 'app/services/data.service';
   styleUrls: ['./force-update-apps.component.scss']
 })
 export class ForceUpdateAppsComponent {
-  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }];
+  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }, { name: 'AYO SRC Kasir', value: 'cashier' }];
   listOs: any[] = [
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
