@@ -1643,6 +1643,11 @@ export class PopupNotificationEditComponent {
       this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
     }
+    if (this.formPopupGroup.get("user_group").value === 'retailer' && this.formPopupGroup.get("landing_page_value").value === 'pojok-modal') {
+      this.pagination['type'] = 'pojok-modal'
+    } else {
+      delete this.pagination['type'];
+    }
     this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
