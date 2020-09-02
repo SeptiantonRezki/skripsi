@@ -173,6 +173,7 @@ export class PopupNotificationEditComponent {
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
       is_target_audience: [false],
+      transfer_token: ["yes", Validators.required],
       is_mission_builder: this.is_mission_builder
     });
 
@@ -961,6 +962,7 @@ export class PopupNotificationEditComponent {
 
       if (response.action === 'iframe') {
         this.formPopupGroup.get('url_iframe').setValue(response.action_data);
+        this.formPopupGroup.get('transfer_token').setValue(response.transfer_token);
       }
 
       for (const { val, index } of response.areas.map((val, index) => ({ val, index }))) {
@@ -1397,6 +1399,10 @@ export class PopupNotificationEditComponent {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
       } else if (body.action === 'iframe') {
         body['action_data'] = this.formPopupGroup.get('url_iframe').value;
+      }
+
+      if (body.action === 'iframe') {
+        body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
       }
 
       let _areas = [];
