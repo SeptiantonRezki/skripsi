@@ -42,6 +42,20 @@ export class TemplateEditComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   listChoose: Array<any> = [
+  ];
+
+  listChooseOriginal: Array<any> = [
+    { name: "Jawaban Singkat", value: "text", icon: "short_text" },
+    { name: "Paragraf", value: "textarea", icon: "notes" },
+    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
+    { name: "Angka", value: "numeric", icon: "dialpad" },
+    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
+    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+  ];
+
+  listChooseWithIr: Array<any> = [
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
@@ -128,6 +142,7 @@ export class TemplateEditComponent {
     this.getListTingkatKesulitanMisi();
     this.getListKategoriMisi();
 
+    this.listChoose = this.listChooseOriginal.slice();
     this.filterLKT.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -240,6 +255,10 @@ export class TemplateEditComponent {
     );
   }
 
+  splitCheckList(template) {
+    console.log('template', template);
+  }
+
   getListTipeMisi() {
     this.pengaturanAttributeMisiService.getTipeMisi({ status: 'active' }).subscribe(
       (res) => {
@@ -346,6 +365,10 @@ export class TemplateEditComponent {
     }
   }
 
+  onChangeListChoose(selection) {
+    console.log('selection', selection);
+  }
+
   getProductObj(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     console.log('event', event, index);
@@ -396,13 +419,48 @@ export class TemplateEditComponent {
         // this.listProductSelected[index].product.updateValueAndValidity();
 
       }
+      if (this.isIRTemplate.value) this.listChoose = [...this.listChooseWithIr]
+      else this.listChoose = [...this.listChooseOriginal]
+
+      var modificationType = item.type === 'planogram' ? item.type + "_ir" : item.type;
+      if (modificationType.includes("_ir")) {
+        let typeService = modificationType.includes("planogram") ? "getPlanogramIRTemplates" : "getStockCheckIRTemplates";
+        this.taskTemplateService[typeService]().subscribe(results => {
+          console.log('result ir', results);
+          this.templateList[index] = results.data.data;
+        });
+
+        if (modificationType === 'planogram') {
+          this.templateListImageIR.push({
+            item_id: Number(item.planogram_id),
+            image: item.planogram_image,
+            ir_id: Number(item.planogram_id),
+            ir_name: item.planogram_name,
+          });
+        } else {
+          this.templateListImageIR.push({
+            item_id: Number(item.stock_check_ir_id),
+            ir_id: Number(item.stock_check_ir_id),
+            ir_code: item.stock_check_ir_id,
+            ir_name: item.stock_check_ir_name,
+            check_list: item.stock_check_ir_list
+          });
+        }
+      }
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
         question_image: item['question_image'] ? item['question_image'] : '',
         question_video: item['question_video'] ? item['question_video'] : '',
-        type: item.type,
-        typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
+        type: item.type === 'planogram' ? item.type + "_ir" : item.type,
+        typeSelection: this.listChoose.filter(val => val.value === (item.type === 'planogram' ? item.type + "_ir" : item.type))[0],
+        planogram_id: Number(item.planogram_id),
+        planogram_image: item.planogram_image,
+        planogram_name: item.planogram_name,
+        stock_check_ir_id: item.stock_check_ir_id,
+        stock_check_ir_code: item.stock_check_ir_code,
+        stock_check_ir_name: item.stock_check_ir_name,
+        stock_check_ir_list: item.stock_check_ir_list,
         // required: item.required,
         additional: this.formBuilder.array(
           item.additional.map((itm, idx) => {
@@ -410,6 +468,7 @@ export class TemplateEditComponent {
           })
         )
       }));
+      console.log('questions', questions, this.listChoose);
       this.allQuestionList.push({
         id: item.id,
         question: item.question,
@@ -493,20 +552,42 @@ export class TemplateEditComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template) {
-    console.log('selectedIR IR', selectedIR, template);
-    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
-    if (indexExist > -1) {
-      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
+  selectedImageIR(selectedIR, template, idx) {
+    console.log('selectedIR IR', selectedIR, template, idx);
+    // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
+    let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
+    if (idx > -1 && indexTemplate > -1) {
+      this.templateListImageIR[idx]['item_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['ir_code'] = this.templateList[idx][indexTemplate].code;
+      this.templateListImageIR[idx]['ir_name'] = this.templateList[idx][indexTemplate].name;
+      this.templateListImageIR[idx]['check_list'] = this.templateList[idx][indexTemplate].check_list ? JSON.parse(this.templateList[idx][indexTemplate].check_list) : [];
+
+      this.templateListImageIR[idx]['ir_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['image'] = this.templateList[idx][indexTemplate].image;
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name });
+      this.templateListImageIR.push({ item_id: this.templateList[idx][indexTemplate].id, image: this.templateList[idx][indexTemplate].image, ir_id: this.templateList[idx][indexTemplate].id, ir_code: this.templateList[idx][indexTemplate].code, ir_name: this.templateList[idx][indexTemplate].name, check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : [] });
     }
 
-    console.log('template image IR', this.templateListImageIR);
+    console.log('the ir', this.templateListImageIR[idx]);
+  }
+
+  onChangeTemplateIR(event) {
+    console.log('the event dude!!!', event);
+    if (event.checked) this.listChoose = [...this.listChooseWithIr]
+    else this.listChoose = [...this.listChooseOriginal]
   }
 
   changeType(item, idx?) {
     this.checkIsIRExist();
+
+    if (item.value.type.includes("_ir")) {
+      let typeService = item.value.type.includes("planogram") ? "getPlanogramIRTemplates" : "getStockCheckIRTemplates";
+      // if (item.value.type.includes("planogram")) { }
+      this.taskTemplateService[typeService]().subscribe(results => {
+        console.log('result ir', results);
+        this.templateList[idx] = results.data.data;
+      });
+    }
 
     const questions = this.templateTaskForm.get('questions') as FormArray;
     const type = questions.at(idx).get('type').value;
@@ -646,8 +727,8 @@ export class TemplateEditComponent {
     let rawValue = this.templateTaskForm.getRawValue();
     console.log('value raw', rawValue);
     let isIR = rawValue['questions'].map(tp => tp.type).find(typ => typ.includes("_ir"));
-    if (isIR) this.isIRTemplate.setValue(true);
-    else this.isIRTemplate.setValue(false);
+    // if (isIR) this.isIRTemplate.setValue(true);
+    // else this.isIRTemplate.setValue(false);
   }
 
   checkHasLinked(idx, idQuestion): Boolean {
@@ -710,7 +791,7 @@ export class TemplateEditComponent {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
-          return {
+          let mockup = {
             id: item.id,
             question: item.question,
             type: item.type,
@@ -731,6 +812,23 @@ export class TemplateEditComponent {
               directly: this.listDirectBelanja[index]
             }) : null
           }
+
+          if (item.type === 'stock_check_ir') {
+            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
+            mockup['type'] = 'stock_check_ir';
+            mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
+            mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
+            mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
+          }
+
+          if (item.type === 'planogram_ir') {
+            mockup['type'] = 'planogram';
+            mockup['planogram_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
+            mockup['planogram_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
+            mockup['planogram_image'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['image'] : null;
+          }
+
+          return mockup;
           // }
           // return {
           //   id: item.id,
@@ -748,6 +846,7 @@ export class TemplateEditComponent {
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
+      console.log('this body', body);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
           let bodyMasterVideo = new FormData();
