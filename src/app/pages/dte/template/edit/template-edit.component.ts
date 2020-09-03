@@ -423,29 +423,42 @@ export class TemplateEditComponent {
       else this.listChoose = [...this.listChooseOriginal]
 
       var modificationType = item.type === 'planogram' ? item.type + "_ir" : item.type;
+      var ir_id = null;
       if (modificationType.includes("_ir")) {
         let typeService = modificationType.includes("planogram") ? "getPlanogramIRTemplates" : "getStockCheckIRTemplates";
         this.taskTemplateService[typeService]().subscribe(results => {
-          console.log('result ir', results);
           this.templateList[index] = results.data.data;
+          if (this.templateListImageIR[index]['ir_name'] && modificationType === 'stock_check_ir') {
+            let dataTemplate = this.templateList[index].find(tl => tl.code === this.templateListImageIR[index]['ir_code']);
+            if (dataTemplate) {
+              ir_id = dataTemplate['id'];
+              questions.at(index).get('planogram_id').setValue(dataTemplate['id']);
+              this.templateListImageIR[index]['id'] = dataTemplate['id'];
+            }
+          }
         });
-
-        if (modificationType === 'planogram') {
+        if (modificationType === 'planogram_ir') {
           this.templateListImageIR.push({
-            item_id: Number(item.planogram_id),
+            item_id: index + 1,
+            id: Number(item.planogram_id),
             image: item.planogram_image,
             ir_id: Number(item.planogram_id),
             ir_name: item.planogram_name,
           });
         } else {
           this.templateListImageIR.push({
-            item_id: Number(item.stock_check_ir_id),
-            ir_id: Number(item.stock_check_ir_id),
+            item_id: index + 1,
+            id: item.stock_check_ir_id,
+            ir_id: item.stock_check_ir_id,
             ir_code: item.stock_check_ir_id,
             ir_name: item.stock_check_ir_name,
             check_list: item.stock_check_ir_list
           });
         }
+
+      } else {
+        this.templateList.push([]);
+        this.templateListImageIR.push({ item_id: index + 1 });
       }
       questions.push(this.formBuilder.group({
         id: item.id,
@@ -557,7 +570,7 @@ export class TemplateEditComponent {
     // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
     let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
     if (idx > -1 && indexTemplate > -1) {
-      this.templateListImageIR[idx]['item_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['item_id'] = idx + 1;
       this.templateListImageIR[idx]['ir_code'] = this.templateList[idx][indexTemplate].code;
       this.templateListImageIR[idx]['ir_name'] = this.templateList[idx][indexTemplate].name;
       this.templateListImageIR[idx]['check_list'] = this.templateList[idx][indexTemplate].check_list ? JSON.parse(this.templateList[idx][indexTemplate].check_list) : [];
@@ -565,7 +578,7 @@ export class TemplateEditComponent {
       this.templateListImageIR[idx]['ir_id'] = this.templateList[idx][indexTemplate].id;
       this.templateListImageIR[idx]['image'] = this.templateList[idx][indexTemplate].image;
     } else {
-      this.templateListImageIR.push({ item_id: this.templateList[idx][indexTemplate].id, image: this.templateList[idx][indexTemplate].image, ir_id: this.templateList[idx][indexTemplate].id, ir_code: this.templateList[idx][indexTemplate].code, ir_name: this.templateList[idx][indexTemplate].name, check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : [] });
+      this.templateListImageIR.push({ item_id: idx + 1, image: this.templateList[idx][indexTemplate].image, ir_id: this.templateList[idx][indexTemplate].id, ir_code: this.templateList[idx][indexTemplate].code, ir_name: this.templateList[idx][indexTemplate].name, check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : [] });
     }
 
     console.log('the ir', this.templateListImageIR[idx]);
@@ -635,6 +648,9 @@ export class TemplateEditComponent {
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
+
+    this.templateList.push([]);
+    this.templateListImageIR.push({ item_id: newId.id + 1 });
   }
 
   filteringPossibilitiesQuestion(questionId) {
@@ -814,7 +830,6 @@ export class TemplateEditComponent {
           }
 
           if (item.type === 'stock_check_ir') {
-            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
             mockup['type'] = 'stock_check_ir';
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
             mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
