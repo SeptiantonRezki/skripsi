@@ -445,7 +445,7 @@
                 </ng-container>
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-                *ngIf="templateListImageIR[i]" style="margin-top: 25px;">
+                *ngIf="templateListImageIR[i]['ir_id'] || templateListImageIR[i]['ir_code']" style="margin-top: 25px;">
                 <div fxFlex="45" *ngIf="item.get('type').value !== 'stock_check_ir'">
                   <div class="banner-image-template-selected">
                     <div id="banner">
