@@ -1424,7 +1424,7 @@ export class NotificationCreateComponent {
       if (this.pagination['age']) delete this.pagination['age'];
     }
 
-    if (this.formNotification.get("user_group").value === 'retailer') {
+    if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page").value === 'pojok-modal') {
       this.pagination['type'] = 'pojok-modal'
     } else {
       delete this.pagination['type'];
