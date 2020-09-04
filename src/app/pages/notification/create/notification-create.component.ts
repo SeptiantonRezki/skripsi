@@ -151,7 +151,8 @@ export class NotificationCreateComponent {
       landing_page_value: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
-      is_target_audience: [false]
+      is_target_audience: [false],
+      transfer_token: ["yes", Validators.required]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -1053,6 +1054,7 @@ export class NotificationCreateComponent {
         body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
       } else if (body.content_type === 'iframe') {
         body['iframe_value'] = this.formNotification.get('url_iframe').value;
+        body['transfer_token'] = this.formNotification.get('transfer_token').value;
       } else if (body.content_type === 'image') {
         if (this.imageContentTypeBase64) {
           body['image_value'] = this.imageContentTypeBase64;

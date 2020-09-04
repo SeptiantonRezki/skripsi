@@ -107,8 +107,9 @@
           </div>
 
           <!-- image -->
-          <div class="pb-16" *ngIf="formNotification.get('content_type').value === 'image' && formNotification.get('user_group').value !== 'wholesaler'" fxLayout="row"
-            fxLayoutAlign="start center">
+          <div class="pb-16"
+            *ngIf="formNotification.get('content_type').value === 'image' && formNotification.get('user_group').value !== 'wholesaler'"
+            fxLayout="row" fxLayoutAlign="start center">
             <div fxFlex="30" class="inline-block">
               <div ngfDrop selectable="1" [(validDrag)]="validComboDrag" [(file)]="imageContentType" accept="image/*"
                 class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
@@ -117,9 +118,10 @@
               </div>
             </div>
             <div *ngIf="imageContentType">
-              <div class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
+              <div
+                class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
                 role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
-                <img [src]="imageContentTypeBase64" class="multiple-img" (click)="previewImage()"/>
+                <img [src]="imageContentTypeBase64" class="multiple-img" (click)="previewImage()" />
                 <span class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
                 <!-- <mat-icon matTooltip="Hapus gambar" (click)="removeImageVideo()"
                   class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
@@ -130,21 +132,24 @@
 
 
           <!-- multiple image for wholesaler-->
-          <div class="pb-16" *ngIf="formNotification.get('content_type').value === 'image' && formNotification.get('user_group').value === 'wholesaler'" fxLayout="row"
-            fxLayoutAlign="start center">
+          <div class="pb-16"
+            *ngIf="formNotification.get('content_type').value === 'image' && formNotification.get('user_group').value === 'wholesaler'"
+            fxLayout="row" fxLayoutAlign="start center">
             <div fxFlex="30" class="inline-block">
               <div ngfDrop [(validDrag)]="validComboDrag" [(files)]="imageContentType" accept="image/*"
                 class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
-                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)" selectable="1" multiple="1">
+                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)" selectable="1"
+                multiple="1">
 
                 Tarik gambar kesini atau <strong>pilih file</strong>
               </div>
             </div>
             <div *ngIf="multipleImageContentType.length > 0" fxLayout="row wrap">
               <div *ngFor="let img of multipleImageContentType; let i = index;">
-                <div class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
+                <div
+                  class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                   role="option" tabindex="-1" aria-disabled="false" aria-selected="false" style="height: 60px;">
-                  <img [src]="img" class="multiple-img" (click)="previewImage(i)"/>
+                  <img [src]="img" class="multiple-img" (click)="previewImage(i)" />
                   <span class="preview-image-content" (click)="previewImage(i)">Lihat gambar</span>
                   <mat-icon matTooltip="Hapus gambar" (click)="removeImageMultiple(i)"
                     class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
@@ -154,26 +159,28 @@
             </div>
           </div>
 
-           <!-- video -->
-          <div class="pb-16" *ngIf="formNotification.get('content_type').value === 'video' && formNotification.get('user_group').value === 'wholesaler'" fxLayout="row"
-           fxLayoutAlign="start center">
-           <div fxFlex="30" class="inline-block">
-             <div ngfDrop selectable="1" [(validDrag)]="validComboDrag" [(file)]="videoContentType" accept="video/mp4"
-               class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
-               [class.valid-drag]="validComboDrag" (fileChange)="onVideoContentTypeSelect($event)">
-               Tarik Video kesini atau <strong>pilih file</strong>
-             </div>
-           </div>
-           <div *ngIf="videoContentTypeURL">
-             <div class="video-content-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
-               role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
-               <!-- <span class="preview-image-content" (click)="previewVideo()">Lihat Video</span> -->
-              <video class="video-content" [src]="videoContentTypeURL" controls> </video>
-              <!-- <mat-icon matTooltip="Hapus video" (click)="removeImageVideo()"
+          <!-- video -->
+          <div class="pb-16"
+            *ngIf="formNotification.get('content_type').value === 'video' && formNotification.get('user_group').value === 'wholesaler'"
+            fxLayout="row" fxLayoutAlign="start center">
+            <div fxFlex="30" class="inline-block">
+              <div ngfDrop selectable="1" [(validDrag)]="validComboDrag" [(file)]="videoContentType" accept="video/mp4"
+                class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
+                [class.valid-drag]="validComboDrag" (fileChange)="onVideoContentTypeSelect($event)">
+                Tarik Video kesini atau <strong>pilih file</strong>
+              </div>
+            </div>
+            <div *ngIf="videoContentTypeURL">
+              <div
+                class="video-content-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
+                role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
+                <!-- <span class="preview-image-content" (click)="previewVideo()">Lihat Video</span> -->
+                <video class="video-content" [src]="videoContentTypeURL" controls> </video>
+                <!-- <mat-icon matTooltip="Hapus video" (click)="removeImageVideo()"
                  class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                  matchipremove="" role="img" aria-hidden="true">cancel</mat-icon> -->
-             </div>
-           </div>
+              </div>
+            </div>
           </div>
 
           <!-- Consumer -->
@@ -205,25 +212,38 @@
           </div>
         </div>
 
+        <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe'">
+          <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <strong class="font-size-16">Transfer Token Credential</strong>
+          </div>
+          <mat-radio-group formControlName="transfer_token" class="radio-group">
+            <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
+            <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
         <!-- Targeted Audience Options -->
         <div *ngIf="formNotification.value.user_group != 'tsm'">
           <div fxLayout="row" class="pb-24 px-24">
-            <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)" formControlName="is_target_audience">
+            <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
+              formControlName="is_target_audience">
               Target Audience</mat-checkbox>
           </div>
           <div *ngIf="formNotification.get('is_target_audience').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">
-                <div class="py-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-                  fxLayoutAlign="space-between stretch">
+                <div class="py-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
+                  fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
                     <mat-select placeholder="National" formControlName="national"
                       matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
-                      <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">{{item.name}}
+                      <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
+                        {{item.name}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                    <mat-error
+                      *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
                       National harus diisi
                     </mat-error>
                   </mat-form-field>
@@ -276,10 +296,12 @@
                     <mat-select placeholder="District" formControlName="district"
                       matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
                       (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
-                      <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">{{item.name}}
+                      <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
+                        {{item.name}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                    <mat-error
+                      *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
                       Distrik harus diisi
                     </mat-error>
                   </mat-form-field>
@@ -298,9 +320,10 @@
               </div>
             </div>
           </div>
-          <div [formGroup]="formFilter" fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column"
-          class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;"
-          *ngIf="formNotification.get('is_target_audience').value === true">
+          <div [formGroup]="formFilter" fxLayout="row wrap" fxLayoutAlign="space-between stretch"
+            fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+            style="margin-left: 25px; margin-right: 25px;"
+            *ngIf="formNotification.get('is_target_audience').value === true">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -426,10 +449,11 @@
             </div>
             <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
             <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-              [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-              [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-              (page)="setPage($event)" (sort)="onSort($event)" [selected]="selected" [selectionType]="'checkbox'"
-              (select)='onSelect($event)' [selectCheck]='selectCheck'>
+              [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+              [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+              [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
+              [selectCheck]='selectCheck'>
 
               <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
                 <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
