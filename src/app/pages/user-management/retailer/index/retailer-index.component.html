@@ -15,9 +15,9 @@
     <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
       style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
       <a #downloadLink></a>
-      <button mat-raised-button type="button" color="primary">
+      <!-- <button mat-raised-button type="button" color="primary">
         Kelola Akses Kasir
-      </button>
+      </button> disabled tiket CDE-2572-dissable-mass-upload -->
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
@@ -133,6 +133,11 @@
               <mat-checkbox [checked]="isSelected"></mat-checkbox>
             </ng-template>
           </ngx-datatable-column> -->
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <mat-checkbox [checked]="false" (change)="onSelectedRetailer($event, row)"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Nama Toko" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

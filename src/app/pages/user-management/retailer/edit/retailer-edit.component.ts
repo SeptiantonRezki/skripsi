@@ -165,7 +165,7 @@ export class RetailerEditComponent {
       latitude: [""],
       longitude: [""],
       type: [""],
-      cashier: ["", Validators.required],
+      // cashier: ["", Validators.required],
       InternalClassification: ["", Validators.required],
       version_retailer: [""],
       version_cashier: [""]
@@ -386,7 +386,7 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
-      cashier: this.detailRetailer.cashier || 0,
+      // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
     });
@@ -614,7 +614,7 @@ export class RetailerEditComponent {
         longitude: this.formRetailer.get("longitude").value ? this.formRetailer.get("longitude").value : null,
         type: (this.formRetailer.get("InternalClassification").value === 'SRC' || this.formRetailer.get("InternalClassification").value === 'NON-SRC') ? "General Trade" : this.formRetailer.get("InternalClassification").value,
         InternalClassification: this.formRetailer.get("InternalClassification").value,
-        cashier: this.formRetailer.get("cashier").value,
+        // cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
@@ -758,11 +758,11 @@ export class RetailerEditComponent {
       this.pkp.updateValueAndValidity();
 
     }
-    if (!this.isCan(['ubah', 'akses_kasir'])) {
-      const fields = ['cashier'];
-      this.disableFields(fields);
-      this.rmValidators(fields);
-    }
+    // if (!this.isCan(['ubah', 'akses_kasir'])) {
+    //   const fields = ['cashier'];
+    //   this.disableFields(fields);
+    //   this.rmValidators(fields);
+    // }
     // jika tidak memiliki submenu samasekali maka disable simpan
     if (!this.isCan(ALL_ROLES, 'OR')) {
       this.disableSubmit = true;

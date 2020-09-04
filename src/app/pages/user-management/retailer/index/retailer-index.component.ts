@@ -24,6 +24,7 @@ export class RetailerIndexComponent {
   rows: any[];
   selected: any[];
   id: any[];
+  selectedRetailer: any[] = [];
 
   loadingIndicator = true;
   reorderable = true;
@@ -1103,7 +1104,8 @@ export class RetailerIndexComponent {
 
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
-      const response = await this.retailerService.getAccessCashier({ area_id: area_id }).toPromise();
+      // const selectedRetailer = [];
+      const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
@@ -1178,5 +1180,16 @@ export class RetailerIndexComponent {
     }
     console.log(error);
     // alert('Open console to see the error')
+  }
+  onSelectedRetailer(event, retailer) {
+    const index = this.selectedRetailer.findIndex(id => id === retailer.id);
+    console.log({index});
+
+    if (index >= 0) {
+      this.selectedRetailer.splice(index, 1);
+    } else {
+      this.selectedRetailer.push(retailer.id);
+    }
+    console.log('SELECTED RETAILER', this.selectedRetailer);
   }
 }
