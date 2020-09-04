@@ -233,7 +233,7 @@ export class AudienceCreateComponent {
         }
       });
 
-    // this.getListScheduler();
+    this.getListScheduler();
 
     this.formAudience.get("audience_type").valueChanges.subscribe((data) => {
       if (data === 'scheduler' && this.formAudience.get("type").value === 'mission') {
