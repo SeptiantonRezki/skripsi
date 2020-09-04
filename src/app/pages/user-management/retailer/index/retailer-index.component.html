@@ -135,7 +135,7 @@
           </ngx-datatable-column> -->
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <mat-checkbox [checked]="false" (change)="onSelectedRetailer($event, row)"></mat-checkbox>
+            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
