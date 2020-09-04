@@ -136,7 +136,7 @@ export class TemplateCreateComponent {
   }
 
   ngOnInit() {
-
+    console.log('Unnecessary Check')
     this.getListKategoriToolbox();
     this.getListTipeMisi();
     this.getListTingkatKesulitanMisi();
