@@ -295,9 +295,8 @@
             [footerHeight]="56"
             [rowHeight]="'auto'"
             [reorderable]="reorderable"
-            [selectionType]="
-              createForm.get('type').value !== 'pick-all' ? 'checkbox' : ''
-            "
+            [selectionType]="'checkbox'"
+            [selected] = "selected"
             [count]="pagination.total"
             [limit]="pagination.per_page"
             [externalPaging]="true"

@@ -35,7 +35,7 @@ export class PanelPartnershipCreateComponent {
   createFormError: any;
   supplierStatusList: any[] = [
     { name: 'Status Aktif', status: 'active' },
-    { name: 'Status Non-Aktif', status: 'non-active' }
+    { name: 'Status Non-Aktif', status: 'inactive' }
   ];
   supplierStatusSelected: any;
 
