@@ -23,8 +23,10 @@ export class ForceUpdateAppsComponent {
 
   listVersionConsumer: any[];
   listVersionRetailer: any[];
+  listVersionCashier: any[];
   lastVersionConsumer: any;
   lastVersionRetailer: any;
+  lastVersionCashier: any;
 
   id: any;
   onLoad: Boolean;
@@ -49,9 +51,11 @@ export class ForceUpdateAppsComponent {
     this.accessServices.listVersion().subscribe(res => {
       this.listVersionRetailer = res[0].data;
       this.listVersionConsumer = res[1].data;
+      this.listVersionCashier = res[2].data;
 
       this.lastVersionRetailer = this.listVersionRetailer.length > 0 ? parseFloat(this.listVersionRetailer[0]['version']) : 0;
       this.lastVersionConsumer = this.listVersionConsumer.length > 0 ? parseFloat(this.listVersionConsumer[0]['version']) : 0;
+      this.lastVersionCashier = this.listVersionCashier.length > 0 ? parseFloat(this.listVersionCashier[0]['version']) : 0;
 
       this.formForceUpdate = this.formBuilder.group({
         appsName: ["", Validators.required],
