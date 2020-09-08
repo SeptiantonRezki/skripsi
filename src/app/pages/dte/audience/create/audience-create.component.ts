@@ -73,6 +73,7 @@ export class AudienceCreateComponent {
   reorderable = true;
   saveData: Boolean;
   exportTemplate: Boolean;
+  allRowsSelected: boolean;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -269,7 +270,7 @@ export class AudienceCreateComponent {
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
       // this.searchingRetailer(res);
-      this.getRetailer();
+      // this.getRetailer();
     });
 
     this.filterScheduler.valueChanges
@@ -314,6 +315,10 @@ export class AudienceCreateComponent {
         this.getAudienceAreaV2("territory", res);
       }
     });
+  }
+
+  loadFormFilter() {
+    this.getRetailer();
   }
 
   clickMe(input, parameter) {
@@ -1004,8 +1009,14 @@ export class AudienceCreateComponent {
     });
   }
 
-  selectFn() {
-    console.log("jalan");
+  selectFn(allRowsSelected: boolean) {
+    console.log('allRowsSelected_', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (allRowsSelected) {
+      this.formAudience.get('limit').setValue('pick-all');
+    } else {
+      this.formAudience.get('limit').setValue('limit');
+    }
   }
 
   appendRows(rows, next) {
