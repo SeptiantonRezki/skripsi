@@ -184,7 +184,7 @@ export class AudienceCreateComponent {
       max: ["", [Validators.required, Validators.min(0)]],
       limit: ["limit"],
       type: ["mission", Validators.required],
-      audience_type: ["tsm", Validators.required],
+      audience_type: ["scheduler", Validators.required],
       business_checkbox: true,
       geotree_checkbox: true,
       // national: [""],
@@ -234,7 +234,7 @@ export class AudienceCreateComponent {
         }
       });
 
-    // this.getListScheduler();
+    this.getListScheduler();
 
     this.formAudience.get("audience_type").valueChanges.subscribe((data) => {
       if (data === 'scheduler' && this.formAudience.get("type").value === 'mission') {
