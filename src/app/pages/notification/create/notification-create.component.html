@@ -184,6 +184,20 @@
           </div>
 
           <!-- Consumer -->
+          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="verification" placeholder="Jenis Konsumen">
+                  <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['verification'].hasError('required') && formNotification.controls['verification'].touched">
+                  Jenis Konsumen harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div class="pb-16" *ngIf="formNotification.controls['user_group'].value === 'customer'">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
