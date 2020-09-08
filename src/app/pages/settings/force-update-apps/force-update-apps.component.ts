@@ -115,6 +115,8 @@ export class ForceUpdateAppsComponent {
 
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
         console.log('res', res);
+        if (!res.data) this.dataService.showLoading(false);
+
         this.paralellForceUpdates(res.data ? res.data : [], body).subscribe(res => {
           console.log('res force updates', res);
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
