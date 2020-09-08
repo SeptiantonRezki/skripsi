@@ -13,7 +13,7 @@ import { DataService } from 'app/services/data.service';
   styleUrls: ['./force-update-apps.component.scss']
 })
 export class ForceUpdateAppsComponent {
-  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }];
+  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }, { name: 'AYO SRC Kasir', value: 'cashier' }];
   listOs: any[] = [
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
@@ -23,8 +23,10 @@ export class ForceUpdateAppsComponent {
 
   listVersionConsumer: any[];
   listVersionRetailer: any[];
+  listVersionCashier: any[];
   lastVersionConsumer: any;
   lastVersionRetailer: any;
+  lastVersionCashier: any;
 
   id: any;
   onLoad: Boolean;
@@ -49,9 +51,11 @@ export class ForceUpdateAppsComponent {
     this.accessServices.listVersion().subscribe(res => {
       this.listVersionRetailer = res[0].data;
       this.listVersionConsumer = res[1].data;
+      this.listVersionCashier = res[2].data;
 
       this.lastVersionRetailer = this.listVersionRetailer.length > 0 ? parseFloat(this.listVersionRetailer[0]['version']) : 0;
       this.lastVersionConsumer = this.listVersionConsumer.length > 0 ? parseFloat(this.listVersionConsumer[0]['version']) : 0;
+      this.lastVersionCashier = this.listVersionCashier.length > 0 ? parseFloat(this.listVersionCashier[0]['version']) : 0;
 
       this.formForceUpdate = this.formBuilder.group({
         appsName: ["", Validators.required],
@@ -111,6 +115,8 @@ export class ForceUpdateAppsComponent {
 
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
         console.log('res', res);
+        if (!res.data) this.dataService.showLoading(false);
+
         this.paralellForceUpdates(res.data ? res.data : [], body).subscribe(res => {
           console.log('res force updates', res);
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
