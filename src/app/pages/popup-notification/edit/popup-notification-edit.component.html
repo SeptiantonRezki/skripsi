@@ -259,6 +259,16 @@
             </div>
           </div>
 
+          <div class="pb-16 px-24" *ngIf="formPopupGroup.get('content_type').value === 'iframe'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <strong class="font-size-16">Transfer Token Credential</strong>
+            </div>
+            <mat-radio-group formControlName="transfer_token" class="radio-group">
+              <mat-radio-button class="radio-button" value="yes">Ya</mat-radio-button>
+              <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
           <!-- Retailer -->
           <div *ngIf="formPopupGroup.get('user_group').value === 'retailer'">
             <div class="pb-16 px-24">
