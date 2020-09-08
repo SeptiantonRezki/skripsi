@@ -52,6 +52,11 @@ import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/
 import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
 import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
 import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-component";
+// import { PendingChangesGuard } from "../dte/dte.guard";
+import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
+import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
+import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
+
 
 const routes: Routes = [
   {
@@ -488,6 +493,30 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.retailer.medalBadge
     },
+  },
+  {
+    path: "panel-partnership",
+    component: PanelPartnershipIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelpartnership.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "panel-partnership/create",
+    component: PanelPartnershipCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelpartnership.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "panel-partnership/edit",
+    component: PanelPartnershipEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.panelpartnership.edit
+    },
+    // canActivate: [PageGuard]
   },
 ];
 
