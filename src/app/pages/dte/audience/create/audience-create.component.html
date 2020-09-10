@@ -29,7 +29,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row">
+          <!-- <div fxLayout="row">
             <label id="ts">Jenis Audience</label>
           </div>
 
@@ -43,7 +43,7 @@
                 {{ item.name }}
               </mat-radio-button>
             </mat-radio-group>
-          </div>
+          </div> -->
 
           <br>
           
@@ -206,6 +206,25 @@
             </mat-form-field>
           </div>
         </form>
+      </div>
+      <div
+        fxLayout="row wrap"
+        fxLayoutAlign="end stretch"
+        fxLayout.lt-md="column"
+        class="pt-16"
+        fxLayoutGap="20px"
+        fxLayoutGap.lt-md="0px"
+        *ngIf="formAudience.controls['geotree_checkbox'].value === true"
+      >
+        <button
+          mat-raised-button
+          type="button"
+          class="confirmation-button"
+          (click)="loadFormFilter()"
+          fxFlex="20"
+        >
+          Load Data
+        </button>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div
@@ -446,11 +465,13 @@
           [resizeable]="false"
           [headerCheckboxable]="true"
         >
-          <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected" [disabled]="formAudience.get('limit').value === 'pick-all'"
-              (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-          </ng-template> -->
+          <ng-template ngx-datatable-header-template >
+            <mat-checkbox 
+              [checked]="allRowsSelected" 
+              (change)="selectFn(!allRowsSelected);"
+            >
+            </mat-checkbox>
+          </ng-template>
 
           <ng-template
             ngx-datatable-cell-template
@@ -458,11 +479,19 @@
             let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn"
           >
-            <mat-checkbox
-              [checked]="isSelected"
-              [disabled]="formAudience.get('limit').value === 'pick-all'"
-              (change)="onCheckboxChangeFn($event)"
-            ></mat-checkbox>
+            <mat-checkbox 
+              [checked]="isSelected" 
+              (change)="onCheckboxChangeFn($event)" 
+              [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
+              *ngIf="!allRowsSelected"
+            >
+            </mat-checkbox>
+            <mat-checkbox 
+              [checked]="true" 
+              [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
+              *ngIf="allRowsSelected" class="mat-checkbox-all"
+            >
+            </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>

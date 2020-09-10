@@ -649,6 +649,8 @@ export class TemplateCreateComponent {
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
+    this.templateList.push([]);
+    this.templateListImageIR.push({ item_id: newId.id + 1 });
   }
 
   addRejectedReason() {
@@ -786,15 +788,14 @@ export class TemplateCreateComponent {
             }) : null
           };
 
-          if (item.type === 'stock_check_ir') {
-            mockup['id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
+          if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
             mockup['type'] = 'stock_check_ir';
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
             mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
             mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
           }
 
-          if (item.type === 'planogram_ir') {
+          if (item.type === 'planogram_ir' && this.templateListImageIR[index]['ir_id']) {
             mockup['type'] = 'planogram';
             mockup['planogram_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
             mockup['planogram_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;

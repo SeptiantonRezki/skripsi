@@ -94,7 +94,7 @@ export class Endpoint {
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
-        export_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/export?area=${context.area_id}`,
+        export_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/export`,
         import_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/preview`,
         store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`
       },
@@ -662,7 +662,19 @@ export class Endpoint {
         exportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/export`,
         importRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/import`,
         previewImportRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/list/retailer/preview-import`,
-      }
+      },
+      panel_partnership: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/${context.partnership_id}`,
+        list_suppliers: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
+        list_retailer_selected: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/${context.partnership_id}`,
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/status/${context.partnership_id}`,
+        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/import-audience`,
+        show_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/import/show-import-audience`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/panel-partnership/partnership/audience/export-audience`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
