@@ -154,8 +154,79 @@
             </div>
           </div>
 
-          <div *ngIf="item.type == 'image'" fxLayout="column" fxLayoutAlign="start start">
-            <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)"/>
+          <div class="item-question-img" *ngIf="item.type == 'image'" fxLayout="column" fxLayoutAlign="start start">
+            <img src="{{item.answer_image}}" class="p-8 answer-img" (click)="previewImage(item.answer_image)"/>
+          </div>
+
+          <div class="item-question-img" *ngIf="item.type == 'planogram'" fxLayout="column" fxLayoutAlign="start start">
+            <div class="p-12 planogram-template" fxLayout="column" fxLayoutAlign="center center">
+              <img src="{{item.planogram_image}}" class="planogram-template-img" (click)="previewImage(item.planogram_image)">
+              <span class="planogram-template-caption">Template Planogram</span>
+            </div>
+            <div class="item-question-img" fxLayout="column" fxLayoutAlign="center center">
+              <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)"/>
+              <span class="planogram-template-caption">Bukti Foto</span>
+            </div>
+          </div>
+
+          <div class="item-question-img" *ngIf="item.type == 'stock_check_ir'" fxLayout="column" fxLayoutAlign="start start">
+            <div class="mb-16 mt-8 item-question-img">
+              <div class="responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th nowrap>Product Name</th>
+                      <th nowrap>Qty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of item.stock_check_ir_list">
+                      <td nowrap>
+                        {{ item.PRODUCT_NAME }}
+                      </td>
+                      <td nowrap>
+                        {{ item.QUANTITY }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="item-question-img" fxLayout="column" fxLayoutAlign="center center">
+              <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)"/>
+              <span class="planogram-template-caption">Bukti Foto</span>
+            </div>
+          </div>
+
+          <div class="item-question-img" *ngIf="dataSubmission.data.ir_verification !== null && dataSubmission.data.ir_verification.length > 0" >
+            <div class="item-question-img" *ngFor="let ir_item of dataSubmission.data.ir_verification; let i = index;">
+              <div class="mt-8 item-question-img" *ngIf="ir_item.id_pertanyaan === item.id" fxLayout="column" fxLayoutAlign="center center">
+                <div class="responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th nowrap>IR Check</th>
+                        <th nowrap>Compliance</th>
+                        <th nowrap>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td nowrap>
+                          {{ ir_item.hasil_verifikasi.ir_verification }}
+                        </td>
+                        <td nowrap>
+                          {{ ir_item.hasil_verifikasi.planogram_compliance }}
+                        </td>
+                        <td nowrap>
+                          {{ ir_item.hasil_verifikasi.status }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>

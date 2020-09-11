@@ -53,6 +53,21 @@ export class AudienceCreateComponent {
   ];
   listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
 
+  retailClassification: any[] = [
+    { name: "Semua Tipe", value: "all" },
+    { name: "SRC", value: "SRC" },
+    { name: "NON-SRC", value: "NON-SRC" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" },
+    { name: "GT", value: "GT" }
+  ];
+  srcClassification: any[] = [
+    { name: "Semua Tipe", value: "all" }
+  ];
+  srcType: any[] = [
+    { name: "Semua Tipe", value: "all" }
+  ];
+
   selected = [];
   area: Array<any>;
   queries: any;
@@ -68,6 +83,7 @@ export class AudienceCreateComponent {
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
+  formFilterRetailer: FormGroup;
 
   loadingIndicator: Boolean;
   reorderable = true;
@@ -207,6 +223,12 @@ export class AudienceCreateComponent {
       territory: [""],
     });
 
+    this.formFilterRetailer = this.formBuilder.group({
+      retail_classification: [''],
+      src_classification: [''],
+      src_type: ['']
+    });
+
     // this.initArea();
     this.initAreaV2();
     this.getRetailer();
@@ -313,6 +335,18 @@ export class AudienceCreateComponent {
       console.log("district", res);
       if (res) {
         this.getAudienceAreaV2("territory", res);
+      }
+    });
+
+    this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
+      this.getRetailer();
+    });
+
+    this.formFilterRetailer.get('retail_classification').valueChanges.subscribe((res) => {
+      if (res) {
+        this.pagination['classification'] = res;
+      } else {
+        delete this.pagination['classification'];
       }
     });
   }
