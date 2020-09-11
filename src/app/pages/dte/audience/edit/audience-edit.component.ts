@@ -72,6 +72,7 @@ export class AudienceEditComponent {
   pageAccess = [];
   isDetail: Boolean;
   exportTemplate: Boolean;
+  allRowsSelected: boolean;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -272,7 +273,7 @@ export class AudienceEditComponent {
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.searchingRetailer(res);
-      this.getRetailer();
+      // this.getRetailer();
     })
 
     this.filterScheduler.valueChanges
@@ -329,6 +330,10 @@ export class AudienceEditComponent {
         delete this.pagination['classification'];
       }
     });
+  }
+
+  loadFormFilter() {
+    this.getRetailer();
   }
 
   initAreaV2() {
@@ -1144,6 +1149,16 @@ export class AudienceEditComponent {
     this.selected.push(...selected);
 
     console.log(this.selected);
+  }
+
+  selectFn(allRowsSelected: boolean) {
+    console.log('allRowsSelected_', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (allRowsSelected) {
+      this.formAudience.get('limit').setValue('pick-all');
+    } else {
+      this.formAudience.get('limit').setValue('limit');
+    }
   }
 
   getId(row) {
