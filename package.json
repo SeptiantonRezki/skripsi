@@ -47,7 +47,7 @@
     "angular-autofocus-fix": "^0.1.0",
     "angular-calendar": "0.24.0",
     "angular-file": "^0.5.4",
-    "angular-froala-wysiwyg": "^2.8.4-1",
+    "angular-froala-wysiwyg": "2.8.4-1",
     "angular-in-memory-web-api": "0.6.0",
     "angular-progress-bar": "^1.0.9",
     "angular-user-idle": "^2.1.2",
