@@ -60,7 +60,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
       alamat: ["", Validators.required],
       telepon: ["", [Validators.required, Validators.minLength(6)]],
       ponsel: ["", [Validators.required, Validators.minLength(6)]],
-      // catatan: "", 
+      // catatan: "",
     })
     this.catatan = '';
     this.catatanControl.setValue('');
@@ -141,22 +141,23 @@ export class SupplierCompanyCreateComponent implements OnInit {
   checkError() {
     console.log('statusError', this.createForm.status)
     if (!this.createForm.get('namasupplier').valid) {
-      this.createForm.get('namasupplier').markAsTouched({ onlySelf: true });     
+      this.createForm.get('namasupplier').markAsTouched({ onlySelf: true });
     } else if (this.products.length == 0) {
       this.chipList.errorState = true;
       this.chipList.focus();
     } else if (!this.createForm.get('alamat').valid) {
-      this.createForm.get('alamat').markAsTouched({ onlySelf: true });  
+      this.createForm.get('alamat').markAsTouched({ onlySelf: true });
     } else if (!this.createForm.get('telepon').valid) {
-      this.createForm.get('telepon').markAsTouched({ onlySelf: true });  
+      this.createForm.get('telepon').markAsTouched({ onlySelf: true });
     } else if (!this.createForm.get('ponsel').valid) {
-      this.createForm.get('ponsel').markAsTouched({ onlySelf: true }); 
+      this.createForm.get('ponsel').markAsTouched({ onlySelf: true });
     }
   }
 
   onSave() {
     this.isLoadingSave = true;
-    if (this.createForm.valid && this.products.length > 0) {
+    // if (this.createForm.valid && this.products.length > 0) {
+    if (this.createForm.valid) {
       const products = this.products.map((item) => item.id);
       const body = {
         name: this.createForm.get("namasupplier").value,
@@ -165,13 +166,13 @@ export class SupplierCompanyCreateComponent implements OnInit {
         cellphone: this.createForm.get("ponsel").value,
         // note: this.createForm.get("catatan").value,
         note: this.catatanControl.value,
-        products: products
+        // products: products
       };
       this.supplierCompanyService.create(body).subscribe(res => {
         this.dialogService.openSnackBar({
           message: "Data Berhasil Disimpan"
         });
-        this.products = [];
+        // this.products = [];
         this.createForm.reset();
         this.catatanControl.reset();
         this.router.navigate(["user-management", "supplier-company"]);

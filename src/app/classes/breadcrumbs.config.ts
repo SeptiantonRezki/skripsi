@@ -565,6 +565,54 @@ export const brConfig = {
     ]
   },
   privatelabel: {
+    panelpartnership:{
+      index: [
+        {
+          type: "parent",
+          url: "/user-management/panel-partnership",
+          name: "Strategic Partnership"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Panel Partnership"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/user-management/panel-partnership",
+          name: "Strategic Partnership"
+        },
+        {
+          type: "parent",
+          url: "/user-management/panel-partnership",
+          name: "Panel Partnership"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Create"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/user-management/panel-partnership",
+          name: "Strategic Partnership"
+        },
+        {
+          type: "parent",
+          url: "/user-management/panel-partnership",
+          name: "Panel Partnership"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
+    },
     suppliercompany: {
       index: [
         {
