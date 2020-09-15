@@ -984,6 +984,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   async exportInvoice() {
     // let fileName = `Export_Invoice_Panel_Retailer_CN_REWARD_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     try {
+      this.dataService.showLoading(true);
       const response = await this.b2bVoucherService.exportInvoice({ voucher_id: this.detailVoucher.id }).toPromise();
       console.log('he', response);
       if (response && response.data) window.open(response.data.url, "_blank");
