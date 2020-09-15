@@ -172,14 +172,15 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
-            fxLayoutAlign="left stretch" *ngIf="!onLoad && detailRetailer?.paguyuban">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px" fxLayoutAlign="left stretch"
+            *ngIf="!onLoad && detailRetailer?.paguyuban">
 
             <mat-form-field fxFlex="20" class="is-light paguyuban">
               <input matInput type="text" placeholder="Tergabung dalam Paguyuban" disabled>
             </mat-form-field>
             <mat-form-field fxFlex="30" class="is-light paguyuban">
-              <input matInput type="text" placeholder="Nama Paguyuban" disabled [value]="detailRetailer?.paguyuban_name">
+              <input matInput type="text" placeholder="Nama Paguyuban" disabled
+                [value]="detailRetailer?.paguyuban_name">
             </mat-form-field>
 
           </div>
@@ -314,6 +315,15 @@
               <input matInput placeholder="Apps Version AYO SRC Kasir" formControlName="version_cashier">
             </mat-form-field>
           </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <mat-select formControlName="is_chat_bot" placeholder="Chatbot">
+                <mat-option [value]="statusChatBot.value" *ngFor="let statusChatBot of listStatusChatBot">
+                  {{statusChatBot.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
             <h3>Daftar Consumer</h3>
@@ -346,8 +356,8 @@
             </ngx-datatable>
           </div>
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
-            <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button" fxFlex="20"
-              (click)="submit()">
+            <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
+              fxFlex="20" (click)="submit()">
               SIMPAN
             </button>
           </div>
