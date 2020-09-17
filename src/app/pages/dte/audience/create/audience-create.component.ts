@@ -200,7 +200,7 @@ export class AudienceCreateComponent {
       max: ["", [Validators.required, Validators.min(0)]],
       limit: ["limit"],
       type: ["mission", Validators.required],
-      audience_type: ["scheduler", Validators.required],
+      audience_type: ["tsm", Validators.required],
       business_checkbox: true,
       geotree_checkbox: true,
       // national: [""],
