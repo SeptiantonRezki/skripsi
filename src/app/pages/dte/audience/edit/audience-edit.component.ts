@@ -181,7 +181,7 @@ export class AudienceEditComponent {
       max: ["", [Validators.required, Validators.min(0)]],
       limit: [""],
       type: ["", Validators.required],
-      audience_type: ["scheduler", Validators.required],
+      audience_type: ["", Validators.required],
       // national: [""],
       // division: [""],
       // region: [""],
