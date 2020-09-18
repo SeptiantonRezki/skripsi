@@ -89,6 +89,11 @@
               <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field fxFlex="20" class="is-light form-primary">
+            <mat-select placeholder="Clasification" [formControl]="clasification">
+              <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -115,7 +120,9 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Username" prop="username" summary-template="activeCell"></ngx-datatable-column>
-
+        <ngx-datatable-column name="Clasification" prop="clasification" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"></ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column name="Teritori" prop="area_code" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code}}</ng-template>
         </ngx-datatable-column>
