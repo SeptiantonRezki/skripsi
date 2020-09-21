@@ -53,8 +53,9 @@ export class FieldForceIndexComponent {
   listVersions: any[] = []
   version: FormControl = new FormControl('');
   status: FormControl = new FormControl('');
+  clasification: FormControl = new FormControl('');
+  listClasification: any[] = [{ name: 'WEE', value: 'WEE' }, { name: 'REE', value: 'REE' }];
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -111,7 +112,6 @@ export class FieldForceIndexComponent {
       district: [""],
       territory: [""]
     })
-
     this.getVersions();
 
     // this.initArea()
