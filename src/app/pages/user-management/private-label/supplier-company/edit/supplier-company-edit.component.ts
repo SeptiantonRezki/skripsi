@@ -89,7 +89,10 @@ export class SupplierCompanyEditComponent implements OnInit {
         console.log('response', response);
         this.detailSupplier = response.data;
         this.createForm.get('namasupplier').setValue(this.detailSupplier.name);
-        // this.products = this.detailSupplier.products;
+        if(this.router.url.indexOf('/user-management/private-label') > -1){
+          
+        this.products = this.detailSupplier.products;
+        }
         this.createForm.get('alamat').setValue(this.detailSupplier.address);
         this.createForm.get('telepon').setValue(this.detailSupplier.telephone);
         this.createForm.get('ponsel').setValue(this.detailSupplier.cellphone);

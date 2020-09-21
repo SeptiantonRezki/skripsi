@@ -167,7 +167,19 @@ export class SupplierCompanyIndexComponent implements OnInit {
   }
 
   directEdit(item?: any): void {
-    this.router.navigate(["user-management", "supplier-company", "edit", item.id]);
+    if(this.router.url == "/user-management/private-label"){
+      this.router.navigate(["user-management", "private-label", "edit", item.id]);
+    }else{
+      this.router.navigate(["user-management", "supplier-company", "edit", item.id]);
+    }
+  }
+
+  directCreate(){
+    if(this.router.url == "/user-management/private-label"){
+      this.router.navigate(["user-management", "private-label", "create"]);
+    }else{
+      this.router.navigate(["user-management", "supplier-company", "create"]);
+    }
   }
 
   deleteById(id: any) {
