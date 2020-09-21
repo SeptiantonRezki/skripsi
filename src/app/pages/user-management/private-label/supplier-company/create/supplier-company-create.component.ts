@@ -185,12 +185,14 @@ export class SupplierCompanyCreateComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: "Data Berhasil Disimpan"
         });
-        if(this.router.url.indexOf('/user-management/private-label') > -1){
-          this.products = [];
-        }
         this.createForm.reset();
         this.catatanControl.reset();
-        this.router.navigate(["user-management", "supplier-company"]);
+        if(this.router.url.indexOf('/user-management/private-label') > -1){
+          this.products = [];
+          this.router.navigate(["user-management", "private-label"]);
+        }else{
+          this.router.navigate(["user-management", "supplier-company"]);
+        }
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
@@ -209,4 +211,13 @@ export class SupplierCompanyCreateComponent implements OnInit {
       this.checkError();
     }
   }
+
+  isFromPrivateLabel(){
+    if(this.router.url.indexOf('/user-management/private-label') > -1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 }
