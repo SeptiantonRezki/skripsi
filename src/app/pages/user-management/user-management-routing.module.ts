@@ -431,6 +431,38 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
+    path: "private-label",
+    component: SupplierCompanyIndexComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "private-label/create",
+    component: SupplierCompanyCreateComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "private-label/edit/:id",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "private-label/detail/:id",
+    component: SupplierCompanyEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.suppliercompany.detail
+    },
+    // canActivate: [PageGuard]
+  },
+  {
     path: "supplier-user",
     component: UserSupplierIndexComponent,
     data: {
