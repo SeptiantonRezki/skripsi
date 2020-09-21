@@ -25,7 +25,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div *ngIf="this.router.url == '/user-management/private-label/create'" fxLayout="row">
+          <div *ngIf="isFromPrivateLabel()" fxLayout="row">
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light form-primary">
               <mat-chip-list #chipList aria-label="Keyword Selection">
                 <mat-chip *ngFor="let product of products" [selectable]="productSelectable"
