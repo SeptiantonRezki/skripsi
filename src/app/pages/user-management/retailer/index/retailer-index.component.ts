@@ -62,9 +62,13 @@ export class RetailerIndexComponent {
   version_cashier: FormControl = new FormControl('');
   status: FormControl = new FormControl('');
   access_cashier: FormControl = new FormControl('');
+  chatbot: FormControl = new FormControl('');
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-
+  listStatusChatBot: any[] = [
+    { name: "OFF", value: 0 },
+    { name: "ON", value: 1 }
+  ]
 
   constructor(
     private router: Router,
@@ -945,6 +949,7 @@ export class RetailerIndexComponent {
     this.pagination['retailer_version'] = this.version_retailer.value;
     this.pagination['cashier_version'] = this.version_cashier.value;
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
+    this.pagination['is_chat_bot'] = this.chatbot.value;
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
@@ -1183,7 +1188,7 @@ export class RetailerIndexComponent {
   }
   onSelectedRetailer(event, retailer) {
     const index = this.selectedRetailer.findIndex(id => id === retailer.id);
-    console.log({index});
+    console.log({ index });
 
     if (index >= 0) {
       this.selectedRetailer.splice(index, 1);
