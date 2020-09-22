@@ -9,7 +9,7 @@
  * AYO Sampoerna Staging
  *
  */
-import { environment, serviceServer, server } from '../../environments/environment';
+import { environment, serviceServer, server } from '../../environments/environment.dev-hms';
 import { Config } from './config';
 
 // const SERVER = Config.server;
