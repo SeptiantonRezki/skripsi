@@ -159,23 +159,40 @@ export class SupplierCompanyCreateComponent implements OnInit {
     // if (this.createForm.valid && this.products.length > 0) {
     if (this.createForm.valid) {
       const products = this.products.map((item) => item.id);
-      const body = {
-        name: this.createForm.get("namasupplier").value,
-        address: this.createForm.get("alamat").value,
-        telephone: this.createForm.get("telepon").value,
-        cellphone: this.createForm.get("ponsel").value,
-        // note: this.createForm.get("catatan").value,
-        note: this.catatanControl.value,
-        // products: products
-      };
+      var body = {};
+      if(this.router.url.indexOf('/user-management/private-label') > -1){
+         body = {
+          name: this.createForm.get("namasupplier").value,
+          address: this.createForm.get("alamat").value,
+          telephone: this.createForm.get("telepon").value,
+          cellphone: this.createForm.get("ponsel").value,
+          // note: this.createForm.get("catatan").value,
+          note: this.catatanControl.value,
+          products: products
+        };
+      }else{
+        body = {
+          name: this.createForm.get("namasupplier").value,
+          address: this.createForm.get("alamat").value,
+          telephone: this.createForm.get("telepon").value,
+          cellphone: this.createForm.get("ponsel").value,
+          // note: this.createForm.get("catatan").value,
+          note: this.catatanControl.value,
+          // products: products
+        };
+      }
       this.supplierCompanyService.create(body).subscribe(res => {
         this.dialogService.openSnackBar({
           message: "Data Berhasil Disimpan"
         });
-        // this.products = [];
         this.createForm.reset();
         this.catatanControl.reset();
-        this.router.navigate(["user-management", "supplier-company"]);
+        if(this.router.url.indexOf('/user-management/private-label') > -1){
+          this.products = [];
+          this.router.navigate(["user-management", "private-label"]);
+        }else{
+          this.router.navigate(["user-management", "supplier-company"]);
+        }
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
@@ -194,4 +211,13 @@ export class SupplierCompanyCreateComponent implements OnInit {
       this.checkError();
     }
   }
+
+  isFromPrivateLabel(){
+    if(this.router.url.indexOf('/user-management/private-label') > -1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 }
