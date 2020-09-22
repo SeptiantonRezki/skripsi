@@ -115,6 +115,12 @@
               <mat-option *ngFor="let item of listAccessCashier" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Chatbot" [formControl]="chatbot">
+              <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -135,7 +141,8 @@
           </ngx-datatable-column> -->
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)"></mat-checkbox>
+            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)">
+            </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
