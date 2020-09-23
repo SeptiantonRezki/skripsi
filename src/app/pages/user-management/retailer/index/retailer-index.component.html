@@ -124,7 +124,13 @@
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
             <mat-select placeholder="Chatbot" [formControl]="chatbot">
-              <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option>
+              <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option> 
+            </mat-select>
+          </mat-form-field>
+            
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Classification" [formControl]="retail_classification">
+              <mat-option *ngFor="let item of retailClassification" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

@@ -41,7 +41,8 @@ export class AudienceEditComponent {
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
-    { name: "GT", value: "GT" }
+    { name: "GT", value: "GT" },
+    { name: "KA", value: "KA" }
   ];
   srcClassification: any[] = [
     { name: "Semua Tipe", value: "all" }
@@ -273,7 +274,7 @@ export class AudienceEditComponent {
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.searchingRetailer(res);
-      // this.getRetailer();
+      this.getRetailer();
     })
 
     this.filterScheduler.valueChanges
