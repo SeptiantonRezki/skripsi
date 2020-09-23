@@ -661,6 +661,7 @@ export class RetailerEditComponent {
       this.dialogService.openSnackBar({
         message: "Silakan lengkapi data terlebih dahulu!"
       });
+      commonFormValidator.validateAllFields(this.formRetailer);
     }
   }
 
