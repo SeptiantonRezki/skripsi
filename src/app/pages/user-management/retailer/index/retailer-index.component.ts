@@ -66,6 +66,7 @@ export class RetailerIndexComponent {
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
   listStatusChatBot: any[] = [
+    { name: 'Semua Status', value: '-1' },
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
@@ -149,6 +150,10 @@ export class RetailerIndexComponent {
     })
 
     this.access_cashier.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.chatbot.valueChanges.subscribe(res => {
       this.getRetailerList();
     })
 
@@ -949,7 +954,7 @@ export class RetailerIndexComponent {
     this.pagination['retailer_version'] = this.version_retailer.value;
     this.pagination['cashier_version'] = this.version_cashier.value;
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
-    this.pagination['is_chat_bot'] = this.chatbot.value;
+    this.pagination['is_chat_bot'] = this.chatbot.value ? '1' : '0';
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
@@ -959,6 +964,7 @@ export class RetailerIndexComponent {
     }
     if (this.access_cashier.value == '-1') this.pagination['is_cashier'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
+    if (this.chatbot.value === '-1') this.pagination['is_chat_bot'] = null;
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
