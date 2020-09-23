@@ -126,6 +126,10 @@ export class FieldForceIndexComponent {
       this.getFfList();
     })
 
+    this.clasification.valueChanges.subscribe(res =>{
+      this.getFfList();
+    })
+
     this.version.valueChanges.subscribe(res => {
       this.getFfList();
     })
@@ -745,13 +749,15 @@ export class FieldForceIndexComponent {
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination['status'] = this.status.value;
     this.pagination['version'] = this.version.value;
-
+    this.pagination['classification'] = this.clasification.value;
     if (this.version.value === 'Semua Versi') this.pagination['version'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
     this.fieldForceService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
+        
+        console.log(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -858,7 +864,7 @@ export class FieldForceIndexComponent {
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_field_force", param);
+    this.dataService.setToStorage(" ", param);
     this.router.navigate(["user-management", "field-force", "detail"]);
   }
 }
