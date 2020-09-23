@@ -182,6 +182,11 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Chat Bot" prop="is_chat_bot" summary-template="activeCell" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.is_chat_bot === 1 ? 'On' : 'Off'}}
+          </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column name="AYO SRC Kasir Version" prop="version_cashier" summary-template="activeCell"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_cashier || '-'}}
