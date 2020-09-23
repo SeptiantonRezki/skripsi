@@ -293,7 +293,7 @@ export class AudienceCreateComponent {
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
       // this.searchingRetailer(res);
-      // this.getRetailer();
+      this.getRetailer();
     });
 
     this.filterScheduler.valueChanges
