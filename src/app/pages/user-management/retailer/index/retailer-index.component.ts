@@ -63,12 +63,23 @@ export class RetailerIndexComponent {
   status: FormControl = new FormControl('');
   access_cashier: FormControl = new FormControl('');
   chatbot: FormControl = new FormControl('');
+  retail_classification: FormControl = new FormControl('');
+  
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
   listStatusChatBot: any[] = [
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
+  retailClassification: any[] = [
+    { name: "Semua Tipe", value: "all" },
+    { name: "SRC", value: "SRC" },
+    { name: "NON-SRC", value: "NON-SRC" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" },
+    { name: "GT", value: "GT" },
+    { name: "KA", value: "KA" }
+  ];
 
   constructor(
     private router: Router,
@@ -149,6 +160,10 @@ export class RetailerIndexComponent {
     })
 
     this.access_cashier.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.retail_classification.valueChanges.subscribe(res => {
       this.getRetailerList();
     })
 
@@ -950,6 +965,7 @@ export class RetailerIndexComponent {
     this.pagination['cashier_version'] = this.version_cashier.value;
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
     this.pagination['is_chat_bot'] = this.chatbot.value;
+    this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
