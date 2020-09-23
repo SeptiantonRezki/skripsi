@@ -89,7 +89,10 @@ export class SupplierCompanyEditComponent implements OnInit {
         console.log('response', response);
         this.detailSupplier = response.data;
         this.createForm.get('namasupplier').setValue(this.detailSupplier.name);
-        // this.products = this.detailSupplier.products;
+        if(this.router.url.indexOf('/user-management/private-label') > -1){
+          
+        this.products = this.detailSupplier.products;
+        }
         this.createForm.get('alamat').setValue(this.detailSupplier.address);
         this.createForm.get('telepon').setValue(this.detailSupplier.telephone);
         this.createForm.get('ponsel').setValue(this.detailSupplier.cellphone);
@@ -226,20 +229,40 @@ export class SupplierCompanyEditComponent implements OnInit {
     // if (this.createForm.valid && this.products.length > 0) {
     if (this.createForm.valid) {
       const products = this.products.map((item) => item.id);
-      const body = {
-        name: this.createForm.get("namasupplier").value,
-        address: this.createForm.get("alamat").value,
-        telephone: this.createForm.get("telepon").value,
-        cellphone: this.createForm.get("ponsel").value,
-        note: this.catatanControl.value,
-        // products: products,
-        status: this.supplierStatusSelected
-      };
+      var body = {};
+      if(this.router.url.indexOf('/user-management/private-label') > -1){
+         body = {
+          name: this.createForm.get("namasupplier").value,
+          address: this.createForm.get("alamat").value,
+          telephone: this.createForm.get("telepon").value,
+          cellphone: this.createForm.get("ponsel").value,
+          // note: this.createForm.get("catatan").value,
+          note: this.catatanControl.value,
+          products: products,
+          status: this.supplierStatusSelected
+        };
+      }else{
+        body = {
+          name: this.createForm.get("namasupplier").value,
+          address: this.createForm.get("alamat").value,
+          telephone: this.createForm.get("telepon").value,
+          cellphone: this.createForm.get("ponsel").value,
+          // note: this.createForm.get("catatan").value,
+          note: this.catatanControl.value,
+          // products: products
+          status: this.supplierStatusSelected
+        };
+      }
       this.supplierCompanyService.update(body, { supplierId: this.detailSupplier.id }).subscribe(res => {
         this.dialogService.openSnackBar({
           message: "Berhasil Mengubah Data"
         });
-        this.router.navigate(["user-management", "supplier-company"]);
+        if(this.router.url.indexOf('/user-management/private-label') > -1){
+          this.products = [];
+          this.router.navigate(["user-management", "private-label"]);
+        }else{
+          this.router.navigate(["user-management", "supplier-company"]);
+        }
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
@@ -256,6 +279,14 @@ export class SupplierCompanyEditComponent implements OnInit {
       });
       commonFormValidator.validateAllFields(this.createForm);
       this.checkError();
+    }
+  }
+
+  isFromPrivateLabel(){
+    if(this.router.url.indexOf('/user-management/private-label') > -1){
+      return true;
+    }else{
+      return false;
     }
   }
 }

@@ -53,7 +53,11 @@ export class SupplierCompanyIndexComponent implements OnInit {
   ) {
     this.onLoad = false;
     this.selected = [];
-    this.permission = this.roles.getRoles('principal.suppliercompany');
+    if(this.router.url == "/user-management/private-label"){
+      this.permission = this.roles.getRoles('principal.privatelabel');
+    }else{
+      this.permission = this.roles.getRoles('principal.suppliercompany');
+    }
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -143,7 +147,11 @@ export class SupplierCompanyIndexComponent implements OnInit {
   }
 
   directDetail(item?: any): void {
-    this.router.navigate(["user-management", "supplier-company", "detail", item.id]);
+    if(this.router.url == "/user-management/private-label"){
+      this.router.navigate(["user-management", "private-label", "detail", item.id]);
+    }else{
+      this.router.navigate(["user-management", "supplier-company", "detail", item.id]);
+    }
   }
 
   selectionStatus(event: any, item: any, i: number) {
@@ -167,7 +175,19 @@ export class SupplierCompanyIndexComponent implements OnInit {
   }
 
   directEdit(item?: any): void {
-    this.router.navigate(["user-management", "supplier-company", "edit", item.id]);
+    if(this.router.url == "/user-management/private-label"){
+      this.router.navigate(["user-management", "private-label", "edit", item.id]);
+    }else{
+      this.router.navigate(["user-management", "supplier-company", "edit", item.id]);
+    }
+  }
+
+  directCreate(){
+    if(this.router.url == "/user-management/private-label"){
+      this.router.navigate(["user-management", "private-label", "create"]);
+    }else{
+      this.router.navigate(["user-management", "supplier-company", "create"]);
+    }
   }
 
   deleteById(id: any) {
