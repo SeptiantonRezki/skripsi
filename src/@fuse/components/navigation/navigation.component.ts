@@ -15,4 +15,8 @@ export class FuseNavigationComponent
     {
 
     }
+
+    redirectToPrivacy() {
+        window.open('https://pmiprivacy.com/id/traders', '_blank');
+    }
 }

@@ -12,6 +12,28 @@
 
         </ng-container>
 
+        <div class="nav-item">
+            <a class="nav-link" (click)="redirectToPrivacy()"
+                routerLinkActive="active" matRipple>
+                <span class="nav-link-title">Kebijakan Privasi</span>
+            </a>
+        </div>
+        
+        <div class="nav-item">
+            <a class="nav-link" [routerLink]="['syarat-ketentuan']"
+                routerLinkActive="active" matRipple>
+                <span class="nav-link-title">Syarat & Ketentuan</span>
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a class="nav-link" id="onetrust-pc-btn-handler"
+                routerLinkActive="active" matRipple>
+                <span class="nav-link-title">Pengaturan Kuki</span>
+            </a>
+        </div>
+        
+
     </ng-container>
     <!-- / Vertical Navigation Layout -->
 
