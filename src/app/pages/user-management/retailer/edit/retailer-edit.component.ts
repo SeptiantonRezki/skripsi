@@ -45,7 +45,8 @@ export class RetailerEditComponent {
     { name: "SRC", value: "SRC" },
     { name: "GT", value: "GT" },
     { name: "IMO", value: "IMO" },
-    { name: "LAMP/HOP", value: "LAMP/HOP" }
+    { name: "LAMP/HOP", value: "LAMP/HOP" },
+    { name: "KA", value: "KA"}
   ];
 
   listCashierAccess: any[] = [

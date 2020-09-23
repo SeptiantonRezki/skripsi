@@ -41,7 +41,8 @@ export class AudienceEditComponent {
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
-    { name: "GT", value: "GT" }
+    { name: "GT", value: "GT" },
+    { name: "KA", value: "KA" }
   ];
   srcClassification: any[] = [
     { name: "Semua Tipe", value: "all" }
