@@ -89,7 +89,8 @@ export class FieldForceEditComponent {
       wilayah: this.formBuilder.array([], Validators.required),
       password: [""],
       password_confirmation: [""],
-      version: [""]
+      version: [""],
+      classification: [""]
     });
 
     this.formFF.valueChanges.subscribe(() => {
@@ -108,6 +109,7 @@ export class FieldForceEditComponent {
     this.formFF.controls['username'].setValue(this.detailFF.username);
     this.formFF.controls['status'].setValue(this.detailFF.status);
     this.formFF.controls['version'].setValue(this.detailFF.version);
+    this.formFF.controls['classification'].setValue(this.detailFF.classification);
 
     for (const { val, index } of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
       const response = await this.fieldforceService.getParentByCode({ parent: val }).toPromise();
@@ -139,6 +141,7 @@ export class FieldForceEditComponent {
       }
     }
     this.formFF.controls['version'].disable();
+    this.formFF.controls['classification'].disable();
 
   }
 
