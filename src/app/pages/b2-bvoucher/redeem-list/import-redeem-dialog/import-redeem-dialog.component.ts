@@ -49,7 +49,7 @@ export class ImportRedeemDialogComponent {
     fd.append('file', this.files);
 
     this.dataService.showLoading(true);
-    this.b2bVoucherService.redeemImportPreview(fd).subscribe(res => {
+    this.b2bVoucherService.redeemImportPreview(fd, { voucher_id: this.dialogData.voucher_id }).subscribe(res => {
         this.rows = res.data;
         this.dataService.showLoading(false);
       }, err => {

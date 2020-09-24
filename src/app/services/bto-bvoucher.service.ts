@@ -102,8 +102,8 @@ export class BtoBVoucherService extends BaseService {
     return this.getBlobAsJsonApi(url);
   }
 
-  redeemImportPreview(body: any): Observable<any> {
-    const url = this.getUrl(this.namespace, 'redeem_import_preview');
+  redeemImportPreview(body: any, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'redeem_import_preview', context);
     return this.postApi(url, body);
   }
 
