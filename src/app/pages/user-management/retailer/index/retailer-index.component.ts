@@ -167,6 +167,10 @@ export class RetailerIndexComponent {
     this.retail_classification.valueChanges.subscribe(res => {
       this.getRetailerList();
     })
+    
+    this.chatbot.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
       this.getRetailerList();
