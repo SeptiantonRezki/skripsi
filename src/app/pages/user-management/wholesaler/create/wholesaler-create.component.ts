@@ -25,6 +25,7 @@ export class WholesalerCreateComponent {
 
   listLevelArea: any[];
   list: any;
+  listGsw: any[] = [{ name: 'Pilih GSW', value: '' }, { name: 'ON', value: 1 }, { name: 'OFF', value: 0 }];
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;

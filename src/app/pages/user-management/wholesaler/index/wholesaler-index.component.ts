@@ -49,6 +49,7 @@ export class WholesalerIndexComponent {
   // 2 geotree property
   endArea: String;
   lastLevel: any;
+  listGsw: any[] = [{ name: 'Semua GSW', value: '' }, { name: 'ON', value: 1 }, { name: 'OFF', value: 0 }];
 
 
   constructor(

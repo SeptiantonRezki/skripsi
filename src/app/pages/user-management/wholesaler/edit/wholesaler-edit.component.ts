@@ -31,6 +31,7 @@ export class WholesalerEditComponent {
     { name: "Status Non Aktif", value: "inactive" },
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
+  listGsw: any[] = [{ name: 'Pilih GSW', value: '' }, { name: 'ON', value: 1 }, { name: 'OFF', value: 0 }];
 
   listLevelArea: any[];
   list: any;

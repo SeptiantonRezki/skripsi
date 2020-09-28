@@ -88,11 +88,8 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="10.5%" class="is-light form-primary">
-            <mat-select placeholder="GWS" formControlName="gws" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['gws'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                GWS'
-                :
-                item.code}}</mat-option>
+            <mat-select placeholder="GSW" formControlName="gsw">
+              <mat-option *ngFor="let item of listGsw" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -128,7 +125,7 @@
 
         <ngx-datatable-column name="Kode WS" prop="code" summary-template="activeCell"></ngx-datatable-column>
         
-        <ngx-datatable-column name="GWS" prop="gws"></ngx-datatable-column>
+        <ngx-datatable-column name="GSW" prop="gsw"></ngx-datatable-column>
 
         <ngx-datatable-column [width]="120" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
