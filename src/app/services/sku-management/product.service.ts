@@ -74,6 +74,11 @@ export class ProductService extends BaseService {
   import(context?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, "import");
     return this.multipartPost(url, body)
-}
+  }
+
+  generateLink(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "generate_link");
+    return this.postApi(url, body);
+  }
 
 }

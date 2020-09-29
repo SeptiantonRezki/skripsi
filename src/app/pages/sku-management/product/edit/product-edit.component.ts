@@ -155,7 +155,25 @@ export class ProductEditComponent {
   }
 
   generateLink() {
+    this.dataService.showLoading(true);
+    console.log("this.detail", this.detailProduct.id);
+    this.productService.generateLink({ id: this.detailProduct.id }).subscribe(res => {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: "Link Berhasil dibuat!" });
+      this.detailProduct['sharelink_url'] = res.data ? res.data.sharelink : null;
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
 
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Product Disalin!" });
   }
 
   parallelResolver(): Observable<any[]> {
