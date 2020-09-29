@@ -15,6 +15,7 @@
         <div class="nav-item">
             <a class="nav-link" (click)="redirectToPrivacy()"
                 routerLinkActive="active" matRipple>
+                <mat-icon class="nav-link-icon" >help_outline</mat-icon>
                 <span class="nav-link-title">Kebijakan Privasi</span>
             </a>
         </div>
@@ -22,16 +23,18 @@
         <div class="nav-item">
             <a class="nav-link" [routerLink]="['syarat-ketentuan']"
                 routerLinkActive="active" matRipple>
+                <mat-icon class="nav-link-icon" >help_outline</mat-icon>
                 <span class="nav-link-title">Syarat & Ketentuan</span>
             </a>
         </div>
 
-        <!-- <div class="nav-item">
+        <div class="nav-item">
             <a class="nav-link" id="onetrust-pc-btn-handler"
                 routerLinkActive="active" matRipple>
+                <mat-icon class="nav-link-icon" >storage</mat-icon>
                 <span class="nav-link-title">Pengaturan Kuki</span>
             </a>
-        </div> -->
+        </div>
         
 
     </ng-container>
