@@ -125,7 +125,7 @@
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{ row.status_indo.toUpperCase() }}
+                {{ row.status_indo ? row.status_indo.toUpperCase() : '-' }}
               </p>
             </div>
           </ng-template>
