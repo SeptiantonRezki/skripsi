@@ -110,6 +110,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "device",
+    loadChildren: "./pages/device-authentication/device-authentication.module#DeviceAuthenticationModule",
+    canActivate: [NonAuthGuard]
+  },
+  {
     path: "paylater",
     loadChildren: "./pages/pay-later/pay-later.module#PayLaterModule",
     canActivate: [AuthGuard]

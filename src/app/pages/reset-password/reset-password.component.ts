@@ -11,6 +11,7 @@ import {
   Params
 } from "../../../../node_modules/@angular/router";
 import { environment } from "environments/environment";
+import { DataService } from "app/services/data.service";
 
 @Component({
   selector: "app-reset-password",
@@ -27,6 +28,7 @@ export class ResetPasswordComponent implements OnInit {
   showConfirmPassword = false;
 
   environment: any;
+  status: any;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -34,7 +36,8 @@ export class ResetPasswordComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private dialogService: DialogService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dataService: DataService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -58,10 +61,20 @@ export class ResetPasswordComponent implements OnInit {
       this.email = res['email'];
     })
 
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        console.log(params); // { order: "popular" }
+        this.status = params.status;
+      });
+
     this.environment = environment;
   }
 
   ngOnInit() {
+    if (this.status && this.status === 'not-registered') {
+      this.dataService.setToStorage('bodyLogin', { username: this.email });
+      this.router.navigate(['device/authentication']);
+    }
     this.forgotPasswordForm = this.formBuilder.group({
       password: ["", Validators.required],
       password_confirmation: ["", Validators.required]
@@ -105,7 +118,7 @@ export class ResetPasswordComponent implements OnInit {
 
         this.authenticationService.resetPassword(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Atur ulang kata sandi berhasil, silakan login kembali'});
+            this.dialogService.openSnackBar({ message: 'Atur ulang kata sandi berhasil, silakan login kembali' });
             this.router.navigate(['login']);
           },
           err => {
