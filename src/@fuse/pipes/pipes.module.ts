@@ -10,6 +10,7 @@ import {
   RupiahFormaterWithoutRpPipe
 } from "./rupiah-formater";
 import { CapitalizePipe } from "./capitalize";
+import { TimeRemainingPipe } from "./time-remaining.pipe";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CapitalizePipe } from "./capitalize";
     RupiahFormaterPipe,
     CapitalizePipe,
     RupiahFormaterWithoutRpPipe,
-    DateToMomentPipe
+    DateToMomentPipe,
+    TimeRemainingPipe
   ],
   imports: [],
   exports: [
@@ -33,7 +35,8 @@ import { CapitalizePipe } from "./capitalize";
     RupiahFormaterPipe,
     CapitalizePipe,
     RupiahFormaterWithoutRpPipe,
-    DateToMomentPipe
+    DateToMomentPipe,
+    TimeRemainingPipe
   ]
 })
-export class FusePipesModule {}
+export class FusePipesModule { }
