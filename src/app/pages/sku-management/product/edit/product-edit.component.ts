@@ -160,7 +160,7 @@ export class ProductEditComponent {
     this.productService.generateLink({ id: this.detailProduct.id }).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: "Link Berhasil dibuat!" });
-      this.detailProduct['sharelink_url'] = res.data ? res.data.sharelink : null;
+      this.getDetails();
     }, err => {
       this.dataService.showLoading(false);
     })
