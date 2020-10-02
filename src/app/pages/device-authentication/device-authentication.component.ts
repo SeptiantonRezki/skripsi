@@ -32,20 +32,6 @@ export class DeviceAuthenticationComponent implements OnInit {
   showValue: Boolean;
   username: any;
 
-  digit1: FormControl = new FormControl('', Validators.required);
-  digit2: FormControl = new FormControl('', Validators.required);
-  digit3: FormControl = new FormControl('', Validators.required);
-  digit4: FormControl = new FormControl('', Validators.required);
-  digit5: FormControl = new FormControl('', Validators.required);
-  digit6: FormControl = new FormControl('', Validators.required);
-
-  @ViewChild("digit1") digitOne: ElementRef;
-  @ViewChild("digit2") digitTwo: ElementRef;
-  @ViewChild("digit3") digitThree: ElementRef;
-  @ViewChild("digit4") digitFour: ElementRef;
-  @ViewChild("digit5") digitFive: ElementRef;
-  @ViewChild("digit6") digitSix: ElementRef;
-
   constructor(
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder,
@@ -96,14 +82,14 @@ export class DeviceAuthenticationComponent implements OnInit {
   submit() {
     this.dataService.showLoading(true);
     let body = {
-      code: `${this.digit1.value}${this.digit2.value}${this.digit3.value}${this.digit4.value}${this.digit5.value}${this.digit6.value}`,
+      code: this.activationForm.get('code').value,
       email: this.username
     };
 
     this.authenticationService.verifyCode(body).subscribe(res => {
       this.dataService.showLoading(false);
       if (res && res.token) {
-        this.router.navigate(['login']);
+        this.router.navigate(['reset-password/' + this.dataService.getFromStorage('token_reset_password')], { queryParams: { email: this.username } });
       } else {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: 'Gagal mengautorisasi OTP silahkan coba lagi' });

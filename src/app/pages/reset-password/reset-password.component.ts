@@ -61,6 +61,10 @@ export class ResetPasswordComponent implements OnInit {
       this.email = res['email'];
     })
 
+    this.activatedRoute.params.subscribe(params => {
+      this.dataService.setToStorage('token_reset_password', params.token);
+    });
+
     this.activatedRoute.queryParams
       .subscribe(params => {
         console.log(params); // { order: "popular" }
