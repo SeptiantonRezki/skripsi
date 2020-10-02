@@ -730,8 +730,8 @@ export class BannerEditComponent {
       this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
       if (this.detailBanner.smoker !== 'yes') {
         try {
-        this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
-        } catch (ex) {console.log(ex)}
+          this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
+        } catch (ex) { console.log(ex) }
       }
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
@@ -1713,7 +1713,7 @@ export class BannerEditComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = this.audienceSelected.concat(response);
+        this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });

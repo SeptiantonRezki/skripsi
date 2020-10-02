@@ -1701,7 +1701,7 @@ export class BannerCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = this.audienceSelected.concat(response);
+        this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
