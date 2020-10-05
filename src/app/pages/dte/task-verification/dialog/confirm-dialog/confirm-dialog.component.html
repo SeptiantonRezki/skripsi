@@ -233,7 +233,7 @@
       </div>
     </div>
 
-    <div class="p-8">
+    <div *ngIf="dataSubmission.data.submission_status != 'approved' && dataSubmission.data.submission_status != 'rejected'" class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <button mat-raised-button class="primary-green" (click)="verifikasiMisi('setuju')" >
           Setujui
