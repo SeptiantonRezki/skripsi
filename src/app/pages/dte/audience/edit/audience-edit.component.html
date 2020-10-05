@@ -145,7 +145,7 @@
         class="pt-16"
         fxLayoutGap="20px"
         fxLayoutGap.lt-md="0px"
-        *ngIf="formAudience.controls['geotree_checkbox'].value === true"
+        *ngIf="formAudience.controls['geotree_checkbox'] !== undefined && formAudience.controls['geotree_checkbox'].value === true"
       >
         <button
           mat-raised-button
@@ -213,64 +213,7 @@
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
-              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone"
-              (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
-              <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                Zona' :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region"
-              (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
-              <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                Regional'
-                :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area"
-              (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
-              <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                Area'
-                :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint"
-              (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
-              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
-                'Semua
-                Salespoint'
-                :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district"
-              (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
-              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                District'
-                :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
-              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
-                Territori'
-                :
-                item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+          
         </div>
       </form>
       <form [formGroup]="formFilterRetailer" autoComplete="off">
@@ -371,7 +314,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
-        <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column>
+        <!-- <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column> -->
         <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
         <!--[R]-->
@@ -395,9 +338,9 @@
             <span *ngIf="row.status === 'not-registered'">No</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column>
-        <ngx-datatable-column name="Wilayah" prop="region_code" [sortable]="false"></ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column>
+        <!-- <ngx-datatable-column name="Kode Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column> -->
+        <!-- <ngx-datatable-column name="Wilayah" prop="region_code" [sortable]="false"></ngx-datatable-column> -->
+        <!-- <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column> -->
       </ngx-datatable>
     </div>
 
