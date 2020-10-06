@@ -96,6 +96,8 @@ export class ProductEditComponent {
   areaFromLogin;
   detailAreaSelected: any[];
 
+  linkProduct: FormControl = new FormControl();
+
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
@@ -150,6 +152,10 @@ export class ProductEditComponent {
       district: [],
       territory: []
     }
+  }
+
+  generateLink() {
+
   }
 
   parallelResolver(): Observable<any[]> {
