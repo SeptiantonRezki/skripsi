@@ -8,7 +8,29 @@ import { brConfig } from 'app/classes/breadcrumbs.config';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatStepperModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule, MatTooltipModule, MatToolbarModule, MatDialogModule, MatExpansionPanel, MatExpansionModule, MatMenuModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatAutocompleteModule, MatChipsModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatStepperModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatTabsModule,
+  MatTooltipModule,
+  MatToolbarModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatMenuModule,
+  MatDatepickerModule,
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS,
+  MatAutocompleteModule,
+  MatChipsModule
+} from '@angular/material';
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { PageGuard } from 'app/classes/auth.guard';
@@ -18,6 +40,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { RedeemListComponent } from './redeem-list/redeem-list.component';
 import { PanelMitraVoucherComponent } from './panel-mitra-voucher/panel-mitra-voucher.component';
 import { ImportPanelDialogComponent } from './import-panel-dialog/import-panel-dialog.component';
+import { ImportRedeemDialogComponent } from './redeem-list/import-redeem-dialog/import-redeem-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -109,7 +132,15 @@ export const MY_FORMATS = {
     MatAutocompleteModule,
     MatChipsModule
   ],
-  declarations: [B2BVoucherComponent, B2BVoucherCreateComponent, B2BVoucherEditComponent, RedeemListComponent, PanelMitraVoucherComponent, ImportPanelDialogComponent],
+  declarations: [
+    B2BVoucherComponent,
+    B2BVoucherCreateComponent,
+    B2BVoucherEditComponent,
+    RedeemListComponent,
+    PanelMitraVoucherComponent,
+    ImportPanelDialogComponent,
+    ImportRedeemDialogComponent,
+  ],
   providers: [
     {
       provide: DateAdapter,
@@ -119,7 +150,12 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     PageGuard
   ],
-  entryComponents: [RedeemListComponent, PanelMitraVoucherComponent, ImportPanelDialogComponent],
+  entryComponents: [
+    RedeemListComponent,
+    PanelMitraVoucherComponent,
+    ImportPanelDialogComponent,
+    ImportRedeemDialogComponent,
+  ],
   exports: [RedeemListComponent, PanelMitraVoucherComponent]
 })
 export class B2BVoucherModule { }
