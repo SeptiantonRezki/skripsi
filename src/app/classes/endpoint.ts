@@ -90,7 +90,7 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
-        consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/service/by-referral-code/${context.referral_code}`,
+        consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/by-referral-code/${context.referral_code}`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
         list_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/by-level/${context.level_desc}`,
