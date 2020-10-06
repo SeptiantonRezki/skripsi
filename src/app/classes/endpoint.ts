@@ -163,7 +163,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
         import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
-          }&status=active`
+          }&status=active`,
+        generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
       },
       template_task: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
