@@ -121,6 +121,12 @@
               <mat-option *ngFor="let item of retailClassification" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Chatbot" [formControl]="chatbot">
+              <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -141,7 +147,8 @@
           </ngx-datatable-column> -->
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)"></mat-checkbox>
+            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)">
+            </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
@@ -179,6 +186,11 @@
         <ngx-datatable-column name="AYO SRC Toko Version" prop="version_retailer" summary-template="activeCell"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Chat Bot" prop="is_chat_bot" summary-template="activeCell" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.is_chat_bot === 1 ? 'On' : 'Off'}}
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="AYO SRC Kasir Version" prop="version_cashier" summary-template="activeCell"

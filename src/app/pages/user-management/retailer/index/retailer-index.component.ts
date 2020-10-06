@@ -76,6 +76,13 @@ export class RetailerIndexComponent {
     { name: "KA", value: "KA" }
   ];
 
+  chatbot: FormControl = new FormControl('');
+  listStatusChatBot: any[] = [
+    { name: 'Semua Status', value: '-1' },
+    { name: "OFF", value: 0 },
+    { name: "ON", value: 1 }
+  ]
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
@@ -159,6 +166,10 @@ export class RetailerIndexComponent {
     })
 
     this.retail_classification.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    })
+
+    this.chatbot.valueChanges.subscribe(res => {
       this.getRetailerList();
     })
 
@@ -960,6 +971,7 @@ export class RetailerIndexComponent {
     this.pagination['cashier_version'] = this.version_cashier.value;
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
     this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
+    this.pagination['is_chat_bot'] = this.chatbot.value ? '1' : '0';
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
@@ -969,6 +981,8 @@ export class RetailerIndexComponent {
     }
     if (this.access_cashier.value == '-1') this.pagination['is_cashier'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
+    if (this.chatbot.value === '-1') this.pagination['is_chat_bot'] = null;
+    if (this.chatbot.value === '') this.pagination['is_chat_bot'] = null;
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
@@ -1198,7 +1212,7 @@ export class RetailerIndexComponent {
   }
   onSelectedRetailer(event, retailer) {
     const index = this.selectedRetailer.findIndex(id => id === retailer.id);
-    console.log({index});
+    console.log({ index });
 
     if (index >= 0) {
       this.selectedRetailer.splice(index, 1);

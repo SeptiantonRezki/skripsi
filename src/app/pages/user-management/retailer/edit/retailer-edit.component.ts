@@ -85,6 +85,10 @@ export class RetailerEditComponent {
   seeRekening: boolean = true;
   seeAksesKasir: boolean = true;
   disableSubmit: boolean = false;
+  listStatusChatBot: any[] = [
+    { name: "OFF", value: 0 },
+    { name: "ON", value: 1 }
+  ]
 
   constructor(
     private formBuilder: FormBuilder,
@@ -166,6 +170,7 @@ export class RetailerEditComponent {
       latitude: [""],
       longitude: [""],
       type: [""],
+      is_chat_bot: [0],
       // cashier: ["", Validators.required],
       InternalClassification: ["", Validators.required],
       version_retailer: [""],
@@ -387,6 +392,7 @@ export class RetailerEditComponent {
       salespoint: this.getArea('salespoint'),
       district: this.getArea('district'),
       territory: this.getArea('teritory'),
+      is_chat_bot: this.detailRetailer.is_chat_bot ? 1 : 0,
       // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
@@ -621,6 +627,7 @@ export class RetailerEditComponent {
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
         status_user: this.formRetailer.get('status_user').value,
+        is_chat_bot: this.formRetailer.get('is_chat_bot').value
       };
 
       console.log(body);
@@ -654,6 +661,7 @@ export class RetailerEditComponent {
       this.dialogService.openSnackBar({
         message: "Silakan lengkapi data terlebih dahulu!"
       });
+      commonFormValidator.validateAllFields(this.formRetailer);
     }
   }
 
