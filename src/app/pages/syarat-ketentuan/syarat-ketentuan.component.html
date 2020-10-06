@@ -1,0 +1,30 @@
+
+
+
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+
+    <div fxFlex fxLayoutAlign="center start" class="neo-content h-100-p">
+        <div class="ayo-main-wrapper border-rd-20 neo-box-middle h-100-p">
+          <div fxLayout="row" class="pl-0 p-20" fxLayoutAlign="start center">
+            <button mat-fab (click)="goBack()" color="mat-white" class="mr-20 neo-fab neo-btn-fab">
+                <mat-icon class="clr-primary">arrow_back</mat-icon>
+            </button>
+            <h1 class="neo-title">SYARAT & KETENTUAN</h1>
+          </div>
+          <div class="ayo-content-middle px-20 py-20 h-85-p">
+              
+            <div fxLayout="row wrap" class="pb-20 neo-box-indented h-100-p overflow-y" fxLayoutAlign="start start" fxFlex="1 0 auto">
+              <mat-progress-spinner *ngIf="loading" mode="indeterminate" class="mat-spinner-white mt-20" diameter="50" style="margin:0 auto;top: calc(50% - 50px)"></mat-progress-spinner>
+              <div *ngIf="!loading">
+                <div class="px-16 mat-body-1" fxFlex="100">
+                    <div id="syarat_dan_ketentuan" [innerHTML]="text" class="neo-text mat-body-1">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+  
+  
