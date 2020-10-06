@@ -981,6 +981,7 @@ export class RetailerIndexComponent {
     if (this.access_cashier.value == '-1') this.pagination['is_cashier'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
     if (this.chatbot.value === '-1') this.pagination['is_chat_bot'] = null;
+    if (this.chatbot.value === '') this.pagination['is_chat_bot'] = null;
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
