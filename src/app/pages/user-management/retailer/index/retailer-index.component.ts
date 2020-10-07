@@ -82,13 +82,6 @@ export class RetailerIndexComponent {
     { name: "KA", value: "KA" }
   ];
 
-  chatbot: FormControl = new FormControl('');
-  listStatusChatBot: any[] = [
-    { name: 'Semua Status', value: '-1' },
-    { name: "OFF", value: 0 },
-    { name: "ON", value: 1 }
-  ]
-
   constructor(
     private router: Router,
     private dialogService: DialogService,
