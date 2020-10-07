@@ -183,6 +183,7 @@ export class AudienceEditComponent {
       limit: [""],
       type: ["", Validators.required],
       audience_type: ["scheduler", Validators.required],
+      geotree_checkbox: true,
       // national: [""],
       // division: [""],
       // region: [""],
