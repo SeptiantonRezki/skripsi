@@ -62,10 +62,16 @@ export class RetailerIndexComponent {
   version_cashier: FormControl = new FormControl('');
   status: FormControl = new FormControl('');
   access_cashier: FormControl = new FormControl('');
+  chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
+
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-
+  listStatusChatBot: any[] = [
+    { name: 'Semua Status', value: '-1' },
+    { name: "OFF", value: 0 },
+    { name: "ON", value: 1 }
+  ]
   retailClassification: any[] = [
     { name: "Semua Tipe", value: "all" },
     { name: "SRC", value: "SRC" },

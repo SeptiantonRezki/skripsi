@@ -247,13 +247,10 @@ export const MY_FORMATS = {
     ImportAccessCashierDialogComponent,
     ImportPanelMitraDialogComponent,
     ReasonDialogComponent,
-
     PanelPartnershipIndexComponent,
     PanelPartnershipCreateComponent,
     PanelPartnershipEditComponent,
     ImportAudienceDialogComponent
-
-
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
