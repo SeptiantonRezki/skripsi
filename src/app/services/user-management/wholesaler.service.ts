@@ -35,7 +35,6 @@ export class WholesalerService extends BaseService {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
   }
-
   getParentArea(context?): Observable<any> {
     const url = this.getUrl("general", "parent_by_code", context);
     return this.getApi(url);
@@ -68,5 +67,20 @@ export class WholesalerService extends BaseService {
   getWsRoles(): Observable<any> {
     const url = this.getUrl(this.namespace, "roles");
     return this.getApi(url);
+  }
+
+  exportWholesalerlist(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportWhosaller", context);
+    return this.getBlobApi(url);
+  }
+
+  importExcel(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_preview");
+    return this.multipartPost(url, body);
+  }
+
+  storeImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "store_import");
+    return this.postApi(url, body);
   }
 }

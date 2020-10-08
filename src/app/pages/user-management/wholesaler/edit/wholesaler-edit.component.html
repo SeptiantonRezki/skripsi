@@ -263,8 +263,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-
-          <div fxLayout="row" *ngIf="seeTokoCabang && !detailWholesaler.is_branch">
+          <div fxLayout="row" *ngIf="seeTokoCabang && !detailWholesaler.is_branch" >
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
               Toko Cabang</mat-checkbox>
           </div>
@@ -314,12 +313,11 @@
             <mat-form-field fxFlex="100" class="is-light">
               <input matInput placeholder="Konfirmasi Kata Sandi" type="password" formControlName="confirmation_password">
             </mat-form-field> -->
-
           <!-- <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
               <button mat-stroked-button>Reset Password</button>
             </div> -->
-
-          <div *ngIf="!isDetail && !disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+            
+          <div *ngIf="isDetail && disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>

@@ -42,6 +42,7 @@ export class WholesalerEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
+  isChecked = true;
   listBanks: any[];
   filterBank: FormControl = new FormControl();
   filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -76,6 +77,7 @@ export class WholesalerEditComponent {
     this.formdataErrors = {
       name: {},
       address: {},
+      gsw: {},
       code: {},
       owner: {},
       phone: {},
@@ -139,7 +141,7 @@ export class WholesalerEditComponent {
     this.getWsRoles();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
-
+    
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
@@ -179,6 +181,12 @@ export class WholesalerEditComponent {
 
       this.detailWholesaler = resWS.data;
       // console.log('wsss', this.detailWholesaler);
+
+      if (this.detailWholesaler.gsw === 1) {
+        this.isChecked = true;
+      } else {
+        this.isChecked = false;
+      }
       if (this.detailWholesaler.area_code) {
 
         this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
@@ -739,7 +747,7 @@ export class WholesalerEditComponent {
 
     if (!this.isCan(['ubah', 'profile_toko'])) {
 
-      const fields = ['name', 'address', 'code', 'owner'];
+      const fields = ['name', 'address', 'code', 'owner', 'gsw'];
 
       this.disableFields(fields);
       this.rmValidators(fields);

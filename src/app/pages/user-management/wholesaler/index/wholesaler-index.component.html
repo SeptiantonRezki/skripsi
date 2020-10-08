@@ -18,7 +18,10 @@
       <!-- <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button> -->
-      <button (click)="export()" mat-raised-button type="button" class="is-danger">
+      <button mat-raised-button type="button" class="is-danger" (click)="import()">
+        <mat-icon>arrow_downward</mat-icon> Import XLS
+      </button>
+      <button (click)="exportwholesaler()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_upward</mat-icon> Export XLS
       </button>
     </div>
@@ -87,6 +90,12 @@
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
+          
+          <mat-form-field fxFlex="20" class="is-light form-primary">
+            <mat-select placeholder="GSW" [formControl]="gsw">
+              <mat-option *ngFor="let item of listGsw" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -131,6 +140,12 @@
                 <mat-icon class="s-20">done</mat-icon>
               </p>
             </div>
+          </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="GSW" prop="GSW">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.gsw == '1' ? 'ON' : 'OFF'}}
           </ng-template>
         </ngx-datatable-column>
 
