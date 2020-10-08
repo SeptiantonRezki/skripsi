@@ -1466,8 +1466,13 @@ export class AudienceCreateComponent {
     return this.rows[index];
   }
 
-  getId(row) {
+  getId(row: any) {
+    // return row.id;
     return row.id;
+  // }
+  }
+  getIdFunction() {
+    return this.getId.bind(this);
   }
 
   submit() {

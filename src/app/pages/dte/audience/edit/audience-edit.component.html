@@ -281,7 +281,7 @@
         [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
         (page)="setPage($event)" [sorts]="[{prop: 'name', dir: 'asc'}]" (select)="onSelect($event)"
         [rowIdentity]="getId" (sort)="onSort($event)" fusePerfectScrollbar>
-        <ngx-datatable-column [width]="68" *ngIf="formAudience.get('limit').value !== 'pick-all'" [canAutoResize]="false"
+        <!-- <ngx-datatable-column [width]="68" *ngIf="formAudience.get('limit').value !== 'pick-all'" [canAutoResize]="false"
           [sortable]="true" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true">
           <ng-template ngx-datatable-header-template >
             <mat-checkbox 
@@ -311,6 +311,17 @@
               *ngIf="allRowsSelected" class="mat-checkbox-all"
             >
             </mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column> -->
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+          </ng-template>
+
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
