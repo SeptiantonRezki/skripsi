@@ -464,13 +464,13 @@
           [resizeable]="false"
           [headerCheckboxable]="true"
         >
-          <!-- <ng-template ngx-datatable-header-template >
+          <ng-template ngx-datatable-header-template >
             <mat-checkbox 
               [checked]="allRowsSelected" 
               (change)="selectFn(!allRowsSelected);"
             >
             </mat-checkbox>
-          </ng-template> -->
+          </ng-template> 
 
           <ng-template
             ngx-datatable-cell-template
@@ -485,12 +485,12 @@
               *ngIf="!allRowsSelected"
             >
             </mat-checkbox>
-            <!-- <mat-checkbox 
+            <mat-checkbox 
               [checked]="true" 
               [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
               *ngIf="allRowsSelected" class="mat-checkbox-all"
             >
-            </mat-checkbox> -->
+            </mat-checkbox> 
           </ng-template>
         </ngx-datatable-column> -->
 
