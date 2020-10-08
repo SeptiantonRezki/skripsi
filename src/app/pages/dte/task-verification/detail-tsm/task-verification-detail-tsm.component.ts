@@ -197,6 +197,10 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     });
   }
 
+  loadFormFilter() {
+    this.getListAudience(this.audience_group_id)
+  }
+
   createTaskTemplate(): FormGroup {
     return this.formBuilder.group({
       task_template_id: ['', Validators.required],
