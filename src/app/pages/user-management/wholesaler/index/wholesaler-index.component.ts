@@ -11,6 +11,8 @@ import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
 import { HttpErrorResponse } from "@angular/common/http";
 import { GeotreeService } from "app/services/geotree.service";
+import { MatDialog, MatDialogConfig } from "@angular/material";
+import { ImportListWholesalerComponent } from "../import-list-wholesaler/import-list-wholesaler.component";
 
 @Component({
   selector: "app-wholesaler-index",
@@ -45,11 +47,13 @@ export class WholesalerIndexComponent {
 
   offsetPagination: any;
   area_id_list: any = [];
-
+  
+  gsw: FormControl = new FormControl('');
+  dialogRef: any;
   // 2 geotree property
   endArea: String;
   lastLevel: any;
-  listGsw: any[] = [{ name: 'Semua GSW', value: '' }, { name: 'ON', value: 1 }, { name: 'OFF', value: 0 }];
+  listGsw: any[] = [{ name: 'Semua GSW', value: 'all' },  { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
 
 
   constructor(
@@ -59,6 +63,7 @@ export class WholesalerIndexComponent {
     private fuseSplashScreen: FuseSplashScreenService,
     private wholesalerService: WholesalerService,
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private geotreeService: GeotreeService
   ) {
     this.onLoad = true;
@@ -145,6 +150,12 @@ export class WholesalerIndexComponent {
       console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
+      }
+    });
+    
+    this.gsw.valueChanges.subscribe(res =>{
+      if (res) {
+        this.getWholesalerList();
       }
     });
   }
@@ -758,15 +769,15 @@ export class WholesalerIndexComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-
-    this.loadingIndicator = true;
+    this.pagination['gsw'] = this.gsw.value;
+    if (this.gsw.value === 'all') this.pagination['gsw'] = null;
     this.wholesalerService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
-
+        console.log(res);
         // this.fuseSplashScreen.hide();
       },
       err => {
@@ -900,6 +911,22 @@ export class WholesalerIndexComponent {
     }
   }
 
+  async exportwholesaler() {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.wholesalerService.exportWholesalerlist().toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
   downLoadFile(data: any, type: string, fileName: string) {
     // It is necessary to create a new blob object with mime-type explicitly set
     // otherwise only Chrome works like it should
@@ -928,7 +955,26 @@ export class WholesalerIndexComponent {
       link.remove();
     }, 100);
   }
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { password: 'P@ssw0rd' };
+
+    this.dialogRef = this.dialog.open(ImportListWholesalerComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.selected = response;
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          // this.getRetailerList();
+        }
+      }
+    });
+  }
   handleError(error) {
     console.log('Here')
     console.log(error)
