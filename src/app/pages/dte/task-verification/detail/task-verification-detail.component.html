@@ -161,6 +161,29 @@
         </form>
 
         <form [formGroup]="formFilter" autoComplete="off">
+
+
+          <div
+            fxLayout="row wrap"
+            fxLayoutAlign="end stretch"
+            fxLayout.lt-md="column"
+            class="p-16 px-24"
+            fxLayoutGap="20px"
+            fxLayoutGap.lt-md="0px"
+            >
+            <button
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="loadFormFilter()"
+              fxFlex="20"
+            >
+              Load Data
+            </button>
+          </div>
+
+
+
           <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
