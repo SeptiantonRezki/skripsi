@@ -33,7 +33,7 @@
       <!-- <small>Total Row Valid : {{rows ? validData : '-'}}</small> -->
     </div>
     <div class="responsive">
-      <table class="table">
+      <table class="table" *ngIf="dialogData.type != 'push_notification'">
         <thead>
           <tr>
             <th nowrap>ID</th>
@@ -59,6 +59,49 @@
             </td>
             <td nowrap>
               {{ item.type }}
+            </td>
+          </tr>
+          <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="10">
+              Tidak ada file yang dipilih
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" *ngIf="dialogData.type === 'push_notification'">
+        <thead>
+          <tr>
+            <th nowrap>ID</th>
+            <th nowrap>Name</th>
+            <th nowrap>Kode</th>
+            <th nowrap>Owner</th>
+            <th nowrap>Tipe</th>
+            <th nowrap>Valid</th>
+            <th nowrap>Alasan Tidak Valid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.is_valid ? '#fff' : '#efaea8'}">
+            <td nowrap>
+              {{ item.id }}
+            </td>
+            <td nowrap>
+              {{ item.name }}
+            </td>
+            <td nowrap>
+              {{ item.code }}
+            </td>
+            <td nowrap>
+              {{ item.owner }}
+            </td>
+            <td nowrap>
+              {{ item.type }}
+            </td>
+            <td nowrap>
+              {{ item.is_valid ? 'VALID' : 'TIDAK VALID' }}
+            </td>
+            <td nowrap>
+              {{ item.reason }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">
