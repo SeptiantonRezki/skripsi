@@ -708,8 +708,8 @@ export class Endpoint {
 
         //partial
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
-        getAudienceRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences`,
-        exportAudience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/export`,
+        getAudienceRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences?is_voucher=1`,
+        exportAudienceRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/export`,
         importAudienceRetailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/import`,
         getAudienceCustomer: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience`,
         exportAudienceCustomer: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/export`,

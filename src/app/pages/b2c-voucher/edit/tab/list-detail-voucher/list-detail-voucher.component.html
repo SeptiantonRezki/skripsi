@@ -46,6 +46,7 @@
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
+
         <mat-form-field class="is-light form-primary">
           <mat-select
             placeholder="Via"
@@ -81,7 +82,6 @@
         </div>
       </div>
     </form>
-
     <div>
       <ngx-datatable
         class="material"
@@ -152,6 +152,7 @@
         <ngx-datatable-column
           name="Detail Transaksi"
           [sortable]="false"
+          [frozenRight]="true"
         >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">

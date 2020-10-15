@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -21,6 +21,8 @@ export class ListDetailVoucherComponent implements OnInit {
   detailVoucher: any;
 
   formFilter: FormGroup;
+  formFilterAdditional: FormGroup;
+  via: FormControl = new FormControl('');
 
   areaType: any[] = [];
   areaFromLogin: any;
@@ -31,8 +33,15 @@ export class ListDetailVoucherComponent implements OnInit {
   endArea: String;
 
   keyUp = new Subject<string>();
-  viaList: any[] = [{ name: 'Retailer', value: 'retailer' }, { name: 'Kasir', value: 'cashier' }];
-  statusList: any[] = [{ name: 'Semua', value: '' }, { name: 'Belum di redeem', value: '0' }, { name: 'Sudah di redeem', value: '1' }];
+  viaList: any[] = [
+    { name: 'Semua', value: 'all' },
+    { name: 'Kasir', value: 'cashier' }
+  ];
+  statusList: any[] = [
+    { name: 'Semua', value: 'all' },
+    { name: 'Belum di redeem', value: '0' },
+    { name: 'Sudah di redeem', value: '1' }
+  ];
 
   loadingIndicator: boolean;
   reorderable: boolean;
@@ -40,6 +49,14 @@ export class ListDetailVoucherComponent implements OnInit {
   pagination: Page = new Page();
   offsetPagination: any;
   isSort: boolean;
+
+  _data: any = null;
+  @Input()
+  set data(data: any) {
+    this.detailVoucher = data;
+    // this._data = data;
+  }
+  get data(): any { return this._data; }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -70,8 +87,6 @@ export class ListDetailVoucherComponent implements OnInit {
     this.isSort = false;
     this.loadingIndicator = true;
     this.reorderable = true;
-    this.viaList = [];
-    this.statusList = [];
     this.rows = [];
 
     this.keyUp.debounceTime(1000)
@@ -95,6 +110,11 @@ export class ListDetailVoucherComponent implements OnInit {
       status: ['']
     });
 
+    this.formFilterAdditional = this.formBuilder.group({
+      via: [''],
+      status: ['']
+    });
+
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     this.initAreaV2();
     this.getListDetailVoucher();
@@ -104,21 +124,27 @@ export class ListDetailVoucherComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
-    this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
-      if (res) {
-        // this.getAudienceAreaV2('salespoint', res);
+    this.formFilter.get('via').valueChanges.subscribe(res => {
+      if (res !== 'all') {
+        this.pagination['from'] = res;
+      } else {
+        delete this.pagination['from'];
+      }
+    });
+    this.formFilter.get('status').valueChanges.subscribe(res => {
+      if (res !== 'all') {
+        this.pagination['redeem'] = res;
+      } else {
+        delete this.pagination['redeem'];
       }
     });
   }
@@ -144,7 +170,7 @@ export class ListDetailVoucherComponent implements OnInit {
         const levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
         if (lastDiffLevelIndex > levelIndex - 2) {
           if (!this.list[level.type]) { this.list[level.type] = []; }
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || 
+          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value ||
           this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
             if (sameArea.level_desc === level.type) {
@@ -154,7 +180,6 @@ export class ListDetailVoucherComponent implements OnInit {
             }
 
             if (areasDisabled.indexOf(level.type) > -1) { this.formFilter.get(this.parseArea(level.type)).disable(); }
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
           const isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -163,7 +188,7 @@ export class ListDetailVoucherComponent implements OnInit {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) { 
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) {
             this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
           }
 
@@ -190,7 +215,6 @@ export class ListDetailVoucherComponent implements OnInit {
   }
 
   getListDetailVoucher(string?: any) {
-    console.log('Search', string);
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
@@ -201,8 +225,7 @@ export class ListDetailVoucherComponent implements OnInit {
       const area_id = areaSelected[areaSelected.length - 1].value;
       const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.pagination.area = area_id;
-
-      // console.log('area_selected on ff list', areaSelected, this.list);
+      
       if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
         this.pagination['after_level'] = true;
       } else {
@@ -243,16 +266,13 @@ export class ListDetailVoucherComponent implements OnInit {
           } else { is_area_2 = true; }
 
           if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-            // console.log('its hitted [levelCovered > -1]');
             if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]];
           } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
           } else {
-            // console.log('its hitted [other level]');
             this.pagination['after_level'] = true;
             this.pagination['last_self_area'] = newLastSelfArea;
           }
         } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-          // console.log('its hitted [other level other]');
           this.pagination['after_level'] = true;
           if (newLastSelfArea.length > 0) {
             this.pagination['last_self_area'] = newLastSelfArea;
@@ -267,8 +287,6 @@ export class ListDetailVoucherComponent implements OnInit {
           this.rows = res.data.data;
           this.loadingIndicator = false;
           this.isSort = false;
-          this.pagination.sort = 'name';
-          this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
           this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
@@ -285,6 +303,7 @@ export class ListDetailVoucherComponent implements OnInit {
       });
     } catch (ex) {
       console.log('ex', ex);
+      this.dataService.showLoading(false);
     }
   }
 
@@ -316,15 +335,14 @@ export class ListDetailVoucherComponent implements OnInit {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
+      if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         });
         if (areaSelected[0].value.length === 0) {
           const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => 
+          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
           ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -341,7 +359,7 @@ export class ListDetailVoucherComponent implements OnInit {
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
+        if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           });
@@ -349,7 +367,6 @@ export class ListDetailVoucherComponent implements OnInit {
             const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
             ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -403,7 +420,6 @@ export class ListDetailVoucherComponent implements OnInit {
         // this.list['salespoint'] = [];
         // this.list['district'] = [];
         // this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         if (id && id.length !== 0) {
@@ -412,7 +428,7 @@ export class ListDetailVoucherComponent implements OnInit {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => 
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
                 expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
@@ -436,10 +452,9 @@ export class ListDetailVoucherComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => 
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
                 expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
@@ -462,10 +477,9 @@ export class ListDetailVoucherComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => 
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
                 expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
@@ -488,7 +502,7 @@ export class ListDetailVoucherComponent implements OnInit {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => 
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
                 expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
@@ -509,7 +523,7 @@ export class ListDetailVoucherComponent implements OnInit {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => 
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
                 expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
@@ -562,21 +576,15 @@ export class ListDetailVoucherComponent implements OnInit {
     this.dataService.showLoading(true);
     try {
       const response = await this.b2cVoucherService.exportListDetailVoucher({ voucher_id: this.detailVoucher.id }, {
-        from: this.formFilter.get('via').value,
-        redeem: this.formFilter.get('status').value === '' ? null : this.formFilter.get('status').value
+        from: this.formFilter.get('via').value === 'all' ? null : this.formFilter.get('via').value,
+        redeem: this.formFilter.get('status').value === 'all' ? null : this.formFilter.get('status').value
       }).toPromise();
-      console.log('he', response.headers);
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       `List_Detail_Voucher_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      // this.exportAccessCashier = false;
       this.dataService.showLoading(false);
     } catch (error) {
-      // this.exportAccessCashier = false;
       this.handleError(error);
       this.dataService.showLoading(false);
-      // throw error;
     }
   }
 

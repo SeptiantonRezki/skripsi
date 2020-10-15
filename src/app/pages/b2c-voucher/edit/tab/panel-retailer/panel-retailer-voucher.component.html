@@ -65,7 +65,7 @@
       </div>
     </form>
 
-    <form [formGroup]="formFilterRetailer">
+    <!-- <form [formGroup]="formFilterRetailer">
       <div
         fxLayout="row wrap"
         fxLayoutAlign="space-between stretch"
@@ -75,7 +75,6 @@
         fxLayoutGap.lt-md="0px"
         *ngIf="isTargetAudience.value === true"
       >
-        <!--[R]-->
         <mat-form-field fxFlex="31%" class="is-light form-primary">
           <mat-select
             placeholder="Retail Classification"
@@ -115,9 +114,8 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <!--[R]-->
       </div>
-    </form>
+    </form> -->
 
     <div *ngIf="isTargetAudience.value === true">
       <div
@@ -146,35 +144,7 @@
         </button>
       </div>
 
-      <!-- <ngx-datatable
-        class="material"
-        [rows]="rows"
-        [columnMode]="'force'"
-        [headerHeight]="48"
-        [footerHeight]="56"
-        [rowHeight]="'auto'"
-        [reorderable]="reorderable"
-        [selected]="selected"
-        [selectionType]="formAudience.get('limit').value !== 'pick-all' ? 'checkbox' : '' "
-        [count]="pagination.total"
-        [limit]="pagination.per_page"
-        [externalPaging]="true"
-        [selectAllRowsOnPage]="false"
-        [externalSorting]="true"
-        (page)="setPage($event)"
-        [sorts]="[{ prop: 'name', dir: 'asc' }]"
-        (select)="onSelect($event)"
-        [rowIdentity]="getId"
-        (sort)="onSort($event)"
-        [loadingIndicator]="loadingIndicator"
-        fusePerfectScrollbar
-      > -->
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-      [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-      [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-      [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" 
-      [selected]="selected" [selectAllRowsOnPage]="false" [selectionType]="'checkbox'" (select)="onSelect($event)" [rowIdentity]="getId">
-      <!-- <ngx-datatable
+      <ngx-datatable
         class="material"
         [rows]="rows"
         [loadingIndicator]="loadingIndicator"
@@ -196,8 +166,8 @@
         [rowIdentity]="getId"
         (sort)="onSort($event)"
         fusePerfectScrollbar
-      > -->
-        <!-- <ngx-datatable-column
+      >
+        <ngx-datatable-column
           [width]="68"
           [canAutoResize]="false"
           [sortable]="true"
@@ -220,7 +190,7 @@
             >
             </mat-checkbox>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
         <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
         <ngx-datatable-column
           name="No Ponsel"
