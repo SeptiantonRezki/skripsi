@@ -124,6 +124,11 @@ const appRoutes: Routes = [
     loadChildren: "./pages/syarat-ketentuan/syarat-ketentuan.module#SyaratKetentuanModule",
     canActivate: [AuthGuard]
   },
+  {
+    path: "b2c-voucher",
+    loadChildren: "./pages/b2c-voucher/b2c-voucher.module#B2CVoucherModule",
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: "admin",
   //   loadChildren: "./pages/admin/admin.module#AdminModule",
