@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import * as _ from 'underscore';
 import { Page } from 'app/classes/laravel-pagination';
@@ -51,9 +51,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   lastLevel: any;
   endArea: String;
   dialogRef: any;
-  totalData: number = 0;
+  totalData: number;
   wholesalerIds: any = [];
-  isSort: boolean = false;
+  isSort: boolean;
   detailVoucher: any;
   isDetail: Boolean;
   indexDelete: any;
@@ -71,6 +71,18 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral dan Verified', value: 'Referral dan Verified' },
     { name: 'Referral atau Verified', value: 'Referral atau Verified' }
   ];
+
+  _data: any = null;
+  @Input()
+  set data(data: any) {
+    this.detailVoucher = data;
+    // this._data = data;
+  }
+  get data(): any { return this._data; }
+
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output()
+  onChangeVoucherAutomation: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -95,6 +107,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.selected = [];
     this.allRowsSelected = false;
     this.isSelected = false;
+    this.totalData = 0;
+    this.isSort = false;
+    this.onChangeVoucherAutomation = new EventEmitter<any>();
 
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -128,10 +143,11 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   ngOnInit() {
     this.formConsumerGroup = this.formBuilder.group({
-      is_smoker: ['both'],
-      gender: ['both'],
-      age_consumer_from: [''],
-      age_consumer_to: [''],
+      allocationVoucher: [0],
+      is_smoker: ['both', Validators.required],
+      gender: ['both', Validators.required],
+      age_consumer_from: ['', Validators.required],
+      age_consumer_to: ['', Validators.required],
       isTargetAudience: [false],
       areas: this.formBuilder.array([]),
       va: [''],
@@ -169,31 +185,26 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -202,21 +213,26 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.addArea();
   }
 
+  isChangeVoucherAutomation(event: any) {
+    this.onChangeVoucherAutomation.emit({ checked: event.checked });
+  }
+
   isChangeTargetAudience(event: any) {
-    if (event.checked) { this.getListConsumer(); }
+    if (event.checked) {
+      this.initAreaV2();
+      // this.getListConsumer();
+    }
   }
 
   onSelect({ selected }) {
-    // console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
-    if (!allRowsSelected) this.selected = [];
-    else this.selected.length = this.totalData;
+    if (!allRowsSelected) { this.selected = [];
+    } else { this.selected.length = this.totalData; }
   }
 
   getId(row) {
@@ -227,25 +243,23 @@ export class PanelConsumerVoucherComponent implements OnInit {
     let item: any;
     const fd = new FormData();
     const lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
-    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+    ({ key, value })).filter(item_ => item_.key === this.parseArea(lastLevel));
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
       if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
-        })
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        });
         if (areaSelected[0].value.length === 0) {
           const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+          ({ key, value })).filter(item_ => item_.key === this.parseArea(beforeLevel));
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
-            })
+            });
           } else {
             fd.append('area_id[]', newAreaSelected[0].value);
           }
@@ -253,24 +267,23 @@ export class PanelConsumerVoucherComponent implements OnInit {
       }
     } else {
       const beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
+      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+      ({ key, value })).filter(item_ => item_.key === this.parseArea(beforeLastLevel));
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
         if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
-          })
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          });
           if (areaSelected[0].value.length === 0) {
             const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-            const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+            ({ key, value })).filter(item_ => item_.key === this.parseArea(beforeLevel));
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
-              })
+              });
             } else {
               fd.append('area_id[]', newAreaSelected[0].value);
             }
@@ -285,30 +298,29 @@ export class PanelConsumerVoucherComponent implements OnInit {
     let expectedArea = [];
     if (!this.formFilter.get(this.parseArea(selection)).disabled) {
       thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) thisAreaOnSet = [
-        ...thisAreaOnSet,
-        ...this.areaFromLogin[1]
-      ];
+      if (this.areaFromLogin[1]) {
+        thisAreaOnSet = [
+          ...thisAreaOnSet,
+          ...this.areaFromLogin[1]
+        ];
+    }
 
       thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
       if (id && id.length > 1) {
         areaNumber = 1;
       }
 
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
-      // console.log('on set', thisAreaOnSet, selection, id);
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') {
+        expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      }
     }
 
 
     switch (this.parseArea(selection)) {
       case 'zone':
-        // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
-          // fd = null
+          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt =>
+            expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
         });
 
         this.formFilter.get('region').setValue('');
@@ -321,23 +333,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(() => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
+                expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['region'] = [];
@@ -353,21 +361,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.list['territory'] = [];
         break;
       case 'area':
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
+          item = this.list['region'].length > 0 ? this.list['region'].filter(() => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
+                expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['area'] = [];
@@ -382,21 +386,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.list['territory'] = [];
         break;
       case 'salespoint':
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
+          item = this.list['area'].length > 0 ? this.list['area'].filter(() => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
+                expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['salespoint'] = [];
@@ -409,19 +409,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.list['territory'] = [];
         break;
       case 'district':
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(() => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
+                expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['district'] = [];
@@ -432,21 +430,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.list['territory'] = [];
         break;
       case 'territory':
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
+          item = this.list['district'].length > 0 ? this.list['district'].filter(() => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
-              // fd = null
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
+                expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['territory'] = [];
@@ -474,18 +468,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   getListConsumer(string?: any) {
-    console.log('Search', string);
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
-      if (string) { this.pagination.search = string; }
-      else { delete this.pagination.search; }
-      const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      if (string) { this.pagination.search = string;
+      } else { delete this.pagination.search; }
+      const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) =>
+      item.value !== null && item.value !== '' && item.value.length !== 0);
       const area_id = areaSelected[areaSelected.length - 1].value;
       const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.pagination.area = area_id;
 
-      // console.log('area_selected on ff list', areaSelected, this.list);
       if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
         this.pagination['after_level'] = true;
       } else {
@@ -514,30 +507,25 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
         const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
 
-        if (this.pagination['after_level']) delete this.pagination['after_level'];
+        if (this.pagination['after_level']) { delete this.pagination['after_level']; }
         this.pagination['self_area'] = self_area;
         this.pagination['last_self_area'] = last_self_area;
         let levelCovered = [];
-        if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+        if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
         if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
           const oneAreaSelected = lastSelectedArea.value[0];
           const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-          if (findOnFirstArea) is_area_2 = false;
-          else is_area_2 = true;
+          if (findOnFirstArea) { is_area_2 = false;
+          } else { is_area_2 = true; }
 
-          console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
           if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-            // console.log('its hitted [levelCovered > -1]');
-            if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-            else this.pagination['last_self_area'] = [last_self_area[0]];
+            if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]];
+            } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
           } else {
-            // console.log('its hitted [other level]');
             this.pagination['after_level'] = true;
             this.pagination['last_self_area'] = newLastSelfArea;
           }
         } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-          // console.log('its hitted [other level other]');
           this.pagination['after_level'] = true;
           if (newLastSelfArea.length > 0) {
             this.pagination['last_self_area'] = newLastSelfArea;
@@ -547,30 +535,21 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.loadingIndicator = true;
 
       this.b2cVoucherService.getAudienceCustomer(this.pagination).subscribe(res => {
-        // if (res.status === 'success') {
           Page.renderPagination(this.pagination, res);
           this.totalData = res.total;
           this.rows = res.data;
           this.loadingIndicator = false;
           this.isSort = false;
-          this.pagination.sort = 'name';
-          this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
-        // } else {
-        //   this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
-        //   Page.renderPagination(this.pagination, res.data);
-        //   this.rows = [];
-        //   this.loadingIndicator = false;
-        //   this.dataService.showLoading(false);
-        // }
       }, err => {
         console.warn(err);
         this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
-      })
+      });
     } catch (ex) {
-      console.log('ex', ex)
+      console.log('ex', ex);
+      this.dataService.showLoading(false);
     }
   }
 
@@ -608,20 +587,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
     const indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     const indexAreaSelected = areaList.indexOf(area.key);
     const rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
-    let newLastSelfArea = []
-    // console.log('[checkAreaLocation:area]', area);
-    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
-    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
+    let newLastSelfArea = [];
     if (area.value !== 1) {
-      // console.log('[checkAreaLocation:list]', this.list[area.key]);
-      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
-      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         const areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
-        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
-        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
-        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
+        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar =>
+          areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
       }
     }
 
@@ -653,30 +624,27 @@ export class PanelConsumerVoucherComponent implements OnInit {
         const level_desc = level.level_desc;
         const levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
         if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
+          if (!this.list[level.type]) { this.list[level.type] = []; }
+          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value ||
+          this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
 
               this.formFilter.get(this.parseArea(level.type)).disable();
             }
 
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            if (areasDisabled.indexOf(level.type) > -1) { this.formFilter.get(this.parseArea(level.type)).disable(); }
           }
-
           const isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
           level['area_type'] = `area_${index + 1}`;
           this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) {
+            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          }
 
           if (i === area.length - 1) {
             this.endArea = this.parseArea(level.type);
@@ -689,14 +657,13 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   getMitraSelected() {
     this.b2bVoucherService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
           id: slc.business_id
         }))
       });
-    })
+    });
   }
 
   onSave() {
@@ -712,7 +679,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     };
     this.dataService.showLoading(true);
 
-    this.b2bVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
+    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
@@ -730,25 +697,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
     const body = this.selected.map(aud => aud.id);
     try {
       const response = await this.b2cVoucherService.exportAudienceCustomer({ selected: body, audience: 'customer' }).toPromise();
-      console.log('he', response.headers);
-      // this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      // `B2C_Panel_retailer_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      // this.exportAccessCashier = false;
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      `B2CVoucher_Panel_Customer_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     } catch (error) {
-      // this.exportAccessCashier = false;
       this.handleError(error);
       this.dataService.showLoading(false);
-      // throw error;
     }
   }
 
   downLoadFile(data: any, type: string, fileName: string) {
     // It is necessary to create a new blob object with mime-type explicitly set
     // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
+    const newBlob = new Blob([data], { type: type });
 
     // IE doesn't allow using a blob object directly as link href
     // instead it is necessary to use msSaveOrOpenBlob
@@ -757,11 +718,11 @@ export class PanelConsumerVoucherComponent implements OnInit {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 
-    var link = document.createElement('a');
+    const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
     // this is necessary as link.click() does not work on the latest firefox
@@ -775,8 +736,8 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
-    console.log(error)
+    console.log('Here');
+    console.log(error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
@@ -806,8 +767,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
   }
 
-  // ==================================================================================================================================================================================
-
   createArea(): FormGroup {
     return this.formBuilder.group({
       national: [1, Validators.required],
@@ -824,7 +783,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       list_salespoint: this.formBuilder.array([]),
       list_district: this.formBuilder.array([]),
       list_territory: this.formBuilder.array([])
-    })
+    });
   }
 
   addArea() {
@@ -852,7 +811,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       switch (item.type.trim()) {
         case 'national':
           wilayah.at(index).get('national').disable();
-          break
+          break;
         case 'division':
           wilayah.at(index).get('zone').disable();
           break;
@@ -872,16 +831,15 @@ export class PanelConsumerVoucherComponent implements OnInit {
           wilayah.at(index).get('territory').disable();
           break;
       }
-    })
+    });
   }
 
   async generateList(selection: any, id: any, index: number, type: any) {
     let item: any;
     const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
     switch (selection) {
-      case 'zone':
+      case 'zone': {
         const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-        console.log('zone response', response);
         const list = wilayah.at(index).get(`list_${selection}`) as FormArray;
 
         while (list.length > 0) {
@@ -905,8 +863,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
           this.clearFormArray(index, 'list_district');
           this.clearFormArray(index, 'list_territory');
         }
+      }
         break;
-      case 'region':
+      case 'region': {
         item = wilayah.at(index).get('list_zone').value.length > 0 ?
         wilayah.at(index).get('list_zone').value.filter((item_: any) => item_.id === id)[0] : {};
         if (item.name !== 'Semua Zone') {
@@ -935,17 +894,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
           this.clearFormArray(index, 'list_district');
           this.clearFormArray(index, 'list_territory');
         }
+      }
         break;
-      case 'area':
-        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
+      case 'area': {
+        item = wilayah.at(index).get('list_region').value.length > 0 ?
+        wilayah.at(index).get('list_region').value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Regional') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
           const list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Area' : item_.name }));
           });
         }
 
@@ -962,17 +923,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
           this.clearFormArray(index, 'list_district');
           this.clearFormArray(index, 'list_territory');
         }
+      }
         break;
-      case 'salespoint':
-        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+      case 'salespoint': {
+        item = wilayah.at(index).get('list_area').value.length > 0 ?
+        wilayah.at(index).get('list_area').value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Area') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
           const list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Salespoint' : item_.name }));
           });
         }
 
@@ -987,17 +950,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
           this.clearFormArray(index, 'list_district');
           this.clearFormArray(index, 'list_territory');
         }
+      }
         break;
-      case 'district':
-        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
+      case 'district': {
+        item = wilayah.at(index).get('list_salespoint').value.length > 0 ?
+        wilayah.at(index).get('list_salespoint').value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Salespoint') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
           const list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua District' : item_.name }));
           });
         }
 
@@ -1010,17 +975,19 @@ export class PanelConsumerVoucherComponent implements OnInit {
           }
           this.clearFormArray(index, 'list_territory');
         }
+      }
         break;
-      case 'territory':
-        item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
+      case 'territory': {
+        item = wilayah.at(index).get('list_district').value.length > 0 ?
+        wilayah.at(index).get('list_district').value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua District') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
           const list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Territory' : item_.name }));
           });
         }
 
@@ -1031,6 +998,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
             this.clearFormArray(index, 'list_territory');
           }
         }
+      }
         break;
 
       default:

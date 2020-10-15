@@ -32,7 +32,7 @@ export class PenukaranVoucherComponent implements OnInit {
   @Input()
   set data(data: any) {
     this.detailVoucher = data;
-    this._data = data;
+    // this._data = data;
   }
   get data(): any { return this._data; }
 
@@ -71,7 +71,6 @@ export class PenukaranVoucherComponent implements OnInit {
 
   getNominal(transferBankValue: any, saldoPojokBayarValue: any) {
     this.b2cVoucherService.getNominal().subscribe((res) => {
-      console.log('res', res)
       if (res.status === 'success') {
         this.nominalList = res.data;
         this.nominalList.forEach((item) => {
@@ -110,7 +109,6 @@ export class PenukaranVoucherComponent implements OnInit {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
       this.isVoucherAutomation.setValue(this.detailVoucher.is_reimburse === 1 ? true : false);
-      console.log('this.detailVoucher', this.detailVoucher);
         this.formPenukaranVoucher.get('startDate').setValue(this.detailVoucher.reimburse_start_date);
         this.formPenukaranVoucher.get('endDate').setValue(this.detailVoucher.reimburse_end_date);
         this.formPenukaranVoucher.get('isVoucherB2B').setValue(this.detailVoucher.reimburse_is_b2b_voucher === 1 ? true : false);
@@ -172,11 +170,10 @@ export class PenukaranVoucherComponent implements OnInit {
           'pojok_bayar': saldoPojokBayarValue.length > 0 ? saldoPojokBayarValue : []
         }
         this.b2cVoucherService.updatePenukaranVoucher({ voucher_id: this.detailVoucher.id }, body).subscribe((res) => {
-          console.log('res', res);
           this.router.navigate(["b2c-voucher"]);
           this.dataService.showLoading(false);
         }, (err) => {
-          console.log('err updatePenukaranVoucher', err);
+          console.warn('err', err);
           this.dataService.showLoading(false);
         });
       } else {
@@ -184,7 +181,7 @@ export class PenukaranVoucherComponent implements OnInit {
         commonFormValidator.validateAllFields(this.formPenukaranVoucher);
       }
     } catch (ex) {
-      console.log('ex onUpdate', ex);
+      console.warn('ex', ex);
       this.dataService.showLoading(false);
     }
   }

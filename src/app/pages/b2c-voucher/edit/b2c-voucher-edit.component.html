@@ -11,20 +11,20 @@
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetailVoucher" (keydown.enter)="$event.preventDefault();">
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8 pt-24 ml-24">
-                <mat-form-field fxFlex="50" class="is-light">
+                <mat-form-field fxFlex="50" class="is-light pb-12">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
                   <mat-error *ngIf="formDetailVoucher.controls['name'].hasError('required') && formDetailVoucher.controls['name'].touched ">
                     Nama Voucher harus diisi.
                   </mat-error>
                 </mat-form-field>
                 <div fxLayout="row" fxFlex="50" fxLayoutGap="20px">
-                  <mat-form-field class="is-light" fxFlex="45%">
+                  <mat-form-field class="is-light pb-12" fxFlex="45%">
                     <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucherValue">
                     <mat-error *ngIf="formDetailVoucher.controls['voucherValue'].hasError('required') && formDetailVoucher.controls['voucherValue'].hasError('min') && formDetailVoucher.controls['voucherValue'].touched ">
                       Nilai Voucher harus diisi.
                     </mat-error>
                   </mat-form-field>
-                  <mat-form-field class="is-light" fxFlex="45%">
+                  <mat-form-field class="is-light pb-12" fxFlex="45%">
                     <input matInput type="number" placeholder="Jumlah Voucher per Consumer" formControlName="jumlahVoucherPerConsumer">
                     <mat-error *ngIf="formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('required') && formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('min') &&formDetailVoucher.controls['jumlahVoucherPerConsumer'].touched ">
                       Jumlah Voucher per Consumer harus diisi.
@@ -32,7 +32,7 @@
                   </mat-form-field>
                 </div>
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
                     <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
                       placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -40,9 +40,12 @@
                     <mat-error *ngIf="formDetailVoucher.controls['startDate'].hasError('required') && formDetailVoucher.controls['startDate'].touched">
                       Tanggal Awal Program harus diisi.
                     </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['startDate'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
                     <input matInput (focus)="endDate.open()" [min]="formDetailVoucher.controls['startDate'].value" [matDatepicker]="endDate"
                       placeholder="Tanggal Akhir Program" formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
@@ -50,10 +53,13 @@
                     <mat-error *ngIf="formDetailVoucher.controls['endDate'].hasError('required') && formDetailVoucher.controls['endDate'].touched">
                       Tanggal Akhir Program harus diisi.
                     </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['endDate'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
                     <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
                       placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
@@ -61,9 +67,12 @@
                     <mat-error *ngIf="formDetailVoucher.controls['available_at'].hasError('required') && formDetailVoucher.controls['available_at'].touched">
                       Tanggal Awal Pemakaian Voucher harus diisi.
                     </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['available_at'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field fxFlex="45%" class="is-light form-primary">
+                  <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
                     <input matInput (focus)="voucherExpiry.open()" [min]="formDetailVoucher.controls['available_at'].value"
                       [matDatepicker]="voucherExpiry" placeholder="Tanggal Kedaluwarsa Voucher"
                       formControlName="expired_at">
@@ -71,6 +80,9 @@
                     <mat-datepicker #voucherExpiry></mat-datepicker>
                     <mat-error *ngIf="formDetailVoucher.controls['expired_at'].hasError('required') && formDetailVoucher.controls['expired_at'].touched">
                       Tanggal Kedaluwarsa Voucher harus diisi.
+                    </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['expired_at'].invalid">
+                      Tanggal Tidak Valid
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -136,10 +148,10 @@
           </div>
         </mat-tab>
         <mat-tab label="Panel Retailer">
-          <app-panel-retailer-voucher></app-panel-retailer-voucher>
+          <app-panel-retailer-voucher [data]="detailVoucher" [isLimitVoucher]="isLimitVoucher"></app-panel-retailer-voucher>
         </mat-tab>
         <mat-tab label="Panel Consumer">
-          <app-panel-consumer-voucher ></app-panel-consumer-voucher>
+          <app-panel-consumer-voucher [data]="detailVoucher" (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)"></app-panel-consumer-voucher>
         </mat-tab>
         <mat-tab label="Penukaran Voucher">
           <app-penukaran-voucher [data]="detailVoucher"></app-penukaran-voucher>
@@ -148,7 +160,7 @@
           <app-design-voucher [data]="detailVoucher"></app-design-voucher>
         </mat-tab>
         <mat-tab label="List Detail Voucher">
-          <app-list-detail-voucher></app-list-detail-voucher>
+          <app-list-detail-voucher [data]="detailVoucher"></app-list-detail-voucher>
         </mat-tab>
       </mat-tab-group>
 
