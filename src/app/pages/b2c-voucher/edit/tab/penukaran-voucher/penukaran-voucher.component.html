@@ -9,7 +9,7 @@
 
   <div *ngIf="isVoucherAutomation.value">
     <form autocomplete="off" [formGroup]="formPenukaranVoucher" class="pb-24 px-12" >
-      <div fxFlex="50" fxLayout="column" class="pb-8">
+      <div fxFlex="50" fxLayout="column" class="pb-8 pb-12">
         <!-- <mat-form-field fxFlex="50" class="is-light"> -->
           <!-- <input matInput type="text" placeholder="Coin per Voucher" formControlName="coinPerVoucher" readonly> -->
         <!-- </mat-form-field> -->
@@ -25,7 +25,7 @@
       </div>
 
       <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45%" class="is-light form-primary">
+        <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
           <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
             placeholder="Tanggal Awal Penukaran Voucher" formControlName="startDate" [min]="minDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -33,15 +33,21 @@
           <mat-error *ngIf="formPenukaranVoucher.controls['startDate'].hasError('required') && formPenukaranVoucher.controls['startDate'].touched">
             Tanggal Awal Program harus diisi.
           </mat-error>
+          <mat-error *ngIf="formPenukaranVoucher.controls['startDate'].invalid">
+            Tanggal Tidak Valid
+          </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex="45%" class="is-light form-primary">
+        <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
           <input matInput (focus)="endDate.open()" [min]="formPenukaranVoucher.controls['startDate'].value" [matDatepicker]="endDate"
             placeholder="Tanggal Berakhir Penukaran Voucher" formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
           <mat-error *ngIf="formPenukaranVoucher.controls['endDate'].hasError('required') && formPenukaranVoucher.controls['endDate'].touched">
             Tanggal Akhir Program harus diisi.
+          </mat-error>
+          <mat-error *ngIf="formPenukaranVoucher.controls['endDate'].invalid">
+            Tanggal Tidak Valid
           </mat-error>
         </mat-form-field>
       </div>

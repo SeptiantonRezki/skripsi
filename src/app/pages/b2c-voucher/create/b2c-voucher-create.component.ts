@@ -439,7 +439,8 @@ export class B2CVoucherCreateComponent implements OnInit {
         expired_at: moment(this.formDetailVoucher.get('expired_at').value).format('YYYY-MM-DD'),
         limit_by: this.formDetailVoucher.get('limit_by_product').value ? 'product' :
         this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
-        limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null
+        limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null,
+        "allocation_voucher": 10000
       };
 
       if (body['limit_by'] !== null) {

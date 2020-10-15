@@ -45,7 +45,7 @@ export class DesignVoucherComponent implements OnInit {
   @Input()
   set data(data: any) {
     this.detailVoucher = data;
-    this._data = data;
+    // this._data = data;
   }
   get data(): any { return this._data; }
 
@@ -130,10 +130,9 @@ export class DesignVoucherComponent implements OnInit {
         bodyForm.append('body', this.formDesignVoucher.get('body').value);
         this.b2cVoucherService.updateDesign({ voucher_id: this.detailVoucher.id }, bodyForm).subscribe((res) => {
           this.router.navigate(['b2c-voucher']);
-          console.log('res', res);
           this.dataService.showLoading(false);
         }, err => {
-          console.log('err onUpdate', err);
+          console.warn('err', err);
           this.dataService.showLoading(false);
         });
       } else {
@@ -141,7 +140,7 @@ export class DesignVoucherComponent implements OnInit {
         commonFormValidator.validateAllFields(this.formDesignVoucher);
       }
     } catch (ex) {
-      console.log('ex onUpdate', ex)
+      console.warn('ex onUpdate', ex)
       this.dataService.showLoading(false);
     }
   }

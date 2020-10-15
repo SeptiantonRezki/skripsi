@@ -82,6 +82,7 @@ export class B2CVoucherEditComponent implements OnInit {
   inputChipList = [];
 
   voucherDetailID: any = null;
+  isLimitVoucher: boolean; // show List Audience @Panel Retailer
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -98,9 +99,7 @@ export class B2CVoucherEditComponent implements OnInit {
     private dialog: MatDialog
   ) {
     activatedRoute.url.subscribe(params => {
-      console.log('PARAM', params)
       this.isDetail = params[0].path === 'detail' ? true : false;
-      // this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
       this.voucherDetailID = params[1].path || null;
     });
     this.onLoad = false;
@@ -189,13 +188,11 @@ export class B2CVoucherEditComponent implements OnInit {
   }
 
   _filterSku(value): any[] {
-    console.log('valueee', value);
-    const filterValue = value && typeof value == 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   resetField(data?: any): void {
-    console.log('resetField', data);
     const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
 
     if (filteredItem.length == 0) {
@@ -213,7 +210,6 @@ export class B2CVoucherEditComponent implements OnInit {
     const input = event.input;
     const value = event.value;
 
-    console.log('value', value);
     if (value) {
       this.productList.push(value);
     }
@@ -282,7 +278,6 @@ export class B2CVoucherEditComponent implements OnInit {
   }
 
   isChecked(type: any, event: any) {
-    console.log('type'+event, type);
     if (type === 'product') {
       this.formDetailVoucher.get('category').setValue('');
       this.formDetailVoucher.get('limit_by_category').setValue(false);
@@ -290,7 +285,7 @@ export class B2CVoucherEditComponent implements OnInit {
         this.productList = [];
         this.product.setValue(null);
         // this.product.disable();
-        this.productInput.nativeElement.value = null;
+        // this.productInput.nativeElement.value = null;
         this.listProductSkuBank = [];
         this.inputChipList = [];
       } else {
@@ -301,12 +296,17 @@ export class B2CVoucherEditComponent implements OnInit {
       this.productList = [];
       this.product.setValue(null);
       // this.product.disable();
-      this.productInput.nativeElement.value = null;
+      // this.productInput.nativeElement.value = null;
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event) {
         this.formDetailVoucher.get('category').setValue('');
       }
+    }
+    if (this.formDetailVoucher.get('limit_by_product').value || this.formDetailVoucher.get('limit_by_category').value) {
+      this.isLimitVoucher = true;
+    } else {
+      this.isLimitVoucher = false;
     }
   }
 
@@ -366,7 +366,6 @@ export class B2CVoucherEditComponent implements OnInit {
            */
           this.listProductSkuBank = [];
         } else {
-          console.log('this.listProductSkuBank', this.listProductSkuBank)
           this.product.setValue(itemClick.toString());
           this.productInput.nativeElement.value = itemClick.toString();
           this.getListProduct(itemClick.toString());
@@ -384,7 +383,7 @@ export class B2CVoucherEditComponent implements OnInit {
   }
 
   getDetail() {
-    console.log('GETDETAIL', this.detailVoucher)
+    this.dataService.showLoading(true);
     this.b2cVoucherService.getDetailVoucher({ voucher_id: this.voucherDetailID }).subscribe(res => {
       this.dataService.setToStorage('detail_voucher_b2c', res.data);
       this.detailVoucher = res.data;
@@ -405,6 +404,10 @@ export class B2CVoucherEditComponent implements OnInit {
         minimumPurchase: res.data.limit_purchase ? res.data.limit_purchase : 0,
       });
       this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
+      this.dataService.showLoading(false);
+    }, err => {
+      console.warn(err);
+      this.dataService.showLoading(false);
     });
     if (this.isDetail) {
       this.formDetailVoucher.get('name').disable();
@@ -464,7 +467,7 @@ export class B2CVoucherEditComponent implements OnInit {
       try {
         this.myScrollContainer.nativeElement.scrollTop = 0;
       } catch (err) {
-        console.log('Scrolling Error', err);
+        console.error('Scrolling Error', err);
       }
     }
   }
@@ -474,6 +477,15 @@ export class B2CVoucherEditComponent implements OnInit {
       return moment(param).format('YYYY-MM-DD');
     }
     return '';
+  }
+
+  onChangeVoucherAutomation(event: any) {
+    if (event.checked) {
+      this.formDetailVoucher.get('jumlahVoucherPerConsumer').setValue(1);
+      this.formDetailVoucher.get('jumlahVoucherPerConsumer').disable();
+    } else {
+      this.formDetailVoucher.get('jumlahVoucherPerConsumer').enable();
+    }
   }
 
 }

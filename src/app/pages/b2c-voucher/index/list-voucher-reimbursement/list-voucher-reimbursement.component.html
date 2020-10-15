@@ -101,65 +101,55 @@
         [scrollbarH]="true"
         fusePerfectScrollbar
       >
-        <ngx-datatable-column 
-          name="ID Voucher" 
-          prop="voucher_id">
-
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{detailVoucher.id}}
+        <ngx-datatable-column name="No">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column
-          name="No HP Consumer"
-          prop="phone"
-          [sortable]="false"
-        ></ngx-datatable-column>
-        <ngx-datatable-column 
-          name="Nama Consumer" 
-          prop="name">
+
+        <ngx-datatable-column name="Retailer Code" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+          </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column
-          name="Retailer Code"
-          prop="code"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Toko SRC"
-          prop="toko"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Area"
-          prop="area"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Regional"
-          prop="region"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Tanggal Transaksi"
-          prop="order_date"
-          [sortable]="false"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Via"
-          prop="from"
-          [sortable]="false"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Total Transaksi"
-          prop="total_transaction"
-          [sortable]="false"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Detail Transaksi"
-          [sortable]="false"
-        >
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
-            <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button>
-                <mat-icon class="secondary-text">visibility</mat-icon>
-              </button>
-            </div>
+
+        <ngx-datatable-column name="Toko SRC" prop="audience_customer_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.audience_customer_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Area" prop="audience_retailer_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.audience_retailer_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Regional" prop="qty_voucher_sent">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.qty_voucher_sent}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Opsi Penukaran" prop="customer_redeem_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.customer_redeem_count}}
+          </ng-template>
+        </ngx-datatable-column>s
+
+        <ngx-datatable-column name="Nominal Penukaran" prop="retailer_receive_voucher_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.retailer_receive_voucher_count}}
+        </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
+            HH:mm:ss'}}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Request" prop="nominal">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.nominal | rupiahFormater }}
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>

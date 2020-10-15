@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -72,6 +72,22 @@ export class PanelRetailerVoucherComponent implements OnInit {
     { name: 'Semua Tipe', value: 'all' }
   ];
   formFilterRetailer: FormGroup;
+
+  _data: any = null;
+  @Input()
+  set data(data: any) {
+    this.detailVoucher = data;
+    // this._data = data;
+  }
+  get data(): any { return this._data; }
+
+  _isLimitVoucher: any = null;
+  @Input()
+  set isLimitVoucher(data: boolean) {
+    this._isLimitVoucher = data;
+  }
+  get isLimitVoucher(): boolean { return this._isLimitVoucher; }
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -159,31 +175,26 @@ export class PanelRetailerVoucherComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -208,13 +219,11 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    // console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (!allRowsSelected) { this.selected = [];
     } else { this.selected.length = this.totalData; }
@@ -349,7 +358,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item_ => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
@@ -375,7 +383,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item_ => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt =>
@@ -453,7 +460,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   getListRetailer(string?: any) {
-    console.log('Search', string);
     try {
       this.dataService.showLoading(true);
       this.pagination['audience'] = 'retailer';
@@ -502,7 +508,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
         if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
           const oneAreaSelected = lastSelectedArea.value[0];
           const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
           if (findOnFirstArea) { is_area_2 = false;
           } else { is_area_2 = true; }
 
@@ -521,23 +526,14 @@ export class PanelRetailerVoucherComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
+      this.pagination['limit_by_voucher'] = this.isLimitVoucher ? 1 : 0;
       this.b2cVoucherService.getAudienceRetailer(this.pagination).subscribe(res => {
-        // if (res.status === 'success') {
           Page.renderPagination(this.pagination, res);
           this.totalData = res.total;
           this.rows = res.data;
           this.loadingIndicator = false;
           this.isSort = false;
-          this.pagination.sort = 'name';
-          this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
-        // } else {
-        //   this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
-        //   Page.renderPagination(this.pagination, res.data);
-        //   this.rows = [];
-        //   this.loadingIndicator = false;
-        //   this.dataService.showLoading(false);
-        // }
       }, err => {
         console.warn(err);
         this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
@@ -546,6 +542,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
       });
     } catch (ex) {
       console.log('ex', ex);
+      this.dataService.showLoading(false);
     }
   }
 
@@ -631,7 +628,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
             }
 
             if (areasDisabled.indexOf(level.type) > -1) { this.formFilter.get(this.parseArea(level.type)).disable(); }
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
           const isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -655,7 +651,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
   getMitraSelected() {
     this.b2bVoucherService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
@@ -671,11 +666,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
       'is_target_audience': this.isTargetAudience.value ? 1 : 0,
       'business_id': this.selected.map(aud => aud.id),
     };
-    if (this.allRowsSelected) {
-      body['type_business'] = 'all';
-    } else {
-      body['business_id'] = this.selected.map(bsn => bsn.id);
-    }
     this.dataService.showLoading(true);
 
     this.b2bVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
@@ -687,7 +677,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   async exportRetailer() {
-    const keyAudience = 'retailer';
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({ message: 'Pilih audience untuk di export!' });
       return;
@@ -696,18 +685,13 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const body = this.selected.map(aud => aud.id);
     try {
       const response = await this.b2cVoucherService.exportAudienceRetailer({ selected: body, audience: 'retailer' }).toPromise();
-      console.log('he', response.headers);
-      // this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      // `B2C_Panel_retailer_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      // this.exportAccessCashier = false;
+      console.log('response', response)
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      `B2CVoucher_Panel_Retailer_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     } catch (error) {
-      // this.exportAccessCashier = false;
       this.handleError(error);
       this.dataService.showLoading(false);
-      // throw error;
     }
   }
 

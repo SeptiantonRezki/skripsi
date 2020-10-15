@@ -37,15 +37,25 @@ export class B2CVoucherService extends BaseService {
     const url = this.getUrl(this.namespace, 'getListReimbursement');
     return this.getApi(url, queryParams);
   }
-  
+
   exportListReimbursement(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'exportListReimbursement');
-    return this.getBlobApi(url, queryParams);
+    return this.getBlobAsJsonApi(url, queryParams);
   }
 
   getProductList(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'product_list');
     return this.getApi(url, queryParams);
+  }
+
+  getSelectedRetailerPanel(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'getSelectedRetailerPanel', context);
+    return this.getApi(url);
+  }
+
+  getSelectedCustomerPanel(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'getSelectedCustomerPanel', context);
+    return this.getApi(url);
   }
 
   getAudienceRetailer(queryParams?: any): Observable<any> {
@@ -105,7 +115,7 @@ export class B2CVoucherService extends BaseService {
 
   exportListDetailVoucher(context: any, queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'exportListDetailVoucher', context);
-    return this.getBlobApi(url, queryParams);
+    return this.getBlobAsJsonApi(url, queryParams);
   }
 
 }
