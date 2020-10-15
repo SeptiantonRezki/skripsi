@@ -28,5 +28,6 @@ export const server = {
   coin: "coin-management",
   community: "community",
   order: "order",
-  bora: "bora"
+  bora: "bora",
+  orderCashier: 'cashier-order',
 }

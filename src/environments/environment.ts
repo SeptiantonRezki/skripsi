@@ -33,6 +33,7 @@ export const server = {
   coin: 'coin',
   community: 'community',
   order: 'order',
+  orderCashier: 'cashier-order',
 }
 
 

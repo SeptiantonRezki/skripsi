@@ -1,0 +1,102 @@
+
+<div class="ayo-middle p-24" fxLayout="column">
+  <div>
+    <div fxLayout="row" class="pb-24 px-12">
+      <mat-checkbox class="mt-4 ml-4 mb-8"
+        [formControl]="isPushNearbyPromotion">
+        Push Nearby Promotion</mat-checkbox>
+    </div>
+    
+    <form autocomplete="off" [formGroup]="formDesignVoucher">
+
+      <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center">
+        <span class="text-bold">Pilih Template Voucher</span>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="0px">
+        <div fxFlex="45" class="pb-24" *ngFor="let item of templateBannerList">
+          <span>{{item.name}}</span>
+          <div
+            [ngClass]="{'selected-banner': bannerSelected?.id === item.id, 'banner-image-template' : bannerSelected?.id !== item.id }"
+            (click)="selectBannerTemplate(item)">
+            <div [class]="'banner-image-custom ' + item.class" [title]="item.name"
+              [style.background-image]="'url(' + item.image + ')'">
+              <div class="title">{{item.title}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-24">
+        <div *ngIf="bannerSelected && bannerSelected?.id === 6" ngfDrop selectable="1" class="rectangle-16"
+          [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+          [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+          (fileChange)="changeImage($event)">
+          <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+            <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+            <br>
+            <span matPrefix>Tarik gambar voucher Anda kesini /
+              <strong>Pilih File</strong> berdimensi 410px x 210px</span>
+            <span matPrefix>Besar file maksimal 2MB</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="bannerSelected" class="pt-16 px-24" formGroupName="banner_selected">
+        <!-- <div *ngIf="bannerSelected['id'] !== 6">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="title"
+                placeholder="Tulisan Utama / Teks Utama / Isi Promosi">
+            </mat-form-field>
+          </div>
+        </div> -->
+        <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+          <span class="text-bold">Contoh Tampilan Voucher</span>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+          *ngIf="bannerSelected">
+          <div fxFlex="45">
+            <div class="banner-image-template-selected">
+              <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class"
+                [title]="bannerSelected.name">
+                <img [src]="bannerSelected.image" style="height: 190px; width: 390px" [alt]="bannerSelected.name">
+                <div class="title">{{bannerSelected.title}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!bannerSelected && detailVoucher.image_url" class="pt-16 px-24">
+        <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
+          <span class="text-bold">Contoh Tampilan Spanduk</span>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div class="banner-image-template-selected">
+            <img [src]="detailVoucher.image_url" class="banner-image-custom-selected">
+          </div>
+        </div>
+      </div>
+      <div class="px-24">
+        <div class="" fxLayout="row" fxLayoutAlign="start center">
+          <h3 class="">Isi Halaman</h3>
+        </div>
+        <textarea *ngIf="!isDetail" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+        <textarea matInput *ngIf="isDetail" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+        <mat-error style="padding-top: 6px !important; font-size: .86em;"
+          *ngIf="formDesignVoucher.controls['body'].hasError('required') && formDesignVoucher.controls['body'].touched">
+          Isi Halaman harus diisi
+        </mat-error>
+      </div>
+
+    </form>
+
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+        (click)="onUpdate()">
+        SIMPAN
+      </button>
+    </div>
+
+  </div>
+</div>
