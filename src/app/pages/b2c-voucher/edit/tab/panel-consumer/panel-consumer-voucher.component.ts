@@ -548,9 +548,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
       this.b2cVoucherService.getAudienceCustomer(this.pagination).subscribe(res => {
         // if (res.status === 'success') {
-          Page.renderPagination(this.pagination, res.data);
-          this.totalData = res.data.total;
-          this.rows = res.data.data;
+          Page.renderPagination(this.pagination, res);
+          this.totalData = res.total;
+          this.rows = res.data;
           this.loadingIndicator = false;
           this.isSort = false;
           this.pagination.sort = 'name';
