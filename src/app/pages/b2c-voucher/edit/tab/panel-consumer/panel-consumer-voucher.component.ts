@@ -685,8 +685,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
-    if (this.formConsumerGroup.valid) {
-    const body = {
+    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
+    let body = null;
+    const bodyArea = {
       'type': 'customer',
       'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
       'user_id': this.selected.map(aud => aud.id),
@@ -698,8 +699,16 @@ export class PanelConsumerVoucherComponent implements OnInit {
       'gender': this.formConsumerGroup.get('gender').value
     };
     this.dataService.showLoading(true);
+    if (this.formConsumerGroup.get('isTargetAudience').value) {
+      body = {
+        'type': 'customer',
+        'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
+        'user_id': this.selected.map(aud => aud.id),
+      };
+    }
 
-    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
+    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id },
+      this.formConsumerGroup.get('isTargetAudience').value ? body : bodyArea).subscribe(res => {
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
