@@ -7,7 +7,7 @@
     </div>
 
     <form autocomplete="off" [formGroup]="formConsumerGroup">
-      <div fxLayout="row">
+      <div fxLayout="row" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
 
         <div fxFlex="45">
 
