@@ -25,6 +25,7 @@ export class DesignVoucherComponent implements OnInit {
   isDetail: boolean;
   detailVoucher: any;
   isPushNearbyPromotion: FormControl = new FormControl(false);
+  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
   public options: Object = Config.FROALA_CONFIG;
 
@@ -138,6 +139,11 @@ export class DesignVoucherComponent implements OnInit {
       } else {
         alert('Lengkapi bagian yang harus diisi!');
         commonFormValidator.validateAllFields(this.formDesignVoucher);
+        try {
+          this.myScrollContainer.nativeElement.scrollTop = 0;
+        } catch (err) {
+          console.error('Scrolling Error', err);
+        }
       }
     } catch (ex) {
       console.warn('ex onUpdate', ex)

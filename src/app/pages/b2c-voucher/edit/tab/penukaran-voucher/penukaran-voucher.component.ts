@@ -22,6 +22,7 @@ export class PenukaranVoucherComponent implements OnInit {
   isDetail: boolean;
   detailVoucher: any;
   minDate: any = new Date();
+  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formPenukaranVoucher: FormGroup;
@@ -179,6 +180,11 @@ export class PenukaranVoucherComponent implements OnInit {
       } else {
         alert('Lengkapi bagian yang harus diisi!');
         commonFormValidator.validateAllFields(this.formPenukaranVoucher);
+        try {
+          this.myScrollContainer.nativeElement.scrollTop = 0;
+        } catch (err) {
+          console.error('Scrolling Error', err);
+        }
       }
     } catch (ex) {
       console.warn('ex', ex);

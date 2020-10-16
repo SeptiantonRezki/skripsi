@@ -703,7 +703,7 @@ export class Endpoint {
 
         //List Detail Voucher
         getListDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}/list`,
-        exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}//voucher/${context.voucher_id}/list/export`,
+        exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}/list/export`,
         getDetailOrder: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/order/${context.detail_order_id}`,
 
         //partial

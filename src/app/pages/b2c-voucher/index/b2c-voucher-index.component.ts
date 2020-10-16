@@ -242,4 +242,26 @@ export class B2CVoucherIndexComponent implements OnInit {
     });
   }
 
+  deleteVoucher(id: any) {
+    this.id = id;
+    const data = {
+      titleDialog: 'Hapus Voucher',
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini ?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ['Hapus', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.b2cVoucherService.deleteVoucher({ voucher_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getB2CVoucherList();
+
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+      }
+    });
+  }
+
 }
