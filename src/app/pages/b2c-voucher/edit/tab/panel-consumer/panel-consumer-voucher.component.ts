@@ -14,6 +14,7 @@ import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-audience-dialog.component';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
   selector: 'app-panel-consumer-voucher',
@@ -66,17 +67,26 @@ export class PanelConsumerVoucherComponent implements OnInit {
   listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
   listVA: any[] = [
-    { name: 'Referral Code', value: 'Referral Code' },
-    { name: 'Verified Customer', value: 'Verified Customer' },
-    { name: 'Referral dan Verified', value: 'Referral dan Verified' },
-    { name: 'Referral atau Verified', value: 'Referral atau Verified' }
+    { name: 'Referral Code', value: 'referral' },
+    { name: 'Verified Customer', value: 'verified' },
+    { name: 'Referral and Verified', value: 'referral-and-verified' },
+    { name: 'Referral or Verified', value: 'Referral-or-Verified' }
   ];
 
   _data: any = null;
   @Input()
   set data(data: any) {
-    this.detailVoucher = data;
-    // this._data = data;
+    if (data) {
+      this.detailVoucher = data;
+      this.formConsumerGroup.get('isTargetAudience').setValue(data.is_target_audience_customer === 1 ? true : false);
+      if (data && data.dataPanelCustomer) {
+        if (data.dataPanelCustomer.selected) {
+          this.selected = data.dataPanelCustomer.selected;
+        } else if (data.dataPanelCustomer.area_id) {
+          // this.
+        }
+      }
+    }
   }
   get data(): any { return this._data; }
 
@@ -99,9 +109,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
   ) {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
-      if (this.isDetail) {
-        this.detailVoucher = this.dataService.getFromStorage('detail_voucher');
-      }
     });
     this.adapter.setLocale('id');
     this.selected = [];
@@ -175,10 +182,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       }
     });
 
-    if (this.isDetail) {
-      this.initAreaV2();
-      this.getListConsumer();
-    }
+    this.initAreaV2();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       this.getListConsumer();
@@ -211,16 +215,28 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
 
     this.addArea();
+
+    this.formConsumerGroup.get('isTargetAudience').valueChanges.debounceTime(500).subscribe(res => {
+      if (res) {
+        this.initAreaV2();
+        this.getCustomerSelected();
+      }
+    });
   }
 
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
+    if (event.checked) {
+      this.formConsumerGroup.controls['allocationVoucher'].setValidators([Validators.required, Validators.min(0)]);
+      this.formConsumerGroup.get('va').setValidators(Validators.required);
+    } else {
+      this.formConsumerGroup.controls['allocationVoucher'].setValidators([null]);
+      this.formConsumerGroup.get('va').setValidators(null);
+    }
   }
 
   isChangeTargetAudience(event: any) {
     if (event.checked) {
-      this.initAreaV2();
-      // this.getListConsumer();
     }
   }
 
@@ -655,27 +671,31 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
   }
 
-  getMitraSelected() {
-    this.b2bVoucherService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      this.onSelect({
-        selected: res.data.map(slc => ({
-          ...slc,
-          id: slc.business_id
-        }))
+  getCustomerSelected() {
+    if (this.detailVoucher.is_target_audience_customer === 1 ) {
+      this.b2cVoucherService.getSelectedCustomerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+          this.selected = res.data.targeted_audiences.map(aud => ({
+            ...aud,
+            id: aud.user_id
+          }))
       });
-    });
+    } else {
+      // this.geotreeService.getFilter2Geotree(res.data.areas.area_id);
+    }
   }
 
   onSave() {
+    if (this.formConsumerGroup.valid) {
     const body = {
       'type': 'customer',
       'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
       'user_id': this.selected.map(aud => aud.id),
       'area_id': [1],
-      'automation': null,
+      'automation': this.formConsumerGroup.get('va').value,
       'smoker': this.formConsumerGroup.get('is_smoker').value,
       'age_from': this.formConsumerGroup.get('age_consumer_from').value,
       'age_to': this.formConsumerGroup.get('age_consumer_to').value,
+      'gender': this.formConsumerGroup.get('gender').value
     };
     this.dataService.showLoading(true);
 
@@ -686,6 +706,14 @@ export class PanelConsumerVoucherComponent implements OnInit {
     }, err => {
       this.dataService.showLoading(false);
     });
+    } else {
+      commonFormValidator.validateAllFields(this.formConsumerGroup);
+      try {
+        this.myScrollContainer.nativeElement.scrollTop = 0;
+      } catch (err) {
+        console.error('Scrolling Error', err);
+      }
+    }
   }
 
   async exportCustomer() {

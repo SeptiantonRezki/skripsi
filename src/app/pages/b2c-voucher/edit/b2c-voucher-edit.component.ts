@@ -83,6 +83,8 @@ export class B2CVoucherEditComponent implements OnInit {
 
   voucherDetailID: any = null;
   isLimitVoucher: boolean; // show List Audience @Panel Retailer
+  dataPanelRetailer: any;
+  dataPanelCustomer: any;
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -404,6 +406,8 @@ export class B2CVoucherEditComponent implements OnInit {
         minimumPurchase: res.data.limit_purchase ? res.data.limit_purchase : 0,
       });
       this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
+      this.getRetailerSelected();
+      this.getCustomerSelected();
       this.dataService.showLoading(false);
     }, err => {
       console.warn(err);
@@ -486,6 +490,52 @@ export class B2CVoucherEditComponent implements OnInit {
     } else {
       this.formDetailVoucher.get('jumlahVoucherPerConsumer').enable();
     }
+  }
+
+  getRetailerSelected() {
+      this.b2cVoucherService.getSelectedRetailerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+        if (this.detailVoucher.is_target_audience_retailer === 1 ) {
+          this.detailVoucher = {
+            ...this.detailVoucher,
+            dataPanelRetailer: {
+              selected: res.data.targeted_audiences.map(aud => ({
+                ...aud,
+                id: aud.business_id
+              }))
+            }
+          };
+        } else {
+          this.detailVoucher = {
+            ...this.detailVoucher,
+            dataPanelRetailer: {
+              area_id: res.data.areas.area_id
+            }
+          };
+        }
+      });
+  }
+
+  getCustomerSelected() {
+      this.b2cVoucherService.getSelectedCustomerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+        if (this.detailVoucher.is_target_audience_customer === 1 ) {
+          this.detailVoucher = {
+            ...this.detailVoucher,
+            dataPanelCustomer: { 
+              selected: res.data.targeted_audiences.map(aud => ({
+                ...aud,
+                id: aud.user_id
+              }))
+            }
+          };
+        } else {
+          this.detailVoucher = {
+            ...this.detailVoucher,
+            dataPanelCustomer: {
+              area_id: res.data.areas.area_id
+            }
+          }
+        }
+      });
   }
 
 }
