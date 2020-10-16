@@ -104,9 +104,8 @@
         <ngx-datatable-column 
           name="ID Voucher" 
           prop="voucher_id">
-
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{detailVoucher.id}}
+            {{row.code}}
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column
@@ -120,11 +119,11 @@
         </ngx-datatable-column>
         <ngx-datatable-column
           name="Retailer Code"
-          prop="code"
+          prop="business_code"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="Toko SRC"
-          prop="toko"
+          prop="retailer_name"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="Area"
@@ -143,7 +142,11 @@
           name="Via"
           prop="from"
           [sortable]="false"
-        ></ngx-datatable-column>
+        >
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <div>{{row.from === 'cashier' ? 'Kasir' : row.from}}</div>
+        </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column
           name="Total Transaksi"
           prop="total_transaction"
@@ -156,7 +159,7 @@
         >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
-            <div class="button-row" style="margin-left: -10px">
+            <div class="button-row" *ngIf="row.from === 'cashier'">
               <button mat-icon-button>
                 <mat-icon class="secondary-text">visibility</mat-icon>
               </button>
