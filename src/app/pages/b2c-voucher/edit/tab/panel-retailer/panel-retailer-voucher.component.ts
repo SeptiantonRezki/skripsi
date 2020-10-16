@@ -5,7 +5,6 @@ import { PagesName } from 'app/classes/pages-name';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
-import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,7 +20,6 @@ import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-
 export class PanelRetailerVoucherComponent implements OnInit {
   formFilter: FormGroup;
   onLoad: boolean;
-  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
   rows: any[] = [];
   selected: any[];
@@ -76,8 +74,17 @@ export class PanelRetailerVoucherComponent implements OnInit {
   _data: any = null;
   @Input()
   set data(data: any) {
-    this.detailVoucher = data;
-    // this._data = data;
+    if (data) {
+      this.detailVoucher = data;
+      this.isTargetAudience.setValue(data.is_target_audience_retailer === 1 ? true : false);
+      if (data.dataPanelRetailer) {
+        if (data.dataPanelRetailer.selected) {
+          this.selected = data.dataPanelRetailer.selected;
+        } else if (data.dataPanelRetailer.area_id) {
+        // this.
+        }
+      }
+    }
   }
   get data(): any { return this._data; }
 
@@ -93,7 +100,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private b2bVoucherService: BtoBVoucherService,
     private b2cVoucherService: B2CVoucherService,
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
@@ -103,9 +109,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
-      if (this.isDetail) {
-        this.detailVoucher = this.dataService.getFromStorage('detail_voucher');
-      }
     });
     this.adapter.setLocale('id');
     this.selected = [];
@@ -165,11 +168,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
     this.initAreaV2();
 
-    if (this.isDetail) {
-      this.getMitraSelected();
-    }
-
-
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       this.getListRetailer();
     });
@@ -200,7 +198,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
       }
     });
 
-
     this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe(res => {
       this.getListRetailer();
     });
@@ -212,10 +209,18 @@ export class PanelRetailerVoucherComponent implements OnInit {
         delete this.pagination['classification'];
       }
     });
+
+    this.isTargetAudience.valueChanges.debounceTime(1000).subscribe(res => {
+      if (res) {
+        this.getListRetailer();
+        this.getRetailerSelected();
+      }
+    });
   }
 
   isChangeTargetAudience(event: any) {
-    if (event.checked) { this.getListRetailer(); }
+    if (event.checked) {
+    }
   }
 
   onSelect({ selected }) {
@@ -649,15 +654,17 @@ export class PanelRetailerVoucherComponent implements OnInit {
     });
   }
 
-  getMitraSelected() {
-    this.b2bVoucherService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      this.onSelect({
-        selected: res.data.map(slc => ({
-          ...slc,
-          id: slc.business_id
-        }))
+  getRetailerSelected() {
+    if (this.detailVoucher.is_target_audience_retailer === 1 ) {
+      this.b2cVoucherService.getSelectedRetailerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+        this.selected = res.data.targeted_audiences.map(aud => ({
+          ...aud,
+          id: aud.business_id
+        }));
       });
-    });
+    } else {
+      // this.geotreeService.getFilter2Geotree(res.data.areas.area_id);
+    }
   }
 
   onSave() {
@@ -668,7 +675,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     };
     this.dataService.showLoading(true);
 
-    this.b2bVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
+    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
     }, err => {

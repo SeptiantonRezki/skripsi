@@ -33,6 +33,11 @@ export class B2CVoucherService extends BaseService {
     return this.putApi(url, body);
   }
 
+  deleteVoucher(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'deleteVoucher', context);
+    return this.deleteApi(url);
+  }
+
   getListReimbursement(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'getListReimbursement');
     return this.getApi(url, queryParams);
