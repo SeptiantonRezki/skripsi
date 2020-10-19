@@ -63,7 +63,7 @@ export class ImportListWholesalerComponent implements OnInit {
   submit() {
     if (this.rows.length > 0) {
       const res = this.rows.map(item => { return { ...item } });
-      console.log(res);
+      console.log('data', res);
       this.wholesalerService.storeImport({ gswCode: res }).subscribe(resp => {
         console.log('resp', resp);
         this.dialogRef.close(resp);
