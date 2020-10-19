@@ -152,7 +152,7 @@ export class TaskVerificationDetailComponent implements OnInit {
     this.getDetail();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.getListAudience(this.trade_audience_group_id);
+      // this.getListAudience(this.trade_audience_group_id);
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
