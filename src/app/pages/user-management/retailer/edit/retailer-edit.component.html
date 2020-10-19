@@ -213,6 +213,17 @@
                 Internal Classification harus diisi
               </mat-error>
             </mat-form-field>
+            
+            <mat-form-field fxFlex="100" class="is-light">
+              <mat-select placeholder="GSR" formControlName="gsr"
+                (selectionChange)="gsrChange($event)">
+                <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formRetailer.controls['gsr'].hasError('required') && formRetailer.controls['gsr'].touched ">
+                GSR harus diisi
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <!-- <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
