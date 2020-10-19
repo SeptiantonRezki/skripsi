@@ -1,6 +1,6 @@
 <div class="ayo-middle p-24" #containerScroll fxLayout="column">
   <div>
-    <div fxLayout="row" class="pb-24 px-12">
+    <div fxLayout="row" class="pb-24 px-12" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
       <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeVoucherAutomation($event)"
         [formControl]="isVoucherAutomation">
         Voucher Automation</mat-checkbox>
@@ -90,7 +90,7 @@
 
       </div>
 
-      <div fxLayout="row" class="pb-24 px-12">
+      <div fxLayout="row" class="pb-24 px-12" *ngIf="!isVoucherAutomation.value === true">
         <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
           formControlName="isTargetAudience">Target Audience</mat-checkbox>
       </div>
@@ -265,7 +265,7 @@
             [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
             [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
-            [selectCheck]='selectCheck'>
+            [selectCheck]='selectCheck' [rowIdentity]="getId">
 
             <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
               <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"

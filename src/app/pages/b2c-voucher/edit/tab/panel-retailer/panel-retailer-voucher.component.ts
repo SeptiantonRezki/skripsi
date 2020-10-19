@@ -754,8 +754,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.selected = this.selected.concat(response);
-        this.onSelect({ selected: this.selected });
+        this.onSelect({ selected: response });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         }
