@@ -81,6 +81,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('isTargetAudience').setValue(data.is_target_audience_customer === 1 ? true : false);
       if (data && data.dataPanelCustomer) {
         if (data.dataPanelCustomer.selected) {
+          console.log('selecteddata', data.dataPanelCustomer.selected)
           this.selected = data.dataPanelCustomer.selected;
         } else if (data.dataPanelCustomer.area_id) {
           // this.
@@ -241,7 +242,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSelect({ selected }) {
+    console.log('selected', selected);
     this.selected.splice(0, this.selected.length);
+    console.log('selected2', this.selected);
     this.selected.push(...selected);
   }
 
@@ -795,8 +798,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.selected = this.selected.concat(response);
-        this.onSelect({ selected: this.selected });
+        this.onSelect({ selected: response });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         }
