@@ -1,24 +1,24 @@
-import { Component, OnInit, ViewChild, TemplateRef, ElementRef, NgZone } from "@angular/core";
-import { Page } from "app/classes/laravel-pagination";
-import { Subject, Observable } from "rxjs";
-import { DatatableComponent } from "@swimlane/ngx-datatable";
-import { Router } from "@angular/router";
-import { DialogService } from "app/services/dialog.service";
-import { DataService } from "app/services/data.service";
-import { RetailerService } from "../../../../services/user-management/retailer.service";
-import { FormGroup, FormBuilder, FormControl, FormArray } from "@angular/forms";
-import { PagesName } from "app/classes/pages-name";
-import { HttpErrorResponse } from "@angular/common/http";
-import { MatDialogConfig, MatDialog } from "@angular/material";
-import { ImportAccessCashierDialogComponent } from "../import-access-cashier-dialog/import-access-cashier-dialog.component";
-import { GeotreeService } from "app/services/geotree.service";
+import { Component, OnInit, ViewChild, TemplateRef, ElementRef, NgZone } from '@angular/core';
+import { Page } from 'app/classes/laravel-pagination';
+import { Subject, Observable } from 'rxjs';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Router } from '@angular/router';
+import { DialogService } from 'app/services/dialog.service';
+import { DataService } from 'app/services/data.service';
+import { RetailerService } from '../../../../services/user-management/retailer.service';
+import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { PagesName } from 'app/classes/pages-name';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ImportAccessCashierDialogComponent } from '../import-access-cashier-dialog/import-access-cashier-dialog.component';
+import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
-import { GeneralService } from "app/services/general.service";
+import { GeneralService } from 'app/services/general.service';
 
 @Component({
-  selector: "app-retailer-index",
-  templateUrl: "./retailer-index.component.html",
-  styleUrls: ["./retailer-index.component.scss"]
+  selector: 'app-retailer-index',
+  templateUrl: './retailer-index.component.html',
+  styleUrls: ['./retailer-index.component.scss']
 })
 export class RetailerIndexComponent {
   rows: any[];
@@ -36,7 +36,7 @@ export class RetailerIndexComponent {
   keyUp = new Subject<string>();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
-  @ViewChild("activeCell")
+  @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
@@ -73,13 +73,20 @@ export class RetailerIndexComponent {
     { name: "ON", value: 1 }
   ]
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
-    { name: "SRC", value: "SRC" },
-    { name: "NON-SRC", value: "NON-SRC" },
-    { name: "IMO", value: "IMO" },
-    { name: "LAMP/HOP", value: "LAMP/HOP" },
-    { name: "GT", value: "GT" },
-    { name: "KA", value: "KA" }
+    { name: 'Semua Tipe', value: 'all' },
+    { name: 'SRC', value: 'SRC' },
+    { name: 'NON-SRC', value: 'NON-SRC' },
+    { name: 'IMO', value: 'IMO' },
+    { name: 'LAMP/HOP', value: 'LAMP/HOP' },
+    { name: 'GT', value: 'GT' },
+    { name: 'KA', value: 'KA' }
+  ];
+
+  gsr: FormControl = new FormControl('');
+  listGSR: any[] = [
+    { name: 'Semua Status', value: 'all' },
+    { name: 'OFF', value: '0' },
+    { name: 'ON', value: '1' }
   ];
 
   constructor(
@@ -103,10 +110,10 @@ export class RetailerIndexComponent {
     console.log('asdas', this.dataService.getDecryptedProfile());
     this.listLevelArea = [
       {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
+        'id': 1,
+        'parent_id': null,
+        'code': 'SLSNTL      ',
+        'name': 'SLSNTL'
       }
     ];
 
@@ -135,7 +142,7 @@ export class RetailerIndexComponent {
     this.getVersions('cashier');
 
     this.formFilter = this.formBuilder.group({
-      national: [""],
+      national: [''],
       zone: new FormControl(),
       region: new FormControl(),
       area: new FormControl(),
@@ -170,7 +177,11 @@ export class RetailerIndexComponent {
 
     this.chatbot.valueChanges.subscribe(res => {
       this.getRetailerList();
-    })
+    });
+
+    this.gsr.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    });
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
       this.getRetailerList();
@@ -225,7 +236,7 @@ export class RetailerIndexComponent {
     let areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
@@ -300,7 +311,7 @@ export class RetailerIndexComponent {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
+      if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
@@ -325,7 +336,7 @@ export class RetailerIndexComponent {
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
+        if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           })
@@ -861,7 +872,7 @@ export class RetailerIndexComponent {
 
   checkAreaLocation(area, lastSelfArea) {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
     let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     let indexAreaSelected = areaList.indexOf(area.key);
@@ -888,12 +899,12 @@ export class RetailerIndexComponent {
 
   getRetailerList() {
     this.dataService.showLoading(true);
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
 
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
@@ -956,9 +967,9 @@ export class RetailerIndexComponent {
       }
     }
 
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    const page = this.dataService.getFromStorage('page');
+    const sort_type = this.dataService.getFromStorage('sort_type');
+    const sort = this.dataService.getFromStorage('sort');
 
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
@@ -971,6 +982,8 @@ export class RetailerIndexComponent {
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
     this.pagination['is_chat_bot'] = this.chatbot.value ? '1' : '0';
     this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
+    this.pagination['gsr_flag'] = this.gsr.value;
+
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
     if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
@@ -982,6 +995,7 @@ export class RetailerIndexComponent {
     if (this.status.value === '-1') this.pagination['status'] = null;
     if (this.chatbot.value === '-1') this.pagination['is_chat_bot'] = null;
     if (this.chatbot.value === '') this.pagination['is_chat_bot'] = null;
+    if (this.gsr.value === 'all') { delete this.pagination['gsr_flag']; }
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
@@ -1005,7 +1019,7 @@ export class RetailerIndexComponent {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
 
-    console.log("Select Event", selected, this.selected);
+    console.log('Select Event', selected, this.selected);
   }
 
   setPage(pageInfo) {
@@ -1015,8 +1029,8 @@ export class RetailerIndexComponent {
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
     } else {
-      this.dataService.setToStorage("page", pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage("page");
+      this.dataService.setToStorage('page', pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage('page');
     }
 
     this.retailerService.get(this.pagination).subscribe(res => {
@@ -1032,9 +1046,9 @@ export class RetailerIndexComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    this.dataService.setToStorage("page", this.pagination.page);
-    this.dataService.setToStorage("sort", event.column.prop);
-    this.dataService.setToStorage("sort_type", event.newValue);
+    this.dataService.setToStorage('page', this.pagination.page);
+    this.dataService.setToStorage('sort', event.column.prop);
+    this.dataService.setToStorage('sort_type', event.newValue);
 
     this.retailerService.get(this.pagination).subscribe(
       res => {
@@ -1056,7 +1070,7 @@ export class RetailerIndexComponent {
       this.pagination.page = 1;
       this.offsetPagination = 0;
     } else {
-      const page = this.dataService.getFromStorage("page");
+      const page = this.dataService.getFromStorage('page');
       this.pagination.page = page;
       this.offsetPagination = page ? (page - 1) : 0;
     }
@@ -1071,10 +1085,10 @@ export class RetailerIndexComponent {
   deleteWholesaler(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Retailer",
-      captionDialog: "Apakah anda yakin untuk menghapus Retailer ini ?",
+      titleDialog: 'Hapus Retailer',
+      captionDialog: 'Apakah anda yakin untuk menghapus Retailer ini ?',
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ['Hapus', 'Batal']
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1083,7 +1097,7 @@ export class RetailerIndexComponent {
     this.retailerService.delete({ retailer_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
 
         this.getRetailerList();
       },
@@ -1096,20 +1110,20 @@ export class RetailerIndexComponent {
   directEdit(param?: any): void {
     console.log('paramsss', param);
     // this.dataService.setToStorage("detail_retailer", param);
-    this.dataService.setToStorage("id_retailer", param.id);
-    this.router.navigate(["user-management", "retailer", "edit"]);
+    this.dataService.setToStorage('id_retailer', param.id);
+    this.router.navigate(['user-management', 'retailer', 'edit']);
   }
 
   directDetail(param?: any): void {
     // this.dataService.setToStorage("detail_retailer", param);
-    this.dataService.setToStorage("id_retailer", param.id);
-    this.router.navigate(["user-management", "retailer", "detail"]);
+    this.dataService.setToStorage('id_retailer', param.id);
+    this.router.navigate(['user-management', 'retailer', 'detail']);
   }
 
   async export() {
     this.dataService.showLoading(true);
     this.exportAccessCashier = true;
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== '');
     let area_id: any = areaSelected[areaSelected.length - 1].value;
 
     // let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
@@ -1135,7 +1149,7 @@ export class RetailerIndexComponent {
       // const selectedRetailer = [];
       const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.exportAccessCashier = false;
