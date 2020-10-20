@@ -699,7 +699,8 @@ export class PanelConsumerVoucherComponent implements OnInit {
       'smoker': this.formConsumerGroup.get('is_smoker').value,
       'age_from': this.formConsumerGroup.get('age_consumer_from').value,
       'age_to': this.formConsumerGroup.get('age_consumer_to').value,
-      'gender': this.formConsumerGroup.get('gender').value
+      'gender': this.formConsumerGroup.get('gender').value,
+      'allocation_voucher': this.formConsumerGroup.get('allocationVoucher').value
     };
     this.dataService.showLoading(true);
     if (this.formConsumerGroup.get('isTargetAudience').value) {

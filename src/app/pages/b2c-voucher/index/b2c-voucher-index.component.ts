@@ -151,12 +151,12 @@ export class B2CVoucherIndexComponent implements OnInit {
   }
 
   directDetail(param?: any): void {
-    // this.dataService.setToStorage('detail_voucher_b2c', param);
+    this.dataService.setToStorage('detail_voucher_b2c', null);
     this.router.navigate(['b2c-voucher', 'detail', param.id]);
   }
 
   editVoucher(param?: any): void {
-    // this.dataService.setToStorage('detail_voucher_b2c', param);
+    this.dataService.setToStorage('detail_voucher_b2c', null);
     this.router.navigate(['b2c-voucher', 'edit', param.id]);
   }
 
