@@ -24,8 +24,8 @@
           </div>
       </div>
 
-      <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-        <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
+      <div fxFlex.lt-lg="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="is-light form-primary pb-12">
           <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
             placeholder="Tanggal Awal Penukaran Voucher" formControlName="startDate" [min]="minDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -38,7 +38,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex="45%" class="is-light form-primary pb-12">
+        <mat-form-field class="is-light form-primary pb-12">
           <input matInput (focus)="endDate.open()" [min]="formPenukaranVoucher.controls['startDate'].value" [matDatepicker]="endDate"
             placeholder="Tanggal Berakhir Penukaran Voucher" formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
@@ -65,7 +65,7 @@
             </mat-checkbox>
           </div>
 
-          <div fxLayout="column" class="pb-24 px-24">
+          <div fxLayout="column" class="pb-24">
             <mat-checkbox class="mt-4 ml-4 mb-8"
             formControlName="isTransferBank">
               Transfer Bank
@@ -90,7 +90,7 @@
             </div>
           </div>
 
-          <div fxLayout="column" class="pb-24 px-24">
+          <div fxLayout="column" class="pb-24">
             <mat-checkbox class="mt-4 ml-4 mb-8"
               formControlName="isSaldoPojokBayar">
               Saldo Pojok Bayar
