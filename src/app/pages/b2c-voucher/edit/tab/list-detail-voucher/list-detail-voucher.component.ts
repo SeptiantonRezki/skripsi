@@ -280,7 +280,15 @@ export class ListDetailVoucherComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
+      this.getList();
+    } catch (ex) {
+      console.log('ex', ex);
+      this.dataService.showLoading(false);
+    }
+  }
 
+  getList() {
+    if (this.detailVoucher) {
       this.b2cVoucherService.getListDetailVoucher({ voucher_id: this.detailVoucher.id }, this.pagination).subscribe(res => {
         if (res.status === 'success') {
           Page.renderPagination(this.pagination, res.data);
@@ -301,9 +309,10 @@ export class ListDetailVoucherComponent implements OnInit {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       });
-    } catch (ex) {
-      console.log('ex', ex);
-      this.dataService.showLoading(false);
+    } else {
+      setTimeout(() => {
+        this.getList();
+      }, 1000);
     }
   }
 
