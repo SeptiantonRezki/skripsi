@@ -86,10 +86,19 @@ export class DesignVoucherComponent implements OnInit {
   }
 
   getDetail() {
-    this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
+    // this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
+    this.initDetail();
+  }
+
+  initDetail() {
+    console.log('this.detailVoucher', this.detailVoucher);
     if (this.detailVoucher) {
       this.isPushNearbyPromotion.setValue(this.detailVoucher.is_push_nearby ? true : false);
       this.formDesignVoucher.get('body').setValue(this.detailVoucher.body);
+    } else {
+      setTimeout(() => {
+        this.initDetail();
+      }, 1000);
     }
   }
 
