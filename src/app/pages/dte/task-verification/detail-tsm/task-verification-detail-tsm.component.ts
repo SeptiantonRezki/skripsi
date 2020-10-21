@@ -152,7 +152,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     this.getDetail();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.getListAudience(this.audience_group_id);
+      // this.getListAudience(this.audience_group_id);
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
