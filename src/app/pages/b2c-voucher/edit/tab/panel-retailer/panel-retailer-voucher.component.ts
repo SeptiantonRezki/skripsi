@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -95,6 +95,9 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
   get isLimitVoucher(): boolean { return this._isLimitVoucher; }
 
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output()
+  onRefresh: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -118,6 +121,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.isSelected = false;
     this.totalData = 0;
     this.isSort = false;
+    this.onRefresh = new EventEmitter<any>();
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -678,6 +682,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.onRefresh.emit();
     }, err => {
       this.dataService.showLoading(false);
     });

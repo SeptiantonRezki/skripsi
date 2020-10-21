@@ -428,6 +428,10 @@ export class B2CVoucherEditComponent implements OnInit {
     }
   }
 
+  onRefresh() {
+    this.getDetail();
+  }
+
   createFormProduct() {
     return this.formBuilder.group({
       product: ['']
@@ -463,7 +467,8 @@ export class B2CVoucherEditComponent implements OnInit {
       this.b2cVoucherService.updateVoucher({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-        this.router.navigate(['b2c-voucher']);
+        // this.router.navigate(['b2c-voucher']);
+        this.onRefresh();
       }, err => {
         this.dataService.showLoading(false);
       });

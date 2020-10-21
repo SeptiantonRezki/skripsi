@@ -102,6 +102,10 @@ export class PanelConsumerVoucherComponent implements OnInit {
   @Output()
   onChangeVoucherAutomation: any;
 
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output()
+  onRefresh: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -125,6 +129,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.totalData = 0;
     this.isSort = false;
     this.onChangeVoucherAutomation = new EventEmitter<any>();
+    this.onRefresh = new EventEmitter<any>();
 
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -736,9 +741,10 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id },
       this.formConsumerGroup.get('isTargetAudience').value ? body : bodyArea).subscribe(res => {
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       // this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.onRefresh.emit();
     }, err => {
       this.dataService.showLoading(false);
     });
