@@ -51,7 +51,14 @@ export class ImportAudienceDialogComponent implements OnInit {
     fd.append('audience', this.dialogData.audience);
     const keyAudience = this.dialogData.audience === 'retailer' ? 'importAudienceRetailer' : 'importAudienceCustomer';
     this.dataService.showLoading(true);
-    this.b2cVoucherService[keyAudience](fd).subscribe(
+    let dataParams = null;
+    if (this.dialogData.audience === 'retailer' && this.dialogData.isLimitVoucher) {
+      dataParams = {
+        isVoucher: 1,
+        limit_by_voucher: this.dialogData.isLimitVoucher ? 1 : 0
+      }
+    }
+    this.b2cVoucherService[keyAudience](fd, dataParams).subscribe(
       res => {
         if (res && res.data.is_valid) {
           this.rows = res.data && res.data.audiences ? res.data.audiences : [];
