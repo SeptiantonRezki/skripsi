@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -50,6 +50,10 @@ export class DesignVoucherComponent implements OnInit {
   }
   get data(): any { return this._data; }
 
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output()
+  onRefresh: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -63,6 +67,7 @@ export class DesignVoucherComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
     });
+    this.onRefresh = new EventEmitter<any>();
     this.templateBannerList = this.bannerTemplate.getTemplateBanner('LOREM IPSUM');
   }
 
@@ -139,8 +144,10 @@ export class DesignVoucherComponent implements OnInit {
         bodyForm.append('image', this.imageConverted);
         bodyForm.append('body', this.formDesignVoucher.get('body').value);
         this.b2cVoucherService.updateDesign({ voucher_id: this.detailVoucher.id }, bodyForm).subscribe((res) => {
-          this.router.navigate(['b2c-voucher']);
+          // this.router.navigate(['b2c-voucher']);
           this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.onRefresh.emit();
         }, err => {
           console.warn('err', err);
           this.dataService.showLoading(false);

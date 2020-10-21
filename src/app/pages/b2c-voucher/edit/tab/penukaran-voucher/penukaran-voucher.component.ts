@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -37,6 +37,10 @@ export class PenukaranVoucherComponent implements OnInit {
   }
   get data(): any { return this._data; }
 
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output()
+  onRefresh: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -51,6 +55,7 @@ export class PenukaranVoucherComponent implements OnInit {
       this.isDetail = params[0].path === 'detail' ? true : false;
     });
     this.nominalList = null;
+    this.onRefresh = new EventEmitter<any>();
   }
 
   ngOnInit() {
@@ -132,13 +137,17 @@ export class PenukaranVoucherComponent implements OnInit {
 
   addNominal(opsi: string) {
     if (opsi === 'transfer-bank') {
-      const transferBank = this.formPenukaranVoucher.controls['transferBankArray'] as FormArray;
-      transferBank.push(this.formBuilder.group({ nominal: [this.formPenukaranVoucher.get('tambahTransferBank').value], isCheck: [true] }));
-      this.formPenukaranVoucher.get('tambahTransferBank').setValue(null);
+      if (this.formPenukaranVoucher.get('tambahTransferBank').value > 0) {
+        const transferBank = this.formPenukaranVoucher.controls['transferBankArray'] as FormArray;
+        transferBank.push(this.formBuilder.group({ nominal: [this.formPenukaranVoucher.get('tambahTransferBank').value], isCheck: [true] }));
+        this.formPenukaranVoucher.get('tambahTransferBank').setValue(null);
+      }
     } else { // pojok-bayar
-      const saldoPojokBayar = this.formPenukaranVoucher.controls['saldoPojokBayarArray'] as FormArray;
-      saldoPojokBayar.push(this.formBuilder.group({ nominal: [this.formPenukaranVoucher.get('tambahSaldoPojokBayar').value], isCheck: [true] }));
-      this.formPenukaranVoucher.get('tambahSaldoPojokBayar').setValue(null);
+        const saldoPojokBayar = this.formPenukaranVoucher.controls['saldoPojokBayarArray'] as FormArray;
+        if (this.formPenukaranVoucher.get('tambahSaldoPojokBayar').value > 0) {
+        saldoPojokBayar.push(this.formBuilder.group({ nominal: [this.formPenukaranVoucher.get('tambahSaldoPojokBayar').value], isCheck: [true] }));
+        this.formPenukaranVoucher.get('tambahSaldoPojokBayar').setValue(null);
+      }
     }
   }
 
@@ -173,10 +182,12 @@ export class PenukaranVoucherComponent implements OnInit {
           'reimburse_pojok_bayar': saldoPojokBayarValue.length > 0 ? saldoPojokBayarValue : [],
           'transfer_bank': transferBankValue.length > 0 ? transferBankValue : [],
           'pojok_bayar': saldoPojokBayarValue.length > 0 ? saldoPojokBayarValue : []
-        }
+        };
         this.b2cVoucherService.updatePenukaranVoucher({ voucher_id: this.detailVoucher.id }, body).subscribe((res) => {
-          this.router.navigate(["b2c-voucher"]);
+          // this.router.navigate(["b2c-voucher"]);
           this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.onRefresh.emit();
         }, (err) => {
           console.warn('err', err);
           this.dataService.showLoading(false);
