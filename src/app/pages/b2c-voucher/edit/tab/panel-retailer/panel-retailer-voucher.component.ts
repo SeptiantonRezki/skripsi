@@ -748,7 +748,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: 'retailer'};
+    dialogConfig.data = { audience: 'retailer', isLimitVoucher: this.isLimitVoucher };
 
     this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
 

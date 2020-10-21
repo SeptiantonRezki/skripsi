@@ -73,9 +73,9 @@ export class B2CVoucherService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
-  importAudienceRetailer(body?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, 'importAudienceRetailer');
-    return this.postApi(url, body);
+  importAudienceRetailer(body?: any, queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'importAudienceRetailer',);
+    return this.postApi(url, body, queryParams);
   }
 
   getAudienceCustomer(queryParams?: any): Observable<any> {
@@ -88,9 +88,9 @@ export class B2CVoucherService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
-  importAudienceCustomer(body?: any): Observable<any> {
+  importAudienceCustomer(body?: any, queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'importAudienceCustomer');
-    return this.postApi(url, body);
+    return this.postApi(url, body, queryParams);
   }
 
   updatePanel(context?: any, body?: any): Observable<any> {
