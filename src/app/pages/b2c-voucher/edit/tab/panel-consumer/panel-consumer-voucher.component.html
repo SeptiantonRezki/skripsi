@@ -121,7 +121,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}"
-                  (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
+                  (selectionChange)="generateList('region', wil.get('zone').value, i, 'selection')">
                   <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -131,7 +131,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
-                  (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
+                  (selectionChange)="generateList('area', wil.get('region').value, i, 'selection')">
                   <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -141,7 +141,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
-                  (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                  (selectionChange)="generateList('salespoint', wil.get('area').value, i, 'selection')">
                   <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -151,7 +151,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
-                  (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                  (selectionChange)="generateList('district', wil.get('salespoint').value, i, 'selection')">
                   <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
@@ -162,7 +162,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
-                  (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
+                  (selectionChange)="generateList('territory', wil.get('district').value, i, 'selection')">
                   <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
