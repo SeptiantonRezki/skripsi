@@ -131,10 +131,15 @@
                 [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah" matTooltip="Ubah Tanggal Penjadwalan">
                 <mat-icon class="secondary-text">update</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="" [disabled]="row.status_audience !== 'approved'"
-                matTooltip="Eksport Trade Program" (click)="export(row)">
-                <mat-icon *ngIf="row.status_audience === 'approved'" class="orange-500-fg">save_alt</mat-icon>
-                <mat-icon *ngIf="row.status_audience !== 'approved'" class="secondary-text">save_alt</mat-icon>
+              <button type="button" mat-icon-button color=""
+                matTooltip="Request File" (click)="requestFile(row)" [disabled]="reqDownloadCondition(row)['request']">
+                <mat-icon *ngIf="reqDownloadCondition(row)['request']" class="orange-500-fg">account_balance_wallet</mat-icon>
+                <mat-icon *ngIf="!reqDownloadCondition(row)['request']" class="secondary-text">account_balance_wallet</mat-icon>
+              </button>
+              <button type="button" mat-icon-button color="" [disabled]="reqDownloadCondition(row)['download']"
+                matTooltip="Eksport Trade Program" (click)="downloadFile(row)">
+                <mat-icon *ngIf="reqDownloadCondition(row)['download']" class="orange-500-fg">save_alt</mat-icon>
+                <mat-icon *ngIf="!reqDownloadCondition(row)['download']" class="secondary-text">save_alt</mat-icon>
               </button>
               <button type="button" mat-icon-button color="primary"
                 [disabled]="row.status_scheduler === 'publish' || !permission?.hapus" matTooltip="Hapus"
