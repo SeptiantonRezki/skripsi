@@ -202,49 +202,36 @@
         <ngx-datatable-column
           name="Tipe"
           prop="classification"
+          [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="Retailer Classification"
-          prop="retail_classification"
+          prop="classification"
+          [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="SRC Classification"
           prop="src_classification"
+          [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="SRC Type"
           prop="src_type"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Field Force"
-          prop="ff_name"
           [sortable]="false"
         ></ngx-datatable-column>
-        <ngx-datatable-column name="Daftar Ayo" prop="status">
-          <ng-template
-            ngx-datatable-cell-template
-            let-row="row"
-            let-value="value"
-          >
-            <span *ngIf="row.status === 'active' || row.status === 'inactive'"
-              >Yes</span
-            >
-            <span *ngIf="row.status === 'not-registered'">No</span>
-          </ng-template>
-        </ngx-datatable-column>
         <ngx-datatable-column
           name="Kode Divisi"
-          prop="division_code"
+          prop="division"
           [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="Wilayah"
-          prop="region_code"
+          prop="region"
           [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
           name="Area"
-          prop="area_code"
+          prop="area"
           [sortable]="false"
         ></ngx-datatable-column>
       </ngx-datatable>

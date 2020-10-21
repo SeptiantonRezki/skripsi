@@ -78,6 +78,13 @@ export class PanelConsumerVoucherComponent implements OnInit {
   set data(data: any) {
     if (data) {
       this.detailVoucher = data;
+      this.isVoucherAutomation.setValue(data.automation !== null ? true : false);
+      this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
+      this.formConsumerGroup.get('va').setValue(data.automation);
+      this.formConsumerGroup.get('is_smoker').setValue(data.smoker);
+      this.formConsumerGroup.get('age_consumer_from').setValue(data.age_to);
+      this.formConsumerGroup.get('age_consumer_to').setValue(data.age_from);
+      this.formConsumerGroup.get('gender').setValue(data.gender);
       this.formConsumerGroup.get('isTargetAudience').setValue(data.is_target_audience_customer === 1 ? true : false);
       if (data && data.dataPanelCustomer) {
         if (data.dataPanelCustomer.selected) {
@@ -216,6 +223,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
 
     this.addArea();
+    this.getDetail();
 
     this.formConsumerGroup.get('isTargetAudience').valueChanges.debounceTime(500).subscribe(res => {
       if (res) {
@@ -223,6 +231,21 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.getCustomerSelected();
       }
     });
+  }
+
+
+  getDetail() {
+    this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
+    if (this.detailVoucher) {
+      this.formConsumerGroup.get('is_smoker').setValue
+      this.formConsumerGroup.get('age_consumer_from').setValue
+      this.formConsumerGroup.get('age_consumer_to').setValue
+      this.formConsumerGroup.get('gender').setValue
+    } else {
+      setTimeout(() => {
+        this.getDetail();
+      }, 1000);
+    }
   }
 
   isChangeVoucherAutomation(event: any) {
@@ -714,7 +737,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id },
       this.formConsumerGroup.get('isTargetAudience').value ? body : bodyArea).subscribe(res => {
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-      this.router.navigate(['b2c-voucher']);
+      // this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
