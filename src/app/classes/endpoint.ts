@@ -656,7 +656,8 @@ export class Endpoint {
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
         redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
-        redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`
+        redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
+        listVoucherB2C: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/cashier-order/principal/voucher/list`
       },
       medalBadge: {
         medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
