@@ -35,6 +35,7 @@ export class ListDetailVoucherComponent implements OnInit {
   keyUp = new Subject<string>();
   viaList: any[] = [
     { name: 'Semua', value: 'all' },
+    { name: 'Retailer', value: 'retailer' },
     { name: 'Kasir', value: 'cashier' }
   ];
   statusList: any[] = [
