@@ -2424,5 +2424,50 @@ export const brConfig = {
         name: "Detil B2B Voucher"
       }
     ]
-  }
+  },
+  b2b_voucher_inject: {
+    index: [
+      {
+        type: "current",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Voucher"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit Voucher"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Voucher"
+      }
+    ]
+  },
 };
