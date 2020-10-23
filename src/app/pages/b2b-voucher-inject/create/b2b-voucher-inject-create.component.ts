@@ -417,16 +417,18 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       territory: ['']
     })
 
-    if (this.isDetail || this.isEdit) {
-      this.getDetail();
-      this.getRetailerSelected();
-      this.getDetailRedeem();
-      this.getListRetailer();
-    } else {
-      // this.product.disable();
-    }
+    setTimeout(() => {
+      if (this.isDetail || this.isEdit) {
+        this.getDetail();
+        this.getRetailerSelected();
+        this.getDetailRedeem();
+      } else {
+        // this.product.disable();
+      }
+    }, 1000);
 
     this.initAreaV2();
+    this.getListRetailer();
 
     this.filteredProduct.next(this.listProduct.slice());
 
