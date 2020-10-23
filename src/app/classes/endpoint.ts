@@ -714,8 +714,31 @@ export class Endpoint {
         getAudienceCustomer: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience`,
         exportAudienceCustomer: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/export`,
         importAudienceCustomer: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/import`,
-      }
+      },
 
+      b2b_voucher_inject: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher`,
+        create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
+
+        panelRetailerList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/retailer`,
+        panelMitraList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/mitra`,
+        panelPreviewImport: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/preview`,
+        panelImport: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/import`,
+        panelExport: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/export`,
+        selectedRetailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/retailer`,
+        selectedMitra: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/mitra`,
+        updatePanel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/panel/${context.voucher_id}`,
+
+        getRedeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem`,
+        redeemImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/import`,
+        redeemSubmitImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/submit-import`,
+        redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
+
+        product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

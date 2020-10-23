@@ -1,112 +1,112 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
-import { AuthGuard } from "./classes/auth.guard";
-import { NonAuthGuard } from "./classes/non-auth.guard";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { AuthGuard } from './classes/auth.guard';
+import { NonAuthGuard } from './classes/non-auth.guard';
 
 // routes
 const appRoutes: Routes = [
   {
-    path: "",
-    redirectTo: "login",
-    pathMatch: "full"
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-    path: "dashboard",
-    loadChildren: "./pages/dashboard/dashboard.module#DashboardModule",
+    path: 'dashboard',
+    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "user-management",
+    path: 'user-management',
     loadChildren:
-      "./pages/user-management/user-management.module#UserManagementModule",
+      './pages/user-management/user-management.module#UserManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "src-catalogue",
+    path: 'src-catalogue',
     loadChildren:
-      "./pages/src-catalogue/src-catalogue.module#SrcCatalogueModule",
+      './pages/src-catalogue/src-catalogue.module#SrcCatalogueModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "advertisement",
+    path: 'advertisement',
     loadChildren:
-      "./pages/inapp-marketing/inapp-marketing.module#InappMarketingModule",
+      './pages/inapp-marketing/inapp-marketing.module#InappMarketingModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "my-profile",
-    loadChildren: "./pages/profile/profile.module#ProfileModule",
+    path: 'my-profile',
+    loadChildren: './pages/profile/profile.module#ProfileModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "sku-management",
+    path: 'sku-management',
     loadChildren:
-      "./pages/sku-management/sku-management.module#SkuManagementModule",
+      './pages/sku-management/sku-management.module#SkuManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "dte",
-    loadChildren: "./pages/dte/dte.module#DteModule",
+    path: 'dte',
+    loadChildren: './pages/dte/dte.module#DteModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "notifications",
-    loadChildren: "./pages/notification/notification.module#NotificationModule",
+    path: 'notifications',
+    loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "delivery",
-    loadChildren: "./pages/delivery-management/delivery-management.module#DeliveryManagementModule",
+    path: 'delivery',
+    loadChildren: './pages/delivery-management/delivery-management.module#DeliveryManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "content-management",
+    path: 'content-management',
     loadChildren:
-      "./pages/content-management/content-management.module#ContentManagementModule",
+      './pages/content-management/content-management.module#ContentManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "manajemen-template-pesan",
+    path: 'manajemen-template-pesan',
     loadChildren:
-      "./pages/template-message-management/template-message-management.module#TemplateMessageManagementModule",
+      './pages/template-message-management/template-message-management.module#TemplateMessageManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "newsfeed-management",
+    path: 'newsfeed-management',
     loadChildren:
-      "./pages/newsfeed-management/newsfeed-management.module#NewsfeedManagementModule",
+      './pages/newsfeed-management/newsfeed-management.module#NewsfeedManagementModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "settings",
-    loadChildren: "./pages/settings/settings.module#SettingsModule",
+    path: 'settings',
+    loadChildren: './pages/settings/settings.module#SettingsModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "task-sequencing",
-    loadChildren: "./pages/task-sequencing/task-sequencing.module#TaskSequencingModule",
+    path: 'task-sequencing',
+    loadChildren: './pages/task-sequencing/task-sequencing.module#TaskSequencingModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "login",
-    loadChildren: "./pages/login/login.module#LoginModule",
+    path: 'login',
+    loadChildren: './pages/login/login.module#LoginModule',
     canActivate: [NonAuthGuard]
   },
   {
-    path: "forgot-password",
+    path: 'forgot-password',
     loadChildren:
-      "./pages/forgot-password/forgot-password.module#ForgotPasswordModule",
+      './pages/forgot-password/forgot-password.module#ForgotPasswordModule',
     canActivate: [NonAuthGuard]
   },
   {
-    path: "reset-password/:token",
+    path: 'reset-password/:token',
     loadChildren:
-      "./pages/reset-password/reset-password.module#ResetPasswordModule",
+      './pages/reset-password/reset-password.module#ResetPasswordModule',
     canActivate: [NonAuthGuard]
   },
   {
-    path: "access-denied",
-    loadChildren: "./pages/500/access-denied.module#AccessDeniedModule",
+    path: 'access-denied',
+    loadChildren: './pages/500/access-denied.module#AccessDeniedModule',
     canActivate: [AuthGuard]
   },
   {
@@ -120,13 +120,18 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "b2b-voucher",
-    loadChildren: "./pages/b2-bvoucher/b2-bvoucher.module#B2BVoucherModule",
+    path: 'b2b-voucher',
+    loadChildren: './pages/b2-bvoucher/b2-bvoucher.module#B2BVoucherModule',
     canActivate: [AuthGuard]
   },
   {
-    path: "syarat-ketentuan",
-    loadChildren: "./pages/syarat-ketentuan/syarat-ketentuan.module#SyaratKetentuanModule",
+    path: 'inject-b2b-voucher',
+    loadChildren: './pages/b2b-voucher-inject/b2b-voucher-inject.module#B2BVoucherInjectModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'syarat-ketentuan',
+    loadChildren: './pages/syarat-ketentuan/syarat-ketentuan.module#SyaratKetentuanModule',
     canActivate: [AuthGuard]
   },
   {
@@ -140,8 +145,8 @@ const appRoutes: Routes = [
   //   canActivate: [AuthGuard]
   // },
   {
-    path: "**",
-    loadChildren: "./pages/404/error-404.module#Error404Module"
+    path: '**',
+    loadChildren: './pages/404/error-404.module#Error404Module'
   }
 ];
 

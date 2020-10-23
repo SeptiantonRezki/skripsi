@@ -1,0 +1,86 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Inject B2B Voucher'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/inject-b2b-voucher','create']">
+        <mat-icon>add</mat-icon>TAMBAH
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Inject B2B Voucher</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Voucher" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.panel_retailer_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Panel WS" prop="panel_wholesaler_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.panel_wholesaler_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Voucher" prop="retailer_redeem_coin_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.retailer_redeem_coin_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Dibagikan" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy
+            HH:mm:ss'}}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total Nilai Voucher" prop="nominal">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.nominal | rupiahFormater }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Expiry" prop="expired_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
+            HH:mm:ss'}}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
