@@ -323,6 +323,16 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            <div>
+              <mat-label>
+                Order Online:
+              </mat-label>
+              <mat-radio-group formControlName="order_online" class="radio-group pb-16" fxLayout="row wrap">
+                <mat-radio-button class="radio-button" [value]="1">Ya</mat-radio-button>
+                <mat-radio-button class="radio-button" [value]="0">Tidak</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
           </div>
 
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
