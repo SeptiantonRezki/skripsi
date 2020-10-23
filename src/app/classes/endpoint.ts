@@ -722,6 +722,8 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
         delete: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}`,
+        exportInvoice: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/export-invoice`,
+        exportExcel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/export-excel`,
 
         panelRetailerList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/retailer`,
         panelMitraList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/inject/panel/mitra`,

@@ -58,12 +58,12 @@ export class B2BVoucherInjectService extends BaseService {
   }
 
   exportInvoice(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'export_invoice', context);
+    const url = this.getUrl(this.namespace, 'exportInvoice', context);
     return this.getApi(url);
   }
 
   exportExcel(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'export_excel', context);
+    const url = this.getUrl(this.namespace, 'exportExcel', context);
     return this.getBlobAsJsonApi(url);
   }
 
