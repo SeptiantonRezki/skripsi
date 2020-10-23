@@ -53,6 +53,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   isSort: boolean = false;
   detailVoucher: any;
   isDetail: Boolean;
+  isEdit: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,7 +67,8 @@ export class PanelMitraVoucherComponent implements OnInit {
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
-      if (this.isDetail) {
+      this.isEdit = params[0].path === 'edit' ? true : false;
+      if (this.isDetail ||  this.isEdit) {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
       }
     });
@@ -120,9 +122,11 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.initAreaV2();
     this.getListMitra();
 
-    if (this.isDetail) {
-      this.getMitraSelected();
-    }
+    setTimeout(() => {
+      if (this.isDetail ||  this.isEdit) {
+        this.getMitraSelected();
+      }
+    }, 1000);
 
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
@@ -669,7 +673,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.b2bVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
-      if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
+      if (!this.isDetail && !this.isEdit) this.router.navigate(['b2b-voucher', 'detail']);
       else {
         // this.getDetail();
         this.getMitraSelected();
