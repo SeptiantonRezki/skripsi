@@ -132,7 +132,10 @@ export class RedeemListComponent implements OnInit {
 
     this.initAreaV2();
     setTimeout(() => {
-      this.getRedeemList();
+      this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject');
+      if (this.detailVoucher) {
+        this.getRedeemList();
+      }
     }, 2000);
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
@@ -595,8 +598,6 @@ export class RedeemListComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
-      setTimeout(() => {
-        
       this.b2bVoucherInjectService.getRedeems({ voucher_id: this.detailVoucher.id }, this.pagination).subscribe(
         res => {
           Page.renderPagination(this.pagination, res.data);
@@ -613,7 +614,6 @@ export class RedeemListComponent implements OnInit {
           this.dataService.showLoading(false);
         }
       );
-    }, 2000);
 
       // this.b2bVoucherInjectService.getMitra(this.pagination).subscribe(res => {
       //   if (res.status == 'success') {

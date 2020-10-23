@@ -419,16 +419,20 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
     setTimeout(() => {
       if (this.isDetail || this.isEdit) {
-        this.getDetail();
-        this.getRetailerSelected();
-        this.getDetailRedeem();
+        this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject');
+        if (this.detailVoucher) {
+          this.initEditDetail();
+        } else {
+          setTimeout(() => {
+            this.initEditDetail();
+          }, 1000);
+        }
       } else {
         // this.product.disable();
       }
     }, 1000);
 
     this.initAreaV2();
-    this.getListRetailer();
 
     this.filteredProduct.next(this.listProduct.slice());
 
@@ -474,6 +478,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  initEditDetail() {
+    this.getDetail();
+    this.getRetailerSelected();
+    this.getDetailRedeem();
+    this.getListRetailer();
   }
 
   createFormProduct() {
@@ -822,7 +833,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       }
       this.loadingIndicator = true;
 
-      this.b2bVoucherInjectService.getRetailer(this.pagination).subscribe(res => {
+      this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -1020,6 +1031,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       body['type_business'] = 'all';
     } else {
       body['business_id'] = this.selected.map(bsn => bsn.id);
+      body['nominal'] = this.selected.map(bsn => bsn.nominal);
+      body['amount'] = this.selected.map(bsn => bsn.amount);
     }
     this.dataService.showLoading(true);
 
