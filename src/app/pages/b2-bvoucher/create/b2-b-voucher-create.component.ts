@@ -25,6 +25,7 @@ import { NullAstVisitor } from '@angular/compiler';
   styleUrls: ['./b2-b-voucher-create.component.scss']
 })
 export class B2BVoucherCreateComponent implements OnInit {
+  isB2CVoucher: FormControl = new FormControl(false);
   isDetail: Boolean;
   formDetilVoucher: FormGroup;
   formFilter: FormGroup;
@@ -82,6 +83,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
   inputChipList = [];
+  voucherB2CList: any;
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -110,6 +112,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
+    this.voucherB2CList = null;
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -363,7 +366,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         endDate: res.data.end_date,
         voucherDate: res.data.available_at,
         voucherExpiry: res.data.expired_at,
-        group_trade_program: res.data.group_id.map(rs => Number(rs)),
+        group_trade_program: res.data.is_b2c_voucher ? this.voucherB2CList : res.data.group_id.map(rs => Number(rs)),
         note: res.data.description,
         limit_by_product: res.data.limit_by === 'product',
         limit_by_category: res.data.limit_by === 'category',
@@ -396,6 +399,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     // this.getProducts();
     this.getCategories();
     this.getGroupTradeProgram();
+    this.getVoucherB2CList();
 
 
     this.formDetilVoucher = this.formBuilder.group({
@@ -454,6 +458,12 @@ export class B2BVoucherCreateComponent implements OnInit {
       this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
     })
 
+    this.isB2CVoucher.valueChanges.debounceTime(1000).subscribe(res => {
+      if (res) {
+        // this.formDetilVoucher.get('group_trade_program').setValue(this.voucherB2CList);
+      }
+    });
+
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.getListMitra();
       this.getListRetailer();
@@ -489,6 +499,10 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  isChangeB2BVoucher(event) {
+
   }
 
   createFormProduct() {
@@ -892,6 +906,14 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.getListRetailer();
   }
 
+  getVoucherB2CList() {
+    this.b2bVoucherService.getVoucherB2CList().subscribe(res => {
+      this.voucherB2CList = res.data;
+    }, err => {
+      console.log('err', err)
+    });
+  }
+
   checkAreaLocation(area, lastSelfArea) {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
@@ -990,7 +1012,8 @@ export class B2BVoucherCreateComponent implements OnInit {
       group_id: this.formDetilVoucher.get('group_trade_program').value,
       description:  this.formDetilVoucher.get('note').value,
       limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
-      this.formDetilVoucher.get('limit_by_category').value ? 'category' : null
+      this.formDetilVoucher.get('limit_by_category').value ? 'category' : null,
+      is_b2c_voucher: this.isB2CVoucher.value
     };
     // console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {

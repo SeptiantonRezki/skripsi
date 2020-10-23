@@ -12,7 +12,7 @@
         <mat-tab label="Detil Voucher">
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetilVoucher" (keydown.enter)="$event.preventDefault();">
-              <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" *ngIf="isDetail">
+              <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" *ngIf="isDetail">
                 <div class="button-row">
                   <button mat-flat-button style="width: 160px" color="white" (click)="exportInvoice()">
                     <mat-icon>vertical_align_top</mat-icon> Export Invoice
@@ -25,6 +25,13 @@
                 </div>
               </div>
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+                <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
+                  <span>Pilih dari</span>
+                  <mat-checkbox class="mt-4 ml-4 mb-8"
+                    [formControl]="isB2CVoucher">
+                    B2C Voucher</mat-checkbox>
+                </div>
+
                 <mat-form-field fxFlex="50" class="is-light">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
                   <mat-error
@@ -107,8 +114,11 @@
                 </div>
 
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple>
-                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple *ngIf="!isB2CVoucher.value">
+                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id" >{{ gtp.name }}</mat-option>
+                  </mat-select>
+                  <mat-select placeholder="Group Trade Program B2C" formControlName="group_trade_program" multiple *ngIf="isB2CVoucher.value">
+                    <mat-option *ngFor="let item of voucherB2CList" [value]="item.id">{{ item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
