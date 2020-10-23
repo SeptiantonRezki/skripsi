@@ -123,7 +123,12 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.getListMitra();
 
     if (this.isDetail || this.isEdit) {
-      this.getMitraSelected();
+      setTimeout(() => {
+        this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject');
+        if (this.detailVoucher) {
+          this.getMitraSelected();
+        }
+      }, 2000);
     }
 
 
