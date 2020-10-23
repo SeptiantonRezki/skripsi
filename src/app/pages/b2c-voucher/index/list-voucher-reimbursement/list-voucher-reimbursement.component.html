@@ -101,55 +101,57 @@
         [scrollbarH]="true"
         fusePerfectScrollbar
       >
-        <ngx-datatable-column name="No">
+        <ngx-datatable-column name="No" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Retailer Code" prop="name">
+        <ngx-datatable-column name="Retailer Code" prop="code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+            <a class="direct-edit">{{row.code}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Toko SRC" prop="audience_customer_count">
+        <ngx-datatable-column name="Toko SRC" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.audience_customer_count}}
+            {{row.name}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Area" prop="audience_retailer_count">
+        <ngx-datatable-column name="Area" prop="area">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.audience_retailer_count}}
+            {{row.area}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Regional" prop="qty_voucher_sent">
+        <ngx-datatable-column name="Regional" prop="region">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.qty_voucher_sent}}
+            {{row.region}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Opsi Penukaran" prop="customer_redeem_count">
+        <ngx-datatable-column name="Opsi Penukaran" prop="type_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.customer_redeem_count}}
+            {{row.type_name}}
           </ng-template>
         </ngx-datatable-column>s
 
-        <ngx-datatable-column name="Nominal Penukaran" prop="retailer_receive_voucher_count">
+        <ngx-datatable-column name="Nominal Penukaran" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.retailer_receive_voucher_count}}
+            {{row.nominal | rupiahFormater }}
         </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
-            HH:mm:ss'}}</ng-template>
+        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="coin">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin | rupiahFormaterWithoutRp }}
+          </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Request" prop="nominal">
+        <ngx-datatable-column name="Tanggal Request" prop="request_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.nominal | rupiahFormater }}
+            {{row.request_date | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>
