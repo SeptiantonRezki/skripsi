@@ -7,78 +7,78 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BtoBVoucherService extends BaseService {
-  namespace = "b2b_voucher";
+  namespace = 'b2b_voucher';
   constructor(http: HttpClient) {
     super(http);
   }
 
   get(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "get");
+    const url = this.getUrl(this.namespace, 'get');
     return this.getApi(url, queryParams);
   }
 
   show(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "show", context);
+    const url = this.getUrl(this.namespace, 'show', context);
     return this.getApi(url, {});
   }
 
   create(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "create");
+    const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
   }
 
   update(context?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "update", context);
+    const url = this.getUrl(this.namespace, 'update', context);
     return this.putApi(url, body);
   }
 
   getRetailer(queryParams?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_retailer");
+    const url = this.getUrl(this.namespace, 'list_retailer');
     return this.postApi(url, body, queryParams);
   }
 
   getMitra(queryParams?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_mitra");
+    const url = this.getUrl(this.namespace, 'list_mitra');
     return this.postApi(url, body, queryParams);
   }
 
   getSelectedRetailer(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "selected_retailer", context);
+    const url = this.getUrl(this.namespace, 'selected_retailer', context);
     return this.getApi(url)
   }
 
   getSelectedMitra(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "selected_mitra", context);
+    const url = this.getUrl(this.namespace, 'selected_mitra', context);
     return this.getApi(url)
   }
 
   updatePanel(context?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "update_panel", context);
+    const url = this.getUrl(this.namespace, 'update_panel', context);
     return this.postApi(url, body);
   }
 
   exportInvoice(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_invoice", context);
+    const url = this.getUrl(this.namespace, 'export_invoice', context);
     return this.getApi(url);
   }
 
   exportExcel(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_excel", context);
+    const url = this.getUrl(this.namespace, 'export_excel', context);
     return this.getBlobAsJsonApi(url);
   }
 
   getRedeems(context?, queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "redeem", context);
+    const url = this.getUrl(this.namespace, 'redeem', context);
     return this.getApi(url, queryParams);
   }
 
   exportRetailer(body?, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_panel", context);
+    const url = this.getUrl(this.namespace, 'export_panel', context);
     return this.postBlobAsJsonApi(url, body);
   }
 
   exportMitra(body?, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_panel", context);
+    const url = this.getUrl(this.namespace, 'export_panel', context);
     return this.postBlobAsJsonApi(url, body);
   }
 
@@ -88,12 +88,12 @@ export class BtoBVoucherService extends BaseService {
   }
 
   previewImport(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "preview_import");
+    const url = this.getUrl(this.namespace, 'preview_import');
     return this.getApi(url, queryParams);
   }
 
   getProductList(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "product_list");
+    const url = this.getUrl(this.namespace, 'product_list');
     return this.getApi(url, queryParams);
   }
 
@@ -110,6 +110,11 @@ export class BtoBVoucherService extends BaseService {
   redeemImportSubmit(body: any, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'redeem_import_submit', context);
     return this.postApi(url, body);
+  }
+
+  getVoucherB2CList(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'listVoucherB2C');
+    return this.getApi(url, queryParams);
   }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
