@@ -31,8 +31,8 @@ export class ListVoucherReimbursementComponent implements OnInit {
   endArea: String;
 
   keyUp = new Subject<string>();
-  viaList: any[] = [{ name: 'Retailer', value: 'retailer' }, { name: 'Kasir', value: 'cashier' }];
-  statusList: any[] = [{ name: 'Semua', value: '' }, { name: 'Belum di redeem', value: '0' }, { name: 'Sudah di redeem', value: '1' }];
+  viaList: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Retailer', value: 'retailer' }, { name: 'Kasir', value: 'cashier' }];
+  statusList: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Belum di redeem', value: '0' }, { name: 'Sudah di redeem', value: '1' }];
 
   loadingIndicator: boolean;
   reorderable: boolean;
@@ -70,8 +70,6 @@ export class ListVoucherReimbursementComponent implements OnInit {
     this.isSort = false;
     this.loadingIndicator = true;
     this.reorderable = true;
-    this.viaList = [];
-    this.statusList = [];
     this.rows = [];
 
     this.keyUp.debounceTime(1000)
