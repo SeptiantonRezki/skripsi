@@ -202,9 +202,9 @@
                 (select)="onSelect($event)" [rowIdentity]="getId">
 
                 <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-                  <ng-template ngx-datatable-header-template>
+                  <!-- <ng-template ngx-datatable-header-template>
                     <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
-                  </ng-template>
+                  </ng-template> -->
 
                   <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                     let-onCheckboxChangeFn="onCheckboxChangeFn">
@@ -215,24 +215,44 @@
                   </ng-template>
                 </ngx-datatable-column>
 
+                <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.name || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
                 <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+                <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                    <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
+                    <span class="row-address">{{row.owner || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nilai Tiap Voucher" prop="code" [sortable]="false">
+                <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                    <span class="row-address">{{row.code || '-'}}</span>
+                    <span class="row-address">{{row.classification || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Jumlah Voucher" prop="jumlah_voucher" [sortable]="false">
+                <ngx-datatable-column name="Kode WS" prop="ws_code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                    <span class="row-address">{{row.jumlah_voucher || '-'}}</span>
+                    <span class="row-address">{{row.ws_code || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Nama WS" prop="ws_name" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-address">{{row.ws_name || '-'}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Jumlah Voucher" prop="amount">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.amount | rupiahFormaterWithoutRp}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Nilai Voucher" prop="nominal">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.nominal | rupiahFormater}}
                   </ng-template>
                 </ngx-datatable-column>
               </ngx-datatable>

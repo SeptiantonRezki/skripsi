@@ -529,7 +529,7 @@ export class RedeemListComponent implements OnInit {
 
   getRedeemList(string?) {
     try {
-      this.dataService.showLoading(true);
+      // this.dataService.showLoading(true);
       this.pagination.per_page = 25;
       if (string) { this.pagination.search = string; }
       else { delete this.pagination.search; }
