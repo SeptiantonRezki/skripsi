@@ -438,7 +438,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   getListMitra(string?: any) {
     console.log('Search', string);
     try {
-      this.dataService.showLoading(true);
+      // this.dataService.showLoading(true);
       this.pagination.per_page = 25;
       if (string) { this.pagination.search = string; }
       else { delete this.pagination.search; }
@@ -651,7 +651,7 @@ export class PanelMitraVoucherComponent implements OnInit {
 
   getMitraSelected() {
     this.b2bVoucherInjectService.getSelectedMitra({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
+      console.log('mitra selected', res);
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
@@ -665,11 +665,16 @@ export class PanelMitraVoucherComponent implements OnInit {
     let body = {
       _method: 'PUT',
       type: 'wholesaler'
-    }
+    };
     if (this.allRowsSelected) {
       body['type_business'] = 'all';
     } else {
       body['business_id'] = this.selected.map(bsn => bsn.id);
+      body['panels'] = this.selected.map(bsn => ({
+        business_id: bsn.id,
+        nominal: bsn.nominal,
+        amount: bsn.amount
+      }));
     }
     this.dataService.showLoading(true);
 
