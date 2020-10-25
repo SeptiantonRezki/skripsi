@@ -44,20 +44,19 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Voucher" prop="retailer_redeem_coin_count">
+        <ngx-datatable-column name="Jumlah Voucher" prop="amount">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.retailer_redeem_coin_count}}
+            {{row.amount | rupiahFormaterWithoutRp}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibagikan" prop="start_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy
-            HH:mm:ss'}}</ng-template>
+        <ngx-datatable-column name="Tanggal Dibagikan" prop="available_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.available_at | date: 'dd/MM/yyyy'}}</ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Total Nilai Voucher" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.nominal | rupiahFormater }}
+            {{row.nominal | rupiahFormater}}
           </ng-template>
         </ngx-datatable-column>
 
@@ -66,7 +65,7 @@
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false" [frozenRight]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

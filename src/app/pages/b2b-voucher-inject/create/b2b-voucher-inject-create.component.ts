@@ -763,7 +763,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   getListRetailer(string?: any) {
     console.log('Search', string);
     try {
-      this.dataService.showLoading(true);
+      // this.dataService.showLoading(true);
       this.pagination.per_page = 25;
       if (string) { this.pagination.search = string; }
       else { delete this.pagination.search; }
@@ -1026,13 +1026,15 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     let body = {
       _method: 'PUT',
       type: 'retailer'
-    }
+    };
     if (this.allRowsSelected) {
       body['type_business'] = 'all';
     } else {
-      body['business_id'] = this.selected.map(bsn => bsn.id);
-      body['nominal'] = this.selected.map(bsn => bsn.nominal);
-      body['amount'] = this.selected.map(bsn => bsn.amount);
+      body['panels'] = this.selected.map(bsn => ({
+        business_id: bsn.id,
+        nominal: bsn.nominal,
+        amount: bsn.amount
+      }));
     }
     this.dataService.showLoading(true);
 
@@ -1172,6 +1174,11 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       error = error.rejection;
     }
     console.log(error);
+    try {
+      alert(error ? error.error ? error.error.message : 'Terjadi Kesalahan Export' : 'Terjadi Kesalahan Export');
+    } catch (x) {
+      console.log(x);
+    }
     // alert('Open console to see the error')
   }
 
