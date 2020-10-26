@@ -32,6 +32,11 @@ export class B2BVoucherInjectService extends BaseService {
     return this.putApi(url, body);
   }
 
+  delete(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete', context);
+    return this.deleteApi(url);
+  }
+
   getRetailer(queryParams?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, 'panelRetailerList');
     return this.postApi(url, body, queryParams);
