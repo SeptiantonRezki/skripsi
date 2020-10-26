@@ -15,4 +15,8 @@ export class FuseNavigationComponent
     {
 
     }
+
+    redirectToPrivacy() {
+        window.open('https://www.pmiprivacy.com/id/business-partner', '_blank');
+    }
 }

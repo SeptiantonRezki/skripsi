@@ -2424,5 +2424,95 @@ export const brConfig = {
         name: "Detil B2B Voucher"
       }
     ]
-  }
+  },
+  b2c_voucher: {
+    index: [
+      {
+        type: "current",
+        url: "/b2c-voucher",
+        name: "B2C Voucher" 
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/b2c-voucher",
+        name: "B2C Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat B2C Voucher"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/b2c-voucher",
+        name: "B2C Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit B2C Voucher"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/b2c-voucher",
+        name: "B2C Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detil B2C Voucher"
+      }
+    ],
+  },
+  b2b_voucher_inject: {
+    index: [
+      {
+        type: "current",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat B2C Voucher"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit Voucher"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/inject-b2b-voucher",
+        name: "Inject B2B Voucher"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Voucher"
+      }
+    ]
+  },
 };

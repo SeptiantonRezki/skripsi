@@ -86,4 +86,9 @@ export class AuthenticationService extends BaseService {
     const url = this.getUrl(this.namespace, "check_token");
     return this.postApi(url, body);
   }
+
+  getSyaratKetentuan(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_syarat_ketentuan");
+    return this.getApi(url);
+  }
 }

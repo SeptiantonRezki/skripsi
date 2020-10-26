@@ -168,6 +168,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="pt-16">
                   <strong>Jenis Produk</strong>
                 </div>
@@ -295,6 +296,21 @@
                     </mat-form-field>
                   </div>
                 </div>
+              </div>
+              <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+                fxLayoutGap.lt-md="10px" fxFlex="1 0 auto" style="margin-left: 20px;margin-bottom: 20px;"
+                *ngIf="!detailProduct.sharelink_url">
+                <button type="button" mat-stroked-button color="primary" (click)="generateLink()">GENERATE
+                  LINK</button>
+              </div>
+              <div fxLayout="row" *ngIf="detailProduct.sharelink_url" style="margin-left: 20px;margin-bottom: 20px;">
+                <mat-form-field fxFlex="50" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Link Product" [value]="detailProduct.sharelink_url" disabled>
+                  <mat-icon matSuffix (click)="copyMessage(detailProduct.sharelink_url)" style="cursor: pointer;"
+                    matTooltip="Salin Link">
+                    content_copy
+                  </mat-icon>
+                </mat-form-field>
               </div>
               <div *ngIf="formProductGroup.get('is_private_label').value">
                 <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">

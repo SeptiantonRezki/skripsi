@@ -1,0 +1,169 @@
+<div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="isDetail ? 'Detail B2C Voucher' : 'Edit B2C Voucher'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+      <mat-tab-group>
+        <mat-tab label="Detail Voucher">
+          <div class="ayo-middle" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formDetailVoucher" (keydown.enter)="$event.preventDefault();">
+              <div fxLayout.gt-xs="row wrap" fxLayout="column" fxLayoutGap="20px" class="top-table p-8 pt-24 ml-24">
+                <mat-form-field fxFlex.gt-xs="50" class="is-light pb-12">
+                  <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
+                  <mat-error *ngIf="formDetailVoucher.controls['name'].hasError('required') && formDetailVoucher.controls['name'].touched ">
+                    Nama Voucher harus diisi.
+                  </mat-error>
+                </mat-form-field>
+                <div fxLayout.gt-xs="row" fxLayout="column" fxFlex.gt-xs="50" fxLayoutGap="20px">
+                  <mat-form-field class="is-light pb-12" fxFlex.gt-xs="50">
+                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucherValue">
+                    <mat-error *ngIf="formDetailVoucher.controls['voucherValue'].hasError('required') && formDetailVoucher.controls['voucherValue'].hasError('min') && formDetailVoucher.controls['voucherValue'].touched ">
+                      Nilai Voucher harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="is-light pb-12" fxFlex.gt-xs="50">
+                    <input matInput type="number" placeholder="Jumlah Voucher per Consumer" formControlName="jumlahVoucherPerConsumer">
+                    <mat-error *ngIf="formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('required') && formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('min') &&formDetailVoucher.controls['jumlahVoucherPerConsumer'].touched ">
+                      Jumlah Voucher per Consumer harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout.gt-xs="row" fxLayout="column" fxFlex.gt-xs="50" fxLayoutGap="20px">
+                  <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
+                    <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                      placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher">
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                    <mat-error *ngIf="formDetailVoucher.controls['startDate'].hasError('required') && formDetailVoucher.controls['startDate'].touched">
+                      Tanggal Awal Program harus diisi.
+                    </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['startDate'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
+                    <input matInput (focus)="endDate.open()" [min]="formDetailVoucher.controls['startDate'].value" [matDatepicker]="endDate"
+                      placeholder="Tanggal Akhir Program" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error *ngIf="formDetailVoucher.controls['endDate'].hasError('required') && formDetailVoucher.controls['endDate'].touched">
+                      Tanggal Akhir Program harus diisi.
+                    </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['endDate'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout.gt-xs="row" fxLayout="column" fxFlex.gt-xs="50" fxLayoutGap="20px">
+                  <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
+                    <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
+                      placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at" [min]="minDateVoucher">
+                    <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherPicker></mat-datepicker>
+                    <mat-error *ngIf="formDetailVoucher.controls['available_at'].hasError('required') && formDetailVoucher.controls['available_at'].touched">
+                      Tanggal Awal Pemakaian Voucher harus diisi.
+                    </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['available_at'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
+                    <input matInput (focus)="voucherExpiry.open()" [min]="formDetailVoucher.controls['available_at'].value"
+                      [matDatepicker]="voucherExpiry" placeholder="Tanggal Kedaluwarsa Voucher"
+                      formControlName="expired_at">
+                    <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherExpiry></mat-datepicker>
+                    <mat-error *ngIf="formDetailVoucher.controls['expired_at'].hasError('required') && formDetailVoucher.controls['expired_at'].touched">
+                      Tanggal Kedaluwarsa Voucher harus diisi.
+                    </mat-error>
+                    <mat-error *ngIf="formDetailVoucher.controls['expired_at'].invalid">
+                      Tanggal Tidak Valid
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="p-8 pb-8 ml-24" fxLayout="row" fxLayoutAlign="start center">
+                <span class="font-size-16">Batasan</span>
+              </div>
+              <div fxLayout.gt-xs="row wrap" fxLayout="column" fxLayoutGap="20px" class="top-table p-8 ml-24">
+                <div fxFlex="100" fxLayoutGap="20px">
+                  <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)">
+                    Batasi dengan Produk
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">
+                    Batasi Dengan Kategori
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="limit_purchase" (change)="isCheckedPembelianMinimum($event)">
+                    Berlaku Pembelian Minimum
+                  </mat-checkbox>
+                </div>
+                <mat-form-field  fxFlex="50" class="pt-20 is-light" *ngIf="formDetailVoucher.get('limit_by_product').value">
+                  <mat-chip-list #chipList aria-label="Product List">
+                    <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                      (removed)="remove(product)">
+                      {{product.name}}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                    </mat-chip>
+                    <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
+                      (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list>
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
+                    <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                      (onSelectionChange)="getProductObj(item)">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" class="pt-24 is-light" *ngIf="!formDetailVoucher.get('limit_by_product').value">
+                  <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                </mat-form-field>
+                <mat-form-field class="is-light" fxFlex="50">
+                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
+                    [disabled]="!formDetailVoucher.get('limit_by_category').value">
+                    <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="is-light" fxFlex="50">
+                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian" formControlName="minimumPurchase" *ngIf="formDetailVoucher.get('limit_purchase').value">
+                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian" *ngIf="!formDetailVoucher.get('limit_purchase').value" [disabled]="true">
+                  <mat-error *ngIf="formDetailVoucher.controls['minimumPurchase'].hasError('required') && formDetailVoucher.controls['minimumPurchase'].touched">
+                    Batasan Berdasarkan Pembelian harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_detail_voucher">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+                  (click)="onSaveDetail()">
+                  SIMPAN
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Panel Retailer">
+          <app-panel-retailer-voucher [data]="detailVoucher" [isLimitVoucher]="isLimitVoucher" (onRefresh)="onRefresh()"></app-panel-retailer-voucher>
+        </mat-tab>
+        <mat-tab label="Panel Consumer">
+          <app-panel-consumer-voucher [data]="detailVoucher" (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)" (onRefresh)="onRefresh()"></app-panel-consumer-voucher>
+        </mat-tab>
+        <mat-tab label="Penukaran Voucher">
+          <app-penukaran-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-penukaran-voucher>
+        </mat-tab>
+        <mat-tab label="Design Voucher">
+          <app-design-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-design-voucher>
+        </mat-tab>
+        <mat-tab label="List Detail Voucher">
+          <app-list-detail-voucher [data]="detailVoucher"></app-list-detail-voucher>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+  </div>
+</div>

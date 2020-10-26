@@ -1808,7 +1808,7 @@ export class NotificationCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = this.audienceSelected.concat(response);
+        this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
@@ -1836,7 +1836,10 @@ export class NotificationCreateComponent {
       frm.controls['url_iframe'].setValue('');
       frm.controls['is_target_audience'].setValue(true);
 
-      setTimeout(() => { this.audienceSelected = audience; }, 400);
+      setTimeout(() => {
+        this.audienceSelected = audience;
+        this.onSelect({ selected: this.audienceSelected });
+      }, 400);
 
       // end request
       this.dataService.showLoading(false);

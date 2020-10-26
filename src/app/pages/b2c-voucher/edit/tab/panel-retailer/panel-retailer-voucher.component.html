@@ -1,0 +1,246 @@
+<div class="ayo-middle p-24" fxLayout="column">
+  <div>
+    <div fxLayout="row" class="pb-24 px-12">
+      <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
+        [formControl]="isTargetAudience">
+        Target Audience</mat-checkbox>
+    </div>
+
+    <form [formGroup]="formFilter" autoComplete="off">
+      <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select placeholder="National" formControlName="national">
+            <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select placeholder="Zone" formControlName="zone" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+              Zona' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select placeholder="Regional" formControlName="region" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+              Regional' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+              Area' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name === 'all' ? 'Semua
+              Salespoint' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <mat-select placeholder="District" formControlName="district" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all' ? 'Semua
+              District' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <mat-select placeholder="Territory" formControlName="territory" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+              Territory' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div> -->
+      </div>
+    </form>
+
+    <!-- <form [formGroup]="formFilterRetailer">
+      <div
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between stretch"
+        fxLayout.lt-md="column"
+        class="pt-16"
+        fxLayoutGap="20px"
+        fxLayoutGap.lt-md="0px"
+        *ngIf="isTargetAudience.value === true"
+      >
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select
+            placeholder="Retail Classification"
+            formControlName="retail_classification"
+          >
+            <mat-option
+              *ngFor="let item of retailClassification"
+              [value]="item.value"
+            >
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select
+            placeholder="SRC Classification"
+            formControlName="src_classification"
+          >
+            <mat-option
+              *ngFor="let item of srcClassification"
+              [value]="item.value"
+            >
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%" class="is-light form-primary">
+          <mat-select
+            placeholder="SRC Type"
+            formControlName="src_type"
+          >
+            <mat-option
+              *ngFor="let item of srcType"
+              [value]="item.value"
+            >
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form> -->
+
+    <div *ngIf="isTargetAudience.value === true">
+      <div
+        fxLayout="row wrap"
+        fxLayout.lt-md="column"
+        fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center"
+        class="p-16 export"
+      >
+        <button
+          mat-raised-button
+          type="button"
+          class="is-danger"
+          (click)="importRetailer()"
+        >
+          <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+        </button>
+        <button
+          mat-raised-button
+          type="button"
+          class="is-danger"
+          (click)="exportRetailer()"
+        >
+          <mat-icon>vertical_align_top</mat-icon> Export XLS
+        </button>
+      </div>
+
+      <ngx-datatable
+        class="material"
+        [rows]="rows"
+        [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'"
+        [headerHeight]="48"
+        [footerHeight]="56"
+        [rowHeight]="'auto'"
+        [reorderable]="reorderable"
+        [selected]="selected"
+        [selectionType]="'checkbox'"
+        [count]="pagination.total"
+        [limit]="pagination.per_page"
+        [externalPaging]="true"
+        [selectAllRowsOnPage]="false"
+        [externalSorting]="true"
+        (page)="setPage($event)"
+        [sorts]="[{ prop: 'name', dir: 'asc' }]"
+        (select)="onSelect($event)"
+        [rowIdentity]="getId"
+        (sort)="onSort($event)"
+        fusePerfectScrollbar
+      >
+        <ngx-datatable-column
+          [width]="68"
+          [canAutoResize]="false"
+          [sortable]="true"
+          [draggable]="false"
+          [resizeable]="false"
+          [headerCheckboxable]="true"
+        >
+
+          <ng-template
+            ngx-datatable-cell-template
+            let-value="value"
+            let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn"
+          >
+            <mat-checkbox 
+              [checked]="isSelected" 
+              (change)="onCheckboxChangeFn($event)" 
+              [disabled]="allRowsSelected" 
+              *ngIf="!allRowsSelected"
+            >
+            </mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+        <ngx-datatable-column
+          name="No Ponsel"
+          [width]="180"
+          prop="phone"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Tipe"
+          prop="classification"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Retailer Classification"
+          prop="classification"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Classification"
+          prop="src_classification"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="SRC Type"
+          prop="src_type"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Kode Divisi"
+          prop="division"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Wilayah"
+          prop="region"
+          [sortable]="false"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Area"
+          prop="area"
+          [sortable]="false"
+        ></ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_panel_retailer">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+        (click)="onSave()">
+        SIMPAN
+      </button>
+    </div>
+  </div>
+</div>

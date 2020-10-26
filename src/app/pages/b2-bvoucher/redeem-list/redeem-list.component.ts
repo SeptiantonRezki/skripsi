@@ -3,7 +3,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
@@ -11,6 +11,9 @@ import { DataService } from 'app/services/data.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { GeotreeService } from 'app/services/geotree.service';
+import * as moment from 'moment';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { ImportRedeemDialogComponent } from './import-redeem-dialog/import-redeem-dialog.component';
 
 @Component({
   selector: 'app-redeem-list',
@@ -54,19 +57,19 @@ export class RedeemListComponent implements OnInit {
   isDetail: Boolean;
   detailVoucher: any;
   totalData: number;
+  dialogRef: any;
 
   constructor(
-    private http: HttpClient,
-    private fuseSplashScreen: FuseSplashScreenService,
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
     private b2bVoucherService: BtoBVoucherService,
     private geotreeService: GeotreeService,
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
   ) {
-    activatedRoute.url.subscribe(params => {
+    this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       if (this.isDetail) {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
@@ -691,6 +694,71 @@ export class RedeemListComponent implements OnInit {
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_voucher", param);
     this.router.navigate(["b2b-voucher", "detail"]);
+  }
+
+  async importRedeem() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler' };
+
+    this.dialogRef = this.dialog.open(ImportRedeemDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.getRedeemList();
+        this.onSelect({ selected: response });
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
+  }
+
+  async exportRedeem() {
+    this.dataService.showLoading(true);
+    const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    try {
+      const response = await this.b2bVoucherService.redeemExport({ voucher_id: this.detailVoucher.id }).toPromise();
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
+      this.dataService.showLoading(false);
+    } catch (error) {
+      if (!(error instanceof HttpErrorResponse)) {
+        error = error.rejection;
+      }
+      console.log('err', error);
+      alert('Terjadi kesalahan saat Export File');
+      this.dataService.showLoading(false);
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
   }
 
 }

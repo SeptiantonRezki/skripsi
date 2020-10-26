@@ -1,0 +1,161 @@
+
+<div class="ayo-middle p-24" fxLayout="column">
+  <div>
+    <div
+      fxLayout="row wrap"
+      fxLayout.lt-md="column"
+      fxLayoutGap="20px"
+      fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="end center"
+      class="p-16 export"
+    >
+      <button
+        mat-raised-button
+        type="button"
+        class="is-danger"
+        (click)="exportListReimbursement()"
+      >
+        <mat-icon>vertical_align_top</mat-icon> Export XLS
+      </button>
+    </div>
+    <form [formGroup]="formFilter" autoComplete="off">
+      <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="National" formControlName="national">
+            <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="Zone" formControlName="zone" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+              Zona' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="Regional" formControlName="region" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+              Regional' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+              Area' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="is-light form-primary">
+          <mat-select
+            placeholder="Via"
+            formControlName="via"
+          >
+            <mat-option
+              *ngFor="let item of viaList"
+              [value]="item.value"
+            >
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="is-light form-primary">
+          <mat-select
+            placeholder="Opsi Penukaran"
+            formControlName="status"
+          >
+            <mat-option
+              *ngFor="let item of statusList"
+              [value]="item.value"
+            >
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <div>
+      <ngx-datatable
+        class="material"
+        [rows]="rows"
+        [columnMode]="'force'"
+        [headerHeight]="48"
+        [footerHeight]="56"
+        [rowHeight]="'auto'"
+        [reorderable]="reorderable"
+        [count]="pagination.total"
+        [limit]="pagination.per_page"
+        [externalPaging]="true"
+        [externalSorting]="true"
+        (page)="setPage($event)"
+        [sorts]="[{ prop: 'name', dir: 'asc' }]"
+        (sort)="onSort($event)"
+        [scrollbarH]="true"
+        fusePerfectScrollbar
+      >
+        <ngx-datatable-column name="No" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Retailer Code" prop="code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit">{{row.code}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Toko SRC" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.name}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Area" prop="area">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.area}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Regional" prop="region">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.region}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Opsi Penukaran" prop="type_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.type_name}}
+          </ng-template>
+        </ngx-datatable-column>s
+
+        <ngx-datatable-column name="Nominal Penukaran" prop="nominal">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.nominal | rupiahFormater }}
+        </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="coin">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin | rupiahFormaterWithoutRp }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Request" prop="request_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.request_date | date: 'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+
+  </div>
+</div>

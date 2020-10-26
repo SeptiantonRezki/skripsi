@@ -138,7 +138,7 @@
           </div>
         </form>
       </div>
-      <div
+      <!-- <div
         fxLayout="row wrap"
         fxLayoutAlign="end stretch"
         fxLayout.lt-md="column"
@@ -156,7 +156,7 @@
         >
           Load Data
         </button>
-      </div>
+      </div> -->
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -283,14 +283,14 @@
         [rowIdentity]="getId" (sort)="onSort($event)" fusePerfectScrollbar>
         <!-- <ngx-datatable-column [width]="68" *ngIf="formAudience.get('limit').value !== 'pick-all'" [canAutoResize]="false"
           [sortable]="true" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true">
-          <ng-template ngx-datatable-header-template >
+          <!-- <ng-template ngx-datatable-header-template >
             <mat-checkbox 
               [checked]="allRowsSelected" 
               (change)="selectFn(!allRowsSelected);"
               *ngIf="!isDetail"
             >
             </mat-checkbox>
-          </ng-template>
+          </ng-template> -->
 
           <ng-template
             ngx-datatable-cell-template
@@ -305,12 +305,12 @@
               *ngIf="!allRowsSelected"
             >
             </mat-checkbox>
-            <mat-checkbox 
+            <!-- <mat-checkbox 
               [checked]="true" 
               [disabled]="allRowsSelected && isDetail || formAudience.get('limit').value === 'pick-all' && isDetail" 
               *ngIf="allRowsSelected" class="mat-checkbox-all"
             >
-            </mat-checkbox>
+            </mat-checkbox> -->
           </ng-template>
         </ngx-datatable-column> -->
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">

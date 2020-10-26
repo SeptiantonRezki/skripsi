@@ -98,7 +98,7 @@
                 },
                 {
                   "replace": "src/public/index.html",
-                  "with": "src/public/index.prod.html"
+                  "with": "src/public/index.qa.html"
                 }
               ],
               "styles": [

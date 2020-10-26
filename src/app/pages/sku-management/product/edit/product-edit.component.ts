@@ -96,6 +96,8 @@ export class ProductEditComponent {
   areaFromLogin;
   detailAreaSelected: any[];
 
+  linkProduct: FormControl = new FormControl();
+
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
@@ -150,6 +152,28 @@ export class ProductEditComponent {
       district: [],
       territory: []
     }
+  }
+
+  generateLink() {
+    this.dataService.showLoading(true);
+    console.log("this.detail", this.detailProduct.id);
+    this.productService.generateLink({ id: this.detailProduct.id }).subscribe(res => {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: "Link Berhasil dibuat!" });
+      this.getDetails();
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
+
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Product Disalin!" });
   }
 
   parallelResolver(): Observable<any[]> {

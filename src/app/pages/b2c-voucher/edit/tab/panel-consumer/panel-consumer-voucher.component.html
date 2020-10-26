@@ -1,0 +1,316 @@
+<div class="ayo-middle p-24" #containerScroll fxLayout="column">
+  <div>
+    <div fxLayout="row" class="pb-24 px-12" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
+      <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeVoucherAutomation($event)"
+        [formControl]="isVoucherAutomation">
+        Voucher Automation</mat-checkbox>
+    </div>
+
+    <form autocomplete="off" [formGroup]="formConsumerGroup">
+      <div fxLayout="row" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
+
+        <div fxFlex="45">
+
+        <div class="px-12" fxLayout="column">
+          <mat-form-field fxFlex="50" class="is-light" *ngIf="isVoucherAutomation.value === true">
+            <input matInput type="number" placeholder="Jumlah Total Alokasi Voucher" formControlName="allocationVoucher">
+            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].hasError('required') && formConsumerGroup.controls['allocationVoucher'].touched ">
+              Jumlah Total Alokasi Voucher harus diisi.
+            </mat-error>
+            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].hasError('min') && formConsumerGroup.controls['allocationVoucher'].touched ">
+              Jumlah Total Alokasi Voucher harus diisi.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex="50" class="is-light form-primary">
+            <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
+              <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formConsumerGroup.controls['is_smoker'].hasError('required') && formConsumerGroup.controls['is_smoker'].touched">
+              Tipe Consumer harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="pb-16 px-12">
+          <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
+            <span class="font-size-16">Batasan Umur</span>
+          </div>
+          <div class="" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+            <mat-form-field class="is-light form-primary" fxFlex.xs="50">
+              <input matInput type="number" formControlName="age_consumer_from" placeholder="Dari">
+              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_from'].hasError('required') && formConsumerGroup.controls['age_consumer_from'].touched">
+                Dari harus diisi
+              </mat-error>
+              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_from'].hasError('min') && formConsumerGroup.get('age_consumer_from').touched">
+                Tidak boleh kurang dari {{formConsumerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="is-light form-primary" fxFlex.xs="50">
+              <input matInput type="number" formControlName="age_consumer_to" placeholder="Sampai">
+              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_to'].hasError('required') && formConsumerGroup.controls['age_consumer_to'].touched">
+                Sampai harus diisi
+              </mat-error>
+              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_from'].hasError('min') && formConsumerGroup.get('age_consumer_to').touched">
+                Tidak boleh kurang dari minimal batasan umur yg telah di isi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="pb-16 px-12">
+          <div class="" fxLayout="row" fxLayoutAlign="start center">
+            <span class="font-size-16">Jenis Kelamin</span>
+          </div>
+          <mat-radio-group formControlName="gender" class="radio-group">
+            <mat-radio-button class="radio-button" *ngFor="let item of listGender" [value]="item.value">
+              {{item.name}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        </div>
+        
+        <div fxFlex="45">
+
+          <div class="pb-16 px-12" *ngIf="isVoucherAutomation.value === true">
+            <mat-radio-group formControlName="va" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listVA" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <mat-error *ngIf="formConsumerGroup.controls['va'].hasError('required') && formConsumerGroup.controls['va'].touched">
+            Opsi Automation harus dipilih
+          </mat-error>
+
+        </div>
+
+      </div>
+
+      <div fxLayout="row" class="pb-24 px-12" *ngIf="!isVoucherAutomation.value === true">
+        <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
+          formControlName="isTargetAudience">Target Audience</mat-checkbox>
+      </div>
+
+      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false">
+        <div class="" formArrayName="areas" *ngFor="let wil of formConsumerGroup.get('areas')['controls']; let i = index;">
+          <div [formGroupName]="i">
+            <div class="mb-16" style="background: #3a3a3a;color: white;padding: 0 24px;" fxLayout="row" fxLayoutAlign="space-between center">
+              <div fxFlex="50">
+                <h3 class="">&nbsp;</h3>
+              </div>
+              <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <button *ngIf="formConsumerGroup.get('areas').value.length === 1 || i === (formConsumerGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea()">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button *ngIf="formConsumerGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
+                  <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                  National harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}"
+                  (selectionChange)="generateList('region', wil.get('zone').value, i, 'selection')">
+                  <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
+                  Zone harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
+                  (selectionChange)="generateList('area', wil.get('region').value, i, 'selection')">
+                  <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
+                  Regional harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
+                  (selectionChange)="generateList('salespoint', wil.get('area').value, i, 'selection')">
+                  <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                Area harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
+                  (selectionChange)="generateList('district', wil.get('salespoint').value, i, 'selection')">
+                  <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                  Salespoint harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
+                  (selectionChange)="generateList('territory', wil.get('district').value, i, 'selection')">
+                  <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                  Distrik harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
+                  <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
+                  Territori harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === true">
+        <div [formGroup]="formFilter" >
+          <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  Zona' :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  Regional'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  Area'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                  'Semua
+                  Salespoint'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  District'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  Territori'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="p-0">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+            fxLayoutAlign="end center" class="p-16 export">
+            <a #downloadLink></a>
+            <button mat-raised-button type="button" class="is-danger" (click)="importCustomer()">
+              <mat-icon>arrow_downward</mat-icon> Import XLS
+            </button>
+            <button mat-raised-button type="button" class="is-danger" (click)="exportCustomer()">
+              <mat-icon>arrow_upward</mat-icon> Export XLS
+            </button>
+          </div>
+          <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+          <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+            [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+            [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+            [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
+            [selectCheck]='selectCheck' [rowIdentity]="getId">
+
+            <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+              <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+              </ng-template> -->
+
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <!-- <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
+                </mat-checkbox> -->
+                <mat-checkbox 
+                  [checked]="isSelected" 
+                  (change)="onCheckboxChangeFn($event)" 
+                  [disabled]="allRowsSelected" 
+                  *ngIf="!allRowsSelected"
+                ></mat-checkbox>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.code ? row.code : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Owner" prop="owner">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.owner ? row.owner : '-'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Tipe" prop="type">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.type.toUpperCase()}}
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_panel_customer">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+        (click)="onSave()">
+        SIMPAN
+      </button>
+    </div>
+
+  </div>
+</div>

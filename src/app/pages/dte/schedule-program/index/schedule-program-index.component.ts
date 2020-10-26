@@ -174,6 +174,30 @@ export class ScheduleProgramIndexComponent {
     });
   }
 
+  reqDownloadCondition(row): any {
+    let status = { request: false, download: false };
+    switch (row.status_export) {
+      case "unprocessed":
+        if (row.status_scheduler === 'draft') {
+          status = { request: false, download: false };
+        } else if (row.status_scheduler === 'publish') {
+          status = { request: true, download: false };
+        }
+        break;
+      case "running":
+        status = { request: false, download: false };
+        break;
+      case "done":
+        if (row.download_url) {
+          status = { request: false, download: true };
+        } else {
+          status = { request: false, download: false };
+        }
+        break;
+    }
+    return status;
+  }
+
   setMinDate(param?: any): void {
     this.formFilter.get("end_date").setValue("");
     this.minDate = param;
@@ -201,7 +225,7 @@ export class ScheduleProgramIndexComponent {
     });
   }
 
-  async export(item) {
+  async requestFile(item) {
     const length = 100 / item.trade_scheduler_templates.length === Infinity ? 0 : 100 / item.trade_scheduler_templates.length;
     let current_progress = 0;
 
@@ -243,11 +267,20 @@ export class ScheduleProgramIndexComponent {
 
     if (response.data && response.status) {
       setTimeout(() => {
-        this.downloadLink.nativeElement.href = response.data;
-        this.downloadLink.nativeElement.click();
+        // this.downloadLink.nativeElement.href = response.data;
+        // this.downloadLink.nativeElement.click();
         this.dataService.showLoading(false);
       }, 1000);
     }
+  }
+
+  async downloadFile(item) {
+    this.dataService.showLoading(true);
+    setTimeout(() => {
+      this.downloadLink.nativeElement.href = item.download_url;
+      this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    }, 1000);
   }
 
   convertDate(param?: Date) {
