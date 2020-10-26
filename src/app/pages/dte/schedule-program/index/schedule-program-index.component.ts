@@ -178,13 +178,21 @@ export class ScheduleProgramIndexComponent {
     let status = { request: false, download: false };
     switch (row.status_export) {
       case "unprocessed":
-        status = { request: true, download: false };
+        if (row.status_scheduler === 'draft') {
+          status = { request: false, download: false };
+        } else if (row.status_scheduler === 'publish') {
+          status = { request: true, download: false };
+        }
         break;
       case "running":
         status = { request: false, download: false };
         break;
       case "done":
-        status = { request: false, download: true };
+        if (row.download_url) {
+          status = { request: false, download: true };
+        } else {
+          status = { request: false, download: false };
+        }
         break;
     }
     return status;
