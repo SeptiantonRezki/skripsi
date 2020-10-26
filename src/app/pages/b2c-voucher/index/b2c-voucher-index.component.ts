@@ -172,6 +172,8 @@ export class B2CVoucherIndexComponent implements OnInit {
 
     this.offsetPaginationReimbursement = page ? (page - 1) : 0;
 
+    this.dataService.showLoading(true);
+    this.loadingIndicatorReimbursement = true;
     this.b2cVoucherService.getListReimbursement(this.paginationReimbursement).subscribe(
       res => {
         Page.renderPagination(this.paginationReimbursement, res.data);
@@ -179,10 +181,12 @@ export class B2CVoucherIndexComponent implements OnInit {
 
         // this.onLoad = false;
         this.loadingIndicatorReimbursement = false;
+        this.dataService.showLoading(false);
       },
       err => {
         console.error(err);
         // this.onLoad = false;
+        this.dataService.showLoading(false);
       }
     );
   }
