@@ -62,7 +62,7 @@ export class TaskSequencingIndexComponent implements OnInit {
       })
       .subscribe(data => {
         this.updateFilter(data);
-    });
+      });
   }
 
   ngOnInit() {
@@ -196,13 +196,29 @@ export class TaskSequencingIndexComponent implements OnInit {
   confirmDelete() {
     this.sequencingService.delete({ sequencing_id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
-        this.getSequencing();
+      this.getSequencing();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
     });
   }
 
-  export(item) {
+  reqDownloadCondition(row): any {
+    let status = { request: false, download: false };
+    switch (row.status_export) {
+      case "unprocessed":
+        status = { request: true, download: false };
+        break;
+      case "running":
+        status = { request: false, download: false };
+        break;
+      case "done":
+        status = { request: false, download: true };
+        break;
+    }
+    return status;
+  }
+
+  requestFile(item) {
     // const length = 100 / item.trade_scheduler_templates.length === Infinity ? 0 : 100 / item.trade_scheduler_templates.length;
     // let current_progress = 0;
 
@@ -229,8 +245,8 @@ export class TaskSequencingIndexComponent implements OnInit {
       (response) => {
         if (response.data && response.status) {
           setTimeout(() => {
-            this.downloadLink.nativeElement.href = response.data;
-            this.downloadLink.nativeElement.click();
+            // this.downloadLink.nativeElement.href = response.data;
+            // this.downloadLink.nativeElement.click();
             this.dataService.showLoading(false);
           }, 1000);
         }
@@ -263,6 +279,15 @@ export class TaskSequencingIndexComponent implements OnInit {
     //     this.dataService.showLoading(false);
     //   }, 1000);
     // }
+  }
+
+  async downloadFile(item) {
+    this.dataService.showLoading(true);
+    setTimeout(() => {
+      this.downloadLink.nativeElement.href = item.download_url;
+      this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    }, 1000);
   }
 
 }
