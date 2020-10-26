@@ -672,8 +672,8 @@ export class PanelMitraVoucherComponent implements OnInit {
       body['business_id'] = this.selected.map(bsn => bsn.id);
       body['panels'] = this.selected.map(bsn => ({
         business_id: bsn.id,
-        nominal: bsn.nominal,
-        amount: bsn.amount
+        // nominal: bsn.nominal,
+        // amount: bsn.amount
       }));
     }
     this.dataService.showLoading(true);
