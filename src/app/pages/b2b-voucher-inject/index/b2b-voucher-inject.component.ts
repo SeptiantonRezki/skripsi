@@ -18,7 +18,7 @@ import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service
 export class B2BVoucherInjectComponent implements OnInit {
   rows: any[];
   selected: any[];
-  id: any[];
+  id: any;
   statusRow: any;
 
   loadingIndicator = true;
@@ -152,6 +152,28 @@ export class B2BVoucherInjectComponent implements OnInit {
   directDetail(param?: any): void {
     this.dataService.setToStorage('detail_voucher_b2b_inject', param);
     this.router.navigate(['inject-b2b-voucher', 'detail']);
+  }
+
+  deleteVoucher(id) {
+    this.id = id;
+    const data = {
+      titleDialog: 'Hapus Voucher',
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ['Hapus', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.b2bVoucherInjectService.delete({ voucher_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getList();
+
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+      }
+    });
   }
 
 }
