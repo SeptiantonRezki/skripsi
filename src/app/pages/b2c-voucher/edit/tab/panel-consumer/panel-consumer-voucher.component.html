@@ -14,10 +14,13 @@
         <div class="px-12" fxLayout="column">
           <mat-form-field fxFlex="50" class="is-light" *ngIf="isVoucherAutomation.value === true">
             <input matInput type="number" placeholder="Jumlah Total Alokasi Voucher" formControlName="allocationVoucher">
-            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].hasError('required') && formConsumerGroup.controls['allocationVoucher'].touched ">
+            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].value === null && formConsumerGroup.controls['allocationVoucher'].touched">
               Jumlah Total Alokasi Voucher harus diisi.
             </mat-error>
-            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].hasError('min') && formConsumerGroup.controls['allocationVoucher'].touched ">
+            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].value === '' && formConsumerGroup.controls['allocationVoucher'].touched">
+              Jumlah Total Alokasi Voucher harus diisi.
+            </mat-error>
+            <mat-error *ngIf="formConsumerGroup.controls['allocationVoucher'].value === 0 && formConsumerGroup.controls['allocationVoucher'].touched">
               Jumlah Total Alokasi Voucher harus diisi.
             </mat-error>
           </mat-form-field>
@@ -79,7 +82,7 @@
               </mat-radio-button>
             </mat-radio-group>
           </div>
-          <mat-error *ngIf="formConsumerGroup.controls['va'].hasError('required') && formConsumerGroup.controls['va'].touched">
+          <mat-error *ngIf="!formConsumerGroup.controls['va'].value && formConsumerGroup.controls['va'].touched">
             Opsi Automation harus dipilih
           </mat-error>
 
