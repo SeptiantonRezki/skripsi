@@ -74,19 +74,14 @@ export class ImportPanelDialogComponent implements OnInit {
     )
   }
 
+  setRedIfDuplicate(item) {
+    if (!item.is_valid) return '#C62728';
+  }
+
   submit() {
     if (this.rows.length > 0) {
-      // const res = this.rows.map(item => { return { ...item } });
-      // let body = {
-      // }
-      // this.coinService.adjustCoin(body)
-      //   .subscribe(res => {
-      //     this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
-      //     this.dialogRef.close(res);
-      //   }, err => {
-      //     console.log('err', err);
-      //   })
-      this.dialogRef.close(this.rows);
+      let filteredRows = this.rows.filter(item => item.is_valid);
+      this.dialogRef.close(filteredRows);
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }
