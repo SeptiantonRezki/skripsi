@@ -242,7 +242,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
-      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoke);
+      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoker);
       this.formConsumerGroup.get('age_consumer_from').setValue(this.detailVoucher.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
