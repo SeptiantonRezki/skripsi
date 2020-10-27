@@ -48,19 +48,6 @@
         </mat-form-field>
         <mat-form-field class="is-light form-primary">
           <mat-select
-            placeholder="Via"
-            formControlName="via"
-          >
-            <mat-option
-              *ngFor="let item of viaList"
-              [value]="item.value"
-            >
-              {{item.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="is-light form-primary">
-          <mat-select
             placeholder="Opsi Penukaran"
             formControlName="status"
           >
@@ -101,7 +88,7 @@
         [scrollbarH]="true"
         fusePerfectScrollbar
       >
-        <ngx-datatable-column name="No" [sortable]="false">
+        <ngx-datatable-column name="No" [sortable]="false" [width]="50">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
             {{rowIndex + 1}}
           </ng-template>

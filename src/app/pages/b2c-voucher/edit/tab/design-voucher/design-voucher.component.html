@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="px-24">
+      <div class="px-24" *ngIf="!isDetail && detailVoucher?.is_enable_design">
         <div *ngIf="bannerSelected && bannerSelected?.id === 6" ngfDrop selectable="1" class="rectangle-16"
           [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
           [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <div *ngIf="bannerSelected" class="pt-16 px-24" formGroupName="banner_selected">
+      <div *ngIf="bannerSelected && detailVoucher?.is_enable_design" class="pt-16 px-24" formGroupName="banner_selected">
         <!-- <div *ngIf="bannerSelected['id'] !== 6">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -81,7 +81,7 @@
         <div class="" fxLayout="row" fxLayoutAlign="start center">
           <h3 class="">Isi Halaman</h3>
         </div>
-        <textarea *ngIf="!isDetail" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+        <textarea *ngIf="!isDetail && detailVoucher?.is_enable_design" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
         <textarea matInput *ngIf="isDetail" formControlName="body" class="pb-4" fxFlex="100"></textarea>
         <mat-error style="padding-top: 6px !important; font-size: .86em;"
           *ngIf="formDesignVoucher.controls['body'].hasError('required') && formDesignVoucher.controls['body'].touched">
@@ -91,7 +91,7 @@
 
     </form>
 
-    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail">
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_design">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onUpdate()">
         SIMPAN
