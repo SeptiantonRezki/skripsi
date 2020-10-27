@@ -247,6 +247,10 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
 
+      if (this.detailVoucher.is_enable_panel_customer) {
+        this.addArea();
+      }
+
       if (!this.formConsumerGroup.get('isTargetAudience').value) {
         for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
           const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
