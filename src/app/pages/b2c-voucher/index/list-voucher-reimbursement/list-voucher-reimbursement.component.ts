@@ -31,8 +31,13 @@ export class ListVoucherReimbursementComponent implements OnInit {
   endArea: String;
 
   keyUp = new Subject<string>();
-  viaList: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Retailer', value: 'retailer' }, { name: 'Kasir', value: 'cashier' }];
-  statusList: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Belum di redeem', value: '0' }, { name: 'Sudah di redeem', value: '1' }];
+  statusList: any[] = [
+    { name: 'Semua', value: '' },
+    { name: 'Transfer Bank', value: 'transfer-bank' },
+    { name: 'Pojok Bayar', value: 'pojok-bayar' },
+    { name: 'B2B Voucher', value: 'b2b-voucher' },
+    { name: 'Coin', value: 'coin' },
+  ];
 
   loadingIndicator: boolean;
   reorderable: boolean;
@@ -72,13 +77,13 @@ export class ListVoucherReimbursementComponent implements OnInit {
     this.reorderable = true;
     this.rows = [];
 
-    this.keyUp.debounceTime(1000)
+    const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
         return Observable.of(search).delay(500);
       })
       .subscribe(data => {
-        // this.getListMitra(data);
+        this.getListReimbursement(data);
       });
   }
 
@@ -89,7 +94,6 @@ export class ListVoucherReimbursementComponent implements OnInit {
       zone: [''],
       region: [''],
       area: [''],
-      via: [''],
       status: ['']
     });
 
@@ -195,7 +199,7 @@ export class ListVoucherReimbursementComponent implements OnInit {
       if (string) { this.pagination.search = string;
       } else { delete this.pagination.search; }
       const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
-      ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      ({ key, value })).filter((item: any, index) => { console.log('index', index); return (item.value !== null && item.value !== '' && item.value.length !== 0 && index !== 4 && index !== 5); });
       const area_id = areaSelected[areaSelected.length - 1].value;
       const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.pagination.area = area_id;
@@ -257,6 +261,7 @@ export class ListVoucherReimbursementComponent implements OnInit {
           }
         }
       }
+      this.pagination['type'] = this.formFilter.get('status').value;
       this.loadingIndicator = true;
 
       this.b2cVoucherService.getListReimbursement(this.pagination).subscribe(res => {

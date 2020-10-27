@@ -62,24 +62,20 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Tanggal Awal Program" prop="end_date">
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
-                HH:mm:ss'}}</ng-template>
+            <ngx-datatable-column name="Tanggal Awal Program" prop="start_date">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy'}}</ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Tanggal Akhir Program" prop="expired_at">
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
-                HH:mm:ss'}}</ng-template>
+            <ngx-datatable-column name="Tanggal Akhir Program" prop="end_date">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy'}}</ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Tanggal Awal Pemakaian Voucher" prop="expired_at">
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
-                HH:mm:ss'}}</ng-template>
+            <ngx-datatable-column name="Tanggal Awal Pemakaian Voucher" prop="available_at">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.available_at | date: 'dd/MM/yyyy'}}</ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Tanggal Expiry Voucher" prop="expired_at">
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
-                HH:mm:ss'}}</ng-template>
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy'}}</ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Nilai Voucher" prop="nominal" >
