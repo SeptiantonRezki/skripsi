@@ -78,7 +78,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   set data(data: any) {
     if (data) {
       this.detailVoucher = data;
-      this.isVoucherAutomation.setValue(data.automation !== null ? true : false);
+      this.isVoucherAutomation.setValue(data.automation ? true : false);
       this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
       this.formConsumerGroup.get('va').setValue(data.automation);
       this.formConsumerGroup.get('is_smoker').setValue(data.smoker);
