@@ -227,7 +227,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       }
     });
 
-    this.addArea();
+    // this.addArea();
     this.getDetail();
 
     this.formConsumerGroup.get('isTargetAudience').valueChanges.debounceTime(500).subscribe(res => {
@@ -242,41 +242,43 @@ export class PanelConsumerVoucherComponent implements OnInit {
   async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
-      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoke);
+      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoker);
       this.formConsumerGroup.get('age_consumer_from').setValue(this.detailVoucher.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
 
-      // if (!this.formConsumerGroup.get('isTargetAudience').value) {
-      //   for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
-      //     const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
-      //     const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
-      //     // console.log('CONSUMER'+val, index)
-      //     wilayah.push(this.formBuilder.group({
-      //       national: [this.getArea(response, 'national'), Validators.required],
-      //       zone: [this.getArea(response, 'division')],
-      //       region: [this.getArea(response, 'region')],
-      //       area: [this.getArea(response, 'area')],
-      //       salespoint: [this.getArea(response, 'salespoint')],
-      //       district: [this.getArea(response, 'district')],
-      //       territory: [this.getArea(response, 'teritory')],
-      //       list_national: this.formBuilder.array(this.listLevelArea),
-      //       list_zone: this.formBuilder.array([]),
-      //       list_region: this.formBuilder.array([]),
-      //       list_area: this.formBuilder.array([]),
-      //       list_salespoint: this.formBuilder.array([]),
-      //       list_district: this.formBuilder.array([]),
-      //       list_territory: this.formBuilder.array([])
-      //     }));
+      if (!this.formConsumerGroup.get('isTargetAudience').value) {
+        for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
+          const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+          const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+          console.log('CONSUMER'+index, val)
+          console.log('CONSUMERregion'+index, this.getArea(response, 'region'))
+          console.log('CONSUMERresponse'+index, response)
+          wilayah.push(this.formBuilder.group({
+            national: [this.getArea(response, 'national'), Validators.required],
+            zone: [this.getArea(response, 'division')],
+            region: [this.getArea(response, 'region')],
+            area: [this.getArea(response, 'area')],
+            salespoint: [this.getArea(response, 'salespoint')],
+            district: [this.getArea(response, 'district')],
+            territory: [this.getArea(response, 'teritory')],
+            list_national: this.formBuilder.array(this.listLevelArea),
+            list_zone: this.formBuilder.array([]),
+            list_region: this.formBuilder.array([]),
+            list_area: this.formBuilder.array([]),
+            list_salespoint: this.formBuilder.array([]),
+            list_district: this.formBuilder.array([]),
+            list_territory: this.formBuilder.array([])
+          }));
 
-      //     this.initArea(index);
-      //     this.initFormGroup(response, index);
-
-      //     if (this.detailVoucher.area_customer.length === (index + 1)) {
-      //       this.onLoad = false;
-      //     }
-      //   }
-      // }
+          if (this.detailVoucher.area_customer.length === (index + 1)) {
+            this.onLoad = false;
+          } else {
+            this.initArea(index);
+            this.initFormGroup(response, index);
+          }
+        }
+      }
       
     } else {
       setTimeout(() => {
@@ -288,12 +290,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
     if (event.checked) {
-      this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
-      this.formConsumerGroup.get('va').setValidators(Validators.required);
+      // this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
+      // this.formConsumerGroup.get('va').setValidators(Validators.required);
     } else {
       console.log('CLEAR')
-      this.formConsumerGroup.get('allocationVoucher').clearValidators();
-      this.formConsumerGroup.get('va').clearValidators();
+      // this.formConsumerGroup.get('allocationVoucher').clearValidators();
+      // this.formConsumerGroup.get('va').clearValidators();
     }
   }
 
@@ -749,6 +751,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
+    console.log('formConsumerGroup.controls[allocationVoucher].value', this.formConsumerGroup.controls['allocationVoucher'].value)
     if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
     let body = null;
     const bodyArea = {
@@ -763,17 +766,54 @@ export class PanelConsumerVoucherComponent implements OnInit {
       'gender': this.formConsumerGroup.get('gender').value,
       'allocation_voucher': this.formConsumerGroup.get('allocationVoucher').value
     };
-    this.dataService.showLoading(true);
     if (this.formConsumerGroup.get('isTargetAudience').value) {
       body = {
         'type': 'customer',
         'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
         'user_id': this.selected.map(aud => aud.id),
       };
+    } else {
+      if (this.isVoucherAutomation.value) {
+        if (!this.formConsumerGroup.get('allocationVoucher').value || this.formConsumerGroup.get('allocationVoucher').value < 1) {
+          commonFormValidator.validateAllFields(this.formConsumerGroup);
+          alert('Jumlah Alokasi Voucher harus diisi');
+          return;
+        }
+        if (!this.formConsumerGroup.get('va').value) {
+          commonFormValidator.validateAllFields(this.formConsumerGroup);
+          return;
+        }
+      }
     }
 
-    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id },
-      this.formConsumerGroup.get('isTargetAudience').value ? body : bodyArea).subscribe(res => {
+    let _areas = [];
+      let areas = [];
+      let value = this.formConsumerGroup.getRawValue();
+
+      value.areas.map(item => {
+        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+        for (const val of this.typeArea) {
+          const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+          if (filteredValue.length > 0) _areas.push(...filteredValue)
+        }
+
+        areas.push(_.last(_areas));
+        _areas = [];
+      })
+
+      let same = this.findDuplicate(areas.map(item => item.value));
+      if (same.length > 0) {
+        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+      }
+
+      bodyArea['area_id'] = [];
+      areas.map(item => {
+        console.log('AREAS', item)
+        bodyArea['area_id'].push(item.value);
+      });
+
+    this.dataService.showLoading(true);
+    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body ? body : bodyArea).subscribe(res => {
       // this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
@@ -1119,6 +1159,26 @@ export class PanelConsumerVoucherComponent implements OnInit {
   getArea(response, selection) {
     return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
+
+  findDuplicate(array) {
+    var object = {};
+    var result = [];
+
+    array.forEach(function (item) {
+      if (!object[item])
+        object[item] = 0;
+      object[item] += 1;
+    })
+
+    for (var prop in object) {
+      if (object[prop] >= 2) {
+        result.push(prop);
+      }
+    }
+
+    return result;
+  }
+
 
   initFormGroup(response, index) {
     response.data.map(item => {
