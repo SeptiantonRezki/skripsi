@@ -227,7 +227,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       }
     });
 
-    this.addArea();
+    // this.addArea();
     this.getDetail();
 
     this.formConsumerGroup.get('isTargetAudience').valueChanges.debounceTime(500).subscribe(res => {
