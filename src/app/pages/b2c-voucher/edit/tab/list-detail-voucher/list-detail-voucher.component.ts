@@ -222,7 +222,7 @@ export class ListDetailVoucherComponent implements OnInit {
       if (string) { this.pagination.search = string;
       } else { delete this.pagination.search; }
       const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
-      ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      ({ key, value })).filter((item: any, index: number) => item.value !== null && item.value !== '' && item.value.length !== 0 && index !== 4 && index !== 5);
       const area_id = areaSelected[areaSelected.length - 1].value;
       const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.pagination.area = area_id;

@@ -70,7 +70,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral Code', value: 'referral' },
     { name: 'Verified Customer', value: 'verified' },
     { name: 'Referral and Verified', value: 'referral-and-verified' },
-    { name: 'Referral or Verified', value: 'Referral-or-Verified' }
+    { name: 'Referral or Verified', value: 'referral-or-verified' }
   ];
 
   _data: any = null;
@@ -78,12 +78,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   set data(data: any) {
     if (data) {
       this.detailVoucher = data;
-      this.isVoucherAutomation.setValue(data.automation !== null ? true : false);
+      this.isVoucherAutomation.setValue(data.automation ? true : false);
       this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
       this.formConsumerGroup.get('va').setValue(data.automation);
       this.formConsumerGroup.get('is_smoker').setValue(data.smoker);
-      this.formConsumerGroup.get('age_consumer_from').setValue(data.age_to);
-      this.formConsumerGroup.get('age_consumer_to').setValue(data.age_from);
+      this.formConsumerGroup.get('age_consumer_from').setValue(data.age_from);
+      this.formConsumerGroup.get('age_consumer_to').setValue(data.age_to);
       this.formConsumerGroup.get('gender').setValue(data.gender);
       this.formConsumerGroup.get('isTargetAudience').setValue(data.is_target_audience_customer === 1 ? true : false);
       if (data && data.dataPanelCustomer) {
@@ -239,13 +239,45 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
 
-  getDetail() {
+  async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
-      this.formConsumerGroup.get('is_smoker').setValue
-      this.formConsumerGroup.get('age_consumer_from').setValue
-      this.formConsumerGroup.get('age_consumer_to').setValue
-      this.formConsumerGroup.get('gender').setValue
+      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoke);
+      this.formConsumerGroup.get('age_consumer_from').setValue(this.detailVoucher.age_from);
+      this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
+      this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
+
+      // if (!this.formConsumerGroup.get('isTargetAudience').value) {
+      //   for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
+      //     const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+      //     const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+      //     // console.log('CONSUMER'+val, index)
+      //     wilayah.push(this.formBuilder.group({
+      //       national: [this.getArea(response, 'national'), Validators.required],
+      //       zone: [this.getArea(response, 'division')],
+      //       region: [this.getArea(response, 'region')],
+      //       area: [this.getArea(response, 'area')],
+      //       salespoint: [this.getArea(response, 'salespoint')],
+      //       district: [this.getArea(response, 'district')],
+      //       territory: [this.getArea(response, 'teritory')],
+      //       list_national: this.formBuilder.array(this.listLevelArea),
+      //       list_zone: this.formBuilder.array([]),
+      //       list_region: this.formBuilder.array([]),
+      //       list_area: this.formBuilder.array([]),
+      //       list_salespoint: this.formBuilder.array([]),
+      //       list_district: this.formBuilder.array([]),
+      //       list_territory: this.formBuilder.array([])
+      //     }));
+
+      //     this.initArea(index);
+      //     this.initFormGroup(response, index);
+
+      //     if (this.detailVoucher.area_customer.length === (index + 1)) {
+      //       this.onLoad = false;
+      //     }
+      //   }
+      // }
+      
     } else {
       setTimeout(() => {
         this.getDetail();
@@ -256,11 +288,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
     if (event.checked) {
-      this.formConsumerGroup.controls['allocationVoucher'].setValidators([Validators.required, Validators.min(0)]);
+      this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
       this.formConsumerGroup.get('va').setValidators(Validators.required);
     } else {
-      this.formConsumerGroup.controls['allocationVoucher'].setValidators([null]);
-      this.formConsumerGroup.get('va').setValidators(null);
+      console.log('CLEAR')
+      this.formConsumerGroup.get('allocationVoucher').clearValidators();
+      this.formConsumerGroup.get('va').clearValidators();
     }
   }
 
@@ -1081,6 +1114,37 @@ export class PanelConsumerVoucherComponent implements OnInit {
     while (list.length > 0) {
       list.removeAt(list.length - 1);
     }
+  }
+
+  getArea(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  }
+
+  initFormGroup(response, index) {
+    response.data.map(item => {
+      let level_desc = '';
+      switch (item.level_desc.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          break
+        case 'division':
+          level_desc = 'region';
+          break;
+        case 'region':
+          level_desc = 'area';
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          break;
+        case 'district':
+          level_desc = 'territory';
+          break;
+      }
+      this.generateList(level_desc, item.id, index, 'render');
+    });
   }
 
   confirmDelete() {

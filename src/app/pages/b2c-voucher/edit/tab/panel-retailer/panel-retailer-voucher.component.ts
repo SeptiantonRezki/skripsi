@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output }
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as _ from 'underscore';
+import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
@@ -51,6 +53,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   isSort: boolean;
   detailVoucher: any;
   isDetail: Boolean;
+  areaType: any[] = [];
 
   isTargetAudience: FormControl = new FormControl(false);
 
@@ -109,6 +112,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private adapter: DateAdapter<any>,
+    private bannerService: BannerService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -123,6 +127,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.isSort = false;
     this.onRefresh = new EventEmitter<any>();
 
+    this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.listLevelArea = [
@@ -173,7 +178,9 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.initAreaV2();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
-      this.getListRetailer();
+      if (this.isTargetAudience.value) {
+        this.getListRetailer();
+      }
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -220,6 +227,50 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.getRetailerSelected();
       }
     });
+
+    this.getDetail();
+  }
+
+  async getDetail() {
+    if (this.detailVoucher) {
+      if (!this.isTargetAudience.value) {
+        const zone: any[] = [];
+        const region: any[] = [];
+        const area: any[] = [];
+        const salespoint: any[] = [];
+        const district: any[] = [];
+        const territory: any[] = [];
+        for (const { val, index } of this.detailVoucher.area_retailer.map((val, index) => ({ val, index }))) {
+          // console.log('area retailer'+index, val)
+          const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+          // console.log('this.getArea(response, division)', this.getArea(response, 'division'));
+          // this.formFilter.get('national').setValue([this.formFilter.get('national').value, this.getArea(response, 'national')]);
+
+          // console.log('zone', this.formFilter.get('zone').value);
+          console.log('area', this.formFilter.get('area').value);
+          zone.push(this.getArea(response, 'division'));
+          region.push(this.getArea(response, 'region'));
+          area.push(this.getArea(response, 'area'));
+          salespoint.push(this.getArea(response, 'salespoint'));
+          district.push(this.getArea(response, 'district'));
+          territory.push(this.getArea(response, 'teritory'));
+          this.formFilter.get('zone').setValue(zone);
+          this.formFilter.get('region').setValue(region);
+          this.formFilter.get('area').setValue(area);
+          this.formFilter.get('salespoint').setValue(salespoint);
+          this.formFilter.get('district').setValue(district);
+          this.formFilter.get('territory').setValue(territory);
+
+          if (this.detailVoucher.area_customer.length === (index + 1)) {
+            this.onLoad = false;
+          }
+        }
+      }
+    } else {
+      setTimeout(() => {
+        this.getDetail();
+      }, 2000);
+    }
   }
 
   isChangeTargetAudience(event: any) {
@@ -672,9 +723,13 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   onSave() {
+    const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+    ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+    const area_id = areaSelected[areaSelected.length - 1].value;
     const body = {
       type: 'retailer',
       'is_target_audience': this.isTargetAudience.value ? 1 : 0,
+      'area_id': [area_id],
       'business_id': this.selected.map(aud => aud.id),
     };
     this.dataService.showLoading(true);
@@ -767,5 +822,200 @@ export class PanelRetailerVoucherComponent implements OnInit {
     });
   }
 
+
+  initArea(index: number) {
+    this.areaType.map(item => {
+      switch (item.type.trim()) {
+        case 'national':
+          this.formFilter.get('national').disable();
+          break;
+        case 'division':
+          this.formFilter.get('zone').disable();
+          break;
+        case 'region':
+          this.formFilter.get('region').disable();
+          break;
+        case 'area':
+          this.formFilter.get('area').disable();
+          break;
+        case 'salespoint':
+          this.formFilter.get('salespoint').disable();
+          break;
+        case 'district':
+          this.formFilter.get('district').disable();
+          break;
+        case 'territory':
+          this.formFilter.get('territory').disable();
+          break;
+      }
+    });
+  }
+
+  async generateList(selection: any, id: any, index: number, type: any) {
+    let item: any;
+    switch (selection) {
+      case 'zone': {
+        const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+        const list = this.formFilter.get(`list_${selection}`) as FormArray;
+
+        while (list.length > 0) {
+          list.removeAt(list.length - 1);
+        }
+
+        _.clone(response || []).map((item_: any) => {
+          list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Zone' : item_.name }));
+        });
+
+        if (type !== 'render') {
+          this.formFilter.get('region').setValue(null);
+          this.formFilter.get('area').setValue('');
+          this.formFilter.get('salespoint').setValue('');
+          this.formFilter.get('district').setValue('');
+          this.formFilter.get('territory').setValue('');
+        }
+      }
+        break;
+      case 'region': {
+        item = this.formFilter.get('list_zone').value.length > 0 ?
+        this.formFilter.get('list_zone').value.filter((item_: any) => item_.id === id)[0] : {};
+        if (item.name !== 'Semua Zone') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Regional' : item_.name }));
+          });
+        }
+
+        if (type !== 'render') {
+          this.formFilter.get('region').setValue('');
+          this.formFilter.get('area').setValue('');
+          this.formFilter.get('salespoint').setValue('');
+          this.formFilter.get('district').setValue('');
+          this.formFilter.get('territory').setValue('');
+        }
+      }
+        break;
+      case 'area': {
+        item = this.formFilter.get('list_region').value.length > 0 ?
+        this.formFilter.get('list_region').value.filter(item_ => item_.id === id)[0] : {};
+        if (item.name !== 'Semua Regional') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Area' : item_.name }));
+          });
+        }
+
+        if (type !== 'render') {
+          this.formFilter.get('area').setValue('');
+          this.formFilter.get('salespoint').setValue('');
+          this.formFilter.get('district').setValue('');
+          this.formFilter.get('territory').setValue('');
+
+        }
+      }
+        break;
+      case 'salespoint': {
+        item = this.formFilter.get('list_area').value.length > 0 ?
+        this.formFilter.get('list_area').value.filter(item_ => item_.id === id)[0] : {};
+        if (item.name !== 'Semua Area') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Salespoint' : item_.name }));
+          });
+        }
+
+        if (type !== 'render') {
+          this.formFilter.get('salespoint').setValue('');
+          this.formFilter.get('district').setValue('');
+          this.formFilter.get('territory').setValue('');
+        }
+      }
+        break;
+      case 'district': {
+        item = this.formFilter.get('list_salespoint').value.length > 0 ?
+        this.formFilter.get('list_salespoint').value.filter(item_ => item_.id === id)[0] : {};
+        if (item.name !== 'Semua Salespoint') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua District' : item_.name }));
+          });
+        }
+
+        if (type !== 'render') {
+          this.formFilter.get('district').setValue('');
+          this.formFilter.get('territory').setValue('');
+        }
+      }
+        break;
+      case 'territory': {
+        item = this.formFilter.get('list_district').value.length > 0 ?
+        this.formFilter.get('list_district').value.filter(item_ => item_.id === id)[0] : {};
+        if (item.name !== 'Semua District') {
+          const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
+          const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          while (list.length > 0) {
+            list.removeAt(list.length - 1);
+          }
+          _.clone(response || []).map(item_ => {
+            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Territory' : item_.name }));
+          });
+        }
+
+        if (type !== 'render') {
+          this.formFilter.get('territory').setValue('');
+        }
+      }
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  getArea(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
+  }
+
+  initFormGroup(response, index) {
+    response.data.map(item => {
+      let level_desc = '';
+      switch (item.level_desc.trim()) {
+        case 'national':
+          level_desc = 'zone';
+          break
+        case 'division':
+          level_desc = 'region';
+          break;
+        case 'region':
+          level_desc = 'area';
+          break;
+        case 'area':
+          level_desc = 'salespoint';
+          break;
+        case 'salespoint':
+          level_desc = 'district';
+          break;
+        case 'district':
+          level_desc = 'territory';
+          break;
+      }
+      this.generateList(level_desc, item.id, index, 'render');
+    });
+  }
 
 }

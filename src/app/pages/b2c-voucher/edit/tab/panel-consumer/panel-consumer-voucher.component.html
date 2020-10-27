@@ -50,7 +50,7 @@
               <mat-error *ngIf="formConsumerGroup.controls['age_consumer_to'].hasError('required') && formConsumerGroup.controls['age_consumer_to'].touched">
                 Sampai harus diisi
               </mat-error>
-              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_from'].hasError('min') && formConsumerGroup.get('age_consumer_to').touched">
+              <mat-error *ngIf="formConsumerGroup.controls['age_consumer_to'].hasError('min') && formConsumerGroup.get('age_consumer_to').touched">
                 Tidak boleh kurang dari minimal batasan umur yg telah di isi
               </mat-error>
             </mat-form-field>
@@ -70,9 +70,9 @@
 
         </div>
         
-        <div fxFlex="45">
+        <div fxFlex="45" *ngIf="isVoucherAutomation.value === true">
 
-          <div class="pb-16 px-12" *ngIf="isVoucherAutomation.value === true">
+          <div class="pb-16 px-12">
             <mat-radio-group formControlName="va" class="radio-group">
               <mat-radio-button class="radio-button" *ngFor="let item of listVA" [value]="item.value">
                 {{item.name}}
