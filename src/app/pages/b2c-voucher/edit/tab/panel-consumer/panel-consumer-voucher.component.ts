@@ -78,7 +78,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   set data(data: any) {
     if (data) {
       this.detailVoucher = data;
-      this.isVoucherAutomation.setValue(data.automation !== null ? true : false);
+      this.isVoucherAutomation.setValue(data.automation ? true : false);
       this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
       this.formConsumerGroup.get('va').setValue(data.automation);
       this.formConsumerGroup.get('is_smoker').setValue(data.smoker);
@@ -288,11 +288,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
     if (event.checked) {
-      this.formConsumerGroup.controls['allocationVoucher'].setValidators([Validators.required, Validators.min(0)]);
+      this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
       this.formConsumerGroup.get('va').setValidators(Validators.required);
     } else {
-      this.formConsumerGroup.controls['allocationVoucher'].setValidators([null]);
-      this.formConsumerGroup.get('va').setValidators(null);
+      console.log('CLEAR')
+      this.formConsumerGroup.get('allocationVoucher').clearValidators();
+      this.formConsumerGroup.get('va').clearValidators();
     }
   }
 
