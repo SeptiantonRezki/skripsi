@@ -32,7 +32,52 @@
     <div class="">
       <!-- <small>Total Row Valid : {{rows ? validData : '-'}}</small> -->
     </div>
-    <div class="responsive">
+    <div class="responsive" *ngIf="dialogData.type === 'retailer'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th nowrap>Nama</th>
+            <th nowrap>Kode</th>
+            <th nowrap>Owner</th>
+            <th nowrap>Tipe</th>
+            <th nowrap>Klasifikasi</th>
+            <th nowrap>Nominal</th>
+            <th nowrap>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rows" [ngClass]="!item.is_valid? 'invalid-row' : ''">
+            <td nowrap>
+              {{ item.name ? item.name : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.code ? item.code : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.owner ? item.owner : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.classification ? item.classification : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.type ? item.type : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.nominal ? item.nominal : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.amount ? item.amount : '-' }}
+            </td>
+          </tr>
+          <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="10">
+              Tidak ada file yang dipilih
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="responsive" *ngIf="dialogData.type === 'wholesaler'">
       <table class="table">
         <thead>
           <tr>
