@@ -86,6 +86,7 @@
         [sorts]="[{ prop: 'name', dir: 'asc' }]"
         (sort)="onSort($event)"
         [scrollbarH]="true"
+        [loadingIndicator]="loadingIndicator"
         fusePerfectScrollbar
       >
         <ngx-datatable-column name="No" [sortable]="false" [width]="50">
