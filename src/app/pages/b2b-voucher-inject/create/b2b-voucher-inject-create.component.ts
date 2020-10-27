@@ -1195,7 +1195,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         // this.selected = this.selected.concat(response);
-        this.onSelect({ selected: response });
+        this.onSelect({ selected: response.filter(item => item.is_valid) });
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         console.log('this', this.selected)
       }
