@@ -729,7 +729,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const body = {
       type: 'retailer',
       'is_target_audience': this.isTargetAudience.value ? 1 : 0,
-      'area_id': [area_id],
+      'area_id': area_id,
       'business_id': this.selected.map(aud => aud.id),
     };
     this.dataService.showLoading(true);
