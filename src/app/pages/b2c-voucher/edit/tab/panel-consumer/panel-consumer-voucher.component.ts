@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import * as _ from 'underscore';
 import { Page } from 'app/classes/laravel-pagination';
@@ -24,12 +24,10 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 export class PanelConsumerVoucherComponent implements OnInit {
   formFilter: FormGroup;
   onLoad: boolean;
-  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
   rows: any[] = [];
   selected: any[];
   id: any;
-  private _onDestroy = new Subject<void>();
 
   loadingIndicator = true;
   reorderable = true;
@@ -59,6 +57,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isDetail: Boolean;
   indexDelete: any;
   areaType: any[] = [];
+  isArea: boolean;
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
@@ -88,10 +87,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('isTargetAudience').setValue(data.is_target_audience_customer === 1 ? true : false);
       if (data && data.dataPanelCustomer) {
         if (data.dataPanelCustomer.selected) {
-          console.log('selecteddata', data.dataPanelCustomer.selected)
           this.selected = data.dataPanelCustomer.selected;
         } else if (data.dataPanelCustomer.area_id) {
-          // this.
+          this.isArea = true;
         }
       }
     }
@@ -105,6 +103,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   // tslint:disable-next-line:no-output-on-prefix
   @Output()
   onRefresh: any;
+
+  @Output()
+  scrollToTop: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -130,6 +131,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.isSort = false;
     this.onChangeVoucherAutomation = new EventEmitter<any>();
     this.onRefresh = new EventEmitter<any>();
+    this.scrollToTop = new EventEmitter<any>();
+    this.onLoad = true;
+    this.isArea = false;
 
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -247,13 +251,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
 
+      if (this.detailVoucher.is_enable_panel_customer) {
+        this.addArea();
+        this.onLoad = false;
+      }
+
       if (!this.formConsumerGroup.get('isTargetAudience').value) {
         for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
+          this.onLoad = true;
           const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
           const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
-          console.log('CONSUMER'+index, val)
-          console.log('CONSUMERregion'+index, this.getArea(response, 'region'))
-          console.log('CONSUMERresponse'+index, response)
+
           wilayah.push(this.formBuilder.group({
             national: [this.getArea(response, 'national'), Validators.required],
             zone: [this.getArea(response, 'division')],
@@ -278,6 +286,8 @@ export class PanelConsumerVoucherComponent implements OnInit {
             this.initFormGroup(response, index);
           }
         }
+      } else {
+        this.onLoad = false;
       }
       
     } else {
@@ -776,11 +786,13 @@ export class PanelConsumerVoucherComponent implements OnInit {
       if (this.isVoucherAutomation.value) {
         if (!this.formConsumerGroup.get('allocationVoucher').value || this.formConsumerGroup.get('allocationVoucher').value < 1) {
           commonFormValidator.validateAllFields(this.formConsumerGroup);
+          this.scrollToTop.emit();
           alert('Jumlah Alokasi Voucher harus diisi');
           return;
         }
         if (!this.formConsumerGroup.get('va').value) {
           commonFormValidator.validateAllFields(this.formConsumerGroup);
+          this.scrollToTop.emit();
           return;
         }
       }
@@ -818,15 +830,28 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.onRefresh.emit();
+      setTimeout(() => {
+        this.getIsArea();
+      }, 1000);
     }, err => {
       this.dataService.showLoading(false);
     });
     } else {
       commonFormValidator.validateAllFields(this.formConsumerGroup);
-      try {
-        this.myScrollContainer.nativeElement.scrollTop = 0;
-      } catch (err) {
-        console.error('Scrolling Error', err);
+      this.scrollToTop.emit();
+    }
+  }
+
+  getIsArea() {
+    if (this.detailVoucher) {
+      if (!this.detailVoucher.is_enable_panel_retailer) {
+        if (this.isArea) {
+          this.getDetail();
+        }
+      } else {
+        setTimeout(() => {
+          this.getIsArea();
+        }, 2000);
       }
     }
   }
@@ -1157,7 +1182,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   getArea(response, selection) {
-    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0]
   }
 
   findDuplicate(array) {
@@ -1186,7 +1211,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       switch (item.level_desc.trim()) {
         case 'national':
           level_desc = 'zone';
-          break
+          break;
         case 'division':
           level_desc = 'region';
           break;

@@ -1,12 +1,15 @@
-<div class="ayo-middle p-24" fxLayout="column">
-  <div>
+<div  fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="onLoad">
+    <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'"></mat-progress-bar>
+  </div>
+  <div class="ayo-middle p-24">
     <div fxLayout="row" class="pb-24 px-12">
       <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
-        [formControl]="isTargetAudience">
+        [formControl]="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_retailer">
         Target Audience</mat-checkbox>
     </div>
 
-    <form [formGroup]="formFilter" autoComplete="off">
+    <form [formGroup]="formFilter" autoComplete="off" *ngIf="(detailVoucher?.is_target_audience_retailer && !detailVoucher?.is_enable_panel_retailer) || (detailVoucher?.is_enable_panel_retailer)">
       <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="31%" class="is-light form-primary">
           <mat-select placeholder="National" formControlName="national">
@@ -65,57 +68,31 @@
       </div>
     </form>
 
-    <!-- <form [formGroup]="formFilterRetailer">
-      <div
-        fxLayout="row wrap"
-        fxLayoutAlign="space-between stretch"
-        fxLayout.lt-md="column"
-        class="pt-16"
-        fxLayoutGap="20px"
-        fxLayoutGap.lt-md="0px"
-        *ngIf="isTargetAudience.value === true"
-      >
+    <form [formGroup]="formFilter" autoComplete="off" *ngIf="!detailVoucher?.is_target_audience_retailer && !detailVoucher?.is_enable_panel_retailer">
+      <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="31%" class="is-light form-primary">
-          <mat-select
-            placeholder="Retail Classification"
-            formControlName="retail_classification"
-          >
-            <mat-option
-              *ngFor="let item of retailClassification"
-              [value]="item.value"
-            >
-              {{item.name}}
-            </mat-option>
-          </mat-select>
+          <input matInput placeholder="National" formControlName="national" readonly>
         </mat-form-field>
         <mat-form-field fxFlex="31%" class="is-light form-primary">
-          <mat-select
-            placeholder="SRC Classification"
-            formControlName="src_classification"
-          >
-            <mat-option
-              *ngFor="let item of srcClassification"
-              [value]="item.value"
-            >
-              {{item.name}}
-            </mat-option>
-          </mat-select>
+          <input matInput placeholder="Zone" formControlName="zone" readonly>
         </mat-form-field>
         <mat-form-field fxFlex="31%" class="is-light form-primary">
-          <mat-select
-            placeholder="SRC Type"
-            formControlName="src_type"
-          >
-            <mat-option
-              *ngFor="let item of srcType"
-              [value]="item.value"
-            >
-              {{item.name}}
-            </mat-option>
-          </mat-select>
+          <input matInput placeholder="Regional" formControlName="region" readonly>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <input matInput placeholder="Area" formControlName="area" readonly>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <input matInput placeholder="Salespoint" formControlName="salespoint" readonly>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <input matInput placeholder="District" formControlName="district" readonly>
+        </mat-form-field>
+        <mat-form-field fxFlex="31%"  class="is-light form-primary">
+          <input matInput placeholder="Territory" formControlName="territory" readonly>
         </mat-form-field>
       </div>
-    </form> -->
+    </form>
 
     <div *ngIf="isTargetAudience.value === true">
       <div
