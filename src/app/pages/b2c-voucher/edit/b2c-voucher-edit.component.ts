@@ -187,6 +187,8 @@ export class B2CVoucherEditComponent implements OnInit {
         this.filterProductList();
       });
 
+    
+
   }
 
   _filterSku(value): any[] {
@@ -409,23 +411,33 @@ export class B2CVoucherEditComponent implements OnInit {
       this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       this.getRetailerSelected();
       this.getCustomerSelected();
+      if (!res.data.is_enable_detail_voucher) {
+        this.setDisable();
+      }
       this.dataService.showLoading(false);
     }, err => {
       console.warn(err);
       this.dataService.showLoading(false);
+      if (this.isDetail) {
+        this.setDisable();
+      }
     });
-    if (this.isDetail) {
-      this.formDetailVoucher.get('name').disable();
-      this.formDetailVoucher.get('voucherValue').disable();
-      this.formDetailVoucher.get('jumlahVoucherPerConsumer').disable();
-      this.formDetailVoucher.get('startDate').disable();
-      this.formDetailVoucher.get('endDate').disable();
-      this.formDetailVoucher.get('available_at').disable();
-      this.formDetailVoucher.get('expired_at').disable();
-      this.formDetailVoucher.get('limit_by_product').disable();
-      this.formDetailVoucher.get('limit_by_category').disable();
-      this.formDetailVoucher.get('limit_purchase').disable();
-    }
+  }
+
+  setDisable() {
+    this.formDetailVoucher.get('name').disable();
+    this.formDetailVoucher.get('voucherValue').disable();
+    this.formDetailVoucher.get('jumlahVoucherPerConsumer').disable();
+    this.formDetailVoucher.get('startDate').disable();
+    this.formDetailVoucher.get('endDate').disable();
+    this.formDetailVoucher.get('available_at').disable();
+    this.formDetailVoucher.get('expired_at').disable();
+    this.formDetailVoucher.get('limit_by_product').disable();
+    this.formDetailVoucher.get('limit_by_category').disable();
+    this.formDetailVoucher.get('limit_purchase').disable();
+    this.formDetailVoucher.get('minimumPurchase').disable();
+    this.removable = false;
+    this.product.disable();
   }
 
   onRefresh() {
@@ -514,7 +526,7 @@ export class B2CVoucherEditComponent implements OnInit {
           this.detailVoucher = {
             ...this.detailVoucher,
             dataPanelRetailer: {
-              area_id: res.data.areas.area_id
+              area_id: res.data.areas.map(aud => aud.area_id)
             }
           };
         }
@@ -537,11 +549,19 @@ export class B2CVoucherEditComponent implements OnInit {
           this.detailVoucher = {
             ...this.detailVoucher,
             dataPanelCustomer: {
-              area_id: res.data.areas.area_id
+              area_id: res.data.areas.map(aud => aud.area_id)
             }
           }
         }
       });
+  }
+
+  scrollToTop() {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = 0;
+    } catch (err) {
+      console.error('Scrolling Error', err);
+    }
   }
 
 }

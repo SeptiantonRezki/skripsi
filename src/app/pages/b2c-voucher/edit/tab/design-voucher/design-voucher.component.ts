@@ -96,7 +96,6 @@ export class DesignVoucherComponent implements OnInit {
   }
 
   initDetail() {
-    console.log('this.detailVoucher', this.detailVoucher);
     if (this.detailVoucher) {
       this.isPushNearbyPromotion.setValue(this.detailVoucher.is_push_nearby ? true : false);
       this.formDesignVoucher.get('body').setValue(this.detailVoucher.body);

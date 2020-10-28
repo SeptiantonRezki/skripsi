@@ -112,7 +112,7 @@
                     <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
                       (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
                       [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)">
+                      (matChipInputTokenEnd)="add($event)" *ngIf="!detailVoucher?.is_enable_detail_voucher">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
@@ -126,7 +126,7 @@
                 </mat-form-field>
                 <mat-form-field class="is-light" fxFlex="50">
                   <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
-                    [disabled]="!formDetailVoucher.get('limit_by_category').value">
+                    [disabled]="!formDetailVoucher.get('limit_by_category').value || !detailVoucher?.is_enable_detail_voucher">
                     <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -151,7 +151,7 @@
           <app-panel-retailer-voucher [data]="detailVoucher" [isLimitVoucher]="isLimitVoucher" (onRefresh)="onRefresh()"></app-panel-retailer-voucher>
         </mat-tab>
         <mat-tab label="Panel Consumer">
-          <app-panel-consumer-voucher [data]="detailVoucher" (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)" (onRefresh)="onRefresh()"></app-panel-consumer-voucher>
+          <app-panel-consumer-voucher [data]="detailVoucher" (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)" (onRefresh)="onRefresh()" (scrollToTop)="scrollToTop()"></app-panel-consumer-voucher>
         </mat-tab>
         <mat-tab label="Penukaran Voucher">
           <app-penukaran-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-penukaran-voucher>
