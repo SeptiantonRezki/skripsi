@@ -54,6 +54,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   detailVoucher: any;
   isDetail: Boolean;
   areaType: any[] = [];
+  isArea: boolean;
 
   isTargetAudience: FormControl = new FormControl(false);
 
@@ -84,7 +85,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
         if (data.dataPanelRetailer.selected) {
           this.selected = data.dataPanelRetailer.selected;
         } else if (data.dataPanelRetailer.area_id) {
-        // this.
+          this.isArea = true;
         }
       }
     }
@@ -126,6 +127,8 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.totalData = 0;
     this.isSort = false;
     this.onRefresh = new EventEmitter<any>();
+    this.onLoad = true;
+    this.isArea = false;
 
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -184,28 +187,38 @@ export class PanelRetailerVoucherComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('region', res);
+      if (res && this.detailVoucher) {
+        if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
+          this.getAudienceAreaV2('region', res);
+        }
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('area', res);
+      if (res && this.detailVoucher) {
+        if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
+          this.getAudienceAreaV2('area', res);
+        }
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('salespoint', res);
+      if (res && this.detailVoucher) {
+        if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
+          this.getAudienceAreaV2('salespoint', res);
+        }
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('district', res);
+      if (res && this.detailVoucher) {
+        if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
+          this.getAudienceAreaV2('district', res);
+        }
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      if (res) {
-        this.getAudienceAreaV2('territory', res);
+      if (res && this.detailVoucher) {
+        if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
+          this.getAudienceAreaV2('territory', res);
+        }
       }
     });
 
@@ -234,6 +247,10 @@ export class PanelRetailerVoucherComponent implements OnInit {
   async getDetail() {
     if (this.detailVoucher) {
       if (!this.isTargetAudience.value) {
+        if (this.detailVoucher.is_enable_panel_retailer) {
+          this.onLoad = false;
+        }
+        const national: any[] = [];
         const zone: any[] = [];
         const region: any[] = [];
         const area: any[] = [];
@@ -241,35 +258,51 @@ export class PanelRetailerVoucherComponent implements OnInit {
         const district: any[] = [];
         const territory: any[] = [];
         for (const { val, index } of this.detailVoucher.area_retailer.map((val, index) => ({ val, index }))) {
-          // console.log('area retailer'+index, val)
+          
+          this.onLoad = true;
           const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
-          // console.log('this.getArea(response, division)', this.getArea(response, 'division'));
-          // this.formFilter.get('national').setValue([this.formFilter.get('national').value, this.getArea(response, 'national')]);
 
-          // console.log('zone', this.formFilter.get('zone').value);
-          console.log('area', this.formFilter.get('area').value);
+          national.push(this.getArea(response, 'national'));
           zone.push(this.getArea(response, 'division'));
           region.push(this.getArea(response, 'region'));
           area.push(this.getArea(response, 'area'));
           salespoint.push(this.getArea(response, 'salespoint'));
           district.push(this.getArea(response, 'district'));
           territory.push(this.getArea(response, 'teritory'));
-          this.formFilter.get('zone').setValue(zone);
-          this.formFilter.get('region').setValue(region);
-          this.formFilter.get('area').setValue(area);
-          this.formFilter.get('salespoint').setValue(salespoint);
-          this.formFilter.get('district').setValue(district);
-          this.formFilter.get('territory').setValue(territory);
 
-          if (this.detailVoucher.area_customer.length === (index + 1)) {
+          this.formFilter.get('national').setValue(national.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('zone').setValue(zone.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('region').setValue(region.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('area').setValue(area.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('salespoint').setValue(salespoint.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('district').setValue(district.filter((value, index, self) => self.indexOf(value) === index));
+          this.formFilter.get('territory').setValue(territory.filter((value, index, self) => self.indexOf(value) === index));
+
+          if (this.detailVoucher.area_retailer.length === (index + 1)) {
             this.onLoad = false;
           }
         }
+      } else {
+        this.onLoad = false;
       }
     } else {
       setTimeout(() => {
         this.getDetail();
       }, 2000);
+    }
+  }
+
+  getIsArea() {
+    if (this.detailVoucher) {
+      if (!this.detailVoucher.is_enable_panel_retailer) {
+        if (this.isArea) {
+          this.getDetail();
+        }
+      } else {
+        setTimeout(() => {
+          this.getIsArea();
+        }, 2000);
+      }
     }
   }
 
@@ -738,6 +771,9 @@ export class PanelRetailerVoucherComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.onRefresh.emit();
+      setTimeout(() => {
+        this.getIsArea();
+      }, 1000);
     }, err => {
       this.dataService.showLoading(false);
     });
@@ -988,7 +1024,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   getArea(response, selection) {
-    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
+    return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0]
   }
 
   initFormGroup(response, index) {

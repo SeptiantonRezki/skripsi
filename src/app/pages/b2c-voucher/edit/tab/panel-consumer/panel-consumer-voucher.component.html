@@ -1,8 +1,11 @@
-<div class="ayo-middle p-24" #containerScroll fxLayout="column">
-  <div>
+<div fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="onLoad">
+    <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'"></mat-progress-bar>
+  </div>
+  <div class="ayo-middle p-24">
     <div fxLayout="row" class="pb-24 px-12" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
       <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeVoucherAutomation($event)"
-        [formControl]="isVoucherAutomation">
+        [formControl]="isVoucherAutomation" [disabled]="!detailVoucher?.is_enable_panel_customer">
         Voucher Automation</mat-checkbox>
     </div>
 
@@ -92,7 +95,7 @@
 
       <div fxLayout="row" class="pb-24 px-12" *ngIf="!isVoucherAutomation.value === true">
         <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
-          formControlName="isTargetAudience">Target Audience</mat-checkbox>
+          formControlName="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_customer">Target Audience</mat-checkbox>
       </div>
 
       <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false">
@@ -111,7 +114,7 @@
                 </button>
               </div>
             </div>
-            <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+            <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="detailVoucher?.is_enable_panel_customer">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
                 <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
                   <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
@@ -183,6 +186,30 @@
                 <mat-error *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
                   Territori harus diisi
                 </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayoutGap.lt-md="0px" *ngIf="!detailVoucher?.is_enable_panel_customer">
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <input matInput placeholder="National" formControlName="national" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <input matInput placeholder="Zone" formControlName="zone" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%" class="is-light form-primary">
+                <input matInput placeholder="Regional" formControlName="region" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%"  class="is-light form-primary">
+                <input matInput placeholder="Area" formControlName="area" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%"  class="is-light form-primary">
+                <input matInput placeholder="Salespoint" formControlName="salespoint" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%"  class="is-light form-primary">
+                <input matInput placeholder="District" formControlName="district" readonly>
+              </mat-form-field>
+              <mat-form-field fxFlex="31%"  class="is-light form-primary">
+                <input matInput placeholder="Territory" formControlName="territory" readonly>
               </mat-form-field>
             </div>
           </div>
