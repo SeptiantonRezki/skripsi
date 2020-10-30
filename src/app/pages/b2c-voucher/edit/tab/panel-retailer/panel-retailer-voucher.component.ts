@@ -701,7 +701,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
-      this.formFilter.get('national').setValue(1);
+      this.formFilter.get('national').setValue([1]);
       this.formFilter.get('national').disable();
       lastLevelDisabled = 'national';
     }
@@ -759,6 +759,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
     ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     const area_id = areaSelected[areaSelected.length - 1].value;
+    const areas = [];
     const body = {
       type: 'retailer',
       'is_target_audience': this.isTargetAudience.value ? 1 : 0,

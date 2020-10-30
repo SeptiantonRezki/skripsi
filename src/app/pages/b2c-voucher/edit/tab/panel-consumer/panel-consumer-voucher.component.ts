@@ -75,6 +75,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   _data: any = null;
   @Input()
   set data(data: any) {
+    console.log('ok', data)
     if (data) {
       this.detailVoucher = data;
       this.isVoucherAutomation.setValue(data.automation ? true : false);
@@ -844,8 +845,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   getIsArea() {
     if (this.detailVoucher) {
-      if (!this.detailVoucher.is_enable_panel_retailer) {
+      if (!this.detailVoucher.is_enable_panel_customer) {
         if (this.isArea) {
+          const formArray = this.formConsumerGroup.controls['areas'] as FormArray;
+          while (formArray.length !== 0) {
+            formArray.removeAt(0);
+          }
           this.getDetail();
         }
       } else {
