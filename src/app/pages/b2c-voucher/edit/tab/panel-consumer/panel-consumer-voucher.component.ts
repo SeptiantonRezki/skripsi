@@ -62,7 +62,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
 
-  typeArea: any[] = ['national', 'zone', 'region', 'area', 'district', 'salespoint', 'territory'];
+  typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
   listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
   listVA: any[] = [
@@ -804,6 +804,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       let value = this.formConsumerGroup.getRawValue();
 
       value.areas.map(item => {
+        console.log('AREAS', item)
         let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
         for (const val of this.typeArea) {
           const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
