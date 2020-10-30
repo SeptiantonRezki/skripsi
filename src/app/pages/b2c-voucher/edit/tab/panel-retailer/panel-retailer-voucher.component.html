@@ -12,7 +12,7 @@
     <form [formGroup]="formFilter" autoComplete="off" *ngIf="(detailVoucher?.is_target_audience_retailer && !detailVoucher?.is_enable_panel_retailer) || (detailVoucher?.is_enable_panel_retailer)">
       <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="31%" class="is-light form-primary">
-          <mat-select placeholder="National" formControlName="national">
+          <mat-select placeholder="National" formControlName="national" multiple>
             <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
           </mat-select>
         </mat-form-field>
