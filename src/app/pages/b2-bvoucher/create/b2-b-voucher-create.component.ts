@@ -326,7 +326,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
     if (this.inputChipList && this.inputChipList.length > 0) {
       const itemClick = this.inputChipList.filter((item) => {
-        return item.search(obj.name);
+        return item.toLowerCase().search(obj.name.toLowerCase());
       });
 
       if (itemClick && itemClick.length > 0) {
