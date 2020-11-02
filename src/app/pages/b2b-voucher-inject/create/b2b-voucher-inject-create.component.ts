@@ -181,7 +181,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       input.value = '';
     }
 
-    // this.product.setValue(null);
+    this.product.setValue(null);
   }
 
   remove(id: string): void {
@@ -195,7 +195,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   selectedProduct(event: MatAutocompleteSelectedEvent): void {
     console.log('evenaksdjlak', event);
     this.productList.push(event.option.viewValue);
-    this.productInput.nativeElement.value = '';
+    if (this.productInput) {
+      this.productInput.nativeElement.value = '';
+    }
     this.product.setValue(null);
   }
 
@@ -255,9 +257,11 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.productList = [];
         this.product.setValue(null);
         // this.product.disable();
-        // this.productInput.nativeElement.value = null;
         this.listProductSkuBank = [];
         this.inputChipList = [];
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
       } else {
         this.product.enable();
       }
@@ -266,11 +270,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       this.productList = [];
       this.product.setValue(null);
       // this.product.disable();
-      // this.productInput.nativeElement.value = null;
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event) {
         this.formDetilVoucher.get('category').setValue('');
+      }
+      if (this.productInput) {
+        this.productInput.nativeElement.value = null;
       }
     }
   }
@@ -311,7 +317,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     if (index === -1) {
       this.productList.push(obj);
     }
-    this.productInput.nativeElement.value = null;
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
 
     if (this.inputChipList && this.inputChipList.length > 0) {
       const itemClick = this.inputChipList.filter((item) => {
@@ -327,17 +335,23 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         } else {
           console.log('this.listProductSkuBank', this.listProductSkuBank)
           this.product.setValue(itemClick.toString());
-          this.productInput.nativeElement.value = itemClick.toString();
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
           this.getListProduct(itemClick.toString());
         }
       } else {
         this.product.setValue(null);
-        this.productInput.nativeElement.value = null;
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
         this.listProductSkuBank = [];
       }
       setTimeout(() => {
-        this.productInput.nativeElement.blur();
-        this.productInput.nativeElement.focus();
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
       }, 500);
     }
   }
