@@ -244,6 +244,11 @@
                     item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select  placeholder="Status" formControlName="status" multiple>
+                <mat-option [value]="wtLoop.value" *ngFor="let wtLoop of status"> {{wtLoop.label}} </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </form>
         <div class="p-0">
