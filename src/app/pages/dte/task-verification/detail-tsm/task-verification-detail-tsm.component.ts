@@ -73,6 +73,12 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   loadingIndicator: boolean;
   rows: any[];
   pagination: Page = new Page();
+  status: Array<object> = [
+    { label: 'Draft', value: 'draft' },
+    { label: 'Submitted', value: 'pending' },
+    { label: 'Approved', value: 'approved' },
+    { label: 'Rejected', value: 'rejected' }
+  ];
 
   constructor(
     private adapter: DateAdapter<any>,
@@ -133,7 +139,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
       area: [''],
       salespoint: [''],
       district: [''],
-      territory: ['']
+      territory: [''],
+      status: ['']
     });
 
     this.formSchedule = this.formBuilder.group({
@@ -185,8 +192,22 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+    this.formFilter.get('status').valueChanges.subscribe(res => {
+      console.log('status', res);
+      if (res) {
+        this.klik(res);
+      }
+    });
   }
 
+  klik(a: any) {
+    const id = this.audience_group_id;
+    this.pagination.status = a;
+    this.taskVerificationService.getListAudienceTsm({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
+      console.log('tunggu balikan dari belakang');
+    }, err => {
+    });
+  }
   getDetail() {
     this.taskVerificationService.getDetailTsm({ id: this.idTsm, template_id: this.idTemplate }).subscribe(res => {
       this.dataTsm = res.data;
