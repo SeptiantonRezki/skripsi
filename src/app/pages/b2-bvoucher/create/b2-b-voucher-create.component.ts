@@ -205,9 +205,9 @@ export class B2BVoucherCreateComponent implements OnInit {
     console.log('EV', event);
     if (event) {
       this.formDetilVoucher.get('currency').setValue(100);
-      this.formDetilVoucher.disable();
+      this.formDetilVoucher.get('currency').disable();
     } else {
-      this.formDetilVoucher.enable();
+      this.formDetilVoucher.get('currency').enable();
     }
   }
 
