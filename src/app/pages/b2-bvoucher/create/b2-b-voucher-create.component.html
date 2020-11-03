@@ -28,7 +28,7 @@
                 <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
                   <span>Pilih dari</span>
                   <mat-checkbox class="mt-4 ml-4 mb-8"
-                    [formControl]="isB2CVoucher">
+                    [formControl]="isB2CVoucher" (change)="onChangeIsB2CVoucher($event)">
                     B2C Voucher</mat-checkbox>
                 </div>
 

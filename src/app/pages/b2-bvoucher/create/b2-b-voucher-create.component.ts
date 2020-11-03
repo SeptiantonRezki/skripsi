@@ -193,12 +193,22 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   selectedProduct(event: MatAutocompleteSelectedEvent): void {
-    console.log('evenaksdjlak', event);
+    // console.log('evenaksdjlak', event);
     this.productList.push(event.option.viewValue);
     if (this.productInput) {
       this.productInput.nativeElement.value = '';
     }
     this.product.setValue(null);
+  }
+
+  onChangeIsB2CVoucher(event: any) {
+    console.log('EV', event);
+    if (event) {
+      this.formDetilVoucher.get('currency').setValue(100);
+      this.formDetilVoucher.disable();
+    } else {
+      this.formDetilVoucher.enable();
+    }
   }
 
   getListProduct(param?): void {
