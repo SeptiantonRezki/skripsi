@@ -660,7 +660,7 @@ export class Endpoint {
         redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
         redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
         redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
-        listVoucherB2C: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/cashier-order/principal/voucher/list`
+        listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`
       },
       medalBadge: {
         medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
@@ -685,29 +685,29 @@ export class Endpoint {
       },
       b2c_voucher: {
         //Detail
-        getListVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher`,
-        getDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}`,
-        createVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher`,
-        updateVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}`,
-        deleteVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}`,
-        getListReimbursement: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/reimburse/list`,
-        exportListReimbursement: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/cashier-order/principal/voucher/reimburse/list/export`,
+        getListVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher`,
+        getDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/${context.voucher_id}`,
+        createVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher`,
+        updateVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/${context.voucher_id}`,
+        deleteVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/${context.voucher_id}`,
+        getListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/reimburse/list`,
+        exportListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/reimburse/list/export`,
         
         //Panel
-        getSelectedRetailerPanel: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/panel/${context.voucher_id}/retailer`,
-        getSelectedCustomerPanel: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/panel/${context.voucher_id}/customer`,
-        updatePanel: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/panel/${context.voucher_id}`,
+        getSelectedRetailerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/panel/${context.voucher_id}/retailer`,
+        getSelectedCustomerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/panel/${context.voucher_id}/customer`,
+        updatePanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/panel/${context.voucher_id}`,
         
         //Pertukaran Voucher
-        getNominal: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/reimburse/nominal`,
-        updatePenukaranVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/reimburse/${context.voucher_id}`,
+        getNominal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/reimburse/nominal`,
+        updatePenukaranVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/reimburse/${context.voucher_id}`,
 
         //Design Voucher
-        updateDesign: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/design/${context.voucher_id}`,
+        updateDesign: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/design/${context.voucher_id}`,
 
         //List Detail Voucher
-        getListDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}/list`,
-        exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/${context.voucher_id}/list/export`,
+        getListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/${context.voucher_id}/list`,
+        exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/${SERVER.business}/${type_api}/b2c/voucher/${context.voucher_id}/list/export`,
         getDetailOrder: `${AYO_API_SERVICE(SERVER.orderCashier)}/api/v1/${SERVER.orderCashier}/${type_api}/voucher/order/${context.detail_order_id}`,
 
         //partial
