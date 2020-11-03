@@ -384,6 +384,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   getDetail() {
     this.b2bVoucherService.show({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       this.detailVoucher = res.data;
+      this.isB2CVoucher.setValue(res.data.is_b2c_voucher ? true : false);
       this.formDetilVoucher.setValue({
         name: res.data.name,
         coin: res.data.coin,
@@ -393,7 +394,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         endDate: res.data.end_date,
         voucherDate: res.data.available_at,
         voucherExpiry: res.data.expired_at,
-        group_trade_program: res.data.is_b2c_voucher ? this.voucherB2CList : res.data.group_id.map(rs => Number(rs)),
+        group_trade_program: res.data.group_id.map(rs => Number(rs)),
         note: res.data.description,
         limit_by_product: res.data.limit_by === 'product',
         limit_by_category: res.data.limit_by === 'category',
