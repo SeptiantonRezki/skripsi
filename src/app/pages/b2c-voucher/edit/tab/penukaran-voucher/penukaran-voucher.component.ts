@@ -177,7 +177,7 @@ export class PenukaranVoucherComponent implements OnInit {
           'is_reimburse': this.isVoucherAutomation.value ? 1 : 0,
           'reimburse_start_date': this.formPenukaranVoucher.get('startDate').value,
           'reimburse_end_date': this.formPenukaranVoucher.get('endDate').value,
-          'reimburse_is_b2b_voucher': this.formPenukaranVoucher.get('endDate').value ? 1 : 0,
+          'reimburse_is_b2b_voucher': this.formPenukaranVoucher.get('isVoucherB2B').value ? 1 : 0,
           'reimburse_transfer_bank': transferBankValue.length > 0 ? transferBankValue : [],
           'reimburse_pojok_bayar': saldoPojokBayarValue.length > 0 ? saldoPojokBayarValue : [],
           'transfer_bank': transferBankValue.length > 0 ? transferBankValue : [],
