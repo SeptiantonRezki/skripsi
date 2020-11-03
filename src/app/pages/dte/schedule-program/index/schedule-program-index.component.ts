@@ -189,7 +189,7 @@ export class ScheduleProgramIndexComponent {
         break;
       case "done":
         if (row.download_url) {
-          status = { request: false, download: true };
+          status = { request: this.pastDate(row.last_request) ? true : false, download: true };
         } else {
           status = { request: false, download: false };
         }
@@ -289,6 +289,17 @@ export class ScheduleProgramIndexComponent {
     }
 
     return "";
+  }
+
+  pastDate(lastDate) {
+    if (!lastDate) return false;
+
+    lastDate = new Date(lastDate);
+    let now = new Date();
+    if (now.setHours(0, 0, 0, 0) - lastDate.setHours(0, 0, 0, 0) > 1) {
+      return true;
+    }
+    return false;
   }
 
 }
