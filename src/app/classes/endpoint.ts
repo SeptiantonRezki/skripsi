@@ -689,7 +689,7 @@ export class Endpoint {
         getDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}`,
         createVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher`,
         updateVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}`,
-        deleteVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business}/${type_api}/b2c/voucher/${context.voucher_id}`,
+        deleteVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}`,
         getListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list`,
         exportListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list/export`,
         
