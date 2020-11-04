@@ -50,6 +50,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'callobj',
+    loadChildren: './pages/call-objective/call-objective.module#CallobjectiveModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'notifications',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]

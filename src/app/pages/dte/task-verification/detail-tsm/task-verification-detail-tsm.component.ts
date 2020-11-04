@@ -76,6 +76,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   status: Array<object> = [
     { label: 'Draft', value: 'draft' },
     { label: 'Submitted', value: 'pending' },
+    { label: 'Not Submitted', value: ['active', 'not-active'] },
     { label: 'Approved', value: 'approved' },
     { label: 'Rejected', value: 'rejected' }
   ];
