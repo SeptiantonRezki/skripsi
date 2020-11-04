@@ -89,7 +89,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows">
+          <tr *ngFor="let item of rows" [ngStyle]="{ 'background-color': setRedIfDuplicate(item)}">
             <td nowrap>
               {{ item.name ? item.name : '-' }}
             </td>
