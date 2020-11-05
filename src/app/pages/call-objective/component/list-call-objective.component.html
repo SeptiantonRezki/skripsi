@@ -20,14 +20,14 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" autocomplete="off">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
          [selectionType]="'checkbox'" [count]="pagination.total"
-        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true">
+         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (sort)="onSort($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
