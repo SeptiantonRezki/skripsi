@@ -41,6 +41,7 @@ import {
     offsetPagination: any;
     id: any;
     loadingIndicator: Boolean;
+    keyUp = new Subject<string>();
 
     constructor(
         private callObjService: CallObjectiveSerive,
@@ -50,7 +51,15 @@ import {
         private router: Router,
     ) {
         this.callOjbMdl = new CallObjModel();
-        this.rows = [{descriptionObjective: 'NANA', namaObjective: 'SOLO LORD'}];
+
+      const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
     }
 
     ngOnInit() {
@@ -93,6 +102,43 @@ import {
         this.ngOnInit();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
+    });
+  }
+  updateFilter(string) {
+    this.loadingIndicator = true;
+    this.pagination.search = string;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.callObjService.getList(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+
+      this.loadingIndicator = false;
+    });
+  }
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.callObjService.getList(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+
+      this.loadingIndicator = false;
     });
   }
   directEdit(param?: any): void {
