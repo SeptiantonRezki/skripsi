@@ -60,6 +60,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   permissionVerifikasiMisi: any;
   permissionReleaseCoin: any;
   roles: PagesName = new PagesName();
+  statusValue: any = [];
 
   formFilter: FormGroup;
   lastLevel: any;
@@ -76,6 +77,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   status: Array<object> = [
     { label: 'Draft', value: 'draft' },
     { label: 'Submitted', value: 'pending' },
+    { label: 'Not Submitted', value: ['active', 'not-active'] },
     { label: 'Approved', value: 'approved' },
     { label: 'Rejected', value: 'rejected' }
   ];
@@ -192,22 +194,14 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
-    this.formFilter.get('status').valueChanges.subscribe(res => {
-      console.log('status', res);
-      if (res) {
-        this.klik(res);
-      }
-    });
+    // this.formFilter.get('status').valueChanges.subscribe(res => {
+    //   console.log('status', res);
+    //   if (res) {
+    //     this.klik(res);
+    //   }
+    // });
   }
 
-  klik(a: any) {
-    const id = this.audience_group_id;
-    this.pagination.status = a;
-    this.taskVerificationService.getListAudienceTsm({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-      console.log('tunggu balikan dari belakang');
-    }, err => {
-    });
-  }
   getDetail() {
     this.taskVerificationService.getDetailTsm({ id: this.idTsm, template_id: this.idTemplate }).subscribe(res => {
       this.dataTsm = res.data;
@@ -306,6 +300,9 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     // this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
+    if (this.statusValue.length !== 0  ) {
+    this.pagination.status = this.statusValue;
+    }
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
     ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     const area_id = areaSelected[areaSelected.length - 1].value;
@@ -376,6 +373,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
+      this.pagination.status = null;
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
