@@ -256,6 +256,7 @@ export class TaskSequencingIndexComponent implements OnInit {
             // this.downloadLink.nativeElement.href = response.data;
             // this.downloadLink.nativeElement.click();
             this.dataService.showLoading(false);
+            this.getSequencing();
           }, 1000);
         }
       }, (error) => {
@@ -295,6 +296,7 @@ export class TaskSequencingIndexComponent implements OnInit {
       this.downloadLink.nativeElement.href = item.download_url;
       this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
+      this.getSequencing();
     }, 1000);
   }
 
