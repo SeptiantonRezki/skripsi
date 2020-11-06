@@ -31,6 +31,7 @@ import { IdbService } from "app/services/idb.service";
 import {CallObjModel} from 'app/pages/call-objective/call-objective.model';
 import { CallObjectiveSerive } from '../../../services/call-objective/call-objective.service';
 import { ImportObjectiveDialogComponent } from '../import-component/import-objective-dialog.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-call-objective.component',
@@ -363,6 +364,8 @@ export class CreateCallObjectiveComponent implements OnInit {
     this.loadingIndicator = true;
     this.callOjbMdl.status = 'active';
     this.callOjbMdl.retailer_id = this.selected.map((map) => map.id);
+    this.callOjbMdl.start_date = this.convertDate(this.callOjbMdl.start_date);
+    this.callOjbMdl.end_date =  this.convertDate(this.callOjbMdl.end_date);
     this.callObjService.create(this.callOjbMdl).subscribe((res) => {
       this.selected = [];
       this.loadingIndicator = false;
@@ -374,6 +377,8 @@ export class CreateCallObjectiveComponent implements OnInit {
     this.loadingIndicator = true;
     this.dataService.showLoading(true);
     this.callOjbMdl.retailer_id = this.selected.map((map) => map.id);
+    this.callOjbMdl.start_date = this.convertDate(this.callOjbMdl.start_date);
+    this.callOjbMdl.end_date =  this.convertDate(this.callOjbMdl.end_date);
     this.callObjService.put(this.callOjbMdl, this.paramEdit).subscribe((res) => {
       window.localStorage.removeItem('detail_audience');
       this.selected = [];
@@ -391,6 +396,13 @@ export class CreateCallObjectiveComponent implements OnInit {
       this.parameters.push(parameter);
       input.value = "";
     }
+  }
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
   }
 
   deleteLanguage(paramter) {
