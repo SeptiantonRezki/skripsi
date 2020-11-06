@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { Lightbox } from 'ngx-lightbox';
 
 import * as _ from 'underscore';
+import * as moment from "moment";
 import { Config } from 'app/classes/config';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -18,6 +19,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/import-pop-up-audience/import-pop-up-audience.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
+import { P } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-notification-create',
@@ -32,6 +34,12 @@ export class NotificationCreateComponent {
   formNotification: FormGroup;
   formArea: FormGroup;
   formNotificationError: any;
+
+  formDailyRecurrence: FormGroup;
+  formWeeklyRecurrence: FormGroup;
+  formMonthlyRecurrence: FormGroup;
+  formYearlyRecurrence: FormGroup;
+  formRecurrenceCommon: FormGroup;
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   userGroup: any[] = [
@@ -65,6 +73,46 @@ export class NotificationCreateComponent {
 
   audienceSelected: any[] = [];
 
+  listRecurrenceType: Object[] = [
+    { id: 'OneTime', name: 'One time push notification' },
+    { id: 'Recurring', name: 'Recurring push notification' },
+    { id: 'Bday', name: 'Activate for consumer birthday' },
+    { id: 'Bday18', name: 'Activate for consumer 18th birthday' }
+  ];
+
+  listRecurrencePatterns: string[] = [
+    'Daily','Weekly','Monthly','Yearly'
+  ];
+
+  recurrenceLabel: Object = {
+    Daily: 'Day(s)',
+    Weekly: 'Week(s)',
+    Monthly: 'Month(s)',
+    Yearly: 'Year(s)'
+  }
+
+  listWeekDays: string[] = [
+    'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+  ]
+
+  listMonths: Object[] = [
+    { id: 'Jan', name:'Januari'},
+    { id: 'Feb', name:'Februari'},
+    { id: 'Mar', name:'Maret'},
+    { id: 'Apr', name:'April'},
+    { id: 'May', name:'Mei'},
+    { id: 'Jun', name:'Juni'},
+    { id: 'Jul', name:'Juli'},
+    { id: 'Aug', name:'Agustus'},
+    { id: 'Sep', name:'September'},
+    { id: 'Oct', name:'Oktober'},
+    { id: 'Nov', name:'November'},
+    { id: 'Dec', name:'Desember'},
+  ]
+
+  listDates: number[];
+
+
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
@@ -87,6 +135,38 @@ export class NotificationCreateComponent {
   lastLevel: any;
   actionType: string = 'create';
   idNotif: any = '';
+
+  _recurrenceType: string;
+  _recurrencePattern: string;
+
+  @Input() get recurrenceType(): string {
+    return this._recurrenceType
+  }
+
+  set recurrenceType(val: string) {
+    this._recurrenceType = val;
+    if(this._recurrenceType !== 'Recurring') {
+      this.recurrencePattern = '';
+    }
+
+    if(this._recurrenceType !== 'OneTime') {
+      this.formNotification.controls.is_target_audience.setValue(false);
+      this.formNotification.controls.is_target_audience.disable();
+    } else {
+      this.formNotification.controls.is_target_audience.enable();
+    }
+  }
+
+  @Input() get recurrencePattern(): string {
+    return this._recurrencePattern
+  }
+
+  set recurrencePattern(val: string) {
+    this._recurrencePattern = val;
+  }
+
+  minStartDate = new Date()
+  minEndDate = new Date()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -152,7 +232,10 @@ export class NotificationCreateComponent {
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
-      transfer_token: ["yes", Validators.required]
+      transfer_token: ["yes", Validators.required],
+      recurrence_type: ["OneTime", Validators.required],
+      recurrence_pattern: [""],
+      status: ["Active"]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -164,6 +247,38 @@ export class NotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    this.formDailyRecurrence = this.formBuilder.group({
+      recurrence_time: ["", Validators.required]
+    })
+
+    this.formWeeklyRecurrence = this.formBuilder.group({
+      recurrence_day: ["", Validators.required],
+      recurrence_time: ["", Validators.required]
+    })
+
+    this.formMonthlyRecurrence = this.formBuilder.group({
+      recurrence_date: ["", Validators.required],
+      recurrence_time: ["", Validators.required]
+    })
+
+    this.formYearlyRecurrence = this.formBuilder.group({
+      recurrence_date: ["", Validators.required],
+      recurrence_month: ["", Validators.required],
+      recurrence_time: ["", Validators.required]
+    })
+
+    this.formRecurrenceCommon = this.formBuilder.group({
+      recurrence_every: [1, Validators.required],
+      recurrence_start_date: [this.minStartDate],
+      end_option: ["no_end_date"],
+      recurrence_end_date: [this.minEndDate],
+      recurrence_end_count: [10]
+    })
+
+    this.listDates = Array.from({length: 31}, (_, i) => i + 1)
+
+    this.recurrenceType = 'OneTime';
 
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'retailer' || res === 'tsm') {
@@ -203,17 +318,37 @@ export class NotificationCreateComponent {
       commonFormValidator.parseFormChanged(this.formNotification, this.formNotificationError);
     });
 
+    this.formRecurrenceCommon.get('recurrence_end_date').valueChanges.subscribe(val => {
+      if(val) {
+        this.formRecurrenceCommon.controls['end_option'].setValue('end_date');
+      }
+    })
+
+    this.formRecurrenceCommon.get('recurrence_end_count').valueChanges.subscribe(val => {
+      if(val) {
+        this.formRecurrenceCommon.controls['end_option'].setValue('end_count');
+      }
+    })
+
     // this.formFilter.valueChanges.subscribe(filter => {
     //   if (this.formNotification.get("is_target_audience").value === false) {
     //     this.getAudience();
     //   };
     // });
-
+    
     this.addArea();
+    
+    
     // this.initFilterArea();
+
     this.initAreaV2();
+
     if (this.actionType === 'detail') {
       this.getDetails();
+    }
+
+    if(this.formNotification.controls.user_group.value !== 'customer') {
+      this.formNotification.controls.recurrence_type.disable();
     }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -1009,97 +1144,166 @@ export class NotificationCreateComponent {
     if (e.source.value === 'tsm') {
       this.formNotification.get('user_group').patchValue('tsm');
     }
+
+    if(e.source.value != 'customer') {
+      this.recurrenceType = 'OneTime';
+      this.formNotification.controls.recurrence_type.disable();
+    } else {
+      this.formNotification.controls.recurrence_type.enable();
+    }
     console.log(this.formNotification.value.user_group);
   }
 
   async submit() {
-    if (this.formNotification.valid) {
-      let _areas = [];
-      let areas = [];
-      let value = this.formNotification.getRawValue();
+    if (!this.formNotification.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formNotification);
+      return;
+    }
 
-      value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-        for (const val of this.typeArea) {
-          const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
-          if (filteredValue) _areas.push(filteredValue)
+    if(this.recurrenceType === 'Recurring' && !this.recurrencePattern) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      return;
+    }
+
+    if(this.recurrencePattern == 'Daily' && !this.formDailyRecurrence.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formDailyRecurrence);
+      return;
+    }
+
+    if(this.recurrencePattern == 'Weekly' && !this.formWeeklyRecurrence.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
+      return;
+    }
+
+    if(this.recurrencePattern == 'Monthly' && !this.formMonthlyRecurrence.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+      return;
+    }
+
+    if(this.recurrencePattern == 'Yearly' && !this.formYearlyRecurrence.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formYearlyRecurrence);
+      return;
+    }
+
+    if(this.recurrenceType == 'Recurring' && !this.formRecurrenceCommon.valid) {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formRecurrenceCommon);
+      return;
+    }
+    let startDate
+    let endDate
+
+    if(this.recurrenceType == 'Recurring') {
+      let startDateStr = this.formRecurrenceCommon.controls.recurrence_start_date.value
+      let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
+      if(startDateStr && endDateStr) {
+        startDate = moment(startDateStr)
+        endDate = moment(endDateStr)
+        if(startDate.isSameOrAfter(endDate, 'day')) {
+          this.dialogService.openSnackBar({ message: "Tanggal selesai harus setelah tanggal mulai!" });
+          return;
         }
+      }
+    }
 
-        areas.push(_.last(_areas));
-        _areas = [];
-      })
+    let _areas = [];
+    let areas = [];
+    let value = this.formNotification.getRawValue();
 
-      let same = this.findDuplicate(areas.map(item => item.value));
-      if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+    value.areas.map(item => {
+      let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+      for (const val of this.typeArea) {
+        const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
+        if (filteredValue) _areas.push(filteredValue)
       }
 
-      let body = {
-        title: this.formNotification.get("title").value,
-        body: this.formNotification.get("body").value,
-        type: this.formNotification.get("user_group").value,
-        content_type: this.formNotification.get('content_type').value,
-        area_id: areas[0].value
-      };
+      areas.push(_.last(_areas));
+      _areas = [];
+    })
 
-      if (body.type === 'customer') {
-        body['verification'] = this.formNotification.get('verification').value;
-        body['age'] = this.formNotification.get("age").value;
+    let same = this.findDuplicate(areas.map(item => item.value));
+    if (same.length > 0) {
+      return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+    }
+
+    let body: any = {
+      title: this.formNotification.get("title").value,
+      body: this.formNotification.get("body").value,
+      type: this.formNotification.get("user_group").value,
+      content_type: this.formNotification.get('content_type').value,
+      area_id: areas[0].value,
+      recurrence_type: this.recurrenceType,
+      status: this.formNotification.get('status').value
+    };
+
+    //only allow edit for customer type, non one-time recurrence, else create new notification instead
+    if(body.type === 'customer' && body.recurrence_type !== 'OneTime' && this.idNotif) {
+      body.id = this.idNotif
+    }
+
+    let recurrenceBody: { [key: string]: string; };
+
+    if(this.recurrenceType == 'Recurring') {
+      recurrenceBody = {
+        recurrence_pattern: this.recurrencePattern
+      }
+      switch(this.recurrencePattern) {
+        case 'Daily':
+          recurrenceBody.recurrence_time = this.formDailyRecurrence.get('recurrence_time').value
+          break;
+        case 'Weekly':
+          recurrenceBody.recurrence_day = this.formWeeklyRecurrence.get('recurrence_day').value
+          recurrenceBody.recurrence_time = this.formWeeklyRecurrence.get('recurrence_time').value
+          break;
+        case 'Monthly':
+          recurrenceBody.recurrence_date = this.formMonthlyRecurrence.get('recurrence_date').value
+          recurrenceBody.recurrence_time = this.formMonthlyRecurrence.get('recurrence_time').value
+          break;
+        case 'Yearly':
+          recurrenceBody.recurrence_date = this.formYearlyRecurrence.get('recurrence_date').value
+          recurrenceBody.recurrence_month = this.formYearlyRecurrence.get('recurrence_month').value
+          recurrenceBody.recurrence_time = this.formYearlyRecurrence.get('recurrence_time').value
+          break;
       }
 
-      if (body.content_type === 'static_page') {
-        body['static_page_title'] = this.formNotification.get("static_page_title").value
-        body['static_page_body'] = this.formNotification.get("static_page_body").value
-      } else if (body.content_type === 'landing_page') {
-        body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
-      } else if (body.content_type === 'iframe') {
-        body['iframe_value'] = this.formNotification.get('url_iframe').value;
-        body['transfer_token'] = this.formNotification.get('transfer_token').value;
-      } else if (body.content_type === 'image') {
-        if (this.imageContentTypeBase64) {
-          body['image_value'] = this.imageContentTypeBase64;
-        } else {
-          if (this.multipleImageContentType.length > 0) {
-            this.dataService.showLoading(true);
-            return await new Promise(async (resolve, reject) => {
-              const bodyVideo = new FormData();
-              bodyVideo.append('title', body.title);
-              bodyVideo.append('body', body.body);
-              bodyVideo.append('type', body.type);
-              bodyVideo.append('content_type', body.content_type);
-              bodyVideo.append('area_id', body.area_id);
-              this.multipleImageContentType.forEach((element, i) => {
-                bodyVideo.append(`image_value[${i}]`, element);
-              });
-              if (this.formNotification.get('is_target_audience').value) {
-                bodyVideo.append('target_audience', '1');
-                const ta = await this.audienceSelected.map((aud, i) => {
-                  bodyVideo.append(`target_audiences[${i}]`, aud.id);
-                });
-              } else {
-                if (bodyVideo.get('target_audience')) {
-                  bodyVideo.delete('target_audience');
-                }
-              }
-              this.notificationService.create(bodyVideo).subscribe(
-                res => {
-                  this.router.navigate(["notifications"]);
-                  this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-                  this.dataService.showLoading(false);
-                  resolve(res);
-                },
-                err => {
-                  this.dataService.showLoading(false);
-                  reject(err);
-                }
-              );
-            });
-          } else {
-            return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
-          }
-        }
-      } else if (body.content_type === 'video') {
-        if (this.videoContentTypeURL) {
+      recurrenceBody.recurrence_every = "" + this.formRecurrenceCommon.get('recurrence_every').value
+      recurrenceBody.recurrence_start_date = this.formRecurrenceCommon.get('recurrence_start_date').value
+      let end_option = this.formRecurrenceCommon.get('end_option').value
+      if(end_option == 'end_date') {
+        recurrenceBody.recurrence_end_date = this.formRecurrenceCommon.get('recurrence_end_date').value
+      } else if(end_option == 'end_count') {
+        recurrenceBody.end_recurrence_count = "" + this.formRecurrenceCommon.get('recurrence_end_count').value
+      }
+
+      body = {
+        ...body,
+        ...recurrenceBody
+      }
+    }
+
+    if (body.type === 'customer') {
+      body['verification'] = this.formNotification.get('verification').value;
+      body['age'] = this.formNotification.get("age").value;
+    }
+
+    if (body.content_type === 'static_page') {
+      body['static_page_title'] = this.formNotification.get("static_page_title").value
+      body['static_page_body'] = this.formNotification.get("static_page_body").value
+    } else if (body.content_type === 'landing_page') {
+      body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
+    } else if (body.content_type === 'iframe') {
+      body['iframe_value'] = this.formNotification.get('url_iframe').value;
+      body['transfer_token'] = this.formNotification.get('transfer_token').value;
+    } else if (body.content_type === 'image') {
+      if (this.imageContentTypeBase64) {
+        body['image_value'] = this.imageContentTypeBase64;
+      } else {
+        if (this.multipleImageContentType.length > 0) {
           this.dataService.showLoading(true);
           return await new Promise(async (resolve, reject) => {
             const bodyVideo = new FormData();
@@ -1108,7 +1312,9 @@ export class NotificationCreateComponent {
             bodyVideo.append('type', body.type);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
-            bodyVideo.append('video_value', this.videoContentType);
+            this.multipleImageContentType.forEach((element, i) => {
+              bodyVideo.append(`image_value[${i}]`, element);
+            });
             if (this.formNotification.get('is_target_audience').value) {
               bodyVideo.append('target_audience', '1');
               const ta = await this.audienceSelected.map((aud, i) => {
@@ -1118,6 +1324,13 @@ export class NotificationCreateComponent {
               if (bodyVideo.get('target_audience')) {
                 bodyVideo.delete('target_audience');
               }
+            }
+            bodyVideo.append('recurrence_type', body.recurrence_type);
+            if(this.recurrenceType == 'Recurring') {
+              Object.entries(recurrenceBody).forEach(entry => {
+                let [key, val] = entry
+                bodyVideo.append(key, val);
+              })
             }
             this.notificationService.create(bodyVideo).subscribe(
               res => {
@@ -1133,34 +1346,77 @@ export class NotificationCreateComponent {
             );
           });
         } else {
-          return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
+          return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
         }
       }
+    } else if (body.content_type === 'video') {
+      if (this.videoContentTypeURL) {
+        this.dataService.showLoading(true);
+        return await new Promise(async (resolve, reject) => {
+          const bodyVideo = new FormData();
+          bodyVideo.append('title', body.title);
+          bodyVideo.append('body', body.body);
+          bodyVideo.append('type', body.type);
+          bodyVideo.append('content_type', body.content_type);
+          bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('video_value', this.videoContentType);
+          if (this.formNotification.get('is_target_audience').value) {
+            bodyVideo.append('target_audience', '1');
+            const ta = await this.audienceSelected.map((aud, i) => {
+              bodyVideo.append(`target_audiences[${i}]`, aud.id);
+            });
+          } else {
+            if (bodyVideo.get('target_audience')) {
+              bodyVideo.delete('target_audience');
+            }
+          }
 
-      if (this.formNotification.get("is_target_audience").value) {
-        body['target_audience'] = 1;
-        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+          if(this.recurrenceType == 'Recurring') {
+            Object.entries(recurrenceBody).forEach(entry => {
+              let [key, val] = entry
+              bodyVideo.append(key, val);
+            })
+          }
+
+          this.notificationService.create(bodyVideo).subscribe(
+            res => {
+              this.router.navigate(["notifications"]);
+              this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+              this.dataService.showLoading(false);
+              resolve(res);
+            },
+            err => {
+              this.dataService.showLoading(false);
+              reject(err);
+            }
+          );
+        });
       } else {
-        if (body['target_audience']) delete body['target_audience'];
+        return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
       }
-
-      this.dataService.showLoading(true);
-      this.notificationService.create(body).subscribe(
-        res => {
-          this.router.navigate(["notifications"]);
-          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
-          this.dataService.showLoading(false);
-        },
-        err => {
-          // this.dialogService.openSnackBar({ message: err.error.message });
-          // this.loadingIndicator = false;
-          this.dataService.showLoading(false);
-        }
-      );
-    } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formNotification);
     }
+
+    if (this.formNotification.get("is_target_audience").value) {
+      body['target_audience'] = 1;
+      body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+    } else {
+      if (body['target_audience']) delete body['target_audience'];
+    }
+
+    this.dataService.showLoading(true);
+    console.log(body)
+    this.notificationService.create(body).subscribe(
+      res => {
+        this.router.navigate(["notifications"]);
+        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dataService.showLoading(false);
+      },
+      err => {
+        // this.dialogService.openSnackBar({ message: err.error.message });
+        // this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+      }
+    );
   }
 
   contentType(value) {
@@ -1818,9 +2074,8 @@ export class NotificationCreateComponent {
   }
   async getDetails() {
     try {
-
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, type, audience } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       console.log({ audience });
 
       const frm = this.formNotification;
@@ -1834,12 +2089,45 @@ export class NotificationCreateComponent {
       frm.controls['landing_page_value'].setValue('');
       frm.controls['landing_page_value'].setValue('');
       frm.controls['url_iframe'].setValue('');
-      frm.controls['is_target_audience'].setValue(true);
+      frm.controls['status'].setValue(status);
 
-      setTimeout(() => {
-        this.audienceSelected = audience;
-        this.onSelect({ selected: this.audienceSelected });
-      }, 400);
+      if(recurrence) {
+        this.recurrenceType = 'Recurring'
+        this.recurrencePattern = recurrence.recurrence_pattern
+
+        switch(recurrence.recurrence_pattern) {
+          case 'Daily':
+            this.formDailyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
+            break;
+          case 'Weekly':
+            this.formWeeklyRecurrence.controls['recurrence_day'].setValue(recurrence.day_of_week)
+            this.formWeeklyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
+            break;
+          case 'Montly':
+            this.formMonthlyRecurrence.controls['recurrence_date'].setValue(recurrence.date)
+            this.formMonthlyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
+            break;
+          case 'Yearly':
+            this.formYearlyRecurrence.controls['recurrence_date'].setValue(recurrence.date)
+            this.formYearlyRecurrence.controls['recurrence_month'].setValue(recurrence.month)
+            this.formYearlyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
+            break;
+        }
+        const frmCommon = this.formRecurrenceCommon;
+        frmCommon.controls['recurrence_every'].setValue(recurrence.recurrence_every);
+        frmCommon.controls['recurrence_start_date'].setValue(recurrence.start_date);
+        if(recurrence.end_date) frmCommon.controls['recurrence_end_date'].setValue(recurrence.end_date);
+        if(recurrence.end_recurrence_count) frmCommon.controls['end_recurrence_count'].setValue(recurrence.end_recurrence_count);
+      }
+
+      if(type != 'customer' || target_audience) {
+        frm.controls['is_target_audience'].setValue(true);
+
+        setTimeout(() => {
+          this.audienceSelected = audience;
+          this.onSelect({ selected: this.audienceSelected });
+        }, 400);
+      }
 
       // end request
       this.dataService.showLoading(false);
