@@ -45,7 +45,7 @@
               </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <input matInput [matDatepicker]="startPicker"
+                  <input matInput [matDatepicker]="startPicker" #strDtInput="ngModel"
                       placeholder="Tanggal Mulai" [(ngModel)] = "callOjbMdl.start_date"
                       name = "callOjbMdl.start_date">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -53,12 +53,19 @@
                 </mat-form-field>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <input matInput [matDatepicker]="endDate"
+                  <input matInput [matDatepicker]="endDate" #endDtInput="ngModel"
                       placeholder="Tanggal Berakhir" [(ngModel)] = "callOjbMdl.end_date"
                       name = "callOjbMdl.end_date">
                 <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                 <mat-datepicker #endDate></mat-datepicker>
                 </mat-form-field>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex="45%" class="is-light form-primary" *ngIf = "callOjbMdl.start_date === undefined || callOjbMdl.start_date === null || callOjbMdl.start_date === '' || callOjbMdl.end_date === undefined || callOjbMdl.end_date === null || callOjbMdl.end_date === ''">
+              <small class="form-text text-danger">
+                <p style="color:red"> Tanggal mulai & Tanggal berakhir harus diisi</p>
+              </small>
+              </div>
             </div>
             <div fxLayout="row" *ngIf = "paramEdit !== null" >
               <h3>
@@ -407,7 +414,7 @@
           class="confirmation-button"
           (click)="klikCreate()"
           fxFlex="20"
-          [disabled]="(callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === '' || nameInput.dirty && nameInput.invalid)"
+          [disabled]="(callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === '' || nameInput.dirty && nameInput.invalid || callOjbMdl.start_date === undefined || callOjbMdl.start_date === null || callOjbMdl.start_date === '' || callOjbMdl.end_date === undefined || callOjbMdl.end_date === null || callOjbMdl.end_date === '')"
         >
           SIMPAN
         </button>
@@ -419,7 +426,7 @@
           class="confirmation-button"
           (click)="klikUpdate()"
           fxFlex="20"
-          [disabled]="(callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === '' || nameInput.dirty && nameInput.invalid)"
+          [disabled]="(callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === '' || nameInput.dirty && nameInput.invalid || callOjbMdl.start_date === undefined || callOjbMdl.start_date === null || callOjbMdl.start_date === '' || callOjbMdl.end_date === undefined || callOjbMdl.end_date === null || callOjbMdl.end_date === '')"
         >
           Update
         </button>
