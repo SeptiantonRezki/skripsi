@@ -165,9 +165,6 @@ export class NotificationCreateComponent {
     this._recurrencePattern = val;
   }
 
-  minStartDate = new Date()
-  minEndDate = new Date()
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -270,9 +267,9 @@ export class NotificationCreateComponent {
 
     this.formRecurrenceCommon = this.formBuilder.group({
       recurrence_every: [1, Validators.required],
-      recurrence_start_date: [this.minStartDate],
+      recurrence_start_date: [""],
       end_option: ["no_end_date"],
-      recurrence_end_date: [this.minEndDate],
+      recurrence_end_date: [""],
       recurrence_end_count: [10]
     })
 
@@ -1200,15 +1197,17 @@ export class NotificationCreateComponent {
 
     if(this.recurrenceType == 'Recurring') {
       let startDateStr = this.formRecurrenceCommon.controls.recurrence_start_date.value
-      let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
-      if(startDateStr && endDateStr) {
-        startDate = moment(startDateStr)
+      startDate = moment(startDateStr)
+      
+      if(this.formRecurrenceCommon.controls.end_option.value === 'end_date') {
+        let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
         endDate = moment(endDateStr)
         if(startDate.isSameOrAfter(endDate, 'day')) {
           this.dialogService.openSnackBar({ message: "Tanggal selesai harus setelah tanggal mulai!" });
           return;
         }
       }
+      
     }
 
     let _areas = [];
@@ -2075,7 +2074,7 @@ export class NotificationCreateComponent {
   async getDetails() {
     try {
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, content_type, type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       console.log({ audience });
 
       const frm = this.formNotification;
@@ -2083,7 +2082,7 @@ export class NotificationCreateComponent {
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
       frm.controls['age'].setValue(age);
-      frm.controls['content_type'].setValue('');
+      frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
       frm.controls['static_page_body'].setValue('');
       frm.controls['landing_page_value'].setValue('');
