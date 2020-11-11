@@ -46,6 +46,8 @@
             <span class="row-end_date">{{row.end_date}}</span>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column [width]="1">
+        </ngx-datatable-column>
         <ngx-datatable-column name="Status Program" prop="status_program">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.status_program}}</span>
