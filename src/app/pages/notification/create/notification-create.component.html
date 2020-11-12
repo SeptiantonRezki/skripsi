@@ -209,7 +209,9 @@
           <div [formGroup]="formDailyRecurrence" *ngIf="recurrencePattern == 'Daily'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput type="text" formControlName="recurrence_time" placeholder="Waktu">
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formDailyRecurrence.controls['recurrence_time'].hasError('required') && formDailyRecurrence.controls['recurrence_time'].touched">
                   Recurrence Time harus diisi
@@ -218,20 +220,22 @@
             </div>
           </div>
           <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrencePattern == 'Weekly'">
-            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
-              fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-              <mat-form-field fxFlex="40" class="is-light form-primary">
-                <mat-select placeholder="Hari" formControlName="recurrence_day">
-                  <mat-option *ngFor="let item of listWeekDays" [value]="item">{{item}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field fxFlex="40" class="is-light form-primary">
-                <input matInput type="text" formControlName="recurrence_time" placeholder="Waktu">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formWeeklyRecurrence.controls['recurrence_time'].hasError('required') && formWeeklyRecurrence.controls['recurrence_time'].touched">
                   Recurrence Time harus diisi
                 </mat-error>
               </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+              fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+              <ng-container *ngFor="let item of listWeekDays" formArrayName="recurrence_day">
+                <mat-checkbox [formControlName]="item" [value]="item"></mat-checkbox> {{item}} &nbsp;
+              </ng-container>
             </div>
           </div>
           <div [formGroup]="formMonthlyRecurrence" *ngIf="recurrencePattern == 'Monthly'">
@@ -242,8 +246,10 @@
                   <mat-option *ngFor="let item of listDates" [value]="item">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field fxFlex="40" class="is-light form-primary">
-                <input matInput type="text" formControlName="recurrence_time" placeholder="Waktu">
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formMonthlyRecurrence.controls['recurrence_time'].hasError('required') && formMonthlyRecurrence.controls['recurrence_time'].touched">
                   Recurrence Time harus diisi
@@ -264,8 +270,10 @@
                   <mat-option *ngFor="let item of listMonths" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field fxFlex="28" class="is-light form-primary">
-                <input matInput type="text" formControlName="recurrence_time" placeholder="Waktu">
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formYearlyRecurrence.controls['recurrence_time'].hasError('required') && formYearlyRecurrence.controls['recurrence_time'].touched">
                   Recurrence Time harus diisi

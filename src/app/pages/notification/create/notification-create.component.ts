@@ -250,8 +250,13 @@ export class NotificationCreateComponent {
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({
-      recurrence_day: ["", Validators.required],
+      recurrence_day: this.formBuilder.group({}),
       recurrence_time: ["", Validators.required]
+    })
+
+    let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
+    this.listWeekDays.forEach(day => {
+      recurrenceDaysControls.addControl(day, new FormControl(false))
     })
 
     this.formMonthlyRecurrence = this.formBuilder.group({
@@ -267,7 +272,7 @@ export class NotificationCreateComponent {
 
     this.formRecurrenceCommon = this.formBuilder.group({
       recurrence_every: [1, Validators.required],
-      recurrence_start_date: [""],
+      recurrence_start_date: ["", Validators.required],
       end_option: ["no_end_date"],
       recurrence_end_date: [""],
       recurrence_end_count: [10]
@@ -1168,11 +1173,25 @@ export class NotificationCreateComponent {
       commonFormValidator.validateAllFields(this.formDailyRecurrence);
       return;
     }
+    
+    let selectedWeekDays = []
 
-    if(this.recurrencePattern == 'Weekly' && !this.formWeeklyRecurrence.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
-      return;
+    if(this.recurrencePattern == 'Weekly') {
+      if(!this.formWeeklyRecurrence.valid) {
+        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
+        return;
+      }
+      let cbRecurrenceDay = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
+      console.log('weeky', cbRecurrenceDay)
+      
+      let recurrenceDayValues = cbRecurrenceDay.value
+      selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key])
+
+      if(selectedWeekDays.length == 0) {
+        this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+        return;
+      }
     }
 
     if(this.recurrencePattern == 'Monthly' && !this.formMonthlyRecurrence.valid) {
@@ -1198,9 +1217,18 @@ export class NotificationCreateComponent {
     if(this.recurrenceType == 'Recurring') {
       let startDateStr = this.formRecurrenceCommon.controls.recurrence_start_date.value
       startDate = moment(startDateStr)
+
+      if(!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
+        this.dialogService.openSnackBar({ message: "Tanggal mulai tidak boleh sebelum hari ini!" });
+        return;
+      }
       
       if(this.formRecurrenceCommon.controls.end_option.value === 'end_date') {
         let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
+        if(!endDateStr) {
+          this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+          return;
+        }
         endDate = moment(endDateStr)
         if(startDate.isSameOrAfter(endDate, 'day')) {
           this.dialogService.openSnackBar({ message: "Tanggal selesai harus setelah tanggal mulai!" });
@@ -1245,7 +1273,7 @@ export class NotificationCreateComponent {
       body.id = this.idNotif
     }
 
-    let recurrenceBody: { [key: string]: string; };
+    let recurrenceBody: { [key: string]: any; };
 
     if(this.recurrenceType == 'Recurring') {
       recurrenceBody = {
@@ -1256,7 +1284,7 @@ export class NotificationCreateComponent {
           recurrenceBody.recurrence_time = this.formDailyRecurrence.get('recurrence_time').value
           break;
         case 'Weekly':
-          recurrenceBody.recurrence_day = this.formWeeklyRecurrence.get('recurrence_day').value
+          recurrenceBody.recurrence_day = selectedWeekDays
           recurrenceBody.recurrence_time = this.formWeeklyRecurrence.get('recurrence_time').value
           break;
         case 'Monthly':
@@ -2074,7 +2102,7 @@ export class NotificationCreateComponent {
   async getDetails() {
     try {
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, content_type, type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, content_type, type, recurrence_type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       console.log({ audience });
 
       const frm = this.formNotification;
@@ -2099,7 +2127,11 @@ export class NotificationCreateComponent {
             this.formDailyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
           case 'Weekly':
-            this.formWeeklyRecurrence.controls['recurrence_day'].setValue(recurrence.day_of_week)
+            let recurrenceDayControls = this.formWeeklyRecurrence.controls['recurrence_day'] as FormGroup
+            let days = recurrence.day_of_week.split(',')
+            days.forEach(day => {
+              recurrenceDayControls.controls[day].setValue(true)
+            })
             this.formWeeklyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
           case 'Montly':
@@ -2115,8 +2147,16 @@ export class NotificationCreateComponent {
         const frmCommon = this.formRecurrenceCommon;
         frmCommon.controls['recurrence_every'].setValue(recurrence.recurrence_every);
         frmCommon.controls['recurrence_start_date'].setValue(recurrence.start_date);
-        if(recurrence.end_date) frmCommon.controls['recurrence_end_date'].setValue(recurrence.end_date);
-        if(recurrence.end_recurrence_count) frmCommon.controls['end_recurrence_count'].setValue(recurrence.end_recurrence_count);
+        if(recurrence.end_date) {
+          frmCommon.controls['end_option'].setValue('end_date');
+          frmCommon.controls['recurrence_end_date'].setValue(recurrence.end_date);
+        }
+        if(recurrence.end_recurrence_count) {
+          frmCommon.controls['end_option'].setValue('end_count');
+          frmCommon.controls['end_recurrence_count'].setValue(recurrence.end_recurrence_count);
+        }
+      } else {
+        this.recurrenceType = recurrence_type
       }
 
       if(type != 'customer' || target_audience) {
