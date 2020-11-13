@@ -36,6 +36,8 @@ import { TaskSequencingDuplicateComponent } from "./task-sequencing/duplicate/ta
 import { MissionBuilderCreateComponent } from "./mission-builder/create/mission-builder-create.component";
 import { MissionBuilderEditComponent } from "./mission-builder/edit/mission-builder-edit.component";
 import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mission-builder-duplicate.component";
+import { CreatetsmComponent } from "./automation/createtsm/createtsm.component";
+import { EdittsmComponent } from "./automation/edittsm/edittsm.component";
 
 const routes: Routes = [
   {
@@ -225,6 +227,15 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "automation/create_tsm",
+    component: CreatetsmComponent,
+    // data: {
+    //   breadcrumbs: brConfig.dte.automation.create
+    // },
+    canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
     path: "automation/edit",
     component: AudienceTradeProgramEditComponent,
     data: {
@@ -232,6 +243,16 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
+  },
+  
+  {
+    path: "automation/edit_tsm",
+    component: EdittsmComponent,
+    // data: {
+    //   breadcrumbs: brConfig.dte.automation.edit
+    // },
+    canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
   },
   {
     path: "automation/detail",
