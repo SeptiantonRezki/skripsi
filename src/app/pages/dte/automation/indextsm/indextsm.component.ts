@@ -10,16 +10,15 @@ import { DataService } from 'app/services/data.service';
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
 
 @Component({
-  selector: 'app-audience-trade-program-index',
-  templateUrl: './audience-trade-program-index.component.html',
-  styleUrls: ['./audience-trade-program-index.component.scss']
+  selector: 'app-indextsm',
+  templateUrl: './indextsm.component.html',
+  styleUrls: ['./indextsm.component.scss']
 })
-export class AudienceTradeProgramIndexComponent implements OnInit {
+export class IndextsmComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any;
-  btnNonTsm :any;
-  btnTsm :any;
+
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
@@ -46,37 +45,25 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private audienceTradeProgramService: AudienceTradeProgramService,
-    private formBuilder: FormBuilder,
-  ) {
-    this.onLoad = true;
-    this.permission = this.roles.getRoles('principal.dteautomation');
-    console.log(this.permission);
-
-    const observable = this.keyUp.debounceTime(1000)
-      .distinctUntilChanged()
-      .flatMap(search => {
-        return Observable.of(search).delay(500);
-      })
-      .subscribe(data => {
-        this.updateFilter(data);
-      });
-  }
+    private formBuilder: FormBuilder,) {
+      this.onLoad = true;
+      this.permission = this.roles.getRoles('principal.dteautomation');
+      console.log(this.permission);
+  
+      const observable = this.keyUp.debounceTime(1000)
+        .distinctUntilChanged()
+        .flatMap(search => {
+          return Observable.of(search).delay(500);
+        })
+        .subscribe(data => {
+          this.updateFilter(data);
+        }); }
 
   ngOnInit() {
-    this.getDTEAutomationNonTsm();
-    this.btnNonTsm = true;
+    this.getDTEAutomationTsm();
   }
-  tabClick(tab) {
-    if (tab.index === 1) {
-      this.btnNonTsm = false;
-      this.btnTsm = true;
-    } else {
-      this.btnNonTsm = true;
-      this.btnTsm = false;
-    }
-    console.log(tab.index);
-  }
-  getDTEAutomationNonTsm() {
+
+  getDTEAutomationTsm() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -84,7 +71,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
-    this.pagination['classification']= '0';
+    this.pagination['classification']= '1';
     this.offsetPagination = page ? (page - 1) : 0;
     this.audienceTradeProgramService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -164,7 +151,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_dte_automation', param);
-    this.router.navigate(['dte', 'automation', 'edit']);
+    this.router.navigate(['dte', 'automation', 'edit_tsm']);
   }
 
   directDetail(param?: any): void {
@@ -187,7 +174,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     this.audienceTradeProgramService.delete({ automation_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getDTEAutomationNonTsm();
+        this.getDTEAutomationTsm();
 
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
@@ -210,5 +197,4 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
       this.dataService.showLoading(false);
     })
   }
-
 }
