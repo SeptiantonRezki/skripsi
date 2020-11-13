@@ -20,7 +20,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
   templateUrl: './e-ordertsm.component.html',
   styleUrls: ['./e-ordertsm.component.scss']
 })
-export class EOrdertsmComponent implements OnInit {
+export class EOrdertsmeditComponent implements OnInit {
 
   // For chips
   visible = true;
