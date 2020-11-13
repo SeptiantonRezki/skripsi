@@ -131,6 +131,7 @@ import { IndextsmComponent } from './automation/indextsm/indextsm.component';
 import { CreatetsmComponent } from './automation/createtsm/createtsm.component';
 import { EOrdertsmComponent } from './automation/createtsm/e-ordertsm/e-ordertsm.component';
 import { EdittsmComponent } from './automation/edittsm/edittsm.component';
+import { EOrdertsmeditComponent } from "./automation/edittsm/e-ordertsm/e-ordertsm.component";
 
 
 
@@ -195,8 +196,7 @@ export const MY_FORMATS = {
     NgxMaterialTimepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
-    NgxGraphModule,
-    EOrdertsmComponent
+    NgxGraphModule
   ],
   declarations: [
     TemplateIndexComponent,
@@ -272,7 +272,8 @@ export const MY_FORMATS = {
     IndextsmComponent,
     CreatetsmComponent,
     EOrdertsmComponent,
-    EdittsmComponent,
+    EOrdertsmeditComponent,
+    EdittsmComponent
   ],
   exports: [
     TemplateIndexComponent,
