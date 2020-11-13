@@ -1,8 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'DTE Automation'">
-    <button style="width: 170px" [routerLink]="['/dte','automation', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> BUAT
+    <button style="width: 170px" [routerLink]="['/dte','automation', 'create']" *ngIf="btnNonTsm" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT NON TSM
+    </button>
+    
+    <button style="width: 170px" [routerLink]="['/dte','automation', 'create_tsm']" *ngIf="btnTsm" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT TSM
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -18,77 +22,85 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)">
+      <mat-tab-group (selectedTabChange)="tabClick($event)">
+        <mat-tab label="Non-TSM">
+          <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+            [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+            [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+            (page)="setPage($event)" (sort)="onSort($event)">
+    
+            <ngx-datatable-column name="Trade Program" prop="trade_creator_name">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row-name" (click)="directDetail(row)">{{row.trade_creator_name}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column name="Type" prop="type">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span *ngIf="row.type === 'e-order'">e-Order</span>
+                <span *ngIf="row.type === 'coupon'">Digital Coupon</span>
+                <span *ngIf="row.type === 'referral_code'">Referral Code</span>
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column name="Coin Reward" prop="coin_reward">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.coin_reward}}
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column name="Jumlah Koin per Frekuensi" prop="max_frequency">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.max_frequency}}
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.start_date | date:'dd/MM/yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{row.end_date | date:'dd/MM/yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status" prop="end_date">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <p class="status text-truncate h6 p-4 status-order"
+                  [ngClass]="row.status == 'berjalan' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                  {{ row.status.toUpperCase() }}
+                </p>
+              </ng-template>
+            </ngx-datatable-column>
+    
+            <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="button-row" style="margin-left: -10px">
+                  <!-- attribut button edit harus ada permission *ngIf="permission?.ubah" -->
+                  <button type="button" mat-icon-button color="" matTooltip="Eksport" (click)="export(row)">
+                    <mat-icon class="orange-500-fg">save_alt</mat-icon>
+                  </button>
+                  <button mat-icon-button color="" (click)="directEdit(row)" *ngIf="row.status !== 'berjalan'">
+                    <mat-icon class="secondary-text">edit</mat-icon>
+                  </button>
+                  <!-- attribut button hapus harus ada permission [disabled]="!permission?.hapus" -->
+                  <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteAutomation(row.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+          <a #downloadLink></a>
+        </mat-tab>
 
-        <ngx-datatable-column name="Trade Program" prop="trade_creator_name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.trade_creator_name}}</span>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Type" prop="type">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span *ngIf="row.type === 'e-order'">e-Order</span>
-            <span *ngIf="row.type === 'coupon'">Digital Coupon</span>
-            <span *ngIf="row.type === 'referral_code'">Referral Code</span>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Coin Reward" prop="coin_reward">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.coin_reward}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Jumlah Koin per Frekuensi" prop="max_frequency">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.max_frequency}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.start_date | date:'dd/MM/yyyy'}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.end_date | date:'dd/MM/yyyy'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Status" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <p class="status text-truncate h6 p-4 status-order"
-              [ngClass]="row.status == 'berjalan' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-              {{ row.status.toUpperCase() }}
-            </p>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row" style="margin-left: -10px">
-              <!-- attribut button edit harus ada permission *ngIf="permission?.ubah" -->
-              <button type="button" mat-icon-button color="" matTooltip="Eksport" (click)="export(row)">
-                <mat-icon class="orange-500-fg">save_alt</mat-icon>
-              </button>
-              <button mat-icon-button color="" (click)="directEdit(row)" *ngIf="row.status !== 'berjalan'">
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-              <!-- attribut button hapus harus ada permission [disabled]="!permission?.hapus" -->
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteAutomation(row.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable>
-      <a #downloadLink></a>
+        <mat-tab label="TSM">
+          <app-indextsm></app-indextsm>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </div>
