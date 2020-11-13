@@ -196,6 +196,7 @@ export const MY_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
     NgxGraphModule,
+    EOrdertsmComponent
   ],
   declarations: [
     TemplateIndexComponent,
