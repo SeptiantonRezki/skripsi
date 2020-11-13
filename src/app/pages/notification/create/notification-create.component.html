@@ -214,7 +214,7 @@
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formDailyRecurrence.controls['recurrence_time'].hasError('required') && formDailyRecurrence.controls['recurrence_time'].touched">
-                  Recurrence Time harus diisi
+                  Waktu terbit harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -227,7 +227,7 @@
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formWeeklyRecurrence.controls['recurrence_time'].hasError('required') && formWeeklyRecurrence.controls['recurrence_time'].touched">
-                  Recurrence Time harus diisi
+                  Waktu terbit harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -252,7 +252,7 @@
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formMonthlyRecurrence.controls['recurrence_time'].hasError('required') && formMonthlyRecurrence.controls['recurrence_time'].touched">
-                  Recurrence Time harus diisi
+                  Waktu terbit harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -276,7 +276,7 @@
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formYearlyRecurrence.controls['recurrence_time'].hasError('required') && formYearlyRecurrence.controls['recurrence_time'].touched">
-                  Recurrence Time harus diisi
+                  Waktu terbit harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -288,10 +288,15 @@
                 <input matInput type="number" formControlName="recurrence_every" placeholder="Dikirim setiap">
                 <mat-error
                   *ngIf="formRecurrenceCommon.controls['recurrence_every'].hasError('required') && formRecurrenceCommon.controls['recurrence_every'].touched">
-                  Recurrence interval harus diisi
+                  Interval pengulangan harus diisi
                 </mat-error>
                 <span matSuffix>{{ recurrenceLabel[recurrencePattern] }}</span>
               </mat-form-field>
+            </div>
+            <div class="pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center">
+              <h4 class="">
+                <strong>Periode Pengiriman</strong>
+              </h4>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
@@ -318,9 +323,8 @@
                   <div></div>
                   <mat-form-field fxFlex="30" class="is-light"
                     *ngIf="formRecurrenceCommon.controls.end_option.value === 'end_count'">
-                    <mat-label>Total pengiriman</mat-label>
-                    <input matInput type="number" formControlName="recurrence_end_count">
-                    <span matSuffix>kali</span>
+                    <span matPrefix>Pengulangan ke&nbsp;</span>
+                    <input matInput type="number" formControlName="end_recurrence_count">
                   </mat-form-field>
                   <mat-form-field fxFlex="30" class="is-light form-primary"
                     *ngIf="formRecurrenceCommon.controls.end_option.value === 'end_date'">

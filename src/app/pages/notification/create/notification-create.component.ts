@@ -74,10 +74,10 @@ export class NotificationCreateComponent {
   audienceSelected: any[] = [];
 
   listRecurrenceType: Object[] = [
-    { id: 'OneTime', name: 'One time push notification' },
-    { id: 'Recurring', name: 'Recurring push notification' },
-    { id: 'Bday', name: 'Activate for consumer birthday' },
-    { id: 'Bday18', name: 'Activate for consumer 18th birthday' }
+    { id: 'OneTime', name: 'Aktivasi notifikasi sekali kirim' },
+    { id: 'Recurring', name: 'Aktivasi notifikasi berulang' },
+    { id: 'Bday', name: 'Aktivasi notifikasi ulang tahun' },
+    { id: 'Bday18', name: 'Aktivasi notifikasi ulang tahun ke-18' }
   ];
 
   listRecurrencePatterns: string[] = [
@@ -85,10 +85,10 @@ export class NotificationCreateComponent {
   ];
 
   recurrenceLabel: Object = {
-    Daily: 'Day(s)',
-    Weekly: 'Week(s)',
-    Monthly: 'Month(s)',
-    Yearly: 'Year(s)'
+    Daily: 'hari',
+    Weekly: 'minggu',
+    Monthly: 'bulan',
+    Yearly: 'tahun'
   }
 
   listWeekDays: string[] = [
@@ -275,7 +275,7 @@ export class NotificationCreateComponent {
       recurrence_start_date: ["", Validators.required],
       end_option: ["no_end_date"],
       recurrence_end_date: [""],
-      recurrence_end_count: [10]
+      end_recurrence_count: [10]
     })
 
     this.listDates = Array.from({length: 31}, (_, i) => i + 1)
@@ -326,7 +326,7 @@ export class NotificationCreateComponent {
       }
     })
 
-    this.formRecurrenceCommon.get('recurrence_end_count').valueChanges.subscribe(val => {
+    this.formRecurrenceCommon.get('end_recurrence_count').valueChanges.subscribe(val => {
       if(val) {
         this.formRecurrenceCommon.controls['end_option'].setValue('end_count');
       }
@@ -1299,12 +1299,12 @@ export class NotificationCreateComponent {
       }
 
       recurrenceBody.recurrence_every = "" + this.formRecurrenceCommon.get('recurrence_every').value
-      recurrenceBody.recurrence_start_date = this.formRecurrenceCommon.get('recurrence_start_date').value
+      recurrenceBody.recurrence_start_date = startDate.format('YYYY-MM-DD')
       let end_option = this.formRecurrenceCommon.get('end_option').value
       if(end_option == 'end_date') {
-        recurrenceBody.recurrence_end_date = this.formRecurrenceCommon.get('recurrence_end_date').value
+        recurrenceBody.recurrence_end_date = endDate.format('YYYY-MM-DD')
       } else if(end_option == 'end_count') {
-        recurrenceBody.end_recurrence_count = "" + this.formRecurrenceCommon.get('recurrence_end_count').value
+        recurrenceBody.end_recurrence_count = "" + this.formRecurrenceCommon.get('end_recurrence_count').value
       }
 
       body = {
@@ -2118,7 +2118,8 @@ export class NotificationCreateComponent {
       frm.controls['url_iframe'].setValue('');
       frm.controls['status'].setValue(status);
 
-      if(recurrence) {
+      if(recurrence_type == 'Recurring' && recurrence) {
+        this.formNotification.controls.recurrence_type.enable();
         this.recurrenceType = 'Recurring'
         this.recurrencePattern = recurrence.recurrence_pattern
 
@@ -2134,7 +2135,7 @@ export class NotificationCreateComponent {
             })
             this.formWeeklyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
-          case 'Montly':
+          case 'Monthly':
             this.formMonthlyRecurrence.controls['recurrence_date'].setValue(recurrence.date)
             this.formMonthlyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
