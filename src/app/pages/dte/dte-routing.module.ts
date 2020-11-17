@@ -227,12 +227,12 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "automation/create_tsm",
+    path: "automation/createtsm",
     component: CreatetsmComponent,
-    // data: {
-    //   breadcrumbs: brConfig.dte.automation.create
-    // },
-    canDeactivate: [PendingChangesGuard],
+    data: {
+      breadcrumbs: brConfig.dte.automation.create_tsm
+    },
+    // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
   {
@@ -248,10 +248,10 @@ const routes: Routes = [
   {
     path: "automation/edit_tsm",
     component: EdittsmComponent,
-    // data: {
-    //   breadcrumbs: brConfig.dte.automation.edit
-    // },
-    canDeactivate: [PendingChangesGuard],
+    data: {
+      breadcrumbs: brConfig.dte.automation.edit_tsm
+    },
+    // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
   },
   {
