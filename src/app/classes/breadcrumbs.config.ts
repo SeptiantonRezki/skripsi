@@ -1448,6 +1448,18 @@ export const brConfig = {
           name: "Buat DTE Automation"
         }
       ],
+      create_tsm: [
+        {
+          type: "parent",
+          url: "/dte/automation",
+          name: "DTE Automation"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat DTE Automation TSM"
+        }
+      ],
       edit: [
         {
           type: "parent",
@@ -1458,6 +1470,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Ubah DTE Automation"
+        }
+      ],
+      edit_tsm: [
+        {
+          type: "parent",
+          url: "/dte/automation",
+          name: "DTE Automation"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah DTE Automation TSM"
         }
       ],
       detail: [
