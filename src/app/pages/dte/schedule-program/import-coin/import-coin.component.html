@@ -37,11 +37,13 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Nama Trade Program</th>
+            <th nowrap>Nama Group Trade Program</th>
+            <th nowrap>Nama Program</th>
             <th nowrap>Nama Audience</th>
             <th nowrap>Nama Retailer</th>
             <th nowrap>Status Retailer</th>
-            <th nowrap>Current Coin</th>
+            <th nowrap>Current Coin (Total)</th>
+            <th nowrap>Current Coin (Group Trade Program)</th>
             <th nowrap>Coin Adjusted</th>
             <th nowrap>Alasan</th>
           </tr>
@@ -53,6 +55,9 @@
               {{ item.trade_program_name }}
             </td>
             <td nowrap>
+              {{ item.trade_program_name }}
+            </td>
+            <td nowrap>
               {{ item.audience_name }}
             </td>
             <td nowrap>
@@ -60,6 +65,9 @@
             </td>
             <td nowrap>
               {{ item.status }}
+            </td>
+            <td nowrap>
+              {{ item.current_coin }}
             </td>
             <td nowrap>
               {{ item.current_coin }}
