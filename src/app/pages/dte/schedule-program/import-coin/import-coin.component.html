@@ -52,7 +52,7 @@
           <tr *ngFor="let item of rows"
             [ngStyle]="{ 'background-color': setRedIfDuplicate(item), color: item.flag === 'duplicate' ? 'white' : 'black' }">
             <td nowrap>
-              {{ item.trade_program_name }}
+              {{ item.group_trade_program_name }}
             </td>
             <td nowrap>
               {{ item.trade_program_name }}
@@ -70,7 +70,7 @@
               {{ item.current_coin }}
             </td>
             <td nowrap>
-              {{ item.current_coin }}
+              {{ item.current_coin_group_trade_program }}
             </td>
             <td nowrap>
               {{ item.coin }}
