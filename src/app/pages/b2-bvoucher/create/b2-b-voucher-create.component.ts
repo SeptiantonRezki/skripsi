@@ -1044,7 +1044,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     };
     // console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {
-      body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : [this.formDetilVoucher.get('category').value]
+      body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value
     }
 
     if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {

@@ -187,7 +187,7 @@ export class B2CVoucherEditComponent implements OnInit {
         this.filterProductList();
       });
 
-    
+
 
   }
 
@@ -475,13 +475,13 @@ export class B2CVoucherEditComponent implements OnInit {
         available_at: moment(this.formDetailVoucher.get('available_at').value).format('YYYY-MM-DD'),
         expired_at: moment(this.formDetailVoucher.get('expired_at').value).format('YYYY-MM-DD'),
         limit_by: this.formDetailVoucher.get('limit_by_product').value ? 'product' :
-        this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
+          this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
         limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null
       };
 
       if (body['limit_by'] !== null) {
-        body['limit_only'] = body['limit_by'] === 'product' ? 
-        this.productList.map(prd => prd.sku_id) : [this.formDetailVoucher.get('category').value];
+        body['limit_only'] = body['limit_by'] === 'product' ?
+          this.productList.map(prd => prd.sku_id) : this.formDetailVoucher.get('category').value;
       }
 
       if (this.formDetailVoucher.get('limit_by_product').value === false && this.formDetailVoucher.get('limit_by_category').value === false) {
@@ -525,49 +525,49 @@ export class B2CVoucherEditComponent implements OnInit {
   }
 
   getRetailerSelected() {
-      this.b2cVoucherService.getSelectedRetailerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-        if (this.detailVoucher.is_target_audience_retailer === 1 ) {
-          this.detailVoucher = {
-            ...this.detailVoucher,
-            dataPanelRetailer: {
-              selected: res.data.targeted_audiences.map(aud => ({
-                ...aud,
-                id: aud.business_id
-              }))
-            }
-          };
-        } else {
-          this.detailVoucher = {
-            ...this.detailVoucher,
-            dataPanelRetailer: {
-              area_id: res.data.areas.map(aud => aud.area_id)
-            }
-          };
-        }
-      });
+    this.b2cVoucherService.getSelectedRetailerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+      if (this.detailVoucher.is_target_audience_retailer === 1) {
+        this.detailVoucher = {
+          ...this.detailVoucher,
+          dataPanelRetailer: {
+            selected: res.data.targeted_audiences.map(aud => ({
+              ...aud,
+              id: aud.business_id
+            }))
+          }
+        };
+      } else {
+        this.detailVoucher = {
+          ...this.detailVoucher,
+          dataPanelRetailer: {
+            area_id: res.data.areas.map(aud => aud.area_id)
+          }
+        };
+      }
+    });
   }
 
   getCustomerSelected() {
-      this.b2cVoucherService.getSelectedCustomerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-        if (this.detailVoucher.is_target_audience_customer === 1 ) {
-          this.detailVoucher = {
-            ...this.detailVoucher,
-            dataPanelCustomer: { 
-              selected: res.data.targeted_audiences.map(aud => ({
-                ...aud,
-                id: aud.user_id
-              }))
-            }
-          };
-        } else {
-          this.detailVoucher = {
-            ...this.detailVoucher,
-            dataPanelCustomer: {
-              area_id: res.data.areas.map(aud => aud.area_id)
-            }
+    this.b2cVoucherService.getSelectedCustomerPanel({ voucher_id: this.detailVoucher.id }).subscribe(res => {
+      if (this.detailVoucher.is_target_audience_customer === 1) {
+        this.detailVoucher = {
+          ...this.detailVoucher,
+          dataPanelCustomer: {
+            selected: res.data.targeted_audiences.map(aud => ({
+              ...aud,
+              id: aud.user_id
+            }))
+          }
+        };
+      } else {
+        this.detailVoucher = {
+          ...this.detailVoucher,
+          dataPanelCustomer: {
+            area_id: res.data.areas.map(aud => aud.area_id)
           }
         }
-      });
+      }
+    });
   }
 
   scrollToTop() {
