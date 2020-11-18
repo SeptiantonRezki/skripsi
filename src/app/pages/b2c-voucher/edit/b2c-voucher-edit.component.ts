@@ -418,7 +418,7 @@ export class B2CVoucherEditComponent implements OnInit {
         limit_only: res.data.limit_only,
         limit_purchase: res.data.limit_purchase ? true : false,
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
-        category: res.data.limit_by === 'category' && res.data.limit_only[0] ? Number(res.data.limit_only[0]) : '',
+        category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
         minimumPurchase: res.data.limit_purchase ? res.data.limit_purchase : 0,
       });
       this.isLimitVoucher = res.data.limit_by ? true : false;
