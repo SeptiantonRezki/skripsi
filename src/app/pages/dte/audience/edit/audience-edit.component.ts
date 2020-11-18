@@ -183,6 +183,7 @@ export class AudienceEditComponent {
       limit: [""],
       type: ["", Validators.required],
       audience_type: ["scheduler", Validators.required],
+      geotree_checkbox: true,
       // national: [""],
       // division: [""],
       // region: [""],
@@ -274,7 +275,7 @@ export class AudienceEditComponent {
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.searchingRetailer(res);
-      this.getRetailer();
+      // this.getRetailer();
     })
 
     this.filterScheduler.valueChanges

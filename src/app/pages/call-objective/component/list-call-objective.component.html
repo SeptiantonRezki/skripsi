@@ -1,0 +1,91 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Call Objective'">
+    <button style="min-width: 170px;" [routerLink]="['/callobj/call-objective-create']" mat-raised-button
+      aria-label="Produk" type="button">
+      <mat-icon>add</mat-icon>Create
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center"
+        class="p-16 export">
+        <button mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_downward</mat-icon> Import CSV
+        </button>
+      </div> -->
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Daftar Call Objective</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+         [selectionType]="'checkbox'" [count]="pagination.total"
+         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (sort)="onSort($event)">
+
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+          </ng-template>
+
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Objective" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" >{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Description Objective" prop="description">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-description" >{{row.description}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.start_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="90" name="Tanggal Berakhir" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.end_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status Objective" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span *ngIf="row.status === 'Not Active'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
+            <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column> 
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" (click)="directEdit(row)" [routerLink]="['/callobj/call-objective-edit/'+ row.id +'']">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" 
+               (click)="deleteAObjective(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

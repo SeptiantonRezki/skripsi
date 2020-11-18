@@ -58,6 +58,13 @@ export class Endpoint {
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
       },
+      callObjective: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective/${context.objective_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective/${context}`,
+        get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective/${context}`
+      },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,

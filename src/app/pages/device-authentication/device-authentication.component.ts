@@ -69,16 +69,6 @@ export class DeviceAuthenticationComponent implements OnInit {
     this.startTimer();
   }
 
-  onChangeDigit(event) {
-    console.log("cukkk ck")
-    let element = event.srcElement.nextElementSibling; // get the sibling element
-    console.log("element", element);
-    if (element == null)  // check if its null
-      return;
-    else
-      element.focus();   // focus if not null
-  }
-
   submit() {
     this.dataService.showLoading(true);
     let body = {

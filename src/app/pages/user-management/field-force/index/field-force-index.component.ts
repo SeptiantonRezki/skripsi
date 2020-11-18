@@ -53,8 +53,9 @@ export class FieldForceIndexComponent {
   listVersions: any[] = []
   version: FormControl = new FormControl('');
   status: FormControl = new FormControl('');
+  clasification: FormControl = new FormControl('');
+  listClasification: any[] = [{ name: 'All Classifications', value: '' }, { name: 'WEE', value: 'WEE' }, { name: 'REE', value: 'REE' }];
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -111,7 +112,6 @@ export class FieldForceIndexComponent {
       district: [""],
       territory: [""]
     })
-
     this.getVersions();
 
     // this.initArea()
@@ -123,6 +123,10 @@ export class FieldForceIndexComponent {
     });
 
     this.status.valueChanges.subscribe(res => {
+      this.getFfList();
+    })
+
+    this.clasification.valueChanges.subscribe(res =>{
       this.getFfList();
     })
 
@@ -745,13 +749,15 @@ export class FieldForceIndexComponent {
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination['status'] = this.status.value;
     this.pagination['version'] = this.version.value;
-
+    this.pagination['classification'] = this.clasification.value;
     if (this.version.value === 'Semua Versi') this.pagination['version'] = null;
     if (this.status.value === '-1') this.pagination['status'] = null;
     this.fieldForceService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
+        
+        console.log(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -858,7 +864,7 @@ export class FieldForceIndexComponent {
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_field_force", param);
+    this.dataService.setToStorage(" ", param);
     this.router.navigate(["user-management", "field-force", "detail"]);
   }
 }

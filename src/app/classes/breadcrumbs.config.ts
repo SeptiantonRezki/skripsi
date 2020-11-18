@@ -2430,7 +2430,7 @@ export const brConfig = {
       {
         type: "current",
         url: "/b2c-voucher",
-        name: "B2C Voucher" 
+        name: "B2C Voucher"
       }
     ],
     create: [

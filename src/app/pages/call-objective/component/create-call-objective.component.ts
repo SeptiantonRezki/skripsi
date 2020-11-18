@@ -4,6 +4,7 @@ import {
   HostListener,
   ViewChild,
   ElementRef,
+  OnChanges,
 } from "@angular/core";
 import { formatCurrency } from "@angular/common";
 import {
@@ -14,30 +15,33 @@ import {
   FormControl,
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DataService } from "../../../../services/data.service";
-import { AudienceService } from "../../../../services/dte/audience.service";
-import { DialogService } from "../../../../services/dialog.service";
-import { Subject, Observable, ReplaySubject } from "rxjs";
+import { DataService } from '../../../services/data.service';
+import { AudienceService } from "../../../services/dte/audience.service";
+import { DialogService } from "../../../services/dialog.service";
+import { Subject, Observable, ReplaySubject, Subscription } from "rxjs";
 import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 import { takeUntil } from "rxjs/operators";
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
-import { commonFormValidator } from "../../../../classes/commonFormValidator";
-import { Page } from "../../../../classes/laravel-pagination";
+import { commonFormValidator } from "../../../classes/commonFormValidator";
+import { Page } from "../../../classes/laravel-pagination";
 import * as _ from "underscore";
-import { ImportAudienceDialogComponent } from "../import/import-audience-dialog.component";
 import { environment } from "environments/environment";
 import { GeotreeService } from "app/services/geotree.service";
 import { IdbService } from "app/services/idb.service";
+import {CallObjModel} from 'app/pages/call-objective/call-objective.model';
+import { CallObjectiveSerive } from '../../../services/call-objective/call-objective.service';
+import { ImportObjectiveDialogComponent } from '../import-component/import-objective-dialog.component';
+import * as moment from 'moment';
 
 @Component({
-  selector: "app-audience-create",
-  templateUrl: "./audience-create.component.html",
-  styleUrls: ["./audience-create.component.scss"],
+  selector: 'app-create-call-objective.component',
+  templateUrl: './create-call-objective.component.html'
 })
-export class AudienceCreateComponent {
+export class CreateCallObjectiveComponent implements OnInit {
   formAudience: FormGroup;
   formAudienceError: any;
   parameters: Array<string>;
+  paramEdit: any = null;
 
   listScheduler: any[];
   listTradePrograms: any[];
@@ -81,16 +85,19 @@ export class AudienceCreateComponent {
   dialogRef: any;
 
   listLevelArea: any[];
+  private subscription: Subscription;
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
   formFilterRetailer: FormGroup;
+  callOjbMdl: CallObjModel;
 
   loadingIndicator: Boolean;
   reorderable = true;
   saveData: Boolean;
   exportTemplate: Boolean;
   allRowsSelected: boolean;
+  swithchBool:  Boolean = true;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -139,8 +146,11 @@ export class AudienceCreateComponent {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private route: ActivatedRoute,
+    private callObjService: CallObjectiveSerive,
   ) {
+    this.callOjbMdl = new CallObjModel();
     this.exportTemplate = false;
     this.saveData = false;
     this.rows = [];
@@ -179,21 +189,20 @@ export class AudienceCreateComponent {
       .subscribe((res) => {
         this.searchingRetailer(res);
       });
-    console.log(activatedRoute.snapshot.data);
-    // this.listScheduler = activatedRoute.snapshot.data['listScheduler'].data.filter(item => item.status_scheduler === "draft" && item.trade_audience_group_id === null && item.status_audience === null);
-    // this.filteredScheduler.next(this.listScheduler.slice());
-
-    // this.loadingIndicator = true;
-    // this.listRetailer = activatedRoute.snapshot.data['listRetailer'];
-
-    // this.onSelect();
     this.area = dataService.getDecryptedProfile()["area_type"];
     this.parameters = [];
-    // this.parameters = ["PHP", "JavaScript", "C#", "Java"];
   }
 
   ngOnInit() {
     this.idbService.reset();
+    console.log('ini ob', this.callOjbMdl);
+
+    this.subscription = this.route.params.subscribe((params) => {
+      if (params['id']) {
+        this.paramEdit = params['id'];
+        this.callOjbMdl =  this.dataService.getFromStorage('detail_objective');
+        }
+      });
 
     this.formAudience = this.formBuilder.group({
       name: ["", Validators.required],
@@ -204,12 +213,6 @@ export class AudienceCreateComponent {
       audience_type: ["tsm", Validators.required],
       business_checkbox: true,
       geotree_checkbox: true,
-      // national: [""],
-      // division: [""],
-      // region: [""],
-      // area: [""],
-      // district: [""],
-      // teritory: [""],
       trade_scheduler_id: [""],
       trade_creator_id: [""],
     });
@@ -257,7 +260,7 @@ export class AudienceCreateComponent {
         }
       });
 
-    //this.getListScheduler();
+    // this.getListScheduler();
 
     this.formAudience.get("audience_type").valueChanges.subscribe((data) => {
       if (data === 'scheduler' && this.formAudience.get("type").value === 'mission') {
@@ -292,8 +295,6 @@ export class AudienceCreateComponent {
     });
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
-      // this.searchingRetailer(res);
-      // this.getRetailer();
     });
 
     this.filterScheduler.valueChanges
@@ -351,17 +352,57 @@ export class AudienceCreateComponent {
       }
     });
   }
-
+  onChangeInputSlide(event: any, i: number) {
+    if (event.checked == true) {
+      this.callOjbMdl.status = 'Active';
+    } else {
+      this.callOjbMdl.status = 'Not Active';
+    }
+  }
+  klikCreate() {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
+    this.callOjbMdl.status = 'active';
+    this.callOjbMdl.retailer_id = this.selected.map((map) => map.id);
+    this.callOjbMdl.start_date = this.convertDate(this.callOjbMdl.start_date);
+    this.callOjbMdl.end_date =  this.convertDate(this.callOjbMdl.end_date);
+    this.callObjService.create(this.callOjbMdl).subscribe((res) => {
+      this.selected = [];
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+      this.router.navigate(["callobj", "call-objective-list"]);
+    });
+  }
+  klikUpdate() {
+    this.loadingIndicator = true;
+    this.dataService.showLoading(true);
+    this.callOjbMdl.retailer_id = this.selected.map((map) => map.id);
+    this.callOjbMdl.start_date = this.convertDate(this.callOjbMdl.start_date);
+    this.callOjbMdl.end_date =  this.convertDate(this.callOjbMdl.end_date);
+    this.callObjService.put(this.callOjbMdl, this.paramEdit).subscribe((res) => {
+      window.localStorage.removeItem('detail_audience');
+      this.selected = [];
+      this.router.navigate(["callobj", "call-objective-list"]);
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    });
+  }
   loadFormFilter() {
     this.getRetailer();
   }
 
   clickMe(input, parameter) {
     if (parameter !== null) {
-      console.log("New parameter: " + parameter);
       this.parameters.push(parameter);
       input.value = "";
     }
+  }
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
   }
 
   deleteLanguage(paramter) {
@@ -412,8 +453,6 @@ export class AudienceCreateComponent {
             this.formFilter.controls[this.parseArea(level.type)].setValue([
               level.id,
             ]);
-            console.log("ff value", this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
 
@@ -422,11 +461,6 @@ export class AudienceCreateComponent {
 
             if (areasDisabled.indexOf(level.type) > -1)
               this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(
-              this.parseArea(level.type),
-              this.list[this.parseArea(level.type)]
-            );
           }
 
           let isExist = this.list[this.parseArea(level.type)].find(
@@ -458,15 +492,9 @@ export class AudienceCreateComponent {
         }
       });
     });
-
-    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
-    // mutableAreas.areas.map((ar, i) => {
-    //   this.list[ar].splice(1, 1);
-    // });
   }
 
   parseArea(type) {
-    // return type === 'division' ? 'zone' : type;
     switch (type) {
       case "division":
         return "zone";
@@ -477,7 +505,7 @@ export class AudienceCreateComponent {
         return type;
     }
   }
-
+  
   getAudienceAreaV2(selection, id, event?) {
     let item: any;
     let fd = new FormData();
@@ -487,7 +515,6 @@ export class AudienceCreateComponent {
     let areaSelected: any = Object.entries(this.formFilter.getRawValue())
       .map(([key, value]) => ({ key, value }))
       .filter((item) => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
     console.log(
       "audienceareav2",
       this.formFilter.getRawValue(),
@@ -529,7 +556,6 @@ export class AudienceCreateComponent {
       areaSelected = Object.entries(this.formFilter.getRawValue())
         .map(([key, value]) => ({ key, value }))
         .filter((item) => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
       if (
         areaSelected &&
         areaSelected[0] &&
@@ -541,7 +567,6 @@ export class AudienceCreateComponent {
           areaSelected[0].value.map((ar) => {
             fd.append("area_id[]", ar);
           });
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(
               areaSelected[0].key
@@ -590,15 +615,11 @@ export class AudienceCreateComponent {
         expectedArea = thisAreaOnSet.filter((ar) =>
           areaSelected[0].value.includes(ar.parent_id)
         );
-      // console.log('on set', thisAreaOnSet, selection, id);
     }
 
     switch (this.parseArea(selection)) {
       case "zone":
-        // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] =
             expectedArea.length > 0
               ? res.data.filter((dt) =>
@@ -627,7 +648,6 @@ export class AudienceCreateComponent {
         );
         break;
       case "region":
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
           item =
             this.list["zone"].length > 0
@@ -637,8 +657,6 @@ export class AudienceCreateComponent {
               : {};
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
@@ -664,7 +682,6 @@ export class AudienceCreateComponent {
         this.list["territory"] = [];
         break;
       case "area":
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
           item =
             this.list["region"].length > 0
@@ -675,8 +692,6 @@ export class AudienceCreateComponent {
           console.log("area hitted", selection, item, this.list["region"]);
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
@@ -712,8 +727,6 @@ export class AudienceCreateComponent {
           console.log("item", item);
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
@@ -736,7 +749,6 @@ export class AudienceCreateComponent {
         this.list["territory"] = [];
         break;
       case "district":
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
           item =
             this.list["salespoint"].length > 0
@@ -746,7 +758,6 @@ export class AudienceCreateComponent {
               : {};
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
@@ -767,7 +778,6 @@ export class AudienceCreateComponent {
         this.list["territory"] = [];
         break;
       case "territory":
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
           item =
             this.list["district"].length > 0
@@ -777,16 +787,12 @@ export class AudienceCreateComponent {
               : {};
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
-
-              // fd = null
             });
           } else {
             this.list[selection] = [];
@@ -855,15 +861,8 @@ export class AudienceCreateComponent {
       this.formFilter.getRawValue()
     ).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = [];
-    // console.log('[checkAreaLocation:area]', area);
-    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
-    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
     if (area.value !== 1) {
-      // console.log('[checkAreaLocation:list]', this.list[area.key]);
-      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
-      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         let areaSelectedOnRawValues: any = rawValues.find(
           (raw) => raw.key === areaAfterEndLevel
         );
@@ -871,8 +870,6 @@ export class AudienceCreateComponent {
           .filter((ar) => areaSelectedOnRawValues.value.includes(ar.id))
           .map((ar) => ar.parent_id)
           .filter((v, i, a) => a.indexOf(v) === i);
-        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
-        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
       }
     }
 
@@ -902,7 +899,6 @@ export class AudienceCreateComponent {
     ];
     this.pagination.area = area_id;
 
-    // console.log('area_selected on ff list', areaSelected, this.list);
     if (
       this.areaFromLogin[0].length === 1 &&
       this.areaFromLogin[0][0].type === "national" &&
@@ -960,7 +956,6 @@ export class AudienceCreateComponent {
         let findOnFirstArea = this.areaFromLogin[0].find(
           (are) => are.id === oneAreaSelected
         );
-        console.log("oneArea Selected", oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
@@ -973,17 +968,14 @@ export class AudienceCreateComponent {
           lastSelectedArea
         );
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
           if (is_area_2)
             this.pagination["last_self_area"] = [last_self_area[1]];
           else this.pagination["last_self_area"] = [last_self_area[0]];
         } else {
-          // console.log('its hitted [other level]');
           this.pagination["after_level"] = true;
           this.pagination["last_self_area"] = newLastSelfArea;
         }
       } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
         this.pagination["after_level"] = true;
         if (newLastSelfArea.length > 0) {
           this.pagination["last_self_area"] = newLastSelfArea;
@@ -991,7 +983,6 @@ export class AudienceCreateComponent {
       }
     }
     this.loadingIndicator = true;
-    // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.audienceService.getListRetailer(this.pagination).subscribe(
       (res) => {
@@ -1014,11 +1005,6 @@ export class AudienceCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
-      // this.idbService.getAnyOf(rows).then(result => {
-      //   console.log('result', result);
-      //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      // })
 
       this.loadingIndicator = false;
     });
@@ -1034,11 +1020,6 @@ export class AudienceCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
-      // this.idbService.get(rows).then(result => {
-      //   console.log('result', result);
-      //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      // })
 
       this.loadingIndicator = false;
     });
@@ -1321,7 +1302,34 @@ export class AudienceCreateComponent {
   //     this.formAudience.get('area').disable();
   //   }
   // }
+  importAudience() {
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
+
+    this.dialogRef = this.dialog.open(
+      ImportObjectiveDialogComponent,
+      dialogConfig
+    );
+
+    this.dialogRef.afterClosed().subscribe((response) => {
+      if (response) {
+        let rows = this.rows.map((row) => row.id);
+        this.idbService
+          .getAll((dt) => dt.is_valid)
+          .then((result) => {
+            console.log("result", result);
+            this.onSelect({ selected: result });
+            this.dialogService.openSnackBar({
+              message: "File berhasil diimport",
+            });
+          });
+      }
+    });
+  }
   searchingRetailer(res) {
     let areaSelected = Object.entries(this.formFilter.getRawValue())
       .map(([key, value]) => ({ key, value }))
@@ -1340,7 +1348,6 @@ export class AudienceCreateComponent {
       "territory",
     ];
 
-    // console.log('area_selected on ff list', areaSelected, this.list);
     if (
       this.areaFromLogin[0].length === 1 &&
       this.areaFromLogin[0][0].type === "national" &&
@@ -1398,7 +1405,6 @@ export class AudienceCreateComponent {
         let findOnFirstArea = this.areaFromLogin[0].find(
           (are) => are.id === oneAreaSelected
         );
-        console.log("oneArea Selected", oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
@@ -1416,12 +1422,10 @@ export class AudienceCreateComponent {
             this.pagination["last_self_area"] = [last_self_area[1]];
           else this.pagination["last_self_area"] = [last_self_area[0]];
         } else {
-          // console.log('its hitted [other level]');
           this.pagination["after_level"] = true;
           this.pagination["last_self_area"] = newLastSelfArea;
         }
       } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
         this.pagination["after_level"] = true;
         if (newLastSelfArea.length > 0) {
           this.pagination["last_self_area"] = newLastSelfArea;
@@ -1438,7 +1442,6 @@ export class AudienceCreateComponent {
         this.loadingIndicator = false;
       },
       (err) => {
-        console.log(err.error.message);
         this.loadingIndicator = false;
       }
     );
@@ -1466,230 +1469,8 @@ export class AudienceCreateComponent {
     return this.rows[index];
   }
 
-  getId(row: any) {
-    // return row.id;
+  getId(row) {
     return row.id;
-  // }
-  }
-  getIdFunction() {
-    return this.getId.bind(this);
-  }
-
-  submit() {
-    this.dataService.showLoading(true);
-    this.loadingIndicator = true;
-    if (this.formAudience.valid && this.selected.length > 0) {
-      const selectedRetailer = this.selected.length;
-      const limit = this.formAudience.get("limit").value === "limit";
-      const min = this.formAudience.get("min").value;
-      const max = this.formAudience.get("max").value;
-
-      if (limit && selectedRetailer < min) {
-        this.loadingIndicator = false;
-        this.dataService.showLoading(false);
-        return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
-        });
-      }
-      else if (limit && selectedRetailer > max) {
-        this.loadingIndicator = false;
-        this.dataService.showLoading(false);
-        return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
-        });
-      }
-
-      // Audience Type = TSM, Type = any
-      if (this.formAudience.get("audience_type").value === "tsm") {
-        let body = {
-          name: this.formAudience.get("name").value,
-          trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
-        };
-
-        body["type"] = this.formAudience.get("type").value;
-        body["audience_type"] = this.formAudience.get("audience_type").value;
-
-        if (this.formAudience.get("limit").value !== "pick-all") {
-          body["retailer_id"] = this.selected.map((item) => item.id);
-          body["min"] = this.formAudience.get("min").value;
-          body["max"] = this.formAudience.get("max").value;
-        } else {
-          body["area_id"] = this.pagination.area;
-
-          if (this.pagination.area !== 1) {
-            body["min"] = 1;
-            body["max"] = this.pagination.total;
-          } else {
-            body["min"] = "";
-            body["max"] = "";
-          }
-        }
-
-        this.saveData = true;
-        // this.loadingIndicator = false;
-        // this.dataService.showLoading(false);
-        this.audienceService.create(body).subscribe(
-          (res) => {
-            this.dataService.showLoading(false);
-            this.loadingIndicator = false;
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
-            });
-            this.router.navigate(["dte", "audience"]);
-          },
-          (err) => {
-            this.dataService.showLoading(false);
-            this.loadingIndicator = false;
-            // this.dialogService.openSnackBar({ message: err.error.message })
-            console.log(err.error.message);
-          }
-        );
-      }
-      // Audience Type = Scheduler, Type = Mission
-      if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "mission") {
-        let budget = {
-          total_retailer: limit ? this.selected.length : this.pagination.total,
-          trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
-        };
-        this.audienceService.validateBudget(budget).subscribe((res) => {
-          if (res.selisih < 0) {
-            this.loadingIndicator = false;
-            this.dataService.showLoading(false);
-            return this.dialogService.openSnackBar({
-              message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
-                res.selisih
-              )}!`,
-            });
-          }
-
-          let body = {
-            name: this.formAudience.get("name").value,
-            trade_scheduler_id: this.formAudience.get("trade_scheduler_id")
-              .value,
-          };
-
-          if (this.formAudience.get("limit").value !== "pick-all") {
-            body["retailer_id"] = this.selected.map((item) => item.id);
-            body["min"] = this.formAudience.get("min").value;
-            body["max"] = this.formAudience.get("max").value;
-          } else {
-            body["area_id"] = this.pagination.area;
-
-            if (this.pagination.area !== 1) {
-              body["min"] = 1;
-              body["max"] = this.pagination.total;
-            } else {
-              body["min"] = "";
-              body["max"] = "";
-            }
-          }
-
-          body["type"] = this.formAudience.get("type").value;
-          body["audience_type"] = this.formAudience.get("audience_type").value;
-
-          if (body["type"] === "mission") {
-            body["trade_scheduler_id"] = this.formAudience.get(
-              "trade_scheduler_id"
-            ).value;
-            if (body["trade_creator_id"]) delete body["trade_creator_id"];
-          } else {
-            body["trade_creator_id"] = this.formAudience.get(
-              "trade_creator_id"
-            ).value;
-            if (body["trade_scheduler_id"]) delete body["trade_scheduler_id"];
-          }
-          console.log(this.findInvalidControls());
-          // this.saveData = !this.saveData;
-          this.saveData = true;
-          this.audienceService.create(body).subscribe(
-            (res) => {
-              this.dataService.showLoading(false);
-              this.loadingIndicator = false;
-              this.dialogService.openSnackBar({
-                message: "Data Berhasil Disimpan",
-              });
-              this.router.navigate(["dte", "audience"]);
-            },
-            (err) => {
-              this.dataService.showLoading(false);
-              this.loadingIndicator = false;
-              // this.dialogService.openSnackBar({ message: err.error.message })
-              console.log(err.error.message);
-            }
-          );
-        });
-      } else if (this.formAudience.get("audience_type").value === "scheduler" && this.formAudience.get("type").value === "challenge") {
-        let body = {
-          name: this.formAudience.get("name").value,
-          trade_creator_id: this.formAudience.get("trade_creator_id").value,
-        };
-
-        if (this.formAudience.get("limit").value !== "pick-all") {
-          body["retailer_id"] = this.selected.map((item) => item.id);
-          body["min"] = this.formAudience.get("min").value;
-          body["max"] = this.formAudience.get("max").value;
-        } else {
-          body["area_id"] = this.pagination.area;
-
-          if (this.pagination.area !== 1) {
-            body["min"] = 1;
-            body["max"] = this.pagination.total;
-          } else {
-            body["min"] = "";
-            body["max"] = "";
-          }
-        }
-
-        body["type"] = this.formAudience.get("type").value;
-        body["audience_type"] = this.formAudience.get("audience_type").value;
-
-        if (body["type"] === "mission") {
-          body["trade_scheduler_id"] = this.formAudience.get(
-            "trade_scheduler_id"
-          ).value;
-          if (body["trade_creator_id"]) delete body["trade_creator_id"];
-        } else {
-          body["trade_creator_id"] = this.formAudience.get(
-            "trade_creator_id"
-          ).value;
-          if (body["trade_scheduler_id"]) delete body["trade_scheduler_id"];
-        }
-        console.log(this.findInvalidControls());
-        // this.saveData = !this.saveData;
-        this.saveData = true;
-        this.audienceService.create(body).subscribe(
-          (res) => {
-            this.dataService.showLoading(false);
-            this.loadingIndicator = false;
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
-            });
-            this.router.navigate(["dte", "audience"]);
-          },
-          (err) => {
-            this.dataService.showLoading(false);
-            this.loadingIndicator = false;
-            // this.dialogService.openSnackBar({ message: err.error.message })
-            console.log(err.error.message);
-          }
-        );
-      }
-
-    } else {
-      this.loadingIndicator = false;
-      this.dataService.showLoading(false);
-      commonFormValidator.validateAllFields(this.formAudience);
-
-      if (this.formAudience.valid && this.selected.length === 0) {
-        return this.dialogService.openSnackBar({
-          message: "Belum ada Audience yang dipilih!",
-        });
-      }
-
-      return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
-      });
-    }
   }
 
   findInvalidControls() {
@@ -1701,35 +1482,6 @@ export class AudienceCreateComponent {
       }
     }
     return invalid;
-  }
-
-  importAudience() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
-
-    this.dialogRef = this.dialog.open(
-      ImportAudienceDialogComponent,
-      dialogConfig
-    );
-
-    this.dialogRef.afterClosed().subscribe((response) => {
-      if (response) {
-        let rows = this.rows.map((row) => row.id);
-        this.idbService
-          .getAll((dt) => dt.is_valid)
-          .then((result) => {
-            console.log("result", result);
-            this.onSelect({ selected: result });
-            this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
-            });
-          });
-      }
-    });
   }
 
   async exportAudience() {
@@ -1745,7 +1497,6 @@ export class AudienceCreateComponent {
       this.downloadLink.nativeElement.click();
       this.exportTemplate = false;
     } catch (error) {
-      console.log("err", error);
       this.exportTemplate = false;
       throw error;
     }
