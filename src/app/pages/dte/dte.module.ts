@@ -15,6 +15,9 @@ import { ScheduleProgramDetailComponent } from "./schedule-program/detail/schedu
 import { AudienceIndexComponent } from "./audience/index/audience-index.component";
 import { AudienceCreateComponent } from "./audience/create/audience-create.component";
 import { AudienceEditComponent } from "./audience/edit/audience-edit.component";
+import { ProjectListComponent } from "./pengaturan-attribute-misi/index/project/project-list.component";
+import { DialogProjectComponent } from "./pengaturan-attribute-misi/index/project/dialog-project.component";
+import { DialogEditProjectComponent } from "./pengaturan-attribute-misi/index/project/dialog-edit-project.component";
 import {
   MatFormFieldModule,
   MatInputModule,
@@ -207,6 +210,9 @@ export const MY_FORMATS = {
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent,
+    ProjectListComponent,
+    DialogProjectComponent,
+    DialogEditProjectComponent,
     UploadImageComponent,
     ListAudienceDialogComponent,
     ImportAudienceDialogComponent,
@@ -279,6 +285,9 @@ export const MY_FORMATS = {
     AudienceIndexComponent,
     AudienceCreateComponent,
     AudienceEditComponent,
+    ProjectListComponent,
+    DialogProjectComponent,
+    DialogEditProjectComponent,
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
     TaskVerificationIndexTsmComponent,
@@ -342,6 +351,8 @@ export const MY_FORMATS = {
     DialogToolboxComponent,
     DialogTipeMisiComponent,
     DialogKesulitanMisiComponent,
+    DialogProjectComponent,
+    DialogEditProjectComponent,
     DialogKategoriMisiComponent,
     DialogToolboxEditComponent,
     DialogKategoriMisiEditComponent,

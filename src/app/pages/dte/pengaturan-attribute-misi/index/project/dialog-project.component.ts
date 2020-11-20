@@ -12,11 +12,10 @@ import { Page } from 'app/classes/laravel-pagination';
 
 
 @Component({
-  selector: "app-dialog-kesulitan-misi",
-  templateUrl: "./dialog-kesulitan-misi.component.html",
-  styleUrls: ["./dialog-kesulitan-misi.component.scss"],
+  selector: "app-dialog-project",
+  templateUrl: "./dialog-project.component.html"
 })
-export class DialogKesulitanMisiComponent implements OnInit {
+export class DialogProjectComponent implements OnInit {
   form: FormGroup;
   pagination: Page = new Page();
   offsetPagination: Number = null;
@@ -27,7 +26,7 @@ export class DialogKesulitanMisiComponent implements OnInit {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<DialogKesulitanMisiComponent>,
+    public dialogRef: MatDialogRef<DialogProjectComponent>,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
@@ -50,43 +49,37 @@ export class DialogKesulitanMisiComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       res => {
         this.data = res.data.data;
-        console.log('ini data', this.data);
-    }
-  );
-}
+      },
+    );
+  }
 
   submit(form) {
-    this.dataService.showLoading(true);
-    this.loadingIndicator = true;
+    console.log('ini data', this.data);
     this.condition = false;
+    if ( this.data !== undefined) {
     this.data.forEach((each) => {
       if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
         this.condition = true;
         this.dataService.showLoading(false);
-        this.loadingIndicator = false;
       }
     });
+    }
     if (this.condition === false) {
     this.dialogRef.close(`${form.value.name}`);
-    this.pengaturanAttributeMisiService.createKesulitanMisi(form.value).subscribe(
+    this.pengaturanAttributeMisiService.createProjectMisi(form.value).subscribe(
       (res) => {
         this.dialogService.openSnackBar({
           message: "Data Berhasil Disimpan",
         });
-        this.dataService.showLoading(false);
-        this.loadingIndicator = false;
         this.router.navigate(["dte", "pengaturan-attribute-misi"]);
       },
       (err) => {
-        this.dialogService.openSnackBar({ message: err.error.message })
-        console.log(err.error.message);
-        this.dataService.showLoading(false);
-        this.loadingIndicator = false;
+        this.dialogService.openSnackBar({ message: err.error.message });
       }
     );
-      }
+    }
   }
 }
