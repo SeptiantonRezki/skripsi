@@ -95,16 +95,16 @@ import { TaskSequencingCreateComponent } from './task-sequencing/create/task-seq
 import { TaskSequencingDuplicateComponent } from './task-sequencing/duplicate/task-sequencing-duplicate.component';
 import { DialogToolboxComponent } from "./pengaturan-attribute-misi/index/dialog-toolbox/dialog-toolbox.component";
 import { DialogTipeMisiComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi/dialog-tipe-misi.component";
-import { DialogKesulitanMisiComponent } from "./pengaturan-attribute-misi/index/dialog-kesulitan-misi/dialog-kesulitan-misi.component";
+import { DialogInternalMisiComponent } from "./pengaturan-attribute-misi/index/dialog-internal-misi/dialog-internal-misi.component";
 import { DialogKategoriMisiComponent } from "./pengaturan-attribute-misi/index/dialog-kategori-misi/dialog-kategori-misi.component";
 import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
 import { DialogToolboxEditComponent } from "./pengaturan-attribute-misi/index/dialog-toolbox-edit/dialog-toolbox-edit.component";
 import { ListKategoriToolboxComponent } from "./pengaturan-attribute-misi/index/list-kategori-toolbox/list-kategori-toolbox.component"
 import { ListTipeMisiComponent } from "./pengaturan-attribute-misi/index/list-tipe-misi/list-tipe-misi.component"
-import { ListKesulitanMisiComponent } from "./pengaturan-attribute-misi/index/list-kesulitan-misi/list-kesulitan-misi.component";
+import { ListInternalMisiComponent } from "./pengaturan-attribute-misi/index/list-internal-misi/list-internal-misi.component";
 import { ListKategoriMisiComponent } from "./pengaturan-attribute-misi/index/list-kategori-misi/list-kategori-misi.component";
 import { DialogKategoriMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kategori-misi-edit/dialog-kategori-misi-edit.component";
-import { DialogKesulitanMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kesulitan-misi-edit/dialog-kesulitan-misi-edit.component";
+import { DialogInternalMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-internal-misi-edit/dialog-internal-misi-edit.component";
 import { DialogTipeMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { LightboxModule } from 'ngx-lightbox';
@@ -239,16 +239,16 @@ export const MY_FORMATS = {
     TaskSequencingDuplicateComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
-    DialogKesulitanMisiComponent,
+    DialogInternalMisiComponent,
     DialogKategoriMisiComponent,
     TaskSequencingEditComponent,
     DialogToolboxEditComponent,
     ListKategoriToolboxComponent,
     ListTipeMisiComponent,
-    ListKesulitanMisiComponent,
+    ListInternalMisiComponent,
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
-    DialogKesulitanMisiEditComponent,
+    DialogInternalMisiEditComponent,
     DialogTipeMisiEditComponent,
     MissionBuilderCreateComponent,
     MissionBuilderEditComponent,
@@ -300,10 +300,10 @@ export const MY_FORMATS = {
     TaskSequencingEditComponent,
     ListKategoriToolboxComponent,
     ListTipeMisiComponent,
-    ListKesulitanMisiComponent,
+    ListInternalMisiComponent,
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
-    DialogKesulitanMisiEditComponent,
+    DialogInternalMisiEditComponent,
     DialogTipeMisiEditComponent,
     MissionBuilderCreateComponent,
     MissionBuilderEditComponent,
@@ -350,13 +350,13 @@ export const MY_FORMATS = {
     ConfirmDialogTsmComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
-    DialogKesulitanMisiComponent,
+    DialogInternalMisiEditComponent,
     DialogProjectComponent,
     DialogEditProjectComponent,
     DialogKategoriMisiComponent,
     DialogToolboxEditComponent,
     DialogKategoriMisiEditComponent,
-    DialogKesulitanMisiEditComponent,
+    DialogInternalMisiComponent,
     DialogTipeMisiEditComponent,
     DiaglogMisiComponent,
     DiaglogPopUpNotifComponent,
