@@ -476,7 +476,7 @@ export class Endpoint {
         showListPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/show-pesanan/${context.orderId}`,
         statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
         exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
-        updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}}`,
+        updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}`,
       },
       courier: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
@@ -621,12 +621,16 @@ export class Endpoint {
         put_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
         delete_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox/${context.kategori_toolbox_id}`,
         get_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi${context.status ? '?status=active' : ''}`,
+        get_project: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_project_misi${context.status ? '?status=active' : ''}`,
         create_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi`,
         put_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
         delete_tipe_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_tipe_misi/${context.tipe_misi_id}`,
+        delete_project_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_project_misi/${context.tipe_project_id}`,
         get_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi${context.status ? '?status=active' : ''}`,
         create_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi`,
+        create_project_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_project_misi`,
         put_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
+        put_project_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_project_misi/${context.project_misi_id}`,
         delete_kesulitan_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_level_misi/${context.kesulitan_misi_id}`,
         get_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi${context.status ? '?status=active' : ''}`,
         create_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi`,
@@ -699,12 +703,12 @@ export class Endpoint {
         deleteVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}`,
         getListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list`,
         exportListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list/export`,
-        
+
         //Panel
         getSelectedRetailerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/retailer`,
         getSelectedCustomerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/customer`,
         updatePanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}`,
-        
+
         //Pertukaran Voucher
         getNominal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/nominal`,
         updatePenukaranVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/${context.voucher_id}`,
