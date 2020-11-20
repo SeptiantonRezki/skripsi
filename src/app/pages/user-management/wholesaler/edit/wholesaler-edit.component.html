@@ -209,7 +209,9 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <mat-slide-toggle formControlName="gswName">GSW</mat-slide-toggle>
+          <div fxLayout="row wrap">
+            <mat-slide-toggle class="mt-4 ml-4 mb-8" formControlName="gswName">GSW</mat-slide-toggle>
+          </div>
           <div fxLayout="row" *ngIf="seeTokoCabang">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
               Toko Cabang</mat-checkbox>
@@ -230,7 +232,7 @@
               <button mat-stroked-button>Reset Password</button>
             </div> -->
             
-          <div *ngIf="isDetail && disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
+          <div *ngIf="!isDetail && !disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               SIMPAN
             </button>
