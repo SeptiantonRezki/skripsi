@@ -177,6 +177,11 @@
                   Territori harus diisi
                 </mat-error>
               </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="GSW" formControlName="gsw">
+                  <mat-option *ngFor="let item of listGsw" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
 
             </div>
 
