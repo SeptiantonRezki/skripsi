@@ -221,8 +221,8 @@ export class ListKesulitanMisiComponent implements OnInit {
   deleteKesulitanMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Tingkat Keseulitan Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Kesulitan Misi ini ?",
+      titleDialog: "Hapus Internal Kategori Misi",
+      captionDialog: "Apakah anda yakin untuk menghapus Internal Kategori Misi ini ?",
       confirmCallback: this.confirmDeleteKesulitanMisi.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
