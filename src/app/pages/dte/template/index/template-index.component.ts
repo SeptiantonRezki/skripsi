@@ -31,7 +31,7 @@ export class TemplateIndexComponent implements OnInit {
   filterKategoryToolbox: any;
   filterKategoryMisi: any;
   filterTipeMisi: any;
-  filterKesulitanMisi: any;
+  filterInternalMisi: any;
   filterProjectMisi: any;
 
   @ViewChild(DatatableComponent)
@@ -47,7 +47,7 @@ export class TemplateIndexComponent implements OnInit {
 
   listKategoriToolbox: any[];
   listTipeMisi: any[];
-  listTingkatkesulitanMisi: any[];
+  listTingkatinternalMisi: any[];
   listKategoriMisi: any[];
   listProjectMisi: any[];
 
@@ -78,11 +78,11 @@ export class TemplateIndexComponent implements OnInit {
     this.getListKategoriMisi();
     this.getListKategoriProject();
     this.getListKategoriToolbox();
-    this.getListTingkatKesulitanMisi();
+    this.getListTingkatInternalMisi();
     this.getListTipeMisi();
     setTimeout(() => {
     this.getTemplateTask();
-  }, 800);
+    }, 800);
   }
 
   getTemplateTask() {
@@ -132,7 +132,7 @@ export class TemplateIndexComponent implements OnInit {
     this.pagination.per_page = 15;
     this.pagination['toolbox'] = this.filterKategoryToolbox;
     this.pagination['toolbox_type'] = this.filterTipeMisi;
-    this.pagination['toolbox_level'] = this.filterKesulitanMisi;
+    this.pagination['toolbox_internal'] = this.filterInternalMisi;
     this.pagination['toolbox_categories'] = this.filterKategoryMisi;
     this.pagination['toolbox_project'] = this.filterProjectMisi;
 
@@ -192,17 +192,15 @@ export class TemplateIndexComponent implements OnInit {
     );
   }
 
-  async getListTingkatKesulitanMisi() {
+  async getListTingkatInternalMisi() {
     this.pagination.per_page = 99999999;
     this.pagination.status = 'active';
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       (res) => {
-        // console.log("res Kesulitan Misi", res);
-        this.listTingkatkesulitanMisi = res.data.data;
-        // this.listTingkatkesulitanMisi = res.data;
+        this.listTingkatinternalMisi = res.data.data;
       },
       (err) => {
-        console.log("err List Kesulitan Misi", err);
+        console.log("err List Internal Misi", err);
       }
     );
   }

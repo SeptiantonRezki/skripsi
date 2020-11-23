@@ -6,7 +6,7 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
 
-      <mat-tab-group>
+      <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Detail Voucher">
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetailVoucher" (keydown.enter)="$event.preventDefault();">
@@ -173,16 +173,19 @@
             (scrollToTop)="scrollToTop()"></app-panel-consumer-voucher>
         </mat-tab>
         <mat-tab label="Penukaran Voucher">
-          <app-penukaran-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-penukaran-voucher>
+          <app-penukaran-voucher [data]="detailVoucher" (onRefresh)="onRefresh()" (setSelectedTab)="setSelectedTab($event)"></app-penukaran-voucher>
         </mat-tab>
         <mat-tab label="Design Voucher">
-          <app-design-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-design-voucher>
+          <app-design-voucher [data]="detailVoucher" (onRefresh)="onRefresh()" (setSelectedTab)="setSelectedTab($event)"></app-design-voucher>
+        </mat-tab>
+        <mat-tab label="Preview Voucher">
+          <app-preview-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-preview-voucher>
         </mat-tab>
         <mat-tab label="List Detail Voucher">
           <app-list-detail-voucher [data]="detailVoucher"></app-list-detail-voucher>
         </mat-tab>
       </mat-tab-group>
-
+      
     </div>
   </div>
 </div>

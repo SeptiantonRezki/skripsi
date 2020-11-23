@@ -72,7 +72,7 @@ export class ListKategoriMisiComponent implements OnInit {
 
   files = [];
   types = [];
-  kesulitan = [];
+  internal = [];
   kategori = [];
 
   openDialogKategoriMisi() {

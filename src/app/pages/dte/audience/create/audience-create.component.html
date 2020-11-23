@@ -207,7 +207,7 @@
           </div>
         </form>
       </div>
-      <div
+      <!-- <div
         fxLayout="row wrap"
         fxLayoutAlign="end stretch"
         fxLayout.lt-md="column"
@@ -225,7 +225,7 @@
         >
           Load Data
         </button>
-      </div>
+      </div> -->
       <form [formGroup]="formFilter" autoComplete="off">
         <div
           fxLayout="row wrap"
@@ -485,7 +485,7 @@
               *ngIf="!allRowsSelected"
             >
             </mat-checkbox>
-            <mat-checkbox 
+             <mat-checkbox 
               [checked]="true" 
               [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
               *ngIf="allRowsSelected" class="mat-checkbox-all"

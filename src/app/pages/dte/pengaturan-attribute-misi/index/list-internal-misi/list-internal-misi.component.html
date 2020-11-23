@@ -3,7 +3,7 @@
     style="width: 170px;"
     mat-raised-button
     type="button"
-    (click)="openDialogKesulitanMisi()"
+    (click)="openDialogInternalMisi()"
   >
     <mat-icon>add</mat-icon> BUAT
   </button>
@@ -50,7 +50,7 @@
             <!-- <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
               <mat-icon class="secondary-text">edit</mat-icon>
             </button> -->
-            <button mat-icon-button color=""  [disabled]="row.connected === true" (click)="openDialogKesulitanMisiEdit(row.id,row.name,row.status)">
+            <button mat-icon-button color=""  [disabled]="row.connected === true" (click)="openDialogInternalMisiEdit(row.id,row.name,row.status)">
               <mat-icon class="secondary-text">edit</mat-icon>
             </button>
             <!-- <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
@@ -58,7 +58,7 @@
               <mat-icon>delete</mat-icon>
             </button> -->
             <button mat-icon-button color="primary"
-              matTooltip="Hapus Kesulitan Misi" [disabled]="row.status === 'active'" (click)="deleteKesulitanMisi(row.id)">
+              matTooltip="Hapus Internal Kategori" [disabled]="row.status === 'active'" (click)="deleteInternalMisi(row.id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
