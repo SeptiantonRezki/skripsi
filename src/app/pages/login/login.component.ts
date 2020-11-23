@@ -137,6 +137,11 @@ export class LoginComponent implements OnInit {
       };
       this.authenticationService.login(body).subscribe(
         res => {
+          if (!res.access_token) {
+            this.dataService.setToStorage('bodyLogin', { username: res.email });
+            this.router.navigate(['device/authentication']);
+            return;
+          }
           this.dataService.setAuthorization(res);
           this.authenticationService.getProfileDetail().subscribe(async profile => {
             if (profile.status == "active") {
