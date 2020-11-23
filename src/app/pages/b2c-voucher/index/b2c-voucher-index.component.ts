@@ -255,7 +255,7 @@ export class B2CVoucherIndexComponent implements OnInit {
       buttonText: ['Hapus', 'Batal']
     };
     this.dialogService.openCustomConfirmationDialog(data);
-  }
+  } 
 
   confirmDelete() {
     this.b2cVoucherService.deleteVoucher({ voucher_id: this.id }).subscribe(res => {

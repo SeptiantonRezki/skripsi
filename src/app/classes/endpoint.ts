@@ -709,6 +709,9 @@ export class Endpoint {
         //Design Voucher
         updateDesign: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/design/${context.voucher_id}`,
 
+        //Preview VOucher
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/update-status`,
+
         //List Detail Voucher
         getListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/list`,
         exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/list/export`,
