@@ -283,7 +283,7 @@ export class ListDetailVoucherComponent implements OnInit {
       this.loadingIndicator = true;
       this.getList();
     } catch (ex) {
-      console.log('ex', ex);
+      console.warn('ex', ex);
       this.dataService.showLoading(false);
     }
   }
@@ -628,13 +628,12 @@ export class ListDetailVoucherComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here');
-    console.log(error);
+    console.warn('err', error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.log(error);
+    console.warn(error);
     // alert('Open console to see the error')
   }
 
