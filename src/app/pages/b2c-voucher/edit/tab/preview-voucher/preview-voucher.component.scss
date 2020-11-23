@@ -19,6 +19,14 @@
   border-radius: 10px 10px 0 0;
   padding-top: 42px;
 }
+.preview-image-banner {
+  width: 100%;
+  position: sticky;
+  img {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+}
 .label-image {
   background-color: #fff;
   border-radius: 0 0 10px 10px;

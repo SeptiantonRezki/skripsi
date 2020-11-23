@@ -5,7 +5,12 @@
       <div fxLayout="column" fxFlex="40">
         <div fxLayout="column" class="preview-info-mobile">
           <div>
-            <div class="preview-image">Image</div>
+            <div class="preview-image-banner" *ngIf="detailVoucher?.image_url">
+              <img src="{{detailVoucher?.image_url}}">
+            </div>
+            <div class="preview-image" *ngIf="!detailVoucher?.image_url">
+              Image
+            </div>
             <div fxLayout="row" fxLayoutAlign="space-between center" class="label-image">
               <div fxLayout="column">
                 <span style="font-size: 0.7em;">
@@ -80,7 +85,7 @@
       </div>
     </div>
 
-    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="end center">
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="end center" *ngIf="!isDetail">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="confirmUpdateStatusVoucher()" *ngIf="detailVoucher?.status == 'publish'">
         UNPUBLISH
       </button>
