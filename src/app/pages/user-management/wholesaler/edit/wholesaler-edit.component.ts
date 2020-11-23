@@ -622,6 +622,15 @@ export class WholesalerEditComponent {
 
     };
 
+    if (!this.isCan(['ubah', 'gsw'])) {
+
+      const fields = ['gswName'];
+
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+    };
+
     if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
