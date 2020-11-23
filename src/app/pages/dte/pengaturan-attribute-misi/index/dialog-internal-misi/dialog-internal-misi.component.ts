@@ -12,11 +12,11 @@ import { Page } from 'app/classes/laravel-pagination';
 
 
 @Component({
-  selector: "app-dialog-kesulitan-misi",
-  templateUrl: "./dialog-kesulitan-misi.component.html",
-  styleUrls: ["./dialog-kesulitan-misi.component.scss"],
+  selector: "app-dialog-internal-misi",
+  templateUrl: "./dialog-internal-misi.component.html",
+  styleUrls: ["./dialog-internal-misi.component.scss"],
 })
-export class DialogKesulitanMisiComponent implements OnInit {
+export class DialogInternalMisiComponent implements OnInit {
   form: FormGroup;
   pagination: Page = new Page();
   offsetPagination: Number = null;
@@ -27,7 +27,7 @@ export class DialogKesulitanMisiComponent implements OnInit {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<DialogKesulitanMisiComponent>,
+    public dialogRef: MatDialogRef<DialogInternalMisiComponent>,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
@@ -50,18 +50,19 @@ export class DialogKesulitanMisiComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       res => {
         this.data = res.data.data;
         console.log('ini data', this.data);
-    }
-  );
-}
+      }
+    );
+  }
 
   submit(form) {
     this.dataService.showLoading(true);
     this.loadingIndicator = true;
     this.condition = false;
+    if ( this.data !== undefined) {
     this.data.forEach((each) => {
       if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
         this.condition = true;
@@ -69,9 +70,10 @@ export class DialogKesulitanMisiComponent implements OnInit {
         this.loadingIndicator = false;
       }
     });
+    }
     if (this.condition === false) {
     this.dialogRef.close(`${form.value.name}`);
-    this.pengaturanAttributeMisiService.createKesulitanMisi(form.value).subscribe(
+    this.pengaturanAttributeMisiService.createInternalMisi(form.value).subscribe(
       (res) => {
         this.dialogService.openSnackBar({
           message: "Data Berhasil Disimpan",
@@ -87,6 +89,6 @@ export class DialogKesulitanMisiComponent implements OnInit {
         this.loadingIndicator = false;
       }
     );
-      }
+    }
   }
 }

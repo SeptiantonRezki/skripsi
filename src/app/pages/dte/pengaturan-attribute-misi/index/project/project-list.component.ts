@@ -71,7 +71,7 @@ export class ProjectListComponent implements OnInit {
 
    files = [];
    types = [];
-   kesulitan = [];
+   internal = [];
    kategori = [];
 
    openDialogProjectMisi() {
