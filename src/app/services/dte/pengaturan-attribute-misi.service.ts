@@ -62,13 +62,13 @@ export class PengaturanAttributeMisiService extends BaseService {
     return this.deleteApi(url);
   }
 
-  getKesulitanMisi(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'get_kesulitan_misi');
+  getInternalMisi(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_internal_misi');
     return this.getApi(url, queryParams);
   }
 
-  createKesulitanMisi(body): Observable<any> {
-    const url = this.getUrl(this.namespace, 'create_kesulitan_misi');
+  createInternalMisi(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_internal_misi');
     return this.postApi(url, body);
   }
   createProjectMisi(body): Observable<any> {
@@ -76,8 +76,8 @@ export class PengaturanAttributeMisiService extends BaseService {
     return this.postApi(url, body);
   }
 
-  putKesulitanMisi(body, context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'put_kesulitan_misi', context);
+  putInternalMisi(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_internal_misi', context);
     return this.putApi(url, body);
   }
   putProjectMisi(body, context): Observable<any> {
@@ -85,8 +85,8 @@ export class PengaturanAttributeMisiService extends BaseService {
     return this.putApi(url, body);
   }
 
-  deleteKesulitanMisi(context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'delete_kesulitan_misi', context);
+  deleteInternalMisi(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_internal_misi', context);
     return this.deleteApi(url);
   }
 

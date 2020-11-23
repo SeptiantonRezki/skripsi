@@ -11,11 +11,11 @@ import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attr
 
 
 @Component({
-  selector: 'app-dialog-kesulitan-misi-edit',
-  templateUrl: './dialog-kesulitan-misi-edit.component.html',
-  styleUrls: ['./dialog-kesulitan-misi-edit.component.scss']
+  selector: 'app-dialog-internal-misi-edit',
+  templateUrl: './dialog-internal-misi-edit.component.html',
+  styleUrls: ['./dialog-internal-misi-edit.component.scss']
 })
-export class DialogKesulitanMisiEditComponent implements OnInit {
+export class DialogInternalMisiEditComponent implements OnInit {
 
   form: FormGroup;
   loadingIndicator: Boolean;
@@ -24,7 +24,7 @@ export class DialogKesulitanMisiEditComponent implements OnInit {
   exportTemplate: Boolean;
   valueChange: Boolean;
   selected = [];
-  name:string;
+  name: string;
   id: number;
   status: string;
 
@@ -35,7 +35,7 @@ export class DialogKesulitanMisiEditComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    public dialogRef: MatDialogRef<DialogKesulitanMisiEditComponent>,
+    public dialogRef: MatDialogRef<DialogInternalMisiEditComponent>,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
@@ -79,7 +79,7 @@ export class DialogKesulitanMisiEditComponent implements OnInit {
     this.dialogRef.close(`${form.value}`);
     // console.log(`${form.value.name}`);
     console.log(form.value);
-    this.pengaturanAttributeMisiService.putKesulitanMisi(form.value, { kesulitan_misi_id: this.id }).subscribe(res => {
+    this.pengaturanAttributeMisiService.putInternalMisi(form.value, { internal_misi_id: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
       if (res.success) {
         this.dialogService.openSnackBar({

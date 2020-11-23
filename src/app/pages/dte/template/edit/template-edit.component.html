@@ -127,8 +127,8 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="tingkat_kesulitan_misi" placeholder="Pilih Internal Kategori Misi"
-                id="tingkat_kesulitan_misi" #singleSelect>
+              <mat-select formControlName="tingkat_internal_misi" placeholder="Pilih Internal Kategori Misi"
+                id="tingkat_internal_misi" #singleSelect>
                 <ngx-mat-select-search [formControl]="filterLTKM" [placeholderLabel]="'Cari Internal Kategori Misi...'"
                   [noEntriesFoundLabel]="'Tidak ada tingkat Internal Kategori yang ditemukan'"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredLTKM | async" [value]="item.id">
@@ -136,7 +136,7 @@
                 </mat-option>
               </mat-select>
               <mat-error
-                *ngIf="templateTaskForm.controls['tingkat_kesulitan_misi'].hasError('required') && templateTaskForm.controls['tingkat_kesulitan_misi'].touched">
+                *ngIf="templateTaskForm.controls['tingkat_internal_misi'].hasError('required') && templateTaskForm.controls['tingkat_internal_misi'].touched">
                 Pilih salah satu Internal Kategori Misi.
               </mat-error>
             </mat-form-field>
