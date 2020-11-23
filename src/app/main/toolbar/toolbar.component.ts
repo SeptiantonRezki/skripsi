@@ -107,9 +107,9 @@ export class FuseToolbarComponent implements OnInit {
   async ngOnInit() {
     const session = await this.dataService.getAuthorization();
     if (session) {
-      console.log(session);
+      // console.log(session);
       try {
-        console.log('Init Notif');
+        // console.log('Init Notif');
         this.getListNotif();
         this.notificationService.currentMessage.subscribe(res => {
           if (res) {
@@ -146,7 +146,7 @@ export class FuseToolbarComponent implements OnInit {
 
   search(value) {
     // Do your search here...
-    console.log(value);
+    // console.log(value);
   }
 
   setLanguage(lang) {
