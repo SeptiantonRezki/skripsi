@@ -249,7 +249,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   isChecked(type, event) {
-    console.log('type' + event, type);
+    console.log('type'+event, type);
     if (type === 'product') {
       this.formDetilVoucher.get('category').setValue('');
       this.formDetilVoucher.get('limit_by_category').setValue(false);
@@ -380,7 +380,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_by_category: res.data.limit_by === 'category',
         limit_only: res.data.limit_only,
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
-        category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
+        category: res.data.limit_by === 'category' && res.data.limit_only[0] ? Number(res.data.limit_only[0]) : '',
       });
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
@@ -990,46 +990,46 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   onSaveDetail() {
     if (this.formDetilVoucher.valid) {
-      const body = {
-        name: this.formDetilVoucher.get('name').value,
-        available_at: moment(this.formDetilVoucher.get('voucherDate').value).format('YYYY-MM-DD'),
-        expired_at: moment(this.formDetilVoucher.get('voucherExpiry').value).format('YYYY-MM-DD'),
-        description: this.formDetilVoucher.get('note').value,
-        limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
-          this.formDetilVoucher.get('limit_by_category').value ? 'category' : null
-      };
-      // console.log('paskdjsakl', this.productList);
-      if (body['limit_by'] !== null) {
-        body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value
-      }
+    const body = {
+      name: this.formDetilVoucher.get('name').value,
+      available_at: moment(this.formDetilVoucher.get('voucherDate').value).format('YYYY-MM-DD'),
+      expired_at: moment(this.formDetilVoucher.get('voucherExpiry').value).format('YYYY-MM-DD'),
+      description:  this.formDetilVoucher.get('note').value,
+      limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
+      this.formDetilVoucher.get('limit_by_category').value ? 'category' : null
+    };
+    // console.log('paskdjsakl', this.productList);
+    if (body['limit_by'] !== null) {
+      body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : [this.formDetilVoucher.get('category').value]
+    }
 
-      if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {
-        // delete body['limit_by'];
-        // delete body['limit_only'];
-      }
+    if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {
+      // delete body['limit_by'];
+      // delete body['limit_only'];
+    }
 
-      this.dataService.showLoading(true);
-      if (this.isEdit) {
-        this.b2bVoucherInjectService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-          // if (!this.isEdit) this.router.navigate(['b2b-voucher', 'detail']);
-          // else {
+    this.dataService.showLoading(true);
+    if (this.isEdit) {
+      this.b2bVoucherInjectService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+        // if (!this.isEdit) this.router.navigate(['b2b-voucher', 'detail']);
+        // else {
           this.getDetail();
           this.getRetailerSelected();
-          // }
-        }, err => {
-          this.dataService.showLoading(false);
-        })
-      } else {
-        this.b2bVoucherInjectService.create(body).subscribe(res => {
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-          this.router.navigate(['inject-b2b-voucher']);
-        }, err => {
-          this.dataService.showLoading(false);
-        })
-      }
+        // }
+      }, err => {
+        this.dataService.showLoading(false);
+      })
+    } else {
+      this.b2bVoucherInjectService.create(body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+        this.router.navigate(['inject-b2b-voucher']);
+      }, err => {
+        this.dataService.showLoading(false);
+      })
+    }
     } else {
       commonFormValidator.validateAllFields(this.formDetilVoucher);
       this.dialogService.openSnackBar({ message: 'Lengkapi data terlebih dahulu' });
@@ -1055,8 +1055,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.b2bVoucherInjectService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-      if (!this.isDetail && !this.isEdit) {
-        this.router.navigate(['inject-b2b-voucher', 'detail']);
+      if (!this.isDetail && !this.isEdit) { this.router.navigate(['inject-b2b-voucher', 'detail']);
       } else {
         this.getDetail();
         this.getRetailerSelected();

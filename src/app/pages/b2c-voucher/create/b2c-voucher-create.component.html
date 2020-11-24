@@ -39,10 +39,8 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field class="is-light" fxFlex="45%">
-                    <input matInput type="number" placeholder="Jumlah Voucher per Consumer"
-                      formControlName="jumlahVoucherPerConsumer">
-                    <mat-error
-                      *ngIf="formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('required') && formDetailVoucher.controls['jumlahVoucherPerConsumer'].touched ">
+                    <input matInput type="number" placeholder="Jumlah Voucher per Consumer" formControlName="jumlahVoucherPerConsumer">
+                    <mat-error *ngIf="formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('required') && formDetailVoucher.controls['jumlahVoucherPerConsumer'].touched ">
                       Jumlah Voucher per Consumer harus diisi.
                     </mat-error>
                   </mat-form-field>
@@ -53,8 +51,7 @@
                       placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                     <mat-datepicker #startPicker></mat-datepicker>
-                    <mat-error
-                      *ngIf="formDetailVoucher.controls['startDate'].hasError('required') && formDetailVoucher.controls['startDate'].touched">
+                    <mat-error *ngIf="formDetailVoucher.controls['startDate'].hasError('required') && formDetailVoucher.controls['startDate'].touched">
                       Tanggal Awal Program harus diisi.
                     </mat-error>
                   </mat-form-field>
@@ -64,8 +61,7 @@
                       placeholder="Tanggal Akhir Program" formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
-                    <mat-error
-                      *ngIf="formDetailVoucher.controls['endDate'].hasError('required') && formDetailVoucher.controls['endDate'].touched">
+                    <mat-error *ngIf="formDetailVoucher.controls['endDate'].hasError('required') && formDetailVoucher.controls['endDate'].touched">
                       Tanggal Akhir Program harus diisi.
                     </mat-error>
                   </mat-form-field>
@@ -73,12 +69,10 @@
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
-                      placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at"
-                      [min]="minDateVoucher">
+                      placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
                     <mat-datepicker #voucherPicker></mat-datepicker>
-                    <mat-error
-                      *ngIf="formDetailVoucher.controls['available_at'].hasError('required') && formDetailVoucher.controls['available_at'].touched">
+                    <mat-error *ngIf="formDetailVoucher.controls['available_at'].hasError('required') && formDetailVoucher.controls['available_at'].touched">
                       Tanggal Awal Pemakaian Voucher harus diisi.
                     </mat-error>
                   </mat-form-field>
@@ -89,8 +83,7 @@
                       formControlName="expired_at">
                     <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
                     <mat-datepicker #voucherExpiry></mat-datepicker>
-                    <mat-error
-                      *ngIf="formDetailVoucher.controls['expired_at'].hasError('required') && formDetailVoucher.controls['expired_at'].touched">
+                    <mat-error *ngIf="formDetailVoucher.controls['expired_at'].hasError('required') && formDetailVoucher.controls['expired_at'].touched">
                       Tanggal Kedaluwarsa Voucher harus diisi.
                     </mat-error>
                   </mat-form-field>
@@ -114,8 +107,7 @@
                     Berlaku Pembelian Minimum
                   </mat-checkbox>
                 </div>
-                <mat-form-field fxFlex="50" class="pt-20 is-light"
-                  *ngIf="formDetailVoucher.get('limit_by_product').value">
+                <mat-form-field fxFlex="50" class="pt-20 is-light" *ngIf="formDetailVoucher.get('limit_by_product').value">
                   <mat-chip-list #chipList aria-label="Product List">
                     <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
                       (removed)="remove(product)">
@@ -134,23 +126,19 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field fxFlex="50" class="pt-24 is-light"
-                  *ngIf="!formDetailVoucher.get('limit_by_product').value">
+                <mat-form-field fxFlex="50" class="pt-24 is-light" *ngIf="!formDetailVoucher.get('limit_by_product').value">
                   <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
                 </mat-form-field>
                 <mat-form-field class="is-light" fxFlex="50">
                   <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
-                    [disabled]="!formDetailVoucher.get('limit_by_category').value" multiple>
+                    [disabled]="!formDetailVoucher.get('limit_by_category').value">
                     <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field class="is-light" fxFlex="50">
-                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian"
-                    formControlName="minimumPurchase" *ngIf="formDetailVoucher.get('limit_purchase').value">
-                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian"
-                    *ngIf="!formDetailVoucher.get('limit_purchase').value" [disabled]="true">
-                  <mat-error
-                    *ngIf="formDetailVoucher.controls['minimumPurchase'].hasError('required') && formDetailVoucher.controls['minimumPurchase'].touched">
+                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian" formControlName="minimumPurchase" *ngIf="formDetailVoucher.get('limit_purchase').value">
+                  <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian" *ngIf="!formDetailVoucher.get('limit_purchase').value" [disabled]="true">
+                  <mat-error *ngIf="formDetailVoucher.controls['minimumPurchase'].hasError('required') && formDetailVoucher.controls['minimumPurchase'].touched">
                     Batasan Berdasarkan Pembelian harus diisi
                   </mat-error>
                 </mat-form-field>
