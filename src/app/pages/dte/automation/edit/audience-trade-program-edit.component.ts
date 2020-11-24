@@ -327,7 +327,6 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
         max_frequency: this.formAutomation.get("coin_max").value,
         trade_creator_id: this.formAutomation.get("trade_program_id").value,
         title: this.formAutomation.get("title_challenge").value,
-        classification: '0',
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
         _method: 'PUT',

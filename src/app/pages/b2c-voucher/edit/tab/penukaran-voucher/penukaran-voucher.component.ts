@@ -41,9 +41,6 @@ export class PenukaranVoucherComponent implements OnInit {
   @Output()
   onRefresh: any;
 
-  @Output()
-  setSelectedTab: any;
-
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -59,7 +56,6 @@ export class PenukaranVoucherComponent implements OnInit {
     });
     this.nominalList = null;
     this.onRefresh = new EventEmitter<any>();
-    this.setSelectedTab = new EventEmitter<any>();
   }
 
   ngOnInit() {
@@ -111,7 +107,7 @@ export class PenukaranVoucherComponent implements OnInit {
         });
       }
     }, (err) => {
-      console.warn('err', err);
+      console.log('err', err)
     });
   }
 
@@ -192,7 +188,6 @@ export class PenukaranVoucherComponent implements OnInit {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
           this.onRefresh.emit();
-          this.setSelectedTab.emit(4);
         }, (err) => {
           console.warn('err', err);
           this.dataService.showLoading(false);
