@@ -980,8 +980,8 @@ export class RetailerIndexComponent {
     this.pagination['retailer_version'] = this.version_retailer.value;
     this.pagination['cashier_version'] = this.version_cashier.value;
     this.pagination['is_cashier'] = this.access_cashier.value == 1 ? 1 : 0;
-    this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
     this.pagination['is_chat_bot'] = this.chatbot.value ? '1' : '0';
+    this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
     this.pagination['gsr_flag'] = this.gsr.value;
 
 
