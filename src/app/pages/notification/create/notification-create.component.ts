@@ -33,6 +33,7 @@ export class NotificationCreateComponent {
   formArea: FormGroup;
   formNotificationError: any;
 
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   userGroup: any[] = [
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
@@ -1041,6 +1042,7 @@ export class NotificationCreateComponent {
       };
 
       if (body.type === 'customer') {
+        body['verification'] = this.formNotification.get('verification').value;
         body['age'] = this.formNotification.get("age").value;
       }
 
@@ -1833,7 +1835,10 @@ export class NotificationCreateComponent {
       frm.controls['url_iframe'].setValue('');
       frm.controls['is_target_audience'].setValue(true);
 
-      setTimeout(() => { this.audienceSelected = audience; }, 400);
+      setTimeout(() => {
+        this.audienceSelected = audience;
+        this.onSelect({ selected: this.audienceSelected });
+      }, 400);
 
       // end request
       this.dataService.showLoading(false);
