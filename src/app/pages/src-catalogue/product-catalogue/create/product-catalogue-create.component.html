@@ -20,16 +20,14 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" fxFlex="50">
-            <div fxLayout="column">
-              <p>Deskripsi Produk</p>
-              <textarea [froalaEditor]="options" formControlName="description"
-                placeholder="Deskripsi Produk"></textarea>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <textarea matInput rows="2" formControlName="description" placeholder="Deskripsi Produk"></textarea>
               <mat-error
                 *ngIf="formProduct.controls['description'].hasError('required') && formProduct.controls['description'].touched">
                 Deskripsi Produk harus diisi
               </mat-error>
-            </div>
+            </mat-form-field>
           </div>
 
           <div fxLayout="row" *ngIf="!vendor_id">
@@ -110,6 +108,20 @@
               </mat-error>
             </mat-form-field>
             <div fxFlex="5"></div>
+            <!-- <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="have_community_price">Ada Harga Paguyuban</mat-checkbox>
+            </div>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="5" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="number" min="0" formControlName="community_min_qty" placeholder="Min. Qty">
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="tel" currencyMask min="0" formControlName="community_price"
+                placeholder="Harga / Pcs">
+            </mat-form-field> -->
           </div>
 
           <div fxLayout="row">

@@ -35,7 +35,6 @@ export class ProductCatalogueEditComponent implements OnInit {
   validComboDrag: Boolean;
 
   vendor_id: any;
-  public options: Object = Config.FROALA_CUSTOM_TITLE_CONFIG("Deskripsi Produk");
 
   constructor(
     private router: Router,
