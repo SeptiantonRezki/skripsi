@@ -148,13 +148,10 @@
           </div>
         </mat-tab>
         <mat-tab label="Panel Retailer">
-          <app-panel-retailer-voucher [data]="detailVoucher" [isLimitVoucher]="isLimitVoucher"
-            (onRefresh)="onRefresh()"></app-panel-retailer-voucher>
+          <app-panel-retailer-voucher [data]="detailVoucher" [isLimitVoucher]="isLimitVoucher" (onRefresh)="onRefresh()"></app-panel-retailer-voucher>
         </mat-tab>
         <mat-tab label="Panel Consumer">
-          <app-panel-consumer-voucher [data]="detailVoucher"
-            (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)" (onRefresh)="onRefresh()"
-            (scrollToTop)="scrollToTop()"></app-panel-consumer-voucher>
+          <app-panel-consumer-voucher [data]="detailVoucher" (onChangeVoucherAutomation)="onChangeVoucherAutomation($event)" (onRefresh)="onRefresh()" (scrollToTop)="scrollToTop()"></app-panel-consumer-voucher>
         </mat-tab>
         <mat-tab label="Penukaran Voucher">
           <app-penukaran-voucher [data]="detailVoucher" (onRefresh)="onRefresh()"></app-penukaran-voucher>
