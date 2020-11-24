@@ -130,11 +130,6 @@ import { DialogMisiDuplicateComponent } from "./mission-builder/duplicate/dialog
 import { DialogPopUpNotifDuplicateComponent } from "./mission-builder/duplicate/dialog-pop-up-notif-duplicate/dialog-pop-up-notif-duplicate.component";
 import { DialogWaktuTungguDuplicateComponent } from "./mission-builder/duplicate/dialog-waktu-tunggu-duplicate/dialog-waktu-tunggu-duplicate.component";
 import { DialogPushNotifDuplicateComponent } from "./mission-builder/duplicate/dialog-push-notif-duplicate/dialog-push-notif-duplicate.component";
-import { IndextsmComponent } from './automation/indextsm/indextsm.component';
-import { CreatetsmComponent } from './automation/createtsm/createtsm.component';
-import { EOrdertsmComponent } from './automation/createtsm/e-ordertsm/e-ordertsm.component';
-import { EdittsmComponent } from './automation/edittsm/edittsm.component';
-import { EOrdertsmeditComponent } from "./automation/edittsm/e-ordertsm/e-ordertsm.component";
 
 
 
@@ -199,7 +194,7 @@ export const MY_FORMATS = {
     NgxMaterialTimepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
-    NgxGraphModule
+    NgxGraphModule,
   ],
   declarations: [
     TemplateIndexComponent,
@@ -274,12 +269,7 @@ export const MY_FORMATS = {
     DialogMisiDuplicateComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent,
-    IndextsmComponent,
-    CreatetsmComponent,
-    EOrdertsmComponent,
-    EOrdertsmeditComponent,
-    EdittsmComponent
+    DialogPushNotifDuplicateComponent
   ],
   exports: [
     TemplateIndexComponent,

@@ -85,7 +85,6 @@ export class B2CVoucherEditComponent implements OnInit {
   isLimitVoucher: boolean; // show List Audience @Panel Retailer
   dataPanelRetailer: any;
   dataPanelCustomer: any;
-  selectedTab: number;
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -429,14 +428,6 @@ export class B2CVoucherEditComponent implements OnInit {
       if (!res.data.is_enable_detail_voucher) {
         this.setDisable();
       }
-      if (res.data.is_enable_panel_retailer) {
-        setTimeout(() => {
-          if (this.dataService.getFromStorage('isb2ccrt')) {
-            this.setSelectedTab(1);
-            this.dataService.setToStorage('isb2ccrt', null);
-          }
-        }, 1000);
-      }
       this.dataService.showLoading(false);
     }, err => {
       console.warn(err);
@@ -465,7 +456,6 @@ export class B2CVoucherEditComponent implements OnInit {
 
   onRefresh() {
     this.getDetail();
-    this.scrollToTop();
   }
 
   createFormProduct() {
@@ -504,7 +494,6 @@ export class B2CVoucherEditComponent implements OnInit {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
         // this.router.navigate(['b2c-voucher']);
-        this.setSelectedTab(1);
         this.onRefresh();
       }, err => {
         this.dataService.showLoading(false);
@@ -587,14 +576,6 @@ export class B2CVoucherEditComponent implements OnInit {
     } catch (err) {
       console.error('Scrolling Error', err);
     }
-  }
-
-  setSelectedTab(tab: number) {
-    this.selectedTab = tab;
-  }
-
-  onChangeTab(event: any) {
-    this.selectedTab = event.index;
   }
 
 }

@@ -18,8 +18,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any;
-  btnNonTsm :any;
-  btnTsm :any;
+
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
@@ -63,20 +62,10 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDTEAutomationNonTsm();
-    this.btnNonTsm = true;
+    this.getDTEAutomation();
   }
-  tabClick(tab) {
-    if (tab.index === 1) {
-      this.btnNonTsm = false;
-      this.btnTsm = true;
-    } else {
-      this.btnNonTsm = true;
-      this.btnTsm = false;
-    }
-    console.log(tab.index);
-  }
-  getDTEAutomationNonTsm() {
+
+  getDTEAutomation() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -84,7 +73,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
-    this.pagination['classification']= '0';
+
     this.offsetPagination = page ? (page - 1) : 0;
     this.audienceTradeProgramService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -187,7 +176,7 @@ export class AudienceTradeProgramIndexComponent implements OnInit {
     this.audienceTradeProgramService.delete({ automation_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getDTEAutomationNonTsm();
+        this.getDTEAutomation();
 
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }

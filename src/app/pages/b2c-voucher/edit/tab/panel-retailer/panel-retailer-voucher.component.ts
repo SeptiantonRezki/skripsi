@@ -103,9 +103,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   @Output()
   onRefresh: any;
 
-  @Output()
-  setSelectedTab: any;
-
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -130,7 +127,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.totalData = 0;
     this.isSort = false;
     this.onRefresh = new EventEmitter<any>();
-    this.setSelectedTab = new EventEmitter<any>();
     this.onLoad = true;
     this.isArea = false;
 
@@ -638,7 +634,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.dataService.showLoading(false);
       });
     } catch (ex) {
-      console.warn('ex', ex);
+      console.log('ex', ex);
       this.dataService.showLoading(false);
     }
   }
@@ -776,7 +772,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.onRefresh.emit();
-      this.setSelectedTab.emit(2);
       setTimeout(() => {
         this.getIsArea();
       }, 1000);
@@ -794,6 +789,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const body = this.selected.map(aud => aud.id);
     try {
       const response = await this.b2cVoucherService.exportAudienceRetailer({ selected: body, audience: 'retailer' }).toPromise();
+      console.log('response', response)
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       `B2CVoucher_Panel_Retailer_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
@@ -833,12 +829,13 @@ export class PanelRetailerVoucherComponent implements OnInit {
   }
 
   handleError(error) {
-    console.warn('err', error);
+    console.log('Here');
+    console.log(error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.warn(error);
+    console.log(error);
     // alert('Open console to see the error')
   }
 
