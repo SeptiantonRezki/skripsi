@@ -47,7 +47,7 @@ export class BaseInterceptor implements HttpInterceptor {
   }
 
   throwIntercept(err, req) {
-    console.error("HTTP ERROR LOGGER", err.status);
+    // console.error("HTTP ERROR LOGGER", err);
     if (err.status === 0)
       this.injector.get(DialogService).openSnackBar({ message: "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!" });
 

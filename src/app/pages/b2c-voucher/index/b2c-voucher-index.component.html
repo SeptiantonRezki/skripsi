@@ -80,25 +80,18 @@
 
             <ngx-datatable-column name="Nilai Voucher" prop="nominal" >
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                {{row.nominal | rupiahFormater}}
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Status" prop="status" >
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span [ngStyle]="{'background-color': row.status == 'draft' ? '#ff7722' : row.status == 'publish' ? '#388E3C' : '#e90000', 'padding': '5px', 'border-radius': '5px', color: '#fff' }">{{row.status}}</span>
+                {{row.nominal | rupiahFormater }}
               </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Tindakan" [sortable]="false" [frozenRight]="true">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row">
-                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)" [disabled]="row.status !== 'draft'" 
-                  [ngStyle]="{'cursor': row.status !== 'draft' ? 'no-drop' : ''}">
-                    <mat-icon>edit</mat-icon>
+                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)">
+                    <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
                   <button mat-icon-button color="primary" (click)="deleteVoucher(row.id)"
-                    [ngStyle]="{'cursor': !permission?.hapus || row.status !== 'draft' ? 'no-drop' : ''}" [disabled]="!permission?.hapus && row.status !== 'draft' || row.status !== 'draft'">
+                    [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>

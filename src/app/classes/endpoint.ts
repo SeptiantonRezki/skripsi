@@ -89,10 +89,7 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/${context.wholesaler_id}`,
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
-        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/data?area=${context.area_id}`,
-        exportWhosaller: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/list`,
-        import_preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/preview`,
-        store_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/list`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/data?area=${context.area_id}`
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
@@ -716,9 +713,6 @@ export class Endpoint {
         //Design Voucher
         updateDesign: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/design/${context.voucher_id}`,
 
-        //Preview VOucher
-        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/update-status`,
-
         //List Detail Voucher
         getListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/list`,
         exportListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/list/export`,
@@ -758,7 +752,7 @@ export class Endpoint {
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
 
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
-      },
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

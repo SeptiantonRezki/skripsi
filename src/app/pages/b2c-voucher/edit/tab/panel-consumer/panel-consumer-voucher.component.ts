@@ -75,6 +75,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   _data: any = null;
   @Input()
   set data(data: any) {
+    console.log('ok', data)
     if (data) {
       this.detailVoucher = data;
       this.isVoucherAutomation.setValue(data.automation ? true : false);
@@ -107,9 +108,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
   @Output()
   scrollToTop: any;
 
-  @Output()
-  setSelectedTab: any;
-
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -135,7 +133,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.onChangeVoucherAutomation = new EventEmitter<any>();
     this.onRefresh = new EventEmitter<any>();
     this.scrollToTop = new EventEmitter<any>();
-    this.setSelectedTab = new EventEmitter<any>();
     this.onLoad = true;
     this.isArea = false;
 
@@ -303,6 +300,14 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
+    if (event.checked) {
+      // this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
+      // this.formConsumerGroup.get('va').setValidators(Validators.required);
+    } else {
+      console.log('CLEAR')
+      // this.formConsumerGroup.get('allocationVoucher').clearValidators();
+      // this.formConsumerGroup.get('va').clearValidators();
+    }
   }
 
   isChangeTargetAudience(event: any) {
@@ -311,7 +316,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSelect({ selected }) {
+    console.log('selected', selected);
     this.selected.splice(0, this.selected.length);
+    console.log('selected2', this.selected);
     this.selected.push(...selected);
   }
 
@@ -634,7 +641,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.dataService.showLoading(false);
       });
     } catch (ex) {
-      console.warn('ex', ex);
+      console.log('ex', ex);
       this.dataService.showLoading(false);
     }
   }
@@ -755,6 +762,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
+    console.log('formConsumerGroup.controls[allocationVoucher].value', this.formConsumerGroup.controls['allocationVoucher'].value)
     if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
     let body = null;
     const bodyArea = {
@@ -796,6 +804,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       let value = this.formConsumerGroup.getRawValue();
 
       value.areas.map(item => {
+        console.log('AREAS', item)
         let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
         for (const val of this.typeArea) {
           const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
@@ -813,6 +822,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
       bodyArea['area_id'] = [];
       areas.map(item => {
+        console.log('AREAS', item)
         bodyArea['area_id'].push(item.value);
       });
 
@@ -822,7 +832,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.onRefresh.emit();
-      this.setSelectedTab.emit(3);
       setTimeout(() => {
         this.getIsArea();
       }, 1000);
@@ -901,12 +910,13 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   handleError(error) {
-    console.warn('err', error);
+    console.log('Here');
+    console.log(error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.warn(error);
+    console.log(error);
     // alert('Open console to see the error')
   }
 
@@ -1235,13 +1245,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   getToolTipData(value: any, array: any) {
-    // console.log('array', array)
-    // if (value && array && array.length > 0) {
-    //   const msg = array.filter((item: any) => item.id === value)[0]['name'];
-    //   return msg;
-    // } else {
+    if (value && array.length) {
+      const msg = array.filter((item: any) => item.id === value)[0]['name'];
+      return msg;
+    } else {
       return '';
-    // }
+    }
   }
 
 }
