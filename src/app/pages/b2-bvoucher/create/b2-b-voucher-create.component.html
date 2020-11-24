@@ -12,7 +12,8 @@
         <mat-tab label="Detil Voucher">
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetilVoucher" (keydown.enter)="$event.preventDefault();">
-              <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" *ngIf="isDetail">
+              <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center"
+                *ngIf="isDetail">
                 <div class="button-row">
                   <button mat-flat-button style="width: 160px" color="white" (click)="exportInvoice()">
                     <mat-icon>vertical_align_top</mat-icon> Export Invoice
@@ -27,8 +28,8 @@
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
                 <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
                   <span>Pilih dari</span>
-                  <mat-checkbox class="mt-4 ml-4 mb-8"
-                    [formControl]="isB2CVoucher" (change)="onChangeIsB2CVoucher($event)">
+                  <mat-checkbox class="mt-4 ml-4 mb-8" [formControl]="isB2CVoucher"
+                    (change)="onChangeIsB2CVoucher($event)">
                     B2C Voucher</mat-checkbox>
                 </div>
 
@@ -114,10 +115,12 @@
                 </div>
 
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple *ngIf="!isB2CVoucher.value">
-                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id" >{{ gtp.name }}</mat-option>
+                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple
+                    *ngIf="!isB2CVoucher.value">
+                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
                   </mat-select>
-                  <mat-select placeholder="Group Trade Program B2C" formControlName="group_trade_program" multiple *ngIf="isB2CVoucher.value">
+                  <mat-select placeholder="Group Trade Program B2C" formControlName="group_trade_program" multiple
+                    *ngIf="isB2CVoucher.value">
                     <mat-option *ngFor="let item of voucherB2CList" [value]="item.id">{{ item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -127,9 +130,9 @@
                     #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="15"
                     placeholder="Catatan"></textarea>
                 </mat-form-field>
-              
+
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                  <h4 style="font-weight: bold;" >Batasan</h4>
+                  <h4 style="font-weight: bold;">Batasan</h4>
                   <div fxFlex="100">
                     <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
                       style="margin-right: 25px;">Batasi dengan Produk
@@ -166,11 +169,11 @@
                 <!-- fitur multiple category -->
                 <mat-form-field fxFlex="50">
                   <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
-                    [disabled]="!formDetilVoucher.get('limit_by_category').value">
+                    [disabled]="!formDetilVoucher.get('limit_by_category').value" multiple>
                     <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                
+
               </div>
 
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">

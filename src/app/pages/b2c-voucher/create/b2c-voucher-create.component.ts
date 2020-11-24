@@ -404,7 +404,7 @@ export class B2CVoucherCreateComponent implements OnInit {
         limit_only: res.data.limit_only,
         limit_purchase: res.data.limit_purchase ? true : false,
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
-        category: res.data.limit_by === 'category' && res.data.limit_only[0] ? Number(res.data.limit_only[0]) : '',
+        category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
         minimumPurchase: res.data.limit_purchase ? res.data.limit_purchase : 0,
       });
       this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
@@ -441,14 +441,14 @@ export class B2CVoucherCreateComponent implements OnInit {
         available_at: moment(this.formDetailVoucher.get('available_at').value).format('YYYY-MM-DD'),
         expired_at: moment(this.formDetailVoucher.get('expired_at').value).format('YYYY-MM-DD'),
         limit_by: this.formDetailVoucher.get('limit_by_product').value ? 'product' :
-        this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
+          this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
         limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null,
         "allocation_voucher": 10000
       };
 
       if (body['limit_by'] !== null) {
-        body['limit_only'] = body['limit_by'] === 'product' ? 
-        this.productList.map(prd => prd.sku_id) : [this.formDetailVoucher.get('category').value];
+        body['limit_only'] = body['limit_by'] === 'product' ?
+          this.productList.map(prd => prd.sku_id) : this.formDetailVoucher.get('category').value;
       }
 
       if (this.formDetailVoucher.get('limit_by_product').value === false && this.formDetailVoucher.get('limit_by_category').value === false) {
