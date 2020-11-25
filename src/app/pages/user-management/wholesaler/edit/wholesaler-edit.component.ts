@@ -31,7 +31,7 @@ export class WholesalerEditComponent {
     { name: "Status Non Aktif", value: "inactive" },
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
-  listGsw: any[] = [{ name: 'Pilih GSW', value: '' }, { name: 'ON', value: 1 }, { name: 'OFF', value: 0 }];
+  listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
 
   listLevelArea: any[];
   list: any;
@@ -40,7 +40,6 @@ export class WholesalerEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
-  isChecked = true;
   listBanks: any[];
   filterBank: FormControl = new FormControl();
   filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -126,7 +125,7 @@ export class WholesalerEditComponent {
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
-      gswName: [""],
+      gsw: [""],
       code: ["", Validators.required],
       owner: ["", Validators.required],
       phone: ["", Validators.required],
@@ -155,11 +154,6 @@ export class WholesalerEditComponent {
       this.detailWholesaler = resWS.data;
       console.log('wsss', this.detailWholesaler);
       
-      if (this.detailWholesaler.gsw === 1) {
-        this.isChecked = true;
-      } else {
-        this.isChecked = false;
-      }
       if (this.detailWholesaler.area_code) {
 
         this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
@@ -325,7 +319,7 @@ export class WholesalerEditComponent {
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
       branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
-      gswName: this.detailWholesaler.gsw === 1 ? true : false,
+      gsw: this.detailWholesaler.gsw === 1 ? 'on' : 'off',
     });
 
     this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
@@ -510,6 +504,7 @@ export class WholesalerEditComponent {
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
+        gsw: this.formWs.get("gsw").value === 'on' ? 1 : 0,
       };
 
       if (this.formWs.get("branchShop").value === true) {
@@ -519,12 +514,6 @@ export class WholesalerEditComponent {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
       }
 
-      if (this.formWs.get("gswName").value === true) {
-        body['gsw'] = 1;
-      } else {
-        body['gsw'] = 0;
-      }
-      console.log("gswName",body['gsw']);
       // return;
 
       this.wholesalerService
@@ -615,7 +604,7 @@ export class WholesalerEditComponent {
 
     if (!this.isCan(['ubah', 'profile_toko'])) {
 
-      const fields = ['name', 'address', 'code', 'owner', 'gsw'];
+      const fields = ['name', 'address', 'code', 'owner'];
 
       this.disableFields(fields);
       this.rmValidators(fields);
@@ -624,7 +613,7 @@ export class WholesalerEditComponent {
 
     if (!this.isCan(['ubah', 'gsw'])) {
 
-      const fields = ['gswName'];
+      const fields = ['gsw'];
 
       this.disableFields(fields);
       this.rmValidators(fields);
