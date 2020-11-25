@@ -151,7 +151,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
       area: [],
       salespoint: [],
       district: [],
-      territory: []
+      teritory: []
     };
     this.area = dataService.getDecryptedProfile()['area_type'];
 
@@ -173,7 +173,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
       area: [''],
       salespoint: [''],
       district: [''],
-      territory: ['']
+      teritory: ['']
     });
 
     this.formFilterRetailer = this.formBuilder.group({
@@ -221,7 +221,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     this.formFilter.get('district').valueChanges.subscribe(res => {
       if (res && this.detailVoucher) {
         if (this.isTargetAudience.value || this.detailVoucher.is_enable_panel_retailer) {
-          this.getAudienceAreaV2('territory', res);
+          this.getAudienceAreaV2('teritory', res);
         }
       }
     });
@@ -251,38 +251,68 @@ export class PanelRetailerVoucherComponent implements OnInit {
   async getDetail() {
     if (this.detailVoucher) {
       if (!this.isTargetAudience.value) {
-        if (this.detailVoucher.is_enable_panel_retailer) {
-          this.onLoad = false;
-        }
         const national: any[] = [];
         const zone: any[] = [];
         const region: any[] = [];
         const area: any[] = [];
         const salespoint: any[] = [];
         const district: any[] = [];
-        const territory: any[] = [];
-        for (const { val, index } of this.detailVoucher.area_retailer.map((val, index) => ({ val, index }))) {
-          
+        const teritory: any[] = [];
+        if (this.detailVoucher.is_enable_panel_retailer && this.detailVoucher.area_retailer && this.detailVoucher.area_retailer.length > 0 ) {
           this.onLoad = true;
-          const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+          for (const { val, index } of this.detailVoucher.area_retailer.map((val, index) => ({ val, index }))) {
+            const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
 
-          national.push(this.getArea(response, 'national'));
-          zone.push(this.getArea(response, 'division'));
-          region.push(this.getArea(response, 'region'));
-          area.push(this.getArea(response, 'area'));
-          salespoint.push(this.getArea(response, 'salespoint'));
-          district.push(this.getArea(response, 'district'));
-          territory.push(this.getArea(response, 'teritory'));
+            national.push(this.getAreaById(response, 'national'));
+            zone.push(this.getAreaById(response, 'division'));
+            region.push(this.getAreaById(response, 'region'));
+            area.push(this.getAreaById(response, 'area'));
+            salespoint.push(this.getAreaById(response, 'salespoint'));
+            district.push(this.getAreaById(response, 'district'));
+            teritory.push(this.getAreaById(response, 'teritory'));
 
-          this.formFilter.get('national').setValue(national.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('zone').setValue(zone.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('region').setValue(region.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('area').setValue(area.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('salespoint').setValue(salespoint.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('district').setValue(district.filter((value, index, self) => self.indexOf(value) === index));
-          this.formFilter.get('territory').setValue(territory.filter((value, index, self) => self.indexOf(value) === index));
+            this.formFilter.get('national').setValue(national);
+            this.formFilter.get('zone').setValue(zone);
+            this.formFilter.get('region').setValue(region);
+            this.formFilter.get('area').setValue(area);
+            this.formFilter.get('salespoint').setValue(salespoint);
+            this.formFilter.get('district').setValue(district);
+            this.formFilter.get('teritory').setValue(teritory);
+            this.initArea(index);
+            await this.initFormGroup(response, index);
 
-          if (this.detailVoucher.area_retailer.length === (index + 1)) {
+            if (this.detailVoucher.area_retailer.length === (index + 1)) {
+              this.onLoad = false;
+            }
+          }
+        } else {
+          if (this.detailVoucher.area_retailer && this.detailVoucher.area_retailer.length > 0) {
+            for (const { val, index } of this.detailVoucher.area_retailer.map((val, index) => ({ val, index }))) {
+
+              this.onLoad = true;
+              const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+
+              national.push(this.getAreaByName(response, 'national'));
+              zone.push(this.getAreaByName(response, 'division'));
+              region.push(this.getAreaByName(response, 'region'));
+              area.push(this.getAreaByName(response, 'area'));
+              salespoint.push(this.getAreaByName(response, 'salespoint'));
+              district.push(this.getAreaByName(response, 'district'));
+              teritory.push(this.getAreaByName(response, 'teritory'));
+
+              this.formFilter.get('national').setValue(national);
+              this.formFilter.get('zone').setValue(zone);
+              this.formFilter.get('region').setValue(region);
+              this.formFilter.get('area').setValue(area);
+              this.formFilter.get('salespoint').setValue(salespoint);
+              this.formFilter.get('district').setValue(district);
+              this.formFilter.get('teritory').setValue(teritory);
+
+              if (this.detailVoucher.area_retailer.length === (index + 1)) {
+                this.onLoad = false;
+              }
+            }
+          } else {
             this.onLoad = false;
           }
         }
@@ -382,7 +412,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
       }
     }
 
-    fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
+    fd.append('area_type', selection === 'teritory' ? 'teritory' : selection);
     let thisAreaOnSet = [];
     let areaNumber = 0;
     let expectedArea = [];
@@ -395,7 +425,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
         ];
       }
 
-      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
+      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'teritory' : ar.level_desc) === selection);
       if (id && id.length > 1) {
         areaNumber = 1;
       }
@@ -417,12 +447,12 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
+        this.formFilter.get('teritory').setValue('');
         this.list['region'] = [];
         this.list['area'] = [];
         this.list['salespoint'] = [];
         this.list['district'] = [];
-        this.list['territory'] = [];
+        this.list['teritory'] = [];
         break;
       case 'region':
         if (id && id.length !== 0) {
@@ -444,11 +474,11 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
+        this.formFilter.get('teritory').setValue('');
         this.list['area'] = [];
         this.list['salespoint'] = [];
         this.list['district'] = [];
-        this.list['territory'] = [];
+        this.list['teritory'] = [];
         break;
       case 'area':
         if (id && id.length !== 0) {
@@ -470,10 +500,10 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
+        this.formFilter.get('teritory').setValue('');
         this.list['salespoint'] = [];
         this.list['district'] = [];
-        this.list['territory'] = [];
+        this.list['teritory'] = [];
         break;
       case 'salespoint':
         if (id && id.length !== 0) {
@@ -494,9 +524,9 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
+        this.formFilter.get('teritory').setValue('');
         this.list['district'] = [];
-        this.list['territory'] = [];
+        this.list['teritory'] = [];
         break;
       case 'district':
         if (id && id.length !== 0) {
@@ -516,10 +546,10 @@ export class PanelRetailerVoucherComponent implements OnInit {
         }
 
         this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['territory'] = [];
+        this.formFilter.get('teritory').setValue('');
+        this.list['teritory'] = [];
         break;
-      case 'territory':
+      case 'teritory':
         if (id && id.length !== 0) {
           item = this.list['district'].length > 0 ? this.list['district'].filter(item_ => {
             return id && id.length > 0 ? id[0] : id;
@@ -533,10 +563,10 @@ export class PanelRetailerVoucherComponent implements OnInit {
             this.list[selection] = [];
           }
         } else {
-          this.list['territory'] = [];
+          this.list['teritory'] = [];
         }
 
-        this.formFilter.get('territory').setValue('');
+        this.formFilter.get('teritory').setValue('');
         break;
 
       default:
@@ -549,8 +579,8 @@ export class PanelRetailerVoucherComponent implements OnInit {
       case 'division':
         return 'zone';
       case 'teritory':
-      case 'territory':
-        return 'territory';
+      case 'teritory':
+        return 'teritory';
       default:
         return type;
     }
@@ -566,7 +596,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
       const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
       ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
       const area_id = areaSelected[areaSelected.length - 1].value;
-      const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+      const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'teritory'];
       this.pagination.area = area_id;
 
       if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
@@ -672,7 +702,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
   checkAreaLocation(area, lastSelfArea) {
     const lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'teritory'];
     const areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
     const indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     const indexAreaSelected = areaList.indexOf(area.key);
@@ -701,8 +731,8 @@ export class PanelRetailerVoucherComponent implements OnInit {
     const areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    const levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
-    const lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+    const levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'teritory'];
+    const lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'teritory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
       this.formFilter.get('national').setValue([1]);
@@ -884,8 +914,8 @@ export class PanelRetailerVoucherComponent implements OnInit {
         case 'district':
           this.formFilter.get('district').disable();
           break;
-        case 'territory':
-          this.formFilter.get('territory').disable();
+        case 'teritory':
+          this.formFilter.get('teritory').disable();
           break;
       }
     });
@@ -893,151 +923,169 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
   async generateList(selection: any, id: any, index: number, type: any) {
     let item: any;
+    return new Promise(async(resolve, reject) => {
     switch (selection) {
       case 'zone': {
         const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-        const list = this.formFilter.get(`list_${selection}`) as FormArray;
-
-        while (list.length > 0) {
-          list.removeAt(list.length - 1);
-        }
+        // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+        console.log(selection, this.list['zone'])
+        // while (this.list['zone'].length > 0) {
+        //   this.list['zone'].removeAt(this.list['zone'].length - 1);
+        // }
 
         _.clone(response || []).map((item_: any) => {
-          list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Zone' : item_.name }));
+          // this.list['zone'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Zone' : item_.name }));
+          this.list['zone'].push({ ...item_, name: item_.name === 'all' ? 'Semua Zone' : item_.name })
         });
 
-        if (type !== 'render') {
-          this.formFilter.get('region').setValue(null);
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-        }
+        // if (type !== 'render') {
+        //   this.formFilter.get('region').setValue(null);
+        //   this.formFilter.get('area').setValue('');
+        //   this.formFilter.get('salespoint').setValue('');
+        //   this.formFilter.get('district').setValue('');
+        //   this.formFilter.get('teritory').setValue('');
+        // }
+        resolve(true);
       }
         break;
       case 'region': {
-        item = this.formFilter.get('list_zone').value.length > 0 ?
-        this.formFilter.get('list_zone').value.filter((item_: any) => item_.id === id)[0] : {};
+        item = this.list['zone'].length > 0 ?
+        this.list['zone'].filter((item_: any) => item_.id === id)[0] : {};
         if (item.name !== 'Semua Zone') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-          const list = this.formFilter.get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
+          // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          // while (this.list['region'].length > 0) {
+          //   this.list['region'].removeAt(this.list['region'].length - 1);
+          // }
           _.clone(response || []).map(item_ => {
-            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Regional' : item_.name }));
+            // this.list['region'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Regional' : item_.name }));
+          this.list['region'].push({ ...item_, name: item_.name === 'all' ? 'Semua Regional' : item_.name })
           });
         }
 
-        if (type !== 'render') {
-          this.formFilter.get('region').setValue('');
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-        }
+        // if (type !== 'render') {
+        //   this.formFilter.get('region').setValue('');
+        //   this.formFilter.get('area').setValue('');
+        //   this.formFilter.get('salespoint').setValue('');
+        //   this.formFilter.get('district').setValue('');
+        //   this.formFilter.get('teritory').setValue('');
+        // }
+        resolve(true);
       }
         break;
       case 'area': {
-        item = this.formFilter.get('list_region').value.length > 0 ?
-        this.formFilter.get('list_region').value.filter(item_ => item_.id === id)[0] : {};
+        item = this.list['region'].length > 0 ?
+        this.list['region'].filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Regional') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-          const list = this.formFilter.get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
+          // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          // while (this.list['area'].length > 0) {
+          //   this.list['area'].removeAt(this.list['area'].length - 1);
+          // }
           _.clone(response || []).map(item_ => {
-            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Area' : item_.name }));
+            // this.list['area'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Area' : item_.name }));
+          this.list['area'].push({ ...item_, name: item_.name === 'all' ? 'Semua Area' : item_.name })
           });
         }
 
-        if (type !== 'render') {
-          this.formFilter.get('area').setValue('');
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
+        // if (type !== 'render') {
+        //   this.formFilter.get('area').setValue('');
+        //   this.formFilter.get('salespoint').setValue('');
+        //   this.formFilter.get('district').setValue('');
+        //   this.formFilter.get('teritory').setValue('');
 
-        }
+        // }
+        resolve(true);
       }
         break;
       case 'salespoint': {
-        item = this.formFilter.get('list_area').value.length > 0 ?
-        this.formFilter.get('list_area').value.filter(item_ => item_.id === id)[0] : {};
+        item = this.list['area'].length > 0 ?
+        this.list['area'].value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Area') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-          const list = this.formFilter.get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
+          // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          // while (this.list['salespoint'].length > 0) {
+          //   this.list['salespoint'].removeAt(this.list['salespoint'].length - 1);
+          // }
           _.clone(response || []).map(item_ => {
-            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Salespoint' : item_.name }));
+            // this.list['salespoint'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Salespoint' : item_.name }));
+          this.list['salespoint'].push({ ...item_, name: item_.name === 'all' ? 'Semua Salespoint' : item_.name })
           });
         }
 
-        if (type !== 'render') {
-          this.formFilter.get('salespoint').setValue('');
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-        }
+        // if (type !== 'render') {
+        //   this.formFilter.get('salespoint').setValue('');
+        //   this.formFilter.get('district').setValue('');
+        //   this.formFilter.get('teritory').setValue('');
+        // }
+        resolve(true);
       }
         break;
       case 'district': {
-        item = this.formFilter.get('list_salespoint').value.length > 0 ?
-        this.formFilter.get('list_salespoint').value.filter(item_ => item_.id === id)[0] : {};
+        item = this.list['salespoint'].length > 0 ?
+        this.list['salespoint'].value.filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua Salespoint') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-          const list = this.formFilter.get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
+          // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          // while (this.list['district'].length > 0) {
+          //   this.list['district'].removeAt(this.list['district'].length - 1);
+          // }
           _.clone(response || []).map(item_ => {
-            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua District' : item_.name }));
+            // this.list['district'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua District' : item_.name }));
+          this.list['district'].push({ ...item_, name: item_.name === 'all' ? 'Semua District' : item_.name })
           });
         }
 
-        if (type !== 'render') {
-          this.formFilter.get('district').setValue('');
-          this.formFilter.get('territory').setValue('');
-        }
+        // if (type !== 'render') {
+        //   this.formFilter.get('district').setValue('');
+        //   this.formFilter.get('teritory').setValue('');
+        // }
       }
         break;
-      case 'territory': {
-        item = this.formFilter.get('list_district').value.length > 0 ?
-        this.formFilter.get('list_district').value.filter(item_ => item_.id === id)[0] : {};
+      case 'teritory': {
+        item = this.list['district'].length > 0 ?
+        this.list['district'].filter(item_ => item_.id === id)[0] : {};
         if (item.name !== 'Semua District') {
           const response = await this.bannerService.getListOtherChildren({ parent_id: id }).toPromise();
-          const list = this.formFilter.get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
+          // const list = this.formFilter.get(`list_${selection}`) as FormArray;
+          // while (this.list['teritory'].length > 0) {
+          //   this.list['teritory'].removeAt(this.list['teritory'].length - 1);
+          // }
           _.clone(response || []).map(item_ => {
-            list.push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Territory' : item_.name }));
+            // this.list['teritory'].push(this.formBuilder.group({ ...item_, name: item_.name === 'all' ? 'Semua Territory' : item_.name }));
+            this.list['teritory'].push({ ...item_, name: item_.name === 'all' ? 'Semua Territory' : item_.name });
           });
         }
 
-        if (type !== 'render') {
-          this.formFilter.get('territory').setValue('');
-        }
+        // if (type !== 'render') {
+        //   this.formFilter.get('teritory').setValue('');
+        // }
+        resolve(true);
       }
         break;
 
       default:
+        reject(null);
         break;
     }
+    });
   }
 
-  getArea(response, selection) {
-    return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0]
+  getAreaByName(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0];
   }
 
-  initFormGroup(response, index) {
-    response.data.map(item => {
+  getAreaById(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0];
+  }
+
+  async initFormGroup(response, index) {
+    return response.data.forEach(async (item) => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
         case 'national':
           level_desc = 'zone';
-          break
+          break;
         case 'division':
           level_desc = 'region';
           break;
@@ -1051,10 +1099,14 @@ export class PanelRetailerVoucherComponent implements OnInit {
           level_desc = 'district';
           break;
         case 'district':
-          level_desc = 'territory';
+          level_desc = 'teritory';
           break;
       }
-      this.generateList(level_desc, item.id, index, 'render');
+      if (level_desc && level_desc !== '') {
+        return await this.generateList(level_desc, item.id, index, 'render');
+      } 
+      return null;
+      // return this.getAudienceAreaV2(level_desc, item.id);
     });
   }
 

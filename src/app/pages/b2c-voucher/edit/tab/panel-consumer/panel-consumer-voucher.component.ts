@@ -255,44 +255,85 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
 
-      if (this.detailVoucher.is_enable_panel_customer) {
-        this.addArea();
-        this.onLoad = false;
-      }
-
       if (!this.formConsumerGroup.get('isTargetAudience').value) {
-        for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
-          this.onLoad = true;
-          const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
-          const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+        if (this.detailVoucher.area_customer && this.detailVoucher.area_customer.length > 0) {
+          if (this.detailVoucher.is_enable_panel_customer) {
+            this.onLoad = true;
+            try {
+            this.detailVoucher.area_customer.map(async(val, index) => {
+              const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+              const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
 
-          wilayah.push(this.formBuilder.group({
-            national: [this.getArea(response, 'national'), Validators.required],
-            zone: [this.getArea(response, 'division')],
-            region: [this.getArea(response, 'region')],
-            area: [this.getArea(response, 'area')],
-            salespoint: [this.getArea(response, 'salespoint')],
-            district: [this.getArea(response, 'district')],
-            territory: [this.getArea(response, 'teritory')],
-            list_national: this.formBuilder.array(this.listLevelArea),
-            list_zone: this.formBuilder.array([]),
-            list_region: this.formBuilder.array([]),
-            list_area: this.formBuilder.array([]),
-            list_salespoint: this.formBuilder.array([]),
-            list_district: this.formBuilder.array([]),
-            list_territory: this.formBuilder.array([])
-          }));
+              wilayah.push(this.formBuilder.group({
+                national: [this.getAreaById(response, 'national'), Validators.required],
+                zone: [this.getAreaById(response, 'division')],
+                region: [this.getAreaById(response, 'region')],
+                area: [this.getAreaById(response, 'area')],
+                salespoint: [this.getAreaById(response, 'salespoint')],
+                district: [this.getAreaById(response, 'district')],
+                territory: [this.getAreaById(response, 'teritory')],
+                list_national: this.formBuilder.array(this.listLevelArea),
+                list_zone: this.formBuilder.array([]),
+                list_region: this.formBuilder.array([]),
+                list_area: this.formBuilder.array([]),
+                list_salespoint: this.formBuilder.array([]),
+                list_district: this.formBuilder.array([]),
+                list_territory: this.formBuilder.array([])
+              }));
 
-          if (this.detailVoucher.area_customer.length === (index + 1)) {
-            this.onLoad = false;
+              this.initArea(index);
+              await this.initFormGroup(response, index);
+
+              if (this.detailVoucher.area_customer.length === (index + 1)) {
+                this.onLoad = false;
+              }
+            });
+            } catch(ex) {
+              this.onLoad = false;
+            } 
           } else {
-            this.initArea(index);
-            this.initFormGroup(response, index);
+            this.onLoad = true;
+            try {
+            this.detailVoucher.area_customer.map(async(val, index) => {
+              const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+              const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+
+              wilayah.push(this.formBuilder.group({
+                national: [this.getAreaByName(response, 'national'), Validators.required],
+                zone: [this.getAreaByName(response, 'division')],
+                region: [this.getAreaByName(response, 'region')],
+                area: [this.getAreaByName(response, 'area')],
+                salespoint: [this.getAreaByName(response, 'salespoint')],
+                district: [this.getAreaByName(response, 'district')],
+                territory: [this.getAreaByName(response, 'teritory')],
+                list_national: this.formBuilder.array(this.listLevelArea),
+                list_zone: this.formBuilder.array([]),
+                list_region: this.formBuilder.array([]),
+                list_area: this.formBuilder.array([]),
+                list_salespoint: this.formBuilder.array([]),
+                list_district: this.formBuilder.array([]),
+                list_territory: this.formBuilder.array([])
+              }));
+
+              this.initArea(index);
+              await this.initFormGroup(response, index);
+
+              if (this.detailVoucher.area_customer.length === (index + 1)) {
+                this.onLoad = false;
+              }
+            });
+            } catch(ex) {
+              this.onLoad = false;
+            } 
           }
+        } else {
+          this.addArea();
+          this.onLoad = false;
         }
       } else {
         this.onLoad = false;
       }
+
       
     } else {
       setTimeout(() => {
@@ -1177,8 +1218,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
     }
   }
 
-  getArea(response, selection) {
+  getAreaByName(response, selection) {
     return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0]
+  }
+
+  getAreaById(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
   findDuplicate(array) {
@@ -1201,7 +1246,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
 
-  initFormGroup(response, index) {
+  async initFormGroup(response, index) {
     response.data.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
