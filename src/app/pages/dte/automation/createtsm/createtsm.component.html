@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'DTE Automation - Non TSM'">
+  <page-content-header [contentTitle]="'DTE Automation'">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <form autocomplete="off" [formGroup]="formAutomation">
         <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
-          <h2 class="">DTE Automation</h2>
+          <h2 class="">DTE Automation TSM</h2>
           <div fxFlex class="p-16 h3" style="margin-left: 80px;">
             <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
             <mat-checkbox [formControl]="exclude_gsm" style="margin-left: 50px;">Exclude Transaction GSM</mat-checkbox>
@@ -19,13 +19,6 @@
               <mat-select placeholder="Automation" formControlName="automation">
                 <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="text" [value]="detailAutomation.link_tantangan" placeholder="Link Misi" disabled
-                #linkMisi>
-              <mat-icon matSuffix (click)="copyMessage(detailAutomation.link_tantangan)" style="cursor: pointer;"
-                matTooltip="Salin Link Misi">content_copy
-              </mat-icon>
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
@@ -68,8 +61,8 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="Tanggal Berakhir"
-                formControlName="endDate" [max]="maxDateTradeProgram" [min]="minDateTradeProgram">
+              <input matInput (focus)="endDate.open()" [max]="maxDateTradeProgram" [min]="minDateTradeProgram"
+                [matDatepicker]="endDate" placeholder="Tanggal Berakhir" formControlName="endDate">
               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
               <mat-datepicker #endDate></mat-datepicker>
               <mat-error class="mt-8 px-24"
@@ -129,8 +122,8 @@
               class="mt-8 px-24" fxFlex="90%" fxLayout="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
               <div fxFlex="100%" [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <!-- <mat-form-field fxFlex="45%" class="is-light form-primary">
-                    <input matInput type="text" placeholder="Cari Produk yang ditargetkan">
-                  </mat-form-field> -->
+                  <input matInput type="text" placeholder="Cari Produk yang ditargetkan">
+                </mat-form-field> -->
                 <mat-form-field fxFlex="45%" class="is-light form-primary" #singleSelect>
                   <mat-select [formControl]="formAutomation.get('skus').at(i).get('formSku')"
                     placeholder="Cari Barcode SKU yang di targetkan">
@@ -149,7 +142,7 @@
                 <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
                 <div class="mt-24 mb-24" fxFlex="45%">
                   <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
-                    mat-raised-button type="button" [disabled]="isDetail">
+                    mat-raised-button type="button">
                     <mat-icon>add</mat-icon>
                     Tambah Produk
                   </button>
@@ -187,8 +180,24 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div *ngIf="!isDetail" class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px"
-            fxLayoutGap.lt-md="0px">
+          <div class="px-24" fxLayout="column">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Notifikasi Tambahan</strong>
+              </h3>
+            </div>
+            <mat-radio-group [formControl]="is_notif" (change)="changeValue()">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listNotification" [value]="item.value">
+                {{item.name}}&nbsp;&nbsp;
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-radio-group *ngIf="is_notif.value === 1" formControlName="notif">
+              <mat-radio-button class="radio-button pr-48" *ngFor="let item of listAddNotif" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="confirm mt-8 px-24 pt-24 pb-24" fxLayout="row" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
               [disabled]="submitting">
               SIMPAN
@@ -196,17 +205,6 @@
           </div>
         </div>
       </form>
-      <!-- <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
-          <mat-tab label="e-Order">
-            <app-eorder *ngIf="selectedTab === 0" [automationType]="'e-order'"></app-eorder>
-          </mat-tab>
-          <mat-tab label="Digital Coupon">
-            <app-eorder *ngIf="selectedTab === 1" [automationType]="'coupon'"></app-eorder>
-          </mat-tab>
-          <mat-tab label="Referral Code">
-            <app-eorder *ngIf="selectedTab === 2" [automationType]="'referral_code'"></app-eorder>
-          </mat-tab>
-        </mat-tab-group> -->
     </div>
   </div>
 </div>
