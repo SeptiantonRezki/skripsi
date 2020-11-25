@@ -51,6 +51,13 @@
             </mat-error>
           </mat-form-field>
         </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field fxFlex="50" class="is-light form-primary">
+            <mat-select placeholder="GSW" formControlName="gsw">
+              <mat-option *ngFor="let item of listGsw" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">
@@ -208,9 +215,6 @@
                 Territori harus diisi
               </mat-error>
             </mat-form-field>
-          </div>
-          <div fxLayout="row wrap">
-            <mat-slide-toggle class="mt-4 ml-4 mb-8" formControlName="gswName">GSW</mat-slide-toggle>
           </div>
           <div fxLayout="row" *ngIf="seeTokoCabang">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
