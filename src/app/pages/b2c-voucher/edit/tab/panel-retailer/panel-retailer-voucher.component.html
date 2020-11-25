@@ -52,8 +52,8 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex="31%"  class="is-light form-primary">
-          <mat-select placeholder="Territory" formControlName="territory" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+          <mat-select placeholder="Territory" formControlName="teritory" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['teritory'])">{{item.name === 'all' ? 'Semua
               Territory' :
               item.code}}</mat-option>
           </mat-select>
@@ -89,7 +89,7 @@
           <input matInput placeholder="District" formControlName="district" readonly>
         </mat-form-field>
         <mat-form-field fxFlex="31%"  class="is-light form-primary">
-          <input matInput placeholder="Territory" formControlName="territory" readonly>
+          <input matInput placeholder="Territory" formControlName="teritory" readonly>
         </mat-form-field>
       </div>
     </form>
