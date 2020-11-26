@@ -71,7 +71,7 @@ export class ListTipeMisiComponent implements OnInit {
 
    files = [];
    types = [];
-   kesulitan = [];
+   internal = [];
    kategori = [];
 
    openDialogTipeMisi() {

@@ -71,7 +71,7 @@ export class ListKategoriToolboxComponent implements OnInit {
 
   files = [];
   types = [];
-  kesulitan = [];
+  internal = [];
   kategori = [];
 
   openDialogToolbox() {

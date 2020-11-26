@@ -29,8 +29,9 @@ export class TemplateEditComponent {
   listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
   listKategoriToolbox: any[];
   listTipeMisi: any[];
-  listTingkatkesulitanMisi: any[];
+  listTingkatinternalMisi: any[];
   listKategoriMisi: any[];
+  listProjectMisi: any[];
   private _onDestroy = new Subject<void>();
   public filterLKT: FormControl = new FormControl();
   public filteredLKT: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -40,6 +41,8 @@ export class TemplateEditComponent {
   public filteredLTKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterLKM: FormControl = new FormControl();
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterProject: FormControl = new FormControl();
+  public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   listChoose: Array<any> = [
   ];
@@ -128,7 +131,7 @@ export class TemplateEditComponent {
       image: {}
     }
 
-    activatedRoute.url.subscribe(params => {
+    activatedRoute.url.subscribe( params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
@@ -139,8 +142,9 @@ export class TemplateEditComponent {
 
     this.getListKategoriToolbox();
     this.getListTipeMisi();
-    this.getListTingkatKesulitanMisi();
+    this.getListTingkatInternalMisi();
     this.getListKategoriMisi();
+    this.getListKategoriProject();
 
     this.listChoose = this.listChooseOriginal.slice();
     this.filterLKT.valueChanges
@@ -166,6 +170,9 @@ export class TemplateEditComponent {
       .subscribe(() => {
         this.filteringLKM();
       });
+    this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)). subscribe(() => {
+      this.filteringProject();
+    });
 
     this.keyUp.debounceTime(300)
       .flatMap(key => {
@@ -181,8 +188,9 @@ export class TemplateEditComponent {
       description: ["", Validators.required],
       kategori_toolbox: ["", Validators.required],
       tipe_misi: ["", Validators.required],
-      tingkat_kesulitan_misi: ["", Validators.required],
+      tingkat_internal_misi: ["", Validators.required],
       kategori_misi: ["", Validators.required],
+      project_misi: ["", Validators.required],
       image: [""],
       video: [""],
       material: false,
@@ -274,33 +282,63 @@ export class TemplateEditComponent {
   }
 
   filteringLTKM() {
-    if (!this.listTingkatkesulitanMisi) {
+    if (!this.listTingkatinternalMisi) {
       return;
     }
     // get the search keyword
     let search = this.filterLTKM.value;
     if (!search) {
-      this.filteredLTKM.next(this.listTingkatkesulitanMisi.slice());
+      this.filteredLTKM.next(this.listTingkatinternalMisi.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the banks
     this.filteredLTKM.next(
-      this.listTingkatkesulitanMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.listTingkatinternalMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
-  getListTingkatKesulitanMisi() {
-    this.pengaturanAttributeMisiService.getKesulitanMisi({ status: 'active' }).subscribe(
+  getListTingkatInternalMisi() {
+    this.pengaturanAttributeMisiService.getInternalMisi({ status: 'active' }).subscribe(
       (res) => {
-        // console.log("res Kesulitan Misi", res);
-        this.listTingkatkesulitanMisi = res.data.data;
-        this.filteredLTKM.next(this.listTingkatkesulitanMisi.slice());
-        // this.listTingkatkesulitanMisi = res.data;
+        this.listTingkatinternalMisi = res.data.data;
+        this.filteredLTKM.next(this.listTingkatinternalMisi.slice());
       },
       (err) => {
-        console.log("err List Kesulitan Misi", err);
+        console.log("err List Internal Misi", err);
+      }
+    );
+  }
+
+  filteringProject() {
+    if (!this.listProjectMisi) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterProject.value;
+    if (!search) {
+      this.filteredProject.next(this.listProjectMisi.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredProject.next(
+      this.listProjectMisi.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListKategoriProject() {
+    this.pengaturanAttributeMisiService.getProject({status: 'active'}).subscribe(
+      (res) => {
+        // console.log("res Kategori Misi", res);
+        this.listProjectMisi = res.data.data;
+        this.filteredProject.next(this.listProjectMisi.slice());
+        // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
       }
     );
   }
@@ -394,8 +432,9 @@ export class TemplateEditComponent {
 
     this.templateTaskForm.get('kategori_toolbox').setValue(this.detailTask.task_toolbox_id);
     this.templateTaskForm.get('tipe_misi').setValue(this.detailTask.task_toolbox_type_id);
-    this.templateTaskForm.get('tingkat_kesulitan_misi').setValue(this.detailTask.task_toolbox_level_id);
+    this.templateTaskForm.get('tingkat_internal_misi').setValue(this.detailTask.task_toolbox_internal_id);
     this.templateTaskForm.get('kategori_misi').setValue(this.detailTask.task_toolbox_categories_id);
+    this.templateTaskForm.get('project_misi').setValue(this.detailTask.task_toolbox_project_id);
     this.templateTaskForm.get('name').setValue(this.detailTask.name);
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
@@ -789,8 +828,9 @@ export class TemplateEditComponent {
         _method: 'PUT',
         task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
         task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
-        task_toolbox_level_id: this.templateTaskForm.get('tingkat_kesulitan_misi').value,
+        task_toolbox_internal_id: this.templateTaskForm.get('tingkat_internal_misi').value,
         task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
+        task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
         name: this.templateTaskForm.get('name').value,
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',

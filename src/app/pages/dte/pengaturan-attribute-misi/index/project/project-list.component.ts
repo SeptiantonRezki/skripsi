@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
-import { MatDialog, MatDialogRef, VERSION, MatDialogConfig } from "@angular/material";
-import { DialogKategoriMisiComponent } from "../dialog-kategori-misi/dialog-kategori-misi.component";
+import { MatDialog, MatDialogRef, VERSION } from "@angular/material";
+import { DialogTipeMisiComponent } from "../dialog-tipe-misi/dialog-tipe-misi.component";
 import { filter } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
@@ -14,17 +14,18 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
-import { DialogKategoriMisiEditComponent } from "../dialog-kategori-misi-edit/dialog-kategori-misi-edit.component";
+import {DialogProjectComponent} from './dialog-project.component';
+import {DialogEditProjectComponent} from './dialog-edit-project.component'
+
 
 @Component({
-  selector: 'app-list-kategori-misi',
-  templateUrl: './list-kategori-misi.component.html',
-  styleUrls: ['./list-kategori-misi.component.scss']
+  selector: "app-project-list",
+  templateUrl: "./project-list.component.html"
 })
-export class ListKategoriMisiComponent implements OnInit {
+export class ProjectListComponent implements OnInit {
+  dialogProjectDialogRef: MatDialogRef<DialogProjectComponent>;
+  dialogProjectMisiEditDialogRef: MatDialogRef<DialogEditProjectComponent>;
 
-  dialogKategoriMisiDialogRef: MatDialogRef<DialogKategoriMisiComponent>;
-  dialogKategoriMisiEditDialogRef: MatDialogRef<DialogKategoriMisiEditComponent>;
 
   rows: any[];
   selected: any[];
@@ -39,8 +40,6 @@ export class ListKategoriMisiComponent implements OnInit {
   offsetPagination: Number = null;
   keyUp = new Subject<string>();
 
-  @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
-  @ViewChild('table') table: DatatableComponent;
 
   permission: any;
   roles: PagesName = new PagesName();
@@ -68,52 +67,42 @@ export class ListKategoriMisiComponent implements OnInit {
         .subscribe(data => {
         this.updateFilter(data);
       });
-  }
+   }
 
-  files = [];
-  types = [];
-  internal = [];
-  kategori = [];
+   files = [];
+   types = [];
+   internal = [];
+   kategori = [];
 
-  openDialogKategoriMisi() {
-    this.dialogKategoriMisiDialogRef = this.Dialog.open(
-      DialogKategoriMisiComponent,
-      {
-        width: "300px",
-      }
-    );
+   openDialogProjectMisi() {
+    this.dialogProjectDialogRef = this.Dialog.open(DialogProjectComponent, {
+      width: "300px",
+    });
 
-    this.dialogKategoriMisiDialogRef
+    this.dialogProjectDialogRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
-        // this.kategori.push({ name });
-        this.getKategoriMisi();
+        // this.types.push({ name });
+        this.ngOnInit();
       });
   }
-
-  openDialogKategoriMisiEdit(id,name,status) {
-    console.log(id + ", " + name + ", " + status);
-
-    this.dialogKategoriMisiEditDialogRef = this.Dialog.open(DialogKategoriMisiEditComponent, {
+  openDialogProjectMisiEdit(id, name, status) {
+    this.dialogProjectMisiEditDialogRef = this.Dialog.open(DialogEditProjectComponent, {
       width: "300px",
       data: {id: id, name: name, status: status}
     });
 
-    this.dialogKategoriMisiEditDialogRef
+    this.dialogProjectMisiEditDialogRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
-        // this.files.push({ id });
-        this.getKategoriMisi();
+        // this.files.push({ name });
+        this.ngOnInit();
       });
   }
 
   ngOnInit() {
-    this.getKategoriMisi();
-  }
-
-  getKategoriMisi() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -124,7 +113,7 @@ export class ListKategoriMisiComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -138,6 +127,7 @@ export class ListKategoriMisiComponent implements OnInit {
       }
     );
   }
+
 
   onSelect({ selected }) {
     console.log(arguments);
@@ -156,7 +146,7 @@ export class ListKategoriMisiComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -168,7 +158,6 @@ export class ListKategoriMisiComponent implements OnInit {
       }
     );
   }
-
   onSort(event) {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
@@ -179,7 +168,7 @@ export class ListKategoriMisiComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -205,7 +194,7 @@ export class ListKategoriMisiComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -218,21 +207,21 @@ export class ListKategoriMisiComponent implements OnInit {
     );
   }
 
-  deleteKategoriMisi(id) {
+  deleteProjectMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Kategori Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Kategori Misi ini ?",
-      confirmCallback: this.confirmDelete.bind(this),
+      titleDialog: "Hapus Project Misi",
+      captionDialog: "Apakah anda yakin untuk menghapus Project Misi ini ?",
+      confirmCallback: this.confirmDeleteProjectMisi.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDelete() {
-    this.pengaturanAttributeMisiService.deleteKategoriMisi({ kategori_misi_id: this.id }).subscribe(res => {
+  confirmDeleteProjectMisi() {
+    this.pengaturanAttributeMisiService.deleteProjectMisi({ tipe_project_id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
-      this.getKategoriMisi();
+      this.ngOnInit();
 
       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
     });

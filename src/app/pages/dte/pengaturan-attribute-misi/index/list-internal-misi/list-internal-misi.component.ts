@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
 import { MatDialog, MatDialogRef, VERSION } from "@angular/material";
-import { DialogKesulitanMisiComponent } from "../dialog-kesulitan-misi/dialog-kesulitan-misi.component";
+import { DialogInternalMisiComponent } from "../dialog-internal-misi/dialog-internal-misi.component";
 import { filter } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
@@ -14,17 +14,17 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
-import { DialogKesulitanMisiEditComponent } from '../dialog-kesulitan-misi-edit/dialog-kesulitan-misi-edit.component'
+import { DialogInternalMisiEditComponent } from '../dialog-internal-misi-edit/dialog-internal-misi-edit.component';
 
 @Component({
-  selector: 'app-list-kesulitan-misi',
-  templateUrl: './list-kesulitan-misi.component.html',
-  styleUrls: ['./list-kesulitan-misi.component.scss']
+  selector: 'app-list-internal-misi',
+  templateUrl: './list-internal-misi.component.html',
+  styleUrls: ['./list-internal-misi.component.scss']
 })
-export class ListKesulitanMisiComponent implements OnInit {
+export class ListInternalMisiComponent implements OnInit {
 
-  dialogKesulitanMisiDialogRef: MatDialogRef<DialogKesulitanMisiComponent>;
-  dialogKesulitanMisiEditDialogRef: MatDialogRef<DialogKesulitanMisiEditComponent>;
+  dialogInternalMisiDialogRef: MatDialogRef<DialogInternalMisiComponent>;
+  dialogInternalMisiEditDialogRef: MatDialogRef<DialogInternalMisiEditComponent>;
 
   rows: any[];
   selected: any[];
@@ -72,47 +72,46 @@ export class ListKesulitanMisiComponent implements OnInit {
 
   files = [];
   types = [];
-  kesulitan = [];
+  internal = [];
   kategori = [];
 
-  openDialogKesulitanMisi() {
-    this.dialogKesulitanMisiDialogRef = this.Dialog.open(
-      DialogKesulitanMisiComponent,
+  openDialogInternalMisi() {
+    this.dialogInternalMisiDialogRef = this.Dialog.open(
+      DialogInternalMisiComponent,
       {
         width: "300px",
       }
     );
 
-    this.dialogKesulitanMisiDialogRef
+    this.dialogInternalMisiDialogRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
-        // this.kesulitan.push({ name });
-        this.getKesulitanMisi();
+        this.getInternalMisi();
       });
   }
 
-  openDialogKesulitanMisiEdit(id,name, status) {
+  openDialogInternalMisiEdit(id,name, status) {
     console.log(id + ", " + name);
-    this.dialogKesulitanMisiEditDialogRef = this.Dialog.open(DialogKesulitanMisiEditComponent, {
+    this.dialogInternalMisiEditDialogRef = this.Dialog.open(DialogInternalMisiEditComponent, {
       width: "300px",
-      data: {id: id, name: name, status:status}
+      data: {id: id, name: name, status: status}
     });
 
-    this.dialogKesulitanMisiEditDialogRef
+    this.dialogInternalMisiDialogRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
         // this.files.push({ name });
-        this.getKesulitanMisi();
+        this.getInternalMisi();
       });
   }
 
   ngOnInit() {
-    this.getKesulitanMisi();
+    this.getInternalMisi();
   }
 
-  getKesulitanMisi() {
+  getInternalMisi() {
 
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -124,7 +123,7 @@ export class ListKesulitanMisiComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -156,7 +155,7 @@ export class ListKesulitanMisiComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -179,7 +178,7 @@ export class ListKesulitanMisiComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -205,7 +204,7 @@ export class ListKesulitanMisiComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.pengaturanAttributeMisiService.getKesulitanMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -218,21 +217,21 @@ export class ListKesulitanMisiComponent implements OnInit {
     );
   }
 
-  deleteKesulitanMisi(id) {
+  deleteInternalMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Tingkat Keseulitan Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Kesulitan Misi ini ?",
-      confirmCallback: this.confirmDeleteKesulitanMisi.bind(this),
+      titleDialog: "Hapus Internal Kategori",
+      captionDialog: "Apakah anda yakin untuk menghapus Internal Kategori ini ?",
+      confirmCallback: this.confirmDeleteInternalnMisi.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDeleteKesulitanMisi() {
-    this.pengaturanAttributeMisiService.deleteKesulitanMisi({ kesulitan_misi_id: this.id }).subscribe(res => {
+  confirmDeleteInternalnMisi() {
+    this.pengaturanAttributeMisiService.deleteInternalMisi({ internal_misi_id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
-      this.getKesulitanMisi();
+      this.getInternalMisi();
 
       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
     });
