@@ -191,13 +191,7 @@ export class TemplateIndexComponent implements OnInit {
       }
     );
   }
-  reset() {
-    this.filterInternalMisi = null;
-    this.filterKategoryMisi = null;
-    this.filterKategoryToolbox = null;
-    this.filterProjectMisi = null;
-    this.filterTipeMisi = null;
-  }
+
   async getListTingkatInternalMisi() {
     this.pagination.per_page = 99999999;
     this.pagination.status = 'active';
