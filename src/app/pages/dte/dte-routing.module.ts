@@ -36,8 +36,7 @@ import { TaskSequencingDuplicateComponent } from "./task-sequencing/duplicate/ta
 import { MissionBuilderCreateComponent } from "./mission-builder/create/mission-builder-create.component";
 import { MissionBuilderEditComponent } from "./mission-builder/edit/mission-builder-edit.component";
 import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mission-builder-duplicate.component";
-import { CreatetsmComponent } from "./automation/createtsm/createtsm.component";
-import { EdittsmComponent } from "./automation/edittsm/edittsm.component";
+import { ProjectListComponent } from "./pengaturan-attribute-misi/index/project/project-list.component";
 
 const routes: Routes = [
   {
@@ -227,15 +226,6 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "automation/createtsm",
-    component: CreatetsmComponent,
-    data: {
-      breadcrumbs: brConfig.dte.automation.create_tsm
-    },
-    // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
-  },
-  {
     path: "automation/edit",
     component: AudienceTradeProgramEditComponent,
     data: {
@@ -243,16 +233,6 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
-  },
-  
-  {
-    path: "automation/edit_tsm",
-    component: EdittsmComponent,
-    data: {
-      breadcrumbs: brConfig.dte.automation.edit_tsm
-    },
-    // canDeactivate: [PendingChangesGuard],
-    // canActivate: [PageGuard]
   },
   {
     path: "automation/detail",

@@ -118,17 +118,17 @@
 
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="50" class="is-light form-primary">
-              <mat-select formControlName="tingkat_kesulitan_misi" placeholder="Pilih Tingkat Kesulitan Misi"
-                id="tingkat_kesulitan_misi" #singleSelect>
-                <ngx-mat-select-search [formControl]="filterLTKM" [placeholderLabel]="'Cari Tingkat Kesulitan Misi...'"
-                  [noEntriesFoundLabel]="'Tidak ada tingkat kesulitan misi yang ditemukan'"></ngx-mat-select-search>
+              <mat-select formControlName="tingkat_internal_misi" placeholder="Pilih Internal Kategori Misi"
+                id="tingkat_internal_misi" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterLTKM" [placeholderLabel]="'Cari Internal Kategori Misi...'"
+                  [noEntriesFoundLabel]="'Tidak ada Internal kategori misi yang ditemukan'"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredLTKM | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
-                *ngIf="templateTaskForm.controls['tingkat_kesulitan_misi'].hasError('required') && templateTaskForm.controls['tingkat_kesulitan_misi'].touched">
-                Pilih salah satu Tingkat Kesulitan Misi.
+                *ngIf="templateTaskForm.controls['tingkat_internal_misi'].hasError('required') && templateTaskForm.controls['tingkat_internal_misi'].touched">
+                Pilih salah satu Tingkat Internal Kategori.
               </mat-error>
             </mat-form-field>
           </div>
@@ -146,6 +146,23 @@
               <mat-error
                 *ngIf="templateTaskForm.controls['kategori_misi'].hasError('required') && templateTaskForm.controls['kategori_misi'].touched">
                 Pilih salah satu Kategori Misi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="project_misi" placeholder="Pilih Project Misi" id="project_misi"
+                #singleSelect>
+                <ngx-mat-select-search [formControl]="filterProject" [placeholderLabel]="'Cari Project Misi...'"
+                  [noEntriesFoundLabel]="'Tidak ada Project misi yang ditemukan'"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredProject | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="templateTaskForm.controls['project_misi'].hasError('required') && templateTaskForm.controls['project_misi'].touched">
+                Pilih salah satu Project Misi.
               </mat-error>
             </mat-form-field>
           </div>

@@ -38,6 +38,10 @@ export class PengaturanAttributeMisiService extends BaseService {
     const url = this.getUrl(this.namespace, 'get_tipe_misi');
     return this.getApi(url, queryParams);
   }
+  getProject(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_project');
+    return this.getApi(url, queryParams);
+  }
 
   createTipeMisi(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create_tipe_misi');
@@ -53,24 +57,36 @@ export class PengaturanAttributeMisiService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete_tipe_misi', context);
     return this.deleteApi(url);
   }
+  deleteProjectMisi(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_project_misi', context);
+    return this.deleteApi(url);
+  }
 
-  getKesulitanMisi(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'get_kesulitan_misi');
+  getInternalMisi(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_internal_misi');
     return this.getApi(url, queryParams);
   }
 
-  createKesulitanMisi(body): Observable<any> {
-    const url = this.getUrl(this.namespace, 'create_kesulitan_misi');
+  createInternalMisi(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_internal_misi');
+    return this.postApi(url, body);
+  }
+  createProjectMisi(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_project_misi');
     return this.postApi(url, body);
   }
 
-  putKesulitanMisi(body, context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'put_kesulitan_misi', context);
+  putInternalMisi(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_internal_misi', context);
+    return this.putApi(url, body);
+  }
+  putProjectMisi(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_project_misi', context);
     return this.putApi(url, body);
   }
 
-  deleteKesulitanMisi(context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'delete_kesulitan_misi', context);
+  deleteInternalMisi(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_internal_misi', context);
     return this.deleteApi(url);
   }
 
