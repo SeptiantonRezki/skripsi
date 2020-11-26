@@ -56,6 +56,7 @@ export class WholesalerEditComponent {
   seeRekening: boolean = true;
   seeTokoCabang: boolean = true;
   disableSubmit: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -69,7 +70,6 @@ export class WholesalerEditComponent {
     this.formdataErrors = {
       name: {},
       address: {},
-      gsw: {},
       code: {},
       owner: {},
       phone: {},
@@ -121,7 +121,7 @@ export class WholesalerEditComponent {
     this.getBanks();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
-    
+
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
