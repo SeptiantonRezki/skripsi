@@ -8,13 +8,14 @@ import { DataService } from 'app/services/data.service';
 import { TemplateTaskService } from '../../../../services/dte/template-task.service';
 import { Endpoint } from '../../../../classes/endpoint';
 import { PagesName } from 'app/classes/pages-name';
+import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 
 @Component({
   selector: 'app-template-index',
   templateUrl: './template-index.component.html',
   styleUrls: ['./template-index.component.scss']
 })
-export class TemplateIndexComponent {
+export class TemplateIndexComponent implements OnInit {
 
   rows: any[];
   selected: any[];
@@ -27,6 +28,12 @@ export class TemplateIndexComponent {
   onLoad: boolean;
   offsetPagination: any;
 
+  filterKategoryToolbox: any;
+  filterKategoryMisi: any;
+  filterTipeMisi: any;
+  filterInternalMisi: any;
+  filterProjectMisi: any;
+
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -38,11 +45,18 @@ export class TemplateIndexComponent {
   permission: any;
   roles: PagesName = new PagesName();
 
+  listKategoriToolbox: any[];
+  listTipeMisi: any[];
+  listTingkatinternalMisi: any[];
+  listKategoriMisi: any[];
+  listProjectMisi: any[];
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
     private templateTaskService: TemplateTaskService,
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -61,7 +75,14 @@ export class TemplateIndexComponent {
   }
 
   ngOnInit() {
+    this.getListKategoriMisi();
+    this.getListKategoriProject();
+    this.getListKategoriToolbox();
+    this.getListTingkatInternalMisi();
+    this.getListTipeMisi();
+    setTimeout(() => {
     this.getTemplateTask();
+    }, 800);
   }
 
   getTemplateTask() {
@@ -72,11 +93,13 @@ export class TemplateIndexComponent {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination.per_page = 15;
 
     this.offsetPagination = page ? (page - 1) : 0;
 
     this.templateTaskService.get(this.pagination).subscribe(
       res => {
+
         if (res.data.total < res.data.per_page && page !== 1) {
           this.dataService.setToStorage("page", 1);
           this.getTemplateTask();
@@ -94,6 +117,126 @@ export class TemplateIndexComponent {
       },
       err => {
         this.onLoad = false;
+      }
+    );
+  }
+
+  load() {
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+    this.pagination.per_page = 15;
+    this.pagination['toolbox'] = this.filterKategoryToolbox;
+    this.pagination['toolbox_type'] = this.filterTipeMisi;
+    this.pagination['toolbox_internal'] = this.filterInternalMisi;
+    this.pagination['toolbox_categories'] = this.filterKategoryMisi;
+    this.pagination['toolbox_project'] = this.filterProjectMisi;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+    this.templateTaskService.get(this.pagination).subscribe(
+      res => {
+        this.rows = [];
+        if (res.data.total < res.data.per_page && page !== 1) {
+          this.dataService.setToStorage("page", 1);
+          this.getTemplateTask();
+        } else {
+          Page.renderPagination(this.pagination, res.data);
+          this.rows = res.data ? res.data.data.map(item => {
+            return {
+              ...item,
+              image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
+            }
+          }) : [];
+          this.onLoad = false;
+          this.loadingIndicator = false;
+        }
+      },
+      err => {
+        this.onLoad = false;
+      }
+    );
+  }
+
+  async getListKategoriToolbox() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getToolbox(this.pagination).subscribe(
+      (res) => {
+        // console.log("res trade listKategoriToolbox", res);
+        this.listKategoriToolbox = res.data.data;
+        console.log('ini kategori', this.listKategoriToolbox);
+        // this.listKategoriToolbox = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Toolbox", err);
+      }
+    );
+  }
+
+  async getListTipeMisi() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getTipeMisi(this.pagination).subscribe(
+      (res) => {
+        // console.log("res trade List Tipe Misi", res);
+        this.listTipeMisi = res.data.data;
+        // this.listTipeMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Tipe Misi", err);
+      }
+    );
+  }
+  reset() {
+    this.filterInternalMisi = null;
+    this.filterKategoryMisi = null;
+    this.filterKategoryToolbox = null;
+    this.filterProjectMisi = null;
+    this.filterTipeMisi = null;
+  }
+  async getListTingkatInternalMisi() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
+      (res) => {
+        this.listTingkatinternalMisi = res.data.data;
+      },
+      (err) => {
+        console.log("err List Internal Misi", err);
+      }
+    );
+  }
+
+  async getListKategoriMisi() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
+      (res) => {
+        // console.log("res Kategori Misi", res);
+        this.listKategoriMisi = res.data.data;
+        // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
+      }
+    );
+  }
+
+  async getListKategoriProject() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
+      (res) => {
+        // console.log("res Kategori Misi", res);
+        this.listProjectMisi = res.data.data;
+        // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
       }
     );
   }

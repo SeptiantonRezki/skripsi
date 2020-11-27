@@ -18,12 +18,63 @@
           </mat-form-field>
         </div>
       </div>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Kategory Toolbox" [(ngModel)] = "filterKategoryToolbox" name = "Kategory"  [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriToolbox"> {{lsCat.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Tipe Misi" [(ngModel)] = "filterTipeMisi" name = "filterTipeMisi"  [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTipeMisi"> {{lsCat.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Internal Kategori" [(ngModel)] = "filterInternalMisi" name = "filterInternalMisi"  [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTingkatinternalMisi"> {{lsCat.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Kategory Misi" [(ngModel)] = "filterKategoryMisi" name = "filterKategoryMisi"  [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriMisi"> {{lsCat.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select placeholder="Project Misi" [(ngModel)] = "filterProjectMisi" name = "filterProjectMisi"  [ngModelOptions]="{standalone: true}">
+                <mat-option [value]="lsCat.id" *ngFor="let lsCat of listProjectMisi"> {{lsCat.name}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="confirm p-10" fxLayout="row" fxLayoutGap="20px">
+            <button
+              mat-raised-button
+              type="button"
+              class="publish-button"
+              (click)="reset()"
+              style="width: 170px"
+              style="height: 50px"
+            >
+              Reset
+            </button>
+            <button
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="load()"
+              style="width: 170px"
+              style="height: 50px"
+            >
+              Load Data
+            </button>
+          </div>
+      </div>
+
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
         [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+        <ngx-datatable-column [width]="50" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
@@ -43,12 +94,17 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="Nama" [width]="200" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="500" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Deskripsi" headerClass="textright" prop="description"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Kategory Toolbox" headerClass="textright" prop="task_toolbox_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Tipe Misi" headerClass="textright" prop="task_toolbox_type_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Internal Kategori" headerClass="textright" prop="task_toolbox_internal_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Kategori Misi" headerClass="textright" prop="task_toolbox_categories_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="100" name="Project Misi" headerClass="textright" prop ="task_toolbox_project_name"></ngx-datatable-column>
         <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
