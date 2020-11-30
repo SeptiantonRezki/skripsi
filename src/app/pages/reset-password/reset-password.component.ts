@@ -75,10 +75,6 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.status && this.status === 'not-registered') {
-      this.dataService.setToStorage('bodyLogin', { username: this.email });
-      this.router.navigate(['device/authentication']);
-    }
     this.forgotPasswordForm = this.formBuilder.group({
       password: ["", Validators.required],
       password_confirmation: ["", Validators.required]
