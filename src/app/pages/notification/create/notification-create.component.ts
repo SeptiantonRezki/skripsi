@@ -1328,7 +1328,7 @@ export class NotificationCreateComponent {
       body['transfer_token'] = this.formNotification.get('transfer_token').value;
     } else if (body.content_type === 'image') {
       if (this.imageContentTypeBase64) {
-        body['image_value'] = this.imageContentTypeBase64;
+        body['image_value'] = [this.imageContentTypeBase64];
       } else {
         if (this.multipleImageContentType.length > 0) {
           this.dataService.showLoading(true);
