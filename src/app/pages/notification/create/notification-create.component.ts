@@ -51,7 +51,7 @@ export class NotificationCreateComponent {
   ];
 
   dialogRef: any;
-  typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
+  typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
   indexDelete: any;
 

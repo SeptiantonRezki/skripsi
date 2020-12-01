@@ -282,7 +282,7 @@
             </div>
           </div>
 
-          <div [formGroup]="formRecurrenceCommon" *ngIf="recurrenceType == 'Recurring'">
+          <div class="pt-16" [formGroup]="formRecurrenceCommon" *ngIf="recurrenceType == 'Recurring'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light mr-8">
                 <input matInput type="number" formControlName="recurrence_every" placeholder="Dikirim setiap">
