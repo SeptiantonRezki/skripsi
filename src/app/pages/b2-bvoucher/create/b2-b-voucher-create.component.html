@@ -166,6 +166,7 @@
                   <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
                 </mat-form-field>
 
+                <!-- fitur multiple category -->
                 <mat-form-field fxFlex="50">
                   <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
                     [disabled]="!formDetilVoucher.get('limit_by_category').value" multiple>
