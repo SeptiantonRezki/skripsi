@@ -11,11 +11,12 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-audience-trade-program',
-  templateUrl: './audience-trade-program.component.html',
-  styleUrls: ['./audience-trade-program.component.scss']
+  selector: 'app-createtsm',
+  templateUrl: './createtsm.component.html',
+  styleUrls: ['./createtsm.component.scss']
 })
-export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
+export class CreatetsmComponent implements OnInit {
+
   selectedTab: any;
   submitting: Boolean;
   formAutomation: FormGroup;
@@ -67,11 +68,11 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private router: Router
   ) {
-    // const selectedTab = dataService.getFromStorage("selected_tab");
     this.selectedTab = 0;
-  }
+   }
 
   ngOnInit() {
+    
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
       jenis_tantangan: ['default'],
@@ -105,17 +106,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         this._filterTradeProgram();
       });
 
-    // this.formAutomation
-    //   .get("coin_max")
-    //   .valueChanges
-    //   .pipe(
-    //     debounceTime(300)
-    //   )
-    //   .subscribe(data => {
-    //     console.log('data', data);
-    //     let coinMax = this.formAutomation.get("coin_reward").value;
-    //     this.checkCoinReward(data, coinMax);
-    //   });
 
     this.formAutomation
       .get("coin_reward")
@@ -146,29 +136,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       ).subscribe(res => {
         this.filteredSku.next(res.data);
       });
-
-    // this.formAutomation.get('skus')
-    //   .valueChanges
-    //   .pipe(
-    //     debounceTime(300),
-    //     tap(() => this.searching = true),
-    //     switchMap(value => {
-    //       console.log('val', value);
-    //       if (value.formSku == null || value.formSku == "") {
-    //         this.searching = false;
-    //         return [];
-    //       }
-    //       console.log('after', value);
-    //       return this.audienceTradeProgramService.getListSku({ search: value.formSku })
-    //         .pipe(
-    //           finalize(() => this.searching = false)
-    //         )
-    //     })
-    //   ).subscribe(res => {
-    //     this.filteredSku.next(res.data);
-    //   });
   }
-
   changeValue() {
     if (this.is_notif.value === 0) {
       this.formAutomation.get('notif').disable();
@@ -270,8 +238,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         title: this.formAutomation.get("title_challenge").value,
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
+        classification: '1',
         is_shareable: this.shareable.value ? 1 : 0,
-        classification: '0',
         is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
         notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0,
         jenis_tantangan: this.formAutomation.get('jenis_tantangan').value,
@@ -341,7 +309,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
 
   onSelectingTradeProgram(event) {
     this.tradeSelected = this.tradePrograms.find((value: any) => value.id === event.value);
-    console.log(this.tradeSelected);
     if (this.tradeSelected) {
       this.maxDateTradeProgram = this.tradeSelected.end_date;
       this.minDateTradeProgram = this.tradeSelected.start_date;
@@ -355,5 +322,4 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
 
     return "";
   }
-
 }

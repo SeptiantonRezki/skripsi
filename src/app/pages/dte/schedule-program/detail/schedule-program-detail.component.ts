@@ -335,7 +335,7 @@ export class ScheduleProgramDetailComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'adjustment-coin-dialog';
-    dialogConfig.data = this.dataScheduler;;
+    dialogConfig.data = this.dataScheduler;
 
     this.dialogRef = this.dialog.open(ImportCoinComponent, dialogConfig);
 

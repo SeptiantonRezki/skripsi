@@ -45,6 +45,17 @@
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listProjectMisi"> {{lsCat.name}} </mat-option>
               </mat-select>
             </mat-form-field>
+            <div class="confirm p-10" fxLayout="row" fxLayoutGap="20px">
+            <button
+              mat-raised-button
+              type="button"
+              class="publish-button"
+              (click)="reset()"
+              style="width: 170px"
+              style="height: 50px"
+            >
+              Reset
+            </button>
             <button
               mat-raised-button
               type="button"
@@ -55,6 +66,7 @@
             >
               Load Data
             </button>
+          </div>
       </div>
 
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
