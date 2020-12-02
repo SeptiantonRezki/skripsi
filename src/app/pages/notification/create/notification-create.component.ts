@@ -73,14 +73,14 @@ export class NotificationCreateComponent {
 
   audienceSelected: any[] = [];
 
-  listRecurrenceType: Object[] = [
+  listTypeOfRecurrence: Object[] = [
     { id: 'OneTime', name: 'Aktivasi notifikasi sekali kirim' },
     { id: 'Recurring', name: 'Aktivasi notifikasi berulang' },
     { id: 'Bday', name: 'Aktivasi notifikasi ulang tahun' },
     { id: 'Bday18', name: 'Aktivasi notifikasi ulang tahun ke-18' }
   ];
 
-  listRecurrencePatterns: Object[] = [
+  listRecurrenceTypes: Object[] = [
     { id: 'Daily', name: 'Harian'},
     { id: 'Weekly', name: 'Mingguan'},
     { id: 'Monthly', name: 'Bulanan'},
@@ -145,20 +145,20 @@ export class NotificationCreateComponent {
   actionType: string = 'create';
   idNotif: any = '';
 
+  _typeOfRecurrence: string;
   _recurrenceType: string;
-  _recurrencePattern: string;
 
-  @Input() get recurrenceType(): string {
-    return this._recurrenceType
+  @Input() get typeOfRecurrence(): string {
+    return this._typeOfRecurrence
   }
 
-  set recurrenceType(val: string) {
-    this._recurrenceType = val;
-    if(this._recurrenceType !== 'Recurring') {
-      this.recurrencePattern = '';
+  set typeOfRecurrence(val: string) {
+    this._typeOfRecurrence = val;
+    if(this._typeOfRecurrence !== 'Recurring') {
+      this.recurrenceType = '';
     }
 
-    if(this._recurrenceType !== 'OneTime') {
+    if(this._typeOfRecurrence !== 'OneTime') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
     } else {
@@ -166,12 +166,12 @@ export class NotificationCreateComponent {
     }
   }
 
-  @Input() get recurrencePattern(): string {
-    return this._recurrencePattern
+  @Input() get recurrenceType(): string {
+    return this._recurrenceType
   }
 
-  set recurrencePattern(val: string) {
-    this._recurrencePattern = val;
+  set recurrenceType(val: string) {
+    this._recurrenceType = val;
   }
 
   constructor(
@@ -239,8 +239,8 @@ export class NotificationCreateComponent {
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
       transfer_token: ["yes", Validators.required],
-      recurrence_type: ["OneTime", Validators.required],
-      recurrence_pattern: [""],
+      type_of_recurrence: ["OneTime", Validators.required],
+      recurrence_type: [""],
       status: ["Active"]
     });
 
@@ -280,7 +280,7 @@ export class NotificationCreateComponent {
     })
 
     this.formRecurrenceCommon = this.formBuilder.group({
-      recurrence_every: [1, Validators.required],
+      recurrence_pattern: [1, Validators.required],
       recurrence_start_date: ["", Validators.required],
       end_option: ["no_end_date"],
       recurrence_end_date: [""],
@@ -289,7 +289,7 @@ export class NotificationCreateComponent {
 
     this.listDates = Array.from({length: 31}, (_, i) => i + 1)
 
-    this.recurrenceType = 'OneTime';
+    this.typeOfRecurrence = 'OneTime';
 
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'retailer' || res === 'tsm') {
@@ -359,7 +359,7 @@ export class NotificationCreateComponent {
     }
 
     if(this.formNotification.controls.user_group.value !== 'customer') {
-      this.formNotification.controls.recurrence_type.disable();
+      this.formNotification.controls.type_of_recurrence.disable();
     }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -1157,10 +1157,10 @@ export class NotificationCreateComponent {
     }
 
     if(e.source.value != 'customer') {
-      this.recurrenceType = 'OneTime';
-      this.formNotification.controls.recurrence_type.disable();
+      this.typeOfRecurrence = 'OneTime';
+      this.formNotification.controls.type_of_recurrence.disable();
     } else {
-      this.formNotification.controls.recurrence_type.enable();
+      this.formNotification.controls.type_of_recurrence.enable();
     }
     console.log(this.formNotification.value.user_group);
   }
@@ -1172,12 +1172,12 @@ export class NotificationCreateComponent {
       return;
     }
 
-    if(this.recurrenceType === 'Recurring' && !this.recurrencePattern) {
+    if(this.typeOfRecurrence === 'Recurring' && !this.recurrenceType) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       return;
     }
 
-    if(this.recurrencePattern == 'Daily' && !this.formDailyRecurrence.valid) {
+    if(this.recurrenceType == 'Daily' && !this.formDailyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formDailyRecurrence);
       return;
@@ -1185,7 +1185,7 @@ export class NotificationCreateComponent {
     
     let selectedWeekDays = []
 
-    if(this.recurrencePattern == 'Weekly') {
+    if(this.recurrenceType == 'Weekly') {
       if(!this.formWeeklyRecurrence.valid) {
         this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
         commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
@@ -1203,19 +1203,19 @@ export class NotificationCreateComponent {
       }
     }
 
-    if(this.recurrencePattern == 'Monthly' && !this.formMonthlyRecurrence.valid) {
+    if(this.recurrenceType == 'Monthly' && !this.formMonthlyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
       return;
     }
 
-    if(this.recurrencePattern == 'Yearly' && !this.formYearlyRecurrence.valid) {
+    if(this.recurrenceType == 'Yearly' && !this.formYearlyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formYearlyRecurrence);
       return;
     }
 
-    if(this.recurrenceType == 'Recurring' && !this.formRecurrenceCommon.valid) {
+    if(this.typeOfRecurrence == 'Recurring' && !this.formRecurrenceCommon.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formRecurrenceCommon);
       return;
@@ -1223,7 +1223,7 @@ export class NotificationCreateComponent {
     let startDate
     let endDate
 
-    if(this.recurrenceType == 'Recurring') {
+    if(this.typeOfRecurrence == 'Recurring') {
       let startDateStr = this.formRecurrenceCommon.controls.recurrence_start_date.value
       startDate = moment(startDateStr)
 
@@ -1273,22 +1273,22 @@ export class NotificationCreateComponent {
       type: this.formNotification.get("user_group").value,
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
-      recurrence_type: this.recurrenceType,
+      type_of_recurrence: this.typeOfRecurrence,
       status: this.formNotification.get('status').value
     };
 
     //only allow edit for customer type, non one-time recurrence, else create new notification instead
-    if(body.type === 'customer' && body.recurrence_type !== 'OneTime' && this.idNotif) {
+    if(body.type === 'customer' && body.type_of_recurrence !== 'OneTime' && this.idNotif) {
       body.id = this.idNotif
     }
 
     let recurrenceBody: { [key: string]: any; };
 
-    if(this.recurrenceType == 'Recurring') {
+    if(this.typeOfRecurrence == 'Recurring') {
       recurrenceBody = {
-        recurrence_pattern: this.recurrencePattern
+        recurrence_type: this.recurrenceType
       }
-      switch(this.recurrencePattern) {
+      switch(this.recurrenceType) {
         case 'Daily':
           recurrenceBody.recurrence_time = this.formDailyRecurrence.get('recurrence_time').value
           break;
@@ -1307,7 +1307,7 @@ export class NotificationCreateComponent {
           break;
       }
 
-      recurrenceBody.recurrence_every = "" + this.formRecurrenceCommon.get('recurrence_every').value
+      recurrenceBody.recurrence_pattern = "" + this.formRecurrenceCommon.get('recurrence_pattern').value
       recurrenceBody.recurrence_start_date = startDate.format('YYYY-MM-DD')
       let end_option = this.formRecurrenceCommon.get('end_option').value
       if(end_option == 'end_date') {
@@ -1361,8 +1361,8 @@ export class NotificationCreateComponent {
                 bodyVideo.delete('target_audience');
               }
             }
-            bodyVideo.append('recurrence_type', body.recurrence_type);
-            if(this.recurrenceType == 'Recurring') {
+            bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
+            if(this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
                 let [key, val] = entry
                 bodyVideo.append(key, val);
@@ -1407,7 +1407,7 @@ export class NotificationCreateComponent {
             }
           }
 
-          if(this.recurrenceType == 'Recurring') {
+          if(this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
               let [key, val] = entry
               bodyVideo.append(key, val);
@@ -2111,7 +2111,7 @@ export class NotificationCreateComponent {
   async getDetails() {
     try {
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, content_type, type, recurrence_type, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       console.log({ audience });
 
       const frm = this.formNotification;
@@ -2127,12 +2127,12 @@ export class NotificationCreateComponent {
       frm.controls['url_iframe'].setValue('');
       frm.controls['status'].setValue(status);
 
-      if(recurrence_type == 'Recurring' && recurrence) {
-        this.formNotification.controls.recurrence_type.enable();
-        this.recurrenceType = 'Recurring'
-        this.recurrencePattern = recurrence.recurrence_pattern
+      if(type_of_recurrence == 'Recurring' && recurrence) {
+        this.formNotification.controls.type_of_recurrence.enable();
+        this.typeOfRecurrence = 'Recurring'
+        this.recurrenceType = recurrence.recurrence_type
 
-        switch(recurrence.recurrence_pattern) {
+        switch(recurrence.recurrence_type) {
           case 'Daily':
             this.formDailyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
@@ -2155,7 +2155,7 @@ export class NotificationCreateComponent {
             break;
         }
         const frmCommon = this.formRecurrenceCommon;
-        frmCommon.controls['recurrence_every'].setValue(recurrence.recurrence_every);
+        frmCommon.controls['recurrence_pattern'].setValue(recurrence.recurrence_pattern);
         frmCommon.controls['recurrence_start_date'].setValue(recurrence.start_date);
         if(recurrence.end_date) {
           frmCommon.controls['end_option'].setValue('end_date');
@@ -2166,7 +2166,7 @@ export class NotificationCreateComponent {
           frmCommon.controls['end_recurrence_count'].setValue(recurrence.end_recurrence_count);
         }
       } else {
-        this.recurrenceType = recurrence_type
+        this.typeOfRecurrence = type_of_recurrence
       }
 
       if(type != 'customer' || target_audience) {

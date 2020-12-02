@@ -191,22 +191,22 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Tipe Pengulangan" formControlName="recurrence_type" [(ngModel)]="recurrenceType">
-                <mat-option *ngFor="let item of listRecurrenceType" [value]="item.id">{{item.name}}</mat-option>
+              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence" [(ngModel)]="typeOfRecurrence">
+                <mat-option *ngFor="let item of listTypeOfRecurrence" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" *ngIf="recurrenceType == 'Recurring'">
+          <div fxLayout="row" *ngIf="typeOfRecurrence == 'Recurring'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_pattern"
-                [(ngModel)]="recurrencePattern">
-                <mat-option *ngFor="let item of listRecurrencePatterns" [value]="item.id">{{item.name}}</mat-option>
+              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_type"
+                [(ngModel)]="recurrenceType">
+                <mat-option *ngFor="let item of listRecurrenceTypes" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div [formGroup]="formDailyRecurrence" *ngIf="recurrencePattern == 'Daily'">
+          <div [formGroup]="formDailyRecurrence" *ngIf="recurrenceType == 'Daily'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
                 <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
@@ -219,7 +219,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrencePattern == 'Weekly'">
+          <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrenceType == 'Weekly'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
                 <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
@@ -238,7 +238,7 @@
               </ng-container>
             </div>
           </div>
-          <div [formGroup]="formMonthlyRecurrence" *ngIf="recurrencePattern == 'Monthly'">
+          <div [formGroup]="formMonthlyRecurrence" *ngIf="recurrenceType == 'Monthly'">
             <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
               fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="40" class="is-light form-primary">
@@ -257,7 +257,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div [formGroup]="formYearlyRecurrence" *ngIf="recurrencePattern == 'Yearly'">
+          <div [formGroup]="formYearlyRecurrence" *ngIf="recurrenceType == 'Yearly'">
             <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
               fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="28" class="is-light form-primary">
@@ -282,15 +282,15 @@
             </div>
           </div>
 
-          <div class="pt-16" [formGroup]="formRecurrenceCommon" *ngIf="recurrenceType == 'Recurring'">
+          <div class="pt-16" [formGroup]="formRecurrenceCommon" *ngIf="typeOfRecurrence == 'Recurring'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light mr-8">
-                <input matInput type="number" formControlName="recurrence_every" placeholder="Dikirim setiap">
+                <input matInput type="number" formControlName="recurrence_pattern" placeholder="Dikirim setiap">
                 <mat-error
-                  *ngIf="formRecurrenceCommon.controls['recurrence_every'].hasError('required') && formRecurrenceCommon.controls['recurrence_every'].touched">
+                  *ngIf="formRecurrenceCommon.controls['recurrence_pattern'].hasError('required') && formRecurrenceCommon.controls['recurrence_pattern'].touched">
                   Interval pengulangan harus diisi
                 </mat-error>
-                <span matSuffix>{{ recurrenceLabel[recurrencePattern] }}</span>
+                <span matSuffix>{{ recurrenceLabel[recurrenceType] }}</span>
               </mat-form-field>
             </div>
             <div class="pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center">
