@@ -201,7 +201,7 @@
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_pattern"
                 [(ngModel)]="recurrencePattern">
-                <mat-option *ngFor="let item of listRecurrencePatterns" [value]="item">{{item}}</mat-option>
+                <mat-option *ngFor="let item of listRecurrencePatterns" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -234,7 +234,7 @@
             <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
               fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
               <ng-container *ngFor="let item of listWeekDays" formArrayName="recurrence_day">
-                <mat-checkbox [formControlName]="item" [value]="item"></mat-checkbox> {{item}} &nbsp;
+                <mat-checkbox [formControlName]="item.id" [value]="item.id"></mat-checkbox> {{item.name}} &nbsp;
               </ng-container>
             </div>
           </div>
