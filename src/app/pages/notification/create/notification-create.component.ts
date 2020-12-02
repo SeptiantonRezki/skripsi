@@ -80,8 +80,11 @@ export class NotificationCreateComponent {
     { id: 'Bday18', name: 'Aktivasi notifikasi ulang tahun ke-18' }
   ];
 
-  listRecurrencePatterns: string[] = [
-    'Daily','Weekly','Monthly','Yearly'
+  listRecurrencePatterns: Object[] = [
+    { id: 'Daily', name: 'Harian'},
+    { id: 'Weekly', name: 'Mingguan'},
+    { id: 'Monthly', name: 'Bulanan'},
+    { id: 'Yearly', name: 'Tahunan'}
   ];
 
   recurrenceLabel: Object = {
@@ -91,8 +94,14 @@ export class NotificationCreateComponent {
     Yearly: 'tahun'
   }
 
-  listWeekDays: string[] = [
-    'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+  listWeekDays: any[] = [
+    { id: 'Monday', name: 'Senin' },
+    { id: 'Tuesday', name: 'Selasa' },
+    { id: 'Wednesday', name: 'Rabu' },
+    { id: 'Thursday', name: 'Kamis' },
+    { id: 'Friday', name: 'Jumat' },
+    { id: 'Saturday', name: 'Sabtu' },
+    { id: 'Sunday', name: 'Minggu' }
   ]
 
   listMonths: Object[] = [
@@ -256,7 +265,7 @@ export class NotificationCreateComponent {
 
     let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
     this.listWeekDays.forEach(day => {
-      recurrenceDaysControls.addControl(day, new FormControl(false))
+      recurrenceDaysControls.addControl(day.id, new FormControl(false))
     })
 
     this.formMonthlyRecurrence = this.formBuilder.group({
