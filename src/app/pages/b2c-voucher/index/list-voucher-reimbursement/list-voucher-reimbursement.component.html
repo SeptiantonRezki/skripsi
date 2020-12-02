@@ -95,6 +95,12 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Nama Voucher B2C" prop="voucher_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit">{{row.voucher_name}} </a>
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Retailer Code" prop="code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit">{{row.code}} </a>
@@ -123,7 +129,13 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.type_name}}
           </ng-template>
-        </ngx-datatable-column>s
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Voucher B2B" prop="business_voucher_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a>{{row.business_voucher_name}} </a>
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Nominal Penukaran" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
