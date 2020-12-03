@@ -607,10 +607,10 @@ export class Endpoint {
         get_popup: `${AYO_API}/api/principal/sequencing/list/pop-up-notification`,
         get_push: `${AYO_API}/api/principal/sequencing/list/notification`,
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
-        download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/download`,
-        preview_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/preview`,
-        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/import`,
-        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`
+        download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/download`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/preview`,
+        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/retailer`
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
@@ -696,12 +696,12 @@ export class Endpoint {
         deleteVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}`,
         getListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list`,
         exportListReimbursement: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/list/export`,
-        
+
         //Panel
         getSelectedRetailerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/retailer`,
         getSelectedCustomerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/customer`,
         updatePanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}`,
-        
+
         //Pertukaran Voucher
         getNominal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/nominal`,
         updatePenukaranVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/${context.voucher_id}`,
