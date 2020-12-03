@@ -608,7 +608,7 @@ export class Endpoint {
         get_push: `${AYO_API}/api/principal/sequencing/list/notification`,
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
         download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/download`,
-        preview_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/preview`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
         import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
         adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/retailer`
       },
