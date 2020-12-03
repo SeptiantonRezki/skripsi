@@ -47,6 +47,14 @@
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
                 </button>
+                <mat-error
+                  *ngIf="formPaguyuban.controls['password'].hasError('required') && formPaguyuban.controls['password'].touched">
+                  Kata sandi harus diisi.
+                </mat-error>
+                <mat-error *ngIf="formPaguyuban.controls['password'].hasError('notValid')">
+                  Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
+                  & 1 angka
+                </mat-error>
               </mat-form-field>
             </div>
             <div fxLayout="row">

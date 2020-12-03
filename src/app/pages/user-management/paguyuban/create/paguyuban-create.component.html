@@ -61,9 +61,11 @@
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi">
+                  placeholder="Konfirmasi kata sandi"
+                  [errorStateMatcher]="passwordMatcher">
                 <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi">
+                  placeholder="Konfirmasi kata sandi"
+                  [errorStateMatcher]="passwordMatcher">
                 <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
                   (click)="showConfirmPassword = !showConfirmPassword">
                   <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
@@ -73,8 +75,11 @@
                   *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
                   Konfirmasi kata sandi harus diisi.
                 </mat-error>
-                <mat-error
+                <!-- <mat-error
                   *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
+                  Konfirmasi kata sandi tidak sesuai.
+                </mat-error> -->
+                <mat-error *ngIf="verticalStepperStep1.hasError('notMatch') && changePassword.controls['password_confirmation'].touched">
                   Konfirmasi kata sandi tidak sesuai.
                 </mat-error>
               </mat-form-field>
