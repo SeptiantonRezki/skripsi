@@ -738,10 +738,8 @@ export class PanelRetailerVoucherComponent implements OnInit {
         return "salespoint"
       case 'salespoint':
         return "district";
-      case 'teritory':
-          return "teritory";
       default:
-        return "territory";
+        return "teritory";
     }
   }
 
