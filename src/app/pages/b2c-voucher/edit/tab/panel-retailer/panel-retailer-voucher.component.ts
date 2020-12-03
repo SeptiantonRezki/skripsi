@@ -703,7 +703,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   checkAreaLocation(area, lastSelfArea) {
     const lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'teritory'];
-    const areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
+    const areaAfterEndLevel = this.getNextLevel(lastLevelFromLogin);
     const indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     const indexAreaSelected = areaList.indexOf(area.key);
     const rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
@@ -721,6 +721,28 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
   filteringGeotree(areaList) {
     return areaList;
+  }
+
+  getNextLevel(level) {
+    switch (level) {
+      case 'national':
+        return "division";
+      case 'zone':
+      case 'division':
+        return "region";
+      case 'zone':
+        return "region";
+      case 'region':
+        return "area";
+      case 'area':
+        return "salespoint"
+      case 'salespoint':
+        return "district";
+      case 'teritory':
+          return "teritory";
+      default:
+        return "territory";
+    }
   }
 
 
@@ -764,12 +786,12 @@ export class PanelRetailerVoucherComponent implements OnInit {
             level
           ];
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) {
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+            this.getAudienceAreaV2(this.getNextLevel(this.parseArea(level.type)), level.id);
           }
 
           if (i === area.length - 1) {
             this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+            this.getAudienceAreaV2(this.getNextLevel(this.parseArea(level.type)), level.id);
           }
         }
       });
