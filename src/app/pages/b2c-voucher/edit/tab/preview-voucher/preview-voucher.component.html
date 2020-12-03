@@ -47,6 +47,7 @@
               <li *ngIf="detailVoucher?.limit_by === 'category'">Hanya dapat digunakan untuk pembelian kategori produk {{dataLimitMap()}}</li>
               <li>Hanya dapat digunakan di Toko SRC bertanda khusus</li>
               <li>Masa berlaku voucher ini hingga {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}}</li>
+              <li *ngIf="detailVoucher?.limit_purchase !== null && detailVoucher?.limit_purchase > 0">Minimum pembelian {{detailVoucher?.limit_purchase | rupiahFormater}}</li>
             </ul>
           </div>
         </div>
