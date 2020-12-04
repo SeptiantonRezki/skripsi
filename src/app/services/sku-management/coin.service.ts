@@ -15,6 +15,10 @@ export class CoinService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getRetailerTsm(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "retailertms");
+    return this.getApi(url, queryParams);
+  }
   getProgram(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "program");
     return this.getApi(url, queryParams);
@@ -40,6 +44,11 @@ export class CoinService extends BaseService {
     return this.postApi(url, body);
   }
 
+  flushtsm(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "flush_tsm");
+    return this.postApi(url, body);
+  }
+
   detailProgram(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail_program", context);
     return this.getApi(url, queryParams);
@@ -59,7 +68,7 @@ export class CoinService extends BaseService {
     const url = this.getUrl(this.namespace, "export");
     return this.getBlobAsJsonApi(url, queryParams);
   }
-
+  
   previewImport(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'import');
     return this.postApi(url, body);
