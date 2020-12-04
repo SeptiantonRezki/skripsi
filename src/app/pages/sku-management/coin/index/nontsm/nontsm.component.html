@@ -1,0 +1,16 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+
+  <div class="content p-24">
+    
+    <mat-form-field fxFlex="30%" class="is-light form-primary">
+      <mat-select placeholder="Pilih Kategori Coin" [(ngModel)]="category" (ngModelChange)="changeCategory()">
+        <mat-option [value]="0">Retailer</mat-option>
+        <mat-option [value]="1">Trade Proggram</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <data-retailer *ngIf="retailer"></data-retailer>
+      <data-trade-program *ngIf="trade"></data-trade-program>
+    </div>
+  </div>
+</div>

@@ -16,25 +16,25 @@ import { MatTabChangeEvent } from '@angular/material';
 export class CoinIndexComponent {
 
   selectedTab: any;
+  tsm: any;
+  nontsm:any;
 
   constructor(
-    private dataService: DataService
-  ) { 
-    const selectedTab = dataService.getFromStorage("selected_tab");
-    this.selectedTab = selectedTab ? selectedTab : 0;
-  }
+  ) {
+   }
 
   ngOnInit() {
-
+    this.nontsm = true;
   }
-
   setSelectedTab(tabChangeEvent: MatTabChangeEvent) {
-    window.localStorage.removeItem("page");
-    window.localStorage.removeItem("sort");
-    window.localStorage.removeItem("sort_type");
-    
-    this.selectedTab = tabChangeEvent.index;
-    this.dataService.setToStorage("selected_tab", this.selectedTab);
+    console.log(tabChangeEvent.index);
+    if (tabChangeEvent.index === 0) {
+      this.nontsm = true;
+      this.tsm = false;
+    } else {
+      this.nontsm = false;
+      this.tsm = true;
+    }
   }
 
 }

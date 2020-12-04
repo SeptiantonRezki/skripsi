@@ -9,15 +9,14 @@ import { CoinService } from 'app/services/sku-management/coin.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
-import { ImportAdjustmentCoinDialogComponent } from '../import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
+import { TsmImportAdjustmenCoinDialogComponent } from '../tsm-import-adjustmen-coin-dialog/tsm-import-adjustmen-coin-dialog.component';
 
 @Component({
-  selector: 'data-retailer',
-  templateUrl: './retailer.component.html',
-  styleUrls: ['./retailer.component.scss']
+  selector: 'app-retailertsm',
+  templateUrl: './retailertsm.component.html',
+  styleUrls: ['./retailertsm.component.scss']
 })
-export class RetailerComponent {
-
+export class RetailertsmComponent implements OnInit {
   listLevelArea: any[];
   list: any;
   areaFromLogin;
@@ -27,11 +26,9 @@ export class RetailerComponent {
   rows: any[];
   selected: any[];
   id: any[];
-
+  parameter:any[];
   retailer_id: any;
   type: any;
-  
-  parameter:any[];
 
   loadingIndicator = true;
   showLoadingBar: Boolean;
@@ -629,6 +626,7 @@ export class RetailerComponent {
 
       if (this.pagination['after_level']) delete this.pagination['after_level'];
       this.pagination['self_area'] = self_area;
+      this.pagination['from'] = "tsm";
       this.pagination['last_self_area'] = last_self_area;
       let levelCovered = [];
       if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
@@ -755,7 +753,7 @@ export class RetailerComponent {
 
       if (this.pagination['after_level']) delete this.pagination['after_level'];
       this.pagination['self_area'] = self_area;
-      this.pagination['from'] = "nontsm";
+      this.pagination['from'] = "tsm";
       this.pagination['last_self_area'] = last_self_area;
       let levelCovered = [];
       if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
@@ -885,6 +883,7 @@ export class RetailerComponent {
       body['retailer_id'] = this.retailer_id;
     else
       body['trade_program_id'] = this.retailer_id;
+      body['from'] = "tsm";
 
     this.coinService.flush(body).subscribe(
       res => {
@@ -906,10 +905,10 @@ export class RetailerComponent {
     this.dataService.showLoading(true);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area = areaSelected[areaSelected.length - 1].value;
-
+    let parameter = "tsm";
     try {
-      const response = await this.coinService.export({ area }).toPromise();
-      console.log('he', response.headers);
+      const response = await this.coinService.export({ area, from : parameter }).toPromise();
+      // console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `TemplateManajemenCoin_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
@@ -969,7 +968,7 @@ export class RetailerComponent {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {};
 
-    this.dialogRef = this.dialog.open(ImportAdjustmentCoinDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(TsmImportAdjustmenCoinDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
