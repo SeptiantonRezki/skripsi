@@ -88,7 +88,12 @@ export class PaguyubanCreateComponent {
       fullname: ["", Validators.required],
       group_name: ["", Validators.required],
       username: ["", Validators.required],
-      password: ["", [Validators.required, commonFormValidator.passwordRequirement]],
+      password: ["", [
+        Validators.required,
+        PasswordValidator.strong,
+        PasswordValidator.specialChar,
+        Validators.minLength(8),
+      ]],
       password_confirmation: ["", Validators.required],
     }, {validator: PasswordValidator.matchValues('password', 'password_confirmation')});
 
