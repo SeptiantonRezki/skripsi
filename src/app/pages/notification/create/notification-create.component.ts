@@ -229,6 +229,7 @@ export class NotificationCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user_group: ["retailer", Validators.required],
+      verification: ["all"],
       age: ["18+", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
@@ -1715,7 +1716,7 @@ export class NotificationCreateComponent {
       if (this.pagination['age']) delete this.pagination['age'];
     }
 
-    if (this.formNotification.get("user_group").value === 'retailer') {
+    if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page_value").value === 'pojok-modal') {
       this.pagination['type'] = 'pojok-modal'
     } else {
       delete this.pagination['type'];
@@ -2099,7 +2100,7 @@ export class NotificationCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = this.audienceSelected.concat(response);
+        this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
