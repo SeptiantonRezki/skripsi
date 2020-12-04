@@ -64,6 +64,11 @@ import { RetailerComponent } from './coin/index/retailer/retailer.component';
 import { ProgramComponent } from './coin/index/program/program.component';
 import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
 import { ImportFileDialogComponent } from './product/index/import-file-dialog/import-file-dialog.component';
+import { NontsmComponent } from './coin/index/nontsm/nontsm.component';
+import { TsmComponent } from './coin/index/tsm/tsm.component';
+import { RetailertsmComponent } from './coin/index/retailertsm/retailertsm.component';
+import { ProgramtsmComponent } from './coin/index/programtsm/programtsm.component';
+import { TsmImportAdjustmenCoinDialogComponent } from './coin/index/tsm-import-adjustmen-coin-dialog/tsm-import-adjustmen-coin-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -136,7 +141,12 @@ export const MY_FORMATS = {
     RetailerComponent,
     ProgramComponent,
     ImportAdjustmentCoinDialogComponent,
-    ImportFileDialogComponent
+    ImportFileDialogComponent,
+    NontsmComponent,
+    TsmComponent,
+    RetailertsmComponent,
+    ProgramtsmComponent,
+    TsmImportAdjustmenCoinDialogComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -151,7 +161,7 @@ export const MY_FORMATS = {
     DetailRetailerComponent,
     ImportFileDialogComponent
   ],
-  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent],
+  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent],
   providers: [
     ListBrandResolver,
     ListCategoryResolver,

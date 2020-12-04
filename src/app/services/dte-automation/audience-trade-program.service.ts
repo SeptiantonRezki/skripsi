@@ -51,4 +51,9 @@ export class AudienceTradeProgramService extends BaseService {
     const url = this.getUrl(this.namespace, 'export');
     return this.postApi(url, body);
   }
+
+  exportTsm(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export_tsm');
+    return this.postApi(url, body);
+  }
 }
