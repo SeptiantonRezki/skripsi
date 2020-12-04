@@ -49,7 +49,7 @@ export class IndextsmComponent implements OnInit {
       this.onLoad = true;
       this.permission = this.roles.getRoles('principal.dteautomation');
       console.log(this.permission);
-  
+
       const observable = this.keyUp.debounceTime(1000)
         .distinctUntilChanged()
         .flatMap(search => {
@@ -184,7 +184,7 @@ export class IndextsmComponent implements OnInit {
   export(item) {
     this.dataService.showLoading(true);
     console.log('Wow You Exported Me!!!', item);
-    this.audienceTradeProgramService.export({ id: item.id, type: item.type }).subscribe(res => {
+    this.audienceTradeProgramService.exportTsm({ id: item.id, type: item.type }).subscribe(res => {
       if (res.data && res.status) {
         setTimeout(() => {
           this.downloadLink.nativeElement.href = res.data;

@@ -235,7 +235,8 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
         update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
-        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`,
+        export_tsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/tsm/export`,
       },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
