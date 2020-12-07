@@ -116,6 +116,18 @@ export class ConfirmDialogTsmComponent implements OnInit {
             this.dataSubmission.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + this.dataSubmission.data.image;
           }
         }
+        if (this.dataSubmission.data.submission !== null || this.dataSubmission.data.submission.length > 0) {
+          this.dataSubmission.data.submission = this.dataSubmission.data.submission.map((item: any) => {
+            if (item.type === 'stock_check_ir') {
+              try {
+                item.stock_check_ir_list = JSON.parse(item.stock_check_ir_list);
+              } catch (ex) {
+                console.log('error - stock_check_ir', ex);
+              }
+            }
+            return item;
+          });
+        }
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);
