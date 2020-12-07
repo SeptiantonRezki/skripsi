@@ -12,6 +12,8 @@
   .info {
     font-size: 18px !important;
     text-align: center !important;
+    border-top: #aaaa 2px dashed;
+    padding-top: 8px;
   }
 
   .reason-layout {
@@ -52,6 +54,11 @@
     line-height: normal;
     white-space: pre-wrap;
     font-size: 14px;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+  .item-question-img {
+    width: 100%;
   }
   .mat-radio-label-content {
     font-size: 14px !important;
@@ -64,5 +71,56 @@
     border-radius: 8;
     margin: 0 auto;
   }
+  .answer-img:hover {
+    cursor: pointer;
+  }
+  .planogram-template {
+    width: 100%;
+    min-height: 100px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8;
+    margin: 0 auto;
+  }
+  .planogram-template-img {
+    width: 100%;
+    min-height: 150px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8;
+    margin: 0 auto;
+  }
+  .planogram-template-img:hover {
+    cursor: pointer;
+  }
+  .planogram-template-caption {
+    padding: 3px !important;
+    font-style: italic;
+  }
+
+  .responsive {
+    overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+  }
+  
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
 
 }
