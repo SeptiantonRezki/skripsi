@@ -199,7 +199,7 @@
             </div>
           </div>
 
-          <div class="item-question-img" *ngIf="dataSubmission.data.ir_verification !== null && dataSubmission.data.ir_verification.length > 0" >
+          <div class="item-question-img" *ngIf="dataSubmission?.data?.ir_verification !== null && dataSubmission?.data?.ir_verification?.length > 0" >
             <div class="item-question-img" *ngFor="let ir_item of dataSubmission.data.ir_verification; let i = index;">
               <div class="mt-8 item-question-img" *ngIf="ir_item.id_pertanyaan === item.id" fxLayout="column" fxLayoutAlign="center center">
                 <div class="responsive" *ngIf="item.type == 'planogram'">
