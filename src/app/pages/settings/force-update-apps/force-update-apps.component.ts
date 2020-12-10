@@ -118,6 +118,7 @@ export class ForceUpdateAppsComponent {
           this.dataService.showLoading(false);
         if (res.success) {
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
+          this.ngOnInit();
         }
         // if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
         // this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
