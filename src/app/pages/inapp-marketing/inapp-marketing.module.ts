@@ -24,7 +24,9 @@ import {
   MatTooltipModule,
   MatRadioModule,
   MatDialogModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatListModule,
+  MatCardModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -41,6 +43,8 @@ import { ngfModule } from "angular-file";
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 import { LightboxModule } from 'ngx-lightbox';
 import { ImportAudienceBannerDialogComponent } from './banner/import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { BannerSortingComponent } from './banner-sorting/banner-sorting.component';
+import { DndModule } from 'ngx-drag-drop';
 
 export const MY_FORMATS = {
   parse: {
@@ -78,7 +82,10 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot(),
     LightboxModule,
     MatDialogModule,
-    MatToolbarModule
+    MatToolbarModule,
+    DndModule,
+    MatListModule,
+    MatCardModule,
   ],
   declarations: [
     BannerIndexComponent,
@@ -87,7 +94,8 @@ export const MY_FORMATS = {
     LandingPageIndexComponent,
     LandingPageCreateComponent,
     LandingPageEditComponent,
-    ImportAudienceBannerDialogComponent
+    ImportAudienceBannerDialogComponent,
+    BannerSortingComponent
   ],
   exports: [
     BannerIndexComponent,
