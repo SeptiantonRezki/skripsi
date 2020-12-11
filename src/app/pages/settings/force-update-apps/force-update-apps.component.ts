@@ -116,7 +116,7 @@ export class ForceUpdateAppsComponent {
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
         console.log('res', res);
           this.dataService.showLoading(false);
-        if (res.success) {
+        if (res.status === 'success') {
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
           this.ngOnInit();
         }
