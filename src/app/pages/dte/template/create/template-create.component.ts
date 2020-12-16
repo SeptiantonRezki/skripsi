@@ -16,6 +16,8 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { takeUntil } from 'rxjs/operators';
 import { Page } from "app/classes/laravel-pagination";
+import { Config } from 'app/classes/config';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: "app-template-create",
@@ -47,6 +49,7 @@ export class TemplateCreateComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterProject: FormControl = new FormControl();
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public options: Object = Config.FROALA_CONFIG;
 
   listChoose: Array<any> = [
   ];
@@ -83,6 +86,8 @@ export class TemplateCreateComponent {
 
   saveData: Boolean;
   valueChange: Boolean;
+  validComboDrag: boolean;
+  validComboDragQuestionChild: boolean;
   duplicateTask: any;
   product: FormControl = new FormControl("");
   listProductSkuBank: Array<any> = [];
@@ -98,11 +103,28 @@ export class TemplateCreateComponent {
   childQuestions: any = {};
   filteredNext: any[] = [];
   pagination: Page = new Page();
+  files: File;
+  filesQuestion: File;
+  filesQuestionChild: File;
+  imageContentTypeBase64: any;
+  imageContentTypeBase64Child: any;
+  imageContentTypeBase64Question: any;
+  imageContentTypeBase64QuestionChild: any;
+  isDetailBanner: Boolean = false;
+  isDetailBannerPertanyaan: Boolean = false;
+  imageContentTypeDefault: File;
+  listLandingPage: any[] = [];
+  changeImageDetailQuestion: Boolean = false;
+  changeImageDetailQuestionChild: Boolean = false;
 
   videoMaster: any = null;
   questionVideo: any[] = [];
   templateList: any[] = [];
   templateListImageIR: any[] = [];
+  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }
+  ];
+  listContentTypeQuestionChild: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }
+  ];
 
 
   @HostListener('window:beforeunload')
@@ -122,6 +144,7 @@ export class TemplateCreateComponent {
     private dialog: MatDialog,
     private router: Router,
     private dialogService: DialogService,
+    private _lightbox: Lightbox,
     private taskTemplateService: TemplateTaskService,
     private dataService: DataService,
     private productService: ProductService,
@@ -129,6 +152,7 @@ export class TemplateCreateComponent {
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
+    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }, { name: "Pathnership", value: "pathnership" }];
     this.saveData = false;
     this.templateTaskFormError = {
       name: {},
@@ -178,7 +202,6 @@ export class TemplateCreateComponent {
         return Observable.of(key).delay(300);
       })
       .subscribe(res => {
-        console.log('reas ngetik cuk', res);
         this.getListProduct(res);
         this.resetField(res);
       });
@@ -195,8 +218,16 @@ export class TemplateCreateComponent {
       material: false,
       material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
+      image_description: this.formBuilder.array([this.formBuilder.group({
+        content_type: '',
+        landing_page: '',
+        body: '',
+        title: '',
+        url_iframe: '',
+        imageDetailBanner: ''
+        })]),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required)
-    })
+    });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
       commonFormValidator.parseFormChanged(this.templateTaskForm, this.templateTaskFormError);
@@ -308,6 +339,52 @@ export class TemplateCreateComponent {
       (err) => {
       }
     );
+  }
+  contentType(value) {
+    if (this.imageContentTypeBase64 && this.imageContentTypeDefault) {
+      this.imageContentTypeDefault = undefined;
+      this.imageContentTypeBase64 = undefined;
+    }
+  }
+  imagesContentType(image, i) {
+      var file: File = image;
+      var myReader: FileReader = new FileReader();
+
+      myReader.onloadend = (e) => {
+        this.imageContentTypeBase64Child = myReader.result;
+        let image_description = this.templateTaskForm.get('image_description') as FormArray;
+        image_description.at(i).get('imageDetailBanner').setValue(this.imageContentTypeBase64Child);
+      };
+
+      myReader.readAsDataURL(file);
+  }
+
+  imagesContentTypeQuestionChild(image, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
+    this.changeImageDetailQuestionChild = true;
+      var file: File = image;
+      var myReader: FileReader = new FileReader();
+
+      myReader.onloadend = (e) => {
+        this.imageContentTypeBase64QuestionChild = myReader.result;
+        question_image_description.at(index).get('question_image_detail_photo').setValue(this.imageContentTypeBase64QuestionChild);
+      };
+
+      myReader.readAsDataURL(file);
+  }
+  deleteImg() {
+    this.imageContentTypeDefault = undefined;
+    this.imageContentTypeDefault = null;
+  }
+  removeImage(): void {
+    this.files = undefined;
+  }
+  removeImageQuestion(): void {
+    this.filesQuestion = undefined;
+  }
+  removeImageQuestionChild(): void {
+    this.filesQuestionChild = undefined;
   }
 
   filteringLKM() {
@@ -434,6 +511,7 @@ export class TemplateCreateComponent {
   setValue() {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
+    let image_description = this.templateTaskForm.get('image_description') as FormArray;
 
     this.templateTaskForm.get('kategori_toolbox').setValue(this.duplicateTask.task_toolbox_id);
     this.templateTaskForm.get('tipe_misi').setValue(this.duplicateTask.task_toolbox_type_id);
@@ -455,14 +533,33 @@ export class TemplateCreateComponent {
         type: item.type,
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         // required: item.required,
+        question_image_description: this.formBuilder.array( item.question_image_description.map (item  => {
+          return this.formBuilder.group({
+            content_typePertanyaan: '',
+            title: '',
+            body: '',
+            landing_page: '',
+            url_iframe: '',
+            question_image_detail_photo: ''
+          });
+        })),
         additional: this.formBuilder.array(
           item.additional.map(item => {
             return this.formBuilder.group({ option: item, next_question: '' })
           })
         )
       }))
-    })
-
+    });
+    this.duplicateTask['image_description'].map(item => {
+       image_description.push(this.formBuilder.group({
+        content_type: item.content_type,
+        title: item.title,
+        body: item.body,
+        landing_page: item.landing_page,
+        url_iframe: item.url_iframe,
+        imageDetailBanner: item.imageDetailBanner
+        }));
+    });
     if (this.duplicateTask.material === 'no')
       this.templateTaskForm.get('material_description').disable();
     else
@@ -470,7 +567,7 @@ export class TemplateCreateComponent {
 
     this.duplicateTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
-    })
+    });
   }
 
   addAdditional(idx) {
@@ -576,11 +673,26 @@ export class TemplateCreateComponent {
       id: 1,
       question: `Pertanyaan`,
       type: 'radio',
+      content_typePertanyaan: "static_page", 
+      static_page: '',
+      e_wallet: '',
+      title: '',
+      body: '',
+      landing_page: '',
+      iframe: '',
+      url_iframe: '',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
+      question_image_description: this.formBuilder.array([this.formBuilder.group({
+        content_typePertanyaan: '',
+            title: '',
+            body: '',
+            landing_page: '',
+            url_iframe: '',
+            question_image_detail_photo: '' })]),
       question_image: [''],
-      question_video: ['']
-    })
+      question_video: [''],
+    });
   }
 
   filteringPossibilitiesQuestion(questionId) {
@@ -662,7 +774,6 @@ export class TemplateCreateComponent {
       this.questionHasNext[elem] = true;
     });
   }
-
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id })
@@ -672,10 +783,25 @@ export class TemplateCreateComponent {
       id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
+      static_page: '',
+      e_wallet: '',
+      title: '',
+      body: '',
+      landing_page: '',
+      iframe: '',
+      url_iframe: '',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      content_typePertanyaan:  'static_page',
       additional: this.formBuilder.array([this.createAdditional()]),
+      question_image_description: this.formBuilder.array([this.formBuilder.group({
+        content_typePertanyaan: '',
+            title: '',
+            body: '',
+            landing_page: '',
+            url_iframe: '',
+            question_image_detail_photo: '' })]),
       question_image: [''],
-      question_video: ['']
+      question_video: [''],
       // others: false,
       // required: false
     }))
@@ -769,19 +895,51 @@ export class TemplateCreateComponent {
     additional.removeAt(idx2);
     this.findQuestionsHasNext();
   }
+  previewImage() {
+    let album = {
+      src: this.imageContentTypeBase64Child,
+      caption: '',
+      thumb: this.imageContentTypeBase64Child
+    };
 
+    this._lightbox.open([album], 0);
+  }
+  previewImageChild() {
+    let album = {
+      src: this.imageContentTypeBase64QuestionChild,
+      caption: '',
+      thumb: this.imageContentTypeBase64QuestionChild
+    };
+
+    this._lightbox.open([album], 0);
+  }
   delay() {
     return new Promise(resolve => setTimeout(resolve, 2000));
   }
 
+  onChangeDetailBannerQuestion(event) {
+    if (event.checked) {
+    this.isDetailBannerPertanyaan = true;
+    } else {
+      this.isDetailBannerPertanyaan = false;
+    }
+  }
+  onChangeDetailBanner(event) {
+    if (event.checked) {
+    this.isDetailBanner = true;
+    } else {
+      this.isDetailBanner = false;
+    }
+    console.log('ini is', this.isDetailBanner);
+  }
   async submit() {
-    console.log(this.templateTaskForm);
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
       // this.saveData = !this.saveData;
       this.saveData = true;
       let questions: any[] = this.templateTaskForm.get('questions').value;
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
+      let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let questionsIsEmpty = [];
       let questionVideoList = []
       let body = {
@@ -795,10 +953,44 @@ export class TemplateCreateComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
+        image_description: image_description.map((item, index) => {
+          if (item.content_type === 'image') {
+            let tmp = {
+              content_type: item.content_type,
+              content_image: item.imageDetailBanner
+            };
+            return tmp;
+          } else if (item.content_type === 'landing_page') {
+            let tmp = {
+              content_type: item.content_type,
+              landing_page: item.landing_page,
+            };
+            return tmp;
+          } else if (item.content_type === 'static_page') {
+            let tmp = {
+              content_type: item.content_type,
+              title: item.title,
+              body: item.body,
+            };
+            return tmp;
+          } else if (item.content_type === 'iframe') {
+            let tmp = {
+              content_type: item.content_type,
+              url_iframe: item.url_iframe,
+            };
+            return tmp;
+          } else if (item.content_type === 'unlinked') {
+            let tmp = {
+              content_type: item.content_type,
+            };
+            return tmp;
+          }
+        }),
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
@@ -819,7 +1011,41 @@ export class TemplateCreateComponent {
             })) : [],
             // required: item.required,
             question_image: item.question_image || '',
+            question_image_detail: this.isDetailBannerPertanyaan ? 1 : 0,
             question_video: item.question_video || '',
+            question_image_description: item.question_image_description.map((tmp, index) => {
+              if (tmp.content_typePertanyaan === 'image') {
+                let tmpung = {
+                  content_type: tmp.content_typePertanyaan,
+                  content_image: tmp.question_image_detail_photo
+                };
+                return tmpung;
+              } else if (tmp.content_typePertanyaan === 'landing_page') {
+                let tmpung = {
+                  content_type: tmp.content_typePertanyaan,
+                  landing_page: tmp.landing_page,
+                };
+                return tmpung;
+              } else if (tmp.content_typePertanyaan === 'static_page') {
+                let tmpung = {
+                  content_type: tmp.content_typePertanyaan,
+                  title: tmp.title,
+                  body: tmp.body,
+                };
+                return tmpung;
+              } else if (tmp.content_typePertanyaan === 'iframe') {
+                let tmpung = {
+                  content_type: tmp.content_typePertanyaan,
+                  url_iframe: tmp.url_iframe,
+                };
+                return tmpung;
+              } else if (tmp.content_typePertanyaan === 'unlinked') {
+                let tmpung = {
+                  content_type: tmp.content_typePertanyaan,
+                };
+                return tmpung;
+              }
+            }),
             additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
@@ -842,14 +1068,6 @@ export class TemplateCreateComponent {
             mockup['planogram_image'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['image'] : null;
           }
           return mockup;
-          // }
-          // return {
-          //   id: item.id,
-          //   question: item.question,
-          //   type: item.type,
-          //   // required: item.required,
-          //   additional: item.additional.map(item => item.option)
-          // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
