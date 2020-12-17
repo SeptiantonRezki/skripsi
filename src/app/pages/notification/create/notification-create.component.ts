@@ -1768,7 +1768,7 @@ export class NotificationCreateComponent {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 

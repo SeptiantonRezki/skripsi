@@ -112,12 +112,12 @@ export class ForceUpdateAppsComponent {
         notif: this.formForceUpdate.controls['notifMessage'].value,
         os: this.formForceUpdate.controls['os'].value,
       }
-
+      try {
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
         console.log('res', res);
-        if (!res.data) this.dataService.showLoading(false);
+        if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
 
-        this.paralellForceUpdates(res.data ? res.data : [], body).subscribe(res => {
+        this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
           console.log('res force updates', res);
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
           this.ngOnInit();
@@ -130,6 +130,10 @@ export class ForceUpdateAppsComponent {
         this.dataService.showLoading(false);
         console.log('err', err)
       });
+      } catch (ex) {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: 'Maaf, Terjadi Kesalahan Sistem!' });
+      }
 
       // this.accessServices.forceUpdate(body).subscribe(
       //   res => {

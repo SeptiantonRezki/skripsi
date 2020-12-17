@@ -64,7 +64,7 @@ export class FuseMainComponent implements OnDestroy {
             this.showLoading = res['show'] || res;
             this.progress = res['progress'] || undefined;
 
-            console.log(this.progress);
+            // console.log(this.progress);
         });
     }
 

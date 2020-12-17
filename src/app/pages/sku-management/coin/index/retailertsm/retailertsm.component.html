@@ -1,0 +1,176 @@
+<mat-progress-bar *ngIf="showLoadingBar" class="loading-bar" mode="indeterminate"></mat-progress-bar>
+<div class="padding-top" fxLayout="column" fusePerfectScrollbar *ngIf="!onLoad">
+  <div class="page-layout simple fullwidth">
+    <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="end center" class="p-16 export">
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> EXPORT TEMPLATE
+        </button>
+        <button mat-raised-button type="button" class="is-danger" (click)="import()">
+          <mat-icon>arrow_downward</mat-icon> IMPORT ADJUSMENT COIN
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2>Daftar Retailer</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field autoComplete="off" class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+          </mat-form-field>
+        </div>
+      </div>
+      <form [formGroup]="formFilter" autoComplete="off">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16 pl-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Zone" formControlName="zone" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Zona' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Regional" formControlName="region" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Regional'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Area" formControlName="area" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Area'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
+                Salespoint'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="District" formControlName="district" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                District'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Territori'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
+              <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Zona' :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
+              <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Regional'
+                :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
+              <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Area'
+                :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
+              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
+                'Semua
+                Salespoint'
+                :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
+              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                District'
+                :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="12%" class="is-light form-primary">
+            <mat-select placeholder="Territory" formControlName="territory">
+              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
+                Territori'
+                :
+                item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+      </form>
+    </div>
+    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+      [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+      [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
+      (select)="onSelect($event)">
+
+
+      <!-- <ngx-datatable-column name="Kode Halaman" prop="kode_halaman"></ngx-datatable-column> -->
+
+      <ngx-datatable-column name="Nama" prop="name">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.id]"
+            (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Kode Agen" prop="code"></ngx-datatable-column>
+      <ngx-datatable-column name="Nomor Ponsel" prop="phone" [sortable]="false"></ngx-datatable-column>
+      <ngx-datatable-column name="Total Koin" prop="coin" [sortable]="false"></ngx-datatable-column>
+      <ngx-datatable-column name="Terakhir Masuk" prop="terakhir_masuk" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{row.terakhir_masuk?.date | date:'dd/MM/yyyy HH:mm'}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+          style="justify-content: center !important">
+          <div class="button-row pl-8">
+            <button matTooltip="Flush Coin" type="button" mat-icon-button color="primary"
+              (click)="flush('retailer', row)">
+              <mat-icon>history</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>

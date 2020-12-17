@@ -271,6 +271,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         description: this.formAutomation.get("description_challenge").value,
         text_button: this.formAutomation.get("button_text").value,
         is_shareable: this.shareable.value ? 1 : 0,
+        classification: '0',
         is_exclude_gsm: this.exclude_gsm.value ? 1 : 0,
         notif: this.is_notif.value === 1 ? this.formAutomation.get('notif').value : 0,
         jenis_tantangan: this.formAutomation.get('jenis_tantangan').value,
@@ -340,6 +341,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
 
   onSelectingTradeProgram(event) {
     this.tradeSelected = this.tradePrograms.find((value: any) => value.id === event.value);
+    console.log(this.tradeSelected);
     if (this.tradeSelected) {
       this.maxDateTradeProgram = this.tradeSelected.end_date;
       this.minDateTradeProgram = this.tradeSelected.start_date;

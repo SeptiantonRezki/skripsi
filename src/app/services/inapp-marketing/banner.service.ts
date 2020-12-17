@@ -47,7 +47,6 @@ export class BannerService extends BaseService {
 
   getListOtherChildren(context): Observable<any> {
     const url = this.getUrl("general", "list_other_children", context);
-    console.log('url', url);
     return this.getApi(url);
   }
 

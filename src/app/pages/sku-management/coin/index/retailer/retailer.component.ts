@@ -30,6 +30,8 @@ export class RetailerComponent {
 
   retailer_id: any;
   type: any;
+  
+  parameter:any[];
 
   loadingIndicator = true;
   showLoadingBar: Boolean;
@@ -753,6 +755,7 @@ export class RetailerComponent {
 
       if (this.pagination['after_level']) delete this.pagination['after_level'];
       this.pagination['self_area'] = self_area;
+      this.pagination['from'] = "nontsm";
       this.pagination['last_self_area'] = last_self_area;
       let levelCovered = [];
       if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));

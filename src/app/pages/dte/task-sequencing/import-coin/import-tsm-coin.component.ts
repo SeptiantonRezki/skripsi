@@ -53,8 +53,8 @@ export class ImportTsmCoinComponent {
     this.dataService.showLoading(true);
     this.sequencingService.previewAdjustmentCoin(fd).subscribe(
       res => {
-        this.rows = res.data ? res.data : [];
-        this.isValid = res.data ? res.isValid : false;
+        this.rows = res.data ? res.data.data : [];
+        this.isValid = res.data ? res.data.is_valid : false;
         this.dataService.showLoading(false);
       },
       err => {

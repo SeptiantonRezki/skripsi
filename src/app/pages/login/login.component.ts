@@ -138,6 +138,23 @@ export class LoginComponent implements OnInit {
       };
       this.authenticationService.login(body).subscribe(
         res => {
+          if (!res.access_token) {
+            let encValUsername = CryptoJS.AES.encrypt(this.loginForm.get("username").value, "dxtr-asia.sampoerna").toString();
+            let encValPassword = CryptoJS.AES.encrypt(this.loginForm.get("password").value, "dxtr-asia.sampoerna").toString();
+
+            if (this.rememberMe.value) {
+
+              this.cookieService.set('_udxtrn', encValUsername);
+              this.cookieService.set('_pdxstr', encValPassword);
+
+            } else {
+              this.cookieService.delete('_udxtrn');
+              this.cookieService.delete('_pdxstr');
+            }
+            this.dataService.setToStorage('bodyLogin', { username: res.email, base_auth: "login" });
+            this.router.navigate(['device/authentication']);
+            return;
+          }
           this.dataService.setAuthorization(res);
           this.authenticationService.getProfileDetail().subscribe(async profile => {
             if (profile.status == "active") {

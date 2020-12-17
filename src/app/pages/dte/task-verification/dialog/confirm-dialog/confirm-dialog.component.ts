@@ -112,7 +112,6 @@ export class ConfirmDialogComponent implements OnInit {
         const dataSubmission_ = res;
         if (dataSubmission_.data.image) {
           if (dataSubmission_.data.image.indexOf('http') < 0) {
-            console.log('ok', dataSubmission_.data.image.indexOf('http'))
             dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
           }
         }
@@ -130,7 +129,6 @@ export class ConfirmDialogComponent implements OnInit {
           });
         }
         this.dataSubmission = dataSubmission_;
-        console.log('DATASUBMISSION', this.dataSubmission)
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);

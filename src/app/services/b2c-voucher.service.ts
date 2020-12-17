@@ -123,4 +123,9 @@ export class B2CVoucherService extends BaseService {
     return this.getBlobAsJsonApi(url, queryParams);
   }
 
+  updateStatus(context: any, body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'updateStatus', context);
+    return this.postApi(url, body);
+  }
+
 }
