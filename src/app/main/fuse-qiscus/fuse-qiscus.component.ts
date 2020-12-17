@@ -187,15 +187,15 @@ export class FuseQiscusComponent {
   async ngOnInit() {
 
     if (this.dataTransaction) {
-      if (this.router.url.search('/orders/detail/' + this.dataTransaction.id) == -1) {
+      if (this.router.url.search('/src-catalogue/orders/detail/' + this.dataTransaction.id) == -1) {
         this.emitter.emitChatIsOpen(false);
       } else {
-        if (this.router.url.search('/orders/detail/') == -1) {
+        if (this.router.url.search('/src-catalogue/orders/detail/') == -1) {
           this.emitter.emitChatIsOpen(false);
         }
       }
     } else {
-      if (this.router.url.search('/orders/detail/') == -1) {
+      if (this.router.url.search('/src-catalogue/orders/detail/') == -1) {
         this.emitter.emitChatIsOpen(false);
       }
     }

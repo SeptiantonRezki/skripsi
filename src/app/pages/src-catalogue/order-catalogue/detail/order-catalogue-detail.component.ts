@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -19,7 +19,7 @@ import * as moment from "moment";
   templateUrl: './order-catalogue-detail.component.html',
   styleUrls: ['./order-catalogue-detail.component.scss']
 })
-export class OrderCatalogueDetailComponent implements OnInit {
+export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
   orderId: any;
   body: any;
   detailOrder: any;
@@ -115,6 +115,10 @@ export class OrderCatalogueDetailComponent implements OnInit {
     this.getDetailOrder();
   }
 
+  ngOnDestroy() {
+    this.emitter.emitChatIsOpen(false);
+  }
+
   refreshLevel() {
     // this.productService.getListLevel().subscribe(res => {
     //   this.listLevel = res.data;
@@ -204,23 +208,26 @@ export class OrderCatalogueDetailComponent implements OnInit {
         this.productsNota = products;
         console.log('products nota', this.productsNota);
 
-        await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
-          // this.emitter.emitDataChat({ templates: res_2.data });
-          res.templates = res_2.data;
-          // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
-          if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
-            const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
-            if (dayLimit < 30) {
+        let profile = this.dataService.getDecryptedProfile();
+        if (profile.type === 'vendor') {
+          await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
+            // this.emitter.emitDataChat({ templates: res_2.data });
+            res.templates = res_2.data;
+            // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
+            if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
+              const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
+              if (dayLimit < 30) {
+                // this.initDataQiscus(res);
+                this.qiscusCheck(res.data); // check login qiscus
+              } else {
+                this.emitter.emitChatIsOpen(false); // for open chat
+              }
+            } else {
               // this.initDataQiscus(res);
               this.qiscusCheck(res.data); // check login qiscus
-            } else {
-              this.emitter.emitChatIsOpen(false); // for open chat
             }
-          } else {
-            // this.initDataQiscus(res);
-            this.qiscusCheck(res.data); // check login qiscus
-          }
-        })
+          })
+        }
 
         // if (res.data.type === "retailer") {
         this.editable =
