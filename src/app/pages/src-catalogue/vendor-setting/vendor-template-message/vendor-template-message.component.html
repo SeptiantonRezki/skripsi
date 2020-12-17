@@ -1,0 +1,44 @@
+<div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
+  <div class="header">
+    <span class="header-text">Daftar Template Pesan</span>
+  </div>
+  <div class="content mt-20" fxLayout="column">
+    <div class="mb-20" *ngFor="let item of vendorTemplates; let i = index">
+      <div class="content-title" fxLayout="row" fxLayoutAlign="start start">
+        <label class="title-label" (click)="onEdit(item, i)">Template Pesan {{i+1}}:</label>
+        <input matInput class="title-text ml-8" placeholder="Judul Template Pesan" value="" [(ngModel)]="item.title"
+          (blur)="onBlur(item, i)">
+        <div class="title-edit" (click)="onEdit(item, i)">
+          <mat-icon>edit</mat-icon>
+          <!-- <mat-icon *ngIf="indexOnEdit !== i">edit</mat-icon>
+            <mat-icon *ngIf="indexOnEdit == i">check</mat-icon> -->
+        </div>
+      </div>
+      <div class="content-body" fxLayout="row" fxLayoutAlign="start start">
+        <div class="body-layout">
+          <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body" wrap="soft"
+            (blur)="onBlur(item, i)"></textarea>
+        </div>
+        <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon (click)="resetToDefault(i)">refresh</mat-icon>
+          Reset to default
+        </div>
+      </div>
+      <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan harus diisi!
+      </mat-error>
+    </div>
+  </div>
+  <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
+    <button mat-button class="add" (click)="resetToDefaultAll()">
+      <mat-icon class="secondary-text">refresh</mat-icon>
+      Reset All to Default
+    </button>
+    <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate()"
+      *ngIf="vendorTemplates.length > 0 || deleteListVendor.length > 0">
+      SIMPAN
+    </button>
+    <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span>
+      <mat-icon class="success">check</mat-icon>
+    </div>
+  </div>
+</div>

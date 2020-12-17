@@ -27,6 +27,7 @@ import { QiscusService } from "app/services/qiscus.service";
 import { NotificationService } from "app/services/notification.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { DialogService } from "app/services/dialog.service";
+import { StorageHelper } from "app/helper/storage.helper";
 
 @Component({
   selector: "fuse-navbar",
@@ -60,6 +61,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
   navigation: any;
   navigationServiceWatcher: Subscription;
   fusePerfectScrollbarUpdateTimeout;
+  profile: any;
 
   constructor(
     private sidebarService: FuseSidebarService,
@@ -76,6 +78,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     // private gaService: GoogleAnalyticsService,
     // private storageHelper: StorageHelper,
     private dialogService: DialogService,
+    private storageHelper: StorageHelper
   ) {
     // Navigation data
     // this.navigation = navigation;
@@ -94,6 +97,8 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     }
   }
   async ngOnInit() {
+    this.profile = await this.dataService.getDecryptedProfile();
+    await this.qiscusLoginOrRegister(this.profile);
     // this.qs.qiscusMC.realtimeAdapter.connected;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -102,6 +107,10 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    if (this.storageHelper.getUserQiscus() !== null) {
+      this.qs.qiscus.setUserWithIdentityToken({ user: this.qs.qiscus.userData });
+    }
 
     let session = this.dataService.getDecryptedAuth();
 
@@ -140,25 +149,31 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
     await this.qiscusLoginOrRegister(profile);
   }
 
-  async qiscusLoginOrRegister(profile: any){
+  async qiscusLoginOrRegister(profile: any) {
     console.warn('profile', profile);
-    if(profile) {
-      if(profile.id && profile.email && profile.fullname){
+    if (profile) {
+      if (profile.id && profile.email && profile.fullname) {
         const qiscusPayload = {
+          userId: profile.id + 'vendorhms' + profile.vendor_company_id,
           userIdMC: profile.email,
-          userKey: 'prinhms' + profile.id, //profile.qiscus_user_key,
+          userKey: 'vendorhms' + profile.id, //profile.qiscus_user_key,
           userName: profile.fullname,
           avatarImage: profile.image_url || null,
+          // userIdMC: profile.email,
+          // userKey: 'prinhms' + profile.id, //profile.qiscus_user_key,
+          // userName: profile.fullname,
+          // avatarImage: profile.image_url || null,
         }
 
-				const qiscusMCPayload = {
-					user_id: qiscusPayload.userIdMC,
-					password: qiscusPayload.userKey,
-					username: qiscusPayload.userName,
-					avatar_url: qiscusPayload.avatarImage,
-				};
-        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async(res_2: any) => {
-					return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
+        const qiscusMCPayload = {
+          user_id: qiscusPayload.userIdMC,
+          password: qiscusPayload.userKey,
+          username: qiscusPayload.userName,
+          avatar_url: qiscusPayload.avatarImage,
+        };
+        await this.qs.qiscus.setUser(qiscusPayload.userId, qiscusPayload.userKey, qiscusPayload.userName, qiscusPayload.avatarImage);
+        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async (res_2: any) => {
+          return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
         });
       } else {
         console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');

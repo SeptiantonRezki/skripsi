@@ -1,0 +1,71 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Notifikasi'">
+    <button mat-raised-button type="button" (click)="unreadBadgeBtn()" *ngIf="isSelectedRows || allRowsSelected">
+      Tandai belum dibaca
+    </button>
+    <button mat-raised-button type="button" (click)="updateBadgeBtn()" *ngIf="isSelectedRows || allRowsSelected">
+      Tandai sudah dibaca
+    </button>
+    <button mat-raised-button color="primary" type="button" (click)="removeNotifBtn()"
+      *ngIf="isSelectedRows || allRowsSelected">
+      Hapus
+    </button>
+  </page-content-header>
+
+  <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24 mb-42" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0 " fxLayout="column" *ngIf="!isDirectDetail">
+      <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+      <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="onSelectedTabChange($event)">
+        <mat-tab label="Update">
+          <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
+            <app-vendor-notif-update-list [data]="dataNotifUpdate" (onRowsSelected)="onRowsSelected($event)">
+            </app-vendor-notif-update-list>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <!-- ZONE - BADGE -->
+      <div class='badgeUpdate' fxLayout="row" fxLayoutAlign="center center" *ngIf="countNotifUpdate > 0">
+        <span>{{countNotifUpdate > 9 ? countNotifUpdate + '+' : countNotifUpdate}}</span>
+      </div>
+      <!-- END ZONE - BADGE -->
+
+    </div>
+
+    <!-- ZONE - DETAIL -->
+    <div class="ayo-main-wrapper mat-white-bg p-0 mb-20" fxLayout="column" *ngIf="isDirectDetail">
+      <div class="detail-container p-16">
+        <div class="content" fxLayout="column" fxLayoutAlign="start center">
+          <div class="content-video" *ngIf="dataDetail.entity_type === 'video'" fxFlex="80">
+            <video [src]="dataDetail.data.video_value" alt="Memuat video..." controls></video>
+          </div>
+          <div class="content-img" *ngIf="dataDetail.entity_type === 'image'" fxFlex="80" fxLayout="row"
+            fxLayoutAlign="center center">
+            <div class="slide-img-btn" (click)="prevImage()" fxLayout="row" fxLayoutAlign="center center">
+              <i class="material-icons prev">keyboard_arrow_left</i>
+            </div>
+            <div class="img-container" fxLayout="column" fxLayoutAlign="center center">
+              <!-- <img [src]="selectedImage.url" alt="Memuat gambar..." style="max-height: inherit;"/> -->
+              <picture>
+                <source media="(min-width: 400px)" srcset="{{selectedImage.url}}">
+                <img [src]="selectedImage.url">
+              </picture>
+              <span class="p-8">{{selectedImage.index + 1}} dari {{dataDetail.data.image_value.length || 0}}</span>
+            </div>
+            <div class="slide-img-btn" (click)="nextImage()" fxLayout="row" fxLayoutAlign="center center">
+              <i class="material-icons next">keyboard_arrow_right</i>
+            </div>
+          </div>
+        </div>
+        <div class="close-detail" (click)="closeDetail()">
+          <mat-icon size="32" class="s-24">close</mat-icon>
+        </div>
+      </div>
+    </div>
+    <!-- END ZONE - DETAIL -->
+  </div>
+</div>

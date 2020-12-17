@@ -9,21 +9,17 @@
         <!-- / TOOLBAR: Above -->
 
         <!-- NAVBAR: Top -->
-        <fuse-navbar layout="horizontal"
-                     class="top-navbar" fxHide fxShow.gt-md
-                     [ngClass]="fuseSettings.colorClasses.navbar"
-                     *ngIf="fuseSettings.layout.navigation === 'top'">
+        <fuse-navbar layout="horizontal" class="top-navbar" fxHide fxShow.gt-md
+            [ngClass]="fuseSettings.colorClasses.navbar" *ngIf="fuseSettings.layout.navigation === 'top'">
         </fuse-navbar>
         <!-- / NAVBAR: Top -->
 
         <div id="wrapper">
 
             <!-- NAVBAR: Left -->
-            <fuse-sidebar [name]="'navbar'"
-                          [folded]="fuseSettings.layout.navigationFolded"
-                          [lockedOpen]="'gt-md'"
-                          class="left-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
-                          *ngIf="fuseSettings.layout.navigation === 'left' || fuseSettings.layout.navigation === 'top'">
+            <fuse-sidebar [name]="'navbar'" [folded]="fuseSettings.layout.navigationFolded" [lockedOpen]="'gt-md'"
+                class="left-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
+                *ngIf="fuseSettings.layout.navigation === 'left' || fuseSettings.layout.navigation === 'top'">
                 <fuse-navbar layout="vertical"></fuse-navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Left -->
@@ -32,7 +28,9 @@
 
                 <!-- TOOLBAR: Below -->
                 <ng-container *ngIf="fuseSettings.layout.toolbar === 'below'">
-                    <fuse-toolbar class="below toolbar-main" [ngStyle]="{'background-image': 'url(' + environment?.backgroundImage  + ')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}"></fuse-toolbar>
+                    <fuse-toolbar class="below toolbar-main"
+                        [ngStyle]="{'background-image': 'url(' + environment?.backgroundImage  + ')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}">
+                    </fuse-toolbar>
                 </ng-container>
                 <!-- / TOOLBAR: Below -->
 
@@ -40,11 +38,9 @@
             </div>
 
             <!-- NAVBAR: Right -->
-            <fuse-sidebar [name]="'navbar'" [align]="'right'"
-                          [folded]="fuseSettings.layout.navigationFolded"
-                          [lockedOpen]="'gt-md'"
-                          class="right-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
-                          *ngIf="fuseSettings.layout.navigation === 'right'">
+            <fuse-sidebar [name]="'navbar'" [align]="'right'" [folded]="fuseSettings.layout.navigationFolded"
+                [lockedOpen]="'gt-md'" class="right-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
+                *ngIf="fuseSettings.layout.navigation === 'right'">
                 <fuse-navbar layout="vertical"></fuse-navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Right -->
@@ -59,6 +55,8 @@
     <!-- / QUICK PANEL -->
 
 </mat-sidenav-container>
+<fuse-chat *ngIf="chatIsOpen">
+</fuse-chat>
 <div class="loading" *ngIf="showLoading">
     <div *ngIf="progress" style="position: relative; top: 60%;" fxLayout="column" fxLayoutAlign="center center">
         <progress-bar style="width: 600px;" [progress]="progress" [color]="'#dc1e2d'"></progress-bar>
