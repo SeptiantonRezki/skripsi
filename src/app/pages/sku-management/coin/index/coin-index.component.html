@@ -6,11 +6,11 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
-        <mat-tab label="Retailer">
-          <data-retailer *ngIf="selectedTab === 0"></data-retailer>
+        <mat-tab label="NON-TSM">
+          <app-nontsm-coin *ngIf="nontsm"></app-nontsm-coin>
         </mat-tab>
-        <mat-tab label="Trade Program">
-          <data-trade-program *ngIf="selectedTab === 1"></data-trade-program>
+        <mat-tab label="TSM">
+          <app-tsm *ngIf="tsm"></app-tsm>
         </mat-tab>
       </mat-tab-group>
     </div>

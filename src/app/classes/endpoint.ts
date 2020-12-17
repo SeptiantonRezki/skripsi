@@ -235,7 +235,8 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
         update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/${context.automation_id}`,
-        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/export`,
+        export_tsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/tsm/export`
       },
       news: {
         get: `${AYO_API_SERVICE(SERVER.newsfeed)}/api/v1/newsfeed/${type_api}/newsfeed`,
@@ -607,10 +608,10 @@ export class Endpoint {
         get_popup: `${AYO_API}/api/principal/sequencing/list/pop-up-notification`,
         get_push: `${AYO_API}/api/principal/sequencing/list/notification`,
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
-        download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/download`,
-        preview_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/preview`,
-        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/import`,
-        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`
+        download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/download`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
+        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer` //ini yang di coin mangement
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
@@ -712,6 +713,9 @@ export class Endpoint {
 
         //Design Voucher
         updateDesign: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/design/${context.voucher_id}`,
+
+        //Preview VOucher
+        updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/update-status`,
 
         //List Detail Voucher
         getListDetailVoucher: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/${context.voucher_id}/list`,

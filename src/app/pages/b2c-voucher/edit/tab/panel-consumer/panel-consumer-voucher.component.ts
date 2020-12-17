@@ -75,7 +75,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
   _data: any = null;
   @Input()
   set data(data: any) {
-    console.log('ok', data)
     if (data) {
       this.detailVoucher = data;
       this.isVoucherAutomation.setValue(data.automation ? true : false);
@@ -108,6 +107,9 @@ export class PanelConsumerVoucherComponent implements OnInit {
   @Output()
   scrollToTop: any;
 
+  @Output()
+  setSelectedTab: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -133,6 +135,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.onChangeVoucherAutomation = new EventEmitter<any>();
     this.onRefresh = new EventEmitter<any>();
     this.scrollToTop = new EventEmitter<any>();
+    this.setSelectedTab = new EventEmitter<any>();
     this.onLoad = true;
     this.isArea = false;
 
@@ -252,44 +255,85 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
 
-      if (this.detailVoucher.is_enable_panel_customer) {
-        this.addArea();
-        this.onLoad = false;
-      }
-
       if (!this.formConsumerGroup.get('isTargetAudience').value) {
-        for (const { val, index } of this.detailVoucher.area_customer.map((val, index) => ({ val, index }))) {
-          this.onLoad = true;
-          const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
-          const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+        if (this.detailVoucher.area_customer && this.detailVoucher.area_customer.length > 0) {
+          if (this.detailVoucher.is_enable_panel_customer) {
+            this.onLoad = true;
+            try {
+            this.detailVoucher.area_customer.map(async(val, index) => {
+              const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+              const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
 
-          wilayah.push(this.formBuilder.group({
-            national: [this.getArea(response, 'national'), Validators.required],
-            zone: [this.getArea(response, 'division')],
-            region: [this.getArea(response, 'region')],
-            area: [this.getArea(response, 'area')],
-            salespoint: [this.getArea(response, 'salespoint')],
-            district: [this.getArea(response, 'district')],
-            territory: [this.getArea(response, 'teritory')],
-            list_national: this.formBuilder.array(this.listLevelArea),
-            list_zone: this.formBuilder.array([]),
-            list_region: this.formBuilder.array([]),
-            list_area: this.formBuilder.array([]),
-            list_salespoint: this.formBuilder.array([]),
-            list_district: this.formBuilder.array([]),
-            list_territory: this.formBuilder.array([])
-          }));
+              wilayah.push(this.formBuilder.group({
+                national: [this.getAreaById(response, 'national'), Validators.required],
+                zone: [this.getAreaById(response, 'division')],
+                region: [this.getAreaById(response, 'region')],
+                area: [this.getAreaById(response, 'area')],
+                salespoint: [this.getAreaById(response, 'salespoint')],
+                district: [this.getAreaById(response, 'district')],
+                territory: [this.getAreaById(response, 'teritory')],
+                list_national: this.formBuilder.array(this.listLevelArea),
+                list_zone: this.formBuilder.array([]),
+                list_region: this.formBuilder.array([]),
+                list_area: this.formBuilder.array([]),
+                list_salespoint: this.formBuilder.array([]),
+                list_district: this.formBuilder.array([]),
+                list_territory: this.formBuilder.array([])
+              }));
 
-          if (this.detailVoucher.area_customer.length === (index + 1)) {
-            this.onLoad = false;
+              this.initArea(index);
+              await this.initFormGroup(response, index);
+
+              if (this.detailVoucher.area_customer.length === (index + 1)) {
+                this.onLoad = false;
+              }
+            });
+            } catch(ex) {
+              this.onLoad = false;
+            } 
           } else {
-            this.initArea(index);
-            this.initFormGroup(response, index);
+            this.onLoad = true;
+            try {
+            this.detailVoucher.area_customer.map(async(val, index) => {
+              const response = await this.bannerService.getParentArea({ parent: val.area_id }).toPromise();
+              const wilayah = this.formConsumerGroup.controls['areas'] as FormArray;
+
+              wilayah.push(this.formBuilder.group({
+                national: [this.getAreaByName(response, 'national'), Validators.required],
+                zone: [this.getAreaByName(response, 'division')],
+                region: [this.getAreaByName(response, 'region')],
+                area: [this.getAreaByName(response, 'area')],
+                salespoint: [this.getAreaByName(response, 'salespoint')],
+                district: [this.getAreaByName(response, 'district')],
+                territory: [this.getAreaByName(response, 'teritory')],
+                list_national: this.formBuilder.array(this.listLevelArea),
+                list_zone: this.formBuilder.array([]),
+                list_region: this.formBuilder.array([]),
+                list_area: this.formBuilder.array([]),
+                list_salespoint: this.formBuilder.array([]),
+                list_district: this.formBuilder.array([]),
+                list_territory: this.formBuilder.array([])
+              }));
+
+              this.initArea(index);
+              await this.initFormGroup(response, index);
+
+              if (this.detailVoucher.area_customer.length === (index + 1)) {
+                this.onLoad = false;
+              }
+            });
+            } catch(ex) {
+              this.onLoad = false;
+            } 
           }
+        } else {
+          this.addArea();
+          this.onLoad = false;
         }
       } else {
         this.onLoad = false;
       }
+
       
     } else {
       setTimeout(() => {
@@ -300,14 +344,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   isChangeVoucherAutomation(event: any) {
     this.onChangeVoucherAutomation.emit({ checked: event.checked });
-    if (event.checked) {
-      // this.formConsumerGroup.get('allocationVoucher').setValidators([Validators.required, Validators.min(0)]);
-      // this.formConsumerGroup.get('va').setValidators(Validators.required);
-    } else {
-      console.log('CLEAR')
-      // this.formConsumerGroup.get('allocationVoucher').clearValidators();
-      // this.formConsumerGroup.get('va').clearValidators();
-    }
   }
 
   isChangeTargetAudience(event: any) {
@@ -316,9 +352,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    console.log('selected', selected);
     this.selected.splice(0, this.selected.length);
-    console.log('selected2', this.selected);
     this.selected.push(...selected);
   }
 
@@ -641,7 +675,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.dataService.showLoading(false);
       });
     } catch (ex) {
-      console.log('ex', ex);
+      console.warn('ex', ex);
       this.dataService.showLoading(false);
     }
   }
@@ -762,7 +796,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
-    console.log('formConsumerGroup.controls[allocationVoucher].value', this.formConsumerGroup.controls['allocationVoucher'].value)
     if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
     let body = null;
     const bodyArea = {
@@ -804,7 +837,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
       let value = this.formConsumerGroup.getRawValue();
 
       value.areas.map(item => {
-        console.log('AREAS', item)
         let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
         for (const val of this.typeArea) {
           const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
@@ -822,7 +854,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
       bodyArea['area_id'] = [];
       areas.map(item => {
-        console.log('AREAS', item)
         bodyArea['area_id'].push(item.value);
       });
 
@@ -832,6 +863,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       this.onRefresh.emit();
+      this.setSelectedTab.emit(3);
       setTimeout(() => {
         this.getIsArea();
       }, 1000);
@@ -910,13 +942,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here');
-    console.log(error);
+    console.warn('err', error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.log(error);
+    console.warn(error);
     // alert('Open console to see the error')
   }
 
@@ -1187,8 +1218,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
     }
   }
 
-  getArea(response, selection) {
+  getAreaByName(response, selection) {
     return response.data.filter(item => item.level_desc === selection).map(item => item.name)[0]
+  }
+
+  getAreaById(response, selection) {
+    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
   }
 
   findDuplicate(array) {
@@ -1211,7 +1246,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
 
-  initFormGroup(response, index) {
+  async initFormGroup(response, index) {
     response.data.map(item => {
       let level_desc = '';
       switch (item.level_desc.trim()) {
@@ -1245,12 +1280,13 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   getToolTipData(value: any, array: any) {
-    if (value && array.length) {
-      const msg = array.filter((item: any) => item.id === value)[0]['name'];
-      return msg;
-    } else {
+    // console.log('array', array)
+    // if (value && array && array.length > 0) {
+    //   const msg = array.filter((item: any) => item.id === value)[0]['name'];
+    //   return msg;
+    // } else {
       return '';
-    }
+    // }
   }
 
 }

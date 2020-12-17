@@ -44,6 +44,8 @@ import { DesignVoucherComponent } from './edit/tab/design-voucher/design-voucher
 import { ListDetailVoucherComponent } from './edit/tab/list-detail-voucher/list-detail-voucher.component';
 import { ImportAudienceDialogComponent } from './edit/tab/import-audience-dialog/import-audience-dialog.component';
 import { ListVoucherReimbursementComponent } from './index/list-voucher-reimbursement/list-voucher-reimbursement.component';
+import { PreviewVoucherComponent } from './edit/tab/preview-voucher/preview-voucher.component';
+import { ConfirmationPublishDialogComponent } from './edit/tab/preview-voucher/confirmation-publish-dialog/confirmation-publish-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: 'left',
@@ -112,6 +114,8 @@ export const MY_FORMATS = {
     ListDetailVoucherComponent,
     ListVoucherReimbursementComponent,
     ImportAudienceDialogComponent,
+    PreviewVoucherComponent,
+    ConfirmationPublishDialogComponent,
   ],
   providers: [
     {
@@ -133,6 +137,8 @@ export const MY_FORMATS = {
     ListDetailVoucherComponent,
     ListVoucherReimbursementComponent,
     ImportAudienceDialogComponent,
+    PreviewVoucherComponent,
+    ConfirmationPublishDialogComponent,
   ],
 })
 export class B2CVoucherModule { }

@@ -206,7 +206,6 @@ export class B2CVoucherCreateComponent implements OnInit {
     const input = event.input;
     const value = event.value;
 
-    // console.log('value', value);
     if (value) {
       this.productList.push(value);
     }
@@ -277,7 +276,6 @@ export class B2CVoucherCreateComponent implements OnInit {
   }
 
   isChecked(type: any, event: any) {
-    // console.log('type'+event, type);
     if (type === 'product') {
       this.formDetailVoucher.get('category').setValue('');
       this.formDetailVoucher.get('limit_by_category').setValue(false);
@@ -367,7 +365,6 @@ export class B2CVoucherCreateComponent implements OnInit {
            */
           this.listProductSkuBank = [];
         } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank)
           this.product.setValue(itemClick.toString());
           if (this.productInput) {
             this.productInput.nativeElement.value = itemClick.toString();
@@ -458,9 +455,11 @@ export class B2CVoucherCreateComponent implements OnInit {
 
       this.dataService.showLoading(true);
       this.b2cVoucherService.createVoucher(body).subscribe(res => {
+        this.dataService.setToStorage('detail_voucher_b2c', null);
+        this.dataService.setToStorage('isb2ccrt', true);
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-        this.router.navigate(['b2c-voucher']);
+        this.router.navigate(['b2c-voucher', 'edit', res.data.id]);
       }, err => {
         this.dataService.showLoading(false);
       });
