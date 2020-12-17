@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PagesName } from 'app/classes/pages-name';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { DataService } from 'app/services/data.service';
@@ -77,6 +78,8 @@ export class VendorSettingComponent implements OnInit {
   rekeningIsValid: boolean = false;
   liburIsValid: boolean = false;
   permissionSIUP: any;
+  note_1: FormControl = new FormControl("");
+  note_2: FormControl = new FormControl("");
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -153,6 +156,13 @@ export class VendorSettingComponent implements OnInit {
     });
 
     this.getAuthentication();
+    this.getChatTemplateOperational();
+  }
+
+  getChatTemplateOperational() {
+    this.vendorService.getChatTemplateOperational().subscribe(res => {
+      console.log('res chat template op', res);
+    });
   }
 
   openTimeChanged(event: any, i) {
@@ -622,6 +632,149 @@ export class VendorSettingComponent implements OnInit {
         'Error: The Geolocation service failed.' :
         'Error: Your browser doesn\'t support geolocation.'
     });
+  }
+
+  // async onSaveLokasi() {
+  //   const body = {
+  //     latitude: this.formLokasiToko.get('latitude').value,
+  //     longitude: this.formLokasiToko.get('longitude').value,
+  //     address: this.formLokasiToko.get('alamatToko').value,
+  //     address_detail: this.formLokasiToko.get('alamatTokoDetail').value,
+  //   }
+  //   if (this.formLokasiToko.valid) {
+  //     this.generalService.storeLocation(body).subscribe((res) => {
+  //       console.log('Berhasil Menyimpan Data Profile', res);
+  //       this.lokasiIsValid = true;
+  //     }, (err: any) => {
+  //       console.log('Gagal Menyimpan Data Profile', err);
+  //       this.lokasiIsValid = false;
+  //     });
+  //   } else {
+  //     this.lokasiIsValid = false;
+  //     commonFormValidator.validateAllFields(this.formLokasiToko);
+  //     console.log('Gagal Menyimpan Data Profile' + this.formLokasiToko.status, body);
+  //   }
+  // }
+
+  async onSaveOperationalTime() {
+    let body = [];
+    let fd = new FormData();
+    let index = 0;
+    let ot = this.formOperationalTimeGroup.getRawValue();
+    // console.log('ot', ot);
+    await this.listSchedule.map(async (item, i) => {
+      // console.log('item', item)
+      await item.days.map((val: any) => {
+        // console.log('val', val)
+        if (val.isActive) {
+          body.push({
+            day_id: val.day_id,
+            day_name: val.day_name,
+            open_time: item.open_time,
+            closed_time: item.closed_time
+          });
+          fd.append(`operational_time[${index}][day_id]`, val.day_id);
+          fd.append(`operational_time[${index}][day_name]`, val.day_name);
+          fd.append(`operational_time[${index}][open_time]`, ot.formOperationalTime[i].openTime.substring(0, 5));
+          fd.append(`operational_time[${index}][closed_time]`, ot.formOperationalTime[i].closedTime.substring(0, 5));
+          index++;
+        }
+        return val;
+      });
+      return item;
+    });
+    setTimeout(() => {
+      if (body.length > 0) {
+        this.vendorService.saveOperationalTime(fd).subscribe((res) => {
+          console.log('Berhasil Menyimpan Data Operational Time', res);
+          this.scheduleIsValid = true;
+        }, (err: any) => {
+          this.scheduleIsValid = false;
+          console.log('Gagal Menyimpan Data Operational Time', err);
+        });
+      } else {
+        this.vendorService.saveOperationalTime([]).subscribe((res) => {
+          this.scheduleIsValid = true;
+          console.log('Berhasil Menyimpan Data Operational Time', res);
+        }, (err: any) => {
+          this.scheduleIsValid = false;
+          console.log('Gagal Menyimpan Data Operational Time', err);
+        });
+        // console.log('Gagal Menyimpan Data Operational Time' + body.length, body);
+        // commonFormValidator.validateAllFields(this.formLiburToko);
+      }
+    }, 500);
+  }
+
+  async onSave() {
+    if (((this.imgTokoDepan == undefined && this.imgTokoDalam == undefined)) ||
+      (this.imgTokoDepan && this.imgTokoDepan.size <= 2000000) || (this.formProfilToko.valid && this.imgTokoDalam && this.imgTokoDalam.size <= 2000000)) {
+      if (this.formLokasiToko.valid) {
+        // if (this.formBankAccount.valid) {
+        if (this.formLiburToko.get('isLibur').value == true && this.formLiburToko.valid || this.formLiburToko.get('isLibur').value == false) {
+          // console.log('isLibur', this.formLiburToko.get('isLibur').value);
+          // console.log('isLibur_', this.formLiburToko.valid)
+          let i = 0;
+          let isB = false;
+          for (const value of this.listSchedule) {
+            // console.log(JSON.stringify(value));
+            // console.log('index', i);
+            let j = 0;
+            for (const valueChild of value.days) {
+              // console.log('_indexJ', j);
+              if (valueChild.isActive) {
+                this.checkIrisan(i, j).then(async (resp) => {
+                  if (!resp) {
+                    // console.log('resp_', resp);
+                  } else {
+                    // console.log('STOP', resp);
+                    this.dialogService.openSnackBar({ message: "Waktu Operasional Beririsan." });
+                    isB = true;
+                  }
+                });
+              }
+              if (isB) {
+                // console.log('breakj', j);
+                break;
+              }
+              j++;
+            }
+            if (isB) {
+              // console.log('breaki', i);
+              isB = false;
+              break;
+            }
+            i++;
+          }
+          setTimeout(async () => {
+            if (!isB) {
+              this.dataService.showLoading(true);
+              // if (this.permissionLokasiToko.ubah) await this.onSaveLokasi();
+              if (this.permissionOperasionalToko && this.permissionOperasionalToko.ubah) { await this.onSaveOperationalTime(); }
+              setTimeout(() => {
+                this.dataService.showLoading(false);
+                this.ngOnInit();
+              }, 1500);
+            }
+          }, 500);
+        } else {
+          this.dialogService.openSnackBar({ message: "Tanggal & Jam Libur Toko belum lengkap." });
+        }
+        // } else {
+        //   this.dialogService.openSnackBar({ message: "Data Rekening Bank belum lengkap." });
+        // }
+      } else {
+        this.dialogService.openSnackBar({ message: "Data Lokasi belum lengkap." });
+      }
+    } else {
+      if (this.imgTokoDepan && this.imgTokoDepan.size > 2000000) {
+        this.dialogService.openSnackBar({ message: "Ukuran foto toko tampak luar maks 2MB." });
+      } else if (this.imgTokoDalam && this.imgTokoDalam.size > 2000000) {
+        this.dialogService.openSnackBar({ message: "Ukuran foto toko tampak dalam maks 2MB." });
+      } else {
+        this.dialogService.openSnackBar({ message: "Data Profil belum lengkap." });
+      }
+    }
   }
 
 }

@@ -104,6 +104,8 @@
                       </div>
                     </div>
                   </div>
+                  <div>
+                  </div>
                 </form>
                 <div *ngIf="listSchedule.length == 0" style="font-size: 11px; color:rgb(190, 5, 5)">Tidak ada Waktu
                   Operasional yang dapat ditampilkan.</div>
@@ -113,6 +115,12 @@
                     <mat-icon matIcon>add</mat-icon><span> Tambah Jadwal</span>
                   </div>
                 </div>
+                <!-- <div fxLayout="column" fxLayout="100">
+                  <mat-form-field fxFlex="100" class="isLight">
+                    <textarea matInput class="body-text" placeholder="Detail Template Pesan" cdkTextareaAutosize
+                      cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15" [formControl]="note_1"></textarea>
+                  </mat-form-field>
+                </div> -->
               </div>
 
               <div fxLayout="column" fxLayoutAlign="start start" fxFlex="50" class="p-8">
@@ -160,80 +168,11 @@
                   </form>
                 </div>
               </div>
-
-              <div fxLayout="column" fxLayoutAlign="start start" fxFlex="50" class="p-8">
-                <div fxLayout="row" fxLayoutAlign="start start" fxFlex="100">
-                  <h2 class="">Atur Libur Toko</h2>
-                </div>
-                <div>
-                  <form [formGroup]="formLiburToko" fxLayout="row wrap" fxLayoutAlign="start">
-                    <div fxFlex="100">
-                      <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isLibur">Set Libur</mat-checkbox>
-                    </div>
-                    <div fxFlex="100" fxLayout="row" fxLayoutGap="30px" class="pt-16 pl-8 pb-8"
-                      *ngIf="formLiburToko.get('isLibur').value == true">
-                      <div fxFlex="50" fxLayout="column">
-                        <div fxLayout="row" fxLayoutGap="10px">
-                          <mat-form-field class="orders datepicker is-light">
-                            <input matInput #from [matDatepicker]="dari" (focus)="dari.open()"
-                              placeholder="Mulai Tanggal" formControlName="from"
-                              (dateChange)="setMinDate(formLiburToko.get('from').value)" readonly>
-                            <button mat-button *ngIf="formLiburToko.get('from').value && permissionLiburToko?.ubah"
-                              matSuffix mat-icon-button aria-label="Clear"
-                              (click)="formLiburToko.get('from').setValue('')">
-                              <mat-icon>close</mat-icon>
-                            </button>
-                            <mat-datepicker-toggle matSuffix [for]="dari">
-                              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #dari></mat-datepicker>
-                          </mat-form-field>
-                          <div fxLayout="column" fxLayoutAlign="center center">
-                            <span>Jam</span>
-                            <input placeholder="00:00" aria-label="24hr format" [ngxTimepicker]="fullTime3"
-                              [format]="24" class="timepicker-input" formControlName="fromTime" readonly>
-                            <ngx-material-timepicker #fullTime3></ngx-material-timepicker>
-                          </div>
-                        </div>
-                        <mat-error
-                          *ngIf="formLiburToko.controls['from'].hasError('required') && formLiburToko.controls['from'].touched || formLiburToko.controls['fromTime'].hasError('required') && formLiburToko.controls['fromTime'].touched">
-                          Tentukan Tanggal dan Jam Mulai Libur.
-                        </mat-error>
-                      </div>
-                      <div fxFlex="50" fxLayout="column">
-                        <div fxLayout="row" fxLayoutGap="10px">
-                          <mat-form-field class="orders datepicker is-light">
-                            <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-                              placeholder="Sampai Tanggal" formControlName="to" readonly>
-                            <button mat-button *ngIf="formLiburToko.get('to').value && permissionLiburToko.ubah"
-                              matSuffix mat-icon-button aria-label="Clear"
-                              (click)="formLiburToko.get('to').setValue('')">
-                              <mat-icon>close</mat-icon>
-                            </button>
-                            <mat-datepicker-toggle matSuffix [for]="sampai">
-                              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #sampai></mat-datepicker>
-                          </mat-form-field>
-                          <div fxLayout="column" fxLayoutAlign="center center">
-                            <span>Jam</span>
-                            <input placeholder="00:00" aria-label="24hr format" [ngxTimepicker]="fullTime4"
-                              [format]="24" class="timepicker-input" formControlName="toTime" readonly>
-                            <ngx-material-timepicker #fullTime4></ngx-material-timepicker>
-                          </div>
-                        </div>
-                        <mat-error
-                          *ngIf="formLiburToko.controls['to'].hasError('required') && formLiburToko.controls['to'].touched || formLiburToko.controls['toTime'].hasError('required') && formLiburToko.controls['toTime'].touched">
-                          Tentukan Tanggal dan Jam Libur Berakhir.
-                        </mat-error>
-                      </div>
-                    </div>
-                    <mat-form-field fxFlex="100" class="is-light form-primary pl-8"
-                      *ngIf="formLiburToko.get('isLibur').value == true">
-                      <input matInput placeholder="Pesan/Catatan saat toko libur (Opsional)"
-                        formControlName="leaveMessage">
-                    </mat-form-field>
-                  </form>
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div class="confirm pl-8" fxLayout="row" fxLayoutAlign="center center">
+                  <button mat-raised-button type="button" class="confirmation-button" (click)="onSave()">
+                    SIMPAN
+                  </button>
                 </div>
               </div>
             </div>

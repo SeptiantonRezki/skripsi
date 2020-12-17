@@ -58,13 +58,28 @@ export class VendorsService extends BaseService {
     return this.getApi(url, {});
   }
 
+  saveOperationalTime(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "operational_time");
+    return this.postApi(url, body);
+  }
+
   getChatTemplate(): Observable<any> {
     const url = this.getUrl(this.namespace, "chat_template");
-    return this.getApi(url, {}); ''
+    return this.getApi(url, {});
   }
 
   saveChatTemplate(body): Observable<any> {
     const url = this.getUrl(this.namespace, "chat_template");
+    return this.postApi(url, body);
+  }
+
+  getChatTemplateOperational(): Observable<any> {
+    const url = this.getUrl(this.namespace, "chat_template_operational");
+    return this.getApi(url, {});
+  }
+
+  saveChatTemplateOperational(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "chat_template_operational");
     return this.postApi(url, body);
   }
 }
