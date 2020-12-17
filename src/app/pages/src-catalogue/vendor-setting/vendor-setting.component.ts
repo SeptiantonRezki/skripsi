@@ -498,57 +498,57 @@ export class VendorSettingComponent implements OnInit {
   }
 
   timeIsClick() {
-    if (this.permissionOperasionalToko.ubah) {
-      this.dialogService.openSnackBar({ message: "Non Aktifkan semua hari di samping untuk mengubah jam." });
-    }
+    // if (this.permissionOperasionalToko.ubah) {
+    // }
+    this.dialogService.openSnackBar({ message: "Non Aktifkan semua hari di samping untuk mengubah jam." });
   }
 
   timesUp: boolean = false;
   addDayToSchedule_(indexParent: number, indexChild: number) {
-    if (this.permissionOperasionalToko.ubah) {
-      if (!this.timesUp) {
-        this.timesUp = true;
-        this.checkIrisan(indexParent, indexChild).then((value) => {
-          if (!value) {
-            // console.log('isDuplicateDay',value)
-            let ot = this.formOperationalTimeGroup.getRawValue();
-            const optIndex = parseInt(ot.formOperationalTime[indexParent].openTime);
-            let cltIndex = parseInt(ot.formOperationalTime[indexParent].closedTime);
-            if (optIndex !== cltIndex) {
-              this.addDayToSchedule_(indexParent, indexChild);
-            } else {
-              this.dialogService.openSnackBar({ message: "Atur Ulang Jam Buka dan Jam Tutup Operasional!" });
-            }
+    // if (this.permissionOperasionalToko.ubah) {
+    if (!this.timesUp) {
+      this.timesUp = true;
+      this.checkIrisan(indexParent, indexChild).then((value) => {
+        if (!value) {
+          // console.log('isDuplicateDay',value)
+          let ot = this.formOperationalTimeGroup.getRawValue();
+          const optIndex = parseInt(ot.formOperationalTime[indexParent].openTime);
+          let cltIndex = parseInt(ot.formOperationalTime[indexParent].closedTime);
+          if (optIndex !== cltIndex) {
+            this.addDayToSchedule_(indexParent, indexChild);
           } else {
-            if (this.listSchedule[indexParent].days[indexChild].isActive) {
-              this.listSchedule.map((item, i) => {
-                const d = item.days.map((v) => ({ ...v }));
-                let ot = this.formOperationalTimeGroup.get('formOperationalTime') as FormArray;
-                if (i === indexParent) {
-                  d.map((val, j) => {
-                    if (j === indexChild) val.isActive = false;
-                    return ({ ...val });
-                  });
-                  item.days = d;
-                  ot.at(indexParent).get('days').setValue(d);
-                };
-                return ({ ...item });
-              })
-            } else {
-              this.dialogService.openSnackBar({ message: "Waktu Operasional beririsan!" });
-            }
+            this.dialogService.openSnackBar({ message: "Atur Ulang Jam Buka dan Jam Tutup Operasional!" });
           }
-        });
-        setTimeout(() => {
-          this.timesUp = false;
-        }, 300);
-      } else {
-        // console.log('jangan melakukan perubahan terlalu cepat')
-        this.dialogService.openSnackBar({ message: "Jangan melakukan perubahan terlalu cepat!" });
-      }
+        } else {
+          if (this.listSchedule[indexParent].days[indexChild].isActive) {
+            this.listSchedule.map((item, i) => {
+              const d = item.days.map((v) => ({ ...v }));
+              let ot = this.formOperationalTimeGroup.get('formOperationalTime') as FormArray;
+              if (i === indexParent) {
+                d.map((val, j) => {
+                  if (j === indexChild) val.isActive = false;
+                  return ({ ...val });
+                });
+                item.days = d;
+                ot.at(indexParent).get('days').setValue(d);
+              };
+              return ({ ...item });
+            })
+          } else {
+            this.dialogService.openSnackBar({ message: "Waktu Operasional beririsan!" });
+          }
+        }
+      });
+      setTimeout(() => {
+        this.timesUp = false;
+      }, 300);
     } else {
-      console.log('anda tidak memiliki akses ubah untuk fitur ini');
+      // console.log('jangan melakukan perubahan terlalu cepat')
+      this.dialogService.openSnackBar({ message: "Jangan melakukan perubahan terlalu cepat!" });
     }
+    // } else {
+    //   console.log('anda tidak memiliki akses ubah untuk fitur ini');
+    // }
   }
 
   addDayToSchedule(indexParent: number, indexChild: number) {
@@ -685,7 +685,7 @@ export class VendorSettingComponent implements OnInit {
     });
     setTimeout(() => {
       if (body.length > 0) {
-        this.vendorService.saveOperationalTime(fd).subscribe((res) => {
+        this.vendorService.saveOperationalTime(body).subscribe((res) => {
           console.log('Berhasil Menyimpan Data Operational Time', res);
           this.scheduleIsValid = true;
         }, (err: any) => {
@@ -707,74 +707,53 @@ export class VendorSettingComponent implements OnInit {
   }
 
   async onSave() {
-    if (((this.imgTokoDepan == undefined && this.imgTokoDalam == undefined)) ||
-      (this.imgTokoDepan && this.imgTokoDepan.size <= 2000000) || (this.formProfilToko.valid && this.imgTokoDalam && this.imgTokoDalam.size <= 2000000)) {
-      if (this.formLokasiToko.valid) {
-        // if (this.formBankAccount.valid) {
-        if (this.formLiburToko.get('isLibur').value == true && this.formLiburToko.valid || this.formLiburToko.get('isLibur').value == false) {
-          // console.log('isLibur', this.formLiburToko.get('isLibur').value);
-          // console.log('isLibur_', this.formLiburToko.valid)
-          let i = 0;
-          let isB = false;
-          for (const value of this.listSchedule) {
-            // console.log(JSON.stringify(value));
-            // console.log('index', i);
-            let j = 0;
-            for (const valueChild of value.days) {
-              // console.log('_indexJ', j);
-              if (valueChild.isActive) {
-                this.checkIrisan(i, j).then(async (resp) => {
-                  if (!resp) {
-                    // console.log('resp_', resp);
-                  } else {
-                    // console.log('STOP', resp);
-                    this.dialogService.openSnackBar({ message: "Waktu Operasional Beririsan." });
-                    isB = true;
-                  }
-                });
-              }
-              if (isB) {
-                // console.log('breakj', j);
-                break;
-              }
-              j++;
+    let i = 0;
+    let isB = false;
+    for (const value of this.listSchedule) {
+      // console.log(JSON.stringify(value));
+      // console.log('index', i);
+      let j = 0;
+      for (const valueChild of value.days) {
+        // console.log('_indexJ', j);
+        if (valueChild.isActive) {
+          this.checkIrisan(i, j).then(async (resp) => {
+            if (!resp) {
+              // console.log('resp_', resp);
+            } else {
+              // console.log('STOP', resp);
+              this.dialogService.openSnackBar({ message: "Waktu Operasional Beririsan." });
+              isB = true;
             }
-            if (isB) {
-              // console.log('breaki', i);
-              isB = false;
-              break;
-            }
-            i++;
-          }
-          setTimeout(async () => {
-            if (!isB) {
-              this.dataService.showLoading(true);
-              // if (this.permissionLokasiToko.ubah) await this.onSaveLokasi();
-              if (this.permissionOperasionalToko && this.permissionOperasionalToko.ubah) { await this.onSaveOperationalTime(); }
-              setTimeout(() => {
-                this.dataService.showLoading(false);
-                this.ngOnInit();
-              }, 1500);
-            }
-          }, 500);
-        } else {
-          this.dialogService.openSnackBar({ message: "Tanggal & Jam Libur Toko belum lengkap." });
+          });
         }
-        // } else {
-        //   this.dialogService.openSnackBar({ message: "Data Rekening Bank belum lengkap." });
-        // }
-      } else {
-        this.dialogService.openSnackBar({ message: "Data Lokasi belum lengkap." });
+        if (isB) {
+          // console.log('breakj', j);
+          break;
+        }
+        j++;
       }
-    } else {
-      if (this.imgTokoDepan && this.imgTokoDepan.size > 2000000) {
-        this.dialogService.openSnackBar({ message: "Ukuran foto toko tampak luar maks 2MB." });
-      } else if (this.imgTokoDalam && this.imgTokoDalam.size > 2000000) {
-        this.dialogService.openSnackBar({ message: "Ukuran foto toko tampak dalam maks 2MB." });
-      } else {
-        this.dialogService.openSnackBar({ message: "Data Profil belum lengkap." });
+      if (isB) {
+        // console.log('breaki', i);
+        isB = false;
+        break;
       }
+      i++;
     }
+    setTimeout(async () => {
+      if (!isB) {
+        this.dataService.showLoading(true);
+        // if (this.permissionLokasiToko.ubah) await this.onSaveLokasi();
+        // if (this.permissionOperasionalToko && this.permissionOperasionalToko.ubah) {  }
+        await this.onSaveOperationalTime();
+        setTimeout(() => {
+          this.dataService.showLoading(false);
+          this.ngOnInit();
+        }, 1500);
+      }
+    }, 500);
+    // } else {
+    //   this.dialogService.openSnackBar({ message: "Data Lokasi belum lengkap." });
+    // }
   }
 
 }
