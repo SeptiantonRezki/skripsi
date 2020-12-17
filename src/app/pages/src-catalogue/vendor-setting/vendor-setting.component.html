@@ -1,0 +1,186 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Pengaturan'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+        <mat-tab-group>
+          <mat-tab label="Profil">
+            <div fxLayout="row wrap" fxLayout.sm="column" class="pb-16" fxLayoutAlign="start start">
+              <div fxLayout="column" fxLayoutAlign="start start" fxFlex="50" class="p-8">
+                <div fxLayout="row" fxLayoutAlign="start start" fxFlex="100">
+                  <h2 class="">Waktu Operasional Toko</h2>
+                </div>
+                <form autocomplete="off" [formGroup]="formOperationalTimeGroup">
+                  <div formArrayName="formOperationalTime" fxLayout="row" fxLayoutAlign="space-between center"
+                    fxFlex="100" fxLayoutGap="20px"
+                    *ngFor="let item of formOperationalTimeGroup.get('formOperationalTime')['controls']; let i = index;">
+                    <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100"
+                      fxLayoutGap="20px">
+                      <div fxLayout="row" fxLayoutAlign="center center" class="btn-days">
+                        <div *ngFor="let day of item.value.days; let j = index;">
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn days-left active' : 'days-btn days-left'"
+                            [matTooltip]="Senin" id="Senin-{{i}}" (click)="addDayToSchedule(i,j)"
+                            *ngIf="day.day_id == 1 && j == 0"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>SEN</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn active' : 'days-btn'" [matTooltip]="Selasa"
+                            id="Selasa-{{i}}" (click)="addDayToSchedule(i,j)" *ngIf="day.day_id == 2 && j == 1"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>SEL</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn active' : 'days-btn'" [matTooltip]="Rabu" id="Rabu-{{i}}"
+                            (click)="addDayToSchedule(i, j)" *ngIf="day.day_id == 3 && j == 2"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>RAB</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn active' : 'days-btn'" [matTooltip]="Kamis" id="Kamis-{{i}}"
+                            (click)="addDayToSchedule(i, j)" *ngIf="day.day_id == 4 && j == 3"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>KAM</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn active' : 'days-btn'" [matTooltip]="Jumat" id="Jumat-{{i}}"
+                            (click)="addDayToSchedule(i, j)" *ngIf="day.day_id == 5 && j == 4"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>JUM</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn active' : 'days-btn'" [matTooltip]="Sabtu" id="Sabtu-{{i}}"
+                            (click)="addDayToSchedule(i, j)" *ngIf="day.day_id == 6 && j == 5"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>SAB</span>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="center center"
+                            [class]="day.isActive? 'days-btn days-right active' : 'days-btn days-right'"
+                            matTooltip="Minggu" id="Minggu-{{i}}" (click)="addDayToSchedule(i, j)"
+                            *ngIf="day.day_id == 0 && j == 6"
+                            [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                            <span>MIN</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                        <div fxLayout="column" fxLayoutAlign="center center" class="open-time"
+                          [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                          <span>Jam Buka</span>
+                          <span class="ot-time" *ngIf="!permissionOperasionalToko?.ubah"
+                            (click)="timeIsClick()">{{item.value.openTime || '00:00'}}</span>
+                          <div class="24hr-example" *ngIf="permissionOperasionalToko?.ubah">
+                            <input placeholder="00:00" [value]="item.value.openTime" aria-label="24hr format"
+                              [ngxTimepicker]="fullTime1" [format]="24" class="timepicker-input"
+                              formControlName="openTime" (change)="openTimeChanged($event, i)"
+                              [max]="item.value.closedTime" readonly>
+                            <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+                          </div>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="center center" class="close-time"
+                          [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}">
+                          <span>Jam Tutup</span>
+                          <span class="ot-time" *ngIf="!permissionOperasionalToko?.ubah"
+                            (click)="timeIsClick()">{{item.value.closedTime || '00:00'}}</span>
+                          <div class="24hr-example" *ngIf="permissionOperasionalToko?.ubah">
+                            <input placeholder="00:00" [value]="item.value.closedTime" aria-label="24hr format"
+                              [ngxTimepicker]="fullTime2" [format]="24" class="timepicker-input"
+                              formControlName="closedTime" [min]="item.value.openTime" readonly>
+                            <ngx-material-timepicker #fullTime2></ngx-material-timepicker>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteSchedule(item, i)"
+                          [ngStyle]="{'cursor': !permissionOperasionalToko?.ubah ? 'no-drop' : ''}"
+                          [disabled]="!permissionOperasionalToko?.ubah">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                  </div>
+                </form>
+                <div *ngIf="listSchedule.length == 0" style="font-size: 11px; color:rgb(190, 5, 5)">Tidak ada Waktu
+                  Operasional yang dapat ditampilkan.</div>
+                <div fxLayout="row" fxLayoutAlign="start start" fxFlex="100" class="ml-16"
+                  *ngIf="permissionOperasionalToko?.ubah">
+                  <div class="add-schedule" fxLayout="row" fxLayoutAlign="center center" (click)="addSchedule()">
+                    <mat-icon matIcon>add</mat-icon><span> Tambah Jadwal</span>
+                  </div>
+                </div>
+                <!-- <div fxLayout="column" fxLayout="100">
+                  <mat-form-field fxFlex="100" class="isLight">
+                    <textarea matInput class="body-text" placeholder="Detail Template Pesan" cdkTextareaAutosize
+                      cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15" [formControl]="note_1"></textarea>
+                  </mat-form-field>
+                </div> -->
+              </div>
+
+              <div fxLayout="column" fxLayoutAlign="start start" fxFlex="50" class="p-8">
+                <div fxLayout="row" fxLayoutAlign="start start" fxFlex="100">
+                  <h2 class="">Lokasi Toko</h2>
+                </div>
+                <div class="content pl-8">
+                  <div class="map-container" fxLayout="row" fxLayoutAlign="center center">
+                    <div #gmap class="gmap">
+                      <!-- <div class="marker-container"><img src="/assets/images/ayo/maps.png" alt="maps-picker" class="marker-icon"></div> -->
+                    </div>
+                  </div>
+                  <form [formGroup]="formLokasiToko" fxLayout="row wrap" fxLayoutAlign="start">
+                    <div fxFlex="100" class="is-light form-primary">
+                      <input matInput placeholder="" formControlName="alamatToko" class="address-maps">
+                    </div>
+                    <div fxFlex="20" class="pt-8">
+                      <button mat-raised-button type="button" class="confirmation-button" style="min-width: 100px"
+                        (click)="setCurrentLocation()" [disabled]="!isMap">
+                        Set Lokasi
+                      </button>
+                    </div>
+                    <mat-form-field fxFlex="40" class="is-light form-primary">
+                      <input matInput placeholder="Latitude" formControlName="latitude" readonly>
+                      <mat-error
+                        *ngIf="formLokasiToko.controls['latitude'].hasError('required') && formLokasiToko.controls['latitude'].touched">
+                        Tentukan Lokasi Toko.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="40" class="is-light form-primary">
+                      <input matInput placeholder="Longitude" formControlName="longitude" readonly>
+                      <mat-error
+                        *ngIf="formLokasiToko.controls['longitude'].hasError('required') && formLokasiToko.controls['longitude'].touched">
+                        Tentukan Lokasi Toko.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light form-primary">
+                      <textarea matInput placeholder="Alamat Detail" formControlName="alamatTokoDetail"
+                        style="height: 40px; max-height: 40px; resize: none;"></textarea>
+                      <mat-error
+                        *ngIf="formLokasiToko.controls['alamatTokoDetail'].hasError('required') && formLokasiToko.controls['alamatTokoDetail'].touched">
+                        Alamat Detail harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                  </form>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div class="confirm pl-8" fxLayout="row" fxLayoutAlign="center center">
+                  <button mat-raised-button type="button" class="confirmation-button" (click)="onSave()">
+                    SIMPAN
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Template Pesan">
+            <app-vendor-template-message></app-vendor-template-message>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>

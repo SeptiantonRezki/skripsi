@@ -28,6 +28,11 @@ import { OrderCatalogueComponent } from './order-catalogue/index/order-catalogue
 import { OrderCatalogueDetailComponent } from './order-catalogue/detail/order-catalogue-detail.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { EstShippingDialogComponent } from './order-catalogue/est-shipping-dialog/est-shipping-dialog';
+import { VendorSettingComponent } from './vendor-setting/vendor-setting.component';
+import { VendorNotificationComponent } from './vendor-notification/vendor-notification.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { VendorTemplateMessageComponent } from './vendor-setting/vendor-template-message/vendor-template-message.component';
+import { VendorNotifUpdateListComponent } from './vendor-notification/vendor-notif-update-list/vendor-notif-update-list.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -80,8 +85,9 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatDividerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    NgxMaterialTimepickerModule
   ],
-  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent, EstShippingDialogComponent],
+  declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent, EstShippingDialogComponent, VendorSettingComponent, VendorNotificationComponent, VendorTemplateMessageComponent, VendorNotifUpdateListComponent],
   providers: [
     {
       provide: DateAdapter,

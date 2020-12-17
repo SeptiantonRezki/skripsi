@@ -11,6 +11,8 @@ import { Emitter } from 'app/helper/emitter.helper';
 import { GeneralService } from 'app/services/general.service';
 import * as moment from "moment";
 import { HttpErrorResponse } from '@angular/common/http';
+import { QiscusService } from 'app/services/qiscus.service';
+import { StorageHelper } from 'app/helper/storage.helper';
 
 @Component({
   selector: 'app-order-catalogue',
@@ -62,7 +64,9 @@ export class OrderCatalogueComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private emitter: Emitter,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private qs: QiscusService,
+    private storageHelper: StorageHelper
   ) {
     this.adapter.setLocale("id");
 
@@ -140,6 +144,7 @@ export class OrderCatalogueComponent implements OnInit {
       async res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
+        await this.getAndCreateRoomById(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
@@ -168,6 +173,7 @@ export class OrderCatalogueComponent implements OnInit {
     this.ordersService.get(this.pagination).subscribe(async res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      // await this.getAndCreateRoomById(res.data);
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -193,6 +199,7 @@ export class OrderCatalogueComponent implements OnInit {
 
     this.ordersService.get(this.pagination).subscribe(async res => {
       Page.renderPagination(this.pagination, res.data);
+      // await this.getAndCreateRoomById(res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
@@ -219,6 +226,7 @@ export class OrderCatalogueComponent implements OnInit {
 
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      // await this.getAndCreateRoomById(res.data);
       this.loadingIndicator = false;
       console.log('rows', this.rows);
     });
@@ -288,6 +296,126 @@ export class OrderCatalogueComponent implements OnInit {
     }
 
     return "";
+  }
+
+  async getAndCreateRoomById(items: any) {
+    if (items.data && this.qs.qiscus.isLogin) {
+      const dataTransaksi = [];
+      this.loadingIndicator = true;
+      this.qs.qiscus.loadRoomList({ page: 1, limit: 50, showParticipants: true, showEmpty: false })
+        .then(async (rooms: any) => {
+          // On success
+          // console.log('ROOM', rooms);
+          const mappingRoom = await items.data.map(async (item: any) => {
+            item['statusOpened'] = false;
+            // item['orderStatuses'] = Object.entries(item.available_status).map(
+            //   ([value, name]) => ({ value, name })
+            // );
+            rooms.map((room: any) => {
+              if (room.id == item.qiscus_room_id) {
+                item.dataQiscus = room;
+                return;
+              }
+            });
+            dataTransaksi.push(item);
+            return;
+            // if (item.status === 'pesanan-dibatalkan' || item.status === 'selesai') {
+            //   item.dataQiscus = null;
+            //   dataTransaksi.push(item);
+            //   return;
+            // } else {
+
+            // }
+          });
+          Promise.all(mappingRoom).then(() => {
+            // console.log("ROWS", dataTransaksi)
+            this.rows = dataTransaksi;
+            this.loadingIndicator = false;
+          });
+        })
+        .catch(async (error: any) => {
+          // On error
+          console.log('3rror', error);
+          const mappingRoom = await items.data.map(async (item: any) => {
+            item['statusOpened'] = false;
+            item['orderStatuses'] = Object.entries(item.available_status).map(([value, name]) => ({ value, name }));
+            return item;
+          });
+          console.log('mappingRoom', mappingRoom);
+          this.rows = mappingRoom;
+          this.loadingIndicator = false;
+        })
+    } else {
+      setTimeout(() => {
+        this.getAndCreateRoomById(items);
+      }, 500);
+    }
+  }
+
+  async getAndCreateRoomById_(items: any) {
+    const userIds = [];
+    let userQiscus: any = await this.storageHelper.getUserQiscus();
+    let userProfile = this.dataService.getDecryptedProfile();
+    if (items.data) {
+      if (userQiscus && userProfile) {
+        const dataTransaksi = [];
+        const mappingRoom = await items.data.map(async (item: any) => {
+          userIds.push(userQiscus.email);
+          if (item.status === 'pesanan-dibatalkan' || item.status === 'selesai') {
+            item.dataQiscus = null;
+            dataTransaksi.push(item);
+          } else if (item.qiscus_room_id !== null && item.qiscus_room_id !== '' && item.qiscus_room_id !== undefined) {
+            await this.qs.qiscus.getRoomById(item.qiscus_room_id).then(async (getRoom: any) => {
+              // console.log('DATAROOM', getRoom);
+              item.dataQiscus = { ...getRoom };
+              item.dataQiscus.retailer = {
+                username: userProfile.fullname, // agar saat ganti nama akun d apps terganti juga di Qiscus
+                email: userQiscus.email // email khusus untuk Qiscus terdiri dari (Id User + 'rethms' + Id Retailer)
+              };
+              dataTransaksi.push(item);
+            }).catch((qiscusError: any) => {
+              console.log(qiscusError);
+            });
+          } else {
+            const payload = {
+              retailer_id: item.retailer_id || "",
+              invoice_number: item.invoice_number || "",
+              order_id: item.id || ""
+            };
+            // console.log("PAYLOAD", payload);
+            this.qs.qiscusCreateUpdateRoom(payload).subscribe(async (qRes: any) => {
+              // console.log("RESP", qRes);
+              if (qRes.status) {
+                await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+                  // console.log('DATAROOM', getRoom);
+                  item.dataQiscus = { ...getRoom };
+                  item.dataQiscus.retailer = {
+                    username: userProfile.fullname, // agar saat ganti nama akun d apps terganti juga di Qiscus
+                    email: userQiscus.email // email khusus untuk Qiscus terdiri dari (Id User + 'rethms' + Id Retailer)
+                  };
+                  dataTransaksi.push(item);
+                }).catch((qiscusError: any) => {
+                  console.log(qiscusError);
+                });
+              }
+            });
+          }
+        });
+        Promise.all(mappingRoom).then(() => {
+          this.rows = dataTransaksi;
+          this.loadingIndicator = false;
+          console.log("ROWS", this.rows)
+        });
+      } else {
+        this.rows = [];
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      }
+    } else {
+      this.rows = [];
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    }
   }
 
 }
