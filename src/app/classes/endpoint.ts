@@ -517,6 +517,10 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        address_map: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}/address-map`,
+        operational_time: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/operational-time`,
+        chat_template: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
+        chat_template_operational: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template-operational`,
       },
       product_catalogue: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,

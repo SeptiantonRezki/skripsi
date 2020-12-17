@@ -17,6 +17,8 @@ import { ProductCatalogueCreateComponent } from "./product-catalogue/create/prod
 import { ProductCatalogueEditComponent } from "./product-catalogue/edit/product-catalogue-edit.component";
 import { OrderCatalogueComponent } from "./order-catalogue/index/order-catalogue.component";
 import { OrderCatalogueDetailComponent } from "./order-catalogue/detail/order-catalogue-detail.component";
+import { VendorSettingComponent } from "./vendor-setting/vendor-setting.component";
+import { VendorNotificationComponent } from "./vendor-notification/vendor-notification.component";
 
 
 const routes: Routes = [
@@ -160,6 +162,20 @@ const routes: Routes = [
   {
     path: "orders/detail/:id",
     component: OrderCatalogueDetailComponent,
+    data: {
+      breadcrumbs: brConfig.order_catalogue.index
+    }
+  },
+  {
+    path: "settings",
+    component: VendorSettingComponent,
+    data: {
+      breadcrumbs: brConfig.order_catalogue.index
+    }
+  },
+  {
+    path: "notifications",
+    component: VendorNotificationComponent,
     data: {
       breadcrumbs: brConfig.order_catalogue.index
     }

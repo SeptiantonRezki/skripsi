@@ -47,4 +47,24 @@ export class VendorsService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteWithParamsApi(url, null, queryParams);
   }
+
+  getVendorAddress(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "address_map", context);
+    return this.getApi(url, {});
+  }
+
+  getOperationalTime(): Observable<any> {
+    const url = this.getUrl(this.namespace, "operational_time");
+    return this.getApi(url, {});
+  }
+
+  getChatTemplate(): Observable<any> {
+    const url = this.getUrl(this.namespace, "chat_template");
+    return this.getApi(url, {}); ''
+  }
+
+  saveChatTemplate(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "chat_template");
+    return this.postApi(url, body);
+  }
 }
