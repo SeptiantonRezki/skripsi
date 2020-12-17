@@ -12,8 +12,9 @@
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
 
             <div fxFlex="50" class="px-8">
-              
-              <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+
+              <mat-form-field
+                [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="status">
                   <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
                 </mat-select>
@@ -125,6 +126,15 @@
                 Cabang Bank harus diisi.
               </mat-error>
             </div>
+          </div>
+
+          <div [formGroup]="formDoc" class="ayo-middle pt-24" fxLayout="row">
+            <mat-form-field class="is-light" fxFlex="50">
+              <input matInput placeholder="Nomor KTP" type="text" formControlName="ktp">
+            </mat-form-field>
+            <mat-form-field class="is-light" fxFlex="50">
+              <input matInput placeholder="Nomor NPWP" type="text" formControlName="npwp">
+            </mat-form-field>
           </div>
 
           <!-- <mat-form-field fxFlex="100" class="is-light">

@@ -56,6 +56,7 @@ export class WholesalerEditComponent {
   seeRekening: boolean = true;
   seeTokoCabang: boolean = true;
   disableSubmit: boolean = false;
+  formDoc: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -144,6 +145,11 @@ export class WholesalerEditComponent {
       account_name: [""],
       bank_name: [""],
       branch: [""]
+    });
+
+    this.formDoc = this.formBuilder.group({
+      ktp: [''],
+      npwp: ['']
     });
 
     this.formWs.valueChanges.subscribe(() => {
@@ -327,6 +333,13 @@ export class WholesalerEditComponent {
       bank_name: this.detailWholesaler.bank_name || '',
       branch: this.detailWholesaler.branch || '',
     });
+
+    this.formDoc.setValue({
+      ktp: this.detailWholesaler.ktp || '',
+      npwp: this.detailWholesaler.npwp || ''
+    });
+
+    this.formDoc.disable();
 
     if (this.isDetail) {
       this.formWs.disable();
@@ -566,17 +579,17 @@ export class WholesalerEditComponent {
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    if ( cond === 'AND' ) {
-      
+    roles.map(r => { result.push(permissions.includes(r)) });
+    if (cond === 'AND') {
+
       if (result.includes(false)) return false;
       else return true;
 
-    } else if ( cond === 'OR') {
-      
+    } else if (cond === 'OR') {
+
       if (!result.includes(true)) return false;
       else return true;
-      
+
     }
 
   }
