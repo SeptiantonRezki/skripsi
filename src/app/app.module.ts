@@ -35,7 +35,7 @@ import { NgProgressModule, NgProgressInterceptor } from "ngx-progressbar";
 import { BaseInterceptor } from "./services/interceptor.module";
 import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
-import {CallObjectiveSerive} from './services/call-objective/call-objective.service';
+import { CallObjectiveSerive } from './services/call-objective/call-objective.service';
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
 import { VendorsService } from "./services/src-catalogue/vendors.service";
@@ -100,6 +100,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { PopupNotifComponent } from "./shared/popup-notif/popup-notif.component";
+import { StorageHelper } from "./helper/storage.helper";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -156,6 +157,7 @@ const config = {
     //===== QISCUS =====
     QiscusService,
     Emitter,
+    StorageHelper,
 
     AuthenticationService,
     DataService,
@@ -230,5 +232,5 @@ const config = {
   ],
 })
 export class AppModule {
-  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) {}
+  constructor(protected _googleAnalyticsService: GoogleAnalyticsService) { }
 }

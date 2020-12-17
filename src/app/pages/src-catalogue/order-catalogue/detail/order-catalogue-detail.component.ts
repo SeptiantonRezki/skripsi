@@ -10,6 +10,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogue.service';
 import { EstShippingDialogComponent } from '../est-shipping-dialog/est-shipping-dialog';
+import { QiscusService } from 'app/services/qiscus.service';
+import { Emitter } from 'app/helper/emitter.helper';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-order-catalogue-detail',
@@ -71,7 +74,9 @@ export class OrderCatalogueDetailComponent implements OnInit {
     private convertRp: RupiahFormaterWithoutRpPipe,
     private dataService: DataService,
     private dialog: MatDialog,
-    private productService: ProductCatalogueService
+    private productService: ProductCatalogueService,
+    private qs: QiscusService,
+    private emitter: Emitter
   ) {
 
     // const observable = this.keyUp.debounceTime(1000)
@@ -118,6 +123,75 @@ export class OrderCatalogueDetailComponent implements OnInit {
     // })
   }
 
+  async initDataQiscus(item: any) {
+    if (item === 'pesanan-dibatalkan' || item === 'selesai') {
+      // this.setState({ dataQiscus: null });
+      this.emitter.emitChatIsOpen(true); // for open chat
+      this.emitter.emitDataChat(item);
+      return false;
+    } else if (
+      item.qiscus_room_id !== null &&
+      item.qiscus_room_id !== '' &&
+      item.qiscus_room_id !== undefined
+    ) {
+      await this.qs.qiscus.getRoomById(item.qiscus_room_id)
+        .then(async (getRoom: any) => {
+          // console.log('DATAROOM', getRoom);
+          // this.setState({ dataQiscus: { ...this.props.dataQiscus, ...getRoom } });
+          this.emitter.emitChatIsOpen(true); // for open chat
+          this.emitter.emitDataChat(item);
+          return true;
+        }, (err: any) => {
+          console.log('error_012', err);
+          const payload = {
+            retailer_id: item.retailer_id || "",
+            invoice_number: item.invoice_number || "",
+            order_id: item.id || ""
+          };
+          // console.log("PAYLOAD", payload);
+          this.qs.qiscusCreateUpdateRoomId({ order_id: this.orderId }).subscribe(async (qRes: any) => {
+            // console.log("RESP", qRes);
+            if (qRes.status) {
+              await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+                this.emitter.emitChatIsOpen(true); // for open chat
+                this.emitter.emitDataChat(item);
+                return true;
+              }, (err: any) => {
+                console.log('error_013a', err);
+              }).catch((qiscusError: any) => {
+                console.log('error_013aa', qiscusError);
+              });
+            }
+          });
+        })
+        .catch((qiscusError: any) => {
+          console.log('q_error', qiscusError);
+        });
+    } else {
+      const payload = {
+        retailer_id: item.retailer_id || "",
+        invoice_number: item.invoice_number || "",
+        order_id: item.id || ""
+      };
+      // console.log("PAYLOAD", payload);
+      this.qs.qiscusCreateUpdateRoom(payload).subscribe(async (qRes: any) => {
+        // console.log("RESP", qRes);
+        if (qRes.status) {
+          await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+            this.emitter.emitChatIsOpen(true); // for open chat
+            this.emitter.emitDataChat(item);
+            return true;
+          }, (err: any) => {
+            console.log('q_error_013b', err);
+          }).catch((qiscusError: any) => {
+            console.log('q_error_013bb', qiscusError);
+          });
+        }
+      });
+    }
+    return false;
+  }
+
   getDetailOrder(): void {
     this.loadingIndicator = true;
     this.allProductLevels = [];
@@ -129,6 +203,24 @@ export class OrderCatalogueDetailComponent implements OnInit {
         let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.qty > 0) : [];
         this.productsNota = products;
         console.log('products nota', this.productsNota);
+
+        await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
+          // this.emitter.emitDataChat({ templates: res_2.data });
+          res.templates = res_2.data;
+          // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
+          if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
+            const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
+            if (dayLimit < 30) {
+              // this.initDataQiscus(res);
+              this.qiscusCheck(res.data); // check login qiscus
+            } else {
+              this.emitter.emitChatIsOpen(false); // for open chat
+            }
+          } else {
+            // this.initDataQiscus(res);
+            this.qiscusCheck(res.data); // check login qiscus
+          }
+        })
 
         // if (res.data.type === "retailer") {
         this.editable =
@@ -368,6 +460,16 @@ export class OrderCatalogueDetailComponent implements OnInit {
       return this.productsNota.length === 0 ? 0 : item.value.split('Rp ')[1];
     } else {
       return item.value.split('Rp ')[1];
+    }
+  }
+
+  qiscusCheck(res: any) {
+    if (this.qs.qiscus.isLogin) {
+      this.initDataQiscus(res);
+    } else {
+      setTimeout(() => {
+        this.initDataQiscus(res);
+      }, 500);
     }
   }
 

@@ -64,20 +64,23 @@ export class VendorNotificationComponent implements OnInit {
     this.allRowsSelected = false;
     this.countNotifUpdate = 0;
 
-    // this.activatedRoute.url.subscribe(params => {
-    //   if (params.length > 0) {
-    //     this.id = params[1].path;
-    //     this.isDirectDetail = params[0].path === 'detail' ? true : false;
-    //     this.onLoad = true;
-    //     setTimeout(() => {
-    //       if (this.dataDetail === null) {
-    //         this.getDetailNotif(this.id);
-    //       } else {
-    //         this.onLoad = false;
-    //       }
-    //     }, 1500);
-    //   }
-    // });
+    this.activatedRoute.url.subscribe(params => {
+      console.log("the params", params);
+      if (params.length > 0) {
+        if (params[1]) {
+          this.id = params[1].path;
+          this.isDirectDetail = params[0].path === 'detail' ? true : false;
+          this.onLoad = true;
+          setTimeout(() => {
+            if (this.dataDetail === null) {
+              this.getDetailNotif(this.id);
+            } else {
+              this.onLoad = false;
+            }
+          }, 1500);
+        }
+      }
+    });
 
     this.emitter.listenNotifDetailEmitter.subscribe((value: any) => {
       if (value.isDirectDetail) {
@@ -126,15 +129,15 @@ export class VendorNotificationComponent implements OnInit {
   }
 
   getDetailNotif(id: any) {
-    // this.notificationsListService.getDetail({ id: id }).subscribe((response) => {
-    //   this.convertJSONDetail(response.result);
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    // }, (err) => {
-    //   console.log('err', err);
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    // });
+    this.notificationService.getListNotif({ id: id }).subscribe((response) => {
+      this.convertJSONDetail(response.result);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    }, (err) => {
+      console.log('err', err);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
   }
 
   onSelectedTabChange(index: number) {

@@ -100,9 +100,9 @@ export class LoginComponent implements OnInit {
     if (profile) {
       if (profile.id !== undefined && profile.id !== null) {
         const qiscusPayload = {
-          // userId: profile.id + 'prinhms' + profile.business_id,
+          userId: profile.id + 'vendorhms' + profile.vendor_company_id,
           userIdMC: profile.email,
-          userKey: 'prinhms' + profile.id, //profile.qiscus_user_key,
+          userKey: 'vendorhms' + profile.id, //profile.qiscus_user_key,
           userName: profile.fullname,
           avatarImage: profile.image_url || null,
         }
@@ -113,6 +113,7 @@ export class LoginComponent implements OnInit {
           username: qiscusPayload.userName,
           avatar_url: qiscusPayload.avatarImage,
         };
+        await this.qs.qiscus.setUser(qiscusPayload.userId, qiscusPayload.userKey, qiscusPayload.userName, qiscusPayload.avatarImage);
         return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async (res_2: any) => {
           return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
         });

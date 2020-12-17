@@ -1,0 +1,144 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah {{ data.type == 'image' ? 'Gambar' : 'Produk' }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content style="height: 600px" class="p-24 m-0" *ngIf="data.type == 'image'" fxLayout="column"
+    fxLayoutAlign="center center">
+    <div ngfDrop selectable="1" class="img-layout rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" *ngIf="!files">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix style="text-align: center;">Tarik Gambar Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+        <span matPrefix style="text-align: center;">Ukuran Gambar Maksimum 10MB</span>
+      </div>
+    </div>
+
+    <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" style="width: 100%">
+      <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
+        <div class="delete-img">
+          <mat-icon (click)="removeImage()" alt="Hapus gambar">cancel_outline</mat-icon>
+        </div>
+        <div class="attachment-img" [ngfBackground]="files"></div>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="p-0 m-0" *ngIf="data.type !== 'image'" fxLayout="column" fxLayoutAlign="start">
+    <div class="search-container">
+      <div class="full-width" fxLayout="row">
+        <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center">
+          <mat-icon class="search-icon">search</mat-icon>
+        </div>
+        <input class="search-input" type="text" placeholder="Cari Produk" matInput [formControl]="myControl"
+          (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+        <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()"
+          *ngIf="myControl.value">
+          <mat-icon class="cancel-icon">delete</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="(myControl.value == '' && rowsTemp.length > 0) || (myControl.value == '' && rows.length == 0 && rowsTemp.length > 0)"
+      class="data-content-temp">
+      <span>Riwayat Pencarian Sebelumnya</span>
+    </div>
+    <div
+      *ngIf="(myControl.value == '' && rowsTemp.length > 0) || (myControl.value == '' && rows.length == 0 && rowsTemp.length > 0)"
+      class="data-content-product" style="min-height: 170px;" fxLayout="row" fxLayoutAlign="start center">
+      <div class='row-product-temp' *ngFor="let rowTemp of rowsTemp; let y = index">
+        <button class='product-layout' (click)="uploadProduk(rowTemp)" mat-button>
+          <div class='product-layout-content'>
+            <div class="product-img" fxLayout="column" fxLayoutAlign="center center">
+              <img [src]="rowTemp.image_url" alt="img empty">
+            </div>
+            <div class="product-title">
+              <div class="name" ellipsis [ellipsis-content]>{{rowTemp.name}}</div>
+              <div class="pkg" ellipsis [ellipsis-content]>{{rowTemp.element.packaging}}</div>
+              <div class="prc" ellipsis [ellipsis-content]>{{rowTemp.element.price_discount > 0 ?
+                rowTemp.element.price_discount_rupiah : rowTemp.element.price_rupiah}}</div>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="data-content-temp">
+      <span>Pencarian Saat Ini</span>
+    </div>
+    <div class="data-content-product">
+      <div class="data-content-scroll" fxLayout="row wrap" fxLayoutAlign="start center" flexWrap>
+        <div class='row-product' *ngFor="let row of rows; let i = index">
+          <button class='product-layout' (click)="uploadProduk(row)" mat-button>
+            <div class='product-layout-content'>
+              <div class="product-img" fxLayout="column" fxLayoutAlign="center center">
+                <img [src]="row.image_url" alt="Image Empty">
+              </div>
+              <div class="product-title">
+                <div class="name" ellipsis [ellipsis-content]>{{row.name}}</div>
+                <div class="pkg" ellipsis [ellipsis-content]>{{row.element.packaging}}</div>
+                <div class="prc" ellipsis [ellipsis-content]>{{row.element.price_discount > 0 ?
+                  row.element.price_discount_rupiah : row.element.price_rupiah}}</div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="rows.length == 0 && loadingIndicator" fxLayoutAlign="center center">
+        <span style="color: #999;">Sedang Mencari Produk...</span>
+      </div>
+      <div *ngIf="rows.length == 0 && !loadingIndicator" fxLayoutAlign="center center">
+        <span style="color: #999;">Tidak Ada Data</span>
+        <!-- <div style="color: #999; height: 20px; width: 200px;" *ngIf="!loadingIndicator" >
+          <div class='row-product'>
+            <button class='product-layout' (click)="uploadProduk(row)" mat-button>
+              <div class='product-layout-content'>
+                <div class="product-img" fxLayout="column" fxLayoutAlign="center center">
+                </div>
+                <div class="product-title">
+                  <div ellipsis [ellipsis-content]>{{row.name}}</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="upload-progress-layout" *ngIf="isProgressBar">
+    <div class="upload-progress-bar" [ngStyle]="{'width': progressBar+'%'}"></div>
+    <div class="upload-progress-text">{{progressBar > 99 ? 'Upload Success' : 'Uploading...'}}</div>
+  </div>
+  <div *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)>=0" class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <mat-form-field fxFlex="90">
+          <input matInput placeholder="Tulis Keterangan" value="" (keypress)="onMessageKeyPress($event)"
+            [(ngModel)]="message">
+        </mat-form-field>
+        <button class="q-send-btn" mat-icon-button (click)="submit()">
+          <mat-icon class="q-send-icon">send</mat-icon>
+        </button>
+        <!-- <button type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">Pilih</button> -->
+        <!-- <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Batal</button> -->
+      </div>
+    </div>
+  </div>
+</div>

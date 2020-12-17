@@ -11,6 +11,7 @@ import { AuthenticationService } from "../../services/authentication.service";
 import { environment } from "environments/environment";
 import { NotificationService } from "app/services/notification.service";
 import { Emitter } from "app/helper/emitter.helper";
+import { QiscusService } from "app/services/qiscus.service";
 
 @Component({
   selector: "fuse-toolbar",
@@ -39,6 +40,7 @@ export class FuseToolbarComponent implements OnInit {
     private authService: AuthenticationService,
     private notificationService: NotificationService,
     private emitter: Emitter,
+    private qs: QiscusService
   ) {
     this.userStatusOptions = [
       {
@@ -158,8 +160,9 @@ export class FuseToolbarComponent implements OnInit {
   }
 
   logout() {
-    this.authService.doLogout({}).subscribe(res => {
+    this.authService.doLogout({}).subscribe(async res => {
       if (res.status) {
+        await this.qs.qiscus.disconnect();
         window.localStorage.clear();
         this.router.navigate(["/login"]);
       }

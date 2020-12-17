@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material';
-import {ProgressBarModule} from "angular-progress-bar";
+import { ProgressBarModule } from "angular-progress-bar";
 
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseNavigationModule, FuseSearchBarModule, FuseShortcutsModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
@@ -13,13 +13,14 @@ import { FuseQuickPanelModule } from 'app/main/quick-panel/quick-panel.module';
 import { FuseToolbarModule } from 'app/main/toolbar/toolbar.module';
 
 import { FuseMainComponent } from './main.component';
+import { FuseQiscusModule } from './fuse-qiscus/fuse-qiscus.module';
 
 
 @NgModule({
     declarations: [
         FuseMainComponent,
     ],
-    imports     : [
+    imports: [
         RouterModule,
 
         MatSidenavModule,
@@ -38,11 +39,12 @@ import { FuseMainComponent } from './main.component';
         FuseNavbarModule,
         FuseQuickPanelModule,
         FuseToolbarModule,
+        FuseQiscusModule,
+
     ],
-    exports     : [
+    exports: [
         FuseMainComponent
     ]
 })
-export class FuseMainModule
-{
+export class FuseMainModule {
 }

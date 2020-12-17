@@ -71,7 +71,8 @@
     <ngx-datatable-column name="Notifikasi" prop="content" [sortable]="false">
       <ng-template ngx-datatable-cell-template let-row="row" let-rowIndex="rowIndex" let-value="value">
         <div fxLayout="column" fxLayoutAlign="start start" class="row-name"
-          [ngStyle]="{'font-weight': (row.status === 'unread' ? '900' : '500')}" (click)="directDetail(row, rowIndex)">
+          [ngStyle]="{'font-weight': (row.status === 'unread' ? '900' : '500')}">
+          <!-- (click)="directDetail(row, rowIndex)" -->
           <span>{{row.title | toCapitalize}}</span>
           <div [innerHtml]="row.content" class="row-content"></div>
         </div>
