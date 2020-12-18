@@ -46,7 +46,7 @@ export class TemplateEditComponent {
   public filterProject: FormControl = new FormControl();
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = Config.FROALA_CONFIG;
-  
+
 
   listChoose: Array<any> = [
   ];
@@ -148,7 +148,7 @@ export class TemplateEditComponent {
     private _lightbox: Lightbox,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService
   ) {
-    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }, { name: "Pathnership", value: "pathnership" }];
+    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }];
     this.saveData = false;
     this.templateTaskFormError = {
       name: {},
@@ -156,7 +156,7 @@ export class TemplateEditComponent {
       image: {}
     }
 
-    activatedRoute.url.subscribe( params => {
+    activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
@@ -195,7 +195,7 @@ export class TemplateEditComponent {
       .subscribe(() => {
         this.filteringLKM();
       });
-    this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)). subscribe(() => {
+    this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filteringProject();
     });
 
@@ -292,20 +292,25 @@ export class TemplateEditComponent {
   splitCheckList(template) {
     console.log('template', template);
   }
-  onChangeDetailBannerQuestion(event) {
+  onChangeDetailBannerQuestion(event, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
     if (event.checked) {
-    this.isDetailBannerPertanyaan = true;
+      questions.at(index).get('question_image_detail').setValue(true);
     } else {
-      this.isDetailBannerPertanyaan = false;
+      questions.at(index).get('question_image_detail').setValue(false);
+      question_image_description.reset();
     }
+    console.log('ini detail', questions.at(index).get('question_image_detail'));
   }
   onChangeDetailBanner(event) {
+    let image_description = this.templateTaskForm.get('image_description') as FormArray;
     if (event.checked) {
-    this.isDetailBanner = true;
+      this.isDetailBanner = true;
     } else {
       this.isDetailBanner = false;
+      image_description.reset();
     }
-    console.log('ini is', this.isDetailBanner);
   }
 
   getListTipeMisi() {
@@ -371,7 +376,7 @@ export class TemplateEditComponent {
   }
 
   getListKategoriProject() {
-    this.pengaturanAttributeMisiService.getProject({status: 'active'}).subscribe(
+    this.pengaturanAttributeMisiService.getProject({ status: 'active' }).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listProjectMisi = res.data.data;
@@ -385,17 +390,17 @@ export class TemplateEditComponent {
   }
   imagesContentTypeQuestionChild(image, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
-    this.changeImageDetailQuestionChild = true;
-      var file: File = image;
-      var myReader: FileReader = new FileReader();
+    let question_image_description = questions.at(index).get('question_image_description').value as FormArray;
+    question_image_description[0].changeImageDetailQuestionChild = true;
+    var file: File = image;
+    var myReader: FileReader = new FileReader();
 
-      myReader.onloadend = (e) => {
-        this.imageContentTypeBase64QuestionChild = myReader.result;
-        question_image_description.at(index).get('question_image_detail_photo').setValue(this.imageContentTypeBase64QuestionChild);
-      };
-
-      myReader.readAsDataURL(file);
+    myReader.onloadend = (e) => {
+      this.imageContentTypeBase64QuestionChild = myReader.result;
+      question_image_description[0].question_image_detail_photo = this.imageContentTypeBase64QuestionChild;
+    };
+    console.log('ini image desc', question_image_description);
+    myReader.readAsDataURL(file);
   }
   imagesContentType(image, i) {
     var file: File = image;
@@ -408,7 +413,7 @@ export class TemplateEditComponent {
     };
 
     myReader.readAsDataURL(file);
-}
+  }
   previewImage() {
     let album = {
       src: this.imageContentTypeBase64Child,
@@ -419,10 +424,12 @@ export class TemplateEditComponent {
     this._lightbox.open([album], 0);
   }
   previewImageChild(index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description').value as FormArray;
     let album = {
-      src: this.imageContentTypeBase64QuestionChild,
+      src: question_image_description[0].question_image_detail_photo,
       caption: '',
-      thumb: this.imageContentTypeBase64QuestionChild
+      thumb: question_image_description[0].question_image_detail_photo
     };
 
     this._lightbox.open([album], 0);
@@ -524,9 +531,13 @@ export class TemplateEditComponent {
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
     console.log('inii detail', this.detailTask);
     this.isDetailBanner = this.detailTask.image_detail;
-    if (this.detailTask.image_description[0].content_image != null || this.detailTask.image_description[0].content_image !== undefined ) {
-      this.imageContentTypeDefault = this.detailTask.image_description[0].content_image;
-      this.imageContentTypeBase64Child = this.detailTask.image_description[0].content_image;
+    if (this.detailTask.image_description !== undefined) {
+      if (this.detailTask.image_description[0] !== null) {
+        if (this.detailTask.image_description[0].content_image != null || this.detailTask.image_description[0].content_image !== undefined) {
+          this.imageContentTypeDefault = this.detailTask.image_description[0].content_image;
+          this.imageContentTypeBase64Child = this.detailTask.image_description[0].content_image;
+        }
+      }
     }
 
     this.templateTaskForm.get('kategori_toolbox').setValue(this.detailTask.task_toolbox_id);
@@ -543,22 +554,44 @@ export class TemplateEditComponent {
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
-    this.detailTask['image_description'].map(item => {
+    if (this.detailTask['image_description'] === undefined) {
+      this.detailTask['image_description'].map(item => {
+        image_description.push(this.formBuilder.group({
+          content_type: '',
+          body: '',
+          title: '',
+          landing_page: '',
+          url_iframe: '',
+          imageDetailBanner: ''
+        }));
+      });
+    } else if (this.detailTask['image_description'][0] === null) {
+      image_description.push(this.formBuilder.group({
+        content_type: '',
+        body: '',
+        title: '',
+        landing_page: '',
+        url_iframe: '',
+        imageDetailBanner: ''
+      }));
+    } else {
+      this.detailTask['image_description'].map(item => {
         image_description.push(this.formBuilder.group({
           content_type: item.content_type,
-          landing_page: item.landing_page,
           body: item.body,
           title: item.title,
+          landing_page: item.landing_page,
           url_iframe: item.url_iframe,
           imageDetailBanner: item.content_image
         }));
-    });
+      });
+    }
 
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
         this.listProductSelected[index] = {
           product: new FormControl(item.stock_check_data.name)
-        }
+        };
 
         // this.listProductSelected[index] = this.formBuilder.group({
         //   product: item.stock_check_data.name
@@ -608,6 +641,7 @@ export class TemplateEditComponent {
         this.templateList.push([]);
         this.templateListImageIR.push({ item_id: index + 1 });
       }
+      console.log('cek item', item.question_image_description);
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
@@ -622,16 +656,40 @@ export class TemplateEditComponent {
         stock_check_ir_code: item.stock_check_ir_code,
         stock_check_ir_name: item.stock_check_ir_name,
         stock_check_ir_list: item.stock_check_ir_list,
-        question_image_description: this.formBuilder.array( item.question_image_description.map (item  => {
-          return this.formBuilder.group({
-            content_type: item.content_type,
-            title: item.title,
-            body: item.body,
-            landing_page: item.landing_page,
-            url_iframe: item.url_iframe,
-            question_image_detail_photo: item.content_image
-          });
-        })),
+        question_image_detail: item.question_image_detail === '0' ? false : true,
+        question_image_description: item.question_image_description === undefined ? [{
+          content_type: '',
+          title: '',
+          body: '',
+          landing_page: '',
+          url_iframe: '',
+          question_image_detail_photo: [''],
+          changeImageDetailQuestionChild: false
+        }]
+          : item.question_image_description[0] === null ?
+            this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: '',
+                title: '',
+                landing_page: '',
+                body: '',
+                url_iframe: '',
+                question_image_detail_photo: [''],
+                changeImageDetailQuestionChild: false
+              });
+            }
+            ))
+            : this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: item.content_type,
+                title: item.title,
+                body: item.body,
+                landing_page: item.landing_page,
+                url_iframe: item.url_iframe,
+                question_image_detail_photo: item.content_image,
+                changeImageDetailQuestionChild: item.content_image !== undefined ? true : false
+              });
+            })),
         required: item.required,
         additional: this.formBuilder.array(
           item.additional.map((itm, idx) => {
@@ -644,16 +702,39 @@ export class TemplateEditComponent {
         id: item.id,
         question: item.question,
         is_next_question: item.is_next_question === 1 ? true : false,
-        question_image_description: this.formBuilder.array( item.question_image_description.map (item  => {
-          return this.formBuilder.group({
-            content_type: item.content_type,
-            title: item.title,
-            body: item.body,
-            landing_page: item.landing_page,
-            url_iframe: item.url_iframe,
-            question_image_detail_photo: item.content_image
-          });
-        })),
+        question_image_description: item.question_image_description === undefined ? [{
+          content_type: '',
+          title: '',
+          body: '',
+          landing_page: '',
+          url_iframe: '',
+          question_image_detail_photo: [''],
+          changeImageDetailQuestionChild: false
+        }]
+          : item.question_image_description[0] === null ?
+            this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: '',
+                title: '',
+                landing_page: '',
+                body: '',
+                url_iframe: '',
+                question_image_detail_photo: [''],
+                changeImageDetailQuestionChild: false
+              });
+            }
+            ))
+            : this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: item.content_type,
+                title: item.title,
+                body: item.body,
+                landing_page: item.landing_page,
+                url_iframe: item.url_iframe,
+                question_image_detail_photo: item.content_image,
+                changeImageDetailQuestionChild: item.content_image !== undefined ? true : false
+              });
+            })),
         possibilities: item.possibilities && item.possibilities.map(pb => ({
           ...pb,
           isBranching: pb.next !== null ? true : false
@@ -661,12 +742,19 @@ export class TemplateEditComponent {
       });
       console.log('aall Questions', this.templateTaskForm.get('questions').value);
       this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
-      this.isDetailBannerPertanyaan = item.image_detail;
-      if (item.question_image_description[0].content_image !== null || item.question_image_description[0].content_image !== undefined) {
-        this.filesQuestionChild = item.question_image_description[0].content_image;
-        this.imageContentTypeBase64QuestionChild = item.question_image_description[0].content_image;
+      if (item.question_image_description !== undefined) {
+        if (item.question_image_description[0] != null) {
+          if (item.question_image_description[0].content_image !== null || item.question_image_description[0].content_image !== undefined) {
+            this.filesQuestionChild = item.question_image_description[0].content_image;
+            this.imageContentTypeBase64QuestionChild = item.question_image_description[0].content_image;
+          }
+        }
       }
-      this.isDetailBannerPertanyaan = item.question_image_detail;
+      if (item.question_image_detail === '0') {
+        this.isDetailBannerPertanyaan = false;
+      } else {
+        this.isDetailBannerPertanyaan = true;
+      }
     });
     console.log('asdakdj', this.listProductSelected, this.allQuestionList);
     this.detailTask['rejected_reason_choices'].map(item => {
@@ -807,15 +895,18 @@ export class TemplateEditComponent {
       id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
+      question_image_detail: false,
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_type: '',
-            title: '',
-            body: '',
-            landing_page: '',
-            url_iframe: '',
-            question_image_detail_photo: [''] })]),
+        title: '',
+        body: '',
+        landing_page: '',
+        url_iframe: '',
+        question_image_detail_photo: [''],
+        changeImageDetailQuestionChild: false
+      })]),
       question_image: [''],
       question_video: [''],
       // others: false,
@@ -986,32 +1077,32 @@ export class TemplateEditComponent {
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
         image_description: image_description.map((item, index) => {
-          if (item.content_type === 'image') {
+          if (item.content_type === 'image' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               content_image: item.imageDetailBanner
             };
             return tmp;
-          } else if (item.content_type === 'landing_page') {
+          } else if (item.content_type === 'landing_page' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               landing_page: item.landing_page,
             };
             return tmp;
-          } else if (item.content_type === 'static_page') {
+          } else if (item.content_type === 'static_page' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               title: item.title,
               body: item.body,
             };
             return tmp;
-          } else if (item.content_type === 'iframe') {
+          } else if (item.content_type === 'iframe' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               url_iframe: item.url_iframe,
             };
             return tmp;
-          } else if (item.content_type === 'unlinked') {
+          } else if (item.content_type === 'unlinked' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
             };
@@ -1036,12 +1127,12 @@ export class TemplateEditComponent {
               next: pos.next === "" ? null : pos.next
             })) : [],
             required: item.type === 'stock_check' ? 1 : null,
-            question_image_detail: this.isDetailBannerPertanyaan ? 1 : 0,
+            question_image_detail: item.question_image_detail ? 1 : 0,
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
-              if (tmp.content_type === 'image') {
+              if (tmp.content_type === 'image' && item.question_image_detail) {
                 let tmpung = {
                   content_type: tmp.content_type,
                   content_image: tmp.question_image_detail_photo
@@ -1053,20 +1144,20 @@ export class TemplateEditComponent {
                   landing_page: tmp.landing_page,
                 };
                 return tmpung;
-              } else if (tmp.content_type === 'static_page') {
+              } else if (tmp.content_type === 'static_page' && item.question_image_detail) {
                 let tmpung = {
                   content_type: tmp.content_type,
                   title: tmp.title,
                   body: tmp.body,
                 };
                 return tmpung;
-              } else if (tmp.content_type === 'iframe') {
+              } else if (tmp.content_type === 'iframe' && item.question_image_detail) {
                 let tmpung = {
                   content_type: tmp.content_type,
                   url_iframe: tmp.url_iframe,
                 };
                 return tmpung;
-              } else if (tmp.content_type === 'unlinked') {
+              } else if (tmp.content_type === 'unlinked' && item.question_image_detail) {
                 let tmpung = {
                   content_type: tmp.content_type,
                 };

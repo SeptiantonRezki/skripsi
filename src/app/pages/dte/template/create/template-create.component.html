@@ -52,7 +52,7 @@
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
               <textarea matInput [froalaEditor]="options" formControlName="description" id="froala-editor"
-                placeholder="Deskripsi Tugas"></textarea>
+              ></textarea>
               <mat-error
                 *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
                 Deskripsi Tugas harus diisi
@@ -208,7 +208,7 @@
               </div>
           
               <!-- Static Page -->
-              <div class="pb-24 px-24"
+              <div class="pb-24 px-10"
                 *ngIf="(item.get('content_type').value === 'static_page' || item.get('content_type').value === 'e_wallet') && isDetailBanner">
                 <div fxLayout="row" *ngIf="item.get('content_type').value === 'static_page'">
                   <mat-form-field fxFlex="100" class="is-light form-primary">
@@ -228,7 +228,7 @@
                 </mat-error>
               </div>
               <!-- Landing Page -->
-              <div class="px-24" *ngIf="item.get('content_type').value === 'landing_page'">
+              <div class="px-10" *ngIf="item.get('content_type').value === 'landing_page' && isDetailBanner">
                 <div fxLayout="row">
                   <mat-form-field fxFlex="45" class="is-light form-primary">
                     <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
@@ -238,8 +238,8 @@
                 </div>
               </div>
             <!-- iframe -->
-            <div class="px-24"
-              *ngIf="item.get('content_type').value === 'iframe' || item.get('content_type').value === 'link_web'">
+            <div class="px-10"
+              *ngIf="item.get('content_type').value === 'iframe' && isDetailBanner">
               <div class="" fxLayout="row" fxLayoutAlign="start center">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
                   <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
@@ -255,7 +255,7 @@
               </div>
             </div>
             <!-- image -->
-            <div class="pb-16" *ngIf="item.get('content_type').value === 'image'" fxLayout="row"
+            <div class="pb-16" *ngIf="item.get('content_type').value === 'image' && isDetailBanner" fxLayout="row"
               fxLayoutAlign="start center">
               <div fxFlex="30" class="px-24 inline-block">
                 <div ngfDrop selectable="1" [(validDrag)]="validComboDragDefault" [(file)]="imageContentTypeDefault"
@@ -381,15 +381,15 @@
               </div>
               <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
                 *ngIf="item.get('question_image').value && item.get('type').value !== 'stock_check'">
-                <mat-checkbox [(ngModel)]="isDetailBannerPertanyaan" [ngModelOptions]="{standalone: true}"
-                  (change)="onChangeDetailBannerQuestion($event)">Set
+                <mat-checkbox formControlName ="image_detail"
+                  (change)="onChangeDetailBannerQuestion($event, i)">Set
                   Detail Banner
                 </mat-checkbox>
               </div>
               <div formArrayName="question_image_description"
               *ngFor="let itemque of item.get('question_image_description')['controls']; let img=index;">
                 <div [formGroupName]="img">
-                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="isDetailBannerPertanyaan">
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="item.get('image_detail').value">
                   <mat-form-field fxFlex="45" class="is-light form-primary">
                     <mat-select formControlName="content_typePertanyaan" placeholder="Tipe Konten">
                       <mat-option *ngFor="let loop of listContentTypeQuestionChild" [value]="loop.value">{{loop.name}}
@@ -398,8 +398,8 @@
                   </mat-form-field>
                 </div>
                 <!-- Static Page Pertanyaan-->
-                <div class="pb-24 px-24"
-                  *ngIf="(itemque.value.content_typePertanyaan === 'static_page' || itemque.value.content_typePertanyaan === 'e_wallet') && isDetailBannerPertanyaan">
+                <div class="pb-24 px-10"
+                  *ngIf="(itemque.value.content_typePertanyaan === 'static_page' || itemque.value.content_typePertanyaan === 'e_wallet') && item.get('image_detail').value">
                   <div fxLayout="row" *ngIf="itemque.value.content_typePertanyaan === 'static_page'">
                     <mat-form-field fxFlex="100" class="is-light form-primary">
                       <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
@@ -414,8 +414,8 @@
                     Isi Halaman harus diisi
                   </mat-error>
                 </div>
-                <!-- Landing Page -->
-                <div class="px-24" *ngIf="itemque.value.content_typePertanyaan === 'landing_page'">
+                 <!-- Landing Page -->
+                 <div class="px-10" *ngIf="itemque.value.content_typePertanyaan === 'landing_page' && item.get('image_detail').value">
                   <div fxLayout="row">
                     <mat-form-field fxFlex="45" class="is-light form-primary">
                       <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
@@ -425,8 +425,8 @@
                   </div>
                 </div>
                 <!-- iframe -->
-                <div class="px-24"
-                  *ngIf="itemque.value.content_typePertanyaan === 'iframe' || itemque.value.content_typePertanyaan === 'link_web'">
+                <div class="px-10"
+                  *ngIf="itemque.value.content_typePertanyaan === 'iframe' && item.get('image_detail').value">
                   <div class="" fxLayout="row" fxLayoutAlign="start center">
                     <mat-form-field fxFlex="45" class="is-light form-primary">
                       <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
@@ -434,19 +434,19 @@
                   </div>
                 </div>
                 <!-- image -->
-                <div class="pb-16" *ngIf="itemque.value.content_typePertanyaan === 'image'" fxLayout="row"
+                <div class="pb-16" *ngIf="itemque.value.content_typePertanyaan === 'image' && item.get('image_detail').value" fxLayout="row"
                   fxLayoutAlign="start center">
                   <div fxFlex="30" class="px-24 inline-block">
                     <div ngfDrop selectable="1" [(validDrag)]="validComboDragQuestionChild" [(file)]="filesQuestionChild"
                       accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validComboDragQuestionChild===false"
-                      [class.valid-drag]="validComboDragQuestionChild" (fileChange)="imagesContentTypeQuestionChild($event, img)">
+                      [class.valid-drag]="validComboDragQuestionChild" (fileChange)="imagesContentTypeQuestionChild($event, i)">
                       Tarik gambar kesini atau <strong>pilih file</strong>
                     </div>
                   </div>
-                  <div *ngIf="changeImageDetailQuestionChild">
+                  <div *ngIf="itemque.value.changeImageDetailQuestionChild">
                     <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option"
                       tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content"
-                        (click)="previewImageChild()">Lihat gambar</span>
+                        (click)="previewImageChild(i)">Lihat gambar</span>
                       <mat-icon matTooltip="Hapus gambar"
                         class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                         (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>

@@ -152,13 +152,13 @@ export class TemplateCreateComponent {
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
-    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }, { name: "Pathnership", value: "pathnership" }];
+    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }];
     this.saveData = false;
     this.templateTaskFormError = {
       name: {},
       description: {},
       image: {}
-    }
+    };
   }
 
   ngOnInit() {
@@ -360,17 +360,20 @@ export class TemplateCreateComponent {
   }
 
   imagesContentTypeQuestionChild(image, index) {
+    console.log('index', index);
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
-    this.changeImageDetailQuestionChild = true;
+    let question_image_description = questions.at(index).get('question_image_description').value as FormArray;
+    question_image_description[0].changeImageDetailQuestionChild = true;
+    // console.log('question_image_description', question_image_description);
       var file: File = image;
       var myReader: FileReader = new FileReader();
 
       myReader.onloadend = (e) => {
-        this.imageContentTypeBase64QuestionChild = myReader.result;
-        question_image_description.at(index).get('question_image_detail_photo').setValue(this.imageContentTypeBase64QuestionChild);
+        // this.imageContentTypeBase64QuestionChild = myReader.result;
+        question_image_description[0].question_image_detail_photo = myReader.result;
       };
-
+      // console.log('change', question_image_description.get('changeImageDetailQuestionChild'));
+      // console.log('change', question_image_description.at(index).get('question_image_detail_photo'));
       myReader.readAsDataURL(file);
   }
   deleteImg() {
@@ -532,6 +535,7 @@ export class TemplateCreateComponent {
         question_video: item['question_video'] ? item['question_video'] : '',
         type: item.type,
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
+        image_detail: false,
         // required: item.required,
         question_image_description: this.formBuilder.array( item.question_image_description.map (item  => {
           return this.formBuilder.group({
@@ -540,7 +544,8 @@ export class TemplateCreateComponent {
             body: '',
             landing_page: '',
             url_iframe: '',
-            question_image_detail_photo: ''
+            question_image_detail_photo: [''],
+            changeImageDetailQuestionChild: false,
           });
         })),
         additional: this.formBuilder.array(
@@ -674,13 +679,7 @@ export class TemplateCreateComponent {
       question: `Pertanyaan`,
       type: 'radio',
       content_typePertanyaan: "static_page", 
-      static_page: '',
-      e_wallet: '',
-      title: '',
-      body: '',
-      landing_page: '',
-      iframe: '',
-      url_iframe: '',
+      image_detail: false,
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
@@ -689,7 +688,8 @@ export class TemplateCreateComponent {
             body: '',
             landing_page: '',
             url_iframe: '',
-            question_image_detail_photo: '' })]),
+            changeImageDetailQuestionChild: false,
+            question_image_detail_photo: [''] })]),
       question_image: [''],
       question_video: [''],
     });
@@ -778,20 +778,15 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id })
     if (newId === -Infinity) newId = { id: 0 }
+    this.filesQuestionChild = undefined;
 
     questions.push(this.formBuilder.group({
       id: newId.id + 1,
       question: `Pertanyaan`,
       type: 'radio',
-      static_page: '',
-      e_wallet: '',
-      title: '',
-      body: '',
-      landing_page: '',
-      iframe: '',
-      url_iframe: '',
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       content_typePertanyaan:  'static_page',
+      image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
@@ -799,12 +794,13 @@ export class TemplateCreateComponent {
             body: '',
             landing_page: '',
             url_iframe: '',
-            question_image_detail_photo: '' })]),
+            changeImageDetailQuestionChild: false,
+            question_image_detail_photo: [''] })]),
       question_image: [''],
       question_video: [''],
       // others: false,
       // required: false
-    }))
+    }));
 
     this.allQuestionList.push({
       id: newId.id + 1,
@@ -904,12 +900,15 @@ export class TemplateCreateComponent {
 
     this._lightbox.open([album], 0);
   }
-  previewImageChild() {
+  previewImageChild(index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description').value as FormArray;
     let album = {
-      src: this.imageContentTypeBase64QuestionChild,
+      src: question_image_description[0].question_image_detail_photo,
       caption: '',
-      thumb: this.imageContentTypeBase64QuestionChild
+      thumb: question_image_description[0].question_image_detail_photo
     };
+    console.log('album', [album]);
 
     this._lightbox.open([album], 0);
   }
@@ -917,11 +916,12 @@ export class TemplateCreateComponent {
     return new Promise(resolve => setTimeout(resolve, 2000));
   }
 
-  onChangeDetailBannerQuestion(event) {
+  onChangeDetailBannerQuestion(event, index) {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
     if (event.checked) {
-    this.isDetailBannerPertanyaan = true;
+      questions.at(index).get('image_detail').setValue(true);
     } else {
-      this.isDetailBannerPertanyaan = false;
+      questions.at(index).get('image_detail').setValue(false);
     }
   }
   onChangeDetailBanner(event) {
@@ -959,32 +959,32 @@ export class TemplateCreateComponent {
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
         image_description: image_description.map((item, index) => {
-          if (item.content_type === 'image') {
+          if (item.content_type === 'image' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               content_image: item.imageDetailBanner
             };
             return tmp;
-          } else if (item.content_type === 'landing_page') {
+          } else if (item.content_type === 'landing_page' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               landing_page: item.landing_page,
             };
             return tmp;
-          } else if (item.content_type === 'static_page') {
+          } else if (item.content_type === 'static_page' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               title: item.title,
               body: item.body,
             };
             return tmp;
-          } else if (item.content_type === 'iframe') {
+          } else if (item.content_type === 'iframe' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
               url_iframe: item.url_iframe,
             };
             return tmp;
-          } else if (item.content_type === 'unlinked') {
+          } else if (item.content_type === 'unlinked' && this.isDetailBanner) {
             let tmp = {
               content_type: item.content_type,
             };
@@ -1011,35 +1011,35 @@ export class TemplateCreateComponent {
             })) : [],
             // required: item.required,
             question_image: item.question_image || '',
-            question_image_detail: this.isDetailBannerPertanyaan ? 1 : 0,
+            question_image_detail: item.image_detail ? 1 : 0,
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
-              if (tmp.content_typePertanyaan === 'image') {
+              if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
                 let tmpung = {
                   content_type: tmp.content_typePertanyaan,
                   content_image: tmp.question_image_detail_photo
                 };
                 return tmpung;
-              } else if (tmp.content_typePertanyaan === 'landing_page') {
+              } else if (tmp.content_typePertanyaan === 'landing_page' && item.image_detail) {
                 let tmpung = {
                   content_type: tmp.content_typePertanyaan,
                   landing_page: tmp.landing_page,
                 };
                 return tmpung;
-              } else if (tmp.content_typePertanyaan === 'static_page') {
+              } else if (tmp.content_typePertanyaan === 'static_page' && item.image_detail) {
                 let tmpung = {
                   content_type: tmp.content_typePertanyaan,
                   title: tmp.title,
                   body: tmp.body,
                 };
                 return tmpung;
-              } else if (tmp.content_typePertanyaan === 'iframe') {
+              } else if (tmp.content_typePertanyaan === 'iframe' && item.image_detail) {
                 let tmpung = {
                   content_type: tmp.content_typePertanyaan,
                   url_iframe: tmp.url_iframe,
                 };
                 return tmpung;
-              } else if (tmp.content_typePertanyaan === 'unlinked') {
+              } else if (tmp.content_typePertanyaan === 'unlinked' && item.image_detail) {
                 let tmpung = {
                   content_type: tmp.content_typePertanyaan,
                 };
@@ -1071,7 +1071,7 @@ export class TemplateCreateComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-
+      console.log('ini masuk body', body);
       console.log(body, this.questionHasNext[2]);
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
