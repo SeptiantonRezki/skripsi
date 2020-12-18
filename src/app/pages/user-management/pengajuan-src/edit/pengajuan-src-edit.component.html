@@ -114,6 +114,17 @@
                   </mat-error>
                 </mat-form-field>
 
+                <div fxLayout="row" fxFlex="100" style="margin-bottom: 20px;">
+                  <div fxFlex="30">
+                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="snk">
+                      Persetujuan Syarat & Ketentuan</mat-checkbox>
+                  </div>
+                  <div fxFlex="30">
+                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="pnp">
+                      Persetujuan Kebijakan Privasi</mat-checkbox>
+                  </div>
+                </div>
+
                 <div class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                   <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
                     [disabled]="submitting">
