@@ -204,7 +204,8 @@
                   fxLayoutGap.lt-md="0px">
                   <div fxFlex="90" class="py-16 pr-16">
                     <div class="text-center">
-                      <div style="font-size: 20px; font-weight: 600; text-decoration: underline;">Detail Pemesanan/Preorder</div>
+                      <div style="font-size: 20px; font-weight: 600; text-decoration: underline;">Detail
+                        Pemesanan/Preorder</div>
                       <div class="py-8" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
                         <span>{{detailOrder?.invoice_number}}</span>
                       </div>
@@ -241,7 +242,8 @@
                     <!-- <div class="pt-8 border-bottom-custom"></div> -->
                     <br>
                     <div class="text-center">
-                      <div class="mat-caption" style="text-align: left;">{{detailOrder?.created_at | date: 'dd/MM/yyyy HH:mm'}}</div>
+                      <div class="mat-caption" style="text-align: left;">{{detailOrder?.created_at | date: 'dd/MM/yyyy
+                        HH:mm'}}</div>
                       <br>
                       <div class="mat-caption" style="font-size: 14px;">Terima kasih telah</div>
                       <div class="mat-caption" style="font-size: 14px;">menggunakan aplikasi AYO SRC</div>
@@ -251,6 +253,30 @@
               </div>
             </div>
           </div>
+        </mat-tab>
+        <mat-tab label="Dokumen">
+          <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
+            <img class="attachment-img" id="image4" [src]="detailOrder?.document_image_url" />
+          </div>
+          <div fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
+            <mat-form-field fxFlex="30">
+              <input matInput [formControl]="document"
+                [placeholder]="'Nomor ' + (detailOrder?.document_type ? detailOrder?.document_type.toUpperCase() : 'Kartu') " />
+              <mat-icon matSuffix (click)="copyMessage()" style="cursor: pointer;"
+                [matTooltip]="'Salin Nomor' + (detailOrder?.document_type ? detailOrder?.document_type.toUpperCase() : 'Kartu') ">
+                content_copy
+              </mat-icon>
+            </mat-form-field>
+          </div>
+          <p style="text-align: center;" *ngIf="!detailOrder.document">Tidak Ada Dokumen yang Ditampilkan</p>
+          <!-- <div fxLayout="row" style="margin-left: 15px;">
+            <mat-form-field fxFlex="30">
+              <input matInput [formControl]="npwp" placeholder="Nomor NPWP" />
+              <mat-icon matSuffix (click)="copyMessage('npwp')" style="cursor: pointer;" matTooltip="Salin Nomor NPWP">
+                content_copy
+              </mat-icon>
+            </mat-form-field>
+    </div> -->
         </mat-tab>
       </mat-tab-group>
     </div>

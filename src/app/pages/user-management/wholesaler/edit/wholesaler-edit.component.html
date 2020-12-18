@@ -12,8 +12,9 @@
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
 
             <div fxFlex="50" class="px-8">
-              
-              <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+
+              <mat-form-field
+                [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="status">
                   <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
                 </mat-select>
@@ -124,6 +125,43 @@
                 *ngIf="formBankAccount.controls['branch'].hasError('required') && formBankAccount.controls['branch'].touched">
                 Cabang Bank harus diisi.
               </mat-error>
+            </div>
+          </div>
+
+          <div [formGroup]="formDoc" class="ayo-middle pt-24" fxLayout="column">
+            <div fxLayout="row" fxFlex="100">
+              <mat-form-field class="is-light" fxFlex="30">
+                <input matInput placeholder="Nomor KTP" type="text" formControlName="ktp">
+              </mat-form-field>
+              <div fxFlex="2"></div>
+              <div class="confirm btn-confirm py-16" fxLayout="row" fxFlex="50">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                  (click)="cekDokumen('ktp')">
+                  Lihat Dokumen
+                </button>
+                <div fxFlex="2"></div>
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                  (click)="cekDokumenAkses('ktp')">
+                  Lihat Pemberian Akses
+                </button>
+              </div>
+            </div>
+            <div fxLayout="row" fxFlex="100">
+              <mat-form-field class="is-light" fxFlex="30">
+                <input matInput placeholder="Nomor NPWP" type="text" formControlName="npwp">
+              </mat-form-field>
+              <div fxFlex="2"></div>
+              <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                  (click)="cekDokumen('npwp')">
+                  Lihat Dokumen
+                </button>
+                <div fxFlex="2"></div>
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                  (click)="cekDokumenAkses('npwp')">
+                  Lihat Pemberian Akses
+                </button>
+              </div>
             </div>
           </div>
 

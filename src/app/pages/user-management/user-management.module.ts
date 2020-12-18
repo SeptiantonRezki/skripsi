@@ -112,6 +112,7 @@ import { PanelPartnershipEditComponent } from "./private-label/panel-partnership
 import { ImportAudienceDialogComponent } from "./private-label/panel-partnership/import/import-audience-dialog.component";
 
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
+import { DokumenDialogComponent } from './wholesaler/dokumen-dialog/dokumen-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -250,7 +251,8 @@ export const MY_FORMATS = {
     PanelPartnershipIndexComponent,
     PanelPartnershipCreateComponent,
     PanelPartnershipEditComponent,
-    ImportAudienceDialogComponent
+    ImportAudienceDialogComponent,
+    DokumenDialogComponent
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -260,7 +262,8 @@ export const MY_FORMATS = {
     PanelPartnershipIndexComponent,
     PanelPartnershipCreateComponent,
     PanelPartnershipEditComponent,
-    ImportAudienceDialogComponent
+    ImportAudienceDialogComponent,
+    DokumenDialogComponent
   ],
   providers: [
     // PendingChangesGuard,
