@@ -31,6 +31,9 @@ export class ProductEditComponent {
   loadingIndicator: boolean;
   onLoad: Boolean;
   indexDelete: any;
+  is_promo_src: Boolean = true;
+  is_private_label: Boolean  = true;
+  is_private_label_res: Boolean  = true;
 
   idProduct: any;
   detailProduct: any;
@@ -260,6 +263,7 @@ export class ProductEditComponent {
           if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
           if (res.data.end_date_pin_up) this.formProductGroup.get('end_date_pin_up').setValue(new Date(res.data.end_date_pin_up));
         }
+        this.is_private_label_res = res.data.is_private_label_editable;
         this.formProductGroup.get("is_private_label").setValue(res.data.is_private_label === 1 ? true : false);
         console.log(this.formProductGroup);
         if (res.data.category.parent_id) {
@@ -762,22 +766,38 @@ export class ProductEditComponent {
   }
 
   async submit() {
-    if (this.formProductGroup.get('status_pin_up').value != '1') {
-      this.formProductGroup.get('start_date_pin_up').clearValidators();
-      this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
-      this.formProductGroup.get('end_date_pin_up').clearValidators();
-      this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
-    }
-    if (this.formProductGroup.get("is_promo_src").value !== true) {
-      // this.formProductGroup.get("is_promo_src").disable();
-      this.formProductGroup.get("is_promo_src").setValue(false);
-    }
-    if (this.formProductGroup.get("is_private_label").value !== true) {
-      // this.formProductGroup.get("is_private_label").disable();
-      this.formProductGroup.get("is_private_label").setValue(false);
-    }
-    if ((this.formProductGroup.valid && this.files === undefined) || (this.formProductGroup.valid && this.files && this.files.size < 2000000)) {
-      this.loadingIndicator = true;
+    if (!this.formProductGroup.get('is_private_label').value && !this.is_private_label_res) {
+      this.dialogService.openSnackBar({ message: `Product ini masih terasosiasi dengan panel Mitra` });
+    } else {
+      if (!this.is_promo_src) {
+        let areas = this.formProductGroup.controls['areas'] as FormArray;
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+      }
+      if (!this.is_private_label) {
+          let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+          packaging.reset();
+          while (packaging.length > 0) {
+          packaging.removeAt(packaging.length - 1);
+      }
+      }
+      if (this.formProductGroup.get('status_pin_up').value != '1') {
+        this.formProductGroup.get('start_date_pin_up').clearValidators();
+        this.formProductGroup.get('start_date_pin_up').updateValueAndValidity();
+        this.formProductGroup.get('end_date_pin_up').clearValidators();
+        this.formProductGroup.get('end_date_pin_up').updateValueAndValidity();
+      }
+      if (this.formProductGroup.get("is_promo_src").value !== true) {
+        // this.formProductGroup.get("is_promo_src").disable();
+        this.formProductGroup.get("is_promo_src").setValue(false);
+      }
+      if (this.formProductGroup.get("is_private_label").value !== true) {
+        // this.formProductGroup.get("is_private_label").disable();
+        this.formProductGroup.get("is_private_label").setValue(false);
+      }
+      if ((this.formProductGroup.valid && this.files === undefined) || (this.formProductGroup.valid && this.files && this.files.size < 2000000)) {
+        this.loadingIndicator = true;
 
       let aliasChip = this.formProductGroup.get("alias").value.map(item => {
         return item.alias;
@@ -937,8 +957,9 @@ export class ProductEditComponent {
         msg = "Silakan lengkapi data terlebih dahulu!";
       }
 
-      this.dialogService.openSnackBar({ message: msg });
-      commonFormValidator.validateAllFields(this.formProductGroup);
+        this.dialogService.openSnackBar({ message: msg });
+        commonFormValidator.validateAllFields(this.formProductGroup);
+      }
     }
   }
 
@@ -994,18 +1015,14 @@ export class ProductEditComponent {
 
   isPromo(event) {
     if (event.checked) {
-      this.formProductGroup.get('is_private_label').setValue(false);
-      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
-      }
-      this.addArea();
-      this.goToBottom();
-    } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      if (areas.length > 0) {
+        this.is_promo_src = true;
+      } else {
+      this.addArea();
       }
+    } else {
+      this.is_promo_src = false;
     }
   }
 
@@ -1039,19 +1056,15 @@ export class ProductEditComponent {
 
   isPrivateLabel(event: any) {
     if (event.checked) {
-      this.formProductGroup.get('is_promo_src').setValue(false);
-      let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
-      }
-      this.openProductPrice();
-      this.goToBottom();
-    } else {
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset();
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
+      if (packaging.length > 0) {
+        this.is_private_label = true;
+      } else {
+      this.is_private_label = true;
+      this.openProductPrice();
       }
+    } else {
+      this.is_private_label = false;
     }
   }
 

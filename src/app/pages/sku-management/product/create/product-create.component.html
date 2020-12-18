@@ -206,9 +206,10 @@
                   </mat-radio-button>
                 </mat-radio-group> -->
               </div>
+              <div *ngIf="formProductGroup.get('is_promo_src').value">
               <div class="" formArrayName="areas"
                 *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
-                <div [formGroupName]="i">
+                <div [formGroupName]="i" *ngIf="is_promo_check">
                   <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                     <div fxFlex="50">
                       <h3 class="">Geotree {{i+1}}</h3>
@@ -322,6 +323,8 @@
                   </div>
                 </div>
               </div>
+              </div>
+
               <div *ngIf="formProductGroup.get('is_private_label').value">
                 <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxFlex="50">
