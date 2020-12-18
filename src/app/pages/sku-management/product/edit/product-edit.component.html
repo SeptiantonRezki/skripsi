@@ -175,26 +175,27 @@
                 <!-- <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox> -->
                 <div fxLayout="row" fxLayoutGap="20px">
                   <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src"
-                    [disabled]="!detailProduct.is_private_label_editable">Produk Pilihan SRC</mat-checkbox>
+                    >Produk Pilihan SRC</mat-checkbox>
                   <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8"
-                    formControlName="is_private_label" [disabled]="!detailProduct.is_private_label_editable">Produk
+                    formControlName="is_private_label">Produk
                     Prinsipal</mat-checkbox>
                 </div>
               </div>
               <div class="" formArrayName="areas"
-                *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
-                <div [formGroupName]="i">
-                  <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;"
+                >
+                <div [formGroupName]="i" *ngIf = "is_promo_src">
+                  <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center" >
                     <div fxFlex="50">
-                      <h3 class="">Geotree {{i+1}}</h3>
+                      <h3 class="" >Geotree {{i+1}}</h3>
                     </div>
                     <!-- <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
                       <button *ngIf="formProductGroup.get('areas').value.length === 1 || i === (formProductGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea(i)"><mat-icon>add</mat-icon></button>
                       <button *ngIf="formProductGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)"><mat-icon>delete</mat-icon></button>
                     </div> -->
                   </div>
-                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap">
-                    <div fxFlex="10" style="margin-top: 15px;">
+                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap" >
+                    <div fxFlex="100" style="margin-top: 15px;">
                       <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
                     </div>
                     <div fxLayout="row" fxFlex="85" *ngIf="wil.get('time_period').value === true">
@@ -299,7 +300,7 @@
               </div>
               <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="10px" fxFlex="1 0 auto" style="margin-left: 20px;margin-bottom: 20px;"
-                *ngIf="!detailProduct.sharelink_url">
+                *ngIf="!detailProduct.sharelink_url && is_promo_src">
                 <button type="button" mat-stroked-button color="primary" (click)="generateLink()">GENERATE
                   LINK</button>
               </div>
@@ -312,7 +313,7 @@
                   </mat-icon>
                 </mat-form-field>
               </div>
-              <div *ngIf="formProductGroup.get('is_private_label').value">
+              <div *ngIf="formProductGroup.get('is_private_label').value && is_private_label">
                 <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxFlex="50">
                     <h3 class="">Harga Produk</h3>

@@ -30,6 +30,7 @@ export class ProductCreateComponent {
   addOnBlur = true;
   loadingIndicator: boolean;
   indexDelete: any;
+  is_promo_check: Boolean = false;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   otherProduct: any[];
@@ -835,7 +836,10 @@ export class ProductCreateComponent {
 
   isPromo(event) {
     if (event.checked) {
-      this.formProductGroup.get('is_private_label').setValue(false);
+      console.log('ini promo', this.formProductGroup.get('is_promo_src'));
+      console.log('private label', this.formProductGroup.get('is_private_label'));
+      this.is_promo_check = true;
+      // this.formProductGroup.get('is_private_label').setValue(false);
       let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
       while (packaging.length > 0) {
         packaging.removeAt(packaging.length - 1);
@@ -880,11 +884,9 @@ export class ProductCreateComponent {
 
   isPrivateLabel(event: any) {
     if (event.checked) {
-      this.formProductGroup.get('is_promo_src').setValue(false);
-      let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
-      }
+      console.log('ini promo', this.formProductGroup.get('is_promo_src'));
+      console.log('private label', this.formProductGroup.get('is_private_label'));
+      // this.formProductGroup.get('is_promo_src').setValue(false);
       this.openProductPrice();
       this.goToBottom();
     } else {
