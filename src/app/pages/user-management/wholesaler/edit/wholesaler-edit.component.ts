@@ -7,10 +7,11 @@ import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
 import { Utils } from "app/classes/utils";
 import { ReplaySubject, Subject } from "rxjs";
-import { MatSelect } from "@angular/material";
+import { MatDialog, MatDialogConfig, MatSelect } from "@angular/material";
 import { takeUntil, distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { GeneralService } from "app/services/general.service";
 import { PagesName } from "app/classes/pages-name";
+import { DokumenDialogComponent } from "../dokumen-dialog/dokumen-dialog.component";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -31,6 +32,7 @@ export class WholesalerEditComponent {
     { name: "Status Non Aktif", value: "inactive" },
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
+  dialogRef: any;
 
   listLevelArea: any[];
   list: any;
@@ -65,7 +67,8 @@ export class WholesalerEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private wholesalerService: WholesalerService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private dialog: MatDialog,
   ) {
     this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
@@ -371,6 +374,47 @@ export class WholesalerEditComponent {
     this.filteredBanks.next(
       this.listBanks.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
+  }
+
+  cekDokumen(docType) {
+    let ImageURL = null;
+    let document = null;
+    if (docType === 'ktp') {
+      if (this.detailWholesaler.ktp) {
+        ImageURL = this.detailWholesaler.ktp_image_url;
+        document = this.detailWholesaler.ktp;
+      }
+    } else {
+      if (this.detailWholesaler.npwp) {
+        ImageURL = this.detailWholesaler.npwp_image_url;
+        document = this.detailWholesaler.npwp;
+      }
+    }
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { isAccess: false, image_url: ImageURL, document_type: docType, title: 'Dokumen ' + docType.toUpperCase(), document: document };
+
+    this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+    });
+  }
+
+  cekDokumenAkses(docType) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: "Pemberian Akses Ke Supplier" };
+
+    this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+    });
   }
 
   getAudienceArea(selection, id) {
