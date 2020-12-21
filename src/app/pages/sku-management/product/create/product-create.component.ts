@@ -39,6 +39,7 @@ export class ProductCreateComponent {
   listOtherSubCategory: Array<any>;
   listPackaging: Array<any>;
   packagingIndex: any;
+  wilayahIndex: any;
 
   files: File;
   validComboDrag: boolean;
@@ -164,25 +165,30 @@ export class ProductCreateComponent {
         this.filteringSubCategory();
       });
 
-    this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
-      let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-      (res || []).map((item, index) => {
-        if (item.price) {
-          listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
-          listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
-        }
+    // this.formProductGroup.controls['areas'].valueChanges.debounceTime(300).subscribe(res => {
+    //   (res || []).map((wil, idx) => {
+    //     wil.valueChanges.debounceTime(300).subscribe(res2 => {
+    //       let listProdukPrivateLabel = wil.get('listProdukPrivateLabel') as FormArray;
+    //       (res2 || []).map((item, index) => {
+    //         if (item.price) {
+    //           listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+    //           listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+    //         }
 
-        if (item.price_discount) {
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
-        } else {
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
-        }
-      })
-    });
-    const lppl = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-    lppl.at(0).get('price_discount_expires_at').disable();
+    //         if (item.price_discount) {
+    //           listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+    //         } else {
+    //           listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+    //           listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+    //         }
 
+    //         if (index === 0) {
+    //           item.get('price_discount_expires_at').disable();
+    //         }
+    //       })
+    //     })
+    //   });
+    // });
   }
 
   filteringCategory() {
@@ -265,7 +271,7 @@ export class ProductCreateComponent {
   }
 
   createArea(): FormGroup {
-    return this.formBuilder.group({
+    let fb = this.formBuilder.group({
       national: [1, Validators.required],
       zone: [""],
       salespoint: [""],
@@ -282,14 +288,37 @@ export class ProductCreateComponent {
       list_territory: this.formBuilder.array([]),
       time_period: [false],
       start_date: [""],
-      end_date: [""]
-    })
+      end_date: [""],
+      listProdukPrivateLabel: this.formBuilder.array([])
+    });
+
+    fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+      let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+      (res || []).map((item, index) => {
+        if (item.price) {
+          listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+          listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+        }
+
+        if (item.price_discount) {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+        } else {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+        }
+      })
+    });
+
+    // const lppl = fb.get('listProdukPrivateLabel') as FormArray;
+    // lppl.at(0).get('price_discount_expires_at').disable();
+    return fb;
   }
 
   addArea() {
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
     // if (wilayah.length < 2) {
     wilayah.push(this.createArea());
+    // this.addProductPrice(wilayah.length - 1);
     const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
     this.initArea(index);
     this.generataList('zone', 1, index, 'render');
@@ -672,81 +701,79 @@ export class ProductCreateComponent {
         fd.append("is_private_label", body.is_private_label);
         // fd.append("convertion", body.convertion);
 
-        if (body.is_promo_src === "1") {
-          let _areas = [];
-          let areas = [];
-          let value = this.formProductGroup.getRawValue();
+        let _areas = [];
+        let areas = [];
+        let value = this.formProductGroup.getRawValue();
 
-          value.areas.map(item => {
-            let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-            for (const val of this.typeArea) {
-              const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
-              if (filteredValue) _areas.push(filteredValue)
-            }
-
-            areas.push(_.last(_areas));
-            _areas = [];
-          })
-
-          let same = this.findDuplicate(areas.map(item => item.value));
-          if (same.length > 0) {
-            return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
+        value.areas.map(item => {
+          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+          for (const val of this.typeArea) {
+            const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
+            if (filteredValue) _areas.push(filteredValue)
           }
 
-          areas.map((areaItem, i) => {
-            fd.append(`areas[${i}][area_id]`, areaItem.value);
-            fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
-            fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
-          })
+          areas.push(_.last(_areas));
+          _areas = [];
+        })
+
+        let same = this.findDuplicate(areas.map(item => item.value));
+        if (same.length > 0) {
+          return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
         }
-
-        body.alias.map(item => {
-          fd.append("alias[]", item);
-        });
-
-        let priceProducts = []
-        if (body.is_private_label == "1") {
-          let listProdukPrivateLabel = [];
-          let product = this.formProductGroup.getRawValue();
-          product.listProdukPrivateLabel.map((item, index) => {
-            listProdukPrivateLabel.push({
-              packaging: item.packaging,
-              packaging_amount: item.packaging_amount,
-              price: item.price,
-              price_discount: item.price_discount || 0,
-              price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
-              tipe: item.tipe
-            })
-          });
-
-          if (listProdukPrivateLabel.length > 0) {
-            listProdukPrivateLabel.map((item, index) => {
-              fd.append(`product_prices[${index}][packaging]`, item.packaging);
-              fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
-              fd.append(`product_prices[${index}][price]`, item.price);
-
-              if (item.price_discount_expires_at)
-                fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
-              else
-                fd.append(`product_prices[${index}][price_discount]`, '0');
-
-              fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
-              fd.append(`product_prices[${index}][price_type]`, item.tipe);
+        areas.map((areaItem, i) => {
+          if (body.is_private_label == "1") {
+            let listProdukPrivateLabel = [];
+            let productGroup = this.formProductGroup.getRawValue();
+            let product = productGroup.areas[i];
+            product.listProdukPrivateLabel.map((item, index) => {
+              listProdukPrivateLabel.push({
+                packaging: item.packaging,
+                packaging_amount: item.packaging_amount,
+                price: item.price,
+                price_discount: item.price_discount || 0,
+                price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
+                tipe: item.tipe
+              })
             });
 
-            let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
-            if (primaryNamePackaging.length > 0) {
-              this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
-              this.loadingIndicator = false;
+            if (listProdukPrivateLabel.length > 0) {
+              listProdukPrivateLabel.map((item, index) => {
+                fd.append(`product_prices[${index}][packaging]`, item.packaging);
+                fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
+                fd.append(`product_prices[${index}][price]`, item.price);
+                fd.append(`product_prices[${index}][area_id]`, areaItem.value);
+
+                if (item.price_discount_expires_at)
+                  fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
+                else
+                  fd.append(`product_prices[${index}][price_discount]`, '0');
+
+                fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+                fd.append(`product_prices[${index}][price_type]`, item.tipe);
+              });
+
+              let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
+              if (primaryNamePackaging.length > 0) {
+                this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
+                this.loadingIndicator = false;
+
+                return;
+              }
+            } else {
+              this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
 
               return;
             }
           } else {
-            this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
-
-            return;
+            fd.append(`areas[${i}][area_id]`, areaItem.value);
+            fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
+            fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
           }
-        }
+        })
+
+        body.alias.map(item => {
+          fd.append("alias[]", item);
+        });
 
         this.dataService.showLoading(true);
         this.productService.create(fd).subscribe(
@@ -835,11 +862,15 @@ export class ProductCreateComponent {
 
   isPromo(event) {
     if (event.checked) {
-      this.formProductGroup.get('is_private_label').setValue(false);
-      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
       }
+      this.formProductGroup.get('is_private_label').setValue(false);
+      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      // while (packaging.length > 0) {
+      //   packaging.removeAt(packaging.length - 1);
+      // }
       this.addArea();
       this.goToBottom();
     } else {
@@ -885,14 +916,19 @@ export class ProductCreateComponent {
       while (areas.length > 0) {
         areas.removeAt(areas.length - 1);
       }
-      this.openProductPrice();
+      // this.openProductPrice();
+      this.addArea();
       this.goToBottom();
     } else {
-      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset();
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
       }
+      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      // packaging.reset();
+      // while (packaging.length > 0) {
+      //   packaging.removeAt(packaging.length - 1);
+      // }
     }
   }
 
@@ -921,8 +957,10 @@ export class ProductCreateComponent {
     packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]);
   }
 
-  addProductPrice() {
-    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+  addProductPrice(i) {
+    let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    let packaging = wilayah.at(i).get('listProdukPrivateLabel') as FormArray;
+    // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
     packaging.push(this.createListPriceProdukPrivateLabel());
     this.goToBottom();
   }
@@ -935,11 +973,12 @@ export class ProductCreateComponent {
       price_discount: "",
       price_discount_expires_at: ["", Validators.required],
       tipe: [""]
-    })
+    });
   }
 
-  removePackaging(param?: any, i?: any): void {
+  removePackaging(param?: any, i?: any, j?: any): void {
     this.packagingIndex = i;
+    this.wilayahIndex = j;
 
     let data = {
       titleDialog: "Hapus Data Kemasan",
@@ -951,7 +990,8 @@ export class ProductCreateComponent {
   }
 
   confirmRemovePackaging(): void {
-    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+    let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    let packaging = wilayah.at(this.wilayahIndex).get('listProdukPrivateLabel') as FormArray;
     packaging.removeAt(this.packagingIndex);
 
     this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });

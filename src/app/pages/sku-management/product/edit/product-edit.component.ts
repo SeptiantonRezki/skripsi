@@ -43,6 +43,7 @@ export class ProductEditComponent {
   listOtherSubCategory: Array<any>;
   listPackaging: Array<any>;
   packagingIndex: any;
+  wilayahIndex: any;
 
   files: File;
   validComboDrag: boolean;
@@ -215,23 +216,23 @@ export class ProductEditComponent {
         this.filteringSubCategory();
       });
 
-    this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
-      let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-      (res || []).map((item, index) => {
-        if (item.price) {
-          listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
-          listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
-        }
+    // this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+    //   let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
+    //   (res || []).map((item, index) => {
+    //     if (item.price) {
+    //       listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+    //       listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+    //     }
 
-        if (parseInt(item.price_discount) > 0) {
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
-        } else {
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
-          listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
-        }
-      })
-    });
+    //     if (parseInt(item.price_discount) > 0) {
+    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+    //     } else {
+    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
+    //     }
+    //   })
+    // });
 
   }
 
@@ -271,36 +272,41 @@ export class ProductEditComponent {
           this.formProductGroup.get("category").setValue(res.data.category_id);
         }
 
-        for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
-          console.log('hitted me');
-          const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
-          let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+        if (res.data.is_promo_src === 1) {
+          for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
+            console.log('hitted me');
+            const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
+            let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
-          wilayah.push(this.formBuilder.group({
-            national: [this.getArea(response, 'national'), Validators.required],
-            zone: [this.getArea(response, 'division')],
-            region: [this.getArea(response, 'region')],
-            area: [this.getArea(response, 'area')],
-            salespoint: [this.getArea(response, 'salespoint')],
-            district: [this.getArea(response, 'district')],
-            territory: [this.getArea(response, 'teritory')],
-            list_national: this.formBuilder.array(this.listLevelArea),
-            list_zone: this.formBuilder.array([]),
-            list_region: this.formBuilder.array([]),
-            list_area: this.formBuilder.array([]),
-            list_salespoint: this.formBuilder.array([]),
-            list_district: this.formBuilder.array([]),
-            list_territory: this.formBuilder.array([]),
-            time_period: [val.start_date !== null && val.end_date !== null ? true : false],
-            start_date: [val.start_date !== null ? val.start_date : ""],
-            end_date: [val.end_edate !== null ? val.end_date : ""]
-          }))
+            let fb = this.formBuilder.group({
+              national: [this.getArea(response, 'national'), Validators.required],
+              zone: [this.getArea(response, 'division')],
+              region: [this.getArea(response, 'region')],
+              area: [this.getArea(response, 'area')],
+              salespoint: [this.getArea(response, 'salespoint')],
+              district: [this.getArea(response, 'district')],
+              territory: [this.getArea(response, 'teritory')],
+              list_national: this.formBuilder.array(this.listLevelArea),
+              list_zone: this.formBuilder.array([]),
+              list_region: this.formBuilder.array([]),
+              list_area: this.formBuilder.array([]),
+              list_salespoint: this.formBuilder.array([]),
+              list_district: this.formBuilder.array([]),
+              list_territory: this.formBuilder.array([]),
+              time_period: [val.start_date !== null && val.end_date !== null ? true : false],
+              start_date: [val.start_date !== null ? val.start_date : ""],
+              end_date: [val.end_edate !== null ? val.end_date : ""],
+              listProdukPrivateLabel: this.formBuilder.array([])
+            });
 
-          this.initArea(index);
-          this.initFormGroup(response, index);
+            wilayah.push(fb);
 
-          if (this.detailProduct.areas.length === (index + 1)) {
-            this.onLoad = false;
+            this.initArea(index);
+            this.initFormGroup(response, index);
+
+            if (this.detailProduct.areas.length === (index + 1)) {
+              this.onLoad = false;
+            }
           }
         }
 
@@ -309,19 +315,56 @@ export class ProductEditComponent {
         // }
 
         if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
-          let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-          let idx = 0;
-          for (const item of res.data.product_prices) {
-            priceProduct.push(this.formBuilder.group({
-              packaging: [item.packaging, Validators.required],
-              packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
-              price: [item.price, Validators.required],
-              price_discount: [item.price_discount, Validators.required],
-              price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
-              tipe: [item.price_type]
-            }));
-            idx++;
-          };
+          let productPrices = res.data.product_prices;
+          Object.keys(productPrices).map(async (key, index) => {
+            console.log('askdja', key, productPrices[key]);
+            const response = await this.productService.getParentArea({ parent: key }).toPromise();
+            let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+
+            let fb = this.formBuilder.group({
+              national: [this.getArea(response, 'national'), Validators.required],
+              zone: [this.getArea(response, 'division')],
+              region: [this.getArea(response, 'region')],
+              area: [this.getArea(response, 'area')],
+              salespoint: [this.getArea(response, 'salespoint')],
+              district: [this.getArea(response, 'district')],
+              territory: [this.getArea(response, 'teritory')],
+              list_national: this.formBuilder.array(this.listLevelArea),
+              list_zone: this.formBuilder.array([]),
+              list_region: this.formBuilder.array([]),
+              list_area: this.formBuilder.array([]),
+              list_salespoint: this.formBuilder.array([]),
+              list_district: this.formBuilder.array([]),
+              list_territory: this.formBuilder.array([]),
+              time_period: [false],
+              start_date: [""],
+              end_date: [""],
+              listProdukPrivateLabel: this.formBuilder.array([])
+            });
+
+            wilayah.push(fb);
+
+            this.initArea(index);
+            this.initFormGroup(response, index);
+
+            this.initFormProductPL(productPrices, index, key);
+            if (this.detailProduct.areas.length === (index + 1)) {
+              this.onLoad = false;
+            }
+          });
+          // let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+          // let idx = 0;
+          // for (const item of res.data.product_prices) {
+          //   priceProduct.push(this.formBuilder.group({
+          //     packaging: [item.packaging, Validators.required],
+          //     packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
+          //     price: [item.price, Validators.required],
+          //     price_discount: [item.price_discount, Validators.required],
+          //     price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+          //     tipe: [item.price_type]
+          //   }));
+          //   idx++;
+          // };
         }
 
         setTimeout(() => {
@@ -336,8 +379,27 @@ export class ProductEditComponent {
     }
   }
 
+  initFormProductPL(productPrices, area_idx, area_id): any {
+    let wilayah = this.formProductGroup.get('areas') as FormArray;
+    let priceProduct = wilayah.at(area_idx).get("listProdukPrivateLabel") as FormArray;
+    let idx = 0;
+    for (const item of productPrices[area_id]) {
+      priceProduct.push(this.formBuilder.group({
+        packaging: [item.packaging, Validators.required],
+        packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+        price: [Number(item.price), Validators.required],
+        price_discount: [Number(item.price_discount), Validators.required],
+        price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+        tipe: [item.price_type]
+      }));
+      idx++;
+    };
+
+    return priceProduct;
+  }
+
   createArea(): FormGroup {
-    return this.formBuilder.group({
+    let fb = this.formBuilder.group({
       national: [1, Validators.required],
       zone: [""],
       salespoint: [""],
@@ -354,8 +416,28 @@ export class ProductEditComponent {
       list_territory: this.formBuilder.array([]),
       time_period: [false],
       start_date: [""],
-      end_date: [""]
-    })
+      end_date: [""],
+      listProdukPrivateLabel: this.formBuilder.array([])
+    });
+
+    fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+      let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+      (res || []).map((item, index) => {
+        if (item.price) {
+          listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+          listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+        }
+
+        if (item.price_discount) {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+        } else {
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+          listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+        }
+      })
+    });
+
+    return fb;
   }
 
   addArea() {
@@ -994,11 +1076,15 @@ export class ProductEditComponent {
 
   isPromo(event) {
     if (event.checked) {
-      this.formProductGroup.get('is_private_label').setValue(false);
-      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
       }
+      this.formProductGroup.get('is_private_label').setValue(false);
+      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      // while (packaging.length > 0) {
+      //   packaging.removeAt(packaging.length - 1);
+      // }
       this.addArea();
       this.goToBottom();
     } else {
@@ -1044,14 +1130,18 @@ export class ProductEditComponent {
       while (areas.length > 0) {
         areas.removeAt(areas.length - 1);
       }
-      this.openProductPrice();
+      // this.openProductPrice();
       this.goToBottom();
     } else {
-      let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      packaging.reset();
-      while (packaging.length > 0) {
-        packaging.removeAt(packaging.length - 1);
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
+      while (areas.length > 0) {
+        areas.removeAt(areas.length - 1);
       }
+      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+      // packaging.reset();
+      // while (packaging.length > 0) {
+      //   packaging.removeAt(packaging.length - 1);
+      // }
     }
   }
 
@@ -1080,8 +1170,10 @@ export class ProductEditComponent {
     packaging = this.formBuilder.array([this.createListPriceProdukPrivateLabel()]);
   }
 
-  addProductPrice() {
-    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+  addProductPrice(i) {
+    let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    let packaging = wilayah.at(i).get('listProdukPrivateLabel') as FormArray;
+    // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
     packaging.push(this.createListPriceProdukPrivateLabel());
     this.goToBottom();
   }
@@ -1110,7 +1202,8 @@ export class ProductEditComponent {
   }
 
   confirmRemovePackaging(): void {
-    let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
+    let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+    let packaging = wilayah.at(this.wilayahIndex).get('listProdukPrivateLabel') as FormArray;
     packaging.removeAt(this.packagingIndex);
 
     this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
