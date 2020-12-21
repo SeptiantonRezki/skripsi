@@ -273,7 +273,7 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
               price: item.price,
               price_discount: item.price_discount,
               amount: [
-                Number(item.qty),
+                item.qty_request ? Number(item.qty_request) : Number(item.qty),
                 [Validators.min(0), Validators.max(item.amount)]
               ],
               editable: false,
