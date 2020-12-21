@@ -359,7 +359,7 @@
                         <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel"
                           *ngFor="let item of wil.get('listProdukPrivateLabel')['controls']; let j = index;">
                           <!-- *ngFor="let item of formProductGroup.get('listProdukPrivateLabel')['controls']; let i = index;"> -->
-                          <div [formGroupName]="i">
+                          <div [formGroupName]="j">
                             <mat-list-item class="custom-height mb-8">
                               <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
                                 <div fxFlex="15">
