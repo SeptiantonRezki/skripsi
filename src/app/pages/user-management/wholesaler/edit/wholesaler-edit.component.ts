@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -376,31 +376,42 @@ export class WholesalerEditComponent {
     );
   }
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
   cekDokumen(docType) {
     let ImageURL = null;
     let document = null;
+    let imageName = null;
     if (docType === 'ktp') {
       if (this.detailWholesaler.ktp) {
         ImageURL = this.detailWholesaler.ktp_image_url;
         document = this.detailWholesaler.ktp;
+        imageName = this.detailWholesaler.image_image
       }
     } else {
       if (this.detailWholesaler.npwp) {
         ImageURL = this.detailWholesaler.npwp_image_url;
         document = this.detailWholesaler.npwp;
+        imageName = this.detailWholesaler.npwp_image
       }
     }
-    const dialogConfig = new MatDialogConfig();
+    this.dataService.showLoading(true);
 
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { isAccess: false, image_url: ImageURL, document_type: docType, title: 'Dokumen ' + docType.toUpperCase(), document: document };
+    // this.downloadLink.nativeElement.href = ImageURL;
+    // this.downloadLink.nativeElement.click();
+    setTimeout(() => {
+      this.dataService.showLoading(false);
+    }, 500);
+    // const dialogConfig = new MatDialogConfig();
 
-    this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+    // dialogConfig.disableClose = true;
+    // dialogConfig.autoFocus = true;
+    // dialogConfig.panelClass = 'scrumboard-card-dialog';
+    // dialogConfig.data = { isAccess: false, image_url: ImageURL, document_type: docType, title: 'Dokumen ' + docType.toUpperCase(), document: document };
 
-    this.dialogRef.afterClosed().subscribe(response => {
-    });
+    // this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+
+    // this.dialogRef.afterClosed().subscribe(response => {
+    // });
   }
 
   cekDokumenAkses(docType) {
