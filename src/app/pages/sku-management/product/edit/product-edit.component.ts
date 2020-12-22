@@ -338,20 +338,38 @@ export class ProductEditComponent {
               time_period: [false],
               start_date: [""],
               end_date: [""],
-              listProdukPrivateLabel: this.formBuilder.array(productPrices[key].map(item => this.formBuilder.group({
-                packaging: [item.packaging, Validators.required],
-                packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
-                price: [Number(item.price), Validators.required],
-                price_discount: [Number(item.price_discount), Validators.required],
-                price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
-                tipe: [item.price_type]
-              })))
+              listProdukPrivateLabel: this.formBuilder.array(productPrices[key].map(item => {
+                let fb = this.formBuilder.group({
+                  packaging: [item.packaging, Validators.required],
+                  packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+                  price: [Number(item.price), Validators.required],
+                  price_discount: [Number(item.price_discount), Validators.required],
+                  price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+                  tipe: [item.price_type]
+                });
+
+                if (item.price) {
+                  fb.get('price_discount').setValidators([Validators.max(item.price - 1)]);
+                  fb.get('price_discount').updateValueAndValidity();
+                }
+
+                if (item.price_discount && Number(item.price_discount) > 0) {
+                  fb.get('price_discount_expires_at').enable();
+                } else {
+                  fb.get('price_discount_expires_at').reset();
+                  fb.get('price_discount_expires_at').disable();
+                }
+
+                return fb;
+              }
+              ))
             }));
+
+            this.initArea(index);
+            this.initFormGroup(response, index);
+            console.log('wilayah', wilayah);
+
             setTimeout(() => {
-              this.initArea(index);
-              this.initFormGroup(response, index);
-              console.log('wilayah', wilayah);
-              // this.initFormProductPL(productPrices, index, key);
               if (wilayah.length === (index + 1)) {
                 this.onLoad = false;
               }
@@ -382,23 +400,6 @@ export class ProductEditComponent {
     } catch (ex) {
       console.log('ex', ex);
     }
-  }
-
-  initFormProductPL(productPrices, area_idx, area_id) {
-    let wilayah = this.formProductGroup.controls['areas'] as FormArray;
-    let priceProduct = wilayah.at(area_idx).get("listProdukPrivateLabel") as FormArray;
-    let idx = 0;
-    for (const item of productPrices[area_id]) {
-      priceProduct.push(this.formBuilder.group({
-        packaging: [item.packaging, Validators.required],
-        packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
-        price: [Number(item.price), Validators.required],
-        price_discount: [Number(item.price_discount), Validators.required],
-        price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
-        tipe: [item.price_type]
-      }));
-      idx++;
-    };
   }
 
   createArea(): FormGroup {
@@ -555,6 +556,7 @@ export class ProductEditComponent {
         break;
       case 'region':
         item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
+        console.log('item zone', item);
         if (item.name !== 'Semua Zone') {
           const response = await this.productService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
@@ -924,55 +926,10 @@ export class ProductEditComponent {
         }
 
         areas.map((areaItem, i) => {
-          if (body.is_private_label == "1") {
-            let listProdukPrivateLabel = [];
-            let productGroup = this.formProductGroup.getRawValue();
-            let product = productGroup.areas[i];
-            product.listProdukPrivateLabel.map((item, index) => {
-              listProdukPrivateLabel.push({
-                packaging: item.packaging,
-                packaging_amount: item.packaging_amount,
-                price: item.price,
-                price_discount: item.price_discount || 0,
-                price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
-                tipe: item.tipe
-              })
-            });
-
-            if (listProdukPrivateLabel.length > 0) {
-              listProdukPrivateLabel.map((item, index) => {
-                fd.append(`product_prices[${index}][packaging]`, item.packaging);
-                fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
-                fd.append(`product_prices[${index}][price]`, item.price);
-                fd.append(`product_prices[${index}][area_id]`, areaItem.value);
-
-                if (item.price_discount_expires_at)
-                  fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
-                else
-                  fd.append(`product_prices[${index}][price_discount]`, '0');
-
-                fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
-                fd.append(`product_prices[${index}][price_type]`, item.tipe);
-              });
-
-              let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
-              if (primaryNamePackaging.length > 0) {
-                this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
-                this.loadingIndicator = false;
-
-                return;
-              }
-            } else {
-              this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
-
-              return;
-            }
-          } else {
-            fd.append(`areas[${i}][area_id]`, areaItem.value);
-            fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
-            fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
-          }
-        })
+          fd.append(`areas[${i}][area_id]`, areaItem.value);
+          fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
+          fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
+        });
       }
 
       fd.append("description", "");
@@ -996,49 +953,71 @@ export class ProductEditComponent {
         fd.append("alias[]", item);
       });
 
-      let priceProducts = []
-      // if (body.is_private_label == "1") {
-      //   let listProdukPrivateLabel = [];
-      //   let product = this.formProductGroup.getRawValue();
-      //   product.listProdukPrivateLabel.map((item, index) => {
-      //     listProdukPrivateLabel.push({
-      //       packaging: item.packaging,
-      //       packaging_amount: item.packaging_amount,
-      //       price: item.price,
-      //       price_discount: item.price_discount || 0,
-      //       price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
-      //       tipe: item.tipe
-      //     })
-      //   });
+      let priceProducts = [];
+      if (body.is_private_label == "1") {
+        let listProdukPrivateLabel = [];
+        let productGroup = this.formProductGroup.getRawValue();
+        let productAreas = productGroup.areas;
+        let _areas = [];
+        let areas = [];
 
-      //   if (listProdukPrivateLabel.length > 0) {
-      //     listProdukPrivateLabel.map((item, index) => {
-      //       fd.append(`product_prices[${index}][packaging]`, item.packaging);
-      //       fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
-      //       fd.append(`product_prices[${index}][price]`, item.price);
+        productAreas.map((product, idx) => {
+          let obj = Object.entries(product).map(([key, value]) => ({ key, value }))
+          for (const val of this.typeArea) {
+            const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+            if (filteredValue.length > 0) _areas.push(...filteredValue)
+          }
+          let areaId = _.last(_areas);
 
-      //       if (item.price_discount_expires_at)
-      //         fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
-      //       else
-      //         fd.append(`product_prices[${index}][price_discount]`, '0');
+          areas.push(_.last(_areas));
+          _areas = [];
+          let same = this.findDuplicate(areas.map(item => item.value));
+          if (same.length > 0) {
+            return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
+          }
 
-      //       fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
-      //       fd.append(`product_prices[${index}][price_type]`, item.tipe);
-      //     });
+          product.listProdukPrivateLabel.map((item, index) => {
+            listProdukPrivateLabel.push({
+              packaging: item.packaging,
+              packaging_amount: item.packaging_amount,
+              price: item.price,
+              price_discount: item.price_discount || 0,
+              price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
+              tipe: item.tipe
+            })
+          });
 
-      //     let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
-      //     if (primaryNamePackaging.length > 0) {
-      //       this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
-      //       this.loadingIndicator = false;
+          if (listProdukPrivateLabel.length > 0) {
+            listProdukPrivateLabel.map((item, index) => {
+              console.log('area-id', areaId);
+              fd.append(`product_prices[${index}][packaging]`, item.packaging);
+              fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
+              fd.append(`product_prices[${index}][price]`, item.price);
+              fd.append(`product_prices[${index}][area_id]`, areaId && areaId.value ? areaId.value : 1);
 
-      //       return;
-      //     }
-      //   } else {
-      //     this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
+              if (item.price_discount_expires_at)
+                fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
+              else
+                fd.append(`product_prices[${index}][price_discount]`, '0');
 
-      //     return;
-      //   }
-      // }
+              fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
+              fd.append(`product_prices[${index}][price_type]`, item.tipe);
+            });
+
+            let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
+            if (primaryNamePackaging.length > 0) {
+              this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
+              this.loadingIndicator = false;
+
+              return;
+            }
+          } else {
+            this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
+
+            return;
+          }
+        })
+      }
       this.dataService.showLoading(true);
       this.productService.put(fd, { product_id: this.idProduct }).subscribe(
         res => {
@@ -1237,8 +1216,9 @@ export class ProductEditComponent {
     })
   }
 
-  removePackaging(param?: any, i?: any): void {
+  removePackaging(param?: any, i?: any, j?: any): void {
     this.packagingIndex = i;
+    this.wilayahIndex = j;
 
     let data = {
       titleDialog: "Hapus Data Kemasan",
