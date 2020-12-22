@@ -1158,6 +1158,7 @@ export class ProductEditComponent {
         areas.removeAt(areas.length - 1);
       }
       // this.openProductPrice();
+      this.addArea();
       this.goToBottom();
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
