@@ -130,9 +130,11 @@ export class BannerEditComponent {
       { name: "Pojok Bayar", value: "pojok_bayar" }];
     } else {
       this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-      { name: "Pojok Modal", value: "pojok_modal" },
-      { name: "SRC Katalog", value: "src_katalog" },
-      { name: "Pojok Bayar (TBC)", value: "pojok_bayar_tbc" }];
+      { name: "Pesan Antar", value: "pesan_antar" },
+      { name: "Tantangan", value: "tantangan" },
+      { name: "Peluang", value: "peluang" },
+      { name: "Main Bareng", value: "main_bareng" }
+      ];
     }
 
     this.activatedRoute.url.subscribe(params => {
@@ -236,9 +238,11 @@ export class BannerEditComponent {
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-        { name: "Pojok Modal", value: "pojok_modal" },
-        { name: "SRC Katalog", value: "src_katalog" },
-        { name: "Pojok Bayar", value: "pojok_bayar" }];
+        { name: "Pesan Antar", value: "pesan_antar" },
+        { name: "Tantangan", value: "tantangan" },
+        { name: "Peluang", value: "peluang" },
+        { name: "Main Bareng", value: "main_bareng" }
+        ];
         this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();

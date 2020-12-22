@@ -223,9 +223,10 @@ export class BannerCreateComponent {
       } else {
         this.listLandingPage = [
           { name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-          { name: "Pojok Modal", value: "pojok_modal" },
-          { name: "SRC Katalog", value: "src_katalog" },
-          { name: "Pojok Bayar (TBC)", value: "pojok_bayar_tbc" },
+          { name: "Pesan Antar", value: "pesan_antar" },
+          { name: "Tantangan", value: "tantangan" },
+          { name: "Peluang", value: "peluang" },
+          { name: "Main Bareng", value: "main_bareng" }
         ];
         this.formBannerGroup.controls['age_consumer_from'].enable();
         this.formBannerGroup.controls['age_consumer_to'].enable();
