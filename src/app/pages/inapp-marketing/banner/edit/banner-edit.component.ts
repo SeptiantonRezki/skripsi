@@ -238,7 +238,7 @@ export class BannerEditComponent {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
         { name: "Pojok Modal", value: "pojok_modal" },
         { name: "SRC Katalog", value: "src_katalog" },
-        { name: "Pojok Bayar", value: "pojok_bayar" }];
+        { name: "Pojok Bayar (TBC)", value: "pojok_bayar_tbc" }];
         this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();
