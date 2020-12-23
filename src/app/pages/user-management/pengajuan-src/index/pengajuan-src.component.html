@@ -84,13 +84,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="Status" prop="status" [sortable]="false">
+        <ngx-datatable-column [width]="250" name="Status" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <span
-                [ngStyle]="{ 'background-color': renderStatusName(row.status).bgColor, 'color': renderStatusName(row.status).textColor }"
-                style="min-width: 100px !important;min-height: 20px;font-size: .9em;text-align: center;padding: 5px 15px; border-radius: 10px;">{{row.status
-                ? renderStatusName(row.status).name : ''}}</span>
+              <p [ngStyle]="{ 'background-color': renderStatusName(row.status).bgColor, 'color': renderStatusName(row.status).textColor }"
+                style="min-width: 100px !important;min-height: 20px;font-size: .9em;text-align: center;padding: 5px 15px; border-radius: 10px;">
+                {{row.status
+                ? renderStatusName(row.status).name : ''}}</p>
               <!-- <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;">
                 {{row.status ? row.status.toUpperCase() : '-'}}
@@ -117,15 +117,15 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Channel" prop="channel" [sortable]="false">
+        <ngx-datatable-column [width]="200" name="Channel" prop="channel" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span
-              style="min-width: 100px !important;min-height: 20px;font-size: .9em;text-align: center;padding: 5px 15px; border-radius: 10px;background-color: red;color: white;">
-              {{ row.channel ? row.channel.toUpperCase() : row.channel }}</span>
+            <p
+              style="word-break: break-all;min-width: 100px !important;min-height: 20px;font-size: .9em;text-align: center;padding: 5px 15px; border-radius: 10px;background-color: red;color: white;">
+              {{ row.channel ? row.channel.toUpperCase() : row.channel }}</p>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="88" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
