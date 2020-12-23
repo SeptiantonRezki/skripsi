@@ -379,6 +379,9 @@ export class ProductEditComponent {
               }
             }, 500);
           });
+          if (Array.isArray(productPrices) && productPrices.length === 0) {
+            this.addArea();
+          }
           // let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
           // let idx = 0;
           // for (const item of res.data.product_prices) {
