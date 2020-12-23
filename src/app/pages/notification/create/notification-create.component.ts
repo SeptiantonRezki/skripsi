@@ -71,6 +71,8 @@ export class NotificationCreateComponent {
 
   public options: Object = Config.FROALA_CONFIG;
 
+  public optionsStaticPage: Object = Config.FROALA_CONFIG_NOTIFICATION; // Static Page Only
+
   audienceSelected: any[] = [];
 
   listTypeOfRecurrence: Object[] = [
