@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
@@ -12,7 +12,8 @@ import * as moment from "moment";
 @Component({
   selector: 'app-upload-image-qiscus',
   templateUrl: './upload-image-qiscus.component.html',
-  styleUrls: ['./upload-image-qiscus.component.scss']
+  styleUrls: ['./upload-image-qiscus.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UploadImageQiscusComponent implements OnInit {
   loadingIndicator: boolean;

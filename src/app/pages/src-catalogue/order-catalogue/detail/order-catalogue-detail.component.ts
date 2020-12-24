@@ -128,6 +128,7 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
   }
 
   async initDataQiscus(item: any) {
+    console.log('DATAROOM', item);
     if (item === 'pesanan-dibatalkan' || item === 'selesai') {
       // this.setState({ dataQiscus: null });
       this.emitter.emitChatIsOpen(true); // for open chat
@@ -140,7 +141,6 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
     ) {
       await this.qs.qiscus.getRoomById(item.qiscus_room_id)
         .then(async (getRoom: any) => {
-          // console.log('DATAROOM', getRoom);
           // this.setState({ dataQiscus: { ...this.props.dataQiscus, ...getRoom } });
           this.emitter.emitChatIsOpen(true); // for open chat
           this.emitter.emitDataChat(item);
@@ -178,7 +178,7 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
         order_id: item.id || ""
       };
       // console.log("PAYLOAD", payload);
-      this.qs.qiscusCreateUpdateRoom(payload).subscribe(async (qRes: any) => {
+      this.qs.qiscusCreateUpdateRoomId({ order_id: this.orderId }).subscribe(async (qRes: any) => {
         // console.log("RESP", qRes);
         if (qRes.status) {
           await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
@@ -209,10 +209,11 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
         console.log('products nota', this.productsNota);
 
         let profile = this.dataService.getDecryptedProfile();
+        console.log("profile", profile);
         if (profile.type === 'vendor') {
           await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
             // this.emitter.emitDataChat({ templates: res_2.data });
-            res.templates = res_2.data;
+            res['data'].templates = res_2.data;
             // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
             if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
               const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
