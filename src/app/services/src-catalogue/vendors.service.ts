@@ -53,6 +53,11 @@ export class VendorsService extends BaseService {
     return this.getApi(url, {});
   }
 
+  storeVendorAddress(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, "address_map", context);
+    return this.postApi(url, body);
+  }
+
   getOperationalTime(): Observable<any> {
     const url = this.getUrl(this.namespace, "operational_time");
     return this.getApi(url, {});
@@ -81,5 +86,25 @@ export class VendorsService extends BaseService {
   saveChatTemplateOperational(body): Observable<any> {
     const url = this.getUrl(this.namespace, "chat_template_operational");
     return this.postApi(url, body);
+  }
+
+  getProvinces(): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_province');
+    return this.getApi(url);
+  }
+
+  getCities(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_city', context);
+    return this.getApi(url);
+  }
+
+  getDistricts(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_district', context);
+    return this.getApi(url);
+  }
+
+  getSubDistricts(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_subdistrict', context);
+    return this.getApi(url);
   }
 }

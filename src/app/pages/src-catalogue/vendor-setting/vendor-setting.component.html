@@ -166,11 +166,11 @@
                     </mat-form-field>
                   </form>
                 </div>
-                <div fxLayout="column" [formGroup]="formDetailLokasi">
+                <div fxLayout="column" [formGroup]="formDetailLokasi" class="p-8">
                   <div fxFLex="100" fxLayout="row">
                     <mat-form-field fxFlex="49" class="is-light form-primary">
                       <mat-select placeholder="Provinsi" formControlName="provinsi">
-                        <mat-option [value]="item.id" *ngFor="let item of listProvinsi">{{item.name}}</mat-option>
+                        <mat-option [value]="item.id" *ngFor="let item of listProvince">{{item.name}}</mat-option>
                       </mat-select>
                       <mat-error
                         *ngIf="formDetailLokasi.controls['provinsi'].hasError('required') && formDetailLokasi.controls['provinsi'].touched">
