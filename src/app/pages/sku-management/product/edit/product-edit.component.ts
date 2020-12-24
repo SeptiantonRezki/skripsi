@@ -216,25 +216,6 @@ export class ProductEditComponent {
       .subscribe(() => {
         this.filteringSubCategory();
       });
-
-    // this.formProductGroup.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
-    //   let listProdukPrivateLabel = this.formProductGroup.get('listProdukPrivateLabel') as FormArray;
-    //   (res || []).map((item, index) => {
-    //     if (item.price) {
-    //       listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
-    //       listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
-    //     }
-
-    //     if (parseInt(item.price_discount) > 0) {
-    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
-    //     } else {
-    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
-    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
-    //       listProdukPrivateLabel.at(index).get('price_discount_expires_at').setValue('');
-    //     }
-    //   })
-    // });
-
   }
 
   getDetails() {
@@ -347,19 +328,6 @@ export class ProductEditComponent {
                   price_discount_expires_at: [item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", Validators.required],
                   tipe: [item.price_type]
                 });
-
-                // if (item.price) {
-                //   fb.get('price_discount').setValidators([Validators.max(item.price - 1)]);
-                //   fb.get('price_discount').updateValueAndValidity();
-                // }
-
-                // if (item.price_discount) {
-                //   fb.get('price_discount_expires_at').enable();
-                // } else {
-                //   fb.get('price_discount_expires_at').reset();
-                //   fb.get('price_discount_expires_at').disable();
-                // }
-
                 return fb;
               }
               ))
@@ -397,19 +365,6 @@ export class ProductEditComponent {
           if (Array.isArray(productPrices) && productPrices.length === 0) {
             this.addArea();
           }
-          // let priceProduct = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-          // let idx = 0;
-          // for (const item of res.data.product_prices) {
-          //   priceProduct.push(this.formBuilder.group({
-          //     packaging: [item.packaging, Validators.required],
-          //     packaging_amount: [item.packaging_amount, [Validators.required, Validators.min(1), Validators.max(1000)]],
-          //     price: [item.price, Validators.required],
-          //     price_discount: [item.price_discount, Validators.required],
-          //     price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
-          //     tipe: [item.price_type]
-          //   }));
-          //   idx++;
-          // };
         }
 
         setTimeout(() => {
@@ -1024,12 +979,6 @@ export class ProductEditComponent {
           });
 
           if (listProdukPrivateLabel.length > 0) {
-            // console.log('hasil', listProdukPrivateLabel);
-            // listProdukPrivateLabel.map((item, index) => {
-            //   console.log('area-id', areaId);
-
-            // });
-
             let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
             if (primaryNamePackaging.length > 0) {
               this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
