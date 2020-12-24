@@ -126,6 +126,7 @@ export class FuseQiscusComponent {
 
     this.emitter.listenDataChatQ.subscribe((data: any) => {
       if (data) {
+        console.log("the hell of data", data)
         if (data.dataQiscus) {
           // console.log("DATA_Q1", data);
           // this.lastMessageId = data.dataQiscus.comments[data.dataQiscus.comments.length - 1].id;
@@ -187,15 +188,18 @@ export class FuseQiscusComponent {
   async ngOnInit() {
 
     if (this.dataTransaction) {
-      if (this.router.url.search('/src-catalogue/orders/detail/' + this.dataTransaction.id) == -1) {
+      if (this.router.url.search('/src-catalogue/orders/detail/' + this.dataTransaction.id) == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
+        console.log('pertama');
         this.emitter.emitChatIsOpen(false);
       } else {
-        if (this.router.url.search('/src-catalogue/orders/detail/') == -1) {
+        if (this.router.url.search('/src-catalogue/orders/detail/') == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
+          console.log('kedua');
           this.emitter.emitChatIsOpen(false);
         }
       }
     } else {
-      if (this.router.url.search('/src-catalogue/orders/detail/') == -1) {
+      if (this.router.url.search('/src-catalogue/orders/detail/') == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
+        console.log('ketiga');
         this.emitter.emitChatIsOpen(false);
       }
     }
