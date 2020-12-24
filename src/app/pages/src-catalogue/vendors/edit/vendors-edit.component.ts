@@ -28,6 +28,7 @@ export class VendorsEditComponent implements OnInit {
   listLevelArea: any[];
   list: any;
   list2: any;
+  bodyJson: any;
 
   listIC: any[] = [
     { name: "NON-SRC", value: "NON-SRC" },
@@ -48,6 +49,7 @@ export class VendorsEditComponent implements OnInit {
 
   two_geotree: Boolean;
   first_geotree: Boolean = false;
+  dialogRef: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -59,7 +61,8 @@ export class VendorsEditComponent implements OnInit {
     private adminPrincipalService: AdminPrincipalService
   ) {
     this.submitting = false;
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_id'];
+    console.log(this.dataService.getDecryptedProfile());
     this.shortDetail = this.dataService.getFromStorage("detail_vendor");
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
@@ -654,8 +657,7 @@ export class VendorsEditComponent implements OnInit {
       };
 
       if (!this.first_geotree && !this.two_geotree) delete body['area_id'];
-
-      console.log('body', body);
+      this.bodyJson = body;
       if (!force) {
         this.vendorsService.update({ vendor_id: this.detailVendor.id }, body).subscribe(
           res => {
@@ -667,12 +669,11 @@ export class VendorsEditComponent implements OnInit {
           },
           err => {
             if (err && err.status === 403) {
-              this.dialogService.brodcastCloseConfirmation();
               let data = {
-                titleDialog: "Hapus Vendor secara Paksa",
-                captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan",
+                titleDialog: "Ubah Vendor secara Paksa",
+                captionDialog: "Apakah anda yakin untuk mengubah Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan",
                 confirmCallback: this.forceUpdate.bind(this),
-                buttonText: ["Hapus Sekarang", "Batal"]
+                buttonText: ["Ubah Sekarang", "Batal"]
               };
               this.dialogService.openCustomConfirmationDialog(data);
             }
@@ -680,30 +681,27 @@ export class VendorsEditComponent implements OnInit {
             this.dataService.showLoading(false);
           }
         );
-      } else {
-        this.vendorsService.updateWithParams({ vendor_id: this.detailVendor.id }, body, { force_update: 1 }).subscribe(
-          res => {
-            this.dialogService.brodcastCloseConfirmation();
-            this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan"
-            });
-            this.router.navigate(["src-catalogue", "vendors"]);
-          },
-          err => {
-            this.submitting = false;
-            this.dataService.showLoading(false);
-          }
-        );
       }
-
     } else {
       commonFormValidator.validateAllFields(this.formVendor);
     }
   }
 
   forceUpdate() {
-    this.submit(true);
+    this.vendorsService.updateWithParams({ vendor_id: this.detailVendor.id }, this.bodyJson, { force_update: 1 }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Data Berhasil Disimpan"
+        });
+        this.router.navigate(["src-catalogue", "vendors"]);
+      },
+      err => {
+        this.submitting = false;
+        this.dataService.showLoading(false);
+      }
+    );
   }
 
   async setArea2(isRemove) {
