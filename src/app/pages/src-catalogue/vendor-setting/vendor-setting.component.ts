@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeneralService } from 'app/services/general.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import * as moment from "moment";
 import { ReplaySubject, Subject } from 'rxjs';
 
@@ -34,6 +35,7 @@ export class VendorSettingComponent implements OnInit {
 
   formProfilToko: FormGroup;
   formLokasiToko: FormGroup;
+  formDetailLokasi: FormGroup;
   formLiburToko: FormGroup;
   formBankAccount: FormGroup;
   formSIUP: FormGroup;
@@ -80,13 +82,19 @@ export class VendorSettingComponent implements OnInit {
   permissionSIUP: any;
   note_1: FormControl = new FormControl("");
   note_2: FormControl = new FormControl("");
+
+  listProvince: any[] = [];
+  listCity: any[] = [];
+  listDistrict: any[] = [];
+  listTerritory: any[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private authenticationService: AuthenticationService,
     private dialogService: DialogService,
     private generalService: GeneralService,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
   ) {
     this.formSIUP = this.formBuilder.group({
       siup_number: [""],
@@ -111,7 +119,15 @@ export class VendorSettingComponent implements OnInit {
       longitude: ["", Validators.required],
       latitude: ["", Validators.required],
       alamatTokoDetail: ["", Validators.required],
-    })
+    });
+
+    this.formDetailLokasi = this.formBuilder.group({
+      provinsi: ["", Validators.required],
+      kota: ["", Validators.required],
+      kecamatan: ["", Validators.required],
+      kelurahan: ["", Validators.required],
+      postcode: ["", Validators.required],
+    });
 
     this.formLiburToko = this.formBuilder.group({
       isLibur: "",
@@ -155,13 +171,61 @@ export class VendorSettingComponent implements OnInit {
       });
     });
 
+    this.formDetailLokasi.get('provinsi').valueChanges.subscribe(res => {
+      if (res) {
+        this.getCities(res);
+      }
+    })
+
+    this.formDetailLokasi.get('kota').valueChanges.subscribe(res => {
+      if (res) {
+        this.getDistricts(res);
+      }
+    });
+
+    this.formDetailLokasi.get('kecamatan').valueChanges.subscribe(res => {
+      if (res) {
+        this.getSubDistricts(res);
+      }
+    });
+
+    this.getProvinces();
     this.getAuthentication();
     this.getChatTemplateOperational();
+  }
+
+  getProvinces() {
+    this.vendorService.getProvinces().subscribe(res => {
+      this.listProvince = res.data;
+    });
+  }
+
+  getCities(id) {
+    this.vendorService.getCities({ province_id: id }).subscribe(res => {
+      this.listCity = res.data;
+    });
+  }
+
+  getDistricts(id) {
+    this.vendorService.getDistricts({ city_id: id }).subscribe(res => {
+      this.listDistrict = res.data;
+    });
+  }
+
+  getSubDistricts(id) {
+    this.vendorService.getSubDistricts({ district_id: id }).subscribe(res => {
+      this.listTerritory = res.data;
+    });
   }
 
   getChatTemplateOperational() {
     this.vendorService.getChatTemplateOperational().subscribe(res => {
       console.log('res chat template op', res);
+      res.data.map(notes => {
+        console.log('notes', notes);
+        if (notes.type !== 'available') this.note_1.setValue(notes.body);
+        else this.note_2.setValue(notes.body);
+      })
     });
   }
 
@@ -197,10 +261,18 @@ export class VendorSettingComponent implements OnInit {
 
   setProfile(value: any) {
     this.setMapToCenter(value.businesses.delivery_latitude, value.businesses.delivery_longitude);
-    this.formLokasiToko.get('latitude').setValue(value.businesses.delivery_latitude || '');
-    this.formLokasiToko.get('longitude').setValue(value.businesses.delivery_longitude || '');
-    this.formLokasiToko.get('alamatToko').setValue(value.businesses.delivery_address || '');
-    this.formLokasiToko.get('alamatTokoDetail').setValue(value.businesses.delivery_address_detail || '');
+    this.formLokasiToko.get('latitude').setValue(value.businesses.latitude || '');
+    this.formLokasiToko.get('longitude').setValue(value.businesses.longitude || '');
+    this.formLokasiToko.get('alamatToko').setValue(value.businesses.address || '');
+    this.formLokasiToko.get('alamatTokoDetail').setValue(value.businesses.address_detail || '');
+
+    this.formDetailLokasi.setValue({
+      provinsi: value.businesses.addressmap ? value.businesses.addressmap.province_id : "",
+      kota: value.businesses.addressmap ? value.businesses.addressmap.city_id : "",
+      kecamatan: value.businesses.addressmap ? value.businesses.addressmap.district_id : "",
+      kelurahan: value.businesses.addressmap ? value.businesses.addressmap.subdistrict_id : "",
+      postcode: value.businesses.addressmap ? value.businesses.addressmap.zip_code : "",
+    })
 
     this.vendorService.getOperationalTime().subscribe(res => {
       value.businesses.operational_time = res.data;
@@ -278,10 +350,10 @@ export class VendorSettingComponent implements OnInit {
           icon: markerImage
         });
         this.initMapMarkerListener();
-        if (this.profile.businesses[0].delivery_latitude !== null) {
+        if (this.profile.businesses[0].latitude !== null) {
           var pos = {
-            lat: Number(this.profile.businesses[0].delivery_latitude),
-            lng: Number(this.profile.businesses[0].delivery_longitude)
+            lat: this.profile.businesses[0].latitude ? Number(this.profile.businesses[0].latitude) : -6.1798839,
+            lng: this.profile.businesses[0].longitude ? Number(this.profile.businesses[0].longitude) : 106.8237044
           };
           // console.log('this.profile ', pos );
           this.marker.setPosition(pos);
@@ -634,27 +706,32 @@ export class VendorSettingComponent implements OnInit {
     });
   }
 
-  // async onSaveLokasi() {
-  //   const body = {
-  //     latitude: this.formLokasiToko.get('latitude').value,
-  //     longitude: this.formLokasiToko.get('longitude').value,
-  //     address: this.formLokasiToko.get('alamatToko').value,
-  //     address_detail: this.formLokasiToko.get('alamatTokoDetail').value,
-  //   }
-  //   if (this.formLokasiToko.valid) {
-  //     this.generalService.storeLocation(body).subscribe((res) => {
-  //       console.log('Berhasil Menyimpan Data Profile', res);
-  //       this.lokasiIsValid = true;
-  //     }, (err: any) => {
-  //       console.log('Gagal Menyimpan Data Profile', err);
-  //       this.lokasiIsValid = false;
-  //     });
-  //   } else {
-  //     this.lokasiIsValid = false;
-  //     commonFormValidator.validateAllFields(this.formLokasiToko);
-  //     console.log('Gagal Menyimpan Data Profile' + this.formLokasiToko.status, body);
-  //   }
-  // }
+  async onSaveLokasi() {
+    const body = {
+      latitude: this.formLokasiToko.get('latitude').value,
+      longitude: this.formLokasiToko.get('longitude').value,
+      address: this.formLokasiToko.get('alamatToko').value,
+      address_detail: this.formLokasiToko.get('alamatTokoDetail').value,
+      province_id: this.formDetailLokasi.get('provinsi').value,
+      city_id: this.formDetailLokasi.get('kota').value,
+      district_id: this.formDetailLokasi.get('kecamatan').value,
+      subdistrict_id: this.formDetailLokasi.get('kelurahan').value,
+      zip_code: this.formDetailLokasi.get('postcode').value
+    }
+    if (this.formLokasiToko.valid) {
+      this.vendorService.storeVendorAddress(body, { vendor_id: this.profile.vendor_company_id }).subscribe((res) => {
+        console.log('Berhasil Menyimpan Data Profile', res);
+        this.lokasiIsValid = true;
+      }, (err: any) => {
+        console.log('Gagal Menyimpan Data Profile', err);
+        this.lokasiIsValid = false;
+      });
+    } else {
+      this.lokasiIsValid = false;
+      commonFormValidator.validateAllFields(this.formLokasiToko);
+      console.log('Gagal Menyimpan Data Profile' + this.formLokasiToko.status, body);
+    }
+  }
 
   async onSaveOperationalTime() {
     let body = [];
@@ -742,8 +819,7 @@ export class VendorSettingComponent implements OnInit {
     setTimeout(async () => {
       if (!isB) {
         this.dataService.showLoading(true);
-        // if (this.permissionLokasiToko.ubah) await this.onSaveLokasi();
-        // if (this.permissionOperasionalToko && this.permissionOperasionalToko.ubah) {  }
+        await this.onSaveLokasi();
         await this.onSaveOperationalTime();
         setTimeout(() => {
           this.dataService.showLoading(false);

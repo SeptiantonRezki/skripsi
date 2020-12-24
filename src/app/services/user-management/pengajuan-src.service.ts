@@ -78,4 +78,9 @@ export class PengajuanSrcService extends BaseService {
     return this.getApi(url);
   }
 
+  getSubDistricts(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_territory');
+    return this.getApi(url, queryParams);
+  }
+
 }

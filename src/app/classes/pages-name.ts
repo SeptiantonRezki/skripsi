@@ -120,7 +120,6 @@ export class PagesName {
     let localPerm = window.localStorage.getItem('_prmdxtrn');
     let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
     const permission = JSON.parse(perm);
-    // console.log('permit', permission);
 
     if (!permission) return;
 
@@ -133,9 +132,9 @@ export class PagesName {
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
-    if ( Array.isArray(submenus) ) {
+    if (Array.isArray(submenus)) {
       submenus.map((value) => {
-        
+
         // split submenu , then take last index of array. ex: principal.retailer.submenu.status_business it will return status_business
         let submenuKey = value.split('.');
         submenuKey = submenuKey[submenuKey.length - 1];
