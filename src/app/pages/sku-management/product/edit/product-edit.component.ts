@@ -320,7 +320,7 @@ export class ProductEditComponent {
             const response = await this.productService.getParentArea({ parent: key == "-99" ? "1" : key }).toPromise();
             let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
-            wilayah.push(this.formBuilder.group({
+            let fb = this.formBuilder.group({
               national: [this.getArea(response, 'national'), Validators.required],
               zone: [this.getArea(response, 'division')],
               region: [this.getArea(response, 'region')],
@@ -344,26 +344,45 @@ export class ProductEditComponent {
                   packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
                   price: [Number(item.price), Validators.required],
                   price_discount: [Number(item.price_discount), Validators.required],
-                  price_discount_expires_at: [item.price_discount_expires_at || "", Validators.required],
+                  price_discount_expires_at: [item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", Validators.required],
                   tipe: [item.price_type]
                 });
 
-                if (item.price) {
-                  fb.get('price_discount').setValidators([Validators.max(item.price - 1)]);
-                  fb.get('price_discount').updateValueAndValidity();
-                }
+                // if (item.price) {
+                //   fb.get('price_discount').setValidators([Validators.max(item.price - 1)]);
+                //   fb.get('price_discount').updateValueAndValidity();
+                // }
 
-                if (item.price_discount && Number(item.price_discount) > 0) {
-                  fb.get('price_discount_expires_at').enable();
-                } else {
-                  fb.get('price_discount_expires_at').reset();
-                  fb.get('price_discount_expires_at').disable();
-                }
+                // if (item.price_discount) {
+                //   fb.get('price_discount_expires_at').enable();
+                // } else {
+                //   fb.get('price_discount_expires_at').reset();
+                //   fb.get('price_discount_expires_at').disable();
+                // }
 
                 return fb;
               }
               ))
-            }));
+            });
+
+            fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+              let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+              (res || []).map((item, index) => {
+                if (item.price) {
+                  listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+                  listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+                }
+
+                if (item.price_discount) {
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+                } else {
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+                }
+              })
+            });
+
+            wilayah.push(fb);
 
             this.initArea(index);
             this.initFormGroup(response, index);
@@ -963,7 +982,7 @@ export class ProductEditComponent {
         let productAreas = productGroup.areas;
         let _areas = [];
         let areas = [];
-
+        console.log(productGroup, productAreas);
         productAreas.map((product, idx) => {
           let obj = Object.entries(product).map(([key, value]) => ({ key, value }))
           for (const val of this.typeArea) {
@@ -979,33 +998,37 @@ export class ProductEditComponent {
             return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
           }
 
-          product.listProdukPrivateLabel.map((item, index) => {
+          product.listProdukPrivateLabel.map((itemPL, index) => {
             listProdukPrivateLabel.push({
-              packaging: item.packaging,
-              packaging_amount: item.packaging_amount,
-              price: item.price,
-              price_discount: item.price_discount || 0,
-              price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
-              tipe: item.tipe
-            })
+              packaging: itemPL.packaging,
+              packaging_amount: itemPL.packaging_amount,
+              price: itemPL.price,
+              price_discount: itemPL.price_discount != 0 || itemPL.price_discount != '' ? itemPL.price_discount : 0,
+              price_discount_expires_at: this.convertDate(itemPL.price_discount_expires_at),
+              tipe: itemPL.tipe
+            });
+
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging]`, itemPL.packaging);
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging_amount]`, itemPL.packaging_amount);
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price]`, itemPL.price);
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][area_id]`, areaId && areaId.value ? areaId.value : 1);
+
+            console.log('pdea', itemPL);
+            if (itemPL.price_discount_expires_at)
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, itemPL.price_discount);
+            else
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, "0");
+
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
+            fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_type]`, itemPL.tipe);
           });
 
           if (listProdukPrivateLabel.length > 0) {
-            listProdukPrivateLabel.map((item, index) => {
-              console.log('area-id', areaId);
-              fd.append(`product_prices[${index}][packaging]`, item.packaging);
-              fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
-              fd.append(`product_prices[${index}][price]`, item.price);
-              fd.append(`product_prices[${index}][area_id]`, areaId && areaId.value ? areaId.value : 1);
+            // console.log('hasil', listProdukPrivateLabel);
+            // listProdukPrivateLabel.map((item, index) => {
+            //   console.log('area-id', areaId);
 
-              if (item.price_discount_expires_at)
-                fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
-              else
-                fd.append(`product_prices[${index}][price_discount]`, '0');
-
-              fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
-              fd.append(`product_prices[${index}][price_type]`, item.tipe);
-            });
+            // });
 
             let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
             if (primaryNamePackaging.length > 0) {
@@ -1021,6 +1044,7 @@ export class ProductEditComponent {
           }
         })
       }
+
       this.dataService.showLoading(true);
       this.productService.put(fd, { product_id: this.idProduct }).subscribe(
         res => {
@@ -1214,7 +1238,7 @@ export class ProductEditComponent {
       packaging: ["", Validators.required],
       packaging_amount: ["", [Validators.required, Validators.min(1), Validators.max(1000)]],
       price: ["", Validators.required],
-      price_discount: "",
+      price_discount: [""],
       price_discount_expires_at: ["", Validators.required],
       tipe: [""]
     })
