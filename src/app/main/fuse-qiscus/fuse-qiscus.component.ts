@@ -488,7 +488,7 @@ export class FuseQiscusComponent {
     // console.log("MESSAGES", this.message);
     const extras = {
       invoiceNumber: this.dataTransaction.invoice_number,
-      wholesalerName: this.dataTransaction.wholesaler_name,
+      vendorName: this.dataTransaction.vendor_company.name,
     };
     function isEmpty(obj: any) {
       for (const prop in obj) {
@@ -713,16 +713,17 @@ export class FuseQiscusComponent {
   }
 
   openMedia(type: any, idx: any) {
+    console.log('data', this.dataTransaction);
     const dialogConfig = new MatDialogConfig();
     const extras = {
       invoiceNumber: this.dataTransaction.invoice_number,
-      wholesalerName: this.dataTransaction.wholesaler_name,
+      vendorName: this.dataTransaction.vendor_company.name,
     };
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { roomId: this.dataTransaction.qiscus_room_id, type: type, retailer_id: this.dataTransaction.retailer_id };
+    dialogConfig.data = { roomId: this.dataTransaction.qiscus_room_id, type: type, order_data: this.dataTransaction };
 
     this.dialogRef = this.dialog.open(UploadImageQiscusComponent, dialogConfig);
 
