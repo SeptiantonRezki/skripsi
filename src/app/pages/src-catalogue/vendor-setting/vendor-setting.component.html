@@ -101,12 +101,25 @@
                     <mat-icon matIcon>add</mat-icon><span> Tambah Jadwal</span>
                   </div>
                 </div>
-                <!-- <div fxLayout="column" fxLayout="100">
-                  <mat-form-field fxFlex="100" class="isLight">
-                    <textarea matInput class="body-text" placeholder="Detail Template Pesan" cdkTextareaAutosize
-                      cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15" [formControl]="note_1"></textarea>
-                  </mat-form-field>
-                </div> -->
+
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="start start"
+                  style="margin-top: 25px;margin-left: 15px;">
+                  <div class="content-body" fxLayout="column" fxLayoutAlign="start start">
+                    <p>Pesan/Catatan saat dalam waktu operational (optional)</p>
+                    <div class="body-layout">
+                      <textarea matInput class="body-text" placeholder="" [formControl]="note_1" wrap="soft"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="start start"
+                  style="margin-top: 25px;margin-left: 15px;">
+                  <div class="content-body" fxLayout="column" fxLayoutAlign="start start">
+                    <p>Pesan/Catatan saat diluar waktu operational (optional)</p>
+                    <div class="body-layout">
+                      <textarea matInput class="body-text" placeholder="" [formControl]="note_2" wrap="soft"></textarea>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div fxLayout="column" fxLayoutAlign="start start" fxFlex="50" class="p-8">
@@ -152,6 +165,66 @@
                       </mat-error>
                     </mat-form-field>
                   </form>
+                </div>
+                <div fxLayout="column" [formGroup]="formDetailLokasi">
+                  <div fxFLex="100" fxLayout="row">
+                    <mat-form-field fxFlex="49" class="is-light form-primary">
+                      <mat-select placeholder="Provinsi" formControlName="provinsi">
+                        <mat-option [value]="item.id" *ngFor="let item of listProvinsi">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="formDetailLokasi.controls['provinsi'].hasError('required') && formDetailLokasi.controls['provinsi'].touched">
+                        Provinsi harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field fxFlex="49" class="is-light form-primary">
+                      <mat-select placeholder="Kota/Kabupaten" formControlName="kota">
+                        <mat-option [value]="item.id" *ngFor="let item of listCity">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="formDetailLokasi.controls['kota'].hasError('required') && formDetailLokasi.controls['kota'].touched">
+                        Kota/Kabupaten harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row">
+                    <mat-form-field fxFlex="35" class="is-light form-primary">
+                      <mat-select placeholder="Kecamatan" formControlName="kecamatan">
+                        <mat-option [value]="item.id" *ngFor="let item of listDistrict">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="formDetailLokasi.controls['kecamatan'].hasError('required') && formDetailLokasi.controls['kecamatan'].touched">
+                        Kecamatan harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field fxFlex="35" class="is-light form-primary">
+                      <mat-select placeholder="Kelurahan" formControlName="kelurahan">
+                        <mat-option [value]="item.id" *ngFor="let item of listTerritory">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="formDetailLokasi.controls['kelurahan'].hasError('required') && formDetailLokasi.controls['kelurahan'].touched">
+                        Kelurahan harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field fxFlex="20" class="is-light form-primary">
+                      <input matInput placeholder="Kode Pos" formControlName="postcode">
+                      <mat-error
+                        *ngIf="formDetailLokasi.controls['postcode'].hasError('required') && formDetailLokasi.controls['postcode'].touched">
+                        Kode Pos harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <!-- <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <textarea matInput placeholder="Alamat Detail" formControlName="alamatTokoDetail"
+                      style="height: 40px; max-height: 40px; resize: none;"></textarea>
+                    <mat-error
+                      *ngIf="formDetailLokasi.controls['alamatTokoDetail'].hasError('required') && formDetailLokasi.controls['alamatTokoDetail'].touched">
+                      Alamat Detail harus diisi.
+                    </mat-error>
+                  </mat-form-field> -->
                 </div>
               </div>
               <div fxLayout="row" fxLayoutAlign="start center">

@@ -34,6 +34,7 @@ export class VendorSettingComponent implements OnInit {
 
   formProfilToko: FormGroup;
   formLokasiToko: FormGroup;
+  formDetailLokasi: FormGroup;
   formLiburToko: FormGroup;
   formBankAccount: FormGroup;
   formSIUP: FormGroup;
@@ -80,6 +81,12 @@ export class VendorSettingComponent implements OnInit {
   permissionSIUP: any;
   note_1: FormControl = new FormControl("");
   note_2: FormControl = new FormControl("");
+
+  listProvince: any[] = [];
+  listCity: any[] = [];
+  listDistrict: any[] = [];
+  listTerritory: any[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -111,6 +118,14 @@ export class VendorSettingComponent implements OnInit {
       longitude: ["", Validators.required],
       latitude: ["", Validators.required],
       alamatTokoDetail: ["", Validators.required],
+    });
+
+    this.formDetailLokasi = this.formBuilder.group({
+      provinsi: ["", Validators.required],
+      kota: ["", Validators.required],
+      kecamatan: ["", Validators.required],
+      kelurahan: ["", Validators.required],
+      postcode: ["", Validators.required],
     })
 
     this.formLiburToko = this.formBuilder.group({
@@ -162,6 +177,11 @@ export class VendorSettingComponent implements OnInit {
   getChatTemplateOperational() {
     this.vendorService.getChatTemplateOperational().subscribe(res => {
       console.log('res chat template op', res);
+      res.data.map(notes => {
+        console.log('notes', notes);
+        if (notes.type !== 'available') this.note_1.setValue(notes.body);
+        else this.note_2.setValue(notes.body);
+      })
     });
   }
 
@@ -280,8 +300,8 @@ export class VendorSettingComponent implements OnInit {
         this.initMapMarkerListener();
         if (this.profile.businesses[0].delivery_latitude !== null) {
           var pos = {
-            lat: Number(this.profile.businesses[0].delivery_latitude),
-            lng: Number(this.profile.businesses[0].delivery_longitude)
+            lat: this.profile.businesses[0].delivery_latitude ? Number(this.profile.businesses[0].delivery_latitude) : -6.1798839,
+            lng: this.profile.businesses[0].delivery_longitude ? Number(this.profile.businesses[0].delivery_longitude) : 106.8237044
           };
           // console.log('this.profile ', pos );
           this.marker.setPosition(pos);
