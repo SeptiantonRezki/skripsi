@@ -820,7 +820,7 @@ export class VendorSettingComponent implements OnInit {
       if (!isB) {
         this.dataService.showLoading(true);
         await this.onSaveLokasi();
-        // await this.onSaveOperationalTime();
+        await this.onSaveOperationalTime();
         setTimeout(() => {
           this.dataService.showLoading(false);
           this.ngOnInit();
