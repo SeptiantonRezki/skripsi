@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
@@ -9,13 +9,14 @@ import { QiscusService } from 'app/services/qiscus.service';
 import { SupportService } from 'app/services/settings/support.service';
 import { Observable, Subject } from 'rxjs';
 import * as moment from "moment";
+import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogue.service';
 
 @Component({
   selector: 'app-vendor-notif-update-list',
   templateUrl: './vendor-notif-update-list.component.html',
   styleUrls: ['./vendor-notif-update-list.component.scss']
 })
-export class VendorNotifUpdateListComponent implements OnInit {
+export class VendorNotifUpdateListComponent implements OnInit, OnDestroy {
   onLoad: boolean;
   loadingIndicator: boolean;
 
@@ -34,6 +35,8 @@ export class VendorNotifUpdateListComponent implements OnInit {
 
   rows: any[] = [];
   _data: any = null;
+  dataOrder: any;
+
   @Input()
   set data(data: any) {
     if (data !== null && data.result.data !== null) {
@@ -62,6 +65,7 @@ export class VendorNotifUpdateListComponent implements OnInit {
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private adapter: DateAdapter<any>,
+    private ordersService: OrderCatalogueService
   ) {
     this.onLoad = true;
     this.allRowsSelected = false;
@@ -93,6 +97,12 @@ export class VendorNotifUpdateListComponent implements OnInit {
       from: '',
       to: ''
     });
+    // this.getAndCreateRoomById(this._data['result']);
+  }
+
+  ngOnDestroy() {
+    console.log('destroying')
+    this.emitter.emitChatIsOpen(false);
   }
 
   selectFn(allRowsSelected: boolean) {
@@ -180,14 +190,33 @@ export class VendorNotifUpdateListComponent implements OnInit {
   onCheckboxTrueChangeFn(event: any) {
   }
 
-  directDetail(data: any, index: number) {
-    if (this.isJSONStringify(data.data)) {
-      data.data = JSON.parse(data.data);
+  async directDetail(data: any, index: number) {
+    this.emitter.emitChatIsOpen(false);
+    if (data && data.data) {
       const dataNotif = data;
-      this.onRowsSelected.emit({ isDirectDetail: true, data: dataNotif, index: index });
+      if (typeof data.data !== 'object') data.data = JSON.parse(data.data);
+      if (dataNotif.notif_type === 'vendor' && dataNotif['data']['vendor_company_id']) {
+        this.ordersService.show({ order_id: dataNotif['data']['id'] }).subscribe(
+          async res => {
+            await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
+              res['data'].templates = res_2.data;
+              if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
+                const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
+                if (dayLimit < 30) {
+                  this.qiscusCheck(res.data); // check login qiscus
+                } else {
+                  this.emitter.emitChatIsOpen(false); // for open chat
+                }
+              } else {
+                this.qiscusCheck(res.data); // check login qiscus
+              }
+            })
+          })
+      }
+      // this.onRowsSelected.emit({ isDirectDetail: true, data: dataNotif, index: index });
     } else {
-      const dataNotif = data;
-      this.onRowsSelected.emit({ isDirectDetail: true, data: dataNotif, index: index });
+      // const dataNotif = data;
+      // this.onRowsSelected.emit({ isDirectDetail: true, data: dataNotif, index: index });
     }
   }
 
@@ -201,4 +230,143 @@ export class VendorNotifUpdateListComponent implements OnInit {
     return true;
   }
 
+  qiscusCheck(res: any) {
+    if (this.qs.qiscus.isLogin) {
+      this.initDataQiscus(res);
+    } else {
+      setTimeout(() => {
+        this.initDataQiscus(res);
+      }, 500);
+    }
+  }
+
+  async initDataQiscus(item: any) {
+    console.log('kena kah ?', item);
+    if (item === 'pesanan-dibatalkan' || item === 'selesai') {
+      // this.setState({ dataQiscus: null });
+      this.emitter.emitChatIsOpen(true); // for open chat
+      this.emitter.emitChatAutoOpen(true);
+      this.emitter.emitDataChat(item);
+      return false;
+    } else if (
+      item.qiscus_room_id !== null &&
+      item.qiscus_room_id !== '' &&
+      item.qiscus_room_id !== undefined
+    ) {
+      console.log('kena elsif')
+      await this.qs.qiscus.getRoomById(item.qiscus_room_id)
+        .then(async (getRoom: any) => {
+          // this.setState({ dataQiscus: { ...this.props.dataQiscus, ...getRoom } });
+          this.emitter.emitChatIsOpen(true); // for open chat
+          this.emitter.emitChatAutoOpen(true);
+          this.emitter.emitDataChat(item);
+          return true;
+        }, (err: any) => {
+          console.log('error_012', err);
+          const payload = {
+            retailer_id: item.retailer_id || "",
+            invoice_number: item.invoice_number || "",
+            order_id: item.id || ""
+          };
+          // console.log("PAYLOAD", payload);
+          this.qs.qiscusCreateUpdateRoomId({ order_id: item.id }).subscribe(async (qRes: any) => {
+            // console.log("RESP", qRes);
+            if (qRes.status) {
+              await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+                this.emitter.emitChatIsOpen(true); // for open chat
+                this.emitter.emitChatAutoOpen(true);
+                this.emitter.emitDataChat(item);
+                return true;
+              }, (err: any) => {
+                console.log('error_013a', err);
+              }).catch((qiscusError: any) => {
+                console.log('error_013aa', qiscusError);
+              });
+            }
+          });
+        })
+        .catch((qiscusError: any) => {
+          console.log('q_error', qiscusError);
+        });
+    } else {
+      const payload = {
+        retailer_id: item.retailer_id || "",
+        invoice_number: item.invoice_number || "",
+        order_id: item.id || ""
+      };
+      this.qs.qiscusCreateUpdateRoomId({ order_id: item.id }).subscribe(async (qRes: any) => {
+        // console.log("RESP", qRes);
+        if (qRes.status) {
+          await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+            this.emitter.emitChatIsOpen(true); // for open chat
+            this.emitter.emitChatAutoOpen(true);
+            this.emitter.emitDataChat(item);
+            return true;
+          }, (err: any) => {
+            console.log('q_error_013b', err);
+          }).catch((qiscusError: any) => {
+            console.log('q_error_013bb', qiscusError);
+          });
+        }
+      });
+    }
+    return false;
+  }
+
+  async getAndCreateRoomById(items: any) {
+    console.log('items', items);
+    if (items.data && this.qs.qiscus.isLogin) {
+      const dataTransaksi = [];
+      this.loadingIndicator = true;
+      this.qs.qiscus.loadRoomList({ page: 1, limit: 50, showParticipants: true, showEmpty: false })
+        .then(async (rooms: any) => {
+          // On success
+          console.log('ROOM', rooms, items.data);
+          const mappingRoom = await items.data.map(async (item: any) => {
+            item['statusOpened'] = false;
+            // item['orderStatuses'] = Object.entries(item.available_status).map(
+            //   ([value, name]) => ({ value, name })
+            // );
+            rooms.map((room: any) => {
+              if (typeof (item['data']) !== 'object') item['data'] = JSON.parse(item['data']);
+              if (room.id == item['data'].qiscus_room_id) {
+                item.dataQiscus = room;
+                return;
+              }
+            });
+            dataTransaksi.push(item);
+            console.log('dataTransaksi', dataTransaksi);
+            return;
+            // if (item.status === 'pesanan-dibatalkan' || item.status === 'selesai') {
+            //   item.dataQiscus = null;
+            //   dataTransaksi.push(item);
+            //   return;
+            // } else {
+
+            // }
+          });
+          Promise.all(mappingRoom).then(() => {
+            // console.log("ROWS", dataTransaksi)
+            this.rows = dataTransaksi;
+            this.loadingIndicator = false;
+          });
+        })
+        .catch(async (error: any) => {
+          // On error
+          console.log('3rror', error);
+          const mappingRoom = await items.data.map(async (item: any) => {
+            item['statusOpened'] = false;
+            // item['orderStatuses'] = Object.entries(item.available_status).map(([value, name]) => ({ value, name }));
+            return item;
+          });
+          console.log('mappingRoom', mappingRoom);
+          this.rows = mappingRoom;
+          this.loadingIndicator = false;
+        })
+    } else {
+      setTimeout(() => {
+        this.getAndCreateRoomById(items);
+      }, 500);
+    }
+  }
 }

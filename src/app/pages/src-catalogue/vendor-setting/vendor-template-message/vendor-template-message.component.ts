@@ -4,31 +4,31 @@ import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 
 const defaultTemplateVendor = [
   {
-    "id": 1,
+    "id": "",
     "title": "Hai, selamat datang di toko kami! Apakah ada informasi yang dapat kami berikan?",
     "body": "Hai, selamat datang di toko kami! Apakah ada informasi yang dapat kami berikan?",
     "user": "wholesaler"
   },
   {
-    "id": 2,
+    "id": "",
     "title": "Pesanan Anda masih dalam proses untuk disiapkan.",
     "body": "Pesanan Anda masih dalam proses untuk disiapkan.",
     "user": "wholesaler"
   },
   {
-    "id": 3,
+    "id": "",
     "title": "Mohon maaf ada perubahan pada pesanan Anda, apakah bisa dilakukan konfirmasi (tekan Setuju)?",
     "body": "Mohon maaf ada perubahan pada pesanan Anda, apakah bisa dilakukan konfirmasi (tekan Setuju)?",
     "user": "wholesaler"
   },
   {
-    "id": 4,
+    "id": "",
     "title": "Apakah pesanannya sudah diterima? Jika sudah, mohon untuk lakukan konfirmasi penerimaan (tekan Pesanan Diterima)",
     "body": "Apakah pesanannya sudah diterima? Jika sudah, mohon untuk lakukan konfirmasi penerimaan (tekan Pesanan Diterima)",
     "user": "wholesaler"
   },
   {
-    "id": 5,
+    "id": "",
     "title": "Terima kasih telah berbelanja di toko kami. Semoga pengalaman berbelanja Anda menyenangkan!",
     "body": "Terima kasih telah berbelanja di toko kami. Semoga pengalaman berbelanja Anda menyenangkan!\n\nSilahkan sampaikan kritik dan saran agar kami dapat melayani Anda lebih baik lagi.",
     "user": "wholesaler"
@@ -161,6 +161,7 @@ export class VendorTemplateMessageComponent implements OnInit {
         error = true;
       }
     });
+    console.log('bodySave', bodySave);
     await Promise.all(templateReady).then(async () => {
       if (!error) {
         if (!error2) {
