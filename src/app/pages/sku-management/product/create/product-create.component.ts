@@ -725,32 +725,35 @@ export class ProductCreateComponent {
             let listProdukPrivateLabel = [];
             let productGroup = this.formProductGroup.getRawValue();
             let product = productGroup.areas[i];
-            product.listProdukPrivateLabel.map((item, index) => {
+            product.listProdukPrivateLabel.map((itemPL, index) => {
               listProdukPrivateLabel.push({
-                packaging: item.packaging,
-                packaging_amount: item.packaging_amount,
-                price: item.price,
-                price_discount: item.price_discount || 0,
-                price_discount_expires_at: this.convertDate(item.price_discount_expires_at),
-                tipe: item.tipe
+                packaging: itemPL.packaging,
+                packaging_amount: itemPL.packaging_amount,
+                price: itemPL.price,
+                price_discount: itemPL.price_discount || 0,
+                price_discount_expires_at: this.convertDate(itemPL.price_discount_expires_at),
+                tipe: itemPL.tipe
               })
+
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging]`, itemPL.packaging);
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging_amount]`, itemPL.packaging_amount);
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price]`, itemPL.price);
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][area_id]`, areaItem && areaItem.value ? areaItem.value : 1);
+
+              console.log('pdea', itemPL);
+              if (itemPL.price_discount_expires_at)
+                fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, itemPL.price_discount);
+              else
+                fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, "0");
+
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
+              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_type]`, itemPL.tipe);
             });
 
             if (listProdukPrivateLabel.length > 0) {
-              listProdukPrivateLabel.map((item, index) => {
-                fd.append(`product_prices[${index}][packaging]`, item.packaging);
-                fd.append(`product_prices[${index}][packaging_amount]`, item.packaging_amount);
-                fd.append(`product_prices[${index}][price]`, item.price);
-                fd.append(`product_prices[${index}][area_id]`, areaItem.value);
+              // listProdukPrivateLabel.map((item, index) => {
 
-                if (item.price_discount_expires_at)
-                  fd.append(`product_prices[${index}][price_discount]`, item.price_discount);
-                else
-                  fd.append(`product_prices[${index}][price_discount]`, '0');
-
-                fd.append(`product_prices[${index}][price_discount_expires_at]`, item.price_discount_expires_at);
-                fd.append(`product_prices[${index}][price_type]`, item.tipe);
-              });
+              // });
 
               let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
               if (primaryNamePackaging.length > 0) {
@@ -774,7 +777,6 @@ export class ProductCreateComponent {
         body.alias.map(item => {
           fd.append("alias[]", item);
         });
-
         this.dataService.showLoading(true);
         this.productService.create(fd).subscribe(
           res => {
