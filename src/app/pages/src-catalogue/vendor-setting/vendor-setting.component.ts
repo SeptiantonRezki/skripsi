@@ -1,3 +1,5 @@
+/// <reference types="@types/googlemaps" />
+
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
