@@ -25,7 +25,7 @@
 
         <!-- RIGHT -->
         <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('wshms') > -1 && onMessageSameName(q.username_real, i)">
+          *ngIf="q.username_real.search('vendorhms') > -1 && onMessageSameName(q.username_real, i)">
           <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <span class="message-name-right">{{q.username_as}}</span>
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
@@ -69,7 +69,7 @@
 
         <div id="{{q.id}}" class="message-container-next-right" (mouseover)="messageOnHover(i)"
           (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('wshms') > -1 && !onMessageSameName(q.username_real, i)">
+          *ngIf="q.username_real.search('vendorhms') > -1 && !onMessageSameName(q.username_real, i)">
           <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
               <div class="replied-content" fxLayout="column">
@@ -113,7 +113,7 @@
 
         <!-- LEFT -->
         <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('wshms') == -1 && onMessageSameName(q.username_real, i)">
+          *ngIf="q.username_real.search('vendorhms') == -1 && onMessageSameName(q.username_real, i)">
           <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <span class="message-name-left">{{q.username_as}}</span>
             <div class="replied-content" fxLayout="column">
@@ -155,7 +155,7 @@
 
         <div id="{{q.id}}" class="message-container-next-left" (mouseover)="messageOnHover(i)"
           (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('wshms') == -1 && !onMessageSameName(q.username_real, i)">
+          *ngIf="q.username_real.search('vendorhms') == -1 && !onMessageSameName(q.username_real, i)">
           <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
               <div class="replied-content" fxLayout="column">
