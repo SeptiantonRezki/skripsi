@@ -369,16 +369,13 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   }
 
   getDokumen(row) {
-    this.dataService.showLoading(true);
-    console.log("rowww", row);
-    let body = {
-      product_id: row.order_products.map(prd => prd.id)
+    console.log("row", row);
+    if (row.document) {
+      this.downloadLink.nativeElement.href = row.document_image_url;
+      this.downloadLink.nativeElement.click();
+    } else {
+      this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
     }
-
-    this.ordertoSupplierService.getDocuments(body).subscribe(res => {
-      console.log('ressss', res);
-      this.dataService.showLoading(false);
-    })
   }
 
 }
