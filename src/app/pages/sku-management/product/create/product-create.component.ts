@@ -720,12 +720,14 @@ export class ProductCreateComponent {
         if (same.length > 0) {
           return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
         }
+        let grandIndex = 0;
         areas.map((areaItem, i) => {
           if (body.is_private_label == "1") {
             let listProdukPrivateLabel = [];
             let productGroup = this.formProductGroup.getRawValue();
             let product = productGroup.areas[i];
             product.listProdukPrivateLabel.map((itemPL, index) => {
+              grandIndex += 1;
               listProdukPrivateLabel.push({
                 packaging: itemPL.packaging,
                 packaging_amount: itemPL.packaging_amount,
@@ -735,19 +737,19 @@ export class ProductCreateComponent {
                 tipe: itemPL.tipe
               })
 
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging]`, itemPL.packaging);
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][packaging_amount]`, itemPL.packaging_amount);
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price]`, itemPL.price);
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][area_id]`, areaItem && areaItem.value ? areaItem.value : 1);
+              fd.append(`product_prices[${grandIndex}][packaging]`, itemPL.packaging);
+              fd.append(`product_prices[${grandIndex}][packaging_amount]`, itemPL.packaging_amount);
+              fd.append(`product_prices[${grandIndex}][price]`, itemPL.price);
+              fd.append(`product_prices[${grandIndex}][area_id]`, areaItem && areaItem.value ? areaItem.value : 1);
 
               console.log('pdea', itemPL);
               if (itemPL.price_discount_expires_at)
-                fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, itemPL.price_discount);
+                fd.append(`product_prices[${grandIndex}][price_discount]`, itemPL.price_discount);
               else
-                fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount]`, "0");
+                fd.append(`product_prices[${grandIndex}][price_discount]`, "0");
 
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
-              fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_type]`, itemPL.tipe);
+              fd.append(`product_prices[${grandIndex}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
+              fd.append(`product_prices[${grandIndex}][price_type]`, itemPL.tipe);
             });
 
             if (listProdukPrivateLabel.length > 0) {
