@@ -320,15 +320,15 @@ export class ProductEditComponent {
               start_date: [""],
               end_date: [""],
               listProdukPrivateLabel: this.formBuilder.array(productPrices[key].map(item => {
-                let fb = this.formBuilder.group({
+                let fbPL = this.formBuilder.group({
                   packaging: [item.packaging, Validators.required],
                   packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
                   price: [Number(item.price), Validators.required],
                   price_discount: [Number(item.price_discount), Validators.required],
-                  price_discount_expires_at: [item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", Validators.required],
+                  price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
                   tipe: [item.price_type]
                 });
-                return fb;
+                return fbPL;
               }
               ))
             });
