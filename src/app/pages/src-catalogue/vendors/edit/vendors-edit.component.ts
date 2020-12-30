@@ -61,7 +61,7 @@ export class VendorsEditComponent implements OnInit {
     private adminPrincipalService: AdminPrincipalService
   ) {
     this.submitting = false;
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_id'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     console.log(this.dataService.getDecryptedProfile());
     this.shortDetail = this.dataService.getFromStorage("detail_vendor");
     activatedRoute.url.subscribe(params => {

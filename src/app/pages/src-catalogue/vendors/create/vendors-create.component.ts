@@ -52,7 +52,7 @@ export class VendorsCreateComponent implements OnInit {
     private adminPrincipalService: AdminPrincipalService
   ) {
     this.submitting = false;
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_id'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     // this.verticalStepperStep1Errors = {
     //   nama: {},
