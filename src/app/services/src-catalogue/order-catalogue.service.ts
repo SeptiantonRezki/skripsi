@@ -38,9 +38,9 @@ export class OrderCatalogueService extends BaseService {
         return this.putApi(url, body);
     }
 
-    export(): Observable<any> {
+    export(queryParams?): Observable<any> {
         const url = this.getUrl(this.namespace, "export");
-        return this.getBlobAsJsonApi(url)
+        return this.getBlobAsJsonApi(url, queryParams);
     }
 
     // delete(context): Observable<any> {
