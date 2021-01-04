@@ -316,6 +316,7 @@ export class OrderCatalogueComponent implements OnInit {
             //   ([value, name]) => ({ value, name })
             // );
             rooms.map((room: any) => {
+              // console.log('room', room.id === item.qiscus_room_id, room.id, item.qiscus_room_id, item.invoice_number);
               if (room.id == item.qiscus_room_id) {
                 item.dataQiscus = room;
                 return;
