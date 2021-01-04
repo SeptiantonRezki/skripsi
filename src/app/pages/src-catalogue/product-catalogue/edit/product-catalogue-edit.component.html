@@ -21,13 +21,15 @@
           </div>
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="text" formControlName="description" placeholder="Deskripsi Produk">
+            <div fxLayout="column">
+              <p>Deskripsi Produk</p>
+              <textarea [froalaEditor]="options" formControlName="description"
+                placeholder="Deskripsi Produk"></textarea>
               <mat-error
                 *ngIf="formProduct.controls['description'].hasError('required') && formProduct.controls['description'].touched">
                 Deskripsi Produk harus diisi
               </mat-error>
-            </mat-form-field>
+            </div>
           </div>
 
           <div fxLayout="row" *ngIf="!vendor_id">

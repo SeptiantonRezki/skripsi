@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-product-catalogue-create',
@@ -31,6 +32,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
   validComboDrag: Boolean;
 
   vendor_id: any;
+  public options: Object = Config.FROALA_CUSTOM_TITLE_CONFIG("Deskripsi Produk");
 
   constructor(
     private router: Router,
