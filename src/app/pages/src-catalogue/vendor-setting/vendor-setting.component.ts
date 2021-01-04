@@ -734,7 +734,7 @@ export class VendorSettingComponent implements OnInit {
   }
 
   async onSaveOperationalTime() {
-    let body = [];
+    let body = { operational_time: [] };
     let fd = new FormData();
     let index = 0;
     let ot = this.formOperationalTimeGroup.getRawValue();
@@ -744,11 +744,12 @@ export class VendorSettingComponent implements OnInit {
       await item.days.map((val: any) => {
         // console.log('val', val)
         if (val.isActive) {
-          body.push({
+          console.log("val teim", val);
+          body['operational_time'].push({
             day_id: val.day_id,
             day_name: val.day_name,
-            open_time: item.open_time,
-            closed_time: item.closed_time
+            open_time: item.open_time + ":00",
+            closed_time: item.closed_time + ":00"
           });
           fd.append(`operational_time[${index}][day_id]`, val.day_id);
           fd.append(`operational_time[${index}][day_name]`, val.day_name);
@@ -760,8 +761,10 @@ export class VendorSettingComponent implements OnInit {
       });
       return item;
     });
+    console.log('body you got', body);
+    return;
     setTimeout(() => {
-      if (body.length > 0) {
+      if (body['operational_time'].length > 0) {
         this.vendorService.saveOperationalTime(body).subscribe((res) => {
           console.log('Berhasil Menyimpan Data Operational Time', res);
           this.scheduleIsValid = true;
