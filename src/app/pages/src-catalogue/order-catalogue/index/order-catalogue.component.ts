@@ -235,7 +235,11 @@ export class OrderCatalogueComponent implements OnInit {
   async export() {
     this.dataService.showLoading(true);
     try {
-      const response = await this.ordersService.export().toPromise();
+      let query = {};
+      query['status'] = this.formFilter.get("status").value;
+      query['start_date'] = this.convertDate(this.formFilter.get("from").value);
+      query['end_date'] = this.convertDate(this.formFilter.get("to").value);
+      const response = await this.ordersService.export(query).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `OrderSrcCatalogue${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     } catch (error) {
