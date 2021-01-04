@@ -748,8 +748,8 @@ export class VendorSettingComponent implements OnInit {
           body['operational_time'].push({
             day_id: val.day_id,
             day_name: val.day_name,
-            open_time: item.open_time + ":00",
-            closed_time: item.closed_time + ":00"
+            open_time: item.open_item ? item.open_time + (item.open_time.length === 5 ? ":00" : "") : "00:00:00",
+            closed_time: item.closed_item ? item.closed_time + (item.closed_time.length === 5 ? ":00" : "") : "23:59:00"
           });
           fd.append(`operational_time[${index}][day_id]`, val.day_id);
           fd.append(`operational_time[${index}][day_name]`, val.day_name);
@@ -761,8 +761,6 @@ export class VendorSettingComponent implements OnInit {
       });
       return item;
     });
-    console.log('body you got', body);
-    return;
     setTimeout(() => {
       if (body['operational_time'].length > 0) {
         this.vendorService.saveOperationalTime(body).subscribe((res) => {
