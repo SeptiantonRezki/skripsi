@@ -67,13 +67,12 @@
         <button class='product-layout' (click)="uploadProduk(rowTemp)" mat-button>
           <div class='product-layout-content'>
             <div class="product-img" fxLayout="column" fxLayoutAlign="center center">
-              <img [src]="rowTemp.image_url" alt="img empty">
+              <img [src]="rowTemp.images.length > 0 ? rowTemp.images[0] : ''" alt="img empty">
             </div>
             <div class="product-title">
               <div class="name" ellipsis [ellipsis-content]>{{rowTemp.name}}</div>
-              <div class="pkg" ellipsis [ellipsis-content]>{{rowTemp.element.packaging}}</div>
-              <div class="prc" ellipsis [ellipsis-content]>{{rowTemp.element.price_discount > 0 ?
-                rowTemp.element.price_discount_rupiah : rowTemp.element.price_rupiah}}</div>
+              <div class="pkg" ellipsis [ellipsis-content]>{{rowTemp.category}}</div>
+              <div class="prc" ellipsis [ellipsis-content]>{{rowTemp.price | rupiahFormater}}</div>
             </div>
           </div>
         </button>
@@ -88,13 +87,12 @@
           <button class='product-layout' (click)="uploadProduk(row)" mat-button>
             <div class='product-layout-content'>
               <div class="product-img" fxLayout="column" fxLayoutAlign="center center">
-                <img [src]="row.image_url" alt="Image Empty">
+                <img [src]="row.images.length > 0 ? row.images[0] : ''" alt="Image Empty">
               </div>
               <div class="product-title">
                 <div class="name" ellipsis [ellipsis-content]>{{row.name}}</div>
-                <div class="pkg" ellipsis [ellipsis-content]>{{row.element.packaging}}</div>
-                <div class="prc" ellipsis [ellipsis-content]>{{row.element.price_discount > 0 ?
-                  row.element.price_discount_rupiah : row.element.price_rupiah}}</div>
+                <div class="pkg" ellipsis [ellipsis-content]>{{row.category}}</div>
+                <div class="prc" ellipsis [ellipsis-content]>{{row.price | rupiahFormater}}</div>
               </div>
             </div>
           </button>

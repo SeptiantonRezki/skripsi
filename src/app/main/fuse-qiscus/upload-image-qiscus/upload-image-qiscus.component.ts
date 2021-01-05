@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { QiscusService } from 'app/services/qiscus.service';
-import { ProductService } from 'app/services/sku-management/product.service';
 import { Observable, Subject } from 'rxjs';
 import * as moment from "moment";
+import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 
 @Component({
   selector: 'app-upload-image-qiscus',
@@ -43,7 +43,7 @@ export class UploadImageQiscusComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private qs: QiscusService,
-    private productService: ProductService,
+    private productService: ProductCatalogueService,
   ) {
     this.loadingIndicator = false;
     this.message = null;
@@ -83,18 +83,19 @@ export class UploadImageQiscusComponent implements OnInit {
       this.pagination.search = string;
       this.pagination.page = 1;
       this.offsetPagination = 0;
+      this.pagination['vendor_company_id'] = this.data.order_data.vendor_company_id || '';
       this.rows = [];
       this.productService.get(this.pagination).subscribe(res => {
         Page.renderPagination(this.pagination, res.data);
         const rows = res.data ? res.data.data : [];
         if (rows.length > 0) {
           rows.map((item: any) => {
-            item.prices.map((itemChild: any) => {
-              this.rows.push({
-                ...item,
-                element: itemChild
-              })
+            this.rows.push({
+              ...item,
+              // element: itemChild
             })
+            // item.prices.map((itemChild: any) => {
+            // })
           })
         }
         this.loadingIndicator = false;
@@ -145,14 +146,12 @@ export class UploadImageQiscusComponent implements OnInit {
     const payload = JSON.stringify({
       type: 'product',
       content: {
-        url: item.image_url,
+        url: item.images && item.images[0] ? item.images[0] : '',
         product_id: item.id,
         product_name: item.name,
-        packaging: item.element.packaging ? item.element.packaging : '',
-        price: item.price ? item.element.price : 0,
-        price_discount: item.element.price_discount ? item.element.price_discount : 0,
-        price_discount_rupiah: item.element.price_discount_rupiah ? item.element.price_discount_rupiah : '',
-        price_rupiah: item.element.price_rupiah ? item.element.price_rupiah : '',
+        product_sku_id: item.sku_id,
+        category: item.category ? item.category : '',
+        price: item.price ? item.price : 0,
         product_detail: item,
         caption: this.message
       }

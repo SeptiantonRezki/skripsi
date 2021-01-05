@@ -736,6 +736,7 @@ export class FuseQiscusComponent {
         switch (type) {
           case 'product_tagging':
             // this.templateTaskForm.get('image').setValue(response);
+            console.log('asokdlasdas', JSON.parse(response.payload));
             const dataChatTempProduct = {
               id: response.uniqueId,
               uniqueId: response.uniqueId,
