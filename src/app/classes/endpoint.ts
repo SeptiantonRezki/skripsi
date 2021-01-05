@@ -526,10 +526,10 @@ export class Endpoint {
         operational_time: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/operational-time`,
         chat_template: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
         chat_template_operational: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template-operational`,
-        list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/province`,
-        list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/city/by-province/${context.province_id}`,
-        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/district/by-city/${context.city_id}`,
-        list_subdistrict: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/sub-district/by-district/${context.district_id}`
+        list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/province?sort=name`,
+        list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/city/by-province/${context.province_id}?sort=name`,
+        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/district/by-city/${context.city_id}?sort=name`,
+        list_subdistrict: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/sub-district/by-district/${context.district_id}?sort=name`
       },
       product_catalogue: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,
