@@ -734,16 +734,19 @@ export class VendorSettingComponent implements OnInit {
 
   async onSaveChatOperationalTime() {
     let body = {
-      templates: []
+      templates: [
+        {
+          id: 1,
+          body: this.note_1.value,
+          type: "available"
+        },
+        {
+          id: 2,
+          body: this.note_2.value,
+          type: "unavailable"
+        },
+      ]
     };
-    console.log("ada gak nih orang", this.listChatOperationalTemplates);
-    this.listChatOperationalTemplates.map((chat, idx) => {
-      body.templates.push({
-        id: chat.id,
-        body: idx === 0 ? this.note_1.value : this.note_2.value,
-        type: chat.type
-      });
-    });
 
     this.vendorService.saveChatTemplateOperational(body).subscribe(res => {
       console.log("saving chat operational succeed");
