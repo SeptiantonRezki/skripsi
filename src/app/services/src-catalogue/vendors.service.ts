@@ -88,23 +88,23 @@ export class VendorsService extends BaseService {
     return this.postApi(url, body);
   }
 
-  getProvinces(): Observable<any> {
+  getProvinces(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_province');
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
-  getCities(context?): Observable<any> {
+  getCities(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_city', context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
-  getDistricts(context?): Observable<any> {
+  getDistricts(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_district', context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
-  getSubDistricts(context?): Observable<any> {
+  getSubDistricts(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_subdistrict', context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 }

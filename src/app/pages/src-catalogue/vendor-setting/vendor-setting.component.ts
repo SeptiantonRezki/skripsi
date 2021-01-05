@@ -196,25 +196,25 @@ export class VendorSettingComponent implements OnInit {
   }
 
   getProvinces() {
-    this.vendorService.getProvinces().subscribe(res => {
+    this.vendorService.getProvinces({ sort: "name" }).subscribe(res => {
       this.listProvince = res.data;
     });
   }
 
   getCities(id) {
-    this.vendorService.getCities({ province_id: id }).subscribe(res => {
+    this.vendorService.getCities({ province_id: id }, { sort: "name" }).subscribe(res => {
       this.listCity = res.data;
     });
   }
 
   getDistricts(id) {
-    this.vendorService.getDistricts({ city_id: id }).subscribe(res => {
+    this.vendorService.getDistricts({ city_id: id }, { sort: "name" }).subscribe(res => {
       this.listDistrict = res.data;
     });
   }
 
   getSubDistricts(id) {
-    this.vendorService.getSubDistricts({ district_id: id }).subscribe(res => {
+    this.vendorService.getSubDistricts({ district_id: id }, { sort: "name" }).subscribe(res => {
       this.listTerritory = res.data;
     });
   }
