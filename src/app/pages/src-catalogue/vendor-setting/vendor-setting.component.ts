@@ -59,6 +59,7 @@ export class VendorSettingComponent implements OnInit {
   bankAccountLength: Number = 0;
 
   listSchedule: any[] = [];
+  listChatOperationalTemplates: any[] = [];
 
   listDays: any[] = [
     { day_id: 1, day_name: 'SEN' },
@@ -67,7 +68,7 @@ export class VendorSettingComponent implements OnInit {
     { day_id: 4, day_name: 'KAM' },
     { day_id: 5, day_name: 'JUM' },
     { day_id: 6, day_name: 'SAB' },
-    { day_id: 0, day_name: 'MIN' },
+    { day_id: 7, day_name: 'MIN' },
   ];
 
   minDate: any;
@@ -221,6 +222,7 @@ export class VendorSettingComponent implements OnInit {
   getChatTemplateOperational() {
     this.vendorService.getChatTemplateOperational().subscribe(res => {
       console.log('res chat template op', res);
+      this.listChatOperationalTemplates = res.data;
       res.data.map(notes => {
         console.log('notes', notes);
         if (notes.type !== 'available') this.note_1.setValue(notes.body);
@@ -229,8 +231,9 @@ export class VendorSettingComponent implements OnInit {
     });
   }
 
-  openTimeChanged(event: any, i) {
+  openTimeChanged(event: any, i, type) {
     const e = event.value;
+    // this.listSchedule[i][type] = e;
     console.log('event' + i, event);
   }
 
@@ -729,6 +732,24 @@ export class VendorSettingComponent implements OnInit {
     }
   }
 
+  async onSaveChatOperationalTime() {
+    let body = {
+      templates: []
+    };
+    console.log("ada gak nih orang", this.listChatOperationalTemplates);
+    this.listChatOperationalTemplates.map((chat, idx) => {
+      body.templates.push({
+        id: chat.id,
+        body: idx === 0 ? this.note_1.value : this.note_2.value,
+        type: chat.type
+      });
+    });
+
+    this.vendorService.saveChatTemplateOperational(body).subscribe(res => {
+      console.log("saving chat operational succeed");
+    });
+  }
+
   async onSaveOperationalTime() {
     let body = { operational_time: [] };
     let fd = new FormData();
@@ -736,16 +757,18 @@ export class VendorSettingComponent implements OnInit {
     let ot = this.formOperationalTimeGroup.getRawValue();
     // console.log('ot', ot);
     await this.listSchedule.map(async (item, i) => {
-      // console.log('item', item)
+      console.log('item', item)
       await item.days.map((val: any) => {
         // console.log('val', val)
         if (val.isActive) {
-          console.log("val teim", val);
+          // console.log("val teim", val);
+          let open_time = ot.formOperationalTime[i].openTime.substring(0, 5);
+          let closed_time = ot.formOperationalTime[i].closedTime.substring(0, 5);
           body['operational_time'].push({
             day_id: val.day_id === 0 ? 7 : val.day_id,
             day_name: val.day_name,
-            open_time: item.open_item ? item.open_time + (item.open_time.length === 5 ? ":00" : "") : "00:00:00",
-            closed_time: item.closed_item ? item.closed_time + (item.closed_time.length === 5 ? ":00" : "") : "23:59:00"
+            open_time: open_time ? open_time + (open_time.length === 5 ? ":00" : "") : "00:00:00",
+            closed_time: closed_time ? closed_time + (closed_time.length === 5 ? ":00" : "") : "23:59:00",
           });
           fd.append(`operational_time[${index}][day_id]`, val.day_id);
           fd.append(`operational_time[${index}][day_name]`, val.day_name);
@@ -818,6 +841,7 @@ export class VendorSettingComponent implements OnInit {
         this.dataService.showLoading(true);
         await this.onSaveLokasi();
         await this.onSaveOperationalTime();
+        await this.onSaveChatOperationalTime();
         setTimeout(() => {
           this.dataService.showLoading(false);
           this.ngOnInit();
