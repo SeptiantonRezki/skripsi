@@ -9,6 +9,7 @@ import { LandingPageCreateComponent } from "./landing-page/create/landing-page-c
 import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.component";
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 import { PageGuard } from "app/classes/auth.guard";
+import { BannerSortingComponent } from "./banner-sorting/banner-sorting.component";
 
 const routes: Routes = [
   {
@@ -56,6 +57,14 @@ const routes: Routes = [
       listLevelArea: ListLevelAreaResolver
     },
     canActivate: [PageGuard]
+  },
+  {
+    path: "banner/sorting",
+    component: BannerSortingComponent,
+    data: {
+      breadcrumbs: brConfig.inappMarketing.banner.sorting
+    },
+    // canActivate: [PageGuard]
   },
   {
     path: "landing-page",

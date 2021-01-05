@@ -84,4 +84,8 @@ export class BannerService extends BaseService {
     const url = this.getUrl(this.namespace, "import_c_audience");
     return this.postApi(url, body);
   }
+  updateSorting(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_sorting");
+    return this.postApi(url, body);
+  }
 }
