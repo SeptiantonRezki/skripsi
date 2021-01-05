@@ -56,7 +56,7 @@
                           <div fxLayout="row" fxLayoutAlign="center center"
                             [class]="day.isActive? 'days-btn days-right active' : 'days-btn days-right'"
                             matTooltip="Minggu" id="Minggu-{{i}}" (click)="addDayToSchedule(i, j)"
-                            *ngIf="day.day_id == 0 && j == 6">
+                            *ngIf="day.day_id == 7 && j == 6">
                             <span>MIN</span>
                           </div>
                         </div>
@@ -68,7 +68,7 @@
                           <div class="24hr-example">
                             <input placeholder="00:00" [value]="item.value.openTime" aria-label="24hr format"
                               [ngxTimepicker]="fullTime1" [format]="24" class="timepicker-input"
-                              formControlName="openTime" (change)="openTimeChanged($event, i)"
+                              formControlName="openTime" (change)="openTimeChanged($event, i, 'open_time')"
                               [max]="item.value.closedTime" readonly>
                             <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
                           </div>
@@ -79,7 +79,8 @@
                           <div class="24hr-example">
                             <input placeholder="00:00" [value]="item.value.closedTime" aria-label="24hr format"
                               [ngxTimepicker]="fullTime2" [format]="24" class="timepicker-input"
-                              formControlName="closedTime" [min]="item.value.openTime" readonly>
+                              formControlName="closedTime" (change)="openTimeChanged($event, i, 'closed_time')"
+                              [min]="item.value.openTime" readonly>
                             <ngx-material-timepicker #fullTime2></ngx-material-timepicker>
                           </div>
                         </div>
