@@ -1,0 +1,208 @@
+:host /deep/ 
+mat-form-field.otc {
+  .mat-form-field-wrapper {
+    padding: 0;
+  }
+  .mat-form-field-flex {
+    // align-items: center;
+    // font-size: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px; // text-align: center;
+    padding-top: 0;
+  }
+  .mat-form-field-infix {
+    // display: none;
+    border-top: 0;
+    padding: 10px;
+  }
+  .mat-form-field-underline {
+    display: none;
+  } // input {
+  //   letter-spacing: 0.35em;
+  //   -webkit-text-security: disc;
+  // }
+  
+}
+
+.content {
+  width: 100%;
+}
+
+.address-maps {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.map-container {
+  width: 100%;
+  height: 285px;
+  border: 1.5px dashed #c8c8c8;
+  margin-bottom: 8px;
+  border-radius: 10px;
+}
+
+.img-container {
+  // margin-bottom: 8px;
+}
+
+.gmap {
+  width: calc(100% - 2px);
+  height:281px;
+  border-radius: 10px;
+}
+
+.marker-container {
+  position: relative;
+  top: -185px;
+  left: calc(50% - 25px);
+  .marker-icon {
+    max-width: 40px; width: 100%;
+  }
+}
+
+.btn-days {
+  margin: 16px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.50);
+  border-radius: 22px;
+  .days-btn {
+    padding: 8px;
+    background-color: #cdcdcdcd;
+    color: #444;
+    font-weight: 600;
+    border-right: 2px solid #eaeaea;
+  }
+  .days-left {
+    border-radius: 22px 0 0 22px;
+    padding-left: 8px;
+  }
+  .days-right {
+    border-radius: 0 22px 22px 0;
+    padding-right: 8px;
+    border: none !important;
+  }
+  .days-btn:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+  .active {
+    background-color: #e71207 !important;
+    color: #fff !important;
+  }
+}
+
+.add-schedule {
+  mat-icon {
+    color: #e71207;
+  }
+  span {
+    color: #e71207;
+    font-size: 16px;
+  }
+}
+.add-schedule:hover {
+  cursor: pointer;
+};
+
+.open-time:hover {
+  cursor: pointer;
+}
+.close-time:hover {
+  cursor: pointer;
+}
+
+.image-toko {
+  float: left;
+  box-shadow: 0 0 1px black;
+  /** Interesting part starts here */
+  font-size: 0;
+  text-align: center;
+  width: 210px;
+  height: 210px;
+  padding: 10px;
+}
+
+.attachment-layout {
+  .delete-img:hover {
+    cursor: pointer;
+    .mat-icon {
+      color: #dc1d2d;
+    }
+  }
+  .delete-img {
+    height: 20px;
+    width: 20px;
+    top: -5px;
+    position: relative;
+  }
+  .attachment-img {
+    // width: 100%;
+    // max-width: 400px;
+    height: auto;
+    max-height: 160px;
+    background-color: #ffffff;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center;
+    padding: 10px;
+    margin: 0 auto;
+  }
+}
+
+.confirmation-button {
+  min-width: 150px;
+}
+
+.timepicker-input {
+  width: 50px;
+  font-size: 18px;
+  background-color: transparent;
+  text-align: center;
+}
+.timepicker-input:hover {
+  cursor: pointer;
+}
+.ot-time {
+  font-size: 18px;
+  color: #666;
+}
+
+.content-body {
+  .body-layout {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    background-color: #eee;
+    .body-text {    
+      background-color: #eee;
+      color: #888;
+      width: 100%;
+      height: 80px;
+      resize: none;
+    }
+    .body-text:focus {
+      background-color: #fff;
+      color: #222;
+    }
+  }
+  .body-layout:focus-within {
+    background-color: #fff;
+  }
+  
+  .body-delete {
+    width: 130px;
+    height: 100px;
+    color: #888;
+    mat-icon {
+      color: #888;
+    }
+    mat-icon:hover {
+      cursor: pointer;
+      color: #DC1E2D;
+    }
+  }
+}

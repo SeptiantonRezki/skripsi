@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 // import { OrdersService } from "../../../services/orders.service";
 // import { ProductService } from "../../../services/product.service";
 import { DialogService } from "app/services/dialog.service";
-import { FormGroup, FormBuilder, FormArray, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from "@angular/forms";
 import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import html2canvas from "html2canvas";
 import * as moment from "moment";
@@ -54,6 +54,7 @@ export class OrdertoSupplierDetailComponent {
   productsNota: any[] = [];
   total: any;
   static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
+  document: FormControl = new FormControl('');
 
 
   @HostListener('window:beforeunload')
@@ -115,6 +116,23 @@ export class OrdertoSupplierDetailComponent {
   ngOnInit() {
     this.onLoad = true;
     this.getDetailOrder();
+    this.document.disable();
+  }
+
+  copyMessage(docType: string) {
+    let doc = '';
+    // if(docType === 'ktp') doc = this.detailOrder.
+    if (this.detailOrder.document) {
+      document.addEventListener('copy', (e: ClipboardEvent) => {
+        e.clipboardData.setData('text/plain', (this.detailOrder.document));
+        e.preventDefault();
+        document.removeEventListener('copy', null);
+      });
+      document.execCommand('copy');
+      this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
+    } else {
+      this.dialogService.openSnackBar({ message: "Tidak Ada Dokumen yang dapat disalin!" });
+    }
   }
 
   refreshLevel() {
@@ -130,69 +148,73 @@ export class OrdertoSupplierDetailComponent {
     // this.allProductLevels = [];
     this.ordertoSupplierService.showListPesanan({ orderId: this.orderId }).subscribe(
       async res => {
-      if (res.status == "success") {
-        // setTimeout(() => {
-        res = res.data;
-        this.detailOrder = res;
-        console.log('detail order', this.detailOrder);
-        let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
-        this.productsNota = products;
-        this.total = 0;
-        
-        this.editable = false;
+        if (res.status == "success") {
+          // setTimeout(() => {
+          res = res.data;
+          this.detailOrder = res;
+          console.log('detail order', this.detailOrder);
+          let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
+          this.productsNota = products;
+          this.total = 0;
+          if (this.detailOrder.document) {
+            this.document.setValue(this.detailOrder.document);
+          }
 
-        this.loadingIndicator = false;
-        this.onLoad = false;
-        if (res.available_status)
-          this.orderStatuses = Object.entries(res.available_status).map(
-            ([value, name]) => ({ value, name })
-          );
-        else this.orderStatuses = [];
-        this.statusLogs = res.order_status_logs;
-        this.statusForm = this.formBuilder.group({
-          newStatus: ""
-        });
+          this.editable = false;
 
-        this.productsForm = this.formBuilder.group({
-          listProducts: this.formBuilder.array([])
-        });
+          this.loadingIndicator = false;
+          this.onLoad = false;
+          if (res.available_status)
+            this.orderStatuses = Object.entries(res.available_status).map(
+              ([value, name]) => ({ value, name })
+            );
+          else this.orderStatuses = [];
+          this.statusLogs = res.order_status_logs;
+          this.statusForm = this.formBuilder.group({
+            newStatus: ""
+          });
 
-        let listProducts = this.productsForm.get("listProducts") as FormArray;
-        while (listProducts.length > 0) {
-          listProducts.removeAt(listProducts.length - 1);
+          this.productsForm = this.formBuilder.group({
+            listProducts: this.formBuilder.array([])
+          });
+
+          let listProducts = this.productsForm.get("listProducts") as FormArray;
+          while (listProducts.length > 0) {
+            listProducts.removeAt(listProducts.length - 1);
+          }
+
+          this.isAnyUpdate = res && res.order_products ? res.order_products.findIndex(product => product.price_update_status) : -1;
+
+          // let tierPrice = this.detailOrder.tier;
+          console.log('allproductlevels get detail', this.allProductLevels);
+          res.order_products.map((item: any, idx: number) => {
+            this.total = parseInt(this.total) + parseInt(item.total_price);
+            listProducts.push(
+              this.formBuilder.group({
+                id: item.id,
+                name: item.name,
+                image_url: item.image_url,
+                brand: item.brand_name,
+                category: item.category_name,
+                packaging: item.packaging,
+                price: item.price,
+                amount: [
+                  item.amount,
+                  // [Validators.min(0), Validators.max(item.amount)]
+                  [Validators.min(0)]
+                ],
+                editable: OrdertoSupplierDetailComponent.EDITABLE_IF_STATUS.includes(this.detailOrder.status) ? true : false,
+                edited: false,
+                price_update_status: item.total_price // item.price_update_status
+              })
+            );
+          });
+          this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
+            this.edited = true;
+            this.editable = true;
+          });
         }
-
-        this.isAnyUpdate = res && res.order_products ? res.order_products.findIndex(product => product.price_update_status) : -1;
-
-        // let tierPrice = this.detailOrder.tier;
-        console.log('allproductlevels get detail', this.allProductLevels);
-        res.order_products.map((item: any, idx: number) => {
-          this.total = parseInt(this.total) + parseInt(item.total_price);
-          listProducts.push(
-            this.formBuilder.group({
-              id: item.id,
-              name: item.name,
-              image_url: item.image_url,
-              brand: item.brand_name,
-              category: item.category_name,
-              packaging: item.packaging,
-              price: item.price,
-              amount: [
-                item.amount,
-                // [Validators.min(0), Validators.max(item.amount)]
-                [Validators.min(0)]
-              ],
-              editable: OrdertoSupplierDetailComponent.EDITABLE_IF_STATUS.includes(this.detailOrder.status) ? true : false,
-              edited: false,
-              price_update_status: item.total_price // item.price_update_status
-            })
-          );
-        });
-        this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
-          this.edited = true;
-          this.editable = true;
-        });
-      }}, 
+      },
       err => {
         console.log('err', err);
         this.loadingIndicator = false;
@@ -322,22 +344,22 @@ export class OrdertoSupplierDetailComponent {
   saveUpdateQtyV2() {
 
     const products = this.productsForm.get('listProducts').value;
-    console.log({products});
+    console.log({ products });
     if (products.length) {
 
       this.loadingIndicator = true;
 
-      const body = {products: products.map(({id, amount}) => ({product_id: id, amount})) }
-      console.log({body});
+      const body = { products: products.map(({ id, amount }) => ({ product_id: id, amount })) }
+      console.log({ body });
 
-      this.ordertoSupplierService.updateQty(body, {orderId: this.orderId}).subscribe(response => {
+      this.ordertoSupplierService.updateQty(body, { orderId: this.orderId }).subscribe(response => {
         this.loadingIndicator = false;
         this.dialogService.openSnackBar({ message: "Berhasil merubah data" });
         this.getDetailOrder();
 
       }, error => {
         this.loadingIndicator = false;
-        console.log({error});
+        console.log({ error });
 
       });
 
@@ -348,7 +370,7 @@ export class OrdertoSupplierDetailComponent {
   updateStatus() {
     let data = {
       titleDialog: "Konfirmasi Perubahan Status Pesanan",
-      captionDialog: "Apakah anda yakin untuk melakukan perubahan status pesanan ini menjadi 'Pesanan "+ this.statusForm.get("newStatus").value + "'?",
+      captionDialog: "Apakah anda yakin untuk melakukan perubahan status pesanan ini menjadi 'Pesanan " + this.statusForm.get("newStatus").value + "'?",
       confirmCallback: this._updateStatus.bind(this),
       buttonText: ["Ya, Lanjutkan", "Tidak"]
     };
@@ -362,20 +384,20 @@ export class OrdertoSupplierDetailComponent {
     this.loadingIndicator = true;
     this.dataService.showLoading(true);
     this.ordertoSupplierService.putStatusPesanan(body, { orderId: this.orderId }).subscribe(
-        res => {
-          this.loadingIndicator = false;
-          this.dialogService.brodcastCloseConfirmation();
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: "Status Berhasil Diubah" });
+      res => {
+        this.loadingIndicator = false;
+        this.dialogService.brodcastCloseConfirmation();
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Status Berhasil Diubah" });
 
-          this.ngOnInit();
-          this.selectedTab = 0;
-        },
-        err => {
-          this.loadingIndicator = false;
-          this.dataService.showLoading(false);
-          // this.dialogService.openSnackBar({ message: err.error.message })
-        }
+        this.ngOnInit();
+        this.selectedTab = 0;
+      },
+      err => {
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        // this.dialogService.openSnackBar({ message: err.error.message })
+      }
     );
   }
 

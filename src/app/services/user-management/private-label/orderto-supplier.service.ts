@@ -15,7 +15,7 @@ export class OrdertoSupplierService extends BaseService {
     const url = this.getUrl(this.namespace, "getList");
     return this.getApi(url, queryParams);
   }
-  
+
   detail(context?: any, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail", context);
     return this.getApi(url, queryParams);
@@ -69,6 +69,11 @@ export class OrdertoSupplierService extends BaseService {
   updateQty(body, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "updateQty", context);
     return this.putApi(url, body);
+  }
+
+  getDocuments(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "dokumen_list");
+    return this.postApi(url, body);
   }
 
 }

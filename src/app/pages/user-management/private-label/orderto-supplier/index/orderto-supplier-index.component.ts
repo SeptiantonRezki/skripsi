@@ -77,13 +77,13 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     this.getList();
 
     const observable = this.keyUp.debounceTime(1000)
-    .distinctUntilChanged()
-    .flatMap(search => {
-      return Observable.of(search).delay(500);
-    })
-    .subscribe(data => {
-      this.updateFilter(data);
-    });
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
   }
 
   initFilter() {
@@ -188,7 +188,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       delete this.pagination.start_date;
       delete this.pagination.end_date;
     }
-    
+
     this.ordertoSupplierService.getList(this.pagination).subscribe(async res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
@@ -350,7 +350,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   async print() {
     let bodyHtml = {
       ...this.detailOrder,
-      created_at: moment(this.detailOrder.created_at).format( "DD/MM/YYYY HH:mm"),
+      created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
       products: this.detailOrder.order_products.map(obj => {
         return {
           ...obj,
@@ -366,6 +366,16 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     popupWin.document.open();
     popupWin.document.write(this.generatePO.html(bodyHtml));
     popupWin.document.close();
+  }
+
+  getDokumen(row) {
+    console.log("row", row);
+    if (row.document) {
+      this.downloadLink.nativeElement.href = row.document_image_url;
+      this.downloadLink.nativeElement.click();
+    } else {
+      this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
+    }
   }
 
 }

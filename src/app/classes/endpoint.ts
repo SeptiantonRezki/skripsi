@@ -130,7 +130,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/pengajuan-src/export/data`,
         list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/province?page=1&sort=name&page=all`,
         list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city?page=all&sort=name&province_id=${context.province_id}`,
-        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/district?page=all&sort=name&city_id=${context.city_id}`
+        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/district?page=all&sort=name&city_id=${context.city_id}`,
+        list_territory: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/district/district-city-province`
       },
       banner: {
         get: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner`,
@@ -426,6 +427,9 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`
       },
       qiscus: {
+        updateRoomIdTransaksi: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/wholesaler/order/update/${context.orderId}`,
+        createUpdateRoomOrderId: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/create-qiscus-room`,
+        getMessageTemplates: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
         loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
       },
@@ -468,7 +472,8 @@ export class Endpoint {
         importMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-import-mitra`,
         exportMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-export-mitra`,
         previewImportMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-preview-mitra`,
-        checkPanelMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/check-panel-mitra`
+        checkPanelMitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/check-panel-mitra`,
+        export_supplier_panel_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-panel-mitra/${context.id}/export`
       },
       PLOrdertoSupplier: {
         getList: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/list-pesanan`,
@@ -476,6 +481,7 @@ export class Endpoint {
         statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
         exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
         updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}`,
+        dokumen_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/wholesaler/supplier/document`
       },
       courier: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
@@ -519,6 +525,14 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
+        address_map: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}/address-map`,
+        operational_time: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/operational-time`,
+        chat_template: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
+        chat_template_operational: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template-operational`,
+        list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/province`,
+        list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/city/by-province/${context.province_id}`,
+        list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/district/by-city/${context.city_id}`,
+        list_subdistrict: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/sub-district/by-district/${context.district_id}`
       },
       product_catalogue: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product`,

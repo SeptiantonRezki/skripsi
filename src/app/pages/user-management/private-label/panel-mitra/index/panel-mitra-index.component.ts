@@ -11,6 +11,7 @@ import { takeUntil } from "rxjs/operators";
 
 import { Endpoint } from '../../../../../classes/endpoint';
 import { PanelMitraService } from 'app/services/user-management/private-label/panel-mitra.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-panel-mitra-index',
@@ -28,8 +29,8 @@ export class PanelMitraIndexComponent implements OnInit {
   id: any;
   listFilterCategory: any[];
   listFilterProducts: any[];
-  filterCategory: any[] = [ { name: 'Semua Kategori', id: '' }, ];
-  filterProducts: any[] = [ { name: 'Semua Produk', id: '' }, ];
+  filterCategory: any[] = [{ name: 'Semua Kategori', id: '' },];
+  filterProducts: any[] = [{ name: 'Semua Produk', id: '' },];
   formFilter: FormGroup;
   filterProdukSearch = new FormControl();
   private _onDestroy = new Subject<void>();
@@ -56,7 +57,7 @@ export class PanelMitraIndexComponent implements OnInit {
     this.onLoad = true;
     this.selected = [];
     this.permission = this.roles.getRoles('principal.supplierpanelmitra');
-    
+
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -72,7 +73,7 @@ export class PanelMitraIndexComponent implements OnInit {
       filtercategory: "",
       filterproduct: "",
     });
-    this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data ];
+    this.listFilterCategory = [{ name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data];
     this.filterCategory = this.listFilterCategory;
     this.getList();
 
@@ -125,10 +126,10 @@ export class PanelMitraIndexComponent implements OnInit {
     // console.log('kk', this.formFilter.get('filtercategory').value);
     this.panelMitraService.getFilterProduct({ param: value || '', categoryId: this.formFilter.get('filtercategory').value }).subscribe(res => {
       if (res.status == 'success') {
-        this.listFilterProducts =  [ { name: 'Semua Produk', id: '' }, ...res.data ];
-        this.filterProducts = this.listFilterProducts.map((v) => ({...v}));
+        this.listFilterProducts = [{ name: 'Semua Produk', id: '' }, ...res.data];
+        this.filterProducts = this.listFilterProducts.map((v) => ({ ...v }));
       } else {
-        this.listFilterProducts = [ { name: 'Semua Produk', id: '' }, ];
+        this.listFilterProducts = [{ name: 'Semua Produk', id: '' },];
         this.filterProducts = this.listFilterProducts;
       }
     });
@@ -147,16 +148,16 @@ export class PanelMitraIndexComponent implements OnInit {
     if (!this.listFilterProducts) {
       return;
     }
-      // get the search keyword
-      let search = this.filterProdukSearch.value;
-      if (!search) {
-        this.filterProducts = this.listFilterProducts.slice();
-        return;
-      } else {
-        search = search.toLowerCase();
-      }
-      // filter the products
-      this.filterProducts = this.listFilterProducts.filter(item => item.name.toLowerCase().indexOf(search) > -1).map((v)=>({...v}));
+    // get the search keyword
+    let search = this.filterProdukSearch.value;
+    if (!search) {
+      this.filterProducts = this.listFilterProducts.slice();
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the products
+    this.filterProducts = this.listFilterProducts.filter(item => item.name.toLowerCase().indexOf(search) > -1).map((v) => ({ ...v }));
   }
 
   getList() {
@@ -267,6 +268,60 @@ export class PanelMitraIndexComponent implements OnInit {
 
   directEdit(item?: any): void {
     this.router.navigate(["user-management", "supplier-panel-mitra", "edit", item.id]);
+  }
+
+  async export(id) {
+    try {
+      const response = await this.panelMitraService.exportSupplierPanelMitra({ id: id }).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportPanelMitraSupplier_${new Date().toLocaleString()}.xls`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
 }
