@@ -5,6 +5,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 import { Emitter } from 'app/helper/emitter.helper';
 import { DataService } from 'app/services/data.service';
+import { NotificationListService } from 'app/services/notification-list.service';
 import { NotificationService } from 'app/services/notification.service';
 import { Subject } from 'rxjs';
 
@@ -46,7 +47,7 @@ export class VendorNotificationComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    // private notificationsListService: NotificationsListService,
+    private notificationsListService: NotificationListService,
     private notificationService: NotificationService,
     private activatedRoute: ActivatedRoute,
     private emitter: Emitter,
@@ -223,14 +224,14 @@ export class VendorNotificationComponent implements OnInit {
     }
     this.onLoad = true;
     this.loadingIndicator = true;
-    // this.notificationsListService.updateBadge(fd).subscribe((response) => {
-    //   this.getNotifUpdateList();
-    //   this.emitter.emitNotifDetailEmitter({ isUpdateNotif: true });
-    // }, (err) => {
-    //   console.log('err', err);
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    // });
+    this.notificationsListService.updateBadge(fd).subscribe((response) => {
+      this.getNotifUpdateList();
+      this.emitter.emitNotifDetailEmitter({ isUpdateNotif: true });
+    }, (err) => {
+      console.log('err', err);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
   }
 
   unreadBadge(id?: any[], all?: boolean) {
@@ -251,14 +252,14 @@ export class VendorNotificationComponent implements OnInit {
     }
     this.onLoad = true;
     this.loadingIndicator = true;
-    // this.notificationsListService.unreadBadge(fd).subscribe((response) => {
-    //   this.getNotifUpdateList();
-    //   this.emitter.emitNotifDetailEmitter({ isUpdateNotif: true });
-    // }, (err) => {
-    //   console.log('err', err);
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    // });
+    this.notificationsListService.unreadBadge(fd).subscribe((response) => {
+      this.getNotifUpdateList();
+      this.emitter.emitNotifDetailEmitter({ isUpdateNotif: true });
+    }, (err) => {
+      console.log('err', err);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
   }
 
   removeNotif(id?: any[], all?: boolean) {
@@ -274,15 +275,15 @@ export class VendorNotificationComponent implements OnInit {
     }
     this.onLoad = true;
     this.loadingIndicator = true;
-    // this.notificationsListService.deleteBadge(params).subscribe((response) => {
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    //   this.getNotifUpdateList();
-    // }, (err) => {
-    //   console.log('err', err);
-    //   this.onLoad = false;
-    //   this.loadingIndicator = false;
-    // });
+    this.notificationsListService.deleteBadge(params).subscribe((response) => {
+      this.onLoad = false;
+      this.loadingIndicator = false;
+      this.getNotifUpdateList();
+    }, (err) => {
+      console.log('err', err);
+      this.onLoad = false;
+      this.loadingIndicator = false;
+    });
   }
 
   updateBadgeBtn() {
