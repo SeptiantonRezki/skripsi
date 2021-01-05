@@ -63,7 +63,8 @@ export class ProductCatalogueCreateComponent implements OnInit {
       community_price: [0],
       availability: ["", Validators.required],
       status: ["active"],
-      vendor: [""]
+      vendor: [""],
+      weight: [null, Validators.required]
     });
   }
 
@@ -128,6 +129,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
       fd.append('community_min_qty', this.formProduct.get('community_min_qty').value);
       fd.append('community_price', this.formProduct.get('community_price').value);
       fd.append('vendor_company_id', this.vendor_id ? this.vendor_id : this.formProduct.get('vendor').value);
+      fd.append('weight', this.formProduct.get('weight').value);
 
       if (this.formProduct.get('stage').value) {
         this.listStages.map((stgg) => {

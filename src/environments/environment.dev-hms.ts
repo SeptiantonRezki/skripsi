@@ -8,6 +8,7 @@ export const environment = {
   image_2x: "assets/images/ayo/icon/dev@2x.png 2x",
   backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg",
   qiscus_appIdMC: 'zova-efc1mal9p9cjurph', //Staging
+  qiscus_appId: 'ayosrc-8lv9mbp2ce6iwr',
 };
 
 export const serviceServer = (server) => {

@@ -173,7 +173,8 @@
                 <tbody>
                   <tr>
                     <td class="w-200" style="text-transform: uppercase;">
-                      {{detailOrder.delivery_courier_name ? (detailOrder.delivery_courier_name + '-' + detailOrder.delivery_courier_service_name) : detailOrder.shipping_type?.toUpperCase() || '-'}}
+                      {{detailOrder.delivery_courier_name ? (detailOrder.delivery_courier_name + '-' +
+                      detailOrder.delivery_courier_service_name) : detailOrder.shipping_type?.toUpperCase() || '-'}}
                     </td>
                     <td class="w-200">
                       <span class="email text-truncate">{{detailOrder.shipping_price | rupiahFormater}}</span>
@@ -224,8 +225,8 @@
                     <td>{{product.get("category").value}}</td>
                     <td>
                       <div class="w-100" [formGroupName]="i">
-                        <span
-                          *ngIf="!product.get('editable').value">{{product.get("price").value | rupiahFormater}}</span>
+                        <span *ngIf="!product.get('editable').value">{{product.get("price").value |
+                          rupiahFormater}}</span>
                         <mat-form-field class="w-100 price-change" *ngIf="product.get('editable').value">
                           <input matInput type="tel" currencyMask min="0" formControlName="price">
                         </mat-form-field>
@@ -309,10 +310,11 @@
                         <div class="py-2 text-bold">{{item.name}}</div>
                         <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
                           <span fxFlex="25">{{item.packaging}}</span>
-                          <span fxFlex="25">{{item.qty}}x</span>
+                          <span fxFlex="25">{{item.qty_request ? item.qty_request : item.qty}}x</span>
                           <span fxFlex="25">{{item.price | rupiahFormaterWithoutRp}}</span>
-                          <span fxFlex="25"
-                            class="text-right">{{item.price * item.qty | rupiahFormaterWithoutRp}}</span>
+                          <span fxFlex="25" class="text-right">{{item.price * (item.qty_request ? item.qty_request :
+                            item.qty) |
+                            rupiahFormaterWithoutRp}}</span>
                         </div>
                         <div *ngIf="item.discount_nota > 0" class="" fxFlex="100" fxLayout="row"
                           fxLayoutAlign="start center">
@@ -330,7 +332,8 @@
                         [ngClass]="{'py-8' : item.title === 'Total Pembayaran', 'py-4' : item.title !== 'Total Pembayaran'}"
                         fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span fxFlex="50"
-                          [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}">{{item.title.toUpperCase() === 'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title.toUpperCase()}}</span>
+                          [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}">{{item.title.toUpperCase() ===
+                          'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title.toUpperCase()}}</span>
                         <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}"
                           class="text-right">{{checkOngkirWithProductExisting(item)}}</span>
                         <!-- item.value.split('Rp ')[1] -->
@@ -339,8 +342,8 @@
                     <div class="py-16">
                       <div class="py-4" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span class="mat-caption" fxFlex="50">TOTAL HEMAT BELANJA</span>
-                        <span class="mat-caption text-right"
-                          fxFlex="50">{{detailOrder?.grand_total | rupiahFormaterWithoutRp}}</span>
+                        <span class="mat-caption text-right" fxFlex="50">{{detailOrder?.grand_total |
+                          rupiahFormaterWithoutRp}}</span>
                       </div>
                       <!-- <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span *ngIf="detailOrder?.status !== 'selesai'" class="mat-caption" fxFlex="50">ESTIMASI
