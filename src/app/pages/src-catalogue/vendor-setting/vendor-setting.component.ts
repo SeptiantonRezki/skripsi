@@ -67,7 +67,7 @@ export class VendorSettingComponent implements OnInit {
     { day_id: 4, day_name: 'KAM' },
     { day_id: 5, day_name: 'JUM' },
     { day_id: 6, day_name: 'SAB' },
-    { day_id: 0, day_name: 'MIN' },
+    { day_id: 7, day_name: 'MIN' },
   ];
 
   minDate: any;
