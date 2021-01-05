@@ -54,7 +54,9 @@ export class PengajuanSrcEditComponent implements OnInit {
       phone: ["", Validators.required],
       source: ["", Validators.required],
       channel: ["", Validators.required],
-      image: ["", Validators.required]
+      image: ["", Validators.required],
+      snk: [false],
+      pnp: [false]
     })
 
     this.formPengajuanSrc
@@ -112,7 +114,9 @@ export class PengajuanSrcEditComponent implements OnInit {
           phone: this.detailPengajuan.phone ? (this.detailPengajuan.phone.slice(0, 3) === '+62' ? this.detailPengajuan.phone.split("+62")[1] : this.detailPengajuan.phone) : '',
           source: this.detailPengajuan.source,
           channel: this.detailPengajuan.channel,
-          image: this.detailPengajuan.image_url
+          image: this.detailPengajuan.image_url,
+          snk: this.detailPengajuan.is_syarat_ketentuan ? true : false,
+          pnp: this.detailPengajuan.is_pemberitahuan_privasi ? true : false
         });
 
         this.image = this.detailPengajuan.image_url;
@@ -228,6 +232,8 @@ export class PengajuanSrcEditComponent implements OnInit {
       fd.append('source', this.formPengajuanSrc.get('source').value);
       fd.append('channel', this.formPengajuanSrc.get('channel').value);
       fd.append('image', this.formPengajuanSrc.get('image').value);
+      fd.append('is_syarat_ketentuan', this.formPengajuanSrc.get('snk').value ? '1' : '0');
+      fd.append('is_pemberitahuan_privasi', this.formPengajuanSrc.get('pnp').value ? '1' : '0');
       this.listProductSells.map(prd => {
         fd.append('product[]', prd);
       });
