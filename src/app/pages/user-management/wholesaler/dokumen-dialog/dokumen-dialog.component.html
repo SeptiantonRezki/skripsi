@@ -1,0 +1,83 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>{{ data.title }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div *ngIf="!data.isAccess">
+      <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
+        <img class="attachment-img" id="image4" [src]="data.image_url" />
+      </div>
+      <div fxLayout="row" style="margin-left: 15px;" *ngIf="data.image_url">
+        <mat-form-field fxFlex="30">
+          <input matInput [formControl]="document"
+            [placeholder]="'Nomor ' + (data?.document_type ? data?.document_type.toUpperCase() : 'Kartu') " disabled />
+          <mat-icon matSuffix (click)="copyMessage()" style="cursor: pointer;"
+            [matTooltip]="'Salin Nomor' + (data?.document_type ? data?.document_type.toUpperCase() : 'Kartu') ">
+            content_copy
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <p style="text-align: center;" *ngIf="!data.image_url">Tidak Ada Dokumen yang Ditampilkan</p>
+    </div>
+    <div class="responsive" *ngIf="data.isAccess">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nama Supplier</th>
+            <th>Nama Produk</th>
+            <th>Akses KTP</th>
+            <th>Akses NPWP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data.access">
+            <td nowrap>
+              <strong>{{ item.name }}</strong>
+            </td>
+            <td nowrap>
+              <p *ngFor="let itm of item.products">{{ itm }}</p>
+            </td>
+            <td nowrap>
+              <mat-icon style="color: #E53835;cursor: pointer;">
+                {{ item.access_ktp ? 'check_box' : 'check_box_outline_blank' }}
+              </mat-icon>
+            </td>
+            <td nowrap>
+              <mat-icon style="color: #E53835;cursor: pointer;">
+                {{ item.access_npwp ? 'check_box' : 'check_box_outline_blank' }}
+              </mat-icon>
+            </td>
+          </tr>
+          <tr *ngIf="data.access.length === 0">
+            <td style="text-align:center" colspan="9">
+              Tidak ada data ...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
