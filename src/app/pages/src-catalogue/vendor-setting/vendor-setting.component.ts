@@ -344,7 +344,7 @@ export class VendorSettingComponent implements OnInit {
         this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
         this.marker = new google.maps.Marker({
           position: new google.maps.LatLng(-6.1798839, 106.8237044),
-          draggable: this.permissionLokasiToko ? this.permissionLokasiToko.ubah ? true : false : false,
+          draggable: true,
           animation: google.maps.Animation.BOUNCE,
           map: this.map,
           icon: markerImage
@@ -379,10 +379,8 @@ export class VendorSettingComponent implements OnInit {
 
     this.map.addListener('dragend', (item) => {
       const latLng = this.marker.getPosition();
-      if (this.permissionLokasiToko.ubah) {
-        this.formLokasiToko.get('latitude').setValue(latLng.lat());
-        this.formLokasiToko.get('longitude').setValue(latLng.lng());
-      }
+      this.formLokasiToko.get('latitude').setValue(latLng.lat());
+      this.formLokasiToko.get('longitude').setValue(latLng.lng());
     });
 
     this.marker.addListener('click', () => {
@@ -392,12 +390,10 @@ export class VendorSettingComponent implements OnInit {
     this.marker.addListener('mouseup', (item) => {
       // console.log('ok', item.latLng)
       const latLng = this.marker.getPosition();
-      if (this.permissionLokasiToko.ubah) {
-        if (Number(this.profile.businesses[0].delivery_latitude) !== latLng.lat()) {
-          this.formLokasiToko.get('latitude').setValue(latLng.lat());
-          this.formLokasiToko.get('longitude').setValue(latLng.lng());
-          this.gLocation(latLng);
-        }
+      if (Number(this.profile.businesses[0].delivery_latitude) !== latLng.lat()) {
+        this.formLokasiToko.get('latitude').setValue(latLng.lat());
+        this.formLokasiToko.get('longitude').setValue(latLng.lng());
+        this.gLocation(latLng);
       }
     });
 
