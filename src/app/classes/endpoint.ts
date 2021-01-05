@@ -771,7 +771,15 @@ export class Endpoint {
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
 
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
-      }
+      },
+
+      notifications_list: {
+        get_update: `${AYO_API}/api/general/user_notif/update`,
+        update_badge: `${AYO_API}/api/general/user_notif/status-batch`,
+        unread_badge: `${AYO_API}/api/general/user_notif/status-unread-batch`,
+        delete_notif: `${AYO_API}/api/general/user_notif/delete-batch`,
+        get_detail: `${AYO_API}/api/general/user_notif/detail/${context.id}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
