@@ -67,7 +67,7 @@ export class VendorSettingComponent implements OnInit {
     { day_id: 4, day_name: 'KAM' },
     { day_id: 5, day_name: 'JUM' },
     { day_id: 6, day_name: 'SAB' },
-    { day_id: 7, day_name: 'MIN' },
+    { day_id: 0, day_name: 'MIN' },
   ];
 
   minDate: any;
@@ -746,7 +746,7 @@ export class VendorSettingComponent implements OnInit {
         if (val.isActive) {
           console.log("val teim", val);
           body['operational_time'].push({
-            day_id: val.day_id,
+            day_id: val.day_id === 0 ? 7 : val.day_id,
             day_name: val.day_name,
             open_time: item.open_item ? item.open_time + (item.open_time.length === 5 ? ":00" : "") : "00:00:00",
             closed_time: item.closed_item ? item.closed_time + (item.closed_time.length === 5 ? ":00" : "") : "23:59:00"
