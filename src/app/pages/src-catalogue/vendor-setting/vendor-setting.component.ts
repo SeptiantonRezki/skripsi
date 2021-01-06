@@ -190,31 +190,41 @@ export class VendorSettingComponent implements OnInit {
       }
     });
 
+    this.formDetailLokasi.get('kelurahan').valueChanges.subscribe(res => {
+      if (res) {
+        let data = this.listTerritory.find(tr => tr.id === res);
+        console.log("data", data);
+        if (data) {
+          this.formDetailLokasi.get('postcode').setValue(data.zip_code)
+        }
+      }
+    })
+
     this.getProvinces();
     this.getAuthentication();
     this.getChatTemplateOperational();
   }
 
   getProvinces() {
-    this.vendorService.getProvinces({ sort: "name" }).subscribe(res => {
+    this.vendorService.getProvinces().subscribe(res => {
       this.listProvince = res.data;
     });
   }
 
   getCities(id) {
-    this.vendorService.getCities({ province_id: id }, { sort: "name" }).subscribe(res => {
+    this.vendorService.getCities({ province_id: id }).subscribe(res => {
       this.listCity = res.data;
     });
   }
 
   getDistricts(id) {
-    this.vendorService.getDistricts({ city_id: id }, { sort: "name" }).subscribe(res => {
+    this.vendorService.getDistricts({ city_id: id }).subscribe(res => {
       this.listDistrict = res.data;
     });
   }
 
   getSubDistricts(id) {
-    this.vendorService.getSubDistricts({ district_id: id }, { sort: "name" }).subscribe(res => {
+    this.vendorService.getSubDistricts({ district_id: id }).subscribe(res => {
       this.listTerritory = res.data;
     });
   }
@@ -225,7 +235,7 @@ export class VendorSettingComponent implements OnInit {
       this.listChatOperationalTemplates = res.data;
       res.data.map(notes => {
         console.log('notes', notes);
-        if (notes.type !== 'available') this.note_1.setValue(notes.body);
+        if (notes.type === 'available') this.note_1.setValue(notes.body);
         else this.note_2.setValue(notes.body);
       })
     });
