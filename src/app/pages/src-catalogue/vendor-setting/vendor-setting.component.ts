@@ -190,6 +190,16 @@ export class VendorSettingComponent implements OnInit {
       }
     });
 
+    this.formDetailLokasi.get('kelurahan').valueChanges.subscribe(res => {
+      if (res) {
+        let data = this.listTerritory.find(tr => tr.id === res);
+        console.log("data", data);
+        if (data) {
+          this.formDetailLokasi.get('postcode').setValue(data.zip_code)
+        }
+      }
+    })
+
     this.getProvinces();
     this.getAuthentication();
     this.getChatTemplateOperational();
@@ -225,7 +235,7 @@ export class VendorSettingComponent implements OnInit {
       this.listChatOperationalTemplates = res.data;
       res.data.map(notes => {
         console.log('notes', notes);
-        if (notes.type !== 'available') this.note_1.setValue(notes.body);
+        if (notes.type === 'available') this.note_1.setValue(notes.body);
         else this.note_2.setValue(notes.body);
       })
     });
@@ -734,7 +744,19 @@ export class VendorSettingComponent implements OnInit {
 
   async onSaveChatOperationalTime() {
     let body = {
-      templates: [
+      templates: []
+    };
+
+    if (this.listChatOperationalTemplates.length > 0) {
+      this.listChatOperationalTemplates.map(chat => {
+        body['templates'].push({
+          id: chat.id,
+          body: chat.type === 'available' ? this.note_1.value : this.note_2.value,
+          type: chat.type
+        });
+      })
+    } else {
+      body['templates'] = [
         {
           id: 1,
           body: this.note_1.value,
@@ -746,7 +768,7 @@ export class VendorSettingComponent implements OnInit {
           type: "unavailable"
         },
       ]
-    };
+    }
 
     this.vendorService.saveChatTemplateOperational(body).subscribe(res => {
       console.log("saving chat operational succeed");
