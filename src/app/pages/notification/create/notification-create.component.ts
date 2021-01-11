@@ -2170,14 +2170,16 @@ export class NotificationCreateComponent {
       } else {
         this.typeOfRecurrence = type_of_recurrence
       }
-
-      if(type != 'customer' || target_audience) {
-        frm.controls['is_target_audience'].setValue(true);
-
-        setTimeout(() => {
-          this.audienceSelected = audience;
-          this.onSelect({ selected: this.audienceSelected });
-        }, 400);
+      console.log('type', type);
+      console.log('target_audience', target_audience);
+      if(type !== 'customer' || target_audience) {
+        frm.controls['is_target_audience'].setValue(target_audience ? true : false);
+        if (target_audience) {
+          setTimeout(() => {
+            this.audienceSelected = audience;
+            this.onSelect({ selected: this.audienceSelected });
+          }, 400);
+        }
       }
 
       // end request
