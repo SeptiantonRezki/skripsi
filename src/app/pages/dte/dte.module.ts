@@ -59,6 +59,7 @@ import {
   ListRetailerResolver,
 } from "../../resolver/dte.resolver";
 import { PageGuard } from "app/classes/auth.guard";
+import { PipesModule } from "app/pipe/pipes.module";
 
 import {
   DateAdapter,
@@ -203,6 +204,7 @@ export const MY_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
     NgxGraphModule,
+    PipesModule,
   ],
   declarations: [
     TemplateIndexComponent,

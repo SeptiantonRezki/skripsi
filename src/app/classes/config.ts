@@ -38,9 +38,9 @@ export class Config {
     // Allow to upload PNG and JPG.
     imageAllowedTypes: ['jpeg', 'jpg', 'png'],
     events: {
-      'froalaEditor.image.beforeUpload': function(e, editor, images) {
+      'froalaEditor.image.beforeUpload': function (e, editor, images) {
         let token = null;
-        function tkn () {
+        function tkn() {
           const data = JSON.parse(window.localStorage.getItem('_adxtrn'));
           if (!data) { return null; }
           const enc = SJCL.decrypt('dxtr-asia.sampoerna', data);
@@ -49,28 +49,28 @@ export class Config {
         token = tkn();
         // console.log('token', token);
         if (token) {
-        const formdata = new FormData();
-        formdata.append('upload', images[0], 'file');
+          const formdata = new FormData();
+          formdata.append('upload', images[0], 'file');
 
-        const myHeaders = new Headers();
-            myHeaders.append('Accept', 'application/json');
-            myHeaders.append('Authorization', `Bearer ${token.access_token}`);
-            const requestOptions: RequestInit = {
-              method: 'POST',
-              headers: myHeaders,
-              body: formdata,
-              redirect: 'follow'
-            };
+          const myHeaders = new Headers();
+          myHeaders.append('Accept', 'application/json');
+          myHeaders.append('Authorization', `Bearer ${token.access_token}`);
+          const requestOptions: RequestInit = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+          };
 
-            fetch(`${AYO_API_SERVICE(server.content)}/api/v1/content/general/upload/image`, requestOptions)
-              .then((res: any) => {
-                return res.json();
-              })
-              .then(result => {
-                console.log(result);
-                editor.image.insert(result.data.url, null, null, editor.image.get());
-              })
-              .catch(error => console.log('error', error));
+          fetch(`${AYO_API_SERVICE(server.content)}/api/v1/content/general/upload/image`, requestOptions)
+            .then((res: any) => {
+              return res.json();
+            })
+            .then(result => {
+              console.log(result);
+              editor.image.insert(result.data.url, null, null, editor.image.get());
+            })
+            .catch(error => console.log('error', error));
         }
         return false;
       }
