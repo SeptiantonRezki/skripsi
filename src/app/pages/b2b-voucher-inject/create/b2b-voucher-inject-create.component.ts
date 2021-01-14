@@ -88,6 +88,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
+  listStatuses: any[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -109,7 +111,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     });
     this.onLoad = false;
     this.selected = [];
-    // this.permission = this.roles.getRoles('principal.supplierpanelmitra');
+    this.permission = this.roles.getRoles('principal.b2b_voucher');
     this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
@@ -382,6 +384,11 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
       });
+
+      this.listStatuses = res.data.available_status ? Object.entries(res.data.available_status).map(
+        ([value, name]) => ({ value, name })
+      ) : [];
+
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }
@@ -1214,6 +1221,28 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         console.log('this', this.selected)
       }
+    });
+  }
+
+  takeAction(action) {
+    const data = {
+      titleDialog: 'Ubah Status Voucher',
+      captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${action.name}?`,
+      confirmCallback: () => this.confirmChangeStatus(action),
+      buttonText: ['Ya, Lanjutkan', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+
+  }
+
+  confirmChangeStatus(action) {
+    this.dataService.showLoading(true);
+    this.b2bVoucherInjectService.changeStatus({ status: action.value }, { voucher_id: this.detailVoucher.id }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.dataService.showLoading(false);
+      this.getDetail();
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
