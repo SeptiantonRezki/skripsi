@@ -54,6 +54,8 @@ export class BannerCreateComponent {
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
+  
+  listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -194,7 +196,8 @@ export class BannerCreateComponent {
         "image": [""],
         "title": [""],
         "class": [""]
-      })
+      }),
+      type_banner: null,
     })
 
     this.formFilter = this.formBuilder.group({
@@ -220,6 +223,8 @@ export class BannerCreateComponent {
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value));
+        this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
+        console.log('HERE');
       } else {
         this.listLandingPage = [
           { name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
@@ -234,6 +239,7 @@ export class BannerCreateComponent {
           { name: "E-Wallet", value: "e_wallet" },
           { name: "Link to Web Browser", value: "link_web" }
         );
+        this.formBannerGroup.controls['type_banner'].setValue('');
       }
       if (this.formBannerGroup.get("is_target_audience").value === true) {
         this.getAudience();
@@ -242,6 +248,7 @@ export class BannerCreateComponent {
     });
 
     this.formBannerGroup.controls['user_group'].setValue('retailer');
+    this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
 
     this.formBannerGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
       // const yes = res.find(item => item === 'yes');
@@ -1080,6 +1087,7 @@ export class BannerCreateComponent {
 
       if (body.user_group === 'retailer') {
         fd.append('age', this.formBannerGroup.get('age').value);
+        fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
       }
 
       if (body.user_group === 'customer') {
@@ -1087,6 +1095,7 @@ export class BannerCreateComponent {
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+        fd.append('type_banner', null);
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
