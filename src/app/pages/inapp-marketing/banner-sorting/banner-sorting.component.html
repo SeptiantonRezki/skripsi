@@ -12,6 +12,18 @@
     <div class="table-wrapper">
       <!-- <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
       </div> -->
+      <form autocomplete="off" [formGroup]="formSortBanner" fxLayout="row" class="p-24" fxLayoutAlign="start center">
+
+          <div class="">
+            <strong class="font-size-16">Tipe Spanduk: </strong>
+          </div>
+          <mat-radio-group formControlName="type_banner" class="radio-group" fxLayout="row wrap">
+            <mat-radio-button class="radio-button" [value]="item.value" *ngFor="let item of listTypeBanner">
+              {{item.name}}
+            </mat-radio-button>
+          </mat-radio-group>
+
+      </form>
 
 
       <div fxLayout="row" id="dz-wrapper" dndDropzone [dndHorizontal]="true" dndEffectAllowed="copyMove"
@@ -33,10 +45,11 @@
           </div>
 
         </div>
-        <div style="height: 100px !important; margin-right: 10px !important;" class="dz-add" *ngIf="sortedBanner.length < MAX_SLOT_BANNER">
+        <div style="height: 100px !important; margin-right: 10px !important;" class="dz-add" *ngIf="sortedBanner.length < MAX_SLOT_BANNER[formSortBanner.get('type_banner').value]"
+        [class.ml-24]="(!sortedBanner.length)">
           <div fxLayout="column wrap" class="banner-dropzone" fxLayoutAlign="center center">
             <mat-icon fxFlex class="ic-add" [inline]="true">add</mat-icon>
-            <h3 style="margin-block-start: 0.1em;margin-block-end: 0.1em;">Maks {{MAX_SLOT_BANNER}} Banner</h3>
+            <h3 style="margin-block-start: 0.1em;margin-block-end: 0.1em;">Maks {{MAX_SLOT_BANNER[formSortBanner.get('type_banner').value]}} Banner</h3>
           </div>
         </div>
         <!-- <div class="banner-dropzone dz-add" fxLayout="column wrap" flexLayoutAlign="center center" style="padding: auto;">
@@ -49,7 +62,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Spanduk Online</h2>
+        <h2 class="pl-8">{{TABLE_TITLE[formSortBanner.get('type_banner').value]}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
