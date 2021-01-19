@@ -116,6 +116,11 @@ export class B2BVoucherInjectService extends BaseService {
     const url = this.getUrl(this.namespace, 'redeemSubmitImport', context);
     return this.postApi(url, body);
   }
+
+  changeStatus(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "change_status", context);
+    return this.postApi(url, body);
+  }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
   //   return this.putApi(url, body);

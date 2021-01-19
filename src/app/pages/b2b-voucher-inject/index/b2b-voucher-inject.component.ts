@@ -176,4 +176,19 @@ export class B2BVoucherInjectComponent implements OnInit {
     });
   }
 
+  getStatusColor(status) {
+    switch (status) {
+      case "draft":
+        return "mat-yellow-900-bg";
+      case "need-approval":
+        return "mat-red-800-bg";
+      case "approved":
+        return "mat-green-800-bg";
+      case "published":
+        return "mat-green-800-bg";
+      default:
+        return "mat-red-800-bg";
+    }
+  }
+
 }

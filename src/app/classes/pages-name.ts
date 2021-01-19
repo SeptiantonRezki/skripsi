@@ -120,7 +120,7 @@ export class PagesName {
     let localPerm = window.localStorage.getItem('_prmdxtrn');
     let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
     const permission = JSON.parse(perm);
-
+    // console.log("all permission", permission.findIndex(prm => prm.indexOf("approval") > -1));
     if (!permission) return;
 
     let query = name.toLowerCase();
@@ -131,6 +131,9 @@ export class PagesName {
       "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
+    if (name.indexOf("b2b_voucher") > -1) {
+      roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
+    }
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {
       submenus.map((value) => {
