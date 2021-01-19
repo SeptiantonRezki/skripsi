@@ -248,7 +248,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" *ngIf="seeTokoCabang">
+          <div fxLayout="row" *ngIf="seeTokoCabang && !detailWholesaler.is_branch">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
               Toko Cabang</mat-checkbox>
           </div>
