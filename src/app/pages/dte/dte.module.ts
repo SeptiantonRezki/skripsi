@@ -285,7 +285,12 @@ export const MY_FORMATS = {
     EdittsmComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent
+    DialogPushNotifDuplicateComponent,
+    IndextsmComponent,
+    CreatetsmComponent,
+    EOrdertsmComponent,
+    EOrdertsmeditComponent,
+    EdittsmComponent
   ],
   exports: [
     TemplateIndexComponent,

@@ -49,6 +49,7 @@ export class IndextsmComponent implements OnInit {
       this.onLoad = true;
       this.permission = this.roles.getRoles('principal.dteautomation');
       console.log(this.permission);
+  
 
       const observable = this.keyUp.debounceTime(1000)
         .distinctUntilChanged()
