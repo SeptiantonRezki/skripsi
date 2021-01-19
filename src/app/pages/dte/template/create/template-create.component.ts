@@ -587,8 +587,30 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
+    let rawAddt = questions.at(idx).get('additional').value;
+    let rawType = questions.at(idx).get('type').value;
+    let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+    let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+    let tempOption = {
+      possibilities: null,
+      additional: null
+    }
+    if (idxOther !== -1) {
+      if (idxOtherInPossibilities !== -1) {
+        tempOption['possibilities'] = { ...this.allQuestionList[idx]['possibilities'][idxOtherInPossibilities] }
+        this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+      }
+      tempOption['additional'] = { ...additional.at(idxOther).value };
+      additional.removeAt(idxOther);
+    }
+
     this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
+
+    if (rawType.includes("radio_")) {
+      this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+      additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+    }
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
@@ -666,6 +688,37 @@ export class TemplateCreateComponent {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+    }
+
+    if (type.includes("radio_")) {
+      let rawAddt = questions.at(idx).get('additional').value;
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      let tempOption = {
+        possibilities: null,
+        additional: null
+      }
+
+      if (idxOther === -1) {
+        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
+      } else {
+        tempOption['additional'] = { ...additional.at(idxOther).value };
+        additional.removeAt(idxOther);
+        if (idxOtherInPossibilities !== -1) {
+          tempOption['possibilities'] = { ...this.allQuestionList[idx]['possibilities'][idxOtherInPossibilities] }
+          this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+        }
+        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+      }
+    } else if (!type.includes("radio_")) {
+      let rawAddt = questions.at(idx).get('additional').value;
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      if (idxOther > -1) additional.removeAt(idxOther);
+      if (idxOtherInPossibilities > -1) this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
     }
 
     if (additional.length > 0 && !this.checkIsRadioType(type) && type !== 'checkbox') {
@@ -692,6 +745,10 @@ export class TemplateCreateComponent {
 
   checkIsRadioType(item) {
     return item.includes("radio")
+  }
+
+  checkIsRadioTypeWasOther(item) {
+    return item.option && item.option.includes("Lainnya, Sebutkan");
   }
 
   checkWording(selection) {
@@ -861,7 +918,7 @@ export class TemplateCreateComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let idQUestion = questions.at(idx).get('id').value;
-    if (this.frmIsBranching.value && questions.at(idx).get('typeSelection').value['value'] === 'radio' && this.checkHasLinked(idx, idQUestion)) {
+    if (this.frmIsBranching.value && this.checkIsRadioType(questions.at(idx).get('typeSelection').value['value']) && this.checkHasLinked(idx, idQUestion)) {
       // this.dialogService.openCustomDialog('Tidak Bisa Menghapus Pertanyaan', 'Pertanyaan ini terhubung sebagai Response Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.');
       this.dialogService.openSnackBar({
         message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
@@ -1032,7 +1089,7 @@ export class TemplateCreateComponent {
             required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
@@ -1073,23 +1130,13 @@ export class TemplateCreateComponent {
                 return tmpung;
               }
             }),
-            additional: item.type === 'radio' || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
             }) : null
           };
-
-          if (item.type.includes("radio_")) {
-            let otherIsExistIndex = mockup['additional'].findIndex(addt => addt.includes("Lainnya, Sebutkan"));
-            if (otherIsExistIndex === -1) {
-              mockup['additional'].push(`Lainnya, Sebutkan (${this.checkWordingRadioFreeType(item.type)})`);
-            } else {
-              mockup['additional'].splice(otherIsExistIndex, 1);
-              mockup['additional'].push(`Lainnya, Sebutkan (${this.checkWordingRadioFreeType(item.type)})`);
-            }
-          }
 
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
             mockup['type'] = 'stock_check_ir';

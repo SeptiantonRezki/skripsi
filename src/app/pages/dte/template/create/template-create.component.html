@@ -544,7 +544,8 @@
                           [fxFlex]="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 30 : 85"
                           class="opsi is-light">
                           <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
-                            (change)="defaultValue($event, 'questions', 'Opsi ', i, j)">
+                            (change)="defaultValue($event, 'questions', 'Opsi ', i, j)"
+                            [readonly]="checkIsRadioTypeWasOther(additional.value)">
                         </mat-form-field>
                         <div fxFlex="1" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
                         </div>
@@ -577,9 +578,10 @@
                           </mat-icon>
                         </div>
                         <div fxFlex="6"></div>
-                        <button *ngIf="item.get('additional').value.length > 1" (click)="deleteAdditional(i, j)"
-                          mat-icon-button fxFlex="5" matTooltip="Hapus" matTooltipPosition="below"
-                          class="secondary-text">
+                        <button
+                          *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value)"
+                          (click)="deleteAdditional(i, j)" mat-icon-button fxFlex="5" matTooltip="Hapus"
+                          matTooltipPosition="below" class="secondary-text">
                           <mat-icon class="secondary-text">close</mat-icon>
                         </button>
                       </div>
@@ -633,7 +635,7 @@
                         </a> -->
                       </div>
                     </div>
-                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
+                    <!-- <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
                       fxFlex="1 0 auto"
                       *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value) && checkWordingRadioFreeType(item.get('typeSelection').value['value'])">
                       <mat-icon class="secondary-text" fxFlex="5">
@@ -643,7 +645,7 @@
                         <span class="add-option">Lainnya,
                           Sebutkan ({{ checkWordingRadioFreeType(item.get('typeSelection').value['value']) }})</span>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </ng-container>
               </div>
