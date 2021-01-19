@@ -77,7 +77,7 @@
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="end_date">
+        <ngx-datatable-column name="Status" prop="status_indo">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <p class="status text-truncate h6 p-4 status-order" [ngClass]="getStatusColor(row.status)">
               {{ row.status_indo ? row.status_indo.toUpperCase() : row.status_indo }}
