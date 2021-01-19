@@ -131,15 +131,31 @@
               </div>
             </div>
           </div>
-          <div class="pb-16 px-24">
-            <div class="" fxLayout="row" fxLayoutAlign="start center">
-              <strong class="font-size-16">Grup Pengguna</strong>
+          <div fxLayout="row wrap">
+            <div fxFlex>
+              <div class="pb-16 px-24">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">Grup Pengguna</strong>
+                </div>
+                <mat-radio-group formControlName="user_group" class="radio-group">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
             </div>
-            <mat-radio-group formControlName="user_group" class="radio-group">
-              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
-                {{item.name}}
-              </mat-radio-button>
-            </mat-radio-group>
+            <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
+              <div class="pb-16 px-24">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">Tipe Spanduk</strong>
+                </div>
+                <mat-radio-group formControlName="type_banner" class="radio-group">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listTypeBanner" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
           </div>
 
           <!-- Consumer --> 
