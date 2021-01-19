@@ -30,6 +30,7 @@ export class ProductCreateComponent {
   addOnBlur = true;
   loadingIndicator: boolean;
   indexDelete: any;
+  is_promo_check: Boolean = false;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   otherProduct: any[];
@@ -866,6 +867,7 @@ export class ProductCreateComponent {
 
   isPromo(event) {
     if (event.checked) {
+      this.is_promo_check = true;
       let areas = this.formProductGroup.controls['areas'] as FormArray;
       while (areas.length > 0) {
         areas.removeAt(areas.length - 1);

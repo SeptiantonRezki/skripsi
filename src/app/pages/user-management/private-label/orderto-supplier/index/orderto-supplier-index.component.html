@@ -110,12 +110,13 @@
         <ngx-datatable-column name="Action" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px; padding-top: 5px; padding-bottom: 5px;">
+              <a #downloadLink></a>
               <button mat-stroked-button color="" (click)="getDetailOrder(row.id)">
                 CETAK PO
               </button>
-              <button mat-stroked-button color="" (click)="getDokumen(row)" style="margin-top: 2px;">
+              <!-- <button mat-stroked-button color="" (click)="getDokumen(row)" style="margin-top: 2px;">
                 DOKUMEN
-              </button>
+              </button> -->
             </div>
           </ng-template>
         </ngx-datatable-column>

@@ -95,6 +95,9 @@
               <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
                 {{row.status.replace('-', ' ').toUpperCase()}}
               </p>
+              <span class="chat-badge"
+                *ngIf="row.dataQiscus && row.dataQiscus.count_notif > 0">{{row.dataQiscus.count_notif > 9 ? '9+' :
+                row.dataQiscus.count_notif }}</span>
             </div>
           </ng-template>
         </ngx-datatable-column>

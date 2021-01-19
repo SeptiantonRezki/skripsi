@@ -128,6 +128,14 @@ export class ConfirmDialogComponent implements OnInit {
             return item;
           });
         }
+
+        if (dataSubmission_.data && dataSubmission_.data.ir_verification) {
+          try {
+            dataSubmission_.data.ir_verification = JSON.parse(dataSubmission_.data.ir_verification);
+          } catch (ex) {
+            dataSubmission_.data.ir_verification = dataSubmission_.data.ir_verification;
+          }
+        }
         this.dataSubmission = dataSubmission_;
       }, err => {
         this.onLoad = false;

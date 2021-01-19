@@ -122,13 +122,17 @@ export class OrdertoSupplierDetailComponent {
   copyMessage(docType: string) {
     let doc = '';
     // if(docType === 'ktp') doc = this.detailOrder.
-    document.addEventListener('copy', (e: ClipboardEvent) => {
-      e.clipboardData.setData('text/plain', (doc));
-      e.preventDefault();
-      document.removeEventListener('copy', null);
-    });
-    document.execCommand('copy');
-    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
+    if (this.detailOrder.document) {
+      document.addEventListener('copy', (e: ClipboardEvent) => {
+        e.clipboardData.setData('text/plain', (this.detailOrder.document));
+        e.preventDefault();
+        document.removeEventListener('copy', null);
+      });
+      document.execCommand('copy');
+      this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
+    } else {
+      this.dialogService.openSnackBar({ message: "Tidak Ada Dokumen yang dapat disalin!" });
+    }
   }
 
   refreshLevel() {

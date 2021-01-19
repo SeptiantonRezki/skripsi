@@ -124,9 +124,17 @@ export class BannerEditComponent {
     // this.validComboDrag = true;
 
     if (this.detailBanner.user_group === 'retailer') {
-      this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+      this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" },
+      { name: "Pojok Modal", value: "pojok_modal" },
+      { name: "SRC Katalog", value: "src_katalog" },
+      { name: "Pojok Bayar", value: "pojok_bayar" }];
     } else {
-      this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+      this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
+      { name: "Pesan Antar", value: "pesan_antar" },
+      { name: "Tantangan", value: "tantangan" },
+      { name: "Peluang", value: "peluang" },
+      { name: "Main Bareng", value: "main_bareng" }
+      ];
     }
 
     this.activatedRoute.url.subscribe(params => {
@@ -221,12 +229,20 @@ export class BannerEditComponent {
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
       if (res === 'retailer') {
-        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
+        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" },
+        { name: "Pojok Modal", value: "pojok_modal" },
+        { name: "SRC Katalog", value: "src_katalog" },
+        { name: "Pojok Bayar", value: "pojok_bayar" }];
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
       } else {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
+        { name: "Pesan Antar", value: "pesan_antar" },
+        { name: "Tantangan", value: "tantangan" },
+        { name: "Peluang", value: "peluang" },
+        { name: "Main Bareng", value: "main_bareng" }
+        ];
         this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();

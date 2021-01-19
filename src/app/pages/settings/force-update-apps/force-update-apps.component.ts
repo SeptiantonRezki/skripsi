@@ -115,17 +115,21 @@ export class ForceUpdateAppsComponent {
       try {
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
         console.log('res', res);
-        if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
-
-        this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
-          console.log('res force updates', res);
+          this.dataService.showLoading(false);
+        if (res.status === 'success') {
           this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
           this.ngOnInit();
-          this.dataService.showLoading(false);
-        }, err => {
-          this.dataService.showLoading(false);
-          console.log('err', err)
-        });
+        }
+        // if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
+        // this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
+        //   console.log('res force updates', res);
+        //   this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
+        //   this.ngOnInit();
+        //   this.dataService.showLoading(false);
+        // }, err => {
+        //   this.dataService.showLoading(false);
+        //   console.log('err', err)
+        // });
       }, err => {
         this.dataService.showLoading(false);
         console.log('err', err)

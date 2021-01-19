@@ -110,12 +110,14 @@ export class ConfirmDialogTsmComponent implements OnInit {
         this.onLoad = false;
         this.dataService.showLoading(false);
         const dataSubmission_ = res;
+        
         if (dataSubmission_.data.image) {
           if (dataSubmission_.data.image.indexOf('http') < 0) {
             dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
           }
         }
-        if (dataSubmission_.data.submissions !== null || dataSubmission_.data.submissions.length > 0) {
+
+        if (dataSubmission_.data && dataSubmission_.data.submissions && dataSubmission_.data.submissions.length > 0) {
           dataSubmission_.data.submissions = await dataSubmission_.data.submissions.map((item: any) => {
             if (item.type === 'stock_check_ir') {
               try {
@@ -127,6 +129,15 @@ export class ConfirmDialogTsmComponent implements OnInit {
             return item;
           });
         }
+
+        if (dataSubmission_.data && dataSubmission_.data.ir_verification) {
+          try {
+            dataSubmission_.data.ir_verification = JSON.parse(dataSubmission_.data.ir_verification);
+          } catch (ex) {
+            dataSubmission_.data.ir_verification = dataSubmission_.data.ir_verification;
+          }
+        }
+
         this.dataSubmission = dataSubmission_;
       }, err => {
         this.onLoad = false;
