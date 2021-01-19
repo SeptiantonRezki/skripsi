@@ -932,6 +932,18 @@ export const brConfig = {
           url: "",
           name: "Detail Spanduk Online"
         }
+      ],
+      sorting: [
+        {
+          type: "parent",
+          url: "/advertisement/banner",
+          name: "Spanduk Online"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan In-App Banner"
+        }
       ]
     },
     landingPage: {

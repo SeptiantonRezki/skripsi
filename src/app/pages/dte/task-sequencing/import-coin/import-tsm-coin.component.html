@@ -37,11 +37,13 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Nama Trade Program</th>
+            <th nowrap>Nama Group Trade Program</th>
+            <th nowrap>Nama Program</th>
             <th nowrap>Nama Audience</th>
             <th nowrap>Nama Retailer</th>
             <th nowrap>Status Retailer</th>
-            <th nowrap>Current Coin</th>
+            <th nowrap>Current Coin (Total)</th>
+            <th nowrap>Current Coin (Group Trade Program)</th>
             <th nowrap>Coin Adjusted</th>
             <th nowrap>Alasan</th>
           </tr>
@@ -49,6 +51,9 @@
         <tbody>
           <tr *ngFor="let item of rows"
             [ngStyle]="{ 'background-color': setRedIfDuplicate(item), color: item.flag === 'duplicate' ? 'white' : 'black' }">
+            <td nowrap>
+              {{ item.group_trade_program_name }}
+            </td>
             <td nowrap>
               {{ item.trade_program_name }}
             </td>
@@ -63,6 +68,9 @@
             </td>
             <td nowrap>
               {{ item.current_coin }}
+            </td>
+            <td nowrap>
+              {{ item.current_coin_group_trade_program }}
             </td>
             <td nowrap>
               {{ item.coin }}

@@ -20,7 +20,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" fxFlex="50" style="margin-bottom: 40px;">
+          <div fxLayout="row">
             <div fxLayout="column">
               <p>Deskripsi Produk</p>
               <textarea [froalaEditor]="options" formControlName="description"
@@ -99,6 +99,17 @@
                 <img id="image" [src]='imgUrl' width="410px" height="410px" />
               </div>
             </div>
+          </div>
+
+          <div fxLayout="row" style="margin-top: 15px;">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="weight"
+                placeholder="Berat Produk (gram)">
+              <mat-error
+                *ngIf="formProduct.controls['weight'].hasError('required') && formProduct.controls['weight'].touched">
+                Berat Produk harus diisi
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <div fxLayout="row">

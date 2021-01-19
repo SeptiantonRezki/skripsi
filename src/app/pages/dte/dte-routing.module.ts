@@ -245,7 +245,6 @@ const routes: Routes = [
     // canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
-  
   {
     path: "automation/edit_tsm",
     component: EdittsmComponent,

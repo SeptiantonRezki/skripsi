@@ -68,7 +68,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
     this.getListReasonTsm();
   }
 
-  getListReasonTsm() {
+  async getListReasonTsm() {
     if (this.data.popupType === 'Verification All TSM Mission') {
       this.onLoad = true;
       this.dataService.showLoading(true);
@@ -102,20 +102,43 @@ export class ConfirmDialogTsmComponent implements OnInit {
     } else if (this.data.popupType === 'Verifikasi Misi TSM') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      this.taskVerificationService.submissionTsm({
+      await this.taskVerificationService.submissionTsm({
         task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
         task_sequencing_management_id: this.data.task_sequencing_management_id,
         retailer_id: this.data.retailer_id,
-      }).subscribe(res => {
+      }).subscribe(async res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
-        this.dataSubmission = res;
-        if (this.dataSubmission.data.image) {
-          if (this.dataSubmission.data.image.indexOf('http') < 0) {
-            console.log('ok', this.dataSubmission.data.image.indexOf('http'))
-            this.dataSubmission.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + this.dataSubmission.data.image;
+        const dataSubmission_ = res;
+        
+        if (dataSubmission_.data.image) {
+          if (dataSubmission_.data.image.indexOf('http') < 0) {
+            dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
           }
         }
+
+        if (dataSubmission_.data && dataSubmission_.data.submissions && dataSubmission_.data.submissions.length > 0) {
+          dataSubmission_.data.submissions = await dataSubmission_.data.submissions.map((item: any) => {
+            if (item.type === 'stock_check_ir') {
+              try {
+                item.stock_check_ir_list = JSON.parse(item.stock_check_ir_list);
+              } catch (ex) {
+                console.log('error - stock_check_ir', ex);
+              }
+            }
+            return item;
+          });
+        }
+
+        if (dataSubmission_.data && dataSubmission_.data.ir_verification) {
+          try {
+            dataSubmission_.data.ir_verification = JSON.parse(dataSubmission_.data.ir_verification);
+          } catch (ex) {
+            dataSubmission_.data.ir_verification = dataSubmission_.data.ir_verification;
+          }
+        }
+
+        this.dataSubmission = dataSubmission_;
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);

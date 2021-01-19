@@ -1,3 +1,9 @@
+const appId = 'ayosrc-8lv9mbp2ce6iwr'; // STAGING-DXTR
+// const appId = 'ayosrc-tzvpgcnxyliz1g'; // PRODUCTION - AYO SRC
+
+const appIdMC = 'zova-efc1mal9p9cjurph'; // Multichannel - STAGING-DXTR
+// const appIdMC = 'empty-(payment)'; // Multichannel - PRODUCTION - AYO SRC
+
 export class Config {
   public static AYO_AUTHORIZATION = {
     grant_type: 'password',
@@ -14,7 +20,7 @@ export class Config {
     imageUpload: false,
     pasteImage: false,
     enter: "ENTER_BR",
-    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote'],
+    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote', 'insertLink'],
     htmlSimpleAmpersand: true,
     entities: ''
   }
@@ -32,6 +38,12 @@ export class Config {
     htmlSimpleAmpersand: true,
     entities: ''
   })
+
+  public static QISCUS_CONFIG = {
+    appId: appId,
+    baseUri: `https://${appId}.qiscus.com`,
+    appIdMC: appIdMC,
+  }
 
   // public static server = {
   //   user: "user",

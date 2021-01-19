@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -7,10 +7,11 @@ import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { WholesalerService } from "../../../../services/user-management/wholesaler.service";
 import { Utils } from "app/classes/utils";
 import { ReplaySubject, Subject } from "rxjs";
-import { MatSelect } from "@angular/material";
+import { MatDialog, MatDialogConfig, MatSelect } from "@angular/material";
 import { takeUntil, distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { GeneralService } from "app/services/general.service";
 import { PagesName } from "app/classes/pages-name";
+import { DokumenDialogComponent } from "../dokumen-dialog/dokumen-dialog.component";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -32,6 +33,7 @@ export class WholesalerEditComponent {
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
   listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
+  dialogRef: any;
 
   listLevelArea: any[];
   list: any;
@@ -56,6 +58,7 @@ export class WholesalerEditComponent {
   seeRekening: boolean = true;
   seeTokoCabang: boolean = true;
   disableSubmit: boolean = false;
+  formDoc: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,7 +67,8 @@ export class WholesalerEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private wholesalerService: WholesalerService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private dialog: MatDialog,
   ) {
     this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
@@ -145,6 +149,11 @@ export class WholesalerEditComponent {
       account_name: [""],
       bank_name: [""],
       branch: [""]
+    });
+
+    this.formDoc = this.formBuilder.group({
+      ktp: [''],
+      npwp: ['']
     });
 
     this.formWs.valueChanges.subscribe(() => {
@@ -331,6 +340,13 @@ export class WholesalerEditComponent {
       branch: this.detailWholesaler.branch || '',
     });
 
+    this.formDoc.setValue({
+      ktp: this.detailWholesaler.ktp || '',
+      npwp: this.detailWholesaler.npwp || ''
+    });
+
+    this.formDoc.disable();
+
     if (this.isDetail) {
       this.formWs.disable();
       this.formBankAccount.disable();
@@ -361,6 +377,58 @@ export class WholesalerEditComponent {
     this.filteredBanks.next(
       this.listBanks.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
+  }
+
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+  cekDokumen(docType) {
+    let ImageURL = null;
+    let document = null;
+    let imageName = null;
+    if (docType === 'ktp') {
+      if (this.detailWholesaler.ktp) {
+        ImageURL = this.detailWholesaler.ktp_image_url;
+        document = this.detailWholesaler.ktp;
+        imageName = this.detailWholesaler.image_image
+      }
+    } else {
+      if (this.detailWholesaler.npwp) {
+        ImageURL = this.detailWholesaler.npwp_image_url;
+        document = this.detailWholesaler.npwp;
+        imageName = this.detailWholesaler.npwp_image
+      }
+    }
+    this.dataService.showLoading(true);
+
+    // this.downloadLink.nativeElement.href = ImageURL;
+    // this.downloadLink.nativeElement.click();
+    setTimeout(() => {
+      this.dataService.showLoading(false);
+    }, 500);
+    // const dialogConfig = new MatDialogConfig();
+
+    // dialogConfig.disableClose = true;
+    // dialogConfig.autoFocus = true;
+    // dialogConfig.panelClass = 'scrumboard-card-dialog';
+    // dialogConfig.data = { isAccess: false, image_url: ImageURL, document_type: docType, title: 'Dokumen ' + docType.toUpperCase(), document: document };
+
+    // this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+
+    // this.dialogRef.afterClosed().subscribe(response => {
+    // });
+  }
+
+  cekDokumenAkses(docType) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: "Pemberian Akses Ke Supplier" };
+
+    this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+    });
   }
 
   getAudienceArea(selection, id) {
@@ -569,17 +637,17 @@ export class WholesalerEditComponent {
     if (!permissions.length || !roles.length) return false;
 
     const result = [];
-    roles.map(r =>{ result.push( permissions.includes(r) ) });
-    if ( cond === 'AND' ) {
-      
+    roles.map(r => { result.push(permissions.includes(r)) });
+    if (cond === 'AND') {
+
       if (result.includes(false)) return false;
       else return true;
 
-    } else if ( cond === 'OR') {
-      
+    } else if (cond === 'OR') {
+
       if (!result.includes(true)) return false;
       else return true;
-      
+
     }
 
   }

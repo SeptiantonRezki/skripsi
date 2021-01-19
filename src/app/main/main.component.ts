@@ -8,21 +8,23 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { navigation } from 'app/navigation/navigation';
 import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
+import { Emitter } from 'app/helper/emitter.helper';
 
 @Component({
-    selector     : 'fuse-main',
-    templateUrl  : './main.component.html',
-    styleUrls    : ['./main.component.scss'],
+    selector: 'fuse-main',
+    templateUrl: './main.component.html',
+    styleUrls: ['./main.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class FuseMainComponent implements OnDestroy
-{
+export class FuseMainComponent implements OnDestroy {
     onConfigChanged: Subscription;
     fuseSettings: any;
     navigation: any;
     showLoading: Boolean;
     showProgress: Boolean;
     environment: any;
+    chatIsOpen: boolean;
+
 
     progress: any;
 
@@ -34,9 +36,9 @@ export class FuseMainComponent implements OnDestroy
         private fuseConfig: FuseConfigService,
         private platform: Platform,
         private dataService: DataService,
-        @Inject(DOCUMENT) private document: any
-    )
-    {
+        @Inject(DOCUMENT) private document: any,
+        private emitter: Emitter,
+    ) {
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
                 .subscribe(
@@ -46,13 +48,16 @@ export class FuseMainComponent implements OnDestroy
                     }
                 );
 
-        if ( this.platform.ANDROID || this.platform.IOS )
-        {
+        if (this.platform.ANDROID || this.platform.IOS) {
             this.document.body.className += ' is-mobile';
         }
 
         this.navigation = navigation;
         this.environment = environment;
+        this.emitter.listenChatIsOpenQ.subscribe((value) => {
+            console.log('wehhhh', value);
+            this.chatIsOpen = value;
+        });
     }
 
     ngOnInit() {
@@ -64,18 +69,15 @@ export class FuseMainComponent implements OnDestroy
         });
     }
 
-    ngOnDestroy()
-    {
+    ngOnDestroy() {
         this.onConfigChanged.unsubscribe();
     }
 
-    addClass(className: string)
-    {
+    addClass(className: string) {
         this._renderer.addClass(this._elementRef.nativeElement, className);
     }
 
-    removeClass(className: string)
-    {
+    removeClass(className: string) {
         this._renderer.removeClass(this._elementRef.nativeElement, className);
     }
 }

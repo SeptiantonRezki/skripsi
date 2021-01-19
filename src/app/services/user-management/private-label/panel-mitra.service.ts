@@ -15,7 +15,7 @@ export class PanelMitraService extends BaseService {
     const url = this.getUrl(this.namespace, "getList");
     return this.getApi(url, queryParams);
   }
-  
+
   detail(context?: any, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail", context);
     return this.getApi(url, queryParams);
@@ -55,7 +55,7 @@ export class PanelMitraService extends BaseService {
     const url = this.getUrl(this.namespace, "getListMitra", context);
     return this.postApi(url, body, queryParams);
   }
-  
+
   getListOtherChildren(context): Observable<any> {
     const url = this.getUrl(this.namespace, "list_other_children", context);
     return this.getApi(url);
@@ -84,6 +84,11 @@ export class PanelMitraService extends BaseService {
   checkPanelMitra(body: any): Observable<any> {
     const url = this.getUrl(this.namespace, "checkPanelMitra");
     return this.postApi(url, body);
+  }
+
+  exportSupplierPanelMitra(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_supplier_panel_mitra", context);
+    return this.getBlobAsJsonApi(url, {});
   }
 
 }

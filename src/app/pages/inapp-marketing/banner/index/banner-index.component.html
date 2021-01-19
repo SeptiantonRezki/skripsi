@@ -1,6 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Spanduk Online'">
+    <button [routerLink]="['/advertisement','banner', 'sorting']" mat-raised-button type="button">
+      <mat-icon>sort</mat-icon> PENGATURAN URUTAN
+    </button>
     <button style="width: 170px" [routerLink]="['/advertisement','banner', 'create']" mat-raised-button type="button">
       <mat-icon>add</mat-icon> BUAT
     </button>

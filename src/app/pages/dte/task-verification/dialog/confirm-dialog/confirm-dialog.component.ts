@@ -112,7 +112,6 @@ export class ConfirmDialogComponent implements OnInit {
         const dataSubmission_ = res;
         if (dataSubmission_.data.image) {
           if (dataSubmission_.data.image.indexOf('http') < 0) {
-            console.log('ok', dataSubmission_.data.image.indexOf('http'))
             dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
           }
         }
@@ -129,8 +128,15 @@ export class ConfirmDialogComponent implements OnInit {
             return item;
           });
         }
+
+        if (dataSubmission_.data && dataSubmission_.data.ir_verification) {
+          try {
+            dataSubmission_.data.ir_verification = JSON.parse(dataSubmission_.data.ir_verification);
+          } catch (ex) {
+            dataSubmission_.data.ir_verification = dataSubmission_.data.ir_verification;
+          }
+        }
         this.dataSubmission = dataSubmission_;
-        console.log('DATASUBMISSION', this.dataSubmission)
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);

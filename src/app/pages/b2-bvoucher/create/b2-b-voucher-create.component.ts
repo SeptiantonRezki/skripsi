@@ -44,6 +44,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   pagination: Page = new Page();
   offsetPagination: any;
   allRowsSelected: boolean;
+  // allRowsSelectedValid: boolean;
 
   isSelected: boolean;
 
@@ -401,7 +402,6 @@ export class B2BVoucherCreateComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
       });
-      console.log("category", this.formDetilVoucher.get('category').value);
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }

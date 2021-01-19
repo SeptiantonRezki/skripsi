@@ -270,7 +270,6 @@ export class ScheduleProgramIndexComponent {
         // this.downloadLink.nativeElement.href = response.data;
         // this.downloadLink.nativeElement.click();
         this.dataService.showLoading(false);
-        this.getListScheduler();
       }, 1000);
     }
   }
@@ -281,7 +280,6 @@ export class ScheduleProgramIndexComponent {
       this.downloadLink.nativeElement.href = item.download_url;
       this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
-      this.getListScheduler();
     }, 1000);
   }
 

@@ -14,17 +14,20 @@
         <h2 class="pl-8">Daftar Produk</h2>
         <div fxLayout="row" fxLayoutAlign="center center" fusePerfectScrollbar>
           <form [formGroup]="formFilter" autoComplete="off">
-            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8" fxLayoutAlign="center center">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8"
+              fxLayoutAlign="center center">
               <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                <mat-select placeholder="Filter Kategori" formControlName="filtercategory" (selectionChange)="selectionChangeFilterCategory($event)">
+                <mat-select placeholder="Filter Kategori" formControlName="filtercategory"
+                  (selectionChange)="selectionChangeFilterCategory($event)">
                   <mat-option [value]="item.id" *ngFor="let item of filterCategory">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxLayoutAlign="center center">
-                <mat-select placeholder="Filter Produk" formControlName="filterproduct" (selectionChange)="selectionChangeFilterProduct($event)">
+                <mat-select placeholder="Filter Produk" formControlName="filterproduct"
+                  (selectionChange)="selectionChangeFilterProduct($event)">
                   <mat-option>
                     <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="'Cari Produk...'"
-                    [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                      [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
                   </mat-option>
                   <mat-option [value]="item.id" *ngFor="let item of filterProducts">{{item.name}}</mat-option>
                 </mat-select>
@@ -49,17 +52,18 @@
 
         <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directEdit(row)" *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
+            <span class="row-name" (click)="directEdit(row)"
+              *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
             <ng-template #elseDetail>
               <span class="row-name">{{row.product_name}}</span>
             </ng-template>
             <!-- <div fxLayout="row"> -->
-              <!-- <div class="inner-card name-container product-image my-8 mx-16">
+            <!-- <div class="inner-card name-container product-image my-8 mx-16">
                 <img class="" *ngIf="item.image_url" [src]="item.image_url">
               </div> -->
-              <!-- <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span> -->
-              <!-- <span class="row-address">{{row.product_name}}</span> -->
-              <!-- <span class="row-name" (click)="directEdit(row)">{{row.product_name}}</span> -->
+            <!-- <span class="row-name" (click)="directDetail(row)">{{row.product_name}}</span> -->
+            <!-- <span class="row-address">{{row.product_name}}</span> -->
+            <!-- <span class="row-name" (click)="directEdit(row)">{{row.product_name}}</span> -->
             <!-- </div> -->
           </ng-template>
         </ngx-datatable-column>
@@ -87,6 +91,9 @@
               <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
+              </button>
+              <button type="button" mat-icon-button color="" matTooltip="Export" (click)="export(row.id)">
+                <mat-icon class="secondary-text">save_alt</mat-icon>
               </button>
             </div>
           </ng-template>

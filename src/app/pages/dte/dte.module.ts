@@ -49,6 +49,7 @@ import { SharedModule } from "app/shared/shared.module";
 import { UploadImageComponent } from "./template/dialog/upload-image/upload-image.component";
 import { ngfModule } from "angular-file";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import {
@@ -58,6 +59,7 @@ import {
   ListRetailerResolver,
 } from "../../resolver/dte.resolver";
 import { PageGuard } from "app/classes/auth.guard";
+import { PipesModule } from "app/pipe/pipes.module";
 
 import {
   DateAdapter,
@@ -171,6 +173,8 @@ export const MY_FORMATS = {
     SharedModule,
     MatFormFieldModule,
     MatInputModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot(),
     MatIconModule,
     MatSelectModule,
     MatCheckboxModule,
@@ -199,7 +203,8 @@ export const MY_FORMATS = {
     NgxMaterialTimepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
-    NgxGraphModule
+    NgxGraphModule,
+    PipesModule,
   ],
   declarations: [
     TemplateIndexComponent,
@@ -272,6 +277,12 @@ export const MY_FORMATS = {
     DialogCoinEditComponent,
     DialogCoinDuplicateComponent,
     DialogMisiDuplicateComponent,
+    DialogPushNotifDuplicateComponent,
+    IndextsmComponent,
+    CreatetsmComponent,
+    EOrdertsmComponent,
+    EOrdertsmeditComponent,
+    EdittsmComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
     DialogPushNotifDuplicateComponent,

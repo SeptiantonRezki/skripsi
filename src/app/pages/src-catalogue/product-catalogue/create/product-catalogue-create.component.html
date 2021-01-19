@@ -20,7 +20,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" fxFlex="50">
+          <div fxLayout="row">
             <div fxLayout="column">
               <p>Deskripsi Produk</p>
               <textarea [froalaEditor]="options" formControlName="description"
@@ -101,6 +101,17 @@
             </div>
           </div>
 
+          <div fxLayout="row" style="margin-top: 15px;">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="weight"
+                placeholder="Berat Produk (gram)">
+              <mat-error
+                *ngIf="formProduct.controls['weight'].hasError('required') && formProduct.controls['weight'].touched">
+                Berat Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
           <div fxLayout="row">
             <mat-form-field fxFlex="20" class="is-light form-primary">
               <input matInput type="tel" currencyMask min="0" formControlName="price" placeholder="Harga Produk">
@@ -110,6 +121,20 @@
               </mat-error>
             </mat-form-field>
             <div fxFlex="5"></div>
+            <!-- <div fxLayout="row" fxFlex="10">
+              <mat-checkbox formControlName="have_community_price">Ada Harga Paguyuban</mat-checkbox>
+            </div>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="5" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="number" min="0" formControlName="community_min_qty" placeholder="Min. Qty">
+            </mat-form-field>
+            <div fxFlex="5"></div>
+            <mat-form-field fxFlex="10" class="is-light form-primary"
+              *ngIf="formProduct.get('have_community_price').value">
+              <input matInput type="tel" currencyMask min="0" formControlName="community_price"
+                placeholder="Harga / Pcs">
+            </mat-form-field> -->
           </div>
 
           <div fxLayout="row">
