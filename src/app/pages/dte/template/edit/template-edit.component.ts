@@ -55,6 +55,9 @@ export class TemplateEditComponent {
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
+    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
+    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
@@ -66,6 +69,9 @@ export class TemplateEditComponent {
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
+    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
+    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
@@ -692,7 +698,7 @@ export class TemplateEditComponent {
             })),
         required: item.required,
         additional: this.formBuilder.array(
-          item.additional.map((itm, idx) => {
+          item.additional.filter(addt => addt.includes("Lainnya, Sebutkan") === false).map((itm, idx) => {
             return this.formBuilder.group({ option: itm, next_question: item.possibilities && item.possibilities.length > 0 ? item.possibilities[idx].next : '' })
           })
         )
@@ -869,17 +875,34 @@ export class TemplateEditComponent {
     const typeSelection = this.listChoose.filter(item => item.value === type)[0];
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    if (additional.length === 0 && type == 'radio' || additional.length === 0 && type == 'checkbox') {
+    if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
     }
 
-    if (additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
+    if (additional.length > 0 && !this.checkIsRadioType(type) && type !== 'checkbox') {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+  }
+
+  checkWordingRadioFreeType(item) {
+    switch (item) {
+      case "radio_numeric":
+        return "Angka";
+      case "radio_text":
+        return "Jawaban Singkat";
+      case "radio_textarea":
+        return "Paragraf";
+      default:
+        return null;
+    }
+  }
+
+  checkIsRadioType(item) {
+    return item.includes("radio")
   }
 
   checkWording(selection) {
@@ -1111,7 +1134,6 @@ export class TemplateEditComponent {
         }),
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          console.log('item.type', item.type);
           if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
@@ -1170,6 +1192,16 @@ export class TemplateEditComponent {
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
             }) : null
+          }
+
+          if (item.type.includes("radio_")) {
+            let otherIsExistIndex = mockup['additional'].findIndex(addt => addt.includes("Lainnya, Sebutkan"));
+            if (otherIsExistIndex === -1) {
+              mockup['additional'].push(`Lainnya, Sebutkan (${this.checkWordingRadioFreeType(item.type)})`);
+            } else {
+              mockup['additional'].splice(otherIsExistIndex, 1);
+              mockup['additional'].push(`Lainnya, Sebutkan (${this.checkWordingRadioFreeType(item.type)})`);
+            }
           }
 
           if (item.type === 'stock_check_ir') {

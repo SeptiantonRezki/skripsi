@@ -51,8 +51,7 @@
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-              <textarea matInput [froalaEditor]="options" formControlName="description" id="froala-editor"
-              ></textarea>
+              <textarea matInput [froalaEditor]="options" formControlName="description" id="froala-editor"></textarea>
               <mat-error
                 *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
                 Deskripsi Tugas harus diisi
@@ -201,12 +200,13 @@
                     (selectionChange)="contentType(item.get('content_type').value)">
                     <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
-                  <mat-error *ngIf="item.controls['content_type'].hasError('required') && item.controls['content_type'].touched">
+                  <mat-error
+                    *ngIf="item.controls['content_type'].hasError('required') && item.controls['content_type'].touched">
                     Tipe Konten harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
-          
+
               <!-- Static Page -->
               <div class="pb-24 px-10"
                 *ngIf="(item.get('content_type').value === 'static_page' || item.get('content_type').value === 'e_wallet') && isDetailBanner">
@@ -237,46 +237,45 @@
                   </mat-form-field>
                 </div>
               </div>
-            <!-- iframe -->
-            <div class="px-10"
-              *ngIf="item.get('content_type').value === 'iframe' && isDetailBanner">
-              <div class="" fxLayout="row" fxLayoutAlign="start center">
-                <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
-                  <mat-error
-                    *ngIf="item.controls['url_iframe'].hasError('required') && item.controls['url_iframe'].touched">
-                    URL harus diisi
-                  </mat-error>
-                  <mat-error
-                    *ngIf="item.controls['url_iframe'].hasError('pattern') && item.get('url_iframe').value !== ''">
-                    URL tidak valid
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-            <!-- image -->
-            <div class="pb-16" *ngIf="item.get('content_type').value === 'image' && isDetailBanner" fxLayout="row"
-              fxLayoutAlign="start center">
-              <div fxFlex="30" class="px-24 inline-block">
-                <div ngfDrop selectable="1" [(validDrag)]="validComboDragDefault" [(file)]="imageContentTypeDefault"
-                  accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validComboDragDefault===false"
-                  [class.valid-drag]="validComboDragDefault" (fileChange)="imagesContentType($event, img)">
-                  Tarik gambar kesini atau <strong>pilih file</strong>
+              <!-- iframe -->
+              <div class="px-10" *ngIf="item.get('content_type').value === 'iframe' && isDetailBanner">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-form-field fxFlex="45" class="is-light form-primary">
+                    <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                    <mat-error
+                      *ngIf="item.controls['url_iframe'].hasError('required') && item.controls['url_iframe'].touched">
+                      URL harus diisi
+                    </mat-error>
+                    <mat-error
+                      *ngIf="item.controls['url_iframe'].hasError('pattern') && item.get('url_iframe').value !== ''">
+                      URL tidak valid
+                    </mat-error>
+                  </mat-form-field>
                 </div>
               </div>
-              <div *ngIf="imageContentTypeDefault">
-                <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
-                  role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
-                    class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
-                  <mat-icon matTooltip="Hapus gambar"
-                    class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
-                    (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>
+              <!-- image -->
+              <div class="pb-16" *ngIf="item.get('content_type').value === 'image' && isDetailBanner" fxLayout="row"
+                fxLayoutAlign="start center">
+                <div fxFlex="30" class="px-24 inline-block">
+                  <div ngfDrop selectable="1" [(validDrag)]="validComboDragDefault" [(file)]="imageContentTypeDefault"
+                    accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validComboDragDefault===false"
+                    [class.valid-drag]="validComboDragDefault" (fileChange)="imagesContentType($event, img)">
+                    Tarik gambar kesini atau <strong>pilih file</strong>
+                  </div>
+                </div>
+                <div *ngIf="imageContentTypeDefault">
+                  <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
+                    role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
+                      class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
+                    <mat-icon matTooltip="Hapus gambar"
+                      class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
+                      (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
-            
+
 
 
           <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto"
@@ -351,13 +350,13 @@
                 </mat-form-field>
               </div>
               <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-              <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
-              <mat-form-field fxFlex="100" class="question is-light"
-                *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
-                <textarea matInput [froalaEditor]="options" formControlName="question"
-                  (focus)="$event.target.select()"
-                  (change)="defaultValue($event, 'questions', 'Pertanyaan', i)"></textarea>
-              </mat-form-field>
+                <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
+                <mat-form-field fxFlex="100" class="question is-light"
+                  *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                  <textarea matInput [froalaEditor]="options" formControlName="question"
+                    (focus)="$event.target.select()"
+                    (change)="defaultValue($event, 'questions', 'Pertanyaan', i)"></textarea>
+                </mat-form-field>
               </div>
               <!-- <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                 <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
@@ -390,79 +389,84 @@
               </div>
               <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
                 *ngIf="item.get('question_image').value && item.get('type').value !== 'stock_check'">
-                <mat-checkbox formControlName ="image_detail"
-                  (change)="onChangeDetailBannerQuestion($event, i)">Set
+                <mat-checkbox formControlName="image_detail" (change)="onChangeDetailBannerQuestion($event, i)">Set
                   Detail Banner
                 </mat-checkbox>
               </div>
               <div formArrayName="question_image_description"
-              *ngFor="let itemque of item.get('question_image_description')['controls']; let img=index;">
+                *ngFor="let itemque of item.get('question_image_description')['controls']; let img=index;">
                 <div [formGroupName]="img">
-                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="item.get('image_detail').value">
-                  <mat-form-field fxFlex="45" class="is-light form-primary">
-                    <mat-select formControlName="content_typePertanyaan" placeholder="Tipe Konten">
-                      <mat-option *ngFor="let loop of listContentTypeQuestionChild" [value]="loop.value">{{loop.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <!-- Static Page Pertanyaan-->
-                <div class="pb-24 px-10"
-                  *ngIf="(itemque.value.content_typePertanyaan === 'static_page' || itemque.value.content_typePertanyaan === 'e_wallet') && item.get('image_detail').value">
-                  <div fxLayout="row" *ngIf="itemque.value.content_typePertanyaan === 'static_page'">
-                    <mat-form-field fxFlex="100" class="is-light form-primary">
-                      <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
-                    </mat-form-field>
-                  </div>
-                  <div class="" fxLayout="row" fxLayoutAlign="start center">
-                    <h3 class="">Isi Halaman</h3>
-                  </div>
-                  <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
-                  <mat-error style="padding-top: 6px !important; font-size: .86em;"
-                    *ngIf="itemque.controls['body'].hasError('required') && itemque.controls['body'].touched">
-                    Isi Halaman harus diisi
-                  </mat-error>
-                </div>
-                 <!-- Landing Page -->
-                 <div class="px-10" *ngIf="itemque.value.content_typePertanyaan === 'landing_page' && item.get('image_detail').value">
-                  <div fxLayout="row">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
+                    *ngIf="item.get('image_detail').value">
                     <mat-form-field fxFlex="45" class="is-light form-primary">
-                      <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
-                        <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
+                      <mat-select formControlName="content_typePertanyaan" placeholder="Tipe Konten">
+                        <mat-option *ngFor="let loop of listContentTypeQuestionChild" [value]="loop.value">{{loop.name}}
+                        </mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
-                </div>
-                <!-- iframe -->
-                <div class="px-10"
-                  *ngIf="itemque.value.content_typePertanyaan === 'iframe' && item.get('image_detail').value">
-                  <div class="" fxLayout="row" fxLayoutAlign="start center">
-                    <mat-form-field fxFlex="45" class="is-light form-primary">
-                      <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
-                    </mat-form-field>
+                  <!-- Static Page Pertanyaan-->
+                  <div class="pb-24 px-10"
+                    *ngIf="(itemque.value.content_typePertanyaan === 'static_page' || itemque.value.content_typePertanyaan === 'e_wallet') && item.get('image_detail').value">
+                    <div fxLayout="row" *ngIf="itemque.value.content_typePertanyaan === 'static_page'">
+                      <mat-form-field fxFlex="100" class="is-light form-primary">
+                        <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
+                      </mat-form-field>
+                    </div>
+                    <div class="" fxLayout="row" fxLayoutAlign="start center">
+                      <h3 class="">Isi Halaman</h3>
+                    </div>
+                    <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+                    <mat-error style="padding-top: 6px !important; font-size: .86em;"
+                      *ngIf="itemque.controls['body'].hasError('required') && itemque.controls['body'].touched">
+                      Isi Halaman harus diisi
+                    </mat-error>
                   </div>
-                </div>
-                <!-- image -->
-                <div class="pb-16" *ngIf="itemque.value.content_typePertanyaan === 'image' && item.get('image_detail').value" fxLayout="row"
-                  fxLayoutAlign="start center">
-                  <div fxFlex="30" class="px-24 inline-block">
-                    <div ngfDrop selectable="1" [(validDrag)]="validComboDragQuestionChild" [(file)]="filesQuestionChild"
-                      accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validComboDragQuestionChild===false"
-                      [class.valid-drag]="validComboDragQuestionChild" (fileChange)="imagesContentTypeQuestionChild($event, i)">
-                      Tarik gambar kesini atau <strong>pilih file</strong>
+                  <!-- Landing Page -->
+                  <div class="px-10"
+                    *ngIf="itemque.value.content_typePertanyaan === 'landing_page' && item.get('image_detail').value">
+                    <div fxLayout="row">
+                      <mat-form-field fxFlex="45" class="is-light form-primary">
+                        <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
+                          <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
                   </div>
-                  <div *ngIf="itemque.value.changeImageDetailQuestionChild">
-                    <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted" role="option"
-                      tabindex="-1" aria-disabled="false" aria-selected="false"><span class="preview-image-content"
-                        (click)="previewImageChild(i)">Lihat gambar</span>
-                      <mat-icon matTooltip="Hapus gambar"
-                        class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
-                        (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>
+                  <!-- iframe -->
+                  <div class="px-10"
+                    *ngIf="itemque.value.content_typePertanyaan === 'iframe' && item.get('image_detail').value">
+                    <div class="" fxLayout="row" fxLayoutAlign="start center">
+                      <mat-form-field fxFlex="45" class="is-light form-primary">
+                        <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- image -->
+                  <div class="pb-16"
+                    *ngIf="itemque.value.content_typePertanyaan === 'image' && item.get('image_detail').value"
+                    fxLayout="row" fxLayoutAlign="start center">
+                    <div fxFlex="30" class="px-24 inline-block">
+                      <div ngfDrop selectable="1" [(validDrag)]="validComboDragQuestionChild"
+                        [(file)]="filesQuestionChild" accept="image/*" class="well my-drop-zone"
+                        [class.invalid-drag]="validComboDragQuestionChild===false"
+                        [class.valid-drag]="validComboDragQuestionChild"
+                        (fileChange)="imagesContentTypeQuestionChild($event, i)">
+                        Tarik gambar kesini atau <strong>pilih file</strong>
+                      </div>
+                    </div>
+                    <div *ngIf="itemque.value.changeImageDetailQuestionChild">
+                      <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
+                        role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
+                          class="preview-image-content" (click)="previewImageChild(i)">Lihat gambar</span>
+                        <mat-icon matTooltip="Hapus gambar"
+                          class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
+                          (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
               <!-- end pertanyaan upload gambar -->
               <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
@@ -533,26 +537,26 @@
                       *ngFor="let additional of item.get('additional')['controls']; let j=index;">
                       <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
                         fxFlex="1 0 auto" [formGroupName]="j">
-                        <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
-                          'radio' ?
+                        <mat-icon class="secondary-text" fxFlex="5">{{
+                          checkIsRadioType(item.get('typeSelection').value['value']) ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                         <mat-form-field
-                          [fxFlex]="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 30 : 85"
+                          [fxFlex]="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 30 : 85"
                           class="opsi is-light">
                           <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
                             (change)="defaultValue($event, 'questions', 'Opsi ', i, j)">
                         </mat-form-field>
-                        <div fxFlex="1" *ngIf="item.get('typeSelection').value['value'] === 'radio'">
+                        <div fxFlex="1" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
                         </div>
                         <div fxFlex="2"
-                          *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false">
+                          *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false">
                           <mat-icon style="color: #4A90E2; cursor: pointer;" (click)="showNextQuestion(i, j)">add_circle
                           </mat-icon>
                         </div>
-                        <div fxFlex="2" *ngIf="item.get('typeSelection').value['value'] === 'radio'">
+                        <div fxFlex="2" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
                         </div>
                         <mat-form-field
-                          *ngIf=" item.get('typeSelection').value['value']==='radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                          *ngIf=" checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                           fxFlex="48" class="opsi is-light">
                           <mat-select formControlName="next_question" placeholder="Next Question Possibility">
                             <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">None</mat-option>
@@ -565,10 +569,10 @@
                           </mat-select>
                         </mat-form-field>
                         <div fxFlex="2"
-                          *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true">
+                          *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true">
                         </div>
                         <div fxFlex="2"
-                          *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true">
+                          *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true">
                           <mat-icon style="color: red;cursor: pointer;" (click)="showNextQuestion(i, j)">remove_circle
                           </mat-icon>
                         </div>
@@ -615,17 +619,29 @@
                     <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
                       fxFlex="1 0 auto"
                       *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
-                      <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
-                        'radio' ?
+                      <mat-icon class="secondary-text" fxFlex="5">
+                        {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                       <div class="more-option">
                         <span class="add-option" (click)="addAdditional(i)">Tambahkan opsi </span>
+
                         <!-- &nbsp;{{
                         item.get('others').value ?
                         '' : 'atau' }}&nbsp;
                         <a href="javascript:;" *ngIf="!item.get('others').value" (click)="addOthers(i)">
                           TAMBAHKAN "LAINNYA"
                         </a> -->
+                      </div>
+                    </div>
+                    <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
+                      fxFlex="1 0 auto"
+                      *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value) && checkWordingRadioFreeType(item.get('typeSelection').value['value'])">
+                      <mat-icon class="secondary-text" fxFlex="5">
+                        {{checkIsRadioType(item.get('typeSelection').value['value']) ?
+                        'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
+                      <div class="more-option">
+                        <span class="add-option">Lainnya,
+                          Sebutkan ({{ checkWordingRadioFreeType(item.get('typeSelection').value['value']) }})</span>
                       </div>
                     </div>
                   </div>
