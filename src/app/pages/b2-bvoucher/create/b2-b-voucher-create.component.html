@@ -201,7 +201,7 @@
           </div>
         </mat-tab>
         <mat-tab label="Panel Mitra" *ngIf="isDetail">
-          <app-panel-mitra-voucher></app-panel-mitra-voucher>
+          <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()"></app-panel-mitra-voucher>
         </mat-tab>
         <mat-tab label="Panel Retailer" *ngIf="isDetail">
           <div class="ayo-middle p-24" fxLayout="column">
