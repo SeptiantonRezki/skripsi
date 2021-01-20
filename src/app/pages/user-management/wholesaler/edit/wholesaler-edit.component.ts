@@ -340,6 +340,7 @@ export class WholesalerEditComponent {
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
       branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
+      gsw: this.detailWholesaler.gsw === 1 ? 'on' : 'off',
       formBranchStore: [],
     });
 
