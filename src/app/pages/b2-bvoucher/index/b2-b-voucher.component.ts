@@ -60,10 +60,10 @@ export class B2BVoucherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCourierList();
+    this.getVoucherList();
   }
 
-  getCourierList() {
+  getVoucherList() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -162,6 +162,28 @@ export class B2BVoucherComponent implements OnInit {
       default:
         return "mat-red-800-bg";
     }
+  }
+
+  deleteVoucher(id) {
+    this.id = id;
+    const data = {
+      titleDialog: 'Hapus Voucher',
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ['Hapus', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.b2bVoucherService.delete({ voucher_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getVoucherList();
+
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+      }
+    });
   }
 
 }
