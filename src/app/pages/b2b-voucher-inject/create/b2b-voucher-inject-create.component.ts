@@ -385,7 +385,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
       });
 
-      this.listStatuses = res.data.available_status ? Object.entries(res.data.available_status).map(
+      this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
         ([value, name]) => ({ value, name })
       ) : [];
 
