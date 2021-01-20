@@ -384,7 +384,12 @@ export class B2BVoucherCreateComponent implements OnInit {
     })
   }
 
+  onRefreshDetail() {
+    this.getDetail();
+  }
+
   getDetail() {
+    console.log("Kepanggil lagi bwang");
     this.b2bVoucherService.show({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       this.detailVoucher = res.data;
       this.isB2CVoucher.setValue(res.data.is_b2c_voucher ? true : false);

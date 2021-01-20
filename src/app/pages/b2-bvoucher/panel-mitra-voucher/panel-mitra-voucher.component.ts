@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -54,6 +54,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   detailVoucher: any;
   isDetail: Boolean;
   isEdit: Boolean;
+  @Output() refreshDetail = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,7 +69,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isEdit = params[0].path === 'edit' ? true : false;
-      if (this.isDetail ||  this.isEdit) {
+      if (this.isDetail || this.isEdit) {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
       }
     });
@@ -123,7 +124,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.getListMitra();
 
     setTimeout(() => {
-      if (this.isDetail ||  this.isEdit) {
+      if (this.isDetail || this.isEdit) {
         this.getMitraSelected();
       }
     }, 1000);
@@ -678,6 +679,7 @@ export class PanelMitraVoucherComponent implements OnInit {
         // this.getDetail();
         this.getMitraSelected();
       }
+      this.refreshDetail.emit('refreshdong');
     }, err => {
       this.dataService.showLoading(false);
     });
