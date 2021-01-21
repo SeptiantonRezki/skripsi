@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -54,6 +54,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   detailVoucher: any;
   isDetail: Boolean;
   isEdit: Boolean;
+  @Output() refreshDetail = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -681,11 +682,13 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.b2bVoucherInjectService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
-      if (!this.isDetail && !this.isEdit) { this.router.navigate(['inject-b2b-voucher', 'detail']);
+      if (!this.isDetail && !this.isEdit) {
+        this.router.navigate(['inject-b2b-voucher', 'detail']);
       } else {
         // this.getDetail();
         this.getMitraSelected();
       }
+      this.refreshDetail.emit('refreshdong');
     }, err => {
       this.dataService.showLoading(false);
     });
