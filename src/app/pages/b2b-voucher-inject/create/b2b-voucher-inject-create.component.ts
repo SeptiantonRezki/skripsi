@@ -389,6 +389,16 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         ([value, name]) => ({ value, name })
       ) : [];
 
+      if (res.data.status === 'need-approval') {
+        this.formDetilVoucher.disable();
+      }
+
+      if (res.data.status === 'published') {
+        this.formDetilVoucher.get('name').disable();
+        this.formDetilVoucher.get('voucherDate').disable();
+        this.formDetilVoucher.get('note').disable();
+      }
+
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }
@@ -1109,6 +1119,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   //   });
   // }
 
+  onRefreshDetail() {
+    this.getDetail();
+  }
+
   async exportRetailer() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
@@ -1120,7 +1134,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.dataService.showLoading(true);
     let fd = {
       business_id: this.selected.map(item => item.id),
-      type: 'retailer'
+      type: 'retailer',
+      voucher_id: this.detailVoucher.id
     }
     try {
       const response = await this.b2bVoucherInjectService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
