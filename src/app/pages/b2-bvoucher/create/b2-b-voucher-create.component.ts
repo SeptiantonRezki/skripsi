@@ -422,6 +422,11 @@ export class B2BVoucherCreateComponent implements OnInit {
       if (res.data.status === 'published') {
         this.formDetilVoucher.get('currency').disable();
         this.formDetilVoucher.get('coin').disable();
+        this.formDetilVoucher.get('voucher').disable();
+        this.formDetilVoucher.get('startDate').disable();
+        this.formDetilVoucher.get('voucherDate').disable();
+        this.formDetilVoucher.get('group_trade_program').disable();
+        this.formDetilVoucher.get('note').disable();
       }
 
       if (res.data.limit_by === 'product') {
