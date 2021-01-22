@@ -112,9 +112,11 @@ export class BannerSortingComponent implements OnInit {
     });
     this.formSortBanner.get('type_banner').valueChanges.debounceTime(100).subscribe(newVal => {
       this.getBanner(true);
+      this.getUrutan();
     });
 
     this.getBanner(true);
+    this.getUrutan();
   }
   addSpace() {
     this.sortedBanner.push({id: this.sortedBanner.length+1, name: 'banner', image: 'https://image.com'});
@@ -205,7 +207,7 @@ export class BannerSortingComponent implements OnInit {
       res => {
         BannerSortingPagination.renderPagination(this.pagination, res);
         this.rows = res.data;
-        this.prepareSortingBanner(res.data);
+        // this.prepareSortingBanner(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;
         this.dataService.showLoading(false)
@@ -215,6 +217,19 @@ export class BannerSortingComponent implements OnInit {
         this.dataService.showLoading(false)
       }
     );
+  }
+  getUrutan() {
+    this.dataService.showLoading(true)
+
+    const type_banner = this.formSortBanner.get('type_banner').value;
+    this.bannerService.getSorting({type_banner}).subscribe(res => {
+
+      this.prepareSortingBanner(res.data);
+      this.dataService.showLoading(false)
+
+    }, error => {
+      this.dataService.showLoading(false)
+    })
   }
   prepareSortingBanner(listBanner) {
     const sortedBanner = listBanner.filter(banner => banner.urutan_prioritas);

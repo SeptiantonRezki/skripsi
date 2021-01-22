@@ -74,6 +74,7 @@
         [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+        [selected]="sortedBanner"
         (sort)="onSort($event)">
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
