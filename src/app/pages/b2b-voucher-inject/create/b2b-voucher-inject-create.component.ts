@@ -1220,6 +1220,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   importRetailer(): void {
+    if (this.detailVoucher.status === 'need-approval' && this.permission['b2b_approval']) {
+      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -1239,7 +1243,22 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     });
   }
 
+  extraPermission() {
+    switch (this.detailVoucher.status) {
+      case "need-approval":
+        return this.permission && !this.permission['b2b_approval'];
+      case "published":
+        return false;
+      default:
+        return true;
+    }
+  }
+
   takeAction(action) {
+    if (action.value === 'need-approval' && !this.permission.b2b_approval) {
+      this.dialogService.openSnackBar({ message: "Anda Tidak Memilik Hak Akses untuk Approval!" });
+      return;
+    }
     const data = {
       titleDialog: 'Ubah Status Voucher',
       captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${action.name}?`,
