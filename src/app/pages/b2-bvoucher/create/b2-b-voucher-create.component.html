@@ -210,7 +210,9 @@
           </div>
         </mat-tab>
         <mat-tab label="Panel Mitra" *ngIf="isDetail">
-          <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()"></app-panel-mitra-voucher>
+          <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()" [statusVoucher]="detailVoucher.status"
+            [permissions]="permission">
+          </app-panel-mitra-voucher>
         </mat-tab>
         <mat-tab label="Panel Retailer" *ngIf="isDetail">
           <div class="ayo-middle p-24" fxLayout="column">
@@ -361,7 +363,8 @@
                   </ng-template>
                 </ngx-datatable-column>
               </ngx-datatable>
-              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="isDetail">
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center"
+                *ngIf="isDetail && detailVoucher.status !== 'need-approval'">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSavePanelRetailer()">
                   SIMPAN

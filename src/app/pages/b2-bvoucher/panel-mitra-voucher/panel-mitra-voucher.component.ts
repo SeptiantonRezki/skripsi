@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -55,6 +55,8 @@ export class PanelMitraVoucherComponent implements OnInit {
   isDetail: Boolean;
   isEdit: Boolean;
   @Output() refreshDetail = new EventEmitter();
+  @Input() statusVoucher: string;
+  @Input() permissions: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -755,6 +757,10 @@ export class PanelMitraVoucherComponent implements OnInit {
   }
 
   importMitra(): void {
+    if (this.statusVoucher === 'need-approval' && this.permissions['b2b_approval']) {
+      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
