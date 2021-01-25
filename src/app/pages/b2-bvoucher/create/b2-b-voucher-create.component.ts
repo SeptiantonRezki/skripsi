@@ -27,6 +27,7 @@ import { NullAstVisitor } from '@angular/compiler';
 export class B2BVoucherCreateComponent implements OnInit {
   isB2CVoucher: FormControl = new FormControl(false);
   isDetail: Boolean;
+  isCreate: Boolean;
   formDetilVoucher: FormGroup;
   formFilter: FormGroup;
   minDateVoucher: any = new Date();
@@ -104,6 +105,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
+      this.isCreate = params[0].path === 'create' ? true : false;
       if (this.isDetail) {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
       }
@@ -492,6 +494,13 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.b2bVoucherService.getRedeems({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       console.log('redeeems detail', res);
     })
+  }
+
+  whyYouCantSeeMe() {
+    if (this.permission.b2b_approval && !this.isCreate) return false;
+    else if (this.isCreate && this.permission.buat) return true;
+    else if (!this.isCreate && this.permission.ubah) return true;
+    else return false;
   }
 
   ngOnInit() {

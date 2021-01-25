@@ -28,6 +28,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 export class B2BVoucherInjectCreateComponent implements OnInit {
   isDetail: Boolean;
   isEdit: Boolean;
+  isCreate: Boolean;
   formDetilVoucher: FormGroup;
   formFilter: FormGroup;
   minDateVoucher: any = new Date();
@@ -105,6 +106,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isEdit = params[0].path === 'edit' ? true : false;
+      this.isCreate = params[0].path === 'create' ? true : false;
       if (this.isDetail || this.isEdit) {
         this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject');
       }
@@ -374,6 +376,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       });
       this.getListRetailer();
     })
+  }
+
+  whyYouCantSeeMe() {
+    if (this.permission.b2b_approval && !this.isCreate) return false;
+    else if (this.isCreate && this.permission.buat) return true;
+    else if (!this.isCreate && this.permission.ubah) return true;
+    else return false;
   }
 
   checkForNonApprover() {
