@@ -125,9 +125,9 @@
                 </div>
               </div> -->
 
-              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start" *ngIf="isEdit || !isDetail">
-                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
-                  (click)="onSaveDetail()">
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start">
+                <button mat-raised-button type="button" class="confirmation-button" *ngIf="whyYouCantSeeMe()"
+                  fxFlex="30" fxFlex.gt-xs="20" (click)="onSaveDetail()">
                   SIMPAN
                 </button>
                 <ng-container *ngIf="checkForNonApprover()">
