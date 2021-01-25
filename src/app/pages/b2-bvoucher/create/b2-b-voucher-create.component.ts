@@ -381,6 +381,7 @@ export class B2BVoucherCreateComponent implements OnInit {
           id: slc.business_id
         }))
       });
+      this.getListRetailer();
     })
   }
 
@@ -931,8 +932,10 @@ export class B2BVoucherCreateComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
-
-      this.b2bVoucherService.getRetailer(this.pagination).subscribe(res => {
+      let body = {
+        business_id: this.selected.map(item => item.id)
+      }
+      this.b2bVoucherService.getRetailer(this.pagination, body).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;

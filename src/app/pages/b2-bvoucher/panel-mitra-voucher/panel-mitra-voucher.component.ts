@@ -507,8 +507,11 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
+      let body = {
+        business_id: this.selected.map(item => item.id)
+      }
 
-      this.b2bVoucherService.getMitra(this.pagination).subscribe(res => {
+      this.b2bVoucherService.getMitra(this.pagination, body).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -658,6 +661,7 @@ export class PanelMitraVoucherComponent implements OnInit {
           id: slc.business_id
         }))
       });
+      this.getListMitra();
     })
   }
 

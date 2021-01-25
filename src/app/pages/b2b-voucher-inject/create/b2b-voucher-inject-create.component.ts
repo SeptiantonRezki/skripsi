@@ -367,6 +367,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           id: slc.business_id
         }))
       });
+      this.getListRetailer();
     })
   }
 
@@ -864,7 +865,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       }
       this.loadingIndicator = true;
 
-      this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id }).subscribe(res => {
+      this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id, business_id: this.selected.map(item => item.id) }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
