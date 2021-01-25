@@ -111,7 +111,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     });
     this.onLoad = false;
     this.selected = [];
-    this.permission = this.roles.getRoles('principal.b2b_voucher');
+    this.permission = this.roles.getRoles('principal.inject_b2b_voucher');
     this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
@@ -369,6 +369,20 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       });
       this.getListRetailer();
     })
+  }
+
+  checkForNonApprover() {
+    if (this.detailVoucher) {
+      console.log("thissss", this.detailVoucher, this.permission);
+      switch (this.detailVoucher.status) {
+        case "need-approval":
+          return this.permission.b2b_approval ? true : false;
+        default:
+          return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   getDetail() {

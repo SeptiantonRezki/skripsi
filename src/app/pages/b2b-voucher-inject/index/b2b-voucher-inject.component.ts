@@ -35,6 +35,8 @@ export class B2BVoucherInjectComponent implements OnInit {
 
   // permission: any;
   roles: PagesName = new PagesName();
+  permission: any;
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
@@ -46,8 +48,8 @@ export class B2BVoucherInjectComponent implements OnInit {
     this.onLoad = true;
     // this.selected = [];
 
-    // this.permission = this.roles.getRoles('principal.delivery_courier');
-    // console.log(this.permission);
+    this.permission = this.roles.getRoles('principal.inject_b2b_voucher');
+    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()

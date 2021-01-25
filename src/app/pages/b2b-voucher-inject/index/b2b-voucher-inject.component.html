@@ -79,10 +79,10 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deleteVoucher(row.id)">
+              <button *ngIf="permission?.hapus" mat-icon-button color="primary" (click)="deleteVoucher(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

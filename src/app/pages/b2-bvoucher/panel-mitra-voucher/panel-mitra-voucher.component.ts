@@ -511,6 +511,9 @@ export class PanelMitraVoucherComponent implements OnInit {
         business_id: this.selected.map(item => item.id)
       }
 
+      this.pagination['sort'] = this.dataService.getFromStorage('sort');
+      this.pagination['sort_type'] = this.dataService.getFromStorage('sort_type');
+
       this.b2bVoucherService.getMitra(this.pagination, body).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
