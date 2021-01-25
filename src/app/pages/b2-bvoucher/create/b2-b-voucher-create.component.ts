@@ -266,7 +266,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       if (type === 'product') {
         this.formDetilVoucher.get('category').setValue('');
         this.formDetilVoucher.get('limit_by_category').setValue(false);
-        if (event) {
+        if (!event.checked) {
           this.productList = [];
           this.product.setValue(null);
           // this.product.disable();
@@ -276,6 +276,7 @@ export class B2BVoucherCreateComponent implements OnInit {
             this.productInput.nativeElement.value = null;
           }
         } else {
+          this.formDetilVoucher.get('category').disable();
           this.product.enable();
         }
       } else {
@@ -285,8 +286,12 @@ export class B2BVoucherCreateComponent implements OnInit {
         // this.product.disable();
         this.listProductSkuBank = [];
         this.inputChipList = [];
-        if (event) {
+        if (event.checked) {
           this.formDetilVoucher.get('category').setValue('');
+          this.formDetilVoucher.get('category').enable();
+        } else {
+          this.formDetilVoucher.get('category').setValue('');
+          this.formDetilVoucher.get('category').disable();
         }
         if (this.productInput) {
           this.productInput.nativeElement.value = null;
@@ -416,9 +421,17 @@ export class B2BVoucherCreateComponent implements OnInit {
         ([value, name]) => ({ value, name })
       ) : [];
 
+      // if (!this.formDetilVoucher.get('limit_by_category').value) {
+      //   this.formDetilVoucher.get('category').disable();
+      // }
+
+      if (this.permission.b2b_approval) this.formDetilVoucher.disable();
+
       if (res.data.status === 'need-approval') {
         this.formDetilVoucher.disable();
+        this.formDetilVoucher.get('category').disable();
       }
+
 
       if (res.data.status === 'published') {
         this.formDetilVoucher.get('currency').disable();
@@ -1298,8 +1311,8 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   importRetailer(): void {
-    if (this.detailVoucher.status === 'need-approval' && this.permission['b2b_approval']) {
-      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+    if (this.detailVoucher.status === 'need-approval') {
+      this.dialogService.openSnackBar({ message: "Voucher sedang di Review" });
       return;
     }
     const dialogConfig = new MatDialogConfig();
