@@ -40,38 +40,27 @@
                   Username harus diisi.
                 </mat-error>
               </mat-form-field>
-
-              <mat-form-field fxFlex="100" class="is-light mb-24">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password"
-                  placeholder="Kata Sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
-                  (click)="showPassword = !showPassword">
-                  <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
-                  <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
-                </button>
-                <mat-error
-                  *ngIf="verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched">
-                  Kata sandi harus diisi.
-                </mat-error>
-                <!-- <mat-error *ngIf="verticalStepperStep1.controls['password'].hasError('notValid')">
-                  Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
-                  & 1 angka
-                </mat-error> -->
-                <mat-error *ngIf="
-                (verticalStepperStep1.controls['password'].hasError('minlength') && verticalStepperStep1.controls['password'].touched) ||
-                (verticalStepperStep1.controls['password'].hasError('strong') && verticalStepperStep1.controls['password'].touched) ||
-                (verticalStepperStep1.controls['password'].hasError('specialchar') && verticalStepperStep1.controls['password'].touched)">
-                  Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
-                  & 1 angka & 1 spesial karakter
-                </mat-error>
-                <!-- <mat-error *ngIf="forgotPasswordForm.controls['password'].hasError('strong') && forgotPasswordForm.controls['password'].touched">
-                  Kata Sandi harus mengandung huruf besar dan huruf kecil dan angka
-                </mat-error>
-                <mat-error *ngIf="forgotPasswordForm.controls['password'].hasError('specialchar') && forgotPasswordForm.controls['password'].touched">
-                  Kata Sandi harus mengandung spesial karakter
-                </mat-error> -->
-              </mat-form-field>
+              <div fxLayout="column">
+                <!-- <label for="" style="color: #333333;">Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil</label> -->
+                <mat-form-field fxFlex="100" class="is-light mb-24">
+                  <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil">
+                  <input matInput type="password" *ngIf="!showPassword" formControlName="password"
+                    placeholder="Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil">
+                  <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                    (click)="showPassword = !showPassword">
+                    <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
+                    <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+                  </button>
+                  <mat-error *ngIf="
+                  (verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched) ||
+                  (verticalStepperStep1.controls['password'].hasError('minlength') && verticalStepperStep1.controls['password'].touched) ||
+                  (verticalStepperStep1.controls['password'].hasError('strong') && verticalStepperStep1.controls['password'].touched)">
+                    <!-- Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
+                    & 1 angka & 1 spesial karakter -->
+                    Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil
+                  </mat-error>
+                </mat-form-field>
+              </div>
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
                   placeholder="Konfirmasi kata sandi"

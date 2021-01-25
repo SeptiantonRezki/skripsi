@@ -91,7 +91,7 @@ export class PaguyubanCreateComponent {
       password: ["", [
         Validators.required,
         PasswordValidator.strong,
-        PasswordValidator.specialChar,
+        // PasswordValidator.specialChar,
         Validators.minLength(8),
       ]],
       password_confirmation: ["", Validators.required],
