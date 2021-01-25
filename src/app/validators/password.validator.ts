@@ -9,11 +9,12 @@ export class PasswordValidator {
     public static strong(control: FormControl): ValidationResult {
         let hasNumber = /\d/.test(control.value);
         let hasUpper = /[A-Z]/.test(control.value);
-        // let hasLower = /[a-z]/.test(control.value);
+        let hasLower = /[a-z]/.test(control.value);
         let hasSpecialChars = (!/^[^`~!@#$%\^&*()_+={}|[\]\\:';"<>?,./]*$/.test(control.value));
         // let hasSpecialChars = /^[a-zA-Z0-9!@#$%^&*()]+$/.test(control.value)
         // console.log('Num, Upp, Low', hasNumber, hasUpper, hasLower);
-        const valid = (hasNumber && hasUpper) || (hasNumber && hasSpecialChars) || (hasUpper && hasSpecialChars);
+        const valid = (hasNumber && hasUpper) || (hasNumber && hasSpecialChars) || (hasUpper && hasSpecialChars)
+        || (hasLower && hasUpper) || (hasLower && hasNumber) || (hasLower && hasSpecialChars);
         if (!valid) {
             // return what´s not valid
             return { strong: true };
