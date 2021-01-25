@@ -436,6 +436,19 @@ export class B2BVoucherCreateComponent implements OnInit {
     })
   }
 
+  checkForNonApprover() {
+    if (this.detailVoucher) {
+      switch (this.detailVoucher.status) {
+        case "need-approval":
+          return this.permission.b2b_approval ? true : false;
+        default:
+          return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   takeAction(action) {
     if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
       this.dialogService.openSnackBar({ message: "Anda Tidak Memilik Hak Akses untuk Approval!" });

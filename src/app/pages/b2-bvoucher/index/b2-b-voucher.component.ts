@@ -46,7 +46,7 @@ export class B2BVoucherComponent implements OnInit {
     this.onLoad = true;
     // this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.delivery_courier');
+    this.permission = this.roles.getRoles('principal.b2b_voucher');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)

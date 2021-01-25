@@ -521,7 +521,8 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
-
+      this.pagination['sort'] = this.dataService.getFromStorage('sort');
+      this.pagination['sort_type'] = this.dataService.getFromStorage('sort_type');
       this.b2bVoucherInjectService.getMitra(this.pagination, { business_id: this.selected.map(item => item.id) }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
@@ -568,7 +569,6 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
-
     this.dataService.setToStorage('page', this.pagination.page);
     this.dataService.setToStorage('sort', event.column.prop);
     this.dataService.setToStorage('sort_type', event.newValue);
