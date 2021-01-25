@@ -91,7 +91,8 @@ export class PaguyubanEditComponent {
       status: [""],
       password: ["", [
         Validators.required,
-        commonFormValidator.passwordRequirement
+        PasswordValidator.strong,
+        // commonFormValidator.passwordRequirement
       ]],
       password_confirmation: ["", Validators.required],
       national: ["", Validators.required],
