@@ -172,9 +172,12 @@ export class PanelMitraVoucherComponent implements OnInit {
   }
 
   extraPermission() {
+    if (this.permissions.b2b_approval) {
+      return false;
+    }
     switch (this.statusVoucher) {
       case "need-approval":
-        return this.permissions && !this.permissions['b2b_approval'];
+        return false;
       case "published":
         return false;
       default:
@@ -778,8 +781,8 @@ export class PanelMitraVoucherComponent implements OnInit {
   }
 
   importMitra(): void {
-    if (this.statusVoucher === 'need-approval' && this.permissions['b2b_approval']) {
-      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+    if (this.statusVoucher === 'need-approval') {
+      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
       return;
     }
     const dialogConfig = new MatDialogConfig();

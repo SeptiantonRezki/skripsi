@@ -255,7 +255,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     if (type === 'product') {
       this.formDetilVoucher.get('category').setValue('');
       this.formDetilVoucher.get('limit_by_category').setValue(false);
-      if (event) {
+      if (!event.checked) {
         this.productList = [];
         this.product.setValue(null);
         // this.product.disable();
@@ -265,6 +265,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           this.productInput.nativeElement.value = null;
         }
       } else {
+        this.formDetilVoucher.get('category').disable();
         this.product.enable();
       }
     } else {
@@ -274,8 +275,12 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       // this.product.disable();
       this.listProductSkuBank = [];
       this.inputChipList = [];
-      if (event) {
+      if (event.checked) {
         this.formDetilVoucher.get('category').setValue('');
+        this.formDetilVoucher.get('category').enable();
+      } else {
+        this.formDetilVoucher.get('category').setValue('');
+        this.formDetilVoucher.get('category').disable();
       }
       if (this.productInput) {
         this.productInput.nativeElement.value = null;
@@ -403,6 +408,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
         ([value, name]) => ({ value, name })
       ) : [];
+
+      if (this.permission.b2b_approval) this.formDetilVoucher.disable();
 
       if (res.data.status === 'need-approval') {
         this.formDetilVoucher.disable();
@@ -1235,8 +1242,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   importRetailer(): void {
-    if (this.detailVoucher.status === 'need-approval' && this.permission['b2b_approval']) {
-      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+    if (this.detailVoucher.status === 'need-approval') {
+      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -1259,9 +1266,12 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   extraPermission() {
+    if (this.permission.b2b_approval) {
+      return false;
+    }
     switch (this.detailVoucher.status) {
       case "need-approval":
-        return this.permission && !this.permission['b2b_approval'];
+        return false;
       case "published":
         return false;
       default:
