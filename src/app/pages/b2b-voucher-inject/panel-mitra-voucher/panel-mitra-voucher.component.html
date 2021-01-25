@@ -2,7 +2,8 @@
   <div>
     <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
       <div class="button-row">
-        <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()">
+        <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"
+          *ngIf="!this.permissions.b2b_approval">
           <mat-icon>vertical_align_bottom</mat-icon> Import XLS
         </button>
       </div>
