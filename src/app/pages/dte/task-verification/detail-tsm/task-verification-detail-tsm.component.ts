@@ -753,6 +753,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     data.popupType = popupType;
     data.name = item.name;
     data.code = item.code;
+    data.status_coin = item.status_coin;
     dialogConfig.data = data;
     if (popupType === 'Verifikasi Misi') {
       dialogConfig.disableClose = false;
