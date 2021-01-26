@@ -358,7 +358,7 @@
                 </mat-form-field>
               </div>
               <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-              <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
+                <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                 <mat-form-field fxFlex="100" class="question is-light"
                   *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                   <textarea matInput [froalaEditor]="options" formControlName="question"
@@ -422,7 +422,8 @@
                     </mat-error>
                   </div>
                   <!-- Landing Page -->
-                  <div class="px-10" *ngIf="itemque.value.content_type === 'landing_page' && item.get('question_image_detail').value">
+                  <div class="px-10"
+                    *ngIf="itemque.value.content_type === 'landing_page' && item.get('question_image_detail').value">
                     <div fxLayout="row">
                       <mat-form-field fxFlex="45" class="is-light form-primary">
                         <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
@@ -537,48 +538,50 @@
                         *ngFor="let additional of item.get('additional')['controls']; let j=index;">
                         <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
                           fxFlex="1 0 auto" [formGroupName]="j">
-                          <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
-                            'radio' ?
+                          <mat-icon class="secondary-text" fxFlex="5">
+                            {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                             'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                           <mat-form-field
-                            [fxFlex]="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 50 : 85"
+                            [fxFlex]="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 50 : 85"
                             class="opsi is-light">
                             <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
-                              (change)="defaultValue($event, 'questions', 'Opsi ', i, j)">
+                              (change)="defaultValue($event, 'questions', 'Opsi ', i, j)"
+                              [readonly]="checkIsRadioTypeWasOther(additional.value)">
                           </mat-form-field>
-                          <div fxFlex="1" *ngIf="item.get('typeSelection').value['value'] === 'radio'">
+                          <div fxFlex="1" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
                           </div>
                           <div fxFlex="2"
-                            *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false ">
+                            *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false ">
                             <mat-icon style="color: #4A90E2; cursor: pointer;" (click)="showNextQuestion(i, j)">
                               add_circle
                             </mat-icon>
                           </div>
-                          <div fxFlex="2" *ngIf="item.get('typeSelection').value['value'] === 'radio'">
+                          <div fxFlex="2" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
                           </div>
                           <mat-form-field
-                            *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                            *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                             fxFlex="48" class="opsi is-light">
                             <mat-select formControlName="next_question" placeholder="Next Question Possibility">
                               <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">None</mat-option>
                               <mat-option
                                 *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
                                 [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
-                                {{ possibility.question }}
+                                <span [innerHTML]="possibility.question"></span>
                               </mat-option>
                               <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">Selesai</mat-option>
                             </mat-select>
                           </mat-form-field>
                           <div fxFlex="2"
-                            *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true">
+                            *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true">
                           </div>
                           <div fxFlex="2"
-                            *ngIf="item.get('typeSelection').value['value'] === 'radio' && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true">
+                            *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true">
                             <mat-icon style="color: red;cursor: pointer;" (click)="showNextQuestion(i, j)">remove_circle
                             </mat-icon>
                           </div>
                           <div fxFlex="6"></div>
-                          <button *ngIf="item.get('additional').value.length > 1 && !isDetail"
+                          <button
+                            *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value) && !isDetail"
                             (click)="deleteAdditional(i, j)" mat-icon-button fxFlex="5" matTooltip="Hapus"
                             matTooltipPosition="below" class="secondary-text">
                             <mat-icon class="secondary-text">close</mat-icon>
@@ -621,8 +624,8 @@
                     <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
                       fxFlex="1 0 auto"
                       *ngIf="!isDetail && item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
-                      <mat-icon class="secondary-text" fxFlex="5">{{item.get('typeSelection').value['value'] ===
-                        'radio' ?
+                      <mat-icon class="secondary-text" fxFlex="5">
+                        {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                         'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                       <div class="more-option">
                         <span class="add-option" (click)="addAdditional(i)">Tambahkan opsi </span>
@@ -634,6 +637,17 @@
                           </a> -->
                       </div>
                     </div>
+                    <!-- <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
+                      fxFlex="1 0 auto"
+                      *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value) && checkWordingRadioFreeType(item.get('typeSelection').value['value'])">
+                      <mat-icon class="secondary-text" fxFlex="5">
+                        {{checkIsRadioType(item.get('typeSelection').value['value']) ?
+                        'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
+                      <div class="more-option">
+                        <span class="add-option">Lainnya,
+                          Sebutkan ({{ checkWordingRadioFreeType(item.get('typeSelection').value['value']) }})</span>
+                      </div>
+                    </div> -->
                   </div>
                 </ng-container>
               </div>

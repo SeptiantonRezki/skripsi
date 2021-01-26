@@ -55,6 +55,9 @@ export class TemplateEditComponent {
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
+    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
+    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
@@ -66,6 +69,9 @@ export class TemplateEditComponent {
     { name: "Jawaban Singkat", value: "text", icon: "short_text" },
     { name: "Paragraf", value: "textarea", icon: "notes" },
     { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
+    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
+    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
     { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
     { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
     { name: "Angka", value: "numeric", icon: "dialpad" },
@@ -790,8 +796,30 @@ export class TemplateEditComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
 
+    let rawAddt = questions.at(idx).get('additional').value;
+    let rawType = questions.at(idx).get('type').value;
+    let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+    let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+    let tempOption = {
+      possibilities: null,
+      additional: null
+    }
+    if (idxOther !== -1) {
+      if (idxOtherInPossibilities !== -1) {
+        tempOption['possibilities'] = { ...this.allQuestionList[idx]['possibilities'][idxOtherInPossibilities] }
+        this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+      }
+      tempOption['additional'] = { ...additional.at(idxOther).value };
+      additional.removeAt(idxOther);
+    }
+
     this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
+
+    if (rawType.includes("radio_")) {
+      this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+      additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+    }
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
@@ -869,17 +897,69 @@ export class TemplateEditComponent {
     const typeSelection = this.listChoose.filter(item => item.value === type)[0];
     let additional = questions.at(idx).get('additional') as FormArray;
 
-    if (additional.length === 0 && type == 'radio' || additional.length === 0 && type == 'checkbox') {
+    if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     }
 
-    if (additional.length > 0 && type !== 'radio' && type !== 'checkbox') {
+    if (type.includes("radio_")) {
+      let rawAddt = questions.at(idx).get('additional').value;
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      let tempOption = {
+        possibilities: null,
+        additional: null
+      }
+
+      if (idxOther === -1) {
+        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
+      } else {
+        tempOption['additional'] = { ...additional.at(idxOther).value };
+        additional.removeAt(idxOther);
+        if (idxOtherInPossibilities !== -1) {
+          tempOption['possibilities'] = { ...this.allQuestionList[idx]['possibilities'][idxOtherInPossibilities] }
+          this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+        }
+        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+      }
+    } else if (!type.includes("radio_")) {
+      let rawAddt = questions.at(idx).get('additional').value;
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      if (idxOther > -1) additional.removeAt(idxOther);
+      if (idxOtherInPossibilities > -1) this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+    }
+
+    if (additional.length > 0 && !this.checkIsRadioType(type) && type !== 'checkbox') {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+  }
+
+  checkWordingRadioFreeType(item) {
+    switch (item) {
+      case "radio_numeric":
+        return "Angka";
+      case "radio_text":
+        return "Jawaban Singkat";
+      case "radio_textarea":
+        return "Paragraf";
+      default:
+        return null;
+    }
+  }
+
+  checkIsRadioType(item) {
+    return item.includes("radio")
+  }
+
+  checkIsRadioTypeWasOther(item) {
+    return item.option && item.option.includes("Lainnya, Sebutkan");
   }
 
   checkWording(selection) {
@@ -992,7 +1072,7 @@ export class TemplateEditComponent {
   deleteQuestion(idx): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let idQUestion = questions.at(idx).get('id').value;
-    if (this.frmIsBranching.value && questions.at(idx).get('typeSelection').value['value'] === 'radio' && this.checkHasLinked(idx, idQUestion)) {
+    if (this.frmIsBranching.value && this.checkIsRadioType(questions.at(idx).get('typeSelection').value['value']) && this.checkHasLinked(idx, idQUestion)) {
       // this.dialogService.openCustomDialog('Tidak Bisa Menghapus Pertanyaan', 'Pertanyaan ini terhubung sebagai Response Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.');
       this.dialogService.openSnackBar({
         message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
@@ -1111,7 +1191,6 @@ export class TemplateEditComponent {
         }),
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          console.log('item.type', item.type);
           if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
@@ -1122,7 +1201,7 @@ export class TemplateEditComponent {
             type: item.type,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && item.type === 'radio') ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
             })) : [],
