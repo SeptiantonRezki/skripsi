@@ -581,7 +581,8 @@ export class Endpoint {
         releaseCoinAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin/all`,
         releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
         submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
-        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
+        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
+        exportTrueTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/export`
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,

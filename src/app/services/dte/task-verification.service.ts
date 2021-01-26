@@ -103,7 +103,7 @@ export class TaskVerificationService extends BaseService {
     const url = this.getUrl(this.namespace, 'csv_preview');
     return this.postApi(url, body);
   }
-  
+
   storeExcel(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'csv_store');
     return this.postApi(url, body);
@@ -163,6 +163,11 @@ export class TaskVerificationService extends BaseService {
 
   exportTsm(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'export');
+    return this.postApi(url, body);
+  }
+
+  exportTrueTsm(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'exportTrueTsm');
     return this.postApi(url, body);
   }
 }
