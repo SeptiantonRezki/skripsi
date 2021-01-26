@@ -53,7 +53,7 @@ export class ConfirmDialogComponent implements OnInit {
     this.verificationConfirm.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe((value) => {
-        if (value === 'tolak' ) {
+        if (value === 'tolak') {
           this.isDisagree = true;
         } else {
           this.isDisagree = false;
@@ -73,7 +73,7 @@ export class ConfirmDialogComponent implements OnInit {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.jumlahMisi = this.data.task_need_verify;
-      this.taskVerificationService.listReason({ template_id : this.data.scheduler_templates_id}).subscribe(res => {
+      this.taskVerificationService.listReason({ template_id: this.data.scheduler_templates_id }).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
         if (res.data.length > 0) {
@@ -110,6 +110,10 @@ export class ConfirmDialogComponent implements OnInit {
         this.onLoad = false;
         this.dataService.showLoading(false);
         const dataSubmission_ = res;
+        this.listReason = res.data && res.data.rejected_reason_choices ? res.data.rejected_reason_choices.map(choice => ({
+          name: choice,
+          value: choice
+        })) : [];
         if (dataSubmission_.data.image) {
           if (dataSubmission_.data.image.indexOf('http') < 0) {
             dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
@@ -235,7 +239,7 @@ export class ConfirmDialogComponent implements OnInit {
       this.dataService.showLoading(true);
       this.taskVerificationService.verification({
         trade_scheduler_template_id: this.data.trade_scheduler_template_id,
-        verification:'rejected',
+        verification: 'rejected',
         reason: reason,
         retailer_id: this.data.retailer_id,
       }).subscribe(res => {
@@ -272,5 +276,5 @@ export class ConfirmDialogComponent implements OnInit {
 
     this._lightbox.open([album], 0);
   }
- 
+
 }

@@ -159,7 +159,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     return '';
   }
 
-  setMinDate(e) {}
+  setMinDate(e) { }
 
   openConfirmDialog(item: any, popupType: string) {
     const dialogConfig = new MatDialogConfig();
@@ -175,7 +175,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
       if (response) {
         this.getListTaskVerification();
       }
-     });
+    });
   }
 
   export(item) {
@@ -185,22 +185,38 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
     let params = {
       task_sequencing_management_id: item.task_sequencing_management_id,
-      rand: 1,
+      task_sequencing_management_template_id: item.task_sequencing_management_template_id,
+      rand: "",
+      last: "true"
     }
 
-    this.sequencingService.export(params).subscribe(
-      (response) => {
-        if (response.data && response.status) {
-          setTimeout(() => {
-            this.downloadLink.nativeElement.href = response.data;
-            this.downloadLink.nativeElement.click();
-            this.dataService.showLoading(false);
-          }, 500);
-        }
-      }, (error) => {
-        this.dataService.showLoading(false);
+    this.taskVerificationService.exportTrueTsm(params).subscribe(response => {
+      if (response.data && response.status) {
+        setTimeout(() => {
+          this.downloadLink.nativeElement.href = response.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, 500);
       }
-    )
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+
+    // masih belum tahu untuk apa ...
+    // this.sequencingService.export(params).subscribe(
+    //   (response) => {
+    //     console.log('response tsm bund', response)
+    //     if (response.data && response.status) {
+    //       setTimeout(() => {
+    //         this.downloadLink.nativeElement.href = response.data;
+    //         this.downloadLink.nativeElement.click();
+    //         this.dataService.showLoading(false);
+    //       }, 500);
+    //     }
+    //   }, (error) => {
+    //     this.dataService.showLoading(false);
+    //   }
+    // )
   }
 
   setPage(pageInfo) {
