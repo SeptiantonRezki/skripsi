@@ -564,7 +564,7 @@
                             <mat-option
                               *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
                               [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
-                              {{ possibility.question }}
+                              <span [innerHTML]="possibility.question"></span>
                             </mat-option>
                             <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">Selesai</mat-option>
                           </mat-select>
