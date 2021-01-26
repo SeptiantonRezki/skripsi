@@ -17,6 +17,7 @@ export class Page {
   product_id: any;
   category_id: any;
   type: string;
+  type_banner: string;
   
   constructor() {
     this.per_page = 15;
@@ -34,6 +35,7 @@ export class Page {
     this.category_id = "";
     this.product_id = "";
     this.type = '';
+    this.type_banner = '';
   }
 
   public static renderPagination(pagination, response) {

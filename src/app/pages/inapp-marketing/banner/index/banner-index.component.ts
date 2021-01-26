@@ -14,13 +14,25 @@ import { PagesName } from "app/classes/pages-name";
   styleUrls: ["./banner-index.component.scss"]
 })
 export class BannerIndexComponent {
+  
+  TYPE_BANNER = {
+    DEFAULT: '',
+    INFO_TERKINI: 'info-terkini',
+    AKTIVASI_KONSUMEN: 'aktivasi-konsumen'
+  };
+
   rows: any[];
+  infoTerkiniRows: any[];
+  aktivasiKonsumenRows: any[];
   selected: any[];
   id: any;
 
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
+  infoTerkiniPagination: Page = new Page();
+  aktivasiKonsumenPagination: Page = new Page();
+
   onLoad: boolean;
 
   @ViewChild(DatatableComponent)
@@ -35,6 +47,18 @@ export class BannerIndexComponent {
   roles: PagesName = new PagesName();
 
   offsetPagination: any;
+  
+  // INFO TERKINI
+  infoTerkiniLoadingIndicator = true;
+  infoTerkiniOnLoad: boolean;
+  infoTerkiniOffsetPagination: any;
+
+  // AKTIVASI KONSUMEN
+  aktivasiKonsumenLoadingIndicator = true;
+  aktivasiKonsumenOnLoad: boolean;
+  aktivasiKonsumenOffsetPagination: any;
+
+  _onSearch = new Subject<any>();
 
   constructor(
     private router: Router,
@@ -43,10 +67,12 @@ export class BannerIndexComponent {
     private bannerService: BannerService
   ) {
     this.onLoad = true;
+    this.infoTerkiniOnLoad = true;
     this.selected = [];
+    this.onSearch = this.onSearch.bind(this);
 
     this.permission = this.roles.getRoles('principal.spanduk');
-    console.log(this.permission);
+
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -56,10 +82,16 @@ export class BannerIndexComponent {
       .subscribe(data => {
         this.updateFilter(data);
       });
+    this._onSearch.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap((data) => Observable.of(data).delay(500) )
+      .subscribe(this.onSearch);
   }
 
   ngOnInit() {
     this.getBanner();
+    this.getInfoTerkini();
+    this.getAktivasiKonsumen();
   }
 
   getBanner() {
@@ -70,6 +102,7 @@ export class BannerIndexComponent {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination.per_page = 5;
 
     this.offsetPagination = page ? (page - 1) : 0;
 
@@ -85,12 +118,61 @@ export class BannerIndexComponent {
       }
     );
   }
+  getInfoTerkini() {
+    const page = this.dataService.getFromStorage("banner_info_terkini_page");
+    const sort_type = this.dataService.getFromStorage("banner_info_terkini_sort_type");
+    const sort = this.dataService.getFromStorage("banner_info_terkini_sort");
+
+    this.infoTerkiniPagination.page = page;
+    this.infoTerkiniPagination.sort_type = sort_type;
+    this.infoTerkiniPagination.sort = sort;
+    this.infoTerkiniPagination.type_banner = this.TYPE_BANNER.INFO_TERKINI;
+    this.infoTerkiniPagination.per_page = 5;
+
+    this.infoTerkiniOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.infoTerkiniPagination).subscribe(
+      res => {
+        Page.renderPagination(this.infoTerkiniPagination, res);
+        this.infoTerkiniRows = res.data;
+        this.infoTerkiniOnLoad = false;
+        this.infoTerkiniLoadingIndicator = false;
+      },
+      err => {
+        this.infoTerkiniOnLoad = false;
+      }
+    );
+  }
+  getAktivasiKonsumen() {
+    const page = this.dataService.getFromStorage("banner_aktivasi_konsumen_page");
+    const sort_type = this.dataService.getFromStorage("banner_aktivasi_konsumen_sort_type");
+    const sort = this.dataService.getFromStorage("banner_aktivasi_konsumen_sort");
+
+    this.aktivasiKonsumenPagination.page = page;
+    this.aktivasiKonsumenPagination.sort_type = sort_type;
+    this.aktivasiKonsumenPagination.sort = sort;
+    this.aktivasiKonsumenPagination.type_banner = this.TYPE_BANNER.AKTIVASI_KONSUMEN;
+    this.aktivasiKonsumenPagination.per_page = 5;
+
+    this.infoTerkiniOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.aktivasiKonsumenPagination).subscribe(
+      res => {
+        Page.renderPagination(this.aktivasiKonsumenPagination, res);
+        this.aktivasiKonsumenRows = res.data;
+        this.aktivasiKonsumenOnLoad = false;
+        this.aktivasiKonsumenLoadingIndicator = false;
+      },
+      err => {
+        this.aktivasiKonsumenOnLoad = false;
+      }
+    );
+  }
 
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
 
-    console.log("Select Event", selected, this.selected);
   }
 
   setPage(pageInfo) {
@@ -111,6 +193,43 @@ export class BannerIndexComponent {
       this.loadingIndicator = false;
     });
   }
+  setPageInfoTerkini(pageInfo) {
+    this.infoTerkiniOffsetPagination = pageInfo.offset;      
+    this.infoTerkiniLoadingIndicator = true;
+
+    if (this.infoTerkiniPagination['search']) {
+      this.infoTerkiniPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_info_terkini_page", pageInfo.offset + 1);
+      this.infoTerkiniPagination.page = this.dataService.getFromStorage("banner_info_terkini_page");
+    }
+
+    this.bannerService.get(this.infoTerkiniPagination).subscribe(res => {
+      Page.renderPagination(this.infoTerkiniPagination, res);
+      this.infoTerkiniRows = res.data;
+
+      this.infoTerkiniLoadingIndicator = false;
+    });
+  }
+
+  setPageAktivasiKonsumen(pageInfo) {
+    this.aktivasiKonsumenOffsetPagination = pageInfo.offset;      
+    this.aktivasiKonsumenLoadingIndicator = true;
+
+    if (this.aktivasiKonsumenPagination['search']) {
+      this.aktivasiKonsumenPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_aktivasi_konsumen_page", pageInfo.offset + 1);
+      this.aktivasiKonsumenPagination.page = this.dataService.getFromStorage("banner_aktivasi_konsumen_page");
+    }
+
+    this.bannerService.get(this.aktivasiKonsumenPagination).subscribe(res => {
+      Page.renderPagination(this.aktivasiKonsumenPagination, res);
+      this.aktivasiKonsumenRows = res.data;
+
+      this.aktivasiKonsumenLoadingIndicator = false;
+    });
+  }
 
   onSort(event) {
     this.pagination.sort = event.column.prop;
@@ -127,6 +246,40 @@ export class BannerIndexComponent {
       this.rows = res.data;
 
       this.loadingIndicator = false;
+    });
+  }
+  onSortInfoTerkini(event) {
+    this.infoTerkiniPagination.sort = event.column.prop;
+    this.infoTerkiniPagination.sort_type = event.newValue;
+    this.infoTerkiniPagination.page = 1;
+    this.infoTerkiniLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_info_terkini_page", this.infoTerkiniPagination.page);
+    this.dataService.setToStorage("banner_info_terkini_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_info_terkini_sort", event.newValue);
+
+    this.bannerService.get(this.infoTerkiniPagination).subscribe(res => {
+      Page.renderPagination(this.infoTerkiniPagination, res);
+      this.infoTerkiniRows = res.data;
+
+      this.infoTerkiniLoadingIndicator = false;
+    });
+  }
+  onSortAktivasiKonsumen(event) {
+    this.aktivasiKonsumenPagination.sort = event.column.prop;
+    this.aktivasiKonsumenPagination.sort_type = event.newValue;
+    this.aktivasiKonsumenPagination.page = 1;
+    this.aktivasiKonsumenLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_aktivasi_konsumen_page", this.aktivasiKonsumenPagination.page);
+    this.dataService.setToStorage("banner_aktivasi_konsumen_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_aktivasi_konsumen_sort", event.newValue);
+
+    this.bannerService.get(this.aktivasiKonsumenPagination).subscribe(res => {
+      Page.renderPagination(this.aktivasiKonsumenPagination, res);
+      this.aktivasiKonsumenRows = res.data;
+
+      this.aktivasiKonsumenLoadingIndicator = false;
     });
   }
 
@@ -185,5 +338,53 @@ export class BannerIndexComponent {
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
     });
+  }
+  updateFilterInfoTerkini(keyword) {
+
+    this.infoTerkiniLoadingIndicator = true;
+    this.infoTerkiniPagination.search = keyword;
+
+    if (keyword) {
+      this.infoTerkiniPagination.page = 1;
+      this.infoTerkiniOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.infoTerkiniPagination.page = page;
+      this.infoTerkiniOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.infoTerkiniPagination).subscribe(res => {
+      Page.renderPagination(this.infoTerkiniPagination, res);
+      this.infoTerkiniRows = res.data;
+      this.infoTerkiniLoadingIndicator = false;
+    });
+
+  }
+  updateFilterAktivasiKonsumen(keyword) {
+
+    this.aktivasiKonsumenLoadingIndicator = true;
+    this.aktivasiKonsumenPagination.search = keyword;
+
+    if (keyword) {
+      this.aktivasiKonsumenPagination.page = 1;
+      this.aktivasiKonsumenOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.aktivasiKonsumenPagination.page = page;
+      this.aktivasiKonsumenOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.aktivasiKonsumenPagination).subscribe(res => {
+      Page.renderPagination(this.aktivasiKonsumenPagination, res);
+      this.aktivasiKonsumenRows = res.data;
+      this.aktivasiKonsumenLoadingIndicator = false;
+    });
+  }
+
+  onSearch({keyword, searchType}) {
+    switch (searchType) {
+      case this.TYPE_BANNER.INFO_TERKINI: this.updateFilterInfoTerkini(keyword); break;
+      case this.TYPE_BANNER.AKTIVASI_KONSUMEN: this.updateFilterAktivasiKonsumen(keyword); break;
+    }
   }
 }
