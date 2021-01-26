@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -54,6 +54,9 @@ export class PanelMitraVoucherComponent implements OnInit {
   detailVoucher: any;
   isDetail: Boolean;
   isEdit: Boolean;
+  @Output() refreshDetail = new EventEmitter();
+  @Input() statusVoucher: string;
+  @Input() permissions: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,7 +71,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isEdit = params[0].path === 'edit' ? true : false;
-      if (this.isDetail ||  this.isEdit) {
+      if (this.isDetail || this.isEdit) {
         this.detailVoucher = this.dataService.getFromStorage("detail_voucher");
       }
     });
@@ -123,7 +126,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.getListMitra();
 
     setTimeout(() => {
-      if (this.isDetail ||  this.isEdit) {
+      if (this.isDetail || this.isEdit) {
         this.getMitraSelected();
       }
     }, 1000);
@@ -504,8 +507,14 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }
       this.loadingIndicator = true;
+      let body = {
+        business_id: this.selected.map(item => item.id)
+      }
 
-      this.b2bVoucherService.getMitra(this.pagination).subscribe(res => {
+      this.pagination['sort'] = this.dataService.getFromStorage('sort');
+      this.pagination['sort_type'] = this.dataService.getFromStorage('sort_type');
+
+      this.b2bVoucherService.getMitra(this.pagination, body).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -655,6 +664,7 @@ export class PanelMitraVoucherComponent implements OnInit {
           id: slc.business_id
         }))
       });
+      this.getListMitra();
     })
   }
 
@@ -678,6 +688,7 @@ export class PanelMitraVoucherComponent implements OnInit {
         // this.getDetail();
         this.getMitraSelected();
       }
+      this.refreshDetail.emit('refreshdong');
     }, err => {
       this.dataService.showLoading(false);
     });
@@ -753,6 +764,10 @@ export class PanelMitraVoucherComponent implements OnInit {
   }
 
   importMitra(): void {
+    if (this.statusVoucher === 'need-approval' && this.permissions['b2b_approval']) {
+      this.dialogService.openSnackBar({ message: "Anda Tidak Memiliki Hak Akses untuk hal ini!" });
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;

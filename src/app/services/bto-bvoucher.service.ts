@@ -32,6 +32,11 @@ export class BtoBVoucherService extends BaseService {
     return this.putApi(url, body);
   }
 
+  delete(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update', context);
+    return this.deleteApi(url);
+  }
+
   getRetailer(queryParams?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, 'list_retailer');
     return this.postApi(url, body, queryParams);
@@ -115,6 +120,11 @@ export class BtoBVoucherService extends BaseService {
   getVoucherB2CList(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'listVoucherB2C');
     return this.getApi(url, queryParams);
+  }
+
+  changeStatus(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "change_status", context);
+    return this.postApi(url, body);
   }
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
