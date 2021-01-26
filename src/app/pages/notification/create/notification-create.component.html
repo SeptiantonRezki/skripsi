@@ -67,7 +67,7 @@
             <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
-            <textarea [froalaEditor]="options" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
+            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
               Isi Halaman harus diisi
