@@ -469,6 +469,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       note: [''],
     });
 
+    if (this.isCreate) this.formDetilVoucher.get('category').disable();
+
     this.formFilter = this.formBuilder.group({
       national: [''],
       zone: [''],
