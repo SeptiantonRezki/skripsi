@@ -140,7 +140,7 @@
                   Lihat Dokumen
                 </a>
                 <div fxFlex="2"></div>
-                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
                   (click)="cekDokumenAkses('ktp')">
                   Lihat Pemberian Akses
                 </button>
@@ -157,7 +157,7 @@
                   Lihat Dokumen
                 </a>
                 <div fxFlex="2"></div>
-                <button mat-raised-button type="button" class="confirmation-button" fxFlex="30"
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
                   (click)="cekDokumenAkses('npwp')">
                   Lihat Pemberian Akses
                 </button>
@@ -248,7 +248,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" *ngIf="seeTokoCabang">
+          <div fxLayout="row" *ngIf="seeTokoCabang && !detailWholesaler.is_branch">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
               Toko Cabang</mat-checkbox>
           </div>
@@ -257,6 +257,35 @@
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <input matInput type="number" [formControl]="frmTotalBranch" placeholder="Jumlah Toko Cabang">
             </mat-form-field>
+          </div>
+
+          <div fxLayout="column" *ngIf="!detailWholesaler.is_branch && detailWholesaler.data_branch && detailWholesaler.data_branch.length > 0" class="mt-8">
+            <div formArrayName="formBranchStore" *ngFor="let item of formWs.get('formBranchStore')['controls']; let i = index;">
+              <div [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
+                  <input matInput type="text" formControlName="name" placeholder="Nama Toko">
+                </mat-form-field> 
+
+                <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
+                  <input matInput type="text" formControlName="address" placeholder="Alamat">
+                </mat-form-field>
+
+                <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
+                  <mat-select placeholder="Tipe Cabang" formControlName="branch_type" (selectionChange)="onChangeBranchType($event, i)">
+                    <mat-option *ngFor="let bt of branchType" [value]="bt.value">{{ bt.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
+                  <input matInput type="text" formControlName="code" placeholder="Kode iSMS">
+                </mat-form-field>
+
+                <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
+                  <input matInput type="text" formControlName="status" placeholder="Status">
+                </mat-form-field>
+              </div>
+            </div>
           </div>
 
           <!-- <mat-form-field fxFlex="100" class="is-light">
