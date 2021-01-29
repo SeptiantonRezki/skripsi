@@ -61,6 +61,10 @@ export class NotificationCreateComponent {
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
+  listNotifType: any [] = [
+    { name: "Kirim Sebagai Notifikasi", value: "notif" },
+    { name: "Kirim Sebagai Pesan", value: "message" },
+  ];
 
   imageContentType: File;
   imageContentTypeBase64: any;
@@ -199,7 +203,8 @@ export class NotificationCreateComponent {
       body: {},
       user: {},
       user_group: {},
-      age: {}
+      age: {},
+      notif_type: {},
     };
 
     this.listLevelArea = [
@@ -243,7 +248,8 @@ export class NotificationCreateComponent {
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
-      status: ["Active"]
+      status: ["Active"],
+      notif_type: ['notif', Validators.required],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -305,6 +311,16 @@ export class NotificationCreateComponent {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
       } else {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+      }
+
+      if (res !== 'customer') {
+        this.formNotification.get('notif_type').setValidators([]);
+        this.formNotification.get('notif_type').setValue('');
+        this.formNotification.updateValueAndValidity();
+      } else {
+        this.formNotification.get('notif_type').setValidators([Validators.required]);
+        this.formNotification.get('notif_type').setValue('notif');
+        this.formNotification.updateValueAndValidity();
       }
 
       if (this.formNotification.get("is_target_audience").value === true) {
@@ -1327,6 +1343,7 @@ export class NotificationCreateComponent {
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
       body['age'] = this.formNotification.get("age").value;
+      body['notif_type'] = this.formNotification.get('notif_type').value;
     }
 
     if (body.content_type === 'static_page') {
@@ -2113,7 +2130,7 @@ export class NotificationCreateComponent {
   async getDetails() {
     try {
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       console.log({ audience });
 
       const frm = this.formNotification;
@@ -2180,6 +2197,13 @@ export class NotificationCreateComponent {
             this.onSelect({ selected: this.audienceSelected });
           }, 400);
         }
+      }
+      if (type === 'customer') {
+        frm.controls['notif_type'].setValidators([Validators.required]);
+        frm.controls['notif_type'].setValue(notif_type);
+      } else {
+        frm.controls['notif_type'].setValidators([]);
+        frm.controls['notif_type'].setValue('');
       }
 
       // end request
