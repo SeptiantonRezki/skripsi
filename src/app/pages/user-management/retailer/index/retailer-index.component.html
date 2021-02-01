@@ -133,6 +133,11 @@
               <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="GSM PL" [formControl]="gsm_pl_flag">
+              <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -184,6 +189,11 @@
         <ngx-datatable-column name="GSR" prop="gsr_flag" summary-template="activeCell">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.gsr_flag === 1 ? 'On' : 'Off'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="GSM PL" prop="gsm_pl_flag" summary-template="activeCell">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.gsm_pl === 1 ? 'On' : 'Off'}}
           </ng-template>
         </ngx-datatable-column>
 
