@@ -59,7 +59,7 @@ export class DiaglogMisiComponent implements OnInit {
 
     if (this.data !== null) {
       this.form.patchValue({
-        task_template_id: parseInt(this.data.data.attribute.task_template_id,10),
+        task_template_id: parseInt(this.data.data.attribute.task_template_id, 10),
         start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
         end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
         verification_type: this.data.data.attribute.verification_type,
@@ -95,21 +95,31 @@ export class DiaglogMisiComponent implements OnInit {
     }
   }
 
-  selectChangeMisi(e: any){
+  selectChangeMisi(e: any) {
     // console.log(e);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
     // console.log(this.missions[theIndex]);
-    console.log("is ir template: "+this.missions[theIndex].is_ir_template);
+    console.log("is ir template: " + this.missions[theIndex].is_ir_template);
     this.form.patchValue({
       is_ir_template: this.missions[theIndex].is_ir_template
     });
 
-    if(this.missions[theIndex].is_ir_template === 1){
+    if (this.missions[theIndex].is_ir_template === 1) {
       this.form.get('verifikasiFF').patchValue(false);
       this.form.get('pushFF').patchValue(false);
       this.form.get('verifikasi').patchValue(true);
     } else {
       this.form.get('verifikasi').patchValue(false);
+      if (this.missions[theIndex].is_quiz === 1) {
+        this.form.get('verifikasi').disable();
+        let totalCoin = 0;
+        this.missions[theIndex].questions.map(qst => {
+          totalCoin += Number(qst.coin);
+        });
+        this.form.get('coin_verification').patchValue(totalCoin);
+      } else {
+        this.form.get('verifikasi').enable();
+      }
     }
   }
 
@@ -204,11 +214,11 @@ export class DiaglogMisiComponent implements OnInit {
 
     form.get('verification_type').patchValue(
       (form.value.verifikasiFF === false && form.value.verifikasi === false) ? 'field-force' :
-      (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
-      (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
+        (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
+          (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
     form.get('is_push_to_ff').patchValue(
       (form.value.pushFF === false) ? 0 :
-      (form.value.pushFF === true) ? 1 : ''
+        (form.value.pushFF === true) ? 1 : ''
     );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);

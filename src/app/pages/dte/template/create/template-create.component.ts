@@ -84,6 +84,11 @@ export class TemplateCreateComponent {
     { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
   ];
 
+  listChooseQuiz: Array<any> = [
+    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+  ]
+
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
 
@@ -133,6 +138,13 @@ export class TemplateCreateComponent {
   ];
 
   freeTextPossibilities: any[] = [];
+  frmQuiz: FormControl = new FormControl('non-quiz');
+  listQuiz: any[] = [
+    { name: "Non Quiz", value: "non-quiz" },
+    { name: "Quiz", value: "quiz" },
+  ]
+
+  listAnswerKeys: any[] = [];
 
 
   @HostListener('window:beforeunload')
@@ -176,6 +188,21 @@ export class TemplateCreateComponent {
     this.getListTingkatInternalMisi();
     this.getListKategoriMisi();
     this.getListKategoriProject();
+
+    this.frmQuiz.valueChanges.subscribe(res => {
+      if (res && res === 'quiz') {
+        this.frmIsBranching.setValue(false);
+        this.listChoose = this.listChooseQuiz.slice();
+      } else {
+        this.listChoose = this.listChooseOriginal.slice();
+      }
+    })
+
+    this.frmIsBranching.valueChanges.subscribe(res => {
+      if (res && res === true) {
+        this.frmQuiz.setValue('non-quiz');
+      }
+    })
 
     this.filterLKT.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -556,6 +583,7 @@ export class TemplateCreateComponent {
             changeImageDetailQuestionChild: false,
           });
         })),
+        coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
         additional: this.formBuilder.array(
           item.additional.map(item => {
             return this.formBuilder.group({ option: item, next_question: '' })
@@ -604,6 +632,7 @@ export class TemplateCreateComponent {
       additional.removeAt(idxOther);
     }
 
+
     this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
     additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
 
@@ -611,6 +640,11 @@ export class TemplateCreateComponent {
       this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
       additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
     }
+
+    // let indexQuestionInKeys = this.listAnswerKeys.findIndex(answ => answ.indexKey === idx);
+    // if (idx > -1) {
+    //   this.listAnswerKeys[indexQuestionInKeys].push({ indexKey: additional.length, valid: false });
+    // }
   }
 
   defaultValue(event?, type?, text?, questionsIdx?, additionalIdx?) {
@@ -665,8 +699,18 @@ export class TemplateCreateComponent {
 
   onChangeTemplateIR(event) {
     console.log('the event dude!!!', event);
-    if (event.checked) this.listChoose = [...this.listChooseWithIr]
-    else this.listChoose = [...this.listChooseOriginal]
+    if (event.checked) {
+      this.listChoose = [...this.listChooseWithIr]
+      this.listAnswerKeys = [];
+    }
+    else {
+      if (this.frmQuiz.value === 'quiz') {
+        this.listChoose = [...this.listChooseQuiz];
+      } else {
+        this.listChoose = [...this.listChooseOriginal]
+      }
+    }
+
   }
 
   changeType(item, idx?) {
@@ -880,6 +924,7 @@ export class TemplateCreateComponent {
         changeImageDetailQuestionChild: false,
         question_image_detail_photo: ['']
       })]),
+      coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
       question_image: [''],
       question_video: [''],
       // others: false,
@@ -896,6 +941,7 @@ export class TemplateCreateComponent {
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
     this.templateList.push([]);
     this.templateListImageIR.push({ item_id: newId.id + 1 });
+    // this.listAnswerKeys.push([{ indexKey: 0, valid: false }]);
   }
 
   addRejectedReason() {
@@ -924,6 +970,9 @@ export class TemplateCreateComponent {
         message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
       })
       return;
+    }
+    if (this.listAnswerKeys[idx]) {
+      this.listAnswerKeys.splice(idx, 1);
     }
     questions.removeAt(idx);
     this.allQuestionList.splice(idx, 1);
@@ -967,9 +1016,39 @@ export class TemplateCreateComponent {
     rejected_reason_choices.removeAt(idx);
   }
 
-  deleteAdditional(idx1?, idx2?): void {
+  deleteAdditional(idx1?, idx2?, selectionValue?): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx1).get('additional') as FormArray;
+
+    if (this.frmQuiz.value === 'quiz') {
+      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (isAnswerIsExist > -1) {
+        this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
+        if (selectionValue && selectionValue === 'checkbox') {
+          this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
+            if (answer !== 0 && (answer > idx2)) {
+              answer -= 1;
+            }
+            return answer;
+          });
+        }
+      }
+      else {
+        if (selectionValue && selectionValue === 'radio') {
+          let answerKey = this.listAnswerKeys[idx1] && this.listAnswerKeys[idx1][0] ? this.listAnswerKeys[idx1][0] : null;
+          if (answerKey && (answerKey > idx2)) {
+            this.listAnswerKeys[idx1] = [answerKey - 1];
+          }
+        } else if (selectionValue && selectionValue === 'checkbox') {
+          this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
+            if (answer !== 0 && (answer > idx2)) {
+              answer -= 1;
+            }
+            return answer;
+          });
+        }
+      }
+    }
 
     this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
     additional.removeAt(idx2);
@@ -1135,8 +1214,14 @@ export class TemplateCreateComponent {
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
-            }) : null
+            }) : null,
+            is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0
           };
+
+          if (this.frmQuiz.value === 'quiz') {
+            mockup['coin'] = item.coin;
+            mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
+          }
 
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
             mockup['type'] = 'stock_check_ir';
@@ -1155,14 +1240,12 @@ export class TemplateCreateComponent {
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason)
       }
-      console.log('ini masuk body', body);
-      console.log(body, this.questionHasNext[2]);
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
-
+      console.log('ini masuk body', body);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
           let bodyMasterVideo = new FormData();
@@ -1378,6 +1461,48 @@ export class TemplateCreateComponent {
         }
       }
     });
+  }
+
+  selectAnswerKey(qIdx, idx, data, isRadio) {
+    if (this.listAnswerKeys.length > 0 && this.listAnswerKeys[qIdx]) {
+      let isAnswerIsExist = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      if (isRadio) {
+        if (isAnswerIsExist > -1) {
+          this.listAnswerKeys[qIdx].splice(isAnswerIsExist, 1);
+        } else {
+          this.listAnswerKeys[qIdx] = [idx];
+        }
+      } else {
+        if (isAnswerIsExist > -1) {
+          this.listAnswerKeys[qIdx].splice(isAnswerIsExist, 1);
+        } else {
+          this.listAnswerKeys[qIdx].push(idx);
+        }
+      }
+    } else {
+      this.listAnswerKeys = [
+        ...this.listAnswerKeys,
+        [idx]
+      ]
+    }
+  }
+
+  iconRadioState(qIdx, idx) {
+    if (this.listAnswerKeys[qIdx]) {
+      let isExistInAnswerKeys = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      return isExistInAnswerKeys > -1 ? 'radio_button_checked' : 'radio_button_unchecked'
+    } else {
+      return 'radio_button_unchecked';
+    }
+  }
+
+  iconCheckboxState(qIdx, idx) {
+    if (this.listAnswerKeys[qIdx]) {
+      let isExistInAnswerKeys = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      return isExistInAnswerKeys > -1 ? 'check_box' : 'check_box_outline_blank'
+    } else {
+      return 'check_box_outline_blank';
+    }
   }
 
 }
