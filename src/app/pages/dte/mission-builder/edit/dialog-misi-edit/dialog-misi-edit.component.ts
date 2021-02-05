@@ -107,6 +107,7 @@ export class DialogMisiEditComponent implements OnInit {
       is_ir_template: this.missions[theIndex].is_ir_template
     });
 
+    this.form.get('verifikasiFF').enable();
     if (this.missions[theIndex].is_ir_template === 1) {
       this.form.get('verifikasiFF').patchValue(false);
       this.form.get('pushFF').patchValue(false);
@@ -114,14 +115,13 @@ export class DialogMisiEditComponent implements OnInit {
     } else {
       this.form.get('verifikasi').patchValue(false);
       if (this.missions[theIndex].is_quiz === 1) {
-        this.form.get('verifikasi').disable();
+        this.form.get('verifikasiFF').disable();
+        this.form.get('verifikasi').patchValue(true);
         let totalCoin = 0;
         this.missions[theIndex].questions.map(qst => {
           totalCoin += Number(qst.coin);
         });
         this.form.get('coin_verification').patchValue(totalCoin);
-      } else {
-        this.form.get('verifikasi').enable();
       }
     }
   }
