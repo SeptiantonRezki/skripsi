@@ -564,8 +564,8 @@ export class TemplateEditComponent {
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
     console.log('inii detail', this.detailTask);
     this.isDetailBanner = this.detailTask.image_detail;
-    if (this.detailTask.image_description !== undefined) {
-      if (this.detailTask.image_description[0] !== null) {
+    if (this.detailTask.image_description) {
+      if (this.detailTask.image_description[0]) {
         if (this.detailTask.image_description[0].content_image != null || this.detailTask.image_description[0].content_image !== undefined) {
           this.imageContentTypeDefault = this.detailTask.image_description[0].content_image;
           this.imageContentTypeBase64Child = this.detailTask.image_description[0].content_image;
