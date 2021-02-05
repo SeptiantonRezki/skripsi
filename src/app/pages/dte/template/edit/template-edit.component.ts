@@ -599,7 +599,7 @@ export class TemplateEditComponent {
           imageDetailBanner: ''
         }));
       });
-    } else if (this.detailTask['image_description'][0] === null) {
+    } else if (this.detailTask['image_description'] && !this.detailTask['image_description'][0]) {
       image_description.push(this.formBuilder.group({
         content_type: '',
         body: '',
@@ -609,16 +609,18 @@ export class TemplateEditComponent {
         imageDetailBanner: ''
       }));
     } else {
-      this.detailTask['image_description'].map(item => {
-        image_description.push(this.formBuilder.group({
-          content_type: item.content_type,
-          body: item.body,
-          title: item.title,
-          landing_page: item.landing_page,
-          url_iframe: item.url_iframe,
-          imageDetailBanner: item.content_image
-        }));
-      });
+      if (this.detailTask['image_description'] && Array.isArray(this.detailTask['image_description'])) {
+        this.detailTask['image_description'].map(item => {
+          image_description.push(this.formBuilder.group({
+            content_type: item.content_type,
+            body: item.body,
+            title: item.title,
+            landing_page: item.landing_page,
+            url_iframe: item.url_iframe,
+            imageDetailBanner: item.content_image
+          }));
+        });
+      }
     }
 
     this.detailTask['questions'].map((item, index) => {
