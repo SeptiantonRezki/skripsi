@@ -983,7 +983,11 @@ export class RetailerIndexComponent {
 
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
+    if(sort == "gsm_pl"){
+    this.pagination.sort = "gsm_pl_flag";
+    }else{
     this.pagination.sort = sort;
+    }
 
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination['status'] = this.status.value;
@@ -1059,7 +1063,11 @@ export class RetailerIndexComponent {
     this.loadingIndicator = true;
 
     this.dataService.setToStorage('page', this.pagination.page);
+    if(event.column.prop == "gsm_pl_flag"){
+    this.dataService.setToStorage('sort', "gsm_pl");
+    }else{
     this.dataService.setToStorage('sort', event.column.prop);
+    }
     this.dataService.setToStorage('sort_type', event.newValue);
 
     this.retailerService.get(this.pagination).subscribe(
