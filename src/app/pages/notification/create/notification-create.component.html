@@ -38,6 +38,20 @@
             </mat-radio-group>
           </div>
 
+          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="notif_type" placeholder="Tipe Notifikasi">
+                  <mat-option *ngFor="let item of listNotifType" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['notif_type'].hasError('required') && formNotification.controls['notif_type'].touched">
+                  Tipe Notifikasi harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
