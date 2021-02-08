@@ -1057,7 +1057,11 @@ export class RetailerIndexComponent {
   }
 
   onSort(event) {
+    if(event.column.prop == "gsm_pl_flag"){
+    this.pagination.sort = "gsm_pl";
+    }else{
     this.pagination.sort = event.column.prop;
+    }
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
