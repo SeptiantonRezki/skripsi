@@ -228,8 +228,7 @@
                       </div>
                     </div>
                     <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap">
-                      <div fxFlex="10" style="margin-top: 15px;"
-                        *ngIf="!formProductGroup.get('is_private_label').value">
+                      <div fxFlex="10" style="margin-top: 15px;" *ngIf="is_promo_check && i === 0">
                         <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
                       </div>
                       <div fxLayout="row" fxFlex="85" *ngIf="wil.get('time_period').value === true">

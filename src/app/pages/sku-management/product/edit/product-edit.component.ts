@@ -264,6 +264,25 @@ export class ProductEditComponent {
             const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
             let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
+            let product_pricesOnPS = [];
+            if (res.data.is_private_label === 1 && res.data.product_prices && res.data.product_prices[val.area_id]) {
+              product_pricesOnPS = res.data.product_prices[val.area_id];
+              console.log("product_pricess on PS", product_pricesOnPS);
+            }
+
+            // product_pricesOnPS.length > 0 ? this.formBuilder.array(product_pricesOnPS[val.area_id].map(item => {
+            //   let fbPL = this.formBuilder.group({
+            //     packaging: [item.packaging, Validators.required],
+            //     packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+            //     price: [Number(item.price), Validators.required],
+            //     price_discount: [Number(item.price_discount), Validators.required],
+            //     price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
+            //     tipe: [item.price_type]
+            //   });
+            //   return fbPL;
+            // }
+            // )) : 
+
             wilayah.push(this.formBuilder.group({
               national: [this.getArea(response, 'national'), Validators.required],
               zone: [this.getArea(response, 'division')],
@@ -282,7 +301,18 @@ export class ProductEditComponent {
               time_period: [val.start_date !== null && val.end_date !== null ? true : false],
               start_date: [val.start_date !== null ? val.start_date : ""],
               end_date: [val.end_edate !== null ? val.end_date : ""],
-              listProdukPrivateLabel: this.formBuilder.array([])
+              listProdukPrivateLabel: product_pricesOnPS.length > 0 ? this.formBuilder.array(product_pricesOnPS.map(item => {
+                let fbPL = this.formBuilder.group({
+                  packaging: [item.packaging, Validators.required],
+                  packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+                  price: [Number(item.price), Validators.required],
+                  price_discount: [Number(item.price_discount), Validators.required],
+                  price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
+                  tipe: [item.price_type]
+                });
+                return fbPL;
+              }
+              )) : this.formBuilder.array([])
             }));
 
             this.initArea(index);
@@ -354,11 +384,14 @@ export class ProductEditComponent {
               })
             });
 
-            wilayah.push(fb);
-
-            this.initArea(index);
-            this.initFormGroup(response, index);
-            console.log('wilayah', wilayah);
+            if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key))) {
+              console.log("skip private label", res.data.is_promo_src, wilayah.length, index)
+            } else {
+              wilayah.push(fb);
+              this.initArea(index);
+              this.initFormGroup(response, index);
+              console.log('wilayah yang didapat pas else', wilayah);
+            }
 
             setTimeout(() => {
               if (wilayah.length === (index + 1)) {
@@ -923,9 +956,11 @@ export class ProductEditComponent {
           }
 
           areas.map((areaItem, i) => {
-            fd.append(`areas[${i}][area_id]`, areaItem.value);
-            fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
-            fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
+            if (i === 0) {
+              fd.append(`areas[${i}][area_id]`, areaItem.value);
+              fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
+              fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
+            }
           });
         }
 
@@ -1100,22 +1135,25 @@ export class ProductEditComponent {
   isPromo(event) {
     if (event.checked) {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      if (areas.length === 0) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+        // this.formProductGroup.get('is_private_label').setValue(false);
+        this.addArea();
+        this.goToBottom();
       }
-      this.formProductGroup.get('is_private_label').setValue(false);
-      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      // while (packaging.length > 0) {
-      //   packaging.removeAt(packaging.length - 1);
-      // }
-      this.addArea();
-      this.goToBottom();
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
       if (areas.length > 0) {
         this.is_promo_src = true;
       } else {
         this.addArea();
+      }
+      if (!this.formProductGroup.get("is_private_label").value) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
       }
     }
   }
@@ -1150,24 +1188,23 @@ export class ProductEditComponent {
 
   isPrivateLabel(event: any) {
     if (event.checked) {
-      this.formProductGroup.get('is_promo_src').setValue(false);
+      // this.formProductGroup.get('is_promo_src').setValue(false);
       let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      if (areas.length === 0) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+        // this.openProductPrice();
+        this.addArea();
+        this.goToBottom();
       }
-      // this.openProductPrice();
-      this.addArea();
-      this.goToBottom();
     } else {
-      let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      if (!this.formProductGroup.get('is_promo_src').value) {
+        let areas = this.formProductGroup.controls['areas'] as FormArray;
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
       }
-      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      // packaging.reset();
-      // while (packaging.length > 0) {
-      //   packaging.removeAt(packaging.length - 1);
-      // }
     }
   }
 
