@@ -142,6 +142,14 @@
                   matchipremove="" role="img" aria-hidden="true">cancel</mat-icon> -->
               </div>
             </div>
+            <div *ngIf="imagePrivew && !imageContentType">
+              <div
+                class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
+                role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
+                <img [src]="imagePrivew" class="multiple-img" (click)="previewImage()" />
+                <span class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
+              </div>
+            </div>
           </div>
 
 

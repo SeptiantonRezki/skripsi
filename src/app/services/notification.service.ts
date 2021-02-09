@@ -256,4 +256,8 @@ export class NotificationService extends BaseService {
     const url = this.getUrl('notif', 'update_notif');
     return this.postApi(url, body);
   }
+  getPageContent(slug): Observable<any> {
+    const url = this.getUrl('notif', 'content', {slug});
+    return this.getApi(url);
+  }
 }
