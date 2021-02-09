@@ -1199,9 +1199,15 @@ export class ProductEditComponent {
         this.goToBottom();
       }
     } else {
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
       if (!this.formProductGroup.get('is_promo_src').value) {
-        let areas = this.formProductGroup.controls['areas'] as FormArray;
         while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+      }
+
+      if (this.formProductGroup.get('is_promo_src').value) {
+        while (areas.length > 1) {
           areas.removeAt(areas.length - 1);
         }
       }
