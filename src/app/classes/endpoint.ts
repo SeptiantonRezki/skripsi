@@ -325,7 +325,8 @@ export class Endpoint {
         list_notif: `${AYO_API}/api/general/user_notif`,
         update: `${AYO_API}/api/general/user_notif/${context.id_notif}`,
         popup: `${AYO_API}/api/wholesaler/pop-up-notification`,
-        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`
+        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`,
+        content: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/page/${context.slug}`,
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,

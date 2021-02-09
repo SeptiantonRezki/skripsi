@@ -68,6 +68,7 @@ export class NotificationCreateComponent {
 
   imageContentType: File;
   imageContentTypeBase64: any;
+  imagePrivew: string;
 
   multipleImageContentType: any[];
   videoContentType: File;
@@ -226,7 +227,7 @@ export class NotificationCreateComponent {
     }
     route.url.subscribe(params => {
       console.log({ params });
-      this.idNotif = params[2].path;
+      this.idNotif = (params[2]) ? params[2].path : null;
       this.actionType = params[1].path;
     })
   }
@@ -373,6 +374,7 @@ export class NotificationCreateComponent {
     this.initAreaV2();
 
     if (this.actionType === 'detail') {
+      console.log('GET DETAILS');
       this.getDetails();
     }
 
@@ -1210,7 +1212,6 @@ export class NotificationCreateComponent {
         return;
       }
       let cbRecurrenceDay = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
-      console.log('weeky', cbRecurrenceDay)
       
       let recurrenceDayValues = cbRecurrenceDay.value
       selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key])
@@ -1352,7 +1353,9 @@ export class NotificationCreateComponent {
     } else if (body.content_type === 'landing_page') {
       body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
     } else if (body.content_type === 'iframe') {
-      body['iframe_value'] = this.formNotification.get('url_iframe').value;
+      let url = this.formNotification.get('url_iframe').value;
+      if (!url.match(/^[a-zA-Z]+:\/\//)) { url = 'http://' + url; }
+      body['iframe_value'] = url;
       body['transfer_token'] = this.formNotification.get('transfer_token').value;
     } else if (body.content_type === 'image') {
       if (this.imageContentTypeBase64) {
@@ -1426,6 +1429,8 @@ export class NotificationCreateComponent {
             }
           }
 
+          bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
+          
           if(this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
               let [key, val] = entry
@@ -1589,7 +1594,15 @@ export class NotificationCreateComponent {
       }
       console.log('album', albums)
       this._lightbox.open(albums, index);
-    } else {
+    } else if (this.imagePrivew && !this.imageContentTypeBase64){
+      const album = {
+        src: this.imagePrivew,
+        caption: '',
+        thumb: this.imagePrivew
+      };
+
+      this._lightbox.open([album], 0);
+    }else {
       const album = {
         src: this.imageContentTypeBase64,
         caption: '',
@@ -2130,8 +2143,25 @@ export class NotificationCreateComponent {
   async getDetails() {
     try {
       this.dataService.showLoading(true);
-      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type } = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      console.log({ audience });
+      const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+        verification,
+      } = details;
+      // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
+      // let staticPageDetail = null;
+      let static_page_body = '';
+      const iframe_value = (content_type === 'iframe') ? content_type_value.iframe_value : '';
+      const landing_page_value = (content_type === 'landing_page') ? content_type_value.landing_page_value : '';
+      const image_url = (content_type === 'image') ? content_type_value.image_value : [];
+
+      if (static_page_slug) {
+        const {body} = await this.notificationService.getPageContent(static_page_slug).toPromise();
+        static_page_body = body || '';
+      }
+      if (image_url && image_url.length) {
+        this.imagePrivew = image_url[0];
+        this.imageContentTypeBase64 = image_url[0];
+      }
 
       const frm = this.formNotification;
       frm.controls['title'].setValue(title);
@@ -2140,11 +2170,17 @@ export class NotificationCreateComponent {
       frm.controls['age'].setValue(age);
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
-      frm.controls['static_page_body'].setValue('');
-      frm.controls['landing_page_value'].setValue('');
-      frm.controls['landing_page_value'].setValue('');
-      frm.controls['url_iframe'].setValue('');
+      frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
+      frm.controls['verification'].setValue(verification);
+      setTimeout(() => {
+        /**
+         * dikasih timeout karena ada subscriber user_group, content_type ketika init
+         */
+        frm.controls['url_iframe'].setValue(iframe_value);
+        frm.controls['landing_page_value'].setValue(landing_page_value);
+        frm.controls['notif_type'].setValue(notif_type); 
+      }, 1000);
 
       if(type_of_recurrence == 'Recurring' && recurrence) {
         this.formNotification.controls.type_of_recurrence.enable();
