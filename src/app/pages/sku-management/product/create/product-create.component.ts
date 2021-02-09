@@ -926,9 +926,15 @@ export class ProductCreateComponent {
       this.addArea();
       this.goToBottom();
     } else {
+      let areas = this.formProductGroup.controls['areas'] as FormArray;
       if (this.is_promo_check === false) {
-        let areas = this.formProductGroup.controls['areas'] as FormArray;
         while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+      }
+
+      if (this.formProductGroup.get('is_promo_src').value) {
+        while (areas.length > 1) {
           areas.removeAt(areas.length - 1);
         }
       }
