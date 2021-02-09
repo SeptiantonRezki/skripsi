@@ -1212,7 +1212,6 @@ export class NotificationCreateComponent {
         return;
       }
       let cbRecurrenceDay = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
-      console.log('weeky', cbRecurrenceDay)
       
       let recurrenceDayValues = cbRecurrenceDay.value
       selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key])
@@ -1430,6 +1429,8 @@ export class NotificationCreateComponent {
             }
           }
 
+          bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
+          
           if(this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
               let [key, val] = entry
