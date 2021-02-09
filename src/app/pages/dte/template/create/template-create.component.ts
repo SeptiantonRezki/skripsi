@@ -1121,6 +1121,7 @@ export class TemplateCreateComponent {
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
+        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
         image_description: image_description.map((item, index) => {
           if (item.content_type === 'image' && this.isDetailBanner) {
             let tmp = {
@@ -1215,7 +1216,6 @@ export class TemplateCreateComponent {
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
             }) : null,
-            is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0
           };
 
           if (this.frmQuiz.value === 'quiz') {

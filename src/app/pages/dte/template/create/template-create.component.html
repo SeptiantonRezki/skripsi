@@ -18,7 +18,8 @@
           <div fxFlex class="p-16 h3">Pertanyaan</div>
           <div fxFlex="80" fxLayoutAlign="flex-end flex-end">
             <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-              <mat-checkbox [formControl]="isIRTemplate" (change)="onChangeTemplateIR($event)">Template IR
+              <mat-checkbox [formControl]="isIRTemplate" (change)="onChangeTemplateIR($event)"
+                [disabled]="this.frmQuiz.value === 'quiz'">Template IR
               </mat-checkbox>
             </div>
             <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
@@ -645,7 +646,7 @@
                 <div fxFlex="48" *ngIf="frmQuiz.value === 'quiz'" style="margin-left: 35px;">
                   <span>Jumlah Koin</span>
                   <mat-form-field fxFlex="25" class="question is-light" style="margin-left: 5px;">
-                    <input matInput type="number" formControlName="coin">
+                    <input matInput type="number" formControlName="coin" min="0">
                   </mat-form-field>
                 </div>
               </div>

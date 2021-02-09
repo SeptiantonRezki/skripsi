@@ -108,6 +108,7 @@ export class DialogMisiEditComponent implements OnInit {
     });
 
     this.form.get('verifikasiFF').enable();
+    this.form.get('coin_verification').enable();
     if (this.missions[theIndex].is_ir_template === 1) {
       this.form.get('verifikasiFF').patchValue(false);
       this.form.get('pushFF').patchValue(false);
@@ -122,6 +123,7 @@ export class DialogMisiEditComponent implements OnInit {
           totalCoin += Number(qst.coin);
         });
         this.form.get('coin_verification').patchValue(totalCoin);
+        this.form.get('coin_verification').disable();
       }
     }
   }
