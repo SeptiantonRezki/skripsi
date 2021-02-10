@@ -149,6 +149,36 @@ export class DiaglogMisiComponent implements OnInit {
     );
   }
 
+  checkTaskTemplate() {
+    if (this.form.get('task_template_id').value && this.missions.length > 0) {
+      const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
+
+      this.form.patchValue({
+        is_ir_template: this.missions[theIndex].is_ir_template
+      });
+
+      this.form.get('verifikasiFF').enable();
+      this.form.get('coin_verification').enable();
+      if (this.missions[theIndex].is_ir_template === 1) {
+        this.form.get('verifikasiFF').patchValue(false);
+        this.form.get('pushFF').patchValue(false);
+        this.form.get('verifikasi').patchValue(true);
+      } else {
+        this.form.get('verifikasi').patchValue(false);
+        if (this.missions[theIndex].is_quiz === 1) {
+          this.form.get('verifikasiFF').disable();
+          this.form.get('verifikasi').patchValue(true);
+          let totalCoin = 0;
+          this.missions[theIndex].questions.map(qst => {
+            totalCoin += Number(qst.coin);
+          });
+          this.form.get('coin_verification').patchValue(totalCoin);
+          this.form.get('coin_verification').disable();
+        }
+      }
+    }
+  }
+
   getMission() {
     this.pagination.per_page = 30;
     this.templateTaskService.get(this.pagination).subscribe(
@@ -156,6 +186,7 @@ export class DiaglogMisiComponent implements OnInit {
         console.log("res missions", res.data.data);
         this.missions = res.data.data;
         this.filteredMission.next(this.missions.slice());
+        this.checkTaskTemplate();
       },
       (err) => {
         console.log("err ", err);
@@ -211,6 +242,7 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   submit(form: any) {
+    this.form.get('coin_verification').enable();
     form.get('start_date').patchValue(this.formatDate(form.value.start_date));
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
 
