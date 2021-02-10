@@ -50,7 +50,8 @@ import { UserSupplierCreateComponent } from "./private-label/user-supplier/creat
 import { UserSupplierEditComponent } from "./private-label/user-supplier/edit/user-supplier-edit.component";
 import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/user-supplier-index.component";
 import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
-import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
+import { StockEditComponent } from "./private-label/supplier-settings/edit/stock-edit.component";
+import { SupplierSettingsIndexComponent } from './private-label/supplier-settings/index/supplier-settings-index.component';
 import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-component";
 // import { PendingChangesGuard } from "../dte/dte.guard";
 import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
@@ -504,18 +505,26 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-metode-pembayaran",
-    component: PayMethodIndexComponent,
+    path: 'supplier-settings',
+    component: SupplierSettingsIndexComponent,
     data: {
-      breadcrumbs: brConfig.privatelabel.paymentmethod.index
+      breadcrumbs: brConfig.privatelabel.supplierSettings.index
     },
     // canActivate: [PageGuard]
   },
   {
-    path: "supplier-metode-pembayaran/edit/:id",
+    path: 'supplier-settings/edit/:id',
+    component: StockEditComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.supplierSettings.stockEdit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'supplier-settings/metode-pembayaran/edit/:id',
     component: PayMethodEditComponent,
     data: {
-      breadcrumbs: brConfig.privatelabel.paymentmethod.edit
+      breadcrumbs: brConfig.privatelabel.supplierSettings.paymentMethodEdit
     },
     // canActivate: [PageGuard]
   },

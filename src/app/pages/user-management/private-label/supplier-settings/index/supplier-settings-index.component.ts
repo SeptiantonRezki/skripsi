@@ -8,15 +8,15 @@ import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 
 import { Endpoint } from '../../../../../classes/endpoint';
-import { PayMethodService } from 'app/services/user-management/private-label/pay-method.service';
+import { PLStockService } from 'app/services/user-management/private-label/stock.service';
 import { Emitter } from 'app/helper/emitter.helper';
 
 @Component({
-  selector: 'app-pay-method-index',
-  templateUrl: './pay-method-index.component.html',
-  styleUrls: ['./pay-method-index.component.scss']
+  selector: 'app-supplier-settings-index',
+  templateUrl: './supplier-settings-index.component.html',
+  styleUrls: ['./supplier-settings-index.component.scss']
 })
-export class PayMethodIndexComponent implements OnInit {
+export class SupplierSettingsIndexComponent implements OnInit {
   onLoad: boolean;
 
   ColumnMode = ColumnMode;
@@ -48,14 +48,14 @@ export class PayMethodIndexComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private payMethodService: PayMethodService,
+    private stockService: PLStockService,
     private dialogService: DialogService,
     private router: Router,
     private emitter: Emitter,
   ) {
     this.onLoad = false;
     this.selected = [];
-    this.permission = this.roles.getRoles('principal.supplier_metode_pembayaran');
+    this.permission = this.roles.getRoles('principal.supplier_stock_setting');
 
     console.log('permission', this.permission);
 
@@ -86,7 +86,7 @@ export class PayMethodIndexComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.stockService.getList(this.pagination).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -115,7 +115,7 @@ export class PayMethodIndexComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.payMethodService.getList(this.pagination).subscribe(
+    this.stockService.getList(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
           if (res.data.total < res.data.per_page && page !== 1) {
@@ -154,34 +154,10 @@ export class PayMethodIndexComponent implements OnInit {
   }
 
   directEdit(item?: any): void {
-    this.router.navigate(['user-management', 'supplier-settings', 'metode-pembayaran', 'edit', item.id]);
+    this.router.navigate(['user-management', 'supplier-settings', 'edit', item.id]);
     setTimeout(() => {
-      this.emitter.emitPayMethodDataEmitter({ data: item, ubah: true });
+      this.emitter.emitStockDataEmitter({ data: item, ubah: true });
     }, 500);
-  }
-
-  deleteById(id: any) {
-    this.id = id;
-    let data = {
-      titleDialog: "Hapus User Perusahaan",
-      captionDialog: "Apakah anda yakin untuk menghapus User Perusahaan ini?",
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
-
-  confirmDelete() {
-    this.payMethodService.delete({ userSupplierId: this.id }).subscribe(
-      res => {
-        this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-        this.getList();
-      },
-      err => {
-        this.dialogService.openSnackBar({ message: err.error.message });
-      }
-    );
   }
 
   onSelect({ selected }) {
@@ -201,7 +177,7 @@ export class PayMethodIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.stockService.getList(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
@@ -218,7 +194,7 @@ export class PayMethodIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.stockService.getList(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;

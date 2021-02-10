@@ -102,7 +102,7 @@ export class PayMethodEditComponent implements OnInit {
 
     setTimeout(() => {
       if (!this.payMethodData) {
-        this.router.navigate(['user-management', 'supplier-metode-pembayaran']);
+        this.router.navigate(['user-management', 'supplier-settings']);
       }
     }, 1000);
 
@@ -133,7 +133,7 @@ export class PayMethodEditComponent implements OnInit {
       this.dialogService.openSnackBar({
         message: "Berhasil Menyimpan Data"
       });
-      this.router.navigate(["user-management", "supplier-metode-pembayaran"]);
+      this.router.navigate(["user-management", "supplier-settings"]);
       this.dataService.showLoading(false);
       }, err => {
         console.log('err', err);

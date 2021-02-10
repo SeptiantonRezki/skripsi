@@ -15,7 +15,12 @@ export class PayMethodService extends BaseService {
     const url = this.getUrl(this.namespace, "getList");
     return this.getApi(url, queryParams);
   }
-  
+
+  update(body?: any, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update", context);
+    return this.postApi(url, body);
+  }
+
   detail(context?: any, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail", context);
     return this.getApi(url, queryParams);
@@ -23,11 +28,6 @@ export class PayMethodService extends BaseService {
 
   create(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "create");
-    return this.postApi(url, body);
-  }
-
-  update(body?: any, context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "update", context);
     return this.postApi(url, body);
   }
 
