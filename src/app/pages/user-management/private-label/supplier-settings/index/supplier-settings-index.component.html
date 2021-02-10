@@ -45,8 +45,8 @@
           <ngx-datatable-column name="Stock Input GSR" prop="lastupdated" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               <div *ngFor="let setting of row.settings">
-                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsw_input' && setting.value"></mat-checkbox>
-                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsw_input' && !setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsr_input' && setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsr_input' && !setting.value"></mat-checkbox>
               </div>
             </ng-template>
           </ngx-datatable-column>
