@@ -941,6 +941,10 @@ export class ProductCreateComponent {
     }
   }
 
+  clearDate(idx, type) {
+
+  }
+
   goToBottom() {
     setTimeout(() => {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
