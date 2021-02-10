@@ -281,9 +281,8 @@ export class ProductEditComponent {
             //   });
             //   return fbPL;
             // }
-            // )) : 
-
-            wilayah.push(this.formBuilder.group({
+            // )) :
+            let fb = this.formBuilder.group({
               national: [this.getArea(response, 'national'), Validators.required],
               zone: [this.getArea(response, 'division')],
               region: [this.getArea(response, 'region')],
@@ -313,7 +312,27 @@ export class ProductEditComponent {
                 return fbPL;
               }
               )) : this.formBuilder.array([])
-            }));
+            });
+
+            fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+              let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+              (res || []).map((item, index) => {
+                if (item.price) {
+                  listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+                  listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+                }
+
+                if (item.price_discount) {
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+                } else {
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+                }
+              })
+            });
+
+
+            wilayah.push(fb);
 
             this.initArea(index);
             this.initFormGroup(response, index);
