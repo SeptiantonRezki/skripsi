@@ -61,6 +61,8 @@ export class TaskVerificationDetailComponent implements OnInit {
   permissionReleaseCoin: any;
   roles: PagesName = new PagesName();
   statusValue: any = [];
+  statusCoinSelected: any = [];
+  irCheckSelected: any = [];
 
   formFilter: FormGroup;
   lastLevel: any;
@@ -79,6 +81,17 @@ export class TaskVerificationDetailComponent implements OnInit {
     { label: 'Submitted', value: 'pending' },
     { label: 'Approved', value: 'approved' },
     { label: 'Rejected', value: 'rejected' }
+  ];
+
+  statusCoinList: Array<object> = [
+    { label: 'Sudah Dikirim', value: 'sudah_dikirim' },
+    { label: 'Belum Dikirim', value: 'belum_dikirim' },
+  ];
+
+  irCheckList: Array<object> = [
+    { label: 'Checked By IR', value: 'checked_by_ir' },
+    { label: 'Checking', value: 'checking' },
+    { label: 'Not Submitted', value: 'not_submitted' },
   ];
 
   constructor(
@@ -299,8 +312,14 @@ export class TaskVerificationDetailComponent implements OnInit {
     // this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
-    if (this.statusValue.length !== 0  ) {
-    this.pagination.status = this.statusValue;
+    if (this.statusValue.length !== 0 ) {
+      this.pagination.status = this.statusValue;
+    }
+    if (this.statusCoinSelected.length !== 0 ) {
+      this.pagination['status_coin'] = this.statusCoinSelected;
+    }
+    if (this.irCheckSelected.length !== 0 ) {
+      this.pagination['ir_check'] = this.irCheckSelected;
     }
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
     ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
@@ -373,6 +392,8 @@ export class TaskVerificationDetailComponent implements OnInit {
       this.rows = res.data.data;
       this.loadingIndicator = false;
       this.pagination.status = null;
+      delete this.pagination['status_coin'];
+      delete this.pagination['ir_check'];
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
