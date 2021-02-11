@@ -221,12 +221,171 @@ export class ProductEditComponent {
       });
   }
 
+  // async reseatingDefaultAreasProperties() {
+  //   if (this.detailProduct.is_promo_src === 1) {
+  //     for (const { val, index } of this.detailProduct.areas.map((val, index) => ({ val, index }))) {
+  //       console.log('hitted me');
+  //       const response = await this.productService.getParentArea({ parent: val.area_id }).toPromise();
+  //       let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+
+  //       let product_pricesOnPS = [];
+  //       if (this.detailProduct.is_private_label === 1 && this.detailProduct.product_prices && this.detailProduct.product_prices[val.area_id]) {
+  //         product_pricesOnPS = this.detailProduct.product_prices[val.area_id];
+  //         console.log("product_pricess on PS", product_pricesOnPS);
+  //       }
+
+  //       let fb = this.formBuilder.group({
+  //         national: [this.getArea(response, 'national'), Validators.required],
+  //         zone: [this.getArea(response, 'division')],
+  //         region: [this.getArea(response, 'region')],
+  //         area: [this.getArea(response, 'area')],
+  //         salespoint: [this.getArea(response, 'salespoint')],
+  //         district: [this.getArea(response, 'district')],
+  //         territory: [this.getArea(response, 'teritory')],
+  //         list_national: this.formBuilder.array(this.listLevelArea),
+  //         list_zone: this.formBuilder.array([]),
+  //         list_region: this.formBuilder.array([]),
+  //         list_area: this.formBuilder.array([]),
+  //         list_salespoint: this.formBuilder.array([]),
+  //         list_district: this.formBuilder.array([]),
+  //         list_territory: this.formBuilder.array([]),
+  //         time_period: [val.start_date !== null && val.end_date !== null ? true : false],
+  //         start_date: [val.start_date !== null ? val.start_date : ""],
+  //         end_date: [val.end_edate !== null ? val.end_date : ""],
+  //         listProdukPrivateLabel: product_pricesOnPS.length > 0 ? this.formBuilder.array(product_pricesOnPS.map(item => {
+  //           let fbPL = this.formBuilder.group({
+  //             packaging: [item.packaging, Validators.required],
+  //             packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+  //             price: [Number(item.price), Validators.required],
+  //             price_discount: [Number(item.price_discount), Validators.required],
+  //             price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
+  //             tipe: [item.price_type]
+  //           });
+  //           return fbPL;
+  //         }
+  //         )) : this.formBuilder.array([])
+  //       });
+
+  //       fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+  //         let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+  //         (res || []).map((item, index) => {
+  //           if (item.price) {
+  //             listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+  //             listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+  //           }
+
+  //           if (item.price_discount) {
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+  //           } else {
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+  //           }
+  //         })
+  //       });
+
+
+  //       wilayah.push(fb);
+
+  //       this.initArea(index);
+  //       this.initFormGroup(response, index);
+
+  //       if (this.detailProduct.areas.length === (index + 1)) {
+  //         this.onLoad = false;
+  //       }
+  //     }
+  //   }
+
+  //   // if (this.detailProduct.areas.length === 0) {
+  //   //   this.addArea();
+  //   // }
+
+  //   if (this.detailProduct.is_private_label === 1 && this.detailProduct.product_prices !== null) {
+  //     let productPrices = this.detailProduct.product_prices;
+  //     this.productPrices = this.detailProduct.product_prices;
+  //     Object.keys(productPrices).map(async (key, index) => {
+  //       const response = await this.productService.getParentArea({ parent: key == "-99" ? "1" : key }).toPromise();
+  //       let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+
+  //       let fb = this.formBuilder.group({
+  //         national: [this.getArea(response, 'national'), Validators.required],
+  //         zone: [this.getArea(response, 'division')],
+  //         region: [this.getArea(response, 'region')],
+  //         area: [this.getArea(response, 'area')],
+  //         salespoint: [this.getArea(response, 'salespoint')],
+  //         district: [this.getArea(response, 'district')],
+  //         territory: [this.getArea(response, 'teritory')],
+  //         list_national: this.formBuilder.array(this.listLevelArea),
+  //         list_zone: this.formBuilder.array([]),
+  //         list_region: this.formBuilder.array([]),
+  //         list_area: this.formBuilder.array([]),
+  //         list_salespoint: this.formBuilder.array([]),
+  //         list_district: this.formBuilder.array([]),
+  //         list_territory: this.formBuilder.array([]),
+  //         time_period: [false],
+  //         start_date: [""],
+  //         end_date: [""],
+  //         listProdukPrivateLabel: this.formBuilder.array(productPrices[key].map(item => {
+  //           let fbPL = this.formBuilder.group({
+  //             packaging: [item.packaging, Validators.required],
+  //             packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+  //             price: [Number(item.price), Validators.required],
+  //             price_discount: [Number(item.price_discount), Validators.required],
+  //             price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
+  //             tipe: [item.price_type]
+  //           });
+  //           return fbPL;
+  //         }
+  //         ))
+  //       });
+
+  //       fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+  //         let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+  //         (res || []).map((item, index) => {
+  //           if (item.price) {
+  //             listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+  //             listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+  //           }
+
+  //           if (item.price_discount) {
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+  //           } else {
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+  //             listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+  //           }
+  //         })
+  //       });
+
+  //       if (this.detailProduct.is_promo_src === 1 && wilayah.length === 1 && (this.detailProduct.areas.length > 0 && this.detailProduct.areas[0]['area_id'] === Number(key))) {
+  //         console.log("skip private label", this.detailProduct.is_promo_src, wilayah.length, index)
+  //       } else {
+  //         wilayah.push(fb);
+  //         this.initArea(index);
+  //         this.initFormGroup(response, index);
+  //         console.log('wilayah yang didapat pas else', wilayah);
+  //       }
+
+  //       setTimeout(() => {
+  //         if (wilayah.length === (index + 1)) {
+  //           this.onLoad = false;
+  //         }
+  //       }, 500);
+  //     });
+  //     if (Array.isArray(productPrices) && productPrices.length === 0) {
+  //       this.addArea();
+  //     }
+  //   }
+  // }
+
   getDetails() {
     try {
       this.productService.getdetail(this.idProduct).subscribe(async (res) => {
         this.detailProduct = res.data;
 
         let alias = this.formProductGroup.get("alias") as FormArray;
+        while (alias.length > 0) {
+          alias.removeAt(alias.length - 1);
+        }
+
         if (res.data.alias) {
           (res.data.alias).map(item => {
             alias.push(this.formBuilder.group({ alias: item.trim() }));
@@ -270,18 +429,6 @@ export class ProductEditComponent {
               console.log("product_pricess on PS", product_pricesOnPS);
             }
 
-            // product_pricesOnPS.length > 0 ? this.formBuilder.array(product_pricesOnPS[val.area_id].map(item => {
-            //   let fbPL = this.formBuilder.group({
-            //     packaging: [item.packaging, Validators.required],
-            //     packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
-            //     price: [Number(item.price), Validators.required],
-            //     price_discount: [Number(item.price_discount), Validators.required],
-            //     price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
-            //     tipe: [item.price_type]
-            //   });
-            //   return fbPL;
-            // }
-            // )) :
             let fb = this.formBuilder.group({
               national: [this.getArea(response, 'national'), Validators.required],
               zone: [this.getArea(response, 'division')],
@@ -1162,6 +1309,13 @@ export class ProductEditComponent {
         this.addArea();
         this.goToBottom();
       }
+
+      if (this.detailProduct.is_promo_src === 1) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+        this.getDetails();
+      }
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
       if (areas.length > 0) {
@@ -1216,6 +1370,12 @@ export class ProductEditComponent {
         // this.openProductPrice();
         this.addArea();
         this.goToBottom();
+      }
+      if (this.detailProduct.is_private_label === 1) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
+        this.getDetails();
       }
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
