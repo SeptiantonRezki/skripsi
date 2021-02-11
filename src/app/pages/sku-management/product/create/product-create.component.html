@@ -227,8 +227,9 @@
                         </button>
                       </div>
                     </div>
-                    <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap">
-                      <div fxFlex="15" style="margin-top: 15px;" *ngIf="is_promo_check && i === 0">
+                    <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap"
+                      *ngIf="is_promo_check && i === 0">
+                      <div fxFlex="15" style="margin-top: 15px;">
                         <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
                       </div>
                       <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
