@@ -537,8 +537,8 @@ export class TemplateEditComponent {
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
     console.log('inii detail', this.detailTask);
     this.isDetailBanner = this.detailTask.image_detail;
-    if (this.detailTask.image_description !== undefined) {
-      if (this.detailTask.image_description[0] !== null) {
+    if (this.detailTask.image_description) {
+      if (this.detailTask.image_description[0]) {
         if (this.detailTask.image_description[0].content_image != null || this.detailTask.image_description[0].content_image !== undefined) {
           this.imageContentTypeDefault = this.detailTask.image_description[0].content_image;
           this.imageContentTypeBase64Child = this.detailTask.image_description[0].content_image;
@@ -571,7 +571,7 @@ export class TemplateEditComponent {
           imageDetailBanner: ''
         }));
       });
-    } else if (this.detailTask['image_description'][0] === null) {
+    } else if (this.detailTask['image_description'] && !this.detailTask['image_description'][0]) {
       image_description.push(this.formBuilder.group({
         content_type: '',
         body: '',
@@ -581,16 +581,18 @@ export class TemplateEditComponent {
         imageDetailBanner: ''
       }));
     } else {
-      this.detailTask['image_description'].map(item => {
-        image_description.push(this.formBuilder.group({
-          content_type: item.content_type,
-          body: item.body,
-          title: item.title,
-          landing_page: item.landing_page,
-          url_iframe: item.url_iframe,
-          imageDetailBanner: item.content_image
-        }));
-      });
+      if (this.detailTask['image_description'] && Array.isArray(this.detailTask['image_description'])) {
+        this.detailTask['image_description'].map(item => {
+          image_description.push(this.formBuilder.group({
+            content_type: item.content_type,
+            body: item.body,
+            title: item.title,
+            landing_page: item.landing_page,
+            url_iframe: item.url_iframe,
+            imageDetailBanner: item.content_image
+          }));
+        });
+      }
     }
 
     this.detailTask['questions'].map((item, index) => {
