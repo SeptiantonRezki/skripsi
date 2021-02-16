@@ -245,9 +245,9 @@ export class DialogMisiEditComponent implements OnInit {
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
 
     form.get('verification_type').patchValue(
-      (form.value.verifikasiFF === false && form.value.verifikasi === false) ? null :
-        (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
-          (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
+      (!form.value.verifikasiFF && !form.value.verifikasi) ? null :
+        (!form.value.verifikasiFF && form.value.verifikasi === true) ? 'principal' :
+          (form.value.verifikasiFF === true && !form.value.verifikasi) ? 'field-force' : '');
     form.get('is_push_to_ff').patchValue(
       (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
