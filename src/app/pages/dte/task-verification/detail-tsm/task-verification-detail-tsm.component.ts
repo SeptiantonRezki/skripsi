@@ -84,6 +84,17 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     { label: 'Rejected', value: 'rejected' }
   ];
 
+  statusCoinList: Array<object> = [
+    { label: 'Sudah Dikirim', value: 'sudah_dikirim' },
+    { label: 'Belum Dikirim', value: 'belum_dikirim' },
+  ];
+
+  irCheckList: Array<object> = [
+    { label: 'Checked By IR', value: 'checked_by_ir' },
+    { label: 'Checking', value: 'checking' },
+    { label: 'Not Submitted', value: 'not_submitted' },
+  ];
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
