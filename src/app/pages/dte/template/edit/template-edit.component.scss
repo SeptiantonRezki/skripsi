@@ -1,4 +1,10 @@
 :host {
+  .menu-answer-key ul {
+    list-style: none;
+  }
+  .menu-answer-key li {
+    display: inline;
+  }
   table {
     border-collapse: collapse;
     border-spacing: 0;

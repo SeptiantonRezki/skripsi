@@ -26,13 +26,19 @@
           style="margin-top: 5px;">
 
           <div fxFlex class="p-16 h3">Pertanyaan</div>
-          <div fxFlex="60" fxLayoutAlign="flex-end flex-end">
+          <div fxFlex="80" fxLayoutAlign="flex-end flex-end">
             <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-              <mat-checkbox [formControl]="isIRTemplate">Template IR</mat-checkbox>
+              <mat-checkbox [formControl]="isIRTemplate" [disabled]="this.frmQuiz.value === 'quiz'">Template IR
+              </mat-checkbox>
             </div>
             <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
               <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
             </div>
+            <mat-form-field fxFlex="20" class="is-light form-primary" style="margin-right: 5px;">
+              <mat-select [formControl]="frmQuiz" placeholder="Quiz">
+                <mat-option *ngFor="let item of listQuiz" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select [formControl]="frmIsBranching" placeholder="Reponse Type">
                 <mat-option *ngFor="let item of listCategoryResponse" [value]="item.value">{{item.name}}</mat-option>
@@ -582,8 +588,8 @@
                           <div fxFlex="6"></div>
                           <button
                             *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value) && !isDetail"
-                            (click)="deleteAdditional(i, j)" mat-icon-button fxFlex="5" matTooltip="Hapus"
-                            matTooltipPosition="below" class="secondary-text">
+                            (click)="deleteAdditional(i, j, item.get('typeSelection').value['value'])" mat-icon-button
+                            fxFlex="5" matTooltip="Hapus" matTooltipPosition="below" class="secondary-text">
                             <mat-icon class="secondary-text">close</mat-icon>
                           </button>
                         </div>
@@ -637,19 +643,14 @@
                           </a> -->
                       </div>
                     </div>
-                    <!-- <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
-                      fxFlex="1 0 auto"
-                      *ngIf="item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value) && checkWordingRadioFreeType(item.get('typeSelection').value['value'])">
-                      <mat-icon class="secondary-text" fxFlex="5">
-                        {{checkIsRadioType(item.get('typeSelection').value['value']) ?
-                        'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
-                      <div class="more-option">
-                        <span class="add-option">Lainnya,
-                          Sebutkan ({{ checkWordingRadioFreeType(item.get('typeSelection').value['value']) }})</span>
-                      </div>
-                    </div> -->
                   </div>
                 </ng-container>
+                <div fxFlex="48" *ngIf="frmQuiz.value === 'quiz'" style="margin-left: 35px;">
+                  <span>Jumlah Koin</span>
+                  <mat-form-field fxFlex="25" class="question is-light" style="margin-left: 5px;">
+                    <input matInput type="number" formControlName="coin" min="0">
+                  </mat-form-field>
+                </div>
               </div>
               <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
                 *ngIf="templateListImageIR[i]['ir_id'] || templateListImageIR[i]['ir_code']" style="margin-top: 25px;">
@@ -683,6 +684,18 @@
                     </table>
                   </div>
                 </div>
+              </div>
+              <div fxFlex="100" *ngIf="frmQuiz.value === 'quiz'">
+                <p>Kunci Jawaban</p>
+                <ul class="menu-answer-key py-2" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 1 auto">
+                  <li *ngFor="let addt of item.get('additional').value; let xx = index"
+                    style="margin-right: 7px;cursor: pointer;"
+                    (click)="selectAnswerKey(i, xx, addt, checkIsRadioType(item.get('typeSelection').value['value']))">
+                    <mat-icon class="secondary-text" fxFlex="2" style="font-size: 14px;">{{
+                      checkIsRadioType(item.get('typeSelection').value['value']) ?
+                      iconRadioState(i, xx) : iconCheckboxState(i, xx) }}</mat-icon>{{ addt.option }}
+                  </li>
+                </ul>
               </div>
               <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
                 <!-- <section class="required-section secondary-text">
