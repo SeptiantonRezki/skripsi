@@ -258,6 +258,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
   }
 
   isDisableVerification(row) {
+    if (row.task_sequencing_management_template_quiz === 1) return true;
+
     if (row.task_need_verify === 0) {
       return true;
     } else {
@@ -266,6 +268,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
   }
 
   isDisableReleaseCoin(row) {
+    if (row.task_sequencing_management_template_quiz === 1) return true;
+
     if (row.task_need_coin === 0) {
       return true;
     } else {

@@ -770,7 +770,8 @@ export class ProductCreateComponent {
 
               return;
             }
-          } else {
+          }
+          if (this.is_promo_check && i == 0) {
             fd.append(`areas[${i}][area_id]`, areaItem.value);
             fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
             fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
@@ -872,17 +873,16 @@ export class ProductCreateComponent {
       while (areas.length > 0) {
         areas.removeAt(areas.length - 1);
       }
-      this.formProductGroup.get('is_private_label').setValue(false);
-      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      // while (packaging.length > 0) {
-      //   packaging.removeAt(packaging.length - 1);
-      // }
+      // this.formProductGroup.get('is_private_label').setValue(false);
       this.addArea();
       this.goToBottom();
     } else {
-      let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      this.is_promo_check = false;
+      if (this.formProductGroup.get('is_private_label').value === false) {
+        let areas = this.formProductGroup.controls['areas'] as FormArray;
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
       }
     }
   }
@@ -917,7 +917,7 @@ export class ProductCreateComponent {
 
   isPrivateLabel(event: any) {
     if (event.checked) {
-      this.formProductGroup.get('is_promo_src').setValue(false);
+      // this.formProductGroup.get('is_promo_src').setValue(false);
       let areas = this.formProductGroup.controls['areas'] as FormArray;
       while (areas.length > 0) {
         areas.removeAt(areas.length - 1);
@@ -927,15 +927,22 @@ export class ProductCreateComponent {
       this.goToBottom();
     } else {
       let areas = this.formProductGroup.controls['areas'] as FormArray;
-      while (areas.length > 0) {
-        areas.removeAt(areas.length - 1);
+      if (this.is_promo_check === false) {
+        while (areas.length > 0) {
+          areas.removeAt(areas.length - 1);
+        }
       }
-      // let packaging = this.formProductGroup.get("listProdukPrivateLabel") as FormArray;
-      // packaging.reset();
-      // while (packaging.length > 0) {
-      //   packaging.removeAt(packaging.length - 1);
-      // }
+
+      if (this.formProductGroup.get('is_promo_src').value) {
+        while (areas.length > 1) {
+          areas.removeAt(areas.length - 1);
+        }
+      }
     }
+  }
+
+  clearDate(idx, type) {
+
   }
 
   goToBottom() {

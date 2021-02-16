@@ -80,6 +80,12 @@ export class TemplateEditComponent {
     { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
     { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
   ];
+
+  listChooseQuiz: Array<any> = [
+    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
+    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+  ]
+
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
 
@@ -128,6 +134,14 @@ export class TemplateEditComponent {
   templateList: any[] = [];
   templateListImageIR: any[] = [];
 
+  frmQuiz: FormControl = new FormControl('non-quiz');
+  listQuiz: any[] = [
+    { name: "Non Quiz", value: "non-quiz" },
+    { name: "Quiz", value: "quiz" },
+  ]
+
+  listAnswerKeys: any[] = [];
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
@@ -170,7 +184,20 @@ export class TemplateEditComponent {
   }
 
   ngOnInit() {
+    this.frmQuiz.valueChanges.subscribe(res => {
+      if (res && res === 'quiz') {
+        this.frmIsBranching.setValue(false);
+        this.listChoose = this.listChooseQuiz.slice();
+      } else {
+        this.listChoose = this.listChooseOriginal.slice();
+      }
+    })
 
+    this.frmIsBranching.valueChanges.subscribe(res => {
+      if (res && res === true) {
+        this.frmQuiz.setValue('non-quiz');
+      }
+    })
     this.getListKategoriToolbox();
     this.getListTipeMisi();
     this.getListTingkatInternalMisi();
@@ -537,8 +564,8 @@ export class TemplateEditComponent {
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
     console.log('inii detail', this.detailTask);
     this.isDetailBanner = this.detailTask.image_detail;
-    if (this.detailTask.image_description !== undefined) {
-      if (this.detailTask.image_description[0] !== null) {
+    if (this.detailTask.image_description) {
+      if (this.detailTask.image_description[0]) {
         if (this.detailTask.image_description[0].content_image != null || this.detailTask.image_description[0].content_image !== undefined) {
           this.imageContentTypeDefault = this.detailTask.image_description[0].content_image;
           this.imageContentTypeBase64Child = this.detailTask.image_description[0].content_image;
@@ -560,6 +587,7 @@ export class TemplateEditComponent {
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
+    this.frmQuiz.setValue(this.detailTask.is_quiz === 1 ? 'quiz' : 'non-quiz');
     if (this.detailTask['image_description'] === undefined) {
       this.detailTask['image_description'].map(item => {
         image_description.push(this.formBuilder.group({
@@ -571,7 +599,7 @@ export class TemplateEditComponent {
           imageDetailBanner: ''
         }));
       });
-    } else if (this.detailTask['image_description'][0] === null) {
+    } else if (this.detailTask['image_description'] && !this.detailTask['image_description'][0]) {
       image_description.push(this.formBuilder.group({
         content_type: '',
         body: '',
@@ -581,16 +609,18 @@ export class TemplateEditComponent {
         imageDetailBanner: ''
       }));
     } else {
-      this.detailTask['image_description'].map(item => {
-        image_description.push(this.formBuilder.group({
-          content_type: item.content_type,
-          body: item.body,
-          title: item.title,
-          landing_page: item.landing_page,
-          url_iframe: item.url_iframe,
-          imageDetailBanner: item.content_image
-        }));
-      });
+      if (this.detailTask['image_description'] && Array.isArray(this.detailTask['image_description'])) {
+        this.detailTask['image_description'].map(item => {
+          image_description.push(this.formBuilder.group({
+            content_type: item.content_type,
+            body: item.body,
+            title: item.title,
+            landing_page: item.landing_page,
+            url_iframe: item.url_iframe,
+            imageDetailBanner: item.content_image
+          }));
+        });
+      }
     }
 
     this.detailTask['questions'].map((item, index) => {
@@ -648,6 +678,12 @@ export class TemplateEditComponent {
         this.templateListImageIR.push({ item_id: index + 1 });
       }
       console.log('cek item', item.question_image_description);
+      if (item.question_answer && this.detailTask.is_quiz === 1) {
+        let answerKey = item.question_answer.map(answer => {
+          return item.additional.findIndex(addt => addt === answer);
+        })
+        this.listAnswerKeys.push(answerKey);
+      }
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
@@ -655,6 +691,7 @@ export class TemplateEditComponent {
         question_video: item['question_video'] ? item['question_video'] : '',
         type: item.type === 'planogram' ? item.type + "_ir" : item.type,
         typeSelection: this.listChoose.filter(val => val.value === (item.type === 'planogram' ? item.type + "_ir" : item.type))[0],
+        coin: [item.coin ? Number(item.coin) : 0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
         planogram_id: Number(item.planogram_id),
         planogram_image: item.planogram_image,
         planogram_name: item.planogram_name,
@@ -876,8 +913,17 @@ export class TemplateEditComponent {
 
   onChangeTemplateIR(event) {
     console.log('the event dude!!!', event);
-    if (event.checked) this.listChoose = [...this.listChooseWithIr]
-    else this.listChoose = [...this.listChooseOriginal]
+    if (event.checked) {
+      this.listChoose = [...this.listChooseWithIr]
+      this.listAnswerKeys = [];
+    }
+    else {
+      if (this.frmQuiz.value === 'quiz') {
+        this.listChoose = [...this.listChooseQuiz];
+      } else {
+        this.listChoose = [...this.listChooseOriginal]
+      }
+    }
   }
 
   changeType(item, idx?) {
@@ -987,6 +1033,7 @@ export class TemplateEditComponent {
         question_image_detail_photo: [''],
         changeImageDetailQuestionChild: false
       })]),
+      coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
       question_image: [''],
       question_video: [''],
       // others: false,
@@ -1079,6 +1126,9 @@ export class TemplateEditComponent {
       })
       return;
     }
+    if (this.listAnswerKeys[idx]) {
+      this.listAnswerKeys.splice(idx, 1);
+    }
     questions.removeAt(idx);
     this.allQuestionList.splice(idx, 1);
     if (this.listDirectBelanja[idx]) delete this.listDirectBelanja[idx];
@@ -1122,9 +1172,39 @@ export class TemplateEditComponent {
     rejected_reason_choices.removeAt(idx);
   }
 
-  deleteAdditional(idx1?, idx2?): void {
+  deleteAdditional(idx1?, idx2?, selectionValue?): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx1).get('additional') as FormArray;
+
+    if (this.frmQuiz.value === 'quiz') {
+      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (isAnswerIsExist > -1) {
+        this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
+        if (selectionValue && selectionValue === 'checkbox') {
+          this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
+            if (answer !== 0 && (answer > idx2)) {
+              answer -= 1;
+            }
+            return answer;
+          });
+        }
+      }
+      else {
+        if (selectionValue && selectionValue === 'radio') {
+          let answerKey = this.listAnswerKeys[idx1] && this.listAnswerKeys[idx1][0] ? this.listAnswerKeys[idx1][0] : null;
+          if (answerKey && (answerKey > idx2)) {
+            this.listAnswerKeys[idx1] = [answerKey - 1];
+          }
+        } else if (selectionValue && selectionValue === 'checkbox') {
+          this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
+            if (answer !== 0 && (answer > idx2)) {
+              answer -= 1;
+            }
+            return answer;
+          });
+        }
+      }
+    }
 
     this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
     additional.removeAt(idx2);
@@ -1251,6 +1331,11 @@ export class TemplateEditComponent {
             }) : null
           }
 
+          if (this.frmQuiz.value === 'quiz') {
+            mockup['coin'] = item.coin;
+            mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
+          }
+
           if (item.type === 'stock_check_ir') {
             mockup['type'] = 'stock_check_ir';
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
@@ -1276,7 +1361,8 @@ export class TemplateEditComponent {
           //   additional: item.additional.map(item => item.option)
           // }
         }),
-        rejected_reason_choices: rejected_reason.map(item => item.reason)
+        rejected_reason_choices: rejected_reason.map(item => item.reason),
+        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0
       }
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
@@ -1508,6 +1594,48 @@ export class TemplateEditComponent {
         }
       }
     });
+  }
+
+  selectAnswerKey(qIdx, idx, data, isRadio) {
+    if (this.listAnswerKeys.length > 0 && this.listAnswerKeys[qIdx]) {
+      let isAnswerIsExist = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      if (isRadio) {
+        if (isAnswerIsExist > -1) {
+          this.listAnswerKeys[qIdx].splice(isAnswerIsExist, 1);
+        } else {
+          this.listAnswerKeys[qIdx] = [idx];
+        }
+      } else {
+        if (isAnswerIsExist > -1) {
+          this.listAnswerKeys[qIdx].splice(isAnswerIsExist, 1);
+        } else {
+          this.listAnswerKeys[qIdx].push(idx);
+        }
+      }
+    } else {
+      this.listAnswerKeys = [
+        ...this.listAnswerKeys,
+        [idx]
+      ]
+    }
+  }
+
+  iconRadioState(qIdx, idx) {
+    if (this.listAnswerKeys[qIdx]) {
+      let isExistInAnswerKeys = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      return isExistInAnswerKeys > -1 ? 'radio_button_checked' : 'radio_button_unchecked'
+    } else {
+      return 'radio_button_unchecked';
+    }
+  }
+
+  iconCheckboxState(qIdx, idx) {
+    if (this.listAnswerKeys[qIdx]) {
+      let isExistInAnswerKeys = this.listAnswerKeys[qIdx].findIndex(key => key === idx);
+      return isExistInAnswerKeys > -1 ? 'check_box' : 'check_box_outline_blank'
+    } else {
+      return 'check_box_outline_blank';
+    }
   }
 
 }
