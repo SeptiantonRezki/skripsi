@@ -54,6 +54,11 @@ export class RetailerEditComponent {
     { name: 'ON', value: 1 }
   ];
 
+  listGSM: any[] = [
+    { name: 'OFF', value: 0 },
+    { name: 'ON', value: 1 }
+  ];
+
   listCashierAccess: any[] = [
     { name: 'YA', value: 1 },
     { name: 'TIDAK', value: 0 }
@@ -180,6 +185,7 @@ export class RetailerEditComponent {
       // cashier: ["", Validators.required],
       InternalClassification: ['', Validators.required],
       gsr: [0],
+      gsm_pl: [0],
       version_retailer: [''],
       version_cashier: ['']
     });
@@ -393,6 +399,7 @@ export class RetailerEditComponent {
       type: this.detailRetailer.type_hms || '',
       InternalClassification: this.detailRetailer.classification || '',
       gsr: this.detailRetailer.gsr_flag ? 1 : 0,
+      gsm_pl: this.detailRetailer.gsm_pl ? 1 : 0,
       national: this.getArea('national'),
       zone: this.getArea('division'),
       region: this.getArea('region'),
@@ -631,6 +638,7 @@ export class RetailerEditComponent {
         type: (this.formRetailer.get('InternalClassification').value === 'SRC' || this.formRetailer.get('InternalClassification').value === 'NON-SRC') ? 'General Trade' : this.formRetailer.get('InternalClassification').value,
         InternalClassification: this.formRetailer.get('InternalClassification').value,
         gsr_flag: this.formRetailer.get('gsr').value,
+        gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get('account_name').value === '' ? null : this.formBankAccount.get('account_name').value,
         bank_account_number: this.formBankAccount.get('account_number').value === '' ? null : this.formBankAccount.get('account_number').value,

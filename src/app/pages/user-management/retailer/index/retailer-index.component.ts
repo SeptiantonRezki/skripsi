@@ -88,6 +88,12 @@ export class RetailerIndexComponent {
     { name: 'OFF', value: '0' },
     { name: 'ON', value: '1' }
   ];
+  gsm_pl: FormControl = new FormControl('');
+  listGSM: any[] = [
+    { name: 'Semua Status', value: 'all' },
+    { name: 'OFF', value: '0' },
+    { name: 'ON', value: '1' }
+  ];
 
   constructor(
     private router: Router,
@@ -180,6 +186,10 @@ export class RetailerIndexComponent {
     });
 
     this.gsr.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    });
+
+    this.gsm_pl.valueChanges.subscribe(res => {
       this.getRetailerList();
     });
 
@@ -983,6 +993,7 @@ export class RetailerIndexComponent {
     this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
     this.pagination['is_chat_bot'] = this.chatbot.value ? '1' : '0';
     this.pagination['gsr_flag'] = this.gsr.value;
+    this.pagination['gsm_pl'] = this.gsm_pl.value;
 
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
@@ -996,6 +1007,7 @@ export class RetailerIndexComponent {
     if (this.chatbot.value === '-1') this.pagination['is_chat_bot'] = null;
     if (this.chatbot.value === '') this.pagination['is_chat_bot'] = null;
     if (this.gsr.value === 'all') { delete this.pagination['gsr_flag']; }
+    if (this.gsm_pl.value === 'all') { delete this.pagination['gsm_pl']; }
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(
