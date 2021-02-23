@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class TncService extends BaseService{
+export class TncService extends BaseService {
   public namespace = 'tnc';
-  constructor(http: HttpClient) { 
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -28,5 +28,10 @@ export class TncService extends BaseService{
   delete(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
+  }
+
+  getCompanyList(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "company_list");
+    return this.getApi(url, queryParams);
   }
 }

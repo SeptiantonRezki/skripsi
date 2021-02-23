@@ -270,6 +270,7 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        company_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/group`
       },
       privacy: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=privacy-policy`,
