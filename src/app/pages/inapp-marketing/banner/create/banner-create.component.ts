@@ -21,6 +21,7 @@ import { WholesalerService } from 'app/services/user-management/wholesaler.servi
 import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { InappMarketingValidator } from '../../InappMarketing.validator';
 
 @Component({
   selector: 'app-banner-create',
@@ -56,6 +57,7 @@ export class BannerCreateComponent {
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
+  listCustomerBanners: any[] = [];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -198,6 +200,12 @@ export class BannerCreateComponent {
         "class": [""]
       }),
       type_banner: null,
+      banner_customer_id: [null, [
+        InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
+      ]],
+      banner_customer_body: ['', [
+        InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
+      ]]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -316,6 +324,9 @@ export class BannerCreateComponent {
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
+    this.bannerService.getListBannerCustomer().subscribe(({data}) => {
+      this.listCustomerBanners = data || [];
+    })
     // this.getAudienceArea('zone', this.listLevelArea[0]);
 
     this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
@@ -368,6 +379,15 @@ export class BannerCreateComponent {
         this.getAudience();
       }
     });
+    this.formBannerGroup.controls['type_banner'].valueChanges.debounceTime(50).subscribe(typeBannerVal => {
+
+      if (typeBannerVal !== 'aktivasi-konsumen') {
+        this.formBannerGroup.controls['banner_customer_id'].setValue(null),
+        this.formBannerGroup.controls['banner_customer_body'].setValue(''),
+        this.formBannerGroup.updateValueAndValidity();
+      }
+    });
+
   }
 
   initAreaV2() {
@@ -1099,6 +1119,14 @@ export class BannerCreateComponent {
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
+      }
+
+      if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
+        fd.append('banner_customer_id', this.formBannerGroup.get('banner_customer_id').value);
+        fd.append('banner_customer_body', this.formBannerGroup.get('banner_customer_body').value);
+      } else {
+        fd.append('banner_customer_id', null);
+        fd.append('banner_customer_body', null);
       }
 
       let _areas = [];

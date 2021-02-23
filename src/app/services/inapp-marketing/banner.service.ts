@@ -92,4 +92,8 @@ export class BannerService extends BaseService {
     const url = this.getUrl(this.namespace, "list_sorting");
     return this.getApi(url, queryParams);
   }
+  getListBannerCustomer(): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_banner_customer");
+    return this.getApi(url);
+  }
 }
