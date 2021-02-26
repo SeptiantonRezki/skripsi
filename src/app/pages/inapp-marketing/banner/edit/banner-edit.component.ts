@@ -18,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
 import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { InappMarketingValidator } from '../../InappMarketing.validator';
 
 @Component({
   selector: 'app-banner-edit',
@@ -58,6 +59,7 @@ export class BannerEditComponent {
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
+  listCustomerBanners: any[] = [];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -209,6 +211,12 @@ export class BannerEditComponent {
         "class": [""],
       }),
       type_banner: '',
+      banner_customer_id: [null, [
+        InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
+      ]],
+      banner_customer_body: ['', [
+        InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
+      ]]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -239,7 +247,7 @@ export class BannerEditComponent {
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
-        this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
+        // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       } else {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
         { name: "Pesan Antar", value: "pesan_antar" },
@@ -347,6 +355,9 @@ export class BannerEditComponent {
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
+    this.bannerService.getListBannerCustomer().subscribe(({data}) => {
+      this.listCustomerBanners = data || [];
+    })
 
     this.formBannerGroup.get('banner_selected').valueChanges.debounceTime(300).subscribe(res => {
       this.bannerSelected = res;
@@ -397,6 +408,15 @@ export class BannerEditComponent {
       if (res) {
         // this.getAudienceAreaV2('territory', res);
         this.getAudience();
+      }
+    });
+
+    this.formBannerGroup.controls['type_banner'].valueChanges.debounceTime(50).subscribe(typeBannerVal => {
+
+      if (typeBannerVal !== 'aktivasi-konsumen') {
+        this.formBannerGroup.controls['banner_customer_id'].setValue(null),
+        this.formBannerGroup.controls['banner_customer_body'].setValue(''),
+        this.formBannerGroup.updateValueAndValidity();
       }
     });
 
@@ -742,7 +762,9 @@ export class BannerEditComponent {
       } else {
         this.formBannerGroup.get('group_type').setValue(this.detailBanner.business_type);
       }
-      this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
+      setTimeout(() => {
+        this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
+      }, 50);
     }
 
     if (this.detailBanner.user_group === 'customer') {
@@ -833,6 +855,10 @@ export class BannerEditComponent {
       if (this.formBannerGroup.controls["is_target_audience"].value === true) this.getAudience();
 
     }, 500);
+    if (this.detailBanner.type_banner === 'aktivasi-konsumen') {
+          this.formBannerGroup.controls['banner_customer_id'].setValue(this.detailBanner.banner_customer_id);
+          this.formBannerGroup.controls['banner_customer_body'].setValue(this.detailBanner.banner_customer_body);
+    }
 
     if (this.isDetail) this.formBannerGroup.disable();
   }
@@ -1267,6 +1293,14 @@ export class BannerEditComponent {
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
+      }
+
+      if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
+        fd.append('banner_customer_id', this.formBannerGroup.get('banner_customer_id').value);
+        fd.append('banner_customer_body', this.formBannerGroup.get('banner_customer_body').value);
+      } else {
+        fd.append('banner_customer_id', null);
+        fd.append('banner_customer_body', null);
       }
 
       let _areas = [];

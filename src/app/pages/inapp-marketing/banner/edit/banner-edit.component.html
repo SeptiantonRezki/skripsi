@@ -263,6 +263,31 @@
               </mat-radio-group>
             </div>
           </div>
+          <div *ngIf="formBannerGroup.get('type_banner').value === 'aktivasi-konsumen'">
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="banner_customer_id" placeholder="Image Untuk In-App Chat ke Konsumen">
+                    <mat-option *ngFor="let item of listCustomerBanners" [value]="item.id">{{item.id}} - {{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['banner_customer_id'].hasError('required') && formBannerGroup.controls['banner_customer_id'].touched">
+                    Image Untuk In-App Chat ke Konsumen harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="px-24 mb-12">
+              <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <h3 class="">Isi Halaman Untuk In-App Chat ke Konsumen</h3>
+              </div>
+              <textarea [froalaEditor]="options" formControlName="banner_customer_body" class="pb-4" fxFlex="100"></textarea>
+              <mat-error style="padding-top: 6px !important; font-size: .86em;"
+                *ngIf="formBannerGroup.controls['banner_customer_body'].hasError('required')">
+                Isi Halaman Untuk In-App Chat ke Konsumen harus diisi
+              </mat-error>
+            </div>
+          </div>
 
           <div class="px-24">
             <div fxLayout="row">

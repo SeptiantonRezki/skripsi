@@ -154,7 +154,7 @@ export class BannerIndexComponent {
     this.aktivasiKonsumenPagination.type_banner = this.TYPE_BANNER.AKTIVASI_KONSUMEN;
     this.aktivasiKonsumenPagination.per_page = 5;
 
-    this.infoTerkiniOffsetPagination = page ? (page - 1) : 0;
+    this.aktivasiKonsumenOffsetPagination = page ? (page - 1) : 0;
 
     this.bannerService.get(this.aktivasiKonsumenPagination).subscribe(
       res => {
