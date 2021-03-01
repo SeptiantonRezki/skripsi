@@ -259,19 +259,23 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="column" *ngIf="!detailWholesaler.is_branch && detailWholesaler.data_branch && detailWholesaler.data_branch.length > 0" class="mt-8">
-            <div formArrayName="formBranchStore" *ngFor="let item of formWs.get('formBranchStore')['controls']; let i = index;">
+          <div fxLayout="column"
+            *ngIf="!detailWholesaler.is_branch && detailWholesaler.data_branch && detailWholesaler.data_branch.length > 0"
+            class="mt-8">
+            <div formArrayName="formBranchStore"
+              *ngFor="let item of formWs.get('formBranchStore')['controls']; let i = index;">
               <div [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
                   <input matInput type="text" formControlName="name" placeholder="Nama Toko">
-                </mat-form-field> 
+                </mat-form-field>
 
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
                   <input matInput type="text" formControlName="address" placeholder="Alamat">
                 </mat-form-field>
 
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
-                  <mat-select placeholder="Tipe Cabang" formControlName="branch_type" (selectionChange)="onChangeBranchType($event, i)">
+                  <mat-select placeholder="Tipe Cabang" formControlName="branch_type"
+                    (selectionChange)="onChangeBranchType($event, i)" [disabled]="!permission.toko_cabang">
                     <mat-option *ngFor="let bt of branchType" [value]="bt.value">{{ bt.name }}
                     </mat-option>
                   </mat-select>
