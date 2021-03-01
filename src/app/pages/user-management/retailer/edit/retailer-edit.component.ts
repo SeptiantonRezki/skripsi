@@ -46,7 +46,7 @@ export class RetailerEditComponent {
     { name: 'GT', value: 'GT' },
     { name: 'IMO', value: 'IMO' },
     { name: 'LAMP/HOP', value: 'LAMP/HOP' },
-    { name: 'KA', value: 'KA'}
+    { name: 'KA', value: 'KA' }
   ];
 
   listGSR: any[] = [
@@ -99,6 +99,8 @@ export class RetailerEditComponent {
     { name: 'OFF', value: 0 },
     { name: 'ON', value: 1 }
   ]
+
+  formRefferalCode: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -195,6 +197,14 @@ export class RetailerEditComponent {
       account_name: [''],
       bank_name: [''],
       branch: ['']
+    });
+
+    this.formRefferalCode = this.formBuilder.group({
+      ref_code: [""],
+      customer_code: [""],
+      customer_name: [""],
+      customer_type: [""],
+      date_ref_code: [""]
     });
 
     this.formRetailer.valueChanges.subscribe(() => {
@@ -420,6 +430,16 @@ export class RetailerEditComponent {
       bank_name: this.detailRetailer.bank_name || '',
       branch: this.detailRetailer.branch || '',
     });
+
+    this.formRefferalCode.setValue({
+      ref_code: this.detailRetailer.ref_identifier || "",
+      customer_code: this.detailRetailer.ref_code || "",
+      customer_name: this.detailRetailer.ref_name || "",
+      customer_type: this.detailRetailer.ref_type || "",
+      date_ref_code: this.detailRetailer.ref_submitted || ""
+    })
+
+    this.formRefferalCode.disable();
     console.log(this.detailRetailer.pkp);
     this.npwp.setValue(this.detailRetailer.npwp ? this.detailRetailer.npwp : '');
     this.pkp.setValue(this.detailRetailer.pkp !== null && this.detailRetailer.pkp !== '' ? this.detailRetailer.pkp : '');

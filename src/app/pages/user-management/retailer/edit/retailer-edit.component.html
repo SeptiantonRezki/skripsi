@@ -213,10 +213,9 @@
                 Internal Classification harus diisi
               </mat-error>
             </mat-form-field>
-            
+
             <mat-form-field fxFlex="100" class="is-light">
-              <mat-select placeholder="GSR" formControlName="gsr"
-                (selectionChange)="gsrChange($event)">
+              <mat-select placeholder="GSR" formControlName="gsr" (selectionChange)="gsrChange($event)">
                 <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
@@ -385,6 +384,40 @@
                 </ng-template>
               </ngx-datatable-column>
             </ngx-datatable>
+          </div>
+          <div class="table-wrapper"
+            style="box-shadow: none !important; border: 1px solid #e3e3e3; margin-top: 15px;padding: 15px;"
+            [formGroup]="formRefferalCode" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div fxLayout="row wrap" fxFlex="55">
+              <mat-form-field fxFlex="91" class="is-light form-primary">
+                <input matInput placeholder="Refferal Code yang diinput" formControlName="ref_code">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55">
+              <mat-form-field fxFlex="91" class="is-light form-primary">
+                <input matInput placeholder="Customer Code" formControlName="customer_code">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55">
+              <mat-form-field fxFlex="91" class="is-light form-primary">
+                <input matInput placeholder="Customer Name" formControlName="customer_name">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55">
+              <mat-form-field fxFlex="91" class="is-light form-primary">
+                <input matInput placeholder="Custoemr Type" formControlName="customer_type">
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55">
+              <mat-form-field fxFlex="91" class="is-light form-primary">
+                <input matInput [matDatepicker]="date" (focus)="date.open()" formControlName="date_ref_code"
+                  placeholder="Tanggal input Refferal Code">
+                <mat-datepicker-toggle matSuffix [for]="date">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #date></mat-datepicker>
+              </mat-form-field>
+            </div>
           </div>
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
