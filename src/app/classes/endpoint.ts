@@ -54,6 +54,7 @@ export class Endpoint {
         check_token: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/token`,
         fcm_token: `${AYO_API}/api/general/user_notif`,
         get_syarat_ketentuan: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=terms-conditions&user=principal`,
+        get_user_cognito_ad: `${AYO_API_SERVICE(SERVER.user)}/oauth/cognito/get-user`
       },
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
