@@ -107,7 +107,7 @@ export class DiaglogMisiComponent implements OnInit {
 
   selectChangeMisi(e: any) {
     // console.log(e);
-    this.filterMissionOther.setValue(e.value);
+    this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
     // console.log(this.missions[theIndex]);
     console.log("is ir template: " + this.missions[theIndex].is_ir_template);
@@ -137,7 +137,8 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   selectChangeMisiOtherName(e: any) {
-    this.filterMission.setValue(e.value);
+    // this.filterMission.setValue(e.value);
+    this.form.get("task_template_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
     // console.log(this.missions[theIndex]);
     this.form.patchValue({
