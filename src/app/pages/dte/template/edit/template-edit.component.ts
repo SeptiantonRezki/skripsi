@@ -243,6 +243,7 @@ export class TemplateEditComponent {
       });
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
+      other_name: [""],
       description: ["", Validators.required],
       kategori_toolbox: ["", Validators.required],
       tipe_misi: ["", Validators.required],
@@ -579,6 +580,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('kategori_misi').setValue(this.detailTask.task_toolbox_categories_id);
     this.templateTaskForm.get('project_misi').setValue(this.detailTask.task_toolbox_project_id);
     this.templateTaskForm.get('name').setValue(this.detailTask.name);
+    this.templateTaskForm.get('other_name').setValue(this.detailTask.other_name);
     this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
@@ -1227,6 +1229,7 @@ export class TemplateEditComponent {
         task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
         task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
         name: this.templateTaskForm.get('name').value,
+        other_name: this.templateTaskForm.get('other_name').value,
         description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
