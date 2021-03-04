@@ -96,6 +96,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   ];
 
   keyUp = new Subject<string>();
+  formSearch: FormControl = new FormControl('');
 
   constructor(
     private adapter: DateAdapter<any>,
@@ -151,8 +152,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe(data => {
-        this.formFilter.get('search').setValue(data);
-        this.loadFormFilter();
+        this.formSearch.setValue(data);
+        this.loadFormFilter(data);
       });
   }
 
@@ -167,7 +168,6 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
       district: [''],
       territory: [''],
       status: [''],
-      search: ['']
     });
 
     this.formSchedule = this.formBuilder.group({
@@ -237,8 +237,10 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     });
   }
 
-  loadFormFilter() {
-    this.getListAudience(this.audience_group_id)
+  loadFormFilter(search?: string) {
+    if (!search && this.formSearch.value) search = this.formSearch.value;
+
+    this.getListAudience(this.audience_group_id, search)
   }
 
   createTaskTemplate(): FormGroup {
@@ -319,7 +321,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
 
   // NEW FEATURE
 
-  getListAudience(id: any) {
+  getListAudience(id: any, search?: string) {
     this.dataService.showLoading(true);
     this.pagination.page = 1;
     // this.pagination.per_page = 25;
@@ -397,7 +399,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         }
       }
     }
-    this.pagination['search'] = this.formFilter.get('search').value;
+    this.pagination['search'] = search;
     this.loadingIndicator = true;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 

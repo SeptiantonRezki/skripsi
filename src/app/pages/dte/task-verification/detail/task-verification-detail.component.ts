@@ -96,7 +96,7 @@ export class TaskVerificationDetailComponent implements OnInit {
   ];
 
   keyUp = new Subject<string>();
-
+  formSearch: FormControl = new FormControl('');
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -151,8 +151,8 @@ export class TaskVerificationDetailComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe(data => {
-        this.formFilter.get('search').setValue(data);
-        this.loadFormFilter();
+        this.formSearch.setValue(data);
+        this.loadFormFilter(data);
       });
   }
 
@@ -166,8 +166,7 @@ export class TaskVerificationDetailComponent implements OnInit {
       salespoint: [''],
       district: [''],
       territory: [''],
-      status: [''],
-      search: ['']
+      status: ['']
     });
 
     this.formSchedule = this.formBuilder.group({
@@ -237,8 +236,10 @@ export class TaskVerificationDetailComponent implements OnInit {
     });
   }
 
-  loadFormFilter() {
-    this.getListAudience(this.trade_audience_group_id)
+  loadFormFilter(search?: string) {
+    if (!search && this.formSearch.value) search = this.formSearch.value;
+
+    this.getListAudience(this.trade_audience_group_id, search)
   }
 
   createTaskTemplate(): FormGroup {
@@ -319,7 +320,7 @@ export class TaskVerificationDetailComponent implements OnInit {
 
   // NEW FEATURE
 
-  getListAudience(id: any) {
+  getListAudience(id: any, search?: string) {
     this.dataService.showLoading(true);
     this.pagination.page = 1;
     // this.pagination.per_page = 25;
@@ -398,7 +399,7 @@ export class TaskVerificationDetailComponent implements OnInit {
       }
     }
     this.loadingIndicator = true;
-    this.pagination['search'] = this.formFilter.get('search').value;
+    this.pagination['search'] = search;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.taskVerificationService.getListAudience({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
