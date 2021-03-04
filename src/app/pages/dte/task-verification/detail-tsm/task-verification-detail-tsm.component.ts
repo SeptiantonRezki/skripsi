@@ -95,6 +95,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     { label: 'Not Submitted', value: 'not_submitted' },
   ];
 
+  keyUp = new Subject<string>();
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -143,6 +145,15 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     this.listTradeProgram = this.activatedRoute.snapshot.data['listTradeProgram'].data;
     this.audience_group_id = null;
 
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.formFilter.get('search').setValue(data);
+        this.loadFormFilter();
+      });
   }
 
   ngOnInit() {
@@ -155,7 +166,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
       salespoint: [''],
       district: [''],
       territory: [''],
-      status: ['']
+      status: [''],
+      search: ['']
     });
 
     this.formSchedule = this.formBuilder.group({
@@ -313,17 +325,17 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     // this.pagination.per_page = 25;
     this.pagination.sort = 'name';
     this.pagination.sort_type = 'asc';
-    if (this.statusValue.length !== 0 ) {
+    if (this.statusValue.length !== 0) {
       this.pagination.status = this.statusValue;
     }
-    if (this.statusCoinSelected.length !== 0 ) {
+    if (this.statusCoinSelected.length !== 0) {
       this.pagination['status_coin'] = this.statusCoinSelected;
     }
-    if (this.irCheckSelected.length !== 0 ) {
+    if (this.irCheckSelected.length !== 0) {
       this.pagination['ir_check'] = this.irCheckSelected;
     }
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
-    ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     const area_id = areaSelected[areaSelected.length - 1].value;
     const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     this.pagination.area = area_id;
@@ -369,7 +381,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) { 
+          if (is_area_2) {
             this.pagination['last_self_area'] = [last_self_area[1]];
           } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
         } else {
@@ -385,6 +397,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         }
       }
     }
+    this.pagination['search'] = this.formFilter.get('search').value;
     this.loadingIndicator = true;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
@@ -454,7 +467,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         if (lastDiffLevelIndex > levelIndex - 2) {
           if (!this.list[level.type]) { this.list[level.type] = []; }
           if (!this.formFilter.controls[this.parseArea(level.type)] ||
-            !this.formFilter.controls[this.parseArea(level.type)].value || 
+            !this.formFilter.controls[this.parseArea(level.type)].value ||
             this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
             if (sameArea.level_desc === level.type) {
@@ -472,8 +485,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) { 
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id); 
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) {
+            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
           }
 
           if (i === area.length - 1) {
@@ -585,7 +598,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ?
-          res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+            res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -613,7 +626,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -644,7 +657,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -674,7 +687,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -700,7 +713,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -725,7 +738,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ?
-              res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -761,7 +774,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
         const areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar =>
           areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id
-        ).filter((v, i, a) => a.indexOf(v) === i);
+          ).filter((v, i, a) => a.indexOf(v) === i);
       }
     }
     return newLastSelfArea;
@@ -791,7 +804,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
       if (response) {
         this.getDetail();
       }
-     });
+    });
   }
 
 }
