@@ -145,30 +145,48 @@ export class LoginComponent implements OnInit {
 
   submit() {
     let username = this.loginForm.get("username").value.toLowerCase();
-    let internal = username.match(/.+@pmintl\.net/) || username.match(/.+@sampoerna\.com/);
+    let internal = username.match(/.+@pmintl\.net/) || username.match(/.+@sampoerna\.com/) || username.match(/.+@contracted.sampoerna.com/);
     if(internal) {
       window.location.href= environment.cognito_login_url;
       return;
-    } else if(!this.showExternalUserFields) {
-      this.showExternalUserFields = true;
-      this.loginForm.addControl('password', new FormControl(this.password, [Validators.required]))
-      return;
-    }
-
-    if (this.loginForm.valid) {    
-        this.submitting = true;
-        let body = {
-          username: this.loginForm.get("username").value,
-          password: this.loginForm.get("password").value
-        };
-        this.authenticationService.login(body).subscribe(
-          res => {
-            this.authorize(res);
-          },
-          err => {
-            this.submitting = false;
+    } else {
+      this.authenticationService.checkUserStatus(username).subscribe(
+        res => {
+          console.log(res)
+          if(res.status && res.user_status === 'internal') {
+            window.location.href = environment.cognito_login_url;
+          } else {
+            if(!this.showExternalUserFields) {
+              this.showExternalUserFields = true;
+              this.loginForm.addControl('password', new FormControl(this.password, [Validators.required]))
+              return;
+            }
+  
+            this.loginExternal()
           }
-        );
+        },
+        err => {
+          console.log(err)
+        }
+      );
+    }
+  }
+
+  loginExternal() {
+    if (this.loginForm.valid) {    
+      this.submitting = true;
+      let body = {
+        username: this.loginForm.get("username").value,
+        password: this.loginForm.get("password").value
+      };
+      this.authenticationService.login(body).subscribe(
+        res => {
+          this.authorize(res);
+        },
+        err => {
+          this.submitting = false;
+        }
+      );
     } else {
       commonFormValidator.validateAllFields(this.loginForm);
     }

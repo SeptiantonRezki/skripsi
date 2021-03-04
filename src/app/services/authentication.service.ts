@@ -91,7 +91,12 @@ export class AuthenticationService extends BaseService {
     const url = this.getUrl(this.namespace, "get_syarat_ketentuan");
     return this.getApi(url);
   }
-  
+
+  checkUserStatus(username): Observable<any> {
+    const url = this.getUrl(this.namespace, "check_user_status");
+    return this.postApi(url, {username});
+  }
+   
   getUserCognitoAD(authCode): Observable<any> {
     const url = this.getUrl(this.namespace, "get_user_cognito_ad");
     return this.postApi(url, {code: authCode});
