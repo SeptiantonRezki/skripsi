@@ -83,6 +83,9 @@
     prop="task_sequencing_management_template_other_name" [flexGrow]="3">
   </ngx-datatable-column>
 
+  <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
+  </ngx-datatable-column>
+
   <ngx-datatable-column [sortable]="false" name="Compliance Rate" prop="compliance_rate" [flexGrow]="3">
   </ngx-datatable-column>
 
@@ -93,9 +96,6 @@
   </ngx-datatable-column>
 
   <ngx-datatable-column [sortable]="false" name="Audience Group" prop="audience_group_name" [flexGrow]="3">
-  </ngx-datatable-column>
-
-  <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
   </ngx-datatable-column>
 
   <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="task_sequencing_management_status"
