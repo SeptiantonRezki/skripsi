@@ -4,7 +4,7 @@
 
   </page-content-header>
   <!-- / HEADER -->
-  <div class="content p-24">
+  <div *ngIf="showChangePasswordFields" class="content p-24">
     <form [formGroup]="changePassword" autocomplete="off">
       <div class="ayo-main-wrapper mat-bg-white">
         <div fxLayout="row" class="pb-16" fxLayoutAlign="start center">
