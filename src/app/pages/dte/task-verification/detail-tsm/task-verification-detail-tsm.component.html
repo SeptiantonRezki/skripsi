@@ -35,8 +35,8 @@
                 name="trade_creator_id">
                 <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <input matInput type="text" placeholder="Nama Trade Program"
-                [value]="dataTsm['trade_creator_name']" name="trade_creator_name" disabled>
+              <input matInput type="text" placeholder="Nama Trade Program" [value]="dataTsm['trade_creator_name']"
+                name="trade_creator_name" disabled>
             </mat-form-field>
           </div>
 
@@ -106,8 +106,8 @@
 
 
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Template Tugas" [value]="dataTsm.task_sequencing_management_template_name"
-                    disabled>
+                  <input matInput type="text" placeholder="Template Tugas"
+                    [value]="dataTsm.task_sequencing_management_template_name" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
@@ -120,13 +120,13 @@
                     placeholder="Nilai Coin Tugas Disetujui" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="dataTsm.start_date | dateToMoment"
-                    placeholder="Tanggal Mulai" disabled>
+                  <input matInput type="text" [value]="dataTsm.start_date | dateToMoment" placeholder="Tanggal Mulai"
+                    disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
-                  <input matInput type="text" [value]="dataTsm.end_date | dateToMoment"
-                    placeholder="Tanggal Berakhir" disabled>
+                  <input matInput type="text" [value]="dataTsm.end_date | dateToMoment" placeholder="Tanggal Berakhir"
+                    disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
@@ -170,21 +170,9 @@
         <form [formGroup]="formFilter" autoComplete="off">
 
 
-          <div
-            fxLayout="row wrap"
-            fxLayoutAlign="end stretch"
-            fxLayout.lt-md="column"
-            class="p-16 px-24"
-            fxLayoutGap="20px"
-            fxLayoutGap.lt-md="0px"
-            >
-            <button
-              mat-raised-button
-              type="button"
-              class="confirmation-button"
-              (click)="loadFormFilter()"
-              fxFlex="20"
-            >
+          <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="p-16 px-24"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()" fxFlex="20">
               Load Data
             </button>
           </div>
@@ -198,55 +186,74 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Zone" formControlName="zone" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                    Zona' :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
+                  Zona' :
+                  item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Regional" formControlName="region" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                    Regional'
-                    :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  Regional'
+                  :
+                  item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Area" formControlName="area" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                    Area'
-                    :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
+                  Area'
+                  :
+                  item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
-                    'Semua
-                    Salespoint'
-                    :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                  'all' ?
+                  'Semua
+                  Salespoint'
+                  :
+                  item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="District" formControlName="district" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                    District'
-                    :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  District'
+                  :
+                  item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Territory" formControlName="territory" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
-                    Territori'
-                    :
-                    item.code}}</mat-option>
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  Territori'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start stretch" fxLayout.lt-md="column" class="p-16"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select  placeholder="Status Misi" [(ngModel)]="statusValue" name="statusValue"  [ngModelOptions]="{standalone: true}" multiple>
+                <mat-option [value]="wtLoop.value" *ngFor="let wtLoop of status"> {{wtLoop.label}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select  placeholder="Status" [(ngModel)] = "statusValue" name = "statusValue"  [ngModelOptions]="{standalone: true}" multiple>
-                <mat-option [value]="wtLoop.value" *ngFor="let wtLoop of status"> {{wtLoop.label}} </mat-option>
+              <mat-select  placeholder="Status Coin" [(ngModel)]="statusCoinSelected" name="statusCoinSelected" [ngModelOptions]="{standalone: true}" multiple>
+                <mat-option [value]="scl.value" *ngFor="let scl of statusCoinList"> {{scl.label}} </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="12%" class="is-light form-primary">
+              <mat-select  placeholder="IR Check" [(ngModel)]="irCheckSelected" name="irCheckSelected" [ngModelOptions]="{standalone: true}" multiple>
+                <mat-option [value]="icl.value" *ngFor="let icl of irCheckList"> {{icl.label}} </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -254,11 +261,11 @@
         <div class="p-0">
           <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
           <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-          [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-          [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
-          [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
-          (sort)="onSort($event)">
-          <!-- class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+            [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+            (page)="setPage($event)" (sort)="onSort($event)">
+            <!-- class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
             [rowHeight]="'auto'" [reorderable]="reorderable" [selected]="selected" [count]="pagination.total"
             [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
             (select)="onSelect($event)" fusePerfectScrollbar> -->
@@ -274,20 +281,33 @@
             <ngx-datatable-column name="Status Coin" prop="status_coin" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="Tanggal Submit Misi" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span *ngIf="row.tgl_submit_misi !== null">{{row.tgl_submit_misi.date | date: 'dd/MM/yyy HH:mm'}} WIB</span>
+                <span *ngIf="row.tgl_submit_misi !== null">{{row.tgl_submit_misi.date | date: 'dd/MM/yyy HH:mm'}}
+                  WIB</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi" (click)="openConfirmDialog(row, 'Verifikasi Misi TSM')" [disabled]="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah">
-                    <mat-icon *ngIf="row.status_misi == 'submitted' && row.status_coin !== 'sudah dikirim' && permissionVerifikasiMisi?.ubah || row.status_misi !== 'not-submitted' && row.status_coin == 'belum dikirim' && permissionVerifikasiMisi?.ubah" class="orange-500-fg">assignment_turned_in</mat-icon>
-                    <mat-icon *ngIf="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah" class="secondary-text">assignment_turned_in</mat-icon>
+                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi"
+                    (click)="openConfirmDialog(row, 'Verifikasi Misi TSM')"
+                    [disabled]="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
+                    <mat-icon
+                      *ngIf="row.status_misi == 'submitted' && row.status_coin !== 'sudah dikirim' && permissionVerifikasiMisi?.ubah || row.status_misi !== 'not-submitted' && row.status_coin == 'belum dikirim' && permissionVerifikasiMisi?.ubah"
+                      class="orange-500-fg">assignment_turned_in</mat-icon>
+                    <mat-icon
+                      *ngIf="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah"
+                      class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
 
-                  <button type="button" mat-icon-button matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release TSM Coin')" [disabled]="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim' || !permissionReleaseCoin?.ubah">
-                    <mat-icon *ngIf="row.status_misi == 'approved' && row.status_coin !== 'sudah dikirim' && permissionReleaseCoin?.ubah" class="orange-500-fg">call_made</mat-icon>
-                    <mat-icon *ngIf="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim' || !permissionReleaseCoin?.ubah" class="secondary-text">call_made</mat-icon>
+                  <button type="button" mat-icon-button matTooltip="Release Coin"
+                    (click)="openConfirmDialog(row, 'Release TSM Coin')"
+                    [disabled]="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim' || !permissionReleaseCoin?.ubah || row.task_sequencing_management_template_quiz === 1">
+                    <mat-icon
+                      *ngIf="row.status_misi == 'approved' && row.status_coin !== 'sudah dikirim' && permissionReleaseCoin?.ubah"
+                      class="orange-500-fg">call_made</mat-icon>
+                    <mat-icon
+                      *ngIf="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim' || !permissionReleaseCoin?.ubah"
+                      class="secondary-text">call_made</mat-icon>
                   </button>
                 </div>
               </ng-template>

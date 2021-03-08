@@ -113,7 +113,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     daysArray.forEach(array => {
       theArray = [...theArray, ...array]
     })
-    const uniqueArray = theArray.filter((item,index) => theArray.indexOf(item) === index);
+    const uniqueArray = theArray.filter((item, index) => theArray.indexOf(item) === index);
     this.task.current_week = Math.ceil(uniqueArray.length / 7);
   }
 
@@ -121,7 +121,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     let a = [];
     let d = new Date(s);
     let end = new Date(e);
-    for (d; d <= end; d.setDate(d.getDate()+1)) {
+    for (d; d <= end; d.setDate(d.getDate() + 1)) {
       a.push((moment(d).format('YYYY-MM-DD')).toString());
     }
     return a;
@@ -138,12 +138,12 @@ export class MissionBuilderCreateComponent implements OnInit {
     let mixedVerification = !(missionNodes.every((v: any) => v.attribute.verification_type === missionNodes[0].attribute.verification_type)) || !(missionNodes.every((v: any) => v.attribute.is_push_to_ff === missionNodes[0].attribute.is_push_to_ff));
     // Check if coin activity is used in non-Push to FF sequence
     let validCoinNode = true;
-    
+
     // Use to validate notification nodes
     let notifValid = 0;
     for (let i = 0; i < data.actions.length; i++) {
       const element = data.actions[i];
-      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type ==='field-force' || element.attribute.verification_type === null) && element.attribute.is_push_to_ff === 0) {
+      if (element.attribute !== null && (element.attribute.verification_type === 'principal' || element.attribute.verification_type === 'field-force' || element.attribute.verification_type === null) && element.attribute.is_push_to_ff === 0) {
         if (coinNodes.length > 0) {
           validCoinNode = false;
         }
@@ -293,7 +293,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     // Update action of current node index's next_step_component with the value of next increment of currentNode index
     if (this.actions.length > 0) {
       this.maxNode = parseInt(this.actions[this.actions.length - 1].component_id, 10) + 1;
-      const curIndex = this.currentNode ? this.actions.findIndex(x => {return parseInt(x.component_id) === parseInt(this.currentNode)}) : this.actions.findIndex(x => {return parseInt(x.component_id) === parseInt(this.maxNode) - 1});
+      const curIndex = this.currentNode ? this.actions.findIndex(x => { return parseInt(x.component_id) === parseInt(this.currentNode) }) : this.actions.findIndex(x => { return parseInt(x.component_id) === parseInt(this.maxNode) - 1 });
       if (this.actions[curIndex].type === 'decision') {
         if (this.yesNo === 'yes') {
           this.actions[curIndex].decision_type === 'yes';

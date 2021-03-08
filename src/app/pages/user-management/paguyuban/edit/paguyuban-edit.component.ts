@@ -6,6 +6,7 @@ import { DataService } from 'app/services/data.service';
 import { PaguyubanService } from 'app/services/user-management/paguyuban.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
+import { PasswordValidator } from 'app/validators/password.validator';
 
 @Component({
   selector: 'app-paguyuban-edit',
@@ -88,8 +89,12 @@ export class PaguyubanEditComponent {
       group_name: ["", Validators.required],
       principal_id: ["", Validators.required],
       status: [""],
-      password: [""],
-      password_confirmation: [""],
+      password: ["", [
+        Validators.required,
+        PasswordValidator.strong,
+        // commonFormValidator.passwordRequirement
+      ]],
+      password_confirmation: ["", Validators.required],
       national: ["", Validators.required],
       zone: [""],
       salespoint: [""],
@@ -97,7 +102,7 @@ export class PaguyubanEditComponent {
       area: [""],
       district: [""],
       territory: [""]
-    });
+    }, { validator: PasswordValidator.matchValues('password', 'password_confirmation') });
 
     this.formPaguyuban.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formPaguyuban, this.formdataErrors);

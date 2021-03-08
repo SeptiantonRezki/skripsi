@@ -39,14 +39,21 @@
           </mat-form-field>
 
           <div *ngIf="!isDetail">
-            <div fxLayout="row">
+            <div fxLayout="column" class="mb-20">
+              <label for="" style="color: #333333;" class="mb-20">Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil</label>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata sandi baru">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata sandi baru">
+                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
+                <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi">
                 <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword = !showPassword">
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
                 </button>
+                <mat-error *ngIf="
+                  (formPaguyuban.controls['password'].hasError('required') && formPaguyuban.controls['password'].touched) ||
+                  (formPaguyuban.controls['password'].hasError('minlength') && formPaguyuban.controls['password'].touched) ||
+                  (formPaguyuban.controls['password'].hasError('strong') && formPaguyuban.controls['password'].touched)">
+                  Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil
+                </mat-error>
               </mat-form-field>
             </div>
             <div fxLayout="row">

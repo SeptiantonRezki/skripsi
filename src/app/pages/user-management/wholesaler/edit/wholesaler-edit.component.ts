@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { Validators, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { Validators, FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { DataService } from "../../../../services/data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
@@ -59,6 +59,7 @@ export class WholesalerEditComponent {
   seeTokoCabang: boolean = true;
   disableSubmit: boolean = false;
   formDoc: FormGroup;
+  branchType: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,7 +85,7 @@ export class WholesalerEditComponent {
       area: {},
       salespoint: {},
       district: {},
-      territory: {}
+      territory: {},
     };
 
     this.formBankAccountError = {
@@ -101,6 +102,17 @@ export class WholesalerEditComponent {
     this.detailWholesaler = this.dataService.getFromStorage("detail_wholesaler");
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     // console.log(this.detailWholesaler);
+
+    this.branchType = [
+      {
+        name: 'Dikelola Mitra',
+        value: 'mitra'
+      },
+      {
+        name: 'Dikelola Retailer',
+        value: 'retailer'
+      },
+    ]
 
     this.listLevelArea = [
       {
@@ -141,6 +153,7 @@ export class WholesalerEditComponent {
       district: ["", Validators.required],
       territory: ["", Validators.required],
       branchShop: [false],
+      formBranchStore: this.formBuilder.array([]),
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -160,7 +173,7 @@ export class WholesalerEditComponent {
     });
     this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
       this.detailWholesaler = resWS.data;
-      console.log('wsss', this.detailWholesaler);
+      // console.log('wsss', this.detailWholesaler);
       if (this.detailWholesaler.area_code) {
 
         this.wholesalerService.getParentArea({ parent: (this.detailWholesaler.area_code && this.detailWholesaler.area_code.length > 0) ? this.detailWholesaler.area_code[0] : null }).subscribe(res => {
@@ -326,6 +339,25 @@ export class WholesalerEditComponent {
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
       branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
+      formBranchStore: [],
+    });
+
+    const fbs = this.formWs.get('formBranchStore') as FormArray;
+    this.detailWholesaler.data_branch.map((item: any, index: number) => {
+      fbs.push(this.formBuilder.group({
+        name: item.name,
+        address: item.address,
+        branch_type: item.managed,
+        code: item.code,
+        status: item.status_indo,
+      }));
+      fbs.controls[index].get('name').disable();
+      fbs.controls[index].get('address').disable();
+      fbs.controls[index].get('status').disable();
+      if (item.managed !== 'retailer') {
+        fbs.controls[index].get('code').disable();
+      }
+      // console.log('fbs_', fbs)
     });
 
     this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
@@ -347,6 +379,16 @@ export class WholesalerEditComponent {
     if (this.isDetail) {
       this.formWs.disable();
       this.formBankAccount.disable();
+    }
+  }
+
+  onChangeBranchType(event: any, i: number) {
+    // console.log('value', event.value);
+    const fbs = this.formWs.get('formBranchStore') as FormArray;
+    if (event.value === 'retailer') {
+      fbs.controls[i].get('code').enable();
+    } else {
+      fbs.controls[i].get('code').disable();
     }
   }
 
@@ -554,9 +596,9 @@ export class WholesalerEditComponent {
 
   submit() {
     // console.log(this.formWs);
-    console.log('invalid form field', this.findInvalidControls());
+    // console.log('invalid form field', this.findInvalidControls());
     if (!this.formWs.invalid && !this.formBankAccount.invalid) {
-      let body = {
+      const body = {
         _method: "PUT",
         name: this.formWs.get("name").value,
         address: this.formWs.get("address").value,
@@ -578,8 +620,18 @@ export class WholesalerEditComponent {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
       }
 
-      console.log(this.formWs.get("branchShop").value);
+      // console.log(this.formWs.get("branchShop").value);
       // return;
+
+      body['branchs'] = [];
+      const rawValue = this.formWs.getRawValue();
+      rawValue.formBranchStore.map((fbs: any, i: number) => {
+        body['branchs'].push({
+          id: this.detailWholesaler.data_branch[i].id,
+          managed: fbs.branch_type,
+          code: fbs.code
+        });
+      });
 
       this.wholesalerService
         .put(body, { wholesaler_id: this.detailWholesaler.id })

@@ -18,6 +18,7 @@ export class BannerSortingPagination {
     category_id: any;
     type: string;
     ongoing: boolean;
+    type_banner: string;
     
     constructor() {
       this.per_page = 15;
@@ -36,6 +37,7 @@ export class BannerSortingPagination {
       this.product_id = "";
       this.type = '';
       this.ongoing = false;
+      this.type_banner = '';
     }
   
     public static renderPagination(pagination, response) {

@@ -38,6 +38,20 @@
             </mat-radio-group>
           </div>
 
+          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="notif_type" placeholder="Tipe Notifikasi">
+                  <mat-option *ngFor="let item of listNotifType" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['notif_type'].hasError('required') && formNotification.controls['notif_type'].touched">
+                  Tipe Notifikasi harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -67,7 +81,7 @@
             <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
-            <textarea [froalaEditor]="options" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
+            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
               Isi Halaman harus diisi
@@ -126,6 +140,14 @@
                 <!-- <mat-icon matTooltip="Hapus gambar" (click)="removeImageVideo()"
                   class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                   matchipremove="" role="img" aria-hidden="true">cancel</mat-icon> -->
+              </div>
+            </div>
+            <div *ngIf="imagePrivew && !imageContentType">
+              <div
+                class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
+                role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
+                <img [src]="imagePrivew" class="multiple-img" (click)="previewImage()" />
+                <span class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
               </div>
             </div>
           </div>

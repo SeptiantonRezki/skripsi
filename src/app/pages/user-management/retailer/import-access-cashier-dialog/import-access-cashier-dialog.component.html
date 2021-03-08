@@ -40,6 +40,7 @@
             <th nowrap>Kode Agen</th>
             <th nowrap>Akses Kasir</th>
             <th nowrap>Chatbot</th>
+            <th nowrap>GSM PL</th>
           </tr>
         </thead>
         <tbody>
@@ -52,6 +53,9 @@
             </td>
             <td nowrap>
               {{ item.is_chat_bot === 1 ? "ON" : "OFF" }}
+            </td>
+            <td nowrap>
+              {{ item.gsm_pl === 1 ? "ON" : "OFF" }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">

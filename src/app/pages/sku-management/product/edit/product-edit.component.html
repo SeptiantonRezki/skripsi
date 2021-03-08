@@ -219,11 +219,12 @@
                       </button>
                     </div>
                   </div>
-                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap">
-                    <div fxFlex="10" style="margin-top: 15px;" *ngIf="!formProductGroup.get('is_private_label').value">
+                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap"
+                    *ngIf="formProductGroup.get('is_promo_src').value && i === 0">
+                    <div fxFlex="15" style="margin-top: 15px;">
                       <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
                     </div>
-                    <div fxLayout="row" fxFlex="85" *ngIf="wil.get('time_period').value === true">
+                    <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
                       <mat-form-field fxFlex="20" class="is-light form-primary">
                         <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
                           placeholder="Tanggal Mulai" formControlName="start_date">

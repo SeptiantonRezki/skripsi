@@ -46,7 +46,7 @@ export class B2BVoucherComponent implements OnInit {
     this.onLoad = true;
     // this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.delivery_courier');
+    this.permission = this.roles.getRoles('principal.b2b_voucher');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
@@ -60,10 +60,10 @@ export class B2BVoucherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCourierList();
+    this.getVoucherList();
   }
 
-  getCourierList() {
+  getVoucherList() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -147,6 +147,43 @@ export class B2BVoucherComponent implements OnInit {
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_voucher", param);
     this.router.navigate(["b2b-voucher", "detail"]);
+  }
+
+  getStatusColor(status) {
+    switch (status) {
+      case "draft":
+        return "mat-yellow-900-bg";
+      case "need-approval":
+        return "mat-red-800-bg";
+      case "approved":
+        return "mat-green-800-bg";
+      case "published":
+        return "mat-green-800-bg";
+      default:
+        return "mat-red-800-bg";
+    }
+  }
+
+  deleteVoucher(id) {
+    this.id = id;
+    const data = {
+      titleDialog: 'Hapus Voucher',
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ['Hapus', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.b2bVoucherService.delete({ voucher_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getVoucherList();
+
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+      }
+    });
   }
 
 }

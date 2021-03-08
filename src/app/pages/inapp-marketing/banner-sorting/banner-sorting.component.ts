@@ -9,6 +9,7 @@ import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { Observable, Subject } from 'rxjs';
 import { BannerSortingPagination } from './banner-sorting.pagination';
 import * as _ from 'underscore';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-banner-sorting',
@@ -32,7 +33,16 @@ export class BannerSortingComponent implements OnInit {
     // { id: 4, name: 'banner', image_url: 'https://image.com' },
     // { id: 5, name: 'banner', image_url: 'https://image.com' },
   ];
-  MAX_SLOT_BANNER = 10;
+  MAX_SLOT_BANNER = {
+    'in-app-banner': 10,
+    'info-terkini': 30,
+    'aktivasi-konsumen': 30
+  };
+  TABLE_TITLE = {
+    'in-app-banner': 'Spanduk Online',
+    'info-terkini': 'Info Terkini',
+    'aktivasi-konsumen': 'Aktivasi Konsumen',
+  }
   layout = {
     container: "row",
     list: "row",
@@ -62,17 +72,30 @@ export class BannerSortingComponent implements OnInit {
 
   offsetPagination: any;
 
+  TYPE_BANNER = {
+    DEFAULT: 'in-app-banner',
+    INFO_TERKINI: 'info-terkini',
+    AKTIVASI_KONSUMeN: 'aktivasi-konsumen'
+  };
+  listTypeBanner: any[] = [
+    { name: "In-App Banner", value: "in-app-banner" },
+    { name: "Info Terkini", value: "info-terkini" },
+    { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }
+  ];
+  formSortBanner: FormGroup;
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private bannerService: BannerService
+    private bannerService: BannerService,
+    private formBuilder: FormBuilder,
   ) {
     this.onLoad = true;
     this.selected = [];
 
     this.permission = this.roles.getRoles('principal.spanduk');
-    console.log(this.permission);
+
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -84,7 +107,16 @@ export class BannerSortingComponent implements OnInit {
       });
   }
   ngOnInit() {
+    this.formSortBanner = this.formBuilder.group({
+      type_banner: [this.TYPE_BANNER.DEFAULT, Validators.required]
+    });
+    this.formSortBanner.get('type_banner').valueChanges.debounceTime(100).subscribe(newVal => {
+      this.getBanner(true);
+      this.getUrutan();
+    });
+
     this.getBanner(true);
+    this.getUrutan();
   }
   addSpace() {
     this.sortedBanner.push({id: this.sortedBanner.length+1, name: 'banner', image: 'https://image.com'});
@@ -93,50 +125,11 @@ export class BannerSortingComponent implements OnInit {
     this.sortedBanner.splice(index, 1);
   }
   
-  onDragStart(event:DragEvent) {
-
-    console.log("drag started", JSON.stringify(event, null, 2));
-  }
-  
-  onDragEnd(event:DragEvent) {
-    
-    console.log("drag ended", JSON.stringify(event, null, 2));
-  }
-  
-  onDraggableCopied(event:DragEvent) {
-    
-    console.log("draggable copied", JSON.stringify(event, null, 2));
-  }
-  
-  onDraggableLinked(event:DragEvent) {
-      
-    console.log("draggable linked", JSON.stringify(event, null, 2));
-  }
-    
-  onDraggableMoved(event:DragEvent) {
-    
-    console.log("draggable moved", JSON.stringify(event, null, 2));
-  }
-      
-  onDragCanceled(event:DragEvent) {
-    
-    console.log("drag cancelled", JSON.stringify(event, null, 2));
-  }
-  
-  onDragover(event:DragEvent) {
-    
-    console.log("dragover", JSON.stringify(event, null, 2));
-  }
-  
   onDrop(event:DndDropEvent, list?:any[]) {
   
-    // console.log("dropped", JSON.stringify(event, null, 2));
-    console.log('ITEM DROPED');
-    console.log({event});
 
-    if (event.dropEffect === "copy" && list.length >= this.MAX_SLOT_BANNER) {
+    if (event.dropEffect === "copy" && list.length >= this.MAX_SLOT_BANNER[this.formSortBanner.get('type_banner').value] ) {
       
-      console.log('slot penuh');
       this.dialogService.openSnackBar({message: 'Slot Sudah Penuh!'});
       return;
 
@@ -162,23 +155,12 @@ export class BannerSortingComponent implements OnInit {
   }
   onDragged( item:any, list:any[], effect:DropEffect ) {
 
-    // this.currentDragEffectMsg = `Drag ended with effect "${effect}"!`;
-    console.log({item, list,  effect})
-
     if( effect === "move" ) {
 
       const index = list.indexOf( item );
-      console.log({index});
       list.splice( index, 1 );
       this.sortedBanner = list;
     }
-    // else if ( effect === "copy") {
-      
-    //   const index = list.findIndex((l) => l.id === item.id);
-    //   list.splice(index, 1);
-    //   this.rows = list;
-
-    // }
   }
 
   updateFilter(string) {
@@ -216,6 +198,8 @@ export class BannerSortingComponent implements OnInit {
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
     this.pagination.ongoing = true;
+    let typeBanner = this.formSortBanner.get('type_banner').value;
+    this.pagination.type_banner = (typeBanner === this.TYPE_BANNER.DEFAULT) ? '' : typeBanner;
 
     this.offsetPagination = page ? (page - 1) : 0;
 
@@ -223,7 +207,7 @@ export class BannerSortingComponent implements OnInit {
       res => {
         BannerSortingPagination.renderPagination(this.pagination, res);
         this.rows = res.data;
-        this.prepareSortingBanner(res.data);
+        // this.prepareSortingBanner(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;
         this.dataService.showLoading(false)
@@ -233,6 +217,19 @@ export class BannerSortingComponent implements OnInit {
         this.dataService.showLoading(false)
       }
     );
+  }
+  getUrutan() {
+    this.dataService.showLoading(true)
+
+    const type_banner = this.formSortBanner.get('type_banner').value;
+    this.bannerService.getSorting({type_banner}).subscribe(res => {
+
+      this.prepareSortingBanner(res.data);
+      this.dataService.showLoading(false)
+
+    }, error => {
+      this.dataService.showLoading(false)
+    })
   }
   prepareSortingBanner(listBanner) {
     const sortedBanner = listBanner.filter(banner => banner.urutan_prioritas);
@@ -276,9 +273,8 @@ export class BannerSortingComponent implements OnInit {
     });
   }
   onSelect(event, item:any, list:any[], nativeCallback) {
-    console.log({event, item, list});
     const {checked} = event;
-    if (checked && this.sortedBanner.length < this.MAX_SLOT_BANNER) {
+    if (checked && this.sortedBanner.length < this.MAX_SLOT_BANNER[this.formSortBanner.get('type_banner').value]) {
       let index = list.findIndex((l) => l.id === item.id);
 
       if (!index) {
@@ -286,10 +282,9 @@ export class BannerSortingComponent implements OnInit {
       }
       list.splice( index, 0, item );
       this.sortedBanner = list;
-      console.log({index});
       
     }
-    else if (checked && this.sortedBanner.length >= this.MAX_SLOT_BANNER) {
+    else if (checked && this.sortedBanner.length >= this.MAX_SLOT_BANNER[this.formSortBanner.get('type_banner').value]) {
 
       this.dialogService.openSnackBar({message: "Slot Sudah Penuh!"});
       event.checked = false;
@@ -308,7 +303,6 @@ export class BannerSortingComponent implements OnInit {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
 
-    console.log("Select Event", selected, this.selected);
   }
   checkSelected(row) {
     const index = this.sortedBanner.findIndex((banner) => banner.id === row.id);
@@ -317,18 +311,18 @@ export class BannerSortingComponent implements OnInit {
   }
   submit() {
     this.dataService.showLoading(true);
-    const payload = {id: _.pluck(this.sortedBanner, 'id') };
-    console.log({payload});
+    let typeBanner = this.formSortBanner.get('type_banner').value;
+    const payload = {
+      id: _.pluck(this.sortedBanner, 'id'),
+      type_banner: this.formSortBanner.get('type_banner').value
+    };
 
     this.bannerService.updateSorting(payload).subscribe(response => {
-      
-      console.log({response});
-      // this.dataService.showLoading(false);
+
       this.getBanner(true);
 
     }, error => {
       this.dataService.showLoading(false);
-      console.log({error});
     });
   }
 

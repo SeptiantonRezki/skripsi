@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
+import { PasswordValidator } from 'app/validators/password.validator';
+import { PasswordErrorMatcher } from 'app/validators/password.matcher';
 
 export function checkPassword(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -38,6 +40,7 @@ export class PaguyubanCreateComponent {
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
+  passwordMatcher = new PasswordErrorMatcher();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,9 +88,14 @@ export class PaguyubanCreateComponent {
       fullname: ["", Validators.required],
       group_name: ["", Validators.required],
       username: ["", Validators.required],
-      password: ["", [Validators.required, commonFormValidator.passwordRequirement]],
-      password_confirmation: ["", [Validators.required]],
-    });
+      password: ["", [
+        Validators.required,
+        PasswordValidator.strong,
+        // PasswordValidator.specialChar,
+        Validators.minLength(8),
+      ]],
+      password_confirmation: ["", Validators.required],
+    }, {validator: PasswordValidator.matchValues('password', 'password_confirmation')});
 
     this.wilayah = this.formBuilder.group({
       national: ["", Validators.required],

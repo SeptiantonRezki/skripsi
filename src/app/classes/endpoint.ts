@@ -151,6 +151,7 @@ export class Endpoint {
         export_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/export`,
         import_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/import`,
         update_sorting: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/urutan`,
+        list_sorting: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/urutan`,
       },
       landingPage: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
@@ -321,7 +322,8 @@ export class Endpoint {
         list_notif: `${AYO_API}/api/general/user_notif`,
         update: `${AYO_API}/api/general/user_notif/${context.id_notif}`,
         popup: `${AYO_API}/api/wholesaler/pop-up-notification`,
-        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`
+        update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`,
+        content: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/page/${context.slug}`,
       },
       general: {
         support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
@@ -581,7 +583,8 @@ export class Endpoint {
         releaseCoinAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin/all`,
         releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
         submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
-        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`
+        exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
+        exportTrueTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/export`
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
@@ -684,7 +687,8 @@ export class Endpoint {
         redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
         redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
         redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
-        listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`
+        listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`,
+        change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/status`
       },
       medalBadge: {
         medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
@@ -771,6 +775,7 @@ export class Endpoint {
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
 
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
+        change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/status`
       },
 
       notifications_list: {

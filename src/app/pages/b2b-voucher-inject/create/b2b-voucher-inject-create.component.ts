@@ -28,6 +28,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 export class B2BVoucherInjectCreateComponent implements OnInit {
   isDetail: Boolean;
   isEdit: Boolean;
+  isCreate: Boolean;
   formDetilVoucher: FormGroup;
   formFilter: FormGroup;
   minDateVoucher: any = new Date();
@@ -88,6 +89,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
+  listStatuses: any[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -103,13 +106,14 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isEdit = params[0].path === 'edit' ? true : false;
+      this.isCreate = params[0].path === 'create' ? true : false;
       if (this.isDetail || this.isEdit) {
         this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject');
       }
     });
     this.onLoad = false;
     this.selected = [];
-    // this.permission = this.roles.getRoles('principal.supplierpanelmitra');
+    this.permission = this.roles.getRoles('principal.inject_b2b_voucher');
     this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
@@ -253,7 +257,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     if (type === 'product') {
       this.formDetilVoucher.get('category').setValue('');
       this.formDetilVoucher.get('limit_by_category').setValue(false);
-      if (event) {
+      if (!event.checked) {
         this.productList = [];
         this.product.setValue(null);
         // this.product.disable();
@@ -263,6 +267,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           this.productInput.nativeElement.value = null;
         }
       } else {
+        this.formDetilVoucher.get('category').disable();
         this.product.enable();
       }
     } else {
@@ -272,8 +277,12 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       // this.product.disable();
       this.listProductSkuBank = [];
       this.inputChipList = [];
-      if (event) {
+      if (event.checked) {
         this.formDetilVoucher.get('category').setValue('');
+        this.formDetilVoucher.get('category').enable();
+      } else {
+        this.formDetilVoucher.get('category').setValue('');
+        this.formDetilVoucher.get('category').disable();
       }
       if (this.productInput) {
         this.productInput.nativeElement.value = null;
@@ -365,7 +374,29 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           id: slc.business_id
         }))
       });
+      this.getListRetailer();
     })
+  }
+
+  whyYouCantSeeMe() {
+    if (this.permission.b2b_approval && !this.isCreate) return false;
+    else if (this.isCreate && this.permission.buat) return true;
+    else if (!this.isCreate && this.permission.ubah) return true;
+    else return false;
+  }
+
+  checkForNonApprover() {
+    if (this.detailVoucher) {
+      console.log("thissss", this.detailVoucher, this.permission);
+      switch (this.detailVoucher.status) {
+        case "need-approval":
+          return this.permission.b2b_approval ? true : false;
+        default:
+          return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   getDetail() {
@@ -382,6 +413,23 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
       });
+
+      this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
+        ([value, name]) => ({ value, name })
+      ) : [];
+
+      if (this.permission.b2b_approval) this.formDetilVoucher.disable();
+
+      if (res.data.status === 'need-approval') {
+        this.formDetilVoucher.disable();
+      }
+
+      if (res.data.status === 'published') {
+        this.formDetilVoucher.get('name').disable();
+        this.formDetilVoucher.get('voucherDate').disable();
+        this.formDetilVoucher.get('note').disable();
+      }
+
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }
@@ -420,6 +468,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       category: [''],
       note: [''],
     });
+
+    if (this.isCreate) this.formDetilVoucher.get('category').disable();
 
     this.formFilter = this.formBuilder.group({
       national: [''],
@@ -847,7 +897,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       }
       this.loadingIndicator = true;
 
-      this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id }).subscribe(res => {
+      this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id, business_id: this.selected.map(item => item.id) }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -1102,6 +1152,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   //   });
   // }
 
+  onRefreshDetail() {
+    this.getDetail();
+  }
+
   async exportRetailer() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
@@ -1113,7 +1167,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.dataService.showLoading(true);
     let fd = {
       business_id: this.selected.map(item => item.id),
-      type: 'retailer'
+      type: 'retailer',
+      voucher_id: this.detailVoucher.id
     }
     try {
       const response = await this.b2bVoucherInjectService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
@@ -1198,6 +1253,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   importRetailer(): void {
+    if (this.detailVoucher.status === 'need-approval') {
+      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -1214,6 +1273,46 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         console.log('this', this.selected)
       }
+    });
+  }
+
+  extraPermission() {
+    if (this.permission.b2b_approval) {
+      return false;
+    }
+    switch (this.detailVoucher.status) {
+      case "need-approval":
+        return false;
+      case "published":
+        return false;
+      default:
+        return true;
+    }
+  }
+
+  takeAction(action) {
+    if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
+      this.dialogService.openSnackBar({ message: "Anda Tidak Memilik Hak Akses untuk Approval!" });
+      return;
+    }
+    const data = {
+      titleDialog: 'Ubah Status Voucher',
+      captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${action.name}?`,
+      confirmCallback: () => this.confirmChangeStatus(action),
+      buttonText: ['Ya, Lanjutkan', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+
+  }
+
+  confirmChangeStatus(action) {
+    this.dataService.showLoading(true);
+    this.b2bVoucherInjectService.changeStatus({ status: action.value }, { voucher_id: this.detailVoucher.id }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.dataService.showLoading(false);
+      this.getDetail();
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
