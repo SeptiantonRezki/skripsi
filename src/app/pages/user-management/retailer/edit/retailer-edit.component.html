@@ -224,6 +224,16 @@
                 GSR harus diisi
               </mat-error>
             </mat-form-field>
+
+            <mat-form-field fxFlex="100" class="is-light">
+              <mat-select placeholder="GSM PL" formControlName="gsm_pl">
+                <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formRetailer.controls['gsm_pl'].hasError('required') && formRetailer.controls['gsm_pl'].touched ">
+                GSM PL harus diisi
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <!-- <div fxLayout="column wrap" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px"
