@@ -109,21 +109,24 @@ export class DialogMisiEditComponent implements OnInit {
 
   checkTaskTemplate() {
     if (this.form.get('task_template_id').value && this.missions.length > 0) {
+      this.filterMission.setValue(this.form.get('task_template_id').value)
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
 
-      this.form.patchValue({
-        is_ir_template: this.missions[theIndex].is_ir_template
-      });
+      if (this.missions[theIndex] && this.missions[theIndex]['is_ir_template']) {
+        this.form.patchValue({
+          is_ir_template: this.missions[theIndex].is_ir_template
+        });
+      }
 
       this.form.get('verifikasiFF').enable();
       this.form.get('coin_verification').enable();
-      if (this.missions[theIndex].is_ir_template === 1) {
+      if (this.missions[theIndex] && this.missions[theIndex]['is_ir_template'] && this.missions[theIndex].is_ir_template === 1) {
         this.form.get('verifikasiFF').patchValue(false);
         this.form.get('pushFF').patchValue(false);
         this.form.get('verifikasi').patchValue(true);
       } else {
         this.form.get('verifikasi').patchValue(false);
-        if (this.missions[theIndex].is_quiz === 1) {
+        if (this.missions[theIndex] && this.missions[theIndex].is_quiz && this.missions[theIndex].is_quiz === 1) {
           this.form.get('verifikasiFF').disable();
           this.form.get('verifikasi').patchValue(true);
           let totalCoin = 0;
