@@ -224,6 +224,7 @@ export class DiaglogMisiComponent implements OnInit {
   checkTaskTemplate() {
     if (this.form.get('task_template_id').value && this.missions.length > 0) {
       this.filterMission.setValue(this.form.get('task_template_id').value)
+      this.filterMissionOther.setValue(this.form.get('task_template_id').value);
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
 
       if (this.missions[theIndex] && this.missions[theIndex]['is_ir_template']) {
