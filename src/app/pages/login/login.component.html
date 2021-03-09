@@ -6,7 +6,12 @@
   <li><span></span></li>
   <li><span></span></li>
 </ul> -->
-<div id="ayoLogin" fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="!nternalSigningIn" style="position: absolute; left: 50%; top: 50%;">
+  <mat-progress-spinner mode="indeterminate" diameter="32" style="margin-left: auto; margin-right: auto;"></mat-progress-spinner>
+  <h2>Signing In</h2>
+</div>
+
+<div id="ayoLogin" fxLayout="column" fxLayoutAlign="center center" *ngIf="!internalSigningIn">
   <div class="tra" *ngIf="environment?.show_label">
     <div class="bg-tra"></div>
     <div class="text-tra">{{ environment?.label }}</div>

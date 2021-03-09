@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
 
   showPassword = false;
   showExternalUserFields = false;
+  internalSigningIn = false;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -73,10 +74,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     let authCode = this.route.snapshot.queryParamMap.get('code');
     if(authCode) {
+      this.internalSigningIn = true;
+      
       this.authenticationService.getUserCognitoAD(authCode).subscribe(res => {
         this.authorize(res)
+        this.internalSigningIn = false;
       }, err => {
         console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
+        this.internalSigningIn = false;
       });
     }
 
