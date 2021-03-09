@@ -177,6 +177,16 @@
             </button>
           </div>
 
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+            <h2 class=""></h2>
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
+              <mat-icon>search</mat-icon>
+              <mat-form-field class="is-light tab-search">
+                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+
           <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -239,20 +249,23 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div fxLayout="row wrap" fxLayoutAlign="start stretch" fxLayout.lt-md="column" class="p-16"
-            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div fxLayout="row wrap" fxLayoutAlign="start stretch" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
+            fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select  placeholder="Status Misi" [(ngModel)]="statusValue" name="statusValue"  [ngModelOptions]="{standalone: true}" multiple>
+              <mat-select placeholder="Status Misi" [(ngModel)]="statusValue" name="statusValue"
+                [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="wtLoop.value" *ngFor="let wtLoop of status"> {{wtLoop.label}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select  placeholder="Status Coin" [(ngModel)]="statusCoinSelected" name="statusCoinSelected" [ngModelOptions]="{standalone: true}" multiple>
+              <mat-select placeholder="Status Coin" [(ngModel)]="statusCoinSelected" name="statusCoinSelected"
+                [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="scl.value" *ngFor="let scl of statusCoinList"> {{scl.label}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select  placeholder="IR Check" [(ngModel)]="irCheckSelected" name="irCheckSelected" [ngModelOptions]="{standalone: true}" multiple>
+              <mat-select placeholder="IR Check" [(ngModel)]="irCheckSelected" name="irCheckSelected"
+                [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="icl.value" *ngFor="let icl of irCheckList"> {{icl.label}} </mat-option>
               </mat-select>
             </mat-form-field>

@@ -8,8 +8,7 @@
   </div>
 </div>
 <form [formGroup]="formFilter" autoComplete="off">
-  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-    class="top-table p-8">
+  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8">
     <mat-form-field fxFlex="16" class="orders dropdown">
       <mat-select formControlName="filter">
         <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
@@ -30,8 +29,8 @@
     </mat-form-field>
     <div fxFlex="1"></div>
     <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
-      <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-        placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+      <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="Sampai Tanggal"
+        formControlName="end_date" readonly>
       <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
         (click)="formFilter.get('end_date').setValue('')">
         <mat-icon>close</mat-icon>
@@ -54,12 +53,13 @@
   </div>
 </form>
 <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-  [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-  [rowHeight]="48" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
+  [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="48"
+  [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
   [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
   (sort)="onSort($event)">
 
-  <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Task Sequencing Management" prop="nama_task_sequencing_management" [flexGrow]="3">
+  <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Task Sequencing Management"
+    prop="nama_task_sequencing_management" [flexGrow]="3">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <!-- <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]"> -->
       <span class="row">
@@ -71,10 +71,22 @@
   <ngx-datatable-column [sortable]="false" name="Trade Program" prop="trade_creator_name" [flexGrow]="3">
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program" prop="trade_creator_group_name" [flexGrow]="3">
+  <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program" prop="trade_creator_group_name"
+    [flexGrow]="3">
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas" prop="task_sequencing_management_template_name" [flexGrow]="3">
+  <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas"
+    prop="task_sequencing_management_template_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Lain Misi/Template Tugas"
+    prop="task_sequencing_management_template_other_name" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [sortable]="false" name="Compliance Rate" prop="compliance_rate" [flexGrow]="3">
   </ngx-datatable-column>
 
   <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
@@ -86,10 +98,8 @@
   <ngx-datatable-column [sortable]="false" name="Audience Group" prop="audience_group_name" [flexGrow]="3">
   </ngx-datatable-column>
 
-  <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
-  </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="task_sequencing_management_status" [flexGrow]="3">
+  <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="task_sequencing_management_status"
+    [flexGrow]="3">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="name-container">
         <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
@@ -128,13 +138,16 @@
         <button type="button" mat-icon-button color="" [disabled]="row.task_sequencing_management_status !== 'publish'"
           matTooltip="Export Misi" (click)="export(row)">
           <mat-icon *ngIf="row.task_sequencing_management_status == 'publish'" class="orange-500-fg">save_alt</mat-icon>
-          <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt</mat-icon>
+          <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt
+          </mat-icon>
         </button>
-        <button type="button" mat-icon-button color="" matTooltip="Verified All" (click)="openConfirmDialog(row, 'Verification All TSM Mission')" [disabled]="isDisableVerification(row)">
+        <button type="button" mat-icon-button color="" matTooltip="Verified All"
+          (click)="openConfirmDialog(row, 'Verification All TSM Mission')" [disabled]="isDisableVerification(row)">
           <mat-icon *ngIf="!isDisableVerification(row)" class="orange-500-fg">assignment_turned_in</mat-icon>
           <mat-icon *ngIf="isDisableVerification(row)" class="secondary-text">assignment_turned_in</mat-icon>
         </button>
-        <button type="button" mat-icon-button color="" matTooltip="Release Coin" (click)="openConfirmDialog(row, 'Release TSM Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
+        <button type="button" mat-icon-button color="" matTooltip="Release Coin"
+          (click)="openConfirmDialog(row, 'Release TSM Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
           <mat-icon *ngIf="!isDisableReleaseCoin(row)" class="orange-500-fg">call_made</mat-icon>
           <mat-icon *ngIf="isDisableReleaseCoin(row)" class="secondary-text">call_made</mat-icon>
         </button>
