@@ -152,6 +152,7 @@ export class Endpoint {
         import_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/import`,
         update_sorting: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/urutan`,
         list_sorting: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/urutan`,
+        list_banner_customer: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/customer-last-three-month?page=all`,
       },
       landingPage: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
