@@ -113,11 +113,9 @@ export class DialogMisiEditComponent implements OnInit {
       this.filterMissionOther.setValue(this.form.get('task_template_id').value);
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
 
-      if (this.missions[theIndex] && this.missions[theIndex]['is_ir_template']) {
-        this.form.patchValue({
-          is_ir_template: this.missions[theIndex].is_ir_template
-        });
-      }
+      this.form.patchValue({
+        is_ir_template: this.missions[theIndex] && this.missions[theIndex]['is_ir_template'] ? this.missions[theIndex].is_ir_template : 0
+      });
 
       this.form.get('verifikasiFF').enable();
       this.form.get('coin_verification').enable();
@@ -222,11 +220,11 @@ export class DialogMisiEditComponent implements OnInit {
     );
     // filter the banks
     this.filteredMission.next(
-      this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.missions.filter(item => item.name ? item.name.toLowerCase().indexOf(search) > -1 : item.name.indexOf(search))
     );
 
     this.filteredMissionOther.next(
-      this.missions.filter(item => item.other_name.toLowerCase().indexOf(search) > -1)
+      this.missions.filter(item => item.name ? item.name.toLowerCase().indexOf(search) > -1 : item.name.indexOf(search))
     );
   }
 
@@ -250,11 +248,11 @@ export class DialogMisiEditComponent implements OnInit {
     );
     // filter the banks
     this.filteredMissionOther.next(
-      this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.missions.filter(item => item.name ? item.name.toLowerCase().indexOf(search) > -1 : item.name.indexOf(search))
     );
 
     this.filteredMission.next(
-      this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.missions.filter(item => item.name ? item.name.toLowerCase().indexOf(search) > -1 : item.name.indexOf(search))
     );
   }
 
