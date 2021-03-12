@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = this.formBuilder.group({
       username: [this.username, [Validators.required]],
-      // password: [this.password, Validators.required]
+      ...(this.showExternalUserFields && {password: [this.password, Validators.required]})
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -157,7 +157,6 @@ export class LoginComponent implements OnInit {
     } else {
       this.authenticationService.checkUserStatus(username).subscribe(
         res => {
-          console.log(res)
           if(res.status && res.user_status === 'internal') {
             window.location.href = environment.cognito_login_url;
           } else {
