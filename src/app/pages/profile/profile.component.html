@@ -34,10 +34,10 @@
               <input matInput placeholder="Peran" [value]="profile.role_name" readonly>
             </mat-form-field>
           </div>
-          <div fxLayout="row" class="pt-16" fxLayoutAlign="start center">
+          <div *ngIf="showChangePasswordFields" fxLayout="row" class="pt-16" fxLayoutAlign="start center">
             <h2 class="">Ubah Kata Sandi Baru</h2>
           </div>
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <div *ngIf="showChangePasswordFields" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" *ngIf="currentPassword" formControlName="old_password" placeholder="Kata Sandi Sekarang">
               <input matInput type="password" *ngIf="!currentPassword" formControlName="old_password" placeholder="Kata Sandi Sekarang">
@@ -50,7 +50,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <div *ngIf="showChangePasswordFields" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi Baru">
               <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi Baru">
@@ -64,7 +64,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <div *ngIf="showChangePasswordFields" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
                 placeholder="Konfirmasi Kata Sandi Baru">
@@ -80,7 +80,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="confirm pt-8 pb-24" fxLayout="row">
+        <div *ngIf="showChangePasswordFields" class="confirm pt-8 pb-24" fxLayout="row">
           <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
             SIMPAN
           </button>

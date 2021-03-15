@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   changePassword: FormGroup;
   changePasswordError: any;
 
+  showChangePasswordFields = true;
   currentPassword = false;
   showPassword = false;
   showConfirmPassword = false;
@@ -35,15 +36,22 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.changePassword = this.formBuilder.group({
-      old_password: ["", Validators.required],
-      password: ["", Validators.required],
-      password_confirmation: ["", Validators.required]
-    })
-
-    this.changePassword.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(this.changePassword, this.changePasswordError);
-    })
+    let email = this.profile.email.toLowerCase();
+    let internal = email.match(/.+@pmintl\.net/) || email.match(/.+@sampoerna\.com/) || email.match(/.+@contracted.sampoerna.com/);
+    if(internal) {
+      this.showChangePasswordFields = false;
+    } else {
+      this.changePassword = this.formBuilder.group({
+        old_password: ["", Validators.required],
+        password: ["", Validators.required],
+        password_confirmation: ["", Validators.required]
+      })
+  
+      this.changePassword.valueChanges.subscribe(() => {
+        commonFormValidator.parseFormChanged(this.changePassword, this.changePasswordError);
+      })
+    }
+    
   }
 
   submit() {
