@@ -9,7 +9,7 @@ export const environment = {
   backgroundImage: "assets/images/ayo/header/Header-Color-Blue@2x.jpg",
   qiscus_appIdMC: 'zova-efc1mal9p9cjurph', //Staging
   qiscus_appId: 'ayosrc-8lv9mbp2ce6iwr',
-  cognito_login_url: 'https://ayo-principal-qa.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-qa&redirect_uri=https://hms.dev.src.id/login&response_type=CODE&client_id=3h4042k701id4jimgf4or1jd14&scope=aws.cognito.signin.user.admin email openid phone profile'
+  cognito_login_url: 'https://ayo-principal-dev.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-dev&redirect_uri=https://hms.dev.src.id/login&response_type=CODE&client_id=1oe00f63c64c3lpseof1bgcuah&scope=aws.cognito.signin.user.admin email openid phone profile'
 };
 
 export const serviceServer = (server) => {
