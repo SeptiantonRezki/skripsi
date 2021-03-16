@@ -305,8 +305,10 @@ export class PayLaterPanelMitraComponent implements OnInit {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(
+    this.mitraPanelService.getMitra(this.pagination, {
+      business_id: this.selected.map(mtr => mtr.id),
+      paylater_company_id: this.formPanelMitra.get('company').value,
+    }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -466,7 +468,10 @@ export class PayLaterPanelMitraComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'wholesaler' };
+    dialogConfig.data = {
+      type: 'wholesaler',
+      paylater_company_id: this.formPanelMitra.get('company').value
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 

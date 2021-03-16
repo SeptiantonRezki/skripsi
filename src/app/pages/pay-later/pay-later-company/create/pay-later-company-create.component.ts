@@ -14,6 +14,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 export class PayLaterCompanyCreateComponent implements OnInit {
   formCompany: FormGroup;
   listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
+  companies: Array<any> = [];
 
   constructor(
     private router: Router,
@@ -31,9 +32,16 @@ export class PayLaterCompanyCreateComponent implements OnInit {
       contact_number: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       flowingly_id: ["", Validators.required],
+      paylater_group_id: ["", Validators.required],
       status: ["", Validators.required],
       minimum_transaction: [0, Validators.required]
     });
+
+    this.paylaterCompanyService.list({}).subscribe(res => {
+      this.companies = res.data
+    }, err=> {
+
+    })
 
     let regex = new RegExp(/[0-9]/g);
     this.formCompany.get('contact_number').valueChanges.subscribe(res => {
@@ -62,6 +70,7 @@ export class PayLaterCompanyCreateComponent implements OnInit {
         contact_number: '+62' + this.formCompany.get('contact_number').value,
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
+        paylater_group_id: this.formCompany.get('paylater_group_id').value,
         status: this.formCompany.get('status').value,
         min_transaction: this.formCompany.get('minimum_transaction').value
       }

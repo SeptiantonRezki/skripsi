@@ -593,7 +593,8 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
-        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/update-status/${context.company_id}`
+        update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/update-status/${context.company_id}`,
+        list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/group`,
       },
       paylater_panel: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel`,
