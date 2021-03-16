@@ -433,8 +433,10 @@ export class Endpoint {
         updateRoomIdTransaksi: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/wholesaler/order/update/${context.orderId}`,
         createUpdateRoomOrderId: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/create-qiscus-room`,
         getMessageTemplates: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
-        loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`,
+        loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`, // DEPRECATED
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
+        createJWT: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/create-jwt`,
+        createJWTMC: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/create-jwt-mc`,
       },
       group_trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,

@@ -98,25 +98,48 @@ export class LoginComponent implements OnInit {
 
   async qiscusLoginOrRegister(profile: any) {
     if (profile) {
-      if (profile.id !== undefined && profile.id !== null) {
-        const qiscusPayload = {
-          userId: profile.id + 'vendorhms' + profile.vendor_company_id,
-          userIdMC: profile.email,
-          userKey: 'vendorhms' + profile.id, //profile.qiscus_user_key,
-          userName: profile.fullname,
-          avatarImage: profile.image_url || null,
+      return this.qs.qiscusMC.getNonce().then((gn: any) => {
+        if (gn && gn.nonce) {
+          return new Promise((resolve, reject) => {
+            this.qs.createJWTMC({ nonce: gn.nonce }).subscribe((res: any) => {
+              resolve(res);
+            }, (err) => {
+              reject(err);
+            });
+          });
         }
-
-        const qiscusMCPayload = {
-          user_id: qiscusPayload.userIdMC,
-          password: qiscusPayload.userKey,
-          username: qiscusPayload.userName,
-          avatar_url: qiscusPayload.avatarImage,
-        };
-        await this.qs.qiscus.setUser(qiscusPayload.userId, qiscusPayload.userKey, qiscusPayload.userName, qiscusPayload.avatarImage);
-        return await this.qs.qiscusLoginMultichannel(qiscusMCPayload).subscribe(async (res_2: any) => {
-          return await this.qs.qiscusMC.setUser(qiscusMCPayload.user_id, qiscusMCPayload.password, qiscusMCPayload.username, qiscusMCPayload.avatar_url);
+      }).then((jwt: any) => {
+        if (jwt && jwt.data) {
+          return this.qs.qiscusMC.verifyIdentityToken(jwt.data);
+        }
+      }).then((userData: any) => {
+        if (userData) {
+          this.qs.qiscusMC.setUserWithIdentityToken(userData);
+          return userData;
+        }
+      });
+      if (profile.id !== undefined && profile.id !== null && profile.vendor_company_id) {
+        this.qs.qiscus.getNonce().then(async (gn: any) => {
+          if (gn && gn.nonce) {
+            return new Promise((resolve, reject) => {
+              this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
+                resolve(res);
+              }, (err) => {
+                reject(err);
+              });
+            });
+          }
+        }).then((jwt: any) => {
+          if (jwt && jwt.data) {
+            return this.qs.qiscus.verifyIdentityToken(jwt.data);
+          }
+        }).then((userData: any) => {
+          if (userData) {
+            this.qs.qiscus.setUserWithIdentityToken(userData);
+            return userData;
+          }
         });
+
       } else {
         console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
         // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
