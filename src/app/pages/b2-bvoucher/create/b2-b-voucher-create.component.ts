@@ -85,8 +85,23 @@ export class B2BVoucherCreateComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
   inputChipList = [];
   voucherB2CList: any;
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+  ];
 
-  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  keyUpProductSRCC = new Subject<string>();
+  inputChipListSRCC = [];
+  productSRCC: FormControl = new FormControl('');
+  productListSRCC: any[] = [];
+  listProductSRCC: any[] = [];
+  listProductSkuBankSRCC: Array<any> = [];
+  filteredSkuOptionsSRCC: Observable<string[]>;
+  listCategoriesSRCC: any[] = [];
+
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;  
+  @ViewChild('productInput') productInputSRCC: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
@@ -113,7 +128,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.onLoad = false;
     this.selected = [];
     this.permission = this.roles.getRoles('principal.b2b_voucher');
-    console.log("permission", this.permission);
+    // console.log("permission", this.permission);
     this.allRowsSelected = false;
     // this.allRowsSelectedValid = false;
     this.isSelected = false;
@@ -154,7 +169,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   _filterSku(value): any[] {
-    console.log('valueee', value);
+    // console.log('valueee', value);
     const filterValue = value && typeof value == "object" ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
   }
@@ -207,7 +222,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   onChangeIsB2CVoucher(event: any) {
-    console.log('EV', event);
+    // console.log('EV', event);
     if (event) {
       this.formDetilVoucher.get('currency').setValue(100);
       this.formDetilVoucher.get('currency').disable();
@@ -255,6 +270,12 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.productService.getListCategory(null).subscribe(res => {
       this.listCategories = res.data ? res.data.data : [];
     })
+  }
+
+  getVendorCategories() {
+    this.productService.getListCategoryVendor().subscribe(res => {
+      this.listCategoriesSRCC = res.data ? res.data : [];
+    });
   }
 
   getGroupTradeProgram() {
@@ -356,7 +377,7 @@ export class B2BVoucherCreateComponent implements OnInit {
            */
           this.listProductSkuBank = [];
         } else {
-          console.log('this.listProductSkuBank', this.listProductSkuBank)
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
           this.product.setValue(itemClick.toString());
           if (this.productInput) {
             this.productInput.nativeElement.value = itemClick.toString();
@@ -381,7 +402,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
   getRetailerSelected() {
     this.b2bVoucherService.getSelectedRetailer({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
+      // console.log('retailer selected', res);
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
@@ -397,11 +418,11 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   getDetail() {
-    console.log("Kepanggil lagi bwang");
     this.b2bVoucherService.show({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       this.detailVoucher = res.data;
       this.isB2CVoucher.setValue(res.data.is_b2c_voucher ? true : false);
       this.formDetilVoucher.setValue({
+        opsiVoucher: res.data.type,
         name: res.data.name,
         coin: res.data.coin,
         currency: res.data.currency,
@@ -417,6 +438,12 @@ export class B2BVoucherCreateComponent implements OnInit {
         limit_only: res.data.limit_only,
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
+
+        limit_by_product_srcc: res.data.limit_by === 'product',
+        limit_by_category_srcc: res.data.limit_by === 'category',
+        limit_only_srcc: res.data.limit_only,
+        product_srcc: res.data.limit_by === 'product' ? res.data.limit_only : '',
+        category_srcc: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
       });
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
@@ -492,7 +519,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
   getDetailRedeem() {
     this.b2bVoucherService.getRedeems({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('redeeems detail', res);
+      // console.log('redeeems detail', res);
     })
   }
 
@@ -509,17 +536,28 @@ export class B2BVoucherCreateComponent implements OnInit {
         return Observable.of(key).delay(300);
       })
       .subscribe(res => {
-        console.log('reas ngetik cuk', res);
         this.getListProduct(res);
         this.resetField(res);
       });
+    
+    this.keyUpProductSRCC.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.getListProductSRCC(res);
+        this.resetField(res);
+      });
+    
     // this.getProducts();
     this.getCategories();
+    this.getVendorCategories();
     this.getGroupTradeProgram();
     this.getVoucherB2CList();
 
 
     this.formDetilVoucher = this.formBuilder.group({
+      opsiVoucher: ['b2b', Validators.required],
       name: ["", Validators.required],
       coin: [0, Validators.required],
       currency: [0, Validators.required],
@@ -535,9 +573,18 @@ export class B2BVoucherCreateComponent implements OnInit {
       category: [""],
       group_trade_program: [""],
       note: [''],
+
+      limit_by_product_srcc: [false],
+      limit_by_category_srcc: [false],
+      limit_only_srcc: [''],
+      product_srcc: [''],
+      category_srcc: [''],
     });
 
-    if (this.isCreate) this.formDetilVoucher.get('category').disable();
+    if (this.isCreate) {
+      this.formDetilVoucher.get('category').disable();
+      this.formDetilVoucher.get('category_srcc').disable();
+    }
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -589,31 +636,31 @@ export class B2BVoucherCreateComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
+      // console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
+      // console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
+      // console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
+      // console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
+      // console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -637,7 +684,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
+    // console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (!allRowsSelected) this.selected = [];
     else this.selected.length = this.totalData;
@@ -653,7 +700,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -665,7 +712,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -690,7 +737,7 @@ export class B2BVoucherCreateComponent implements OnInit {
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -745,7 +792,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
+        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -782,7 +829,7 @@ export class B2BVoucherCreateComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
+          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -811,7 +858,7 @@ export class B2BVoucherCreateComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
+          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -898,7 +945,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   getListRetailer(string?: any) {
-    console.log('Search', string);
+    // console.log('Search', string);
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
@@ -946,11 +993,11 @@ export class B2BVoucherCreateComponent implements OnInit {
         if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
           let oneAreaSelected = lastSelectedArea.value[0];
           let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+          // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
           if (findOnFirstArea) is_area_2 = false;
           else is_area_2 = true;
 
-          console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+          // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
           if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
             // console.log('its hitted [levelCovered > -1]');
             if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -1090,7 +1137,7 @@ export class B2BVoucherCreateComponent implements OnInit {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
+            // console.log('ff value', this.formFilter.value);
             // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
@@ -1100,7 +1147,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
             if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
           let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -1109,7 +1156,7 @@ export class B2BVoucherCreateComponent implements OnInit {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
 
           if (i === area.length - 1) {
@@ -1123,6 +1170,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
   onSaveDetail() {
     const body = {
+      type: this.formDetilVoucher.get('opsiVoucher').value,
       name: this.formDetilVoucher.get('name').value,
       currency: this.formDetilVoucher.get('currency').value,
       coin: this.formDetilVoucher.get('coin').value,
@@ -1134,16 +1182,18 @@ export class B2BVoucherCreateComponent implements OnInit {
       description: this.formDetilVoucher.get('note').value,
       limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
         this.formDetilVoucher.get('limit_by_category').value ? 'category' : null,
-      is_b2c_voucher: this.isB2CVoucher.value
+      is_b2c_voucher: this.isB2CVoucher.value,
+      limit_by_src_catalogue: this.formDetilVoucher.get('limit_by_product_srcc').value ? 'product' :
+      this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null
     };
     // console.log('paskdjsakl', this.productList);
     if (body['limit_by'] !== null) {
-      body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value
+      body['limit_only'] = body['limit_by'] === 'product' ?
+        this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value;
     }
-
-    if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {
-      // delete body['limit_by'];
-      // delete body['limit_only'];
+    if (body['limit_by_src_catalogue'] !== null) {
+      body['limit_only_src_catalogue'] = body['limit_by_src_catalogue'] === 'product' ?
+        this.productListSRCC.map(prd => prd.sku_id) : this.formDetilVoucher.get('category_srcc').value;
     }
 
     this.dataService.showLoading(true);
@@ -1200,7 +1250,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     try {
       this.dataService.showLoading(true);
       const response = await this.b2bVoucherService.exportInvoice({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response);
+      // console.log('he', response);
       if (response && response.data) window.open(response.data.url, "_blank");
       // this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
       this.dataService.showLoading(false);
@@ -1246,7 +1296,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     }
     try {
       const response = await this.b2bVoucherService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response.headers);
+      // console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PanelRetailer_${new Date().toLocaleString()}.xls`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
@@ -1272,7 +1322,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     let fileName = `B2B_CN_Reward_Panel_Retailer_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     try {
       const response = await this.b2bVoucherService.exportExcel({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response.headers);
+      // console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
       this.dataService.showLoading(false);
     } catch (error) {
@@ -1311,7 +1361,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
+    // console.log('Here')
     console.log(error)
 
     if (!(error instanceof HttpErrorResponse)) {
@@ -1340,10 +1390,157 @@ export class B2BVoucherCreateComponent implements OnInit {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        console.log('this', this.selected)
+        // console.log('this', this.selected)
       }
     });
   }
 
+  getListProductSRCC(param?): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipListSRCC = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+      this.b2bVoucherService.getProductListVendor({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBankSRCC = res.data ? res.data : [];
+        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBankSRCC = [];
+      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+    }
+  }
+
+  _filterSkuSRCC(value): any[] {
+    // console.log('valueee', value);
+    const filterValue = value && typeof value == "object" ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBankSRCC.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  getProductObjSRCC(event, obj) {
+    let index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productListSRCC.push(obj);
+    }
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
+
+    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
+      const itemClick = this.inputChipList.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBankSRCC = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
+          this.product.setValue(itemClick.toString());
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.product.setValue(null);
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+        this.listProductSkuBankSRCC = [];
+      }
+      setTimeout(() => {
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+
+  isCheckedSRCC(type, event) {
+    try {
+      if (type === 'product') {
+        this.formDetilVoucher.get('category_srcc').setValue('');
+        this.formDetilVoucher.get('limit_by_category_srcc').setValue(false);
+        if (!event.checked) {
+          this.productListSRCC = [];
+          this.productSRCC.setValue(null);
+          // this.product.disable();
+          this.listProductSkuBankSRCC = [];
+          this.inputChipListSRCC = [];
+          if (this.productInputSRCC) {
+            this.productInputSRCC.nativeElement.value = null;
+          }
+        } else {
+          this.formDetilVoucher.get('category_srcc').disable();
+          this.productSRCC.enable();
+        }
+      } else {
+        this.formDetilVoucher.get('limit_by_product_srcc').setValue(false);
+        this.productListSRCC = [];
+        this.productSRCC.setValue(null);
+        // this.product.disable();
+        this.listProductSkuBankSRCC = [];
+        this.inputChipListSRCC = [];
+        if (event.checked) {
+          this.formDetilVoucher.get('category_srcc').setValue('');
+          this.formDetilVoucher.get('category_srcc').enable();
+        } else {
+          this.formDetilVoucher.get('category_srcc').setValue('');
+          this.formDetilVoucher.get('category_srcc').disable();
+        }
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
+        }
+      }
+    } catch (ex) {
+      console.warn(ex)
+    }
+  }
+
+  addSRCC(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productListSRCC.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.productSRCC.setValue(null);
+  }
+
+  removeSRCC(id: string): void {
+    const index = this.productListSRCC.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productListSRCC.splice(index, 1);
+    }
+  }
+
+  selectedProductSRCC(event: MatAutocompleteSelectedEvent): void {
+    // console.log('evenaksdjlak', event);
+    this.productListSRCC.push(event.option.viewValue);
+    if (this.productInputSRCC) {
+      this.productInputSRCC.nativeElement.value = '';
+    }
+    this.productSRCC.setValue(null);
+  }
 
 }
