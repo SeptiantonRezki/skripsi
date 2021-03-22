@@ -778,6 +778,7 @@ export class Endpoint {
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
 
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
+        product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
         change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/status`
       },
 

@@ -90,7 +90,6 @@ export class B2BVoucherCreateComponent implements OnInit {
     { name: 'Katalog SRC Only', value: 'src-catalogue' },
     { name: 'B2B & Katalog SRC', value: 'both' },
   ];
-
   keyUpProductSRCC = new Subject<string>();
   inputChipListSRCC = [];
   productSRCC: FormControl = new FormControl('');
@@ -100,8 +99,8 @@ export class B2BVoucherCreateComponent implements OnInit {
   filteredSkuOptionsSRCC: Observable<string[]>;
   listCategoriesSRCC: any[] = [];
 
-  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;  
-  @ViewChild('productInput') productInputSRCC: ElementRef<HTMLInputElement>;
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
@@ -439,11 +438,11 @@ export class B2BVoucherCreateComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
 
-        limit_by_product_srcc: res.data.limit_by === 'product',
-        limit_by_category_srcc: res.data.limit_by === 'category',
-        limit_only_srcc: res.data.limit_only,
-        product_srcc: res.data.limit_by === 'product' ? res.data.limit_only : '',
-        category_srcc: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
+        limit_by_product_srcc: res.data.limit_by_src_catalogue === 'product',
+        limit_by_category_srcc: res.data.limit_by_src_catalogue === 'category',
+        limit_only_srcc: res.data.limit_only_src_catalogue,
+        product_srcc: res.data.limit_by_src_catalogue === 'product' ? res.data.limit_only_src_catalogue : '',
+        category_srcc: res.data.limit_by_src_catalogue === 'category' ? res.data.limit_only_src_catalogue.map(dt => Number(dt)) : '',
       });
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
@@ -539,7 +538,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getListProduct(res);
         this.resetField(res);
       });
-    
+
     this.keyUpProductSRCC.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
@@ -548,7 +547,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getListProductSRCC(res);
         this.resetField(res);
       });
-    
+
     // this.getProducts();
     this.getCategories();
     this.getVendorCategories();
@@ -573,7 +572,6 @@ export class B2BVoucherCreateComponent implements OnInit {
       category: [""],
       group_trade_program: [""],
       note: [''],
-
       limit_by_product_srcc: [false],
       limit_by_category_srcc: [false],
       limit_only_srcc: [''],

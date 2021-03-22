@@ -1,22 +1,22 @@
 .filter-user-group {
-    border: 1px solid #ddd;
-    width: 200px;
-  }
-  
-  .import-export-bar {
-    background-color: #3e3e3e;
-    color: #fff
-  }
-  
-  .mat-checkbox-all.mat-checkbox.mat-accent {
-    .mat-checkbox-layout {
-      .mat-checkbox-inner-container {
-        .mat-checkbox-background {
-          background-color: #cacaca !important;
-        }
+  border: 1px solid #ddd;
+  width: 200px;
+}
+
+.import-export-bar {
+  background-color: #3e3e3e;
+  color: #fff
+}
+
+.mat-checkbox-all.mat-checkbox.mat-accent {
+  .mat-checkbox-layout {
+    .mat-checkbox-inner-container {
+      .mat-checkbox-background {
+        background-color: #cacaca !important;
       }
     }
   }
+}
 
 .opsi-type {
   position: absolute;
