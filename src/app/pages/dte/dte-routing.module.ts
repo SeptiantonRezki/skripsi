@@ -39,6 +39,7 @@ import { MissionBuilderDuplicateComponent } from "./mission-builder/duplicate/mi
 import { ProjectListComponent } from "./pengaturan-attribute-misi/index/project/project-list.component";
 import { CreatetsmComponent } from "./automation/createtsm/createtsm.component";
 import { EdittsmComponent } from "./automation/edittsm/edittsm.component";
+import { CoinAdjustmentApprovalComponent } from "./coin-adjustment-approval/index/coin-adjustment-approval.component";
 
 const routes: Routes = [
   {
@@ -397,7 +398,14 @@ const routes: Routes = [
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]
-  }
+  },
+  {
+    path: 'approval-coin-adjusment',
+    component: CoinAdjustmentApprovalComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskVerification.index
+    },
+  },
 ];
 
 @NgModule({

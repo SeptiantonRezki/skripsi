@@ -101,6 +101,7 @@ import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { PopupNotifComponent } from "./shared/popup-notif/popup-notif.component";
 import { StorageHelper } from "./helper/storage.helper";
+import { CoinAdjustmentApprovalService } from "./services/dte/coin-adjustment-approval.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -216,6 +217,7 @@ const config = {
     PayLaterPanelService,
     PayLaterDeactivateService,
     MedalBadgeService,
+    CoinAdjustmentApprovalService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,
