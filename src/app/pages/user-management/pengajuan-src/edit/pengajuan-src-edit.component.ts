@@ -98,10 +98,11 @@ export class PengajuanSrcEditComponent implements OnInit {
         if (this.detailPengajuan.city_id) this.getDistricts(this.detailPengajuan.city_id);
         if (!!this.detailPengajuan.product && this.detailPengajuan.product.length > 0) {
           this.detailPengajuan.product.map(prd => {
-            this.productChecked[prd] = true;
+            this.productChecked[prd.toLowerCase()] = true;
           });
           this.listProductSells = this.detailPengajuan.product;
         }
+        console.log("check", this.productChecked);
         this.formPengajuanSrc.setValue({
           name: this.detailPengajuan.name,
           address: this.detailPengajuan.address,

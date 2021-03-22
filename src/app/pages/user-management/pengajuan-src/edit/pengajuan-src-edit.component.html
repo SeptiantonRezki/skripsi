@@ -91,7 +91,7 @@
                 <div fxLayout="column" style="margin-bottom: 20px;">
                   <h4 style="margin-bottom: 3px;">Produk apa saja yang dijual di Toko Anda</h4>
                   <mat-checkbox fxFlex *ngFor="let item of listProducts" (click)="addToProducts(item)"
-                    class="example-margin" [checked]="productChecked[item]">{{ item }}
+                    class="example-margin" [checked]="productChecked[item ? item.toLowerCase() : '']">{{ item }}
                   </mat-checkbox>
                 </div>
                 <mat-form-field fxFlex="100" class="is-light">
