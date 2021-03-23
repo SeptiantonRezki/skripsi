@@ -97,6 +97,11 @@ export class B2BVoucherInjectService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getProductListVendor(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'product_list_vendor');
+    return this.getApi(url, queryParams);
+  }
+
   getRedeems(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'getRedeem', context);
     return this.getApi(url, queryParams);

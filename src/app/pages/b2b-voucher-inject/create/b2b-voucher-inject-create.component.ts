@@ -63,9 +63,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   lastLevel: any;
   endArea: String;
   dialogRef: any;
-  totalData: number = 0;
+  totalData = 0;
   wholesalerIds: any = [];
-  isSort: boolean = false;
+  isSort = false;
 
   groupTradePrograms: any[] = [];
   listCategories: any[] = [];
@@ -85,11 +85,26 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
   inputChipList = [];
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+  ];
+  keyUpProductSRCC = new Subject<string>();
+  inputChipListSRCC = [];
+  productSRCC: FormControl = new FormControl('');
+  productListSRCC: any[] = [];
+  listProductSRCC: any[] = [];
+  listProductSkuBankSRCC: Array<any> = [];
+  filteredSkuOptionsSRCC: Observable<string[]>;
+  listCategoriesSRCC: any[] = [];
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -135,7 +150,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       salespoint: [],
       district: [],
       territory: []
-    }
+    };
     this.area = dataService.getDecryptedProfile()['area_type'];
 
     const observable = this.keyUp.debounceTime(1000)
@@ -153,15 +168,15 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   _filterSku(value): any[] {
-    console.log('valueee', value);
-    const filterValue = value && typeof value == 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    // console.log('valueee', value);
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   resetField(data?: any): void {
     const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
 
-    if (filteredItem.length == 0) {
+    if (filteredItem.length === 0) {
       // this.product = undefined;
     }
   }
@@ -197,7 +212,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   selectedProduct(event: MatAutocompleteSelectedEvent): void {
-    console.log('evenaksdjlak', event);
+    // console.log('evenaksdjlak', event);
     this.productList.push(event.option.viewValue);
     if (this.productInput) {
       this.productInput.nativeElement.value = '';
@@ -222,7 +237,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
         this.listProductSkuBank = res.data ? res.data : [];
         this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-      })
+      });
     } else {
       this.listProductSkuBank = [];
       this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
@@ -237,23 +252,29 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.b2bVoucherInjectService.getProductList({ page: 'all' }).subscribe(res => {
       this.listProduct = res.data ? res.data : [];
       this.filteredProduct.next(res.data ? res.data : []);
-    })
+    });
   }
 
   getCategories() {
     this.productService.getListCategory(null).subscribe(res => {
       this.listCategories = res.data ? res.data.data : [];
-    })
+    });
+  }
+
+  getVendorCategories() {
+    this.productService.getListCategoryVendor().subscribe(res => {
+      this.listCategoriesSRCC = res.data ? res.data : [];
+    });
   }
 
   getGroupTradeProgram() {
     this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
       this.groupTradePrograms = res.data ? res.data.data : [];
-    })
+    });
   }
 
   isChecked(type, event) {
-    console.log('type' + event, type);
+    // console.log('type' + event, type);
     if (type === 'product') {
       this.formDetilVoucher.get('category').setValue('');
       this.formDetilVoucher.get('limit_by_category').setValue(false);
@@ -322,7 +343,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   getProductObj(event, obj) {
-    let index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
     if (index === -1) {
       this.productList.push(obj);
     }
@@ -342,7 +363,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
            */
           this.listProductSkuBank = [];
         } else {
-          console.log('this.listProductSkuBank', this.listProductSkuBank)
+          // console.log('this.listProductSkuBank', this.listProductSkuBank);
           this.product.setValue(itemClick.toString());
           if (this.productInput) {
             this.productInput.nativeElement.value = itemClick.toString();
@@ -367,7 +388,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   getRetailerSelected() {
     this.b2bVoucherInjectService.getSelectedRetailer({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('retailer selected', res);
+      // console.log('retailer selected', res);
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
@@ -375,21 +396,18 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         }))
       });
       this.getListRetailer();
-    })
+    });
   }
 
   whyYouCantSeeMe() {
-    if (this.permission.b2b_approval && !this.isCreate) return false;
-    else if (this.isCreate && this.permission.buat) return true;
-    else if (!this.isCreate && this.permission.ubah) return true;
-    else return false;
+    if (this.permission.b2b_approval && !this.isCreate) { return false; } else if (this.isCreate && this.permission.buat) { return true; } else if (!this.isCreate && this.permission.ubah) { return true; } else { return false; }
   }
 
   checkForNonApprover() {
     if (this.detailVoucher) {
-      console.log("thissss", this.detailVoucher, this.permission);
+      // console.log('thissss', this.detailVoucher, this.permission);
       switch (this.detailVoucher.status) {
-        case "need-approval":
+        case 'need-approval':
           return this.permission.b2b_approval ? true : false;
         default:
           return true;
@@ -412,13 +430,19 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_only: res.data.limit_only,
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
+
+        limit_by_product_srcc: res.data.limit_by_src_catalogue === 'product',
+        limit_by_category_srcc: res.data.limit_by_src_catalogue === 'category',
+        limit_only_srcc: res.data.limit_only_src_catalogue,
+        product_srcc: res.data.limit_by_src_catalogue === 'product' ? res.data.limit_only_src_catalogue : '',
+        category_srcc: res.data.limit_by_src_catalogue === 'category' ? res.data.limit_only_src_catalogue.map(dt => Number(dt)) : '',
       });
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
         ([value, name]) => ({ value, name })
       ) : [];
 
-      if (this.permission.b2b_approval) this.formDetilVoucher.disable();
+      if (this.permission.b2b_approval) { this.formDetilVoucher.disable(); }
 
       if (res.data.status === 'need-approval') {
         this.formDetilVoucher.disable();
@@ -433,13 +457,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }
-    })
+    });
   }
 
   getDetailRedeem() {
     this.b2bVoucherInjectService.getRedeems({ voucher_id: this.detailVoucher.id }).subscribe(res => {
-      console.log('redeeems detail', res);
-    })
+      // console.log('redeeems detail', res);
+    });
   }
 
   ngOnInit() {
@@ -448,16 +472,28 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         return Observable.of(key).delay(300);
       })
       .subscribe(res => {
-        console.log('reas ngetik cuk', res);
+        // console.log('reas ngetik cuk', res);
         this.getListProduct(res);
         this.resetField(res);
       });
+
+    this.keyUpProductSRCC.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.getListProductSRCC(res);
+        this.resetField(res);
+      });
+
     // this.getProducts();
     this.getCategories();
+    this.getVendorCategories();
     this.getGroupTradeProgram();
 
 
     this.formDetilVoucher = this.formBuilder.group({
+      opsiVoucher: ['b2b', Validators.required],
       name: ['', Validators.required],
       voucherDate: [null, Validators.required],
       voucherExpiry: [null, Validators.required],
@@ -467,9 +503,17 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       product: [''],
       category: [''],
       note: [''],
+      limit_by_product_srcc: [false],
+      limit_by_category_srcc: [false],
+      limit_only_srcc: [''],
+      product_srcc: [''],
+      category_srcc: [''],
     });
 
-    if (this.isCreate) this.formDetilVoucher.get('category').disable();
+    if (this.isCreate) {
+      this.formDetilVoucher.get('category').disable();
+      this.formDetilVoucher.get('category_srcc').disable();
+    }
 
     this.formFilter = this.formBuilder.group({
       national: [''],
@@ -479,7 +523,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       salespoint: [''],
       district: [''],
       territory: ['']
-    })
+    });
 
     setTimeout(() => {
       if (this.isDetail || this.isEdit) {
@@ -513,31 +557,31 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
+      // console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
+      // console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
+      // console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
+      // console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
+      // console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -554,7 +598,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   createFormProduct() {
     return this.formBuilder.group({
       product: ['']
-    })
+    });
   }
 
   onSelect({ selected }) {
@@ -564,10 +608,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
+    // console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
-    if (!allRowsSelected) this.selected = [];
-    else this.selected.length = this.totalData;
+    if (!allRowsSelected) { this.selected = []; } else { this.selected.length = this.totalData; }
   }
 
   getId(row) {
@@ -576,34 +619,34 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   getAudienceAreaV2(selection, id, event?) {
     let item: any;
-    let fd = new FormData();
-    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
+    const fd = new FormData();
+    const lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
       if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
-        })
+        });
         // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
         if (areaSelected[0].value.length === 0) {
-          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+          const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
-            })
+            });
           } else {
             fd.append('area_id[]', newAreaSelected[0].value);
           }
         }
       }
     } else {
-      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
+      const beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
       // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
@@ -612,16 +655,16 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
-          })
+          });
           // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
-            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            const beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+            const newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
-              })
+              });
             } else {
               fd.append('area_id[]', newAreaSelected[0].value);
             }
@@ -636,17 +679,18 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     let expectedArea = [];
     if (!this.formFilter.get(this.parseArea(selection)).disabled) {
       thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) thisAreaOnSet = [
+      if (this.areaFromLogin[1]) { thisAreaOnSet = [
         ...thisAreaOnSet,
         ...this.areaFromLogin[1]
       ];
+      }
 
       thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
       if (id && id.length > 1) {
         areaNumber = 1;
       }
 
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') { expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id)); }
       // console.log('on set', thisAreaOnSet, selection, id);
     }
 
@@ -672,7 +716,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
+        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -688,7 +732,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['region'] = [];
@@ -709,7 +753,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
+          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -718,7 +762,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['area'] = [];
@@ -738,7 +782,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
+          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -747,7 +791,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['salespoint'] = [];
@@ -772,7 +816,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['district'] = [];
@@ -797,7 +841,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
           }
         } else {
           this.list['territory'] = [];
@@ -825,24 +869,23 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   getListRetailer(string?: any) {
-    console.log('Search', string);
+    // console.log('Search', string);
     try {
       // this.dataService.showLoading(true);
       this.pagination.per_page = 25;
-      if (string) { this.pagination.search = string; }
-      else { delete this.pagination.search; }
-      let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
-      let area_id = areaSelected[areaSelected.length - 1].value;
-      let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+      if (string) { this.pagination.search = string; } else { delete this.pagination.search; }
+      const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      const area_id = areaSelected[areaSelected.length - 1].value;
+      const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
       this.pagination.area = area_id;
 
       // console.log('area_selected on ff list', areaSelected, this.list);
       if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
         this.pagination['after_level'] = true;
       } else {
-        let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-        let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-        let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+        const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+        const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+        const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
         let is_area_2 = false;
 
         let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
@@ -852,7 +895,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         }
 
         if (this.areaFromLogin[1]) {
-          let second_areas = this.areaFromLogin[1];
+          const second_areas = this.areaFromLogin[1];
           last_self_area = [
             ...last_self_area,
             second_areas[second_areas.length - 1].id
@@ -863,25 +906,23 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           ];
         }
 
-        let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+        const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
 
-        if (this.pagination['after_level']) delete this.pagination['after_level'];
+        if (this.pagination['after_level']) { delete this.pagination['after_level']; }
         this.pagination['self_area'] = self_area;
         this.pagination['last_self_area'] = last_self_area;
         let levelCovered = [];
-        if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+        if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
         if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-          let oneAreaSelected = lastSelectedArea.value[0];
-          let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-          if (findOnFirstArea) is_area_2 = false;
-          else is_area_2 = true;
+          const oneAreaSelected = lastSelectedArea.value[0];
+          const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+          // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+          if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
 
-          console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+          // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
           if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
             // console.log('its hitted [levelCovered > -1]');
-            if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-            else this.pagination['last_self_area'] = [last_self_area[0]];
+            if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]]; } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
           } else {
             // console.log('its hitted [other level]');
             this.pagination['after_level'] = true;
@@ -898,7 +939,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       this.loadingIndicator = true;
 
       this.b2bVoucherInjectService.getRetailer(this.pagination, { voucher_id: this.detailVoucher.id, business_id: this.selected.map(item => item.id) }).subscribe(res => {
-        if (res.status == 'success') {
+        if (res.status === 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
           this.rows = res.data.data;
@@ -919,9 +960,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
-      })
+      });
     } catch (ex) {
-      console.log('ex', ex)
+      console.log('ex', ex);
     }
   }
 
@@ -953,13 +994,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   checkAreaLocation(area, lastSelfArea) {
-    let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
-    let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
-    let indexAreaSelected = areaList.indexOf(area.key);
-    let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
-    let newLastSelfArea = []
+    const lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    const areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
+    const indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
+    const indexAreaSelected = areaList.indexOf(area.key);
+    const rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
+    let newLastSelfArea = [];
     // console.log('[checkAreaLocation:area]', area);
     // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
     // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
@@ -969,7 +1010,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
         // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
-        let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
+        const areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
         // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
         // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
@@ -985,14 +1026,14 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
 
   initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+    const areas = this.dataService.getDecryptedProfile()['areas'] || [];
     this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
+    const sameArea = this.geotreeService.diffLevelStarted;
+    const areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    let levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+    const levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    const lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
       this.formFilter.get('national').setValue(1);
@@ -1001,13 +1042,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     }
     areas.map((area, index) => {
       area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
+        const level_desc = level.level_desc;
+        const levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
         if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
+          if (!this.list[level.type]) { this.list[level.type] = []; }
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
+            // console.log('ff value', this.formFilter.value);
             // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
@@ -1015,19 +1056,19 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
               this.formFilter.get(this.parseArea(level.type)).disable();
             }
 
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
+            if (areasDisabled.indexOf(level.type) > -1) { this.formFilter.get(this.parseArea(level.type)).disable(); }
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
           }
 
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
+          const isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
           level['area_type'] = `area_${index + 1}`;
           this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) { this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id); }
 
           if (i === area.length - 1) {
             this.endArea = this.parseArea(level.type);
@@ -1041,16 +1082,25 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   onSaveDetail() {
     if (this.formDetilVoucher.valid) {
       const body = {
+        type: this.formDetilVoucher.get('opsiVoucher').value,
         name: this.formDetilVoucher.get('name').value,
         available_at: moment(this.formDetilVoucher.get('voucherDate').value).format('YYYY-MM-DD'),
         expired_at: moment(this.formDetilVoucher.get('voucherExpiry').value).format('YYYY-MM-DD'),
         description: this.formDetilVoucher.get('note').value,
         limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
-          this.formDetilVoucher.get('limit_by_category').value ? 'category' : null
+          this.formDetilVoucher.get('limit_by_category').value ? 'category' : null,
+        limit_by_src_catalogue: this.formDetilVoucher.get('limit_by_product_srcc').value ? 'product' :
+          this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null
       };
       // console.log('paskdjsakl', this.productList);
       if (body['limit_by'] !== null) {
-        body['limit_only'] = body['limit_by'] === 'product' ? this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value
+        body['limit_only'] = body['limit_by'] === 'product' ?
+          this.productList.map(prd => prd.sku_id) : this.formDetilVoucher.get('category').value;
+      }
+
+      if (body['limit_by_src_catalogue'] !== null) {
+        body['limit_only_src_catalogue'] = body['limit_by_src_catalogue'] === 'product' ?
+          this.productListSRCC.map(prd => prd.sku_id) : this.formDetilVoucher.get('category_srcc').value;
       }
 
       if (this.formDetilVoucher.get('limit_by_product').value === false && this.formDetilVoucher.get('limit_by_category').value === false) {
@@ -1070,7 +1120,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           // }
         }, err => {
           this.dataService.showLoading(false);
-        })
+        });
       } else {
         this.b2bVoucherInjectService.create(body).subscribe(res => {
           this.dataService.showLoading(false);
@@ -1078,7 +1128,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           this.router.navigate(['inject-b2b-voucher']);
         }, err => {
           this.dataService.showLoading(false);
-        })
+        });
       }
     } else {
       commonFormValidator.validateAllFields(this.formDetilVoucher);
@@ -1087,7 +1137,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   onSavePanelRetailer() {
-    let body = {
+    const body = {
       _method: 'PUT',
       type: 'retailer'
     };
@@ -1121,8 +1171,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     try {
       this.dataService.showLoading(true);
       const response = await this.b2bVoucherInjectService.exportInvoice({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response);
-      if (response && response.data) window.open(response.data.url, '_blank');
+      // console.log('he', response);
+      if (response && response.data) { window.open(response.data.url, '_blank'); }
       // this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
       this.dataService.showLoading(false);
     } catch (error) {
@@ -1160,19 +1210,19 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
         message: 'Jumlah mitra yang dipilih tidak boleh kosong!'
-      })
+      });
       return;
     }
 
     this.dataService.showLoading(true);
-    let fd = {
+    const fd = {
       business_id: this.selected.map(item => item.id),
       type: 'retailer',
       voucher_id: this.detailVoucher.id
-    }
+    };
     try {
       const response = await this.b2bVoucherInjectService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response.headers);
+      // console.log('he', response.headers);
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_PanelRetailer_${new Date().toLocaleString()}.xls`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
@@ -1195,10 +1245,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   async exportExcel() {
     this.dataService.showLoading(true);
-    let fileName = `B2B_CN_Reward_Panel_Retailer_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    const fileName = `B2B_CN_Reward_Panel_Retailer_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     try {
       const response = await this.b2bVoucherInjectService.exportExcel({ voucher_id: this.detailVoucher.id }).toPromise();
-      console.log('he', response.headers);
+      // console.log('he', response.headers);
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
       this.dataService.showLoading(false);
     } catch (error) {
@@ -1210,7 +1260,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   downLoadFile(data: any, type: string, fileName: string) {
     // It is necessary to create a new blob object with mime-type explicitly set
     // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
+    const newBlob = new Blob([data], { type: type });
 
     // IE doesn't allow using a blob object directly as link href
     // instead it is necessary to use msSaveOrOpenBlob
@@ -1219,11 +1269,11 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       return;
     }
 
-    // For other browsers: 
+    // For other browsers:
     // Create a link pointing to the ObjectURL containing the blob.
     const url = window.URL.createObjectURL(newBlob);
 
-    var link = document.createElement('a');
+    const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
     // this is necessary as link.click() does not work on the latest firefox
@@ -1237,13 +1287,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
-    console.log(error)
+    // console.log('Here');
+    // console.log(error);
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.log(error);
+    console.log({error});
     try {
       alert(error ? error.error ? error.error.message : 'Terjadi Kesalahan Export' : 'Terjadi Kesalahan Export');
     } catch (x) {
@@ -1254,7 +1304,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   importRetailer(): void {
     if (this.detailVoucher.status === 'need-approval') {
-      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
+      this.dialogService.openSnackBar({ message: 'Inject Voucher sedang di Review' });
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -1271,7 +1321,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response.filter(item => item.is_valid) });
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        console.log('this', this.selected)
+        // console.log('this', this.selected);
       }
     });
   }
@@ -1281,9 +1331,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       return false;
     }
     switch (this.detailVoucher.status) {
-      case "need-approval":
+      case 'need-approval':
         return false;
-      case "published":
+      case 'published':
         return false;
       default:
         return true;
@@ -1292,7 +1342,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   takeAction(action) {
     if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
-      this.dialogService.openSnackBar({ message: "Anda Tidak Memilik Hak Akses untuk Approval!" });
+      this.dialogService.openSnackBar({ message: 'Anda Tidak Memilik Hak Akses untuk Approval!' });
       return;
     }
     const data = {
@@ -1316,5 +1366,153 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     });
   }
 
+
+  getListProductSRCC(param?): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipListSRCC = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+      this.b2bVoucherInjectService.getProductListVendor({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBankSRCC = res.data ? res.data : [];
+        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      });
+    } else {
+      this.listProductSkuBankSRCC = [];
+      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+    }
+  }
+
+  _filterSkuSRCC(value): any[] {
+    // console.log('valueee', value);
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBankSRCC.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  getProductObjSRCC(event, obj) {
+    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productListSRCC.push(obj);
+    }
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
+
+    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
+      const itemClick = this.inputChipList.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBankSRCC = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
+          this.product.setValue(itemClick.toString());
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.product.setValue(null);
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+        this.listProductSkuBankSRCC = [];
+      }
+      setTimeout(() => {
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+
+  isCheckedSRCC(type, event) {
+    try {
+      if (type === 'product') {
+        this.formDetilVoucher.get('category_srcc').setValue('');
+        this.formDetilVoucher.get('limit_by_category_srcc').setValue(false);
+        if (!event.checked) {
+          this.productListSRCC = [];
+          this.productSRCC.setValue(null);
+          // this.product.disable();
+          this.listProductSkuBankSRCC = [];
+          this.inputChipListSRCC = [];
+          if (this.productInputSRCC) {
+            this.productInputSRCC.nativeElement.value = null;
+          }
+        } else {
+          this.formDetilVoucher.get('category_srcc').disable();
+          this.productSRCC.enable();
+        }
+      } else {
+        this.formDetilVoucher.get('limit_by_product_srcc').setValue(false);
+        this.productListSRCC = [];
+        this.productSRCC.setValue(null);
+        // this.product.disable();
+        this.listProductSkuBankSRCC = [];
+        this.inputChipListSRCC = [];
+        if (event.checked) {
+          this.formDetilVoucher.get('category_srcc').setValue('');
+          this.formDetilVoucher.get('category_srcc').enable();
+        } else {
+          this.formDetilVoucher.get('category_srcc').setValue('');
+          this.formDetilVoucher.get('category_srcc').disable();
+        }
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
+        }
+      }
+    } catch (ex) {
+      console.warn(ex);
+    }
+  }
+
+  addSRCC(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productListSRCC.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.productSRCC.setValue(null);
+  }
+
+  removeSRCC(id: string): void {
+    const index = this.productListSRCC.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productListSRCC.splice(index, 1);
+    }
+  }
+
+  selectedProductSRCC(event: MatAutocompleteSelectedEvent): void {
+    // console.log('evenaksdjlak', event);
+    this.productListSRCC.push(event.option.viewValue);
+    if (this.productInputSRCC) {
+      this.productInputSRCC.nativeElement.value = '';
+    }
+    this.productSRCC.setValue(null);
+  }
 
 }

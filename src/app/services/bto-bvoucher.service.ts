@@ -102,6 +102,11 @@ export class BtoBVoucherService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getProductListVendor(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'product_list_vendor');
+    return this.getApi(url, queryParams);
+  }
+
   redeemExport(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'redeem_export', context);
     return this.getBlobAsJsonApi(url);
