@@ -421,6 +421,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.b2bVoucherInjectService.show({ voucher_id: this.detailVoucher.id }).subscribe(res => {
       this.detailVoucher = res.data;
       this.formDetilVoucher.setValue({
+        opsiVoucher: res.data.type,
         name: res.data.name,
         voucherDate: res.data.available_at,
         voucherExpiry: res.data.expired_at,
