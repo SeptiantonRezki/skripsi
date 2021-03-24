@@ -20,9 +20,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit {
   onLoad: boolean;
   loadingIndicator: boolean;
 
-  permissionVerifikasiMisi: any;
-  permissionVerifikasiMisiAll: any;
-  permissionReleaseCoin: any;
+  permissionCoinAdjustment: any;
   roles: PagesName = new PagesName();
 
   rows: any[];
@@ -67,9 +65,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit {
     this.onLoad = true;
     this.loadingIndicator = true;
 
-    // this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
-    // this.permissionVerifikasiMisiAll = this.roles.getRoles('principal.dtetaskverificationall');
-    // this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
+    this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {
@@ -157,47 +153,27 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit {
 
   setMinDate(e) { }
 
-  // openConfirmDialog(item: any, popupType: string) {
-  //   const dialogConfig = new MatDialogConfig();
-  //   item.popupType = popupType;
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.autoFocus = true;
-  //   dialogConfig.panelClass = 'scrumboard-card-dialog';
-  //   dialogConfig.data = item;
+  export(item) {
+    this.dataService.showLoading({ show: true });
+    console.log("Ke Click gak sih ini cuk ett dah")
+    let params = {
+      id: item.id,
+      is_tsm: true
+    }
 
-  //   this.dialogRef = this.dialog.open(ConfirmDialogTsmComponent, dialogConfig);
-
-  //   this.dialogRef.afterClosed().subscribe(response => {
-  //     if (response) {
-  //       this.getListTaskVerification();
-  //     }
-  //   });
-  // }
-
-  // export(item) {
-  //   this.dataService.showLoading({ show: true });
-
-  //   let response: any = { rand: "" };
-
-  //   let params = {
-  //     task_sequencing_management_id: item.task_sequencing_management_id,
-  //     task_sequencing_management_template_id: item.task_sequencing_management_template_id,
-  //     rand: "",
-  //     last: "true"
-  //   }
-
-  //   this.coinAdjustmentApprovalService.exportTrueTsm(params).subscribe(response => {
-  //     if (response.data && response.status) {
-  //       setTimeout(() => {
-  //         this.downloadLink.nativeElement.href = response.data;
-  //         this.downloadLink.nativeElement.click();
-  //         this.dataService.showLoading(false);
-  //       }, 500);
-  //     }
-  //   }, err => {
-  //     this.dataService.showLoading(false);
-  //   })
-  // }
+    this.coinAdjustmentApprovalService.downloadApprovalList(params).subscribe(response => {
+      console.log('resss', response);
+      if (response.data && response.status) {
+        setTimeout(() => {
+          this.downloadLink.nativeElement.href = response.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, 500);
+      }
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
 
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
@@ -236,25 +212,4 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit {
       this.loadingIndicator = false;
     });
   }
-
-  // isDisableVerification(row) {
-  //   if (row.task_sequencing_management_template_quiz === 1) return true;
-
-  //   if (row.task_need_verify === 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // isDisableReleaseCoin(row) {
-  //   if (row.task_sequencing_management_template_quiz === 1) return true;
-
-  //   if (row.task_need_coin === 0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
 }

@@ -565,7 +565,7 @@ export const brConfig = {
     ]
   },
   privatelabel: {
-    panelpartnership:{
+    panelpartnership: {
       index: [
         {
           type: "parent",
@@ -1506,6 +1506,27 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail DTE Automation"
+        }
+      ]
+    },
+    coin_adjustment: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Approval Coin Adjustment"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/approval-coin-adjusment",
+          name: "Approval Coin Adjustment"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Approval Coin Adjustment"
         }
       ]
     },

@@ -20,9 +20,7 @@ export class CoinAdjustmentApprovalComponent implements OnInit {
   onLoad: boolean;
   loadingIndicator: boolean;
 
-  permissionVerifikasiMisi: any;
-  permissionVerifikasiMisiAll: any;
-  permissionReleaseCoin: any;
+  permissionCoinAdjustment: any;
   roles: PagesName = new PagesName();
 
   rows: any[];
@@ -64,9 +62,7 @@ export class CoinAdjustmentApprovalComponent implements OnInit {
     this.onLoad = true;
     this.loadingIndicator = true;
 
-    // this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
-    // this.permissionVerifikasiMisiAll = this.roles.getRoles('principal.dtetaskverificationall');
-    // this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
+    this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
 
     this.keyUp.debounceTime(500)
       .flatMap(search => {

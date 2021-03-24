@@ -87,85 +87,65 @@
               prop="nama_grup_trade_program" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <!-- <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas" prop="nama_template"
+            <ngx-datatable-column [width]="190" [sortable]="false" name="Jumlah SRC" prop="jumlah_src" [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="190" [sortable]="false" name="Total Coin yang Terkirim" prop="total_coin"
               [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Lain Misi/Template Tugas"
-              prop="other_name_template" [flexGrow]="3">
-            </ngx-datatable-column>
-
-            <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
-            </ngx-datatable-column>
-
-            <ngx-datatable-column [sortable]="false" name="Compliance Rate" prop="compliance_rate" [flexGrow]="3">
-            </ngx-datatable-column>
-
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Request" prop="requested_at"
+              [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span>{{row.start_date | dateToMoment}} s/d {{ row.end_date | dateToMoment}}</span>
+                <span>{{row.requested_at | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Audience Group" prop="nama_audience_group" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="Approver" prop="approver" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Approval" prop="responded_at"
+              [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{row.responded_at | dateToMoment}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="name-container">
                   <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
-                    style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'publish'">
-                    {{row.status_scheduler}}
+                    style="text-transform: capitalize;" *ngIf="row.status == 'approved'">
+                    {{row.status}}
                   </p>
                   <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
-                    style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'draft'">
-                    {{row.status_scheduler}}
+                    style="text-transform: capitalize;" *ngIf="row.status == 'pending'">
+                    {{row.status}}
                   </p>
-                  <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
-                    *ngIf="row.status_scheduler == 'unpublish'">
-                    {{row.status_scheduler}}
+                  <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: capitalize;"
+                    *ngIf="row.status == 'rejected'">
+                    {{row.status}}
                   </p>
                 </div>
               </ng-template>
-            </ngx-datatable-column>
-
-
-            <ngx-datatable-column [sortable]="false" name="Status Coin" prop="status_coin" [flexGrow]="3">
             </ngx-datatable-column>
 
             <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <div class="button-row" style="margin-left: -10px">
+                <div class="button-row" style="margin-left: -10px" *ngIf="permissionCoinAdjustment?.lihat">
                   <button type="button" mat-icon-button color="" matTooltip="Lihat"
-                    [routerLink]="['/dte', 'taskverification', 'detail', row.id, row.scheduler_templates_id]"
-                    [disabled]="!permissionVerifikasiMisi?.lihat">
+                    [routerLink]="['/dte', 'approval-coin-adjusment', 'detail', row.id]">
                     <mat-icon class="secondary-text">assignment</mat-icon>
                   </button>
-                  <button type="button" mat-icon-button color=""
-                    [routerLink]="['/dte', 'taskverification', 'edit', row.id]"
-                    [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah"
-                    matTooltip="Ubah Tanggal Penjadwalan">
-                    <mat-icon class="secondary-text">update</mat-icon>
-                  </button>
-                  <button type="button" mat-icon-button color="" [disabled]="row.status_scheduler !== 'publish'"
-                    matTooltip="Export Misi" (click)="export(row)">
-                    <mat-icon *ngIf="row.status_scheduler == 'publish'" class="orange-500-fg">save_alt</mat-icon>
-                    <mat-icon *ngIf="row.status_scheduler !== 'publish'" class="secondary-text">save_alt</mat-icon>
-                  </button>
-                  <button type="button" mat-icon-button color="" matTooltip="Verified All"
-                    (click)="openConfirmDialog(row, 'Verification All Mission')"
-                    [disabled]="isDisableVerification(row)">
-                    <mat-icon *ngIf="!isDisableVerification(row)" class="orange-500-fg">assignment_turned_in</mat-icon>
-                    <mat-icon *ngIf="isDisableVerification(row)" class="secondary-text">assignment_turned_in</mat-icon>
-                  </button>
-                  <button type="button" mat-icon-button color="" matTooltip="Release Coin"
-                    (click)="openConfirmDialog(row, 'Release Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
-                    <mat-icon *ngIf="!isDisableReleaseCoin(row)" class="orange-500-fg">call_made</mat-icon>
-                    <mat-icon *ngIf="isDisableReleaseCoin(row)" class="secondary-text">call_made</mat-icon>
+                  <button type="button" mat-icon-button color="" matTooltip="Export Approval Coin Adjustment"
+                    (click)="export(row)">
+                    <mat-icon class="orange-500-fg">save_alt</mat-icon>
+                    <!-- <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt
+                    </mat-icon> -->
                   </button>
                 </div>
               </ng-template>
-            </ngx-datatable-column> -->
+            </ngx-datatable-column>
           </ngx-datatable>
           <a #downloadLink></a>
         </mat-tab>
