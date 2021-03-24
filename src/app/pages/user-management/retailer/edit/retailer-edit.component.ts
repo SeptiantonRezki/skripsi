@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { DataService } from '../../../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -101,6 +101,8 @@ export class RetailerEditComponent {
   ]
 
   formRefferalCode: FormGroup;
+  
+  @Input('formOnly') formOnly: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -1,0 +1,112 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Pertanyaan Verifikasi Agent'">
+    <div class="button-row" fxLayout="row">
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      
+      <!-- SEARCH -->
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Pertanyaan Verifikasi Agent</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div> <!--/ SEARCH -->
+
+      <!-- CUSTOMER CARE TABLE -->
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+            let-selectFn="selectFn">
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+          </ng-template>
+
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Kode Pesanan Transaksi Terakhir" prop="kode_pesanan" [width]="250">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="direct-edit" (click)="directDetail(row)">{{row.kode_pesanan}}
+            </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Toko" prop="wholesaler_name" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Kode Toko" prop="wholesaler_code" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.owner || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Alamat" prop="address_line1" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.address_line1 || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Area" prop="area_code" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Nomer Ponsel" prop="refferal_code" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_code || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status Pelanggan" prop="status_indo" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.status_indo || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tipe Pelanggan" prop="classification" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.classification || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Transaksi Terakhir" prop="tanggal_transaksi" [sortable]="false" [width]="250">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.tanggal_transaksi || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total Transaksi Terakhir" prop="total_transaksi" [sortable]="false" [width]="250">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_transaksi || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">remove_red_eye</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable> <!-- CUSTOMER CARE TABLE -->
+
+    </div>
+  </div>
+
+</div>
