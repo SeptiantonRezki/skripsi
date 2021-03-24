@@ -75,7 +75,13 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Status Pelanggan" prop="status_indo" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.status_indo || '-'}}
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <p class="status text-truncate h6 p-4"
+              style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
+              [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+              {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+            </p>
+            <!-- {{row.status_indo || '-'}} -->
           </ng-template>
         </ngx-datatable-column>
 
@@ -89,8 +95,14 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Total SKU Transaksi Terakhir" prop="total_sku" [sortable]="false" [width]="250">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.total_sku || '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Total Transaksi Terakhir" prop="total_transaksi" [sortable]="false" [width]="250">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_transaksi || '-'}}
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_transaksi || 0 | rupiahFormater}}
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
