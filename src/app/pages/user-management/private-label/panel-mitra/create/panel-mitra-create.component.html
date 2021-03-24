@@ -132,8 +132,8 @@
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
             <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
@@ -166,6 +166,17 @@
         <ngx-datatable-column name="Area" prop="area" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.area || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Hub" prop="is_hub" [sortable]="false">
+          <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-label draggable">Hub</span>
+            <mat-slide-toggle class="example-margin ml-12" [color]="'primary'" (change)="onAllSelectedHub(!allHubSelected)" [checked]="allHubSelected" [disabled]="!allRowsSelected"></mat-slide-toggle>
+          </ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected">
+            <div>
+              <mat-slide-toggle class="example-margin" [color]="'primary'" (change)="onSelectedHub($event, row)" [checked]="checkHub(row)" [disabled]="allRowsSelected || !isSelected"></mat-slide-toggle>
+            </div>
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>
