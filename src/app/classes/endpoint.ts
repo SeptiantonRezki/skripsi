@@ -786,6 +786,9 @@ export class Endpoint {
         delete_notif: `${AYO_API}/api/general/user_notif/delete-batch`,
         get_detail: `${AYO_API}/api/general/user_notif/detail/${context.id}`,
       },
+      customer_care: {
+        questions: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/customer-care/pertanyaan-verifikasi-agent/list`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

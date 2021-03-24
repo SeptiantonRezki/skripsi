@@ -146,6 +146,22 @@ export const navigation = [
     ]
   },
   {
+    id: "customer-care",
+    title: "Customer Care",
+    translate: "Customer Care",
+    type: "group",
+    children: [
+      {
+        id: "pertanyaan-verifikasi-agent",
+        title: "Questions Verification Agent",
+        translate: "Pertanyaan Verifikasi Agent",
+        type: "item",
+        icon: "collections",
+        url: "/customer-care/questions-verification-agent"
+      },
+    ]
+  },
+  {
     id: "product-management",
     title: "Product Management",
     translate: "Management Barang (SKU)",
