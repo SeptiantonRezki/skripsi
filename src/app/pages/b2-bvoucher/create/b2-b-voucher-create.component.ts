@@ -1409,11 +1409,11 @@ export class B2BVoucherCreateComponent implements OnInit {
     if (param.length >= 3) {
       this.b2bVoucherService.getProductListVendor({ page: 'all', search: param }).subscribe(res => {
         this.listProductSkuBankSRCC = res.data ? res.data : [];
-        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
       })
     } else {
       this.listProductSkuBankSRCC = [];
-      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
     }
   }
 
@@ -1428,12 +1428,12 @@ export class B2BVoucherCreateComponent implements OnInit {
     if (index === -1) {
       this.productListSRCC.push(obj);
     }
-    if (this.productInput) {
-      this.productInput.nativeElement.value = null;
+    if (this.productInputSRCC) {
+      this.productInputSRCC.nativeElement.value = null;
     }
 
     if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
-      const itemClick = this.inputChipList.filter((item) => {
+      const itemClick = this.inputChipListSRCC.filter((item) => {
         return item.toLowerCase().search(obj.name.toLowerCase());
       });
 
@@ -1445,23 +1445,23 @@ export class B2BVoucherCreateComponent implements OnInit {
           this.listProductSkuBankSRCC = [];
         } else {
           // console.log('this.listProductSkuBank', this.listProductSkuBank)
-          this.product.setValue(itemClick.toString());
-          if (this.productInput) {
-            this.productInput.nativeElement.value = itemClick.toString();
+          this.productSRCC.setValue(itemClick.toString());
+          if (this.productInputSRCC) {
+            this.productInputSRCC.nativeElement.value = itemClick.toString();
           }
           this.getListProduct(itemClick.toString());
         }
       } else {
-        this.product.setValue(null);
-        if (this.productInput) {
-          this.productInput.nativeElement.value = null;
+        this.productSRCC.setValue(null);
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
         }
         this.listProductSkuBankSRCC = [];
       }
       setTimeout(() => {
-        if (this.productInput) {
-          this.productInput.nativeElement.blur();
-          this.productInput.nativeElement.focus();
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.blur();
+          this.productInputSRCC.nativeElement.focus();
         }
       }, 500);
     }
