@@ -468,7 +468,10 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'wholesaler' };
+    dialogConfig.data = {
+      type: 'wholesaler',
+      paylater_company_id: this.formPanelMitra.get('company').value
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 

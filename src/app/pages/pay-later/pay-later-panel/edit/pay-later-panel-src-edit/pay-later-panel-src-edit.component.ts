@@ -522,7 +522,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'retailer' };
+    dialogConfig.data = {
+      type: 'retailer',
+      paylater_company_id: this.paylaterCompanyId
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
