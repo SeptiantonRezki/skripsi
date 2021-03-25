@@ -167,18 +167,18 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
   }
 
   getDetail() {
-    this.onLoad = false;
-    this.initAreaV2();
-    this.trade_audience_group_id = 2;
-    this.getListAudience(2);
+    // this.onLoad = false;
+    // this.initAreaV2();
+    // this.trade_audience_group_id = 2;
+    // this.getListAudience(2);
 
-    // this.coinAdjustmentApprovalService.getDetail({ approval_id: this.idApproval, is_tsm: this.isTSM }).subscribe(res => {
-    //   this.dataApproval = res.data;
-    //   this.onLoad = false;
-    //   this.initAreaV2();
-    //   this.trade_audience_group_id = res.data.id;
-    //   this.getListAudience(res.data.id);
-    // });
+    this.coinAdjustmentApprovalService.getDetail({ approval_id: this.idApproval, is_tsm: this.isTSM }).subscribe(res => {
+      this.dataApproval = res.data;
+      this.onLoad = false;
+      this.initAreaV2();
+      this.trade_audience_group_id = res.data.id;
+      this.getListAudience(res.data.id);
+    });
   }
 
   loadFormFilter(search?: string) {
