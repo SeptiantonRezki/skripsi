@@ -109,6 +109,12 @@
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Hub" [formControl]="filterHub">
+              <mat-option [value]="item.value" *ngFor="let item of listFilterHub">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
   
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
@@ -117,7 +123,7 @@
             </mat-form-field>
           </div>
         </div>
-        </form>
+      </form>
 
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"

@@ -50,6 +50,12 @@ export class PanelMitraCreateComponent implements OnInit {
   allRowsSelected: boolean;
   // allRowsSelectedValid: boolean;
   allHubSelected = false;
+  listFilterHub = [
+    { name: 'All', value: '' },
+    { name: 'Yes', value: '1' },
+    { name: 'No', value: '0' },
+  ];
+  filterHub = new FormControl();
 
   isSelected: boolean;
 
@@ -147,6 +153,10 @@ export class PanelMitraCreateComponent implements OnInit {
 
     this.filterProdukSearch.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filteringProdukSearch();
+    });
+
+    this.filterHub.valueChanges.subscribe((v) => {
+      this.getListMitra(null, v);
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -811,7 +821,7 @@ export class PanelMitraCreateComponent implements OnInit {
     }
   }
 
-  getListMitra(string?: any) {
+  getListMitra(string?: any, hubFilter?: any) {
     console.log('Search', string);
     try {
     this.dataService.showLoading(true);
@@ -895,7 +905,14 @@ export class PanelMitraCreateComponent implements OnInit {
       delete this.pagination['sort_type'];
     }
 
-    this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
+    let hub = null;
+    if (hubFilter === '1') {
+      hub = this.selected.filter((v) => v.isHub).map((v) => v.id);
+    } else if (hubFilter === '0') {
+      hub = this.selected.filter((v) => !v.isHub).map((v) => v.id);
+    }
+
+    this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds, only: hub }).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.totalData = res.data.total;
@@ -1118,9 +1135,10 @@ export class PanelMitraCreateComponent implements OnInit {
   aturPanelMitra() {
     if (this.formInput.valid) {
       const body = {
-          product_id: this.formInput.get('filterproduct').value,
-          supplier_company_id: this.formInput.get('filtersupplier').value,
-        };
+        product_id: this.formInput.get('filterproduct').value,
+        supplier_company_id: this.formInput.get('filtersupplier').value,
+      };
+      this.filterHub.setValue('');
       this.panelMitraService.checkPanelMitra(body).subscribe(res => {
           this.wholesalerIds = res.data.wholesaler_id;
           this.selected = res.data.wholesaler_id.map((id: any) => {

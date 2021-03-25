@@ -51,7 +51,7 @@
           <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
         </div>
       </div>
-      <div *ngIf="rows.length > 0">
+      <div *ngIf="formInput.get('filterproduct').value && formInput.get('filtersupplier').value">
       <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" >
         <div class="button-row">
           <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS</button>
@@ -108,6 +108,12 @@
             <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
               Territory' :
               item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="Hub" [formControl]="filterHub">
+            <mat-option [value]="item.value" *ngFor="let item of listFilterHub">{{item.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -180,12 +186,13 @@
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>
+
       <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
           SIMPAN
         </button>
       </div>
-    </div>
+      </div>
     </div>
   </div>
 </div>

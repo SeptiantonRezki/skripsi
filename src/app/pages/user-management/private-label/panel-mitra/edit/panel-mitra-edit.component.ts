@@ -22,43 +22,49 @@ import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-m
   styleUrls: ['./panel-mitra-edit.component.scss']
 })
 export class PanelMitraEditComponent implements OnInit {
-    onLoad: boolean;
-    @ViewChild('containerScroll') private myScrollContainer: ElementRef;
+  onLoad: boolean;
+  @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
-    rows: any[];
-    selected: any[];
-    id: any;
-    listFilterCategory: any[];
-    listFilterProducts: any[];
-    listFilterSupplier: any[];
-    // filterCategory: any[] = [ { name: 'Semua Kategori', id: '' }, ];
-    // filterProducts: any[] = [ { name: 'Semua Produk', id: '' }, ];
-    filterCategory: any[];
-    filterProducts: any[];
-    filterSupplier: any[];
+  rows: any[];
+  selected: any[];
+  id: any;
+  listFilterCategory: any[];
+  listFilterProducts: any[];
+  listFilterSupplier: any[];
+  // filterCategory: any[] = [ { name: 'Semua Kategori', id: '' }, ];
+  // filterProducts: any[] = [ { name: 'Semua Produk', id: '' }, ];
+  filterCategory: any[];
+  filterProducts: any[];
+  filterSupplier: any[];
 
-    formInput: FormGroup;
-    formFilter: FormGroup;
-    filterProdukSearch = new FormControl();
-    filterSupplierSearch = new FormControl();
-    private _onDestroy = new Subject<void>();
+  formInput: FormGroup;
+  formFilter: FormGroup;
+  filterProdukSearch = new FormControl();
+  filterSupplierSearch = new FormControl();
+  private _onDestroy = new Subject<void>();
 
-    loadingIndicator = true;
-    reorderable = true;
-    pagination: Page = new Page();
-    offsetPagination: any;
-    allRowsSelected: boolean;
-    // allRowsSelectedValid: boolean;
-    allHubSelected = false;
+  loadingIndicator = true;
+  reorderable = true;
+  pagination: Page = new Page();
+  offsetPagination: any;
+  allRowsSelected: boolean;
+  // allRowsSelectedValid: boolean;
+  allHubSelected = false;
+  listFilterHub = [
+    { name: 'All', value: '' },
+    { name: 'Yes', value: '1' },
+    { name: 'No', value: '0' },
+  ];
+  filterHub = new FormControl();
 
-    isSelected: boolean;
+  isSelected: boolean;
 
-    keyUp = new Subject<string>();
-    permission: any;
-    roles: PagesName = new PagesName();
-    isDetail: boolean;
-    panelMitraId: any;
-    panelMitraDetail: null;
+  keyUp = new Subject<string>();
+  permission: any;
+  roles: PagesName = new PagesName();
+  isDetail: boolean;
+  panelMitraId: any;
+  panelMitraDetail: null;
 
   areaFromLogin;
   area_id_list: any = [];
@@ -161,6 +167,10 @@ export class PanelMitraEditComponent implements OnInit {
 
       this.filterProdukSearch.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
         this.filteringProdukSearch();
+      });
+
+      this.filterHub.valueChanges.subscribe((v) => {
+        this.getListMitra(null, v);
       });
 
       this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -854,7 +864,7 @@ export class PanelMitraEditComponent implements OnInit {
       }
     }
 
-  getListMitra(string?: any) {
+  getListMitra(string?: any, hubFilter?: any) {
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
@@ -937,7 +947,14 @@ export class PanelMitraEditComponent implements OnInit {
         delete this.pagination['sort_type'];
       }
 
-      this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds }).subscribe(res => {
+      let hub = null;
+      if (hubFilter === '1') {
+        hub = this.selected.filter((v) => v.isHub).map((v) => v.id);
+      } else if (hubFilter === '0') {
+        hub = this.selected.filter((v) => !v.isHub).map((v) => v.id);
+      }
+
+      this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds, only: hub }).subscribe(res => {
         if (res.status === 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -1161,9 +1178,10 @@ export class PanelMitraEditComponent implements OnInit {
   aturPanelMitra() {
     if (this.formInput.valid) {
       const body = {
-          product_id: this.formInput.get('filterproduct').value,
-          supplier_company_id: this.formInput.get('filtersupplier').value,
-        };
+        product_id: this.formInput.get('filterproduct').value,
+        supplier_company_id: this.formInput.get('filtersupplier').value,
+      };
+      this.filterHub.setValue('');
       this.panelMitraService.checkPanelMitra(body).subscribe(res => {
           this.wholesalerIds = res.data.wholesaler_id;
           this.selected = res.data.wholesaler_id.map((id: any) => {
