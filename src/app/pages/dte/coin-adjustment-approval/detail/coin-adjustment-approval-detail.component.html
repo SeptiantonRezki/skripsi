@@ -20,52 +20,53 @@
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" placeholder="Group Trade Program"
-                [value]="dataApproval['group_trade_program_name']" name="group_trade_program_name" disabled>
+                [value]="dataApproval['group_trade_program_name'] || ''" name="group_trade_program_name" disabled>
             </mat-form-field>
           </div>
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" placeholder="Trade Program" [value]="dataApproval['trade_program_name']"
+              <input matInput type="text" placeholder="Trade Program" [value]="dataApproval['trade_program_name'] || ''"
                 name="trade_program_name" disabled>
             </mat-form-field>
           </div>
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" placeholder="Nama Pengatur Jadwal"
-                [value]="dataApproval['task_sequencing_management_name']" name="task_sequencing_management_name"
+                [value]="dataApproval['task_sequencing_management_name'] || ''" name="task_sequencing_management_name"
                 disabled>
             </mat-form-field>
           </div>
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <input matInput type="text" placeholder="Total Coin / Inject"
-                [value]="dataApproval['total_coin_adjustment']" name="total_coin_adjustment" disabled>
+                [value]="dataApproval['total_coin_inject_flush'] || ''" name="total_coin_inject_flush" disabled>
             </mat-form-field>
           </div>
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="20" class="is-light form-primary">
-              <input matInput type="text" placeholder="Tanggal Request Approval" [value]="dataApproval['requested_at']"
-                name="requested_at" disabled>
+              <input matInput type="text" placeholder="Tanggal Request Approval"
+                [value]="dataApproval['requested_at'] || ''" name="requested_at" disabled>
             </mat-form-field>
             <div fxFlex="1"></div>
             <mat-form-field fxFlex="20" class="is-light form-primary">
-              <input matInput type="text" placeholder="Requestor" [value]="dataApproval['requestor']" name="requestor"
-                disabled>
+              <input matInput type="text" placeholder="Requestor" [value]="dataApproval['requestor'] || ''"
+                name="requestor" disabled>
             </mat-form-field>
             <div fxFlex="1"></div>
             <mat-form-field fxFlex="40" class="is-light form-primary">
-              <input matInput type="text" placeholder="Reason" [value]="dataApproval['reason']" name="reason" disabled>
+              <input matInput type="text" placeholder="Reason" [value]="dataApproval['reason'] || ''" name="reason"
+                disabled>
             </mat-form-field>
           </div>
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="20" class="is-light form-primary">
-              <input matInput type="text" placeholder="Tanggal Approval" [value]="dataApproval['approved_at']"
-                name="approved_at" disabled>
+              <input matInput type="text" placeholder="Tanggal Approval" [value]="dataApproval['responded_at'] || ''"
+                name="responded_at" disabled>
             </mat-form-field>
             <div fxFlex="1"></div>
             <mat-form-field fxFlex="20" class="is-light form-primary">
-              <input matInput type="text" placeholder="Approver" [value]="dataApproval['approver']" name="approver"
-                disabled>
+              <input matInput type="text" placeholder="Approver" [value]="dataApproval['approver'] || ''"
+                name="approver" disabled>
             </mat-form-field>
           </div>
         </form>
