@@ -1028,7 +1028,7 @@ export class PanelMitraCreateComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (response.data) {
-          this.selected = response.data.map((item: any) => ({ id: item.id, isHub: item.is_hub }));
+          this.selected = response.data.map((item: any) => ({ id: item.id, isHub: item.is_hub ? true : false }));
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
           console.log('thisSELECTED', this.selected);
         }
