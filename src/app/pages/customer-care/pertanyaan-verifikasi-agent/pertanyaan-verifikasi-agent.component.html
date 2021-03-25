@@ -44,13 +44,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Toko" prop="wholesaler_name" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
+        <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.name || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode Toko" prop="wholesaler_code" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
+        <ngx-datatable-column name="Kode Toko" prop="code" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.code || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
@@ -69,8 +69,8 @@
           </ng-template>
         </ngx-datatable-column>
         
-        <ngx-datatable-column name="Nomer Ponsel" prop="refferal_code" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.refferal_code || '-'}}
+        <ngx-datatable-column name="Nomer Ponsel" prop="phone" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.phone || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
