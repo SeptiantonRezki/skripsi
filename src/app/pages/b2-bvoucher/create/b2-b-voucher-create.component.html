@@ -35,7 +35,7 @@
                       B2C Voucher</mat-checkbox>
                   </div>
                   <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
-                    <mat-form-field fxFlex="100">
+                    <mat-form-field fxFlex="100" class="mt-8">
                       <mat-select placeholder="Penggunaan Voucher" formControlName="opsiVoucher">
                         <mat-option *ngFor="let ovl of opsiVoucherList" [value]="ovl.value">{{ ovl.name }}</mat-option>
                       </mat-select>
@@ -158,7 +158,7 @@
                             Dengan Kategori</mat-checkbox>
                         </div>
                       </div>
-                      <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product').value" class="mt-8">
+                      <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product').value" class="mt-12">
                         <mat-chip-list #chipList aria-label="Product List">
                           <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
                             (removed)="remove(product)">
@@ -200,7 +200,7 @@
                             Dengan Kategori</mat-checkbox>
                         </div>
                       </div>
-                      <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product_srcc').value" class="mt-8">
+                      <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product_srcc').value" class="mt-12">
                         <mat-chip-list #chipList aria-label="Product List">
                           <mat-chip *ngFor="let product of productListSRCC" [selectable]="selectable" [removable]="removable"
                             (removed)="removeSRCC(product)">
