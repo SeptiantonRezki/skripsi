@@ -474,7 +474,11 @@ export class B2BVoucherCreateComponent implements OnInit {
       if (res.data.limit_by === 'product') {
         this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       }
-    })
+      if (res.data.limit_by_src_catalogue === 'product') {
+        this.productListSRCC = res && res.data && res.data.limit_only_data_src_catalogue ?
+        res.data.limit_only_data_src_catalogue : [];
+      }
+    });
   }
 
   checkForNonApprover() {
