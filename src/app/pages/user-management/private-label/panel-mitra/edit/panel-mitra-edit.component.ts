@@ -56,6 +56,7 @@ export class PanelMitraEditComponent implements OnInit {
     { name: 'No', value: '0' },
   ];
   filterHub = new FormControl();
+  selectedHub: any[];
 
   isSelected: boolean;
 
@@ -93,6 +94,7 @@ export class PanelMitraEditComponent implements OnInit {
   ) {
       this.onLoad = false;
       this.selected = [];
+      this.selectedHub = [];
       this.permission = this.roles.getRoles('principal.supplierpanelmitra');
       // console.log('snapshot', this.activatedRoute.snapshot.data);
       this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data['listCategory'].data ];
@@ -317,7 +319,7 @@ export class PanelMitraEditComponent implements OnInit {
     }
 
     onSelectedHub(event: any, row: any) {
-      if (event) {
+      if (event && !this.allRowsSelected) {
         const temp = [...this.selected];
         const selectedItem = {...this.selected.filter((s: any) => s.id === row.id)[0]};
         const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
@@ -325,6 +327,19 @@ export class PanelMitraEditComponent implements OnInit {
         if (indexFind !== -1) {
           temp[indexFind] = selectedItem;
           this.selected = temp;
+        }
+      }
+
+      if (event && this.allRowsSelected) {
+        if (this.selectedHub.length > 0) {
+          const indexFind = this.selectedHub.findIndex((s: any) => s === row.id);
+          if (indexFind === -1) {
+            this.selectedHub.push(row.id);
+          } else {
+            this.selectedHub.splice(indexFind, 1);
+          }
+        } else {
+          this.selectedHub.push(row.id);
         }
       }
     }
@@ -357,13 +372,16 @@ export class PanelMitraEditComponent implements OnInit {
 
     onAllSelectedHub(isBool: boolean) {
       this.allHubSelected = isBool;
+      this.selectedHub = [];
+      this.selected = [];
     }
 
     selectFn(allRowsSelected: boolean) {
       // console.log('allRowsSelected_', allRowsSelected);
       this.allRowsSelected = allRowsSelected;
       this.allHubSelected = allRowsSelected;
-      if (!allRowsSelected) { this.selected = []; }
+      this.selected = [];
+      // if (!allRowsSelected) { this.selected = []; }
       // else { this.selected.length = this.pagination.total; }
     }
 
@@ -412,15 +430,22 @@ export class PanelMitraEditComponent implements OnInit {
     }
 
     onSave() {
-      if (this.formInput.valid && this.selected.length > 0) {
+      if (this.formInput.valid && (this.selected.length > 0 || this.allRowsSelected)) {
         try {
           this.dataService.showLoading(true);
           let body = null;
           if (this.allRowsSelected) {
+            const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }))
+              .filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+            const area_id = areaSelected[areaSelected.length - 1].value;
             body = {
               product_id: this.formInput.get('filterproduct').value,
               supplier_company_id: this.formInput.get('filtersupplier').value,
-              type: 'all'
+              type: 'all',
+              area: area_id,
+              hub_default: this.allHubSelected,
+              is_hub: this.allRowsSelected ? this.selectedHub :
+                this.selected.filter((item: any) => item.isHub === true).map((item: any) => item.id),
             };
           } else {
             body = {
