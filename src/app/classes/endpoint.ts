@@ -595,6 +595,16 @@ export class Endpoint {
         exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
         exportTrueTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/export`
       },
+      CoinAdjustmentApproval: {
+        get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/list-approval`,
+        get_tsm: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/list-approval`,
+        detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/detil-approval/${context.approval_id}`,
+        listAudience: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/show-audience/${context.audience_id}`,
+        respond_approval: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/respond-approval`,
+        approver_list: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/approver-list`,
+        send_notification: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/send-notification-approval`,
+        download_list_approval: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/download-list-approval/${context.approval_id}`
+      },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,

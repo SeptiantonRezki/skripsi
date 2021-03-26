@@ -81,37 +81,86 @@
           <div class="faq" fxLayout="row wrap">
             <div class="title" fxFlex="100">{{role.nama | toCapitalize}}</div>
 
-            <div class="item" fxFlex="100" fxFlex.gt-xs="30" *ngFor="let items of role.menu; let i = index;" [ngClass]="i%3 !== 2 ? 'line' : ''">
-              <div class="question" *ngIf="items.nama !== 'task verification'">{{items.nama | toCapitalize}}</div>
-              <div class="answer" *ngIf="items.nama !== 'task verification'">
+            <div class="item" fxFlex="100" fxFlex.gt-xs="30" *ngFor="let items of role.menu; let i = index;"
+              [ngClass]="i%3 !== 2 ? 'line' : ''">
+              <div class="question"
+                *ngIf="items.nama !== 'approval coin adjustment' && items.nama !== 'task verification'">{{items.nama |
+                toCapitalize}}
+              </div>
+              <div class="answer"
+                *ngIf="items.nama !== 'approval coin adjustment' && items.nama !== 'task verification'">
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25" *ngFor="let item of items.value">
                     <div class="access-name" *ngIf="item.nama == 'gsw'">{{item.nama | uppercase}}</div>
                     <div class="access-name" *ngIf="item.nama !== 'gsw'">{{item.nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status" [disabled]="isDetail" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
+                      [disabled]="isDetail" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
+                    <!-- <div class="access-name">{{item.nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
+                      [disabled]="isDetail" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle> -->
                   </div>
                 </div>
               </div>
-              
+
+              <!-- Kondisi Khusus Coin Adjustment Approval -->
+              <div class="question" *ngIf="items.nama == 'approval coin adjustment'">{{'Coin Adjustment Approval' |
+                toCapitalize}}</div>
+              <div class="answer mb-16" *ngIf="items.nama == 'approval coin adjustment'">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                  <div fxFlex="25">
+                    <div class="access-name">{{items.value[0].nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[0].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
+                  </div>
+                  <div fxFlex="25">
+                    <div class="access-name">{{items.value[1].nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[1].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+              <div class="question" *ngIf="items.nama == 'approval coin adjustment'">{{'Notifikasi Approval' |
+                toCapitalize}}</div>
+              <div class="answer mb-16" *ngIf="items.nama == 'approval coin adjustment'">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                  <div fxFlex="25">
+                    <div class="access-name">{{items.value[2].nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[0].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
+                  </div>
+                  <div fxFlex="25">
+                    <div class="access-name">{{items.value[3].nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[1].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+              <!-- End Kondisi Khusus Coin Approval Adjustment -->
+
+              <!-- Kondisi Khusus Task Verification -->
               <div class="question" *ngIf="items.nama == 'task verification'">{{'Verifikasi Misi' | toCapitalize}}</div>
               <div class="answer mb-16" *ngIf="items.nama == 'task verification'">
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25">
                     <div class="access-name">{{items.value[0].nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[0].status" [disabled]="isDetail"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[0].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
                   </div>
                   <div fxFlex="25">
                     <div class="access-name">{{items.value[1].nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[1].status" [disabled]="isDetail"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[1].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
                   </div>
                 </div>
               </div>
-              <div class="question" *ngIf="items.nama == 'task verification'">{{'Verifikasi Misi - All' | toCapitalize}}</div>
+              <div class="question" *ngIf="items.nama == 'task verification'">{{'Verifikasi Misi - All' | toCapitalize}}
+              </div>
               <div class="answer mb-16" *ngIf="items.nama == 'task verification'">
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25">
                     <div class="access-name">{{items.value[2].nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[2].status" [disabled]="isDetail"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[2].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
                   </div>
                 </div>
               </div>
@@ -120,16 +169,19 @@
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25">
                     <div class="access-name">{{items.value[3].nama | toCapitalize}}</div>
-                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[3].status" [disabled]="isDetail"></mat-slide-toggle>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[3].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
                   </div>
                 </div>
               </div>
+              <!-- End Kondisi Khusus Task Verification -->
             </div>
           </div>
         </div>
       </div>
       <div *ngIf="!isDetail" class="confirm pl-16 pt-8 pb-24" fxLayout="row">
-        <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25" (click)="submit()">
+        <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25"
+          (click)="submit()">
           SIMPAN
         </button>
       </div>

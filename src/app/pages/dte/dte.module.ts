@@ -137,6 +137,9 @@ import { CreatetsmComponent } from './automation/createtsm/createtsm.component';
 import { EOrdertsmComponent } from './automation/createtsm/e-ordertsm/e-ordertsm.component';
 import { EdittsmComponent } from './automation/edittsm/edittsm.component';
 import { EOrdertsmeditComponent } from "./automation/edittsm/e-ordertsm/e-ordertsm.component";
+import { CoinAdjustmentApprovalComponent } from './coin-adjustment-approval/index/coin-adjustment-approval.component';
+import { CoinAdjustmentApprovalTSMComponent } from './coin-adjustment-approval/index-tsm/coin-adjustment-approval-tsm.component';
+import { CoinAdjustmentApprovalDetailComponent } from './coin-adjustment-approval/detail/coin-adjustment-approval-detail.component';
 
 
 
@@ -290,7 +293,10 @@ export const MY_FORMATS = {
     CreatetsmComponent,
     EOrdertsmComponent,
     EOrdertsmeditComponent,
-    EdittsmComponent
+    EdittsmComponent,
+    CoinAdjustmentApprovalComponent,
+    CoinAdjustmentApprovalTSMComponent,
+    CoinAdjustmentApprovalDetailComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -398,4 +404,4 @@ export const MY_FORMATS = {
     DialogPushNotifDuplicateComponent
   ],
 })
-export class DteModule {}
+export class DteModule { }
