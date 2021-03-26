@@ -155,12 +155,12 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit {
 
   export(item) {
     this.dataService.showLoading({ show: true });
-    console.log("Ke Click gak sih ini cuk ett dah")
     let params = {
-      id: item.id,
+      approval_id: item.id,
       is_tsm: true
     }
 
+    console.log("Ke Click gak sih ini cuk ett dah", params);
     this.coinAdjustmentApprovalService.downloadApprovalList(params).subscribe(response => {
       console.log('resss', response);
       if (response.data && response.status) {

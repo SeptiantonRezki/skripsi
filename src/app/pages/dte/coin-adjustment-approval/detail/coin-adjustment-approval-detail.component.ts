@@ -661,6 +661,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
   confirmAction(status: string) {
     this.dataService.showLoading(true);
     this.coinAdjustmentApprovalService.respondApproval({ id: this.dataApproval['id'], status }, { is_tsm: this.isTSM }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
       this.dialogService.openSnackBar({ message: "Data Berhaasil Disimpan!" });
       this.dataService.showLoading(false);
       this.getDetail();

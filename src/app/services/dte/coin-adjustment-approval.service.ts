@@ -49,7 +49,8 @@ export class CoinAdjustmentApprovalService extends BaseService {
   }
 
   downloadApprovalList(context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, 'dopwnload_list_approval', context);
+    const url = this.getUrl(this.namespace, 'download_list_approval', context);
+    console.log('url', url, context);
     return this.getApi(url);
   }
 }
