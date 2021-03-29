@@ -76,11 +76,8 @@ const routes: Routes = [
     path: "panel/create",
     component: PayLaterPanelCreateComponent,
     data: {
-      breadcrumbs: brConfig.paylater.panel.create
-    },
-    resolve: {
-      listCompanies: PaylaterListCompanyResolver
-    },
+      breadcrumbs: brConfig.paylater.panel.create,
+    }
   },
   {
     path: "panel/edit",
