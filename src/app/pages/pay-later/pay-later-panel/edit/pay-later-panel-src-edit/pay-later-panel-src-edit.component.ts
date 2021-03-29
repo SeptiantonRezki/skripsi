@@ -343,7 +343,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
