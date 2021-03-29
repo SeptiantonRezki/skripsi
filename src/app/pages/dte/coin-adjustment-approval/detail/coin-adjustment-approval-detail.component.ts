@@ -59,6 +59,8 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
     this.permissionNotifikasi = this.roles.getRoles('principal.dtenotifikasiapprovalcoinadjustment');
 
+    console.log(this.permissionCoinAdjustment, this.permissionNotifikasi);
+
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.listLevelArea = [
@@ -671,6 +673,10 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
   }
 
   sendNotification() {
+    if (!this.permissionNotifikasi.ubah) {
+      this.dialogService.openSnackBar({ message: "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)" })
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;

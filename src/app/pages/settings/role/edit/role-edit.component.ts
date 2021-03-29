@@ -331,14 +331,14 @@ export class RoleEditComponent {
     this.roles.map((roleValue) => {
 
       if (roleValue['nama'] === targetRole['nama']) {
-        
+
 
         roleValue['menu'].map((menuValue) => {
 
           if (menuValue.nama === targetItems.nama) {
 
 
-            menuValue['value'].map( (targetValue) => {
+            menuValue['value'].map((targetValue) => {
 
               if (targetValue.submenu) {
 
@@ -360,13 +360,13 @@ export class RoleEditComponent {
     this.roles.map((roleValue) => {
 
       if (roleValue['nama'] === targetRole['nama']) {
-        
+
 
         roleValue['menu'].map((menuValue) => {
 
           if (menuValue.nama === targetItems.nama) {
 
-            menuValue['value'].map( (targetValue) => {
+            menuValue['value'].map((targetValue) => {
               if (targetValue['nama'] === name) {
                 targetValue.status = false;
                 return targetValue;
@@ -381,7 +381,7 @@ export class RoleEditComponent {
   }
 
   onToggleChange(targetItem, targetItems, targetRole, event) {
-
+    console.log("targetsss", targetItem, targetItems, targetRole);
     let hasActiveParents = [];
     let hasActiveChildren = [];
 
@@ -397,12 +397,12 @@ export class RoleEditComponent {
 
     // if target is submenu, then target dont have active parents, then avoid action
     if (targetItem.submenu) {
-      
-      if ( !hasActiveParents.includes(true) ) {
-    
-        console.log({event});
+
+      if (!hasActiveParents.includes(true)) {
+
+        console.log({ event });
         event.source.checked = false;
-      
+
       }
       else if (!hasActiveChildren.includes(true)) {
         this.clearParents(targetRole, targetItems, 'ubah');

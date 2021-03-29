@@ -7,7 +7,7 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
         <h2>Detail Approval Coin Adjustment</h2>
-        <div *ngIf="permissionNotifikasi">
+        <div *ngIf="permissionNotifikasi?.lihat">
           <button mat-raised-button type="button" class="confirmation-button" style="border-radius: 5px;"
             (click)="sendNotification()">
             <mat-icon>circle_notifications</mat-icon>
