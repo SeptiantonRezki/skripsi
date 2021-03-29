@@ -47,6 +47,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation.component';
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { PaylaterListCompanyResolver } from 'app/resolver/paylater.resolver';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -106,7 +107,9 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    RupiahFormaterPipe, PageGuard],
+    RupiahFormaterPipe, PageGuard,
+    PaylaterListCompanyResolver
+  ],
   exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent],
   entryComponents: [DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent]
 })

@@ -5,6 +5,11 @@
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      
+      <mat-select placeholder="Pilih Perusahaan" formControlName="company">
+        <mat-option *ngFor="let cr of listCompanies" [value]="cr.id">{{ cr.name }}</mat-option>
+      </mat-select>
+
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
         <mat-tab label="Mitra">
           <app-pay-later-panel-mitra *ngIf="selectedTab === 0" (onRowsSelected)="onRowsSelected($event)"></app-pay-later-panel-mitra>

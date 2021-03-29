@@ -10,6 +10,7 @@ import { PayLaterPanelComponent } from "./pay-later-panel/index/pay-later-panel.
 import { PayLaterPanelEditComponent } from "./pay-later-panel/edit/pay-later-panel-edit.component";
 import { PayLaterPanelCreateComponent } from "./pay-later-panel/create/pay-later-panel-create.component";
 import { PayLaterActivationComponent } from "./pay-later-activation/pay-later-activation.component";
+import { PaylaterListCompanyResolver } from "app/resolver/paylater.resolver";
 
 
 const routes: Routes = [
@@ -76,7 +77,10 @@ const routes: Routes = [
     component: PayLaterPanelCreateComponent,
     data: {
       breadcrumbs: brConfig.paylater.panel.create
-    }
+    },
+    resolve: {
+      listCompanies: PaylaterListCompanyResolver
+    },
   },
   {
     path: "panel/edit",

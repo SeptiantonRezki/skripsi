@@ -24,6 +24,7 @@ export class TncCreateComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  companyList: any[] = [];
 
   files: File;
   public options: Object = Config.FROALA_CONFIG;
@@ -38,7 +39,8 @@ export class TncCreateComponent {
     this.formTncError = {
       title: {},
       body: {},
-      user: {}
+      user: {},
+      group_id: {}
     };
   }
 
@@ -47,10 +49,12 @@ export class TncCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
-      is_notif: [false]
+      is_notif: [false],
+      group_id: [""]
     });
 
     this.getUserGroups();
+    this.getCompanyList();
 
     this.formTnc.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formTnc, this.formTncError);
@@ -78,6 +82,12 @@ export class TncCreateComponent {
     );
   }
 
+  getCompanyList() {
+    this.tncService.getCompanyList().subscribe(res => {
+      this.companyList = res.data;
+    })
+  }
+
   submit(): void {
     if (this.formTnc.valid) {
       let body: Object = {
@@ -86,6 +96,7 @@ export class TncCreateComponent {
         user: this.formTnc.get("user").value,
         type: "terms-conditions",
         is_notif: this.formTnc.get('is_notif').value === true ? 1 : 0,
+        group_id: this.formTnc.get("group_id").value,
       };
 
       this.tncService.create(body).subscribe(

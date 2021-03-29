@@ -347,7 +347,10 @@ export class PayLaterPanelSrcComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -526,7 +529,10 @@ export class PayLaterPanelSrcComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'retailer' };
+    dialogConfig.data = {
+      type: 'retailer',
+      paylater_company_id: this.paylaterCompanyId
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
