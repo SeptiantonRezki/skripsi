@@ -294,7 +294,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
         }
       }
     }
-    
+
     this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
 
     const page = this.dataService.getFromStorage("page_mitra");
@@ -307,7 +307,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(
+    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id), paylater_company_id: this.formPanelMitra.get('company').value }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
