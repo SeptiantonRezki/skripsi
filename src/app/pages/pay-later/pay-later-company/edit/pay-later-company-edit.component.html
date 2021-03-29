@@ -63,12 +63,12 @@
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select formControlName="paylater_group_id" placeholder="Group">
+              <mat-select formControlName="paylater_group_id" placeholder="API Source">
                 <mat-option *ngFor="let item of companies" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formCompany.controls['paylater_group_id'].hasError('required') && formCompany.controls['paylater_group_id'].touched">
-                Group harus diisi
+                API Source harus diisi
               </mat-error>
             </mat-form-field>
           </div>

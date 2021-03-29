@@ -39,7 +39,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="row" *ngIf="formTnc.get('user').value === 'paylater-src'">
+          <div fxLayout="row" *ngIf="formTnc.get('user').value === 'paylater-src' || formTnc.get('user').value === 'paylater-mitra'">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select formControlName="group_id" placeholder="Pilih Perusahaan">
                 <mat-option *ngFor="let item of companyList" [value]="item.id" style="text-transform: capitalize;">
