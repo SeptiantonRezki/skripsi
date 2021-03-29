@@ -108,7 +108,7 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     RupiahFormaterPipe, PageGuard,
-    PaylaterListCompanyResolver
+    PaylaterListCompanyResolver,
   ],
   exports: [PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelMitraEditComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent],
   entryComponents: [DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent]
