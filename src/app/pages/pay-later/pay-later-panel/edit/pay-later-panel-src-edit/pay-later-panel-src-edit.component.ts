@@ -224,6 +224,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     if (this.paylaterCompanyId !== null) {
       this.selectedMitra = [];
       this.onSelect({ selected: [] });
+      this.pagination.search = '';
+      this.pagination.page = 1;
 
       this.dataService.showLoading(true);
       this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
@@ -382,7 +384,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page_src");
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -406,7 +411,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.dataService.setToStorage("sort_src", event.column.prop);
     this.dataService.setToStorage("sort_type_src", event.newValue);
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -433,7 +441,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
