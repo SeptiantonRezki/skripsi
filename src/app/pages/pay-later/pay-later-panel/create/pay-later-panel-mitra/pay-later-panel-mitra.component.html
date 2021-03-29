@@ -4,9 +4,9 @@
       <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
         <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
           <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-            <!-- <mat-select placeholder="Pilih Perusahaan" formControlName="company">
+            <mat-select placeholder="Pilih Perusahaan" formControlName="company">
               <mat-option *ngFor="let cr of listCompanies" [value]="cr.id">{{ cr.name }}</mat-option>
-            </mat-select> -->
+            </mat-select>
             <mat-error class="mt-8 px-24"
               *ngIf="formPanelMitra.controls['company'].hasError('required') && formPanelMitra.controls['company'].touched">
               Perusahaan harus diisi.

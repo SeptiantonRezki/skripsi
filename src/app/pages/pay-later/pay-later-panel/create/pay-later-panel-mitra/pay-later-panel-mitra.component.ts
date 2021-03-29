@@ -160,7 +160,7 @@ export class PayLaterPanelMitraComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
-    // this.getCompanies();
+    this.getCompanies();
     // this.getPanelMitraList();
 
     this.formPanelMitra.get('company')
@@ -172,11 +172,11 @@ export class PayLaterPanelMitraComponent implements OnInit {
       })
   }
 
-  // getCompanies() {
-  //   this.mitraPanelService.getCompaniesPanel().subscribe(res => {
-  //     this.listCompanies = res.data;
-  //   });
-  // }
+  getCompanies() {
+    this.mitraPanelService.getCompaniesPanel().subscribe(res => {
+      this.listCompanies = res.data;
+    });
+  }
 
   // getCourerList() {
   //   this.mitraPanelService.courierList().subscribe(res => {

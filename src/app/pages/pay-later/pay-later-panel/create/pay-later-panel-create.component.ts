@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
-import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-pay-later-panel-create',
@@ -15,17 +14,13 @@ export class PayLaterPanelCreateComponent implements OnInit, OnDestroy {
   isSelectedRows: boolean;
   selectedRowIds: any[];
   mitraSelected: any;
-  listCompanies: any[] = [];
-  
 
   constructor(
-    private dataService: DataService,
-    private activatedRouteSnapshot: ActivatedRouteSnapshot,
+    private dataService: DataService
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab_paylater_panel");
     // this.selectedTab = selectedTab ? selectedTab : 0;
     this.selectedTab = 0;
-    this.listCompanies = this.activatedRouteSnapshot.data['listCompanies'].data;
   }
 
   ngOnInit() {
