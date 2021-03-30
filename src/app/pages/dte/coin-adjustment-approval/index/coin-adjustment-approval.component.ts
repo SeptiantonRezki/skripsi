@@ -41,9 +41,9 @@ export class CoinAdjustmentApprovalComponent implements OnInit {
 
   listStatuses: any[] = [
     { name: 'Semua Status', value: "" },
-    { name: 'Publish', value: 'publish' },
-    { name: 'Unpublish', value: 'unpublish' },
-    { name: 'Draft', value: 'draft' }
+    { name: 'Approved', value: 'approved' },
+    { name: 'Rejected', value: 'rejected' },
+    { name: 'Pending', value: 'pending' }
   ];
 
   dialogRef: any;
