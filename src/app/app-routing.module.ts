@@ -150,6 +150,12 @@ const appRoutes: Routes = [
   //   canActivate: [AuthGuard]
   // },
   {
+    path: 'customer-care',
+    loadChildren:
+      './pages/customer-care/customer-care.module#CustomerCareModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   }

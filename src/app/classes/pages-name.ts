@@ -112,6 +112,8 @@ export class PagesName {
       // "/delivery/courier/detail": "principal.courier.lihat",
       "/task-sequencing/task-sequencing": "principal.task_sequencing.lihat",
       "/task-sequencing/task-sequencing/create": "principal.task_sequencing.buat",
+      "/customer-care/pertanyaan-verifikasi-agent": "principal.customercareverificationagent.lihat",
+      "/customer-care/pertanyaan-verifikasi-agent/detail": "principal.customercareverificationagent.lihat",
     }
     return PAGES[name];
   }

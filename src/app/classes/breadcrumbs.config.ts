@@ -2572,4 +2572,36 @@ export const brConfig = {
       }
     ]
   },
+  customer_care: {
+    index: [
+      {
+        type: "parent",
+        url: "/customer-care",
+        name: "Customer Care"
+      },
+      {
+        type: "current",
+        url: "/customer-care/pertanyaan-verifikasi-agent",
+        name: "Pertanyaan Verifikasi Agent"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/customer-care",
+        name: "Customer Care"
+      },
+      {
+        type: "parent",
+        url: "/customer-care/pertanyaan-verifikasi-agent",
+        name: "Pertanyaan Verifikasi Agent"
+      },
+      {
+        type: "current",
+        url: "/customer-care/pertanyaan-verifikasi-agent/detail",
+        name: "Detail Pertanyaan Verifikasi Agent"
+      },
+
+    ]
+  }
 };

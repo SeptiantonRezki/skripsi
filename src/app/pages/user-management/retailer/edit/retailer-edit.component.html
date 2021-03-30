@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Retailer Detail'">
+  <page-content-header [contentTitle]="'Retailer Detail'" *ngIf="!formOnly">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -390,7 +390,7 @@
             [formGroup]="formRefferalCode" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Refferal Code yang diinput" formControlName="ref_code">
+                <input matInput placeholder="Referral Code yang diinput" formControlName="ref_code">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
@@ -405,13 +405,13 @@
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Custoemr Type" formControlName="customer_type">
+                <input matInput placeholder="Customer Type" formControlName="customer_type">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
                 <input matInput [matDatepicker]="date" (focus)="date.open()" formControlName="date_ref_code"
-                  placeholder="Tanggal input Refferal Code">
+                  placeholder="Tanggal input Referral Code">
                 <mat-datepicker-toggle matSuffix [for]="date">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                 </mat-datepicker-toggle>
