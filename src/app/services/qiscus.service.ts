@@ -58,7 +58,7 @@ export class QiscusService extends BaseService {
           this.qLoginError(data);
         },
         newMessagesCallback: (messages: any) => {
-          console.log('NEW MESSAGES', messages);
+          // console.log('NEW MESSAGES', messages);
           messages.forEach((message: any) => {
             this.emitter.emitNewMessageQ(message);
             const self = this;
@@ -171,16 +171,10 @@ export class QiscusService extends BaseService {
     const url = this.getUrl(this.namespace, "getMessageTemplates", context);
     return this.getApi(url);
   }
-
-  setUser(userId: any, userKey: any, userName: any, avatarImage: any) {
-    try {
-      this.qiscus.setUser(userId, userKey, userName, avatarImage);
-    } catch (ex) {
-      // console.warn('reinitialize q');
-      setTimeout(() => {
-        this.setUser(userId, userKey, userName, avatarImage);
-      }, 500);
-    }
+  
+  createJWT(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'createJWT');
+    return this.postApi(url, body);
   }
   /**
    *  ============================= QISCUS MULTICHANNEL ==============================
@@ -282,4 +276,10 @@ export class QiscusService extends BaseService {
     const url = this.getUrl(this.namespace, "createRoomMultichannel");
     return this.postApi(url, body);
   }
+
+  createJWTMC(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'createJWTMC');
+    return this.postApi(url, body);
+  }
+
 }
