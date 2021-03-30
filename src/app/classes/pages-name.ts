@@ -120,7 +120,7 @@ export class PagesName {
     let localPerm = window.localStorage.getItem('_prmdxtrn');
     let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
     const permission = JSON.parse(perm);
-    // console.log("all permission", permission.findIndex(prm => prm.indexOf("approval") > -1));
+    // console.log("all permission", permission.find(prm => prm.indexOf("approval") > -1));
     if (!permission) return;
 
     let query = name.toLowerCase();

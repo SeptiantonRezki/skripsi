@@ -1,0 +1,198 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detail Approval Coin Adjustment'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
+      <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
+        <h2>Detail Approval Coin Adjustment</h2>
+        <div *ngIf="permissionNotifikasi?.lihat">
+          <button mat-raised-button type="button" class="confirmation-button" style="border-radius: 5px;"
+            (click)="sendNotification()">
+            <mat-icon>circle_notifications</mat-icon>
+            KIRIM NOTIFIKASI
+          </button>
+        </div>
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off">
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Group Trade Program"
+                [value]="dataApproval['group_trade_program_name'] || ''" name="group_trade_program_name" disabled>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Trade Program" [value]="dataApproval['trade_program_name'] || ''"
+                name="trade_program_name" disabled>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Nama Pengatur Jadwal"
+                [value]="dataApproval['task_sequencing_management_name'] || ''" name="task_sequencing_management_name"
+                disabled>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Total Coin / Inject"
+                [value]="dataApproval['total_coin_inject_flush'] || ''" name="total_coin_inject_flush" disabled>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="text" placeholder="Tanggal Request Approval"
+                [value]="dataApproval['requested_at'] || ''" name="requested_at" disabled>
+            </mat-form-field>
+            <div fxFlex="1"></div>
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="text" placeholder="Requestor" [value]="dataApproval['requestor'] || ''"
+                name="requestor" disabled>
+            </mat-form-field>
+            <div fxFlex="1"></div>
+            <mat-form-field fxFlex="40" class="is-light form-primary">
+              <input matInput type="text" placeholder="Reason" [value]="dataApproval['reason'] || ''" name="reason"
+                disabled>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="text" placeholder="Tanggal Approval" [value]="dataApproval['responded_at'] || ''"
+                name="responded_at" disabled>
+            </mat-form-field>
+            <div fxFlex="1"></div>
+            <mat-form-field fxFlex="20" class="is-light form-primary">
+              <input matInput type="text" placeholder="Approver" [value]="dataApproval['approver'] || ''"
+                name="approver" disabled>
+            </mat-form-field>
+          </div>
+        </form>
+
+        <form [formGroup]="formFilter" autoComplete="off">
+
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+            <h2 class=""></h2>
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
+              <mat-icon>search</mat-icon>
+              <mat-form-field class="is-light tab-search">
+                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
+            fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="National" formControlName="national">
+                <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
+                  Zona' :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="Regional" formControlName="region" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  Regional'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
+                  Area'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                  'all' ?
+                  'Semua
+                  Salespoint'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="District" formControlName="district" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  District'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="10%" class="is-light form-primary">
+              <mat-select placeholder="Territory" formControlName="territory" multiple>
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
+                  Territori'
+                  :
+                  item.code}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div class="confirm p-10" fxLayout="row" fxLayoutGap="20px">
+              <button mat-raised-button type="button" class="publish-button" (click)="resetFormFilter()"
+                style="width: 170px" style="height: 50px">
+                Reset
+              </button>
+              <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()"
+                style="width: 170px" style="height: 50px">
+                Load Data
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="p-0">
+          <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+          <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+            [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+            [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+            (page)="setPage($event)" (sort)="onSort($event)">
+            <ngx-datatable-column name="Retailer Id" prop="id" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Nama Retailer" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Region" prop="region_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Division" prop="division_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Jumlah Total Coin" prop="jml_total_coin" [sortable]="false">
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Jumlah Coin Group Trade Program" prop="jml_coin_group_trade_program"
+              [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Jumlah Adjustment Coin" prop="jml_adjustment_coin" [sortable]="false">
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
+          fxLayoutGap.lt-md="0px"
+          *ngIf="permissionCoinAdjustment?.ubah && dataApproval['status'] && dataApproval['status'] === 'pending'">
+          <button mat-raised-button type="button" class="primary-green"
+            style="width: 220px; height: 50px; font-size: 18px;border-radius:5px;" (click)="takeAction('approved')">
+            APPROVE
+          </button>
+          <button mat-raised-button type="button" class="confirmation-button"
+            style="width: 220px; height: 50px; font-size: 18px;border-radius:5px;" (click)="takeAction('rejected')">
+            REJECT
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

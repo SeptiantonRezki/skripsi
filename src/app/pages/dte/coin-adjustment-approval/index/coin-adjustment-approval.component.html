@@ -1,0 +1,160 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Approval Coin Adjustment'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">List Approval Coin Adjustment</h2>
+      </div>
+      <mat-tab-group>
+        <mat-tab label="Non-TSM">
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+            <h2 class="pl-8">Approval Coin Adjustment Non-TSM</h2>
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+              <mat-icon>search</mat-icon>
+              <mat-form-field autoComplete="off" class="is-light tab-search">
+                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+              </mat-form-field>
+            </div>
+          </div>
+          <form [formGroup]="formFilter" autoComplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+              class="top-table p-8">
+              <mat-form-field fxFlex="16" class="orders dropdown">
+                <mat-select formControlName="filter">
+                  <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div fxFlex="1"></div>
+              <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
+                <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+                  formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
+                <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="formFilter.get('start_date').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="dari">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #dari></mat-datepicker>
+              </mat-form-field>
+              <div fxFlex="1"></div>
+              <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
+                <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
+                  placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+                <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
+                  (click)="formFilter.get('end_date').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="sampai">
+                  <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #sampai></mat-datepicker>
+              </mat-form-field>
+              <div fxFlex="1"></div>
+              <mat-form-field fxFlex="16" class="orders dropdown">
+                <mat-select formControlName="status">
+                  <mat-option [value]="item.value" *ngFor="let item of listStatuses">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div fxFlex="1"></div>
+              <div class="button-row pb-16">
+                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+              </div>
+            </div>
+          </form>
+          <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+            [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+            [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+            (page)="setPage($event)" (sort)="onSort($event)">
+
+            <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Pengatur Jadwal Program"
+              prop="nama_pengatur_jadwal_program" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row">
+                  {{row.nama_pengatur_jadwal_program}}
+                </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [sortable]="false" name="Trade Program" prop="nama_trade_program" [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program"
+              prop="nama_grup_trade_program" [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="190" [sortable]="false" name="Jumlah SRC" prop="jumlah_src" [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="190" [sortable]="false" name="Total Coin yang Terkirim" prop="total_coin"
+              [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Request" prop="requested_at"
+              [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{row.requested_at | dateToMoment}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [sortable]="false" name="Approver" prop="approver" [flexGrow]="3">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Approval" prop="responded_at"
+              [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{row.responded_at | dateToMoment}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="name-container">
+                  <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'approved'">
+                    {{row.status}}
+                  </p>
+                  <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'pending'">
+                    {{row.status}}
+                  </p>
+                  <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: capitalize;"
+                    *ngIf="row.status == 'rejected'">
+                    {{row.status}}
+                  </p>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="button-row" style="margin-left: -10px" *ngIf="permissionCoinAdjustment?.lihat">
+                  <button type="button" mat-icon-button color="" matTooltip="Lihat"
+                    [routerLink]="['/dte', 'approval-coin-adjusment', 'detail', row.id]">
+                    <mat-icon class="secondary-text">assignment</mat-icon>
+                  </button>
+                  <button type="button" mat-icon-button color="" matTooltip="Export Approval Coin Adjustment"
+                    (click)="export(row)">
+                    <mat-icon class="orange-500-fg">save_alt</mat-icon>
+                    <!-- <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt
+                    </mat-icon> -->
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+          <a #downloadLink></a>
+        </mat-tab>
+
+        <!-- TIPE MISI -->
+        <mat-tab label="TSM">
+          <app-coin-adjustment-approval-tsm></app-coin-adjustment-approval-tsm>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

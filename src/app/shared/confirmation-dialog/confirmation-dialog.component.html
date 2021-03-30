@@ -1,6 +1,7 @@
 <div class="dialog-container">
   <h1 *ngIf="data.titleDialog" mat-dialog-title>{{data.titleDialog}}</h1>
-  <div *ngIf="data.captionDialog" mat-dialog-content>{{data.captionDialog}}</div>
+  <div *ngIf="!data.htmlContent && data.captionDialog" mat-dialog-content>{{data.captionDialog}}</div>
+  <div *ngIf="data.htmlContent && data.captionDialog" mat-dialog-content [innerHTML]="data.captionDialog"></div>
   <div *ngIf="data.isDisagree" fxLayout="row" fxLayoutAlign="center center" class="radio-layout">
     <mat-radio-group [formControl]="formRadio">
       <mat-radio-button class="radio-button pr-20" *ngFor="let item of data.listRadio;" [value]="item.value">
@@ -9,9 +10,12 @@
     </mat-radio-group>
   </div>
   <div mat-dialog-actions class="actions">
-    <button *ngIf="!data.isDisagree" mat-button class="confirm" style="cursor: pointer;" (click)="data.confirmCallback()">{{data.buttonText[0]}}</button>
-    <button *ngIf="data.isDisagree && valueRadio" mat-button class="confirm" style="cursor: pointer;" (click)="data.confirmCallback(valueRadio)">{{data.buttonText[0]}}</button>
-    <button *ngIf="data.isDisagree && !valueRadio" mat-button class="disable" style="cursor: no-drop;" [disabled]="!valueRadio">{{data.buttonText[0]}}</button>
+    <button *ngIf="!data.isDisagree" mat-button class="confirm" style="cursor: pointer;"
+      (click)="data.confirmCallback()">{{data.buttonText[0]}}</button>
+    <button *ngIf="data.isDisagree && valueRadio" mat-button class="confirm" style="cursor: pointer;"
+      (click)="data.confirmCallback(valueRadio)">{{data.buttonText[0]}}</button>
+    <button *ngIf="data.isDisagree && !valueRadio" mat-button class="disable" style="cursor: no-drop;"
+      [disabled]="!valueRadio">{{data.buttonText[0]}}</button>
     <button mat-button class="reject" style="cursor: pointer;" (click)="closeDialog()">{{data.buttonText[1]}}</button>
   </div>
 </div>
