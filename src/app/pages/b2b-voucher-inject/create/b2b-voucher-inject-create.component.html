@@ -26,6 +26,15 @@
                 </div>
               </div>
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+
+                <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Penggunaan Voucher" formControlName="opsiVoucher">
+                      <mat-option *ngFor="let ovl of opsiVoucherList" [value]="ovl.value">{{ ovl.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <mat-form-field fxFlex="50" class="is-light">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
                   <mat-error
@@ -65,45 +74,96 @@
                     placeholder="Catatan"></textarea>
                 </mat-form-field>
 
-                <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="50">
                   <h4 style="font-weight: bold;">Batasan</h4>
-                  <div fxFlex="100">
-                    <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
-                      style="margin-right: 25px;">Batasi dengan Produk
-                    </mat-checkbox>
-                    <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">Batasi
-                      Dengan Kategori</mat-checkbox>
-                  </div>
                 </div>
 
-                <mat-form-field fxFlex="50" class="pt-24" *ngIf="formDetilVoucher.get('limit_by_product').value">
-                  <mat-chip-list #chipList aria-label="Product List">
-                    <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
-                      (removed)="remove(product)">
-                      {{product.name}}
-                      <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
-                    </mat-chip>
-                    <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
-                      (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
-                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)">
-                  </mat-chip-list>
-                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
-                    <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
-                      (onSelectionChange)="getProductObj($event, item)">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-                <mat-form-field fxFlex="50" class="pt-24" *ngIf="!formDetilVoucher.get('limit_by_product').value">
-                  <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
-                </mat-form-field>
+                <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+                  <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'b2b' || formDetilVoucher.get('opsiVoucher').value == 'both'">
+                    <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                      <span class="opsi-type">Produk B2B</span>
+                      <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                        <div fxFlex="100">
+                          <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
+                            style="margin-right: 25px;">Batasi dengan Produk
+                          </mat-checkbox>
+                          <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">Batasi
+                            Dengan Kategori</mat-checkbox>
+                        </div>
+                      </div>
+                      <mat-form-field fxFlex="100" class="" *ngIf="formDetilVoucher.get('limit_by_product').value">
+                        <mat-chip-list #chipList aria-label="Product List">
+                          <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                            (removed)="remove(product)">
+                            {{product.name}}
+                            <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                          </mat-chip>
+                          <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
+                            (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                          <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                            (onSelectionChange)="getProductObj($event, item)">
+                            {{item.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" class="" *ngIf="!formDetilVoucher.get('limit_by_product').value">
+                        <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                      </mat-form-field>
 
-                <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category" multiple>
-                    <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                      <mat-form-field fxFlex="50">
+                        <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category" multiple>
+                          <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'src-catalogue' || formDetilVoucher.get('opsiVoucher').value == 'both'">
+                    <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                      <span class="opsi-type">SRC Katalog</span>
+                      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                        <div fxFlex="100">
+                          <mat-checkbox formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
+                            style="margin-right: 25px;">Batasi dengan Produk
+                          </mat-checkbox>
+                          <mat-checkbox formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">Batasi
+                            Dengan Kategori</mat-checkbox>
+                        </div>
+                      </div>
+                      <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product_srcc').value" class="mt-8">
+                        <mat-chip-list #chipList aria-label="Product List">
+                          <mat-chip *ngFor="let product of productListSRCC" [selectable]="selectable" [removable]="removable"
+                            (removed)="removeSRCC(product)">
+                            {{product.name}}
+                            <mat-icon matChipRemove *ngIf="removable" (click)="removeSRCC(product.sku_id)">cancel</mat-icon>
+                          </mat-chip>
+                          <input matInput type="text" #productInputSRCC placeholder="Batasan Berdasarkan Produk"
+                            (input)="keyUpProductSRCC.next($event.target.value)" [formControl]="product_srcc" [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addSRCC($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                          <mat-option *ngFor="let item of filteredSkuOptionsSRCC | async" [value]="item"
+                            (onSelectionChange)="getProductObjSRCC($event, item)">
+                            {{item.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" *ngIf="!formDetilVoucher.get('limit_by_product_srcc').value">
+                        <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                      </mat-form-field>
+                      
+                      <mat-form-field fxFlex="100">
+                        <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category_srcc" multiple>
+                          <mat-option *ngFor="let cat of listCategoriesSRCC" [value]="cat.id">{{ cat.name }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
 
               </div>
 
@@ -145,7 +205,7 @@
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Panel Mitra" *ngIf="isDetail || isEdit">
+        <mat-tab label="Panel Mitra" *ngIf="(isDetail || isEdit) && this.formDetilVoucher.get('opsiVoucher').value !== 'src-catalogue'">
           <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()" [statusVoucher]="detailVoucher.status"
             [permissions]="permission">
           </app-panel-mitra-voucher>
