@@ -14,6 +14,7 @@ export const environment = {
   localDev: 'http://sampoerna.local',
   qiscus_appIdMC: 'zova-efc1mal9p9cjurph', //Staging
   qiscus_appId: 'ayosrc-8lv9mbp2ce6iwr',
+  cognito_login_url: 'https://ayo-principal-prd.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-prd&redirect_uri=https://hms.src.id/login&response_type=CODE&client_id=3uvfgpi61hk7a739rtjpjddv70&scope=aws.cognito.signin.user.admin email openid phone profile'
 };
 
 export const serviceServer = (server) => {

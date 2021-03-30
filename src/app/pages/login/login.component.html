@@ -6,7 +6,12 @@
   <li><span></span></li>
   <li><span></span></li>
 </ul> -->
-<div id="ayoLogin" fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="internalSigningIn" style="position: absolute; left: 50%; top: 50%;">
+  <mat-progress-spinner mode="indeterminate" diameter="32" style="margin-left: auto; margin-right: auto;"></mat-progress-spinner>
+  <h2>Signing In</h2>
+</div>
+
+<div id="ayoLogin" fxLayout="column" fxLayoutAlign="center center" *ngIf="!internalSigningIn">
   <div class="tra" *ngIf="environment?.show_label">
     <div class="bg-tra"></div>
     <div class="text-tra">{{ environment?.label }}</div>
@@ -31,7 +36,7 @@
               </mat-form-field>
             </div>
 
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div *ngIf="showExternalUserFields" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field class="is-light form-primary">
                 <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
                 <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi">
@@ -45,7 +50,7 @@
               </mat-form-field>
             </div>
 
-            <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+            <div *ngIf="showExternalUserFields" class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
               <mat-checkbox class="remember-me red" [formControl]="rememberMe" aria-label="Remember Me">
                 Ingat Saya
               </mat-checkbox>

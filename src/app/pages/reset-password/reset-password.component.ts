@@ -105,6 +105,14 @@ export class ResetPasswordComponent implements OnInit {
 
   submit() {
     if (this.forgotPasswordForm.valid) {
+      let email = this.email.toLowerCase()
+      let internal = email.match(/.+@pmintl\.net/) || email.match(/.+@sampoerna\.com/) || email.match(/.+@contracted\.sampoerna\.com/);
+      
+      if(internal) {
+        this.dialogService.openSnackBar({ message: 'Aplikasi ini sudah menggunakan Single Sign On. Anda dapat melakukan reset password di Password Manager.' });
+        return;
+      }
+      
       const password = this.forgotPasswordForm.get("password").value;
       const password_confirmation = this.forgotPasswordForm.get("password_confirmation").value;
 
