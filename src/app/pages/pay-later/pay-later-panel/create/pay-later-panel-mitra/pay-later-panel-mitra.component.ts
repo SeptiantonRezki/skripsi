@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-mitra.component.html',
   styleUrls: ['./pay-later-panel-mitra.component.scss']
 })
-export class PayLaterPanelMitraComponent implements OnInit {
+export class PayLaterPanelMitraComponent implements OnInit, OnDestroy {
   formPanelMitra: FormGroup;
   formPanelMitraError: any;
   allRowsSelected: boolean;
@@ -172,6 +172,10 @@ export class PayLaterPanelMitraComponent implements OnInit {
       })
   }
 
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_mitra', 1);
+  }
+
   getCompanies() {
     this.mitraPanelService.getCompaniesPanel().subscribe(res => {
       this.listCompanies = res.data;
@@ -201,7 +205,7 @@ export class PayLaterPanelMitraComponent implements OnInit {
       this.pagination.search = '';
       this.pagination.page = 1;
       this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
-      
+
 
       this.dataService.showLoading(true);
       this.mitraPanelService.checkPanel({ paylater_company_id: this.formPanelMitra.get('company').value }).subscribe(res => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-src-edit.component.html',
   styleUrls: ['./pay-later-panel-src-edit.component.scss']
 })
-export class PayLaterPanelSrcEditComponent implements OnInit {
+export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
   // formPanelSrc: FormGroup;
   // formPanelSrcError: any;
   allRowsSelected: boolean;
@@ -136,6 +136,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.shortDetail = this.dataService.getFromStorage("detail_paylater_panel");
   }
 
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_src', 1);
+  }
+
   ngOnInit() {
     // this.formPanelSrc = this.formBuilder.group({
     //   company: ["", Validators.required],
@@ -242,7 +246,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
           })
         }
         setTimeout(() => {
-        console.log('filteredSrc', filteredSrc);
+          console.log('filteredSrc', filteredSrc);
           this.onSelect({ selected: res && res.data && res.data.src ? filteredSrc : [] });
           this.getPanelSrcList();
         }, 800);

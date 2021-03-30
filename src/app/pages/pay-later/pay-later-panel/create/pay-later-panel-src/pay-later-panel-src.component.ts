@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-src.component.html',
   styleUrls: ['./pay-later-panel-src.component.scss']
 })
-export class PayLaterPanelSrcComponent implements OnInit {
+export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
   // formPanelSrc: FormGroup;
   // formPanelSrcError: any;
   allRowsSelected: boolean;
@@ -129,6 +129,10 @@ export class PayLaterPanelSrcComponent implements OnInit {
       });
   }
 
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_src', 1);
+  }
+
   ngOnInit() {
     // this.formPanelSrc = this.formBuilder.group({
     //   company: ["", Validators.required],
@@ -146,7 +150,7 @@ export class PayLaterPanelSrcComponent implements OnInit {
 
     this.initAreaV2();
 
-    if (this.mitraSelected.length > 0 ) {
+    if (this.mitraSelected.length > 0) {
       this.aturPanelMitra();
       this.loaded = true;
     } else {
@@ -232,6 +236,8 @@ export class PayLaterPanelSrcComponent implements OnInit {
     if (this.paylaterCompanyId !== null) {
       this.selectedMitra = [];
       this.onSelect({ selected: [] });
+      this.pagination.search = '';
+      this.pagination.page = 1;
 
       this.dataService.showLoading(true);
       this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
