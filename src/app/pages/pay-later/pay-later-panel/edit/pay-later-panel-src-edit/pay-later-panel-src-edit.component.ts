@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-src-edit.component.html',
   styleUrls: ['./pay-later-panel-src-edit.component.scss']
 })
-export class PayLaterPanelSrcEditComponent implements OnInit {
+export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
   // formPanelSrc: FormGroup;
   // formPanelSrcError: any;
   allRowsSelected: boolean;
@@ -136,6 +136,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.shortDetail = this.dataService.getFromStorage("detail_paylater_panel");
   }
 
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_src', 1);
+  }
+
   ngOnInit() {
     // this.formPanelSrc = this.formBuilder.group({
     //   company: ["", Validators.required],
@@ -224,6 +228,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     if (this.paylaterCompanyId !== null) {
       this.selectedMitra = [];
       this.onSelect({ selected: [] });
+      this.pagination.search = '';
+      this.pagination.page = 1;
 
       this.dataService.showLoading(true);
       this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
@@ -240,7 +246,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
           })
         }
         setTimeout(() => {
-        console.log('filteredSrc', filteredSrc);
+          console.log('filteredSrc', filteredSrc);
           this.onSelect({ selected: res && res.data && res.data.src ? filteredSrc : [] });
           this.getPanelSrcList();
         }, 800);
@@ -343,7 +349,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -371,6 +380,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
@@ -379,10 +389,16 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page_src");
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -398,15 +414,22 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     this.dataService.setToStorage("page_src", this.pagination.page);
     this.dataService.setToStorage("sort_src", event.column.prop);
     this.dataService.setToStorage("sort_type_src", event.newValue);
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -420,6 +443,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.loadingIndicator = true;
     this.pagination.search = string;
+    this.dataService.showLoading(true);
 
     if (string) {
       this.pagination.page = 1;
@@ -430,10 +454,16 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.panelService.getSrc(this.pagination, { wholesaler_id: this.mitraSelected, business_id: businessIds }).subscribe(res => {
+    this.panelService.getSrc(this.pagination, {
+      wholesaler_id: this.mitraSelected, business_id: businessIds,
+      paylater_company_id: this.paylaterCompanyId
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -522,7 +552,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'retailer' };
+    dialogConfig.data = {
+      type: 'retailer',
+      paylater_company_id: this.paylaterCompanyId
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 

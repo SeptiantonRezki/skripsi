@@ -60,6 +60,7 @@ export class PayLaterPanelImportDialogComponent implements OnInit {
       res => {
         let fdd = new FormData();
         fdd.append('type', this.payload.type);
+        fdd.append('paylater_company_id', this.payload.paylater_company_id);
         this.mitraPanelService.previewImport(fdd).subscribe(preview => {
           console.log('preview res', preview);
           this.rows = preview.data;

@@ -42,4 +42,8 @@ export class PayLaterCompanyService extends BaseService {
     const url = this.getUrl(this.namespace, 'update_status', context);
     return this.putApi(url, body);
   }
+  list(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list', context);
+    return this.getApi(url);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-mitra-edit.component.html',
   styleUrls: ['./pay-later-panel-mitra-edit.component.scss']
 })
-export class PayLaterPanelMitraEditComponent implements OnInit {
+export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
   formPanelMitra: FormGroup;
   formPanelMitraError: any;
   allRowsSelected: boolean;
@@ -110,6 +110,10 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     this.shortDetail = this.dataService.getFromStorage("detail_paylater_panel");
   }
 
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_mitra', 1);
+  }
+
   ngOnInit() {
     this.formPanelMitra = this.formBuilder.group({
       company: ["", Validators.required],
@@ -198,6 +202,9 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     if (this.formPanelMitra.valid) {
       this.selectedMitra = [];
       this.onSelect({ selected: [] });
+      this.pagination.search = '';
+      this.pagination.page = 1;
+      this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
 
       this.dataService.showLoading(true);
       this.mitraPanelService.checkPanel({ paylater_company_id: this.formPanelMitra.get('company').value }).subscribe(res => {
@@ -294,7 +301,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
         }
       }
     }
-    
+
     this.dataService.setToStorage('company_selected', this.formPanelMitra.get('company').value);
 
     const page = this.dataService.getFromStorage("page_mitra");
@@ -307,7 +314,10 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(
+    this.mitraPanelService.getMitra(this.pagination, {
+      business_id: this.selected.map(mtr => mtr.id),
+      paylater_company_id: this.formPanelMitra.get('company').value
+    }).subscribe(
       res => {
         this.dataService.showLoading(false);
         Page.renderPagination(this.pagination, res.data);
@@ -329,6 +339,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
@@ -337,10 +348,16 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page_mitra");
     }
 
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.mitraPanelService.getMitra(this.pagination, {
+      business_id: this.selected.map(mtr => mtr.id),
+      paylater_company_id: this.formPanelMitra.get('company').value
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -349,21 +366,29 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     this.dataService.setToStorage("page_mitra", this.pagination.page);
     this.dataService.setToStorage("sort_mitra", event.column.prop);
     this.dataService.setToStorage("sort_type_mitra", event.newValue);
 
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.mitraPanelService.getMitra(this.pagination, {
+      business_id: this.selected.map(mtr => mtr.id),
+      paylater_company_id: this.formPanelMitra.get('company').value
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
   updateFilter(string) {
     this.loadingIndicator = true;
     this.pagination.search = string;
+    this.dataService.showLoading(true);
 
     if (string) {
       this.pagination.page = 1;
@@ -374,10 +399,16 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.mitraPanelService.getMitra(this.pagination, { business_id: this.selected.map(mtr => mtr.id) }).subscribe(res => {
+    this.mitraPanelService.getMitra(this.pagination, {
+      business_id: this.selected.map(mtr => mtr.id),
+      paylater_company_id: this.formPanelMitra.get('company').value
+    }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -468,7 +499,10 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { type: 'wholesaler' };
+    dialogConfig.data = {
+      type: 'wholesaler',
+      paylater_company_id: this.formPanelMitra.get('company').value
+    };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 

@@ -75,7 +75,7 @@ const routes: Routes = [
     path: "panel/create",
     component: PayLaterPanelCreateComponent,
     data: {
-      breadcrumbs: brConfig.paylater.panel.create
+      breadcrumbs: brConfig.paylater.panel.create,
     }
   },
   {
