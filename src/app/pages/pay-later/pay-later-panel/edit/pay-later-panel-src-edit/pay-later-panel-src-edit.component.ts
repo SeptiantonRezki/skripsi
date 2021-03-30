@@ -376,6 +376,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
@@ -391,6 +392,9 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -406,6 +410,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     this.dataService.setToStorage("page_src", this.pagination.page);
     this.dataService.setToStorage("sort_src", event.column.prop);
@@ -418,6 +423,9 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -431,6 +439,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
 
     this.loadingIndicator = true;
     this.pagination.search = string;
+    this.dataService.showLoading(true);
 
     if (string) {
       this.pagination.page = 1;
@@ -448,6 +457,9 @@ export class PayLaterPanelSrcEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
