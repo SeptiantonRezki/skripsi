@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import
   templateUrl: './pay-later-panel-mitra-edit.component.html',
   styleUrls: ['./pay-later-panel-mitra-edit.component.scss']
 })
-export class PayLaterPanelMitraEditComponent implements OnInit {
+export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
   formPanelMitra: FormGroup;
   formPanelMitraError: any;
   allRowsSelected: boolean;
@@ -108,6 +108,10 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     })
 
     this.shortDetail = this.dataService.getFromStorage("detail_paylater_panel");
+  }
+
+  ngOnDestroy() {
+    this.dataService.setToStorage('page_mitra', 1);
   }
 
   ngOnInit() {
@@ -335,6 +339,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
@@ -350,6 +355,9 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
@@ -358,6 +366,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    this.dataService.showLoading(true);
 
     this.dataService.setToStorage("page_mitra", this.pagination.page);
     this.dataService.setToStorage("sort_mitra", event.column.prop);
@@ -370,12 +379,16 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
   updateFilter(string) {
     this.loadingIndicator = true;
     this.pagination.search = string;
+    this.dataService.showLoading(true);
 
     if (string) {
       this.pagination.page = 1;
@@ -393,6 +406,9 @@ export class PayLaterPanelMitraEditComponent implements OnInit {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     });
   }
 
