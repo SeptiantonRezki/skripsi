@@ -67,16 +67,16 @@ export class NotificationCoinAdjustmentDialogComponent implements OnInit {
     let search = this.filterUserNames.value;
     this.pagination.per_page = 30;
     this.pagination.search = search;
-    // this.coinAdjustmentApprovalService.approverList({ is_tsm: this.data.is_tsm }, this.pagination).subscribe(
-    //   (res) => {
-    //     console.log("res users", res.data);
-    //     this.users = res.data;
-    //     this.filteredUserNames.next(this.users.slice());
-    //   },
-    //   (err) => {
-    //     console.log("err ", err);
-    //   }
-    // );
+    this.coinAdjustmentApprovalService.approverList({ is_tsm: this.data.is_tsm }, this.pagination).subscribe(
+      (res) => {
+        console.log("res users", res.data);
+        this.users = res.data;
+        this.filteredUserNames.next(this.users.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
     // filter the banks
     this.filteredUserNames.next(
       this.users.filter(item => item.fullname.toLowerCase().indexOf(search ? search.toLowerCase() : search) > -1)

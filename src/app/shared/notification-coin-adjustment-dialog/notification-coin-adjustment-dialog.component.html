@@ -5,7 +5,7 @@
         <mat-select formControlName="name" placeholder="Nama User Penerima" id="name"
           (selectionChange)="selectChangeReceiver($event)" #singleSelect>
           <ngx-mat-select-search [formControl]="filterUserNames" [placeholderLabel]="'Cari Nama User ...'"
-            [noEntriesFoundLabel]="'Tidak ada Nama Lain Misi yang ditemukan'" [clearSearchInput]="false">
+            [noEntriesFoundLabel]="'User Tidak ditemukan!'" [clearSearchInput]="false">
           </ngx-mat-select-search>
           <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id">
             {{item.fullname}}
