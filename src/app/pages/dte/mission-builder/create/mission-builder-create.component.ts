@@ -625,6 +625,7 @@ export class MissionBuilderCreateComponent implements OnInit {
 
   checkBudget() {
     const body = {
+      tsm_id: this.task.id,
       trade_creator_id: this.task.trade_creator_id,
       total_coin: this.task.total_coin,
       trade_audience_id: this.task.trade_audience_group_id
