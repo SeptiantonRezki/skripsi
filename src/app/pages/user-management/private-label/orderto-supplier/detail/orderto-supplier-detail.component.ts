@@ -129,7 +129,7 @@ export class OrdertoSupplierDetailComponent {
         document.removeEventListener('copy', null);
       });
       document.execCommand('copy');
-      this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
+      this.dialogService.openSnackBar({ message: "Nomor Disalin!" });
     } else {
       this.dialogService.openSnackBar({ message: "Tidak Ada Dokumen yang dapat disalin!" });
     }
