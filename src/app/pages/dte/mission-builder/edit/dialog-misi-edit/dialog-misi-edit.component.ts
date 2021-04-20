@@ -112,7 +112,7 @@ export class DialogMisiEditComponent implements OnInit {
       this.filterMission.setValue(this.form.get('task_template_id').value);
       this.filterMissionOther.setValue(this.form.get('task_template_id').value);
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
-
+      console.log("the index", theIndex, this.form.get('task_template_id').value, this.missions[theIndex]);
       this.form.patchValue({
         is_ir_template: this.missions[theIndex] && this.missions[theIndex]['is_ir_template'] ? this.missions[theIndex].is_ir_template : 0
       });
@@ -258,6 +258,9 @@ export class DialogMisiEditComponent implements OnInit {
 
   getMission() {
     this.pagination.per_page = 30;
+    if (this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['search'] = this.data.data.attribute.task_template_id;
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
