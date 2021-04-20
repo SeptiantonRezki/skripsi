@@ -103,6 +103,7 @@ import { PopupNotifComponent } from "./shared/popup-notif/popup-notif.component"
 import { StorageHelper } from "./helper/storage.helper";
 import { CoinAdjustmentApprovalService } from "./services/dte/coin-adjustment-approval.service";
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
+import { CoinDisburstmentService } from "./services/dte/coin-disburstment.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -219,6 +220,7 @@ const config = {
     PayLaterDeactivateService,
     MedalBadgeService,
     CoinAdjustmentApprovalService,
+    CoinDisburstmentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

@@ -808,6 +808,11 @@ export class Endpoint {
       customer_care: {
         questions: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/customer-care/pertanyaan-verifikasi-agent/list`,
       },
+      CoinDisburstment: {
+        get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
+        get_exchanges: `${AYO_API_SERVICE((SERVER.coin))}/api/v1/coin/principal/coin-redemption/penukaran`,
+        detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
