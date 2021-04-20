@@ -110,7 +110,7 @@ export class DialogMisiEditComponent implements OnInit {
   checkTaskTemplate() {
     if (this.form.get('task_template_id').value && this.missions.length > 0) {
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
-
+      console.log("the index", theIndex, this.form.get('task_template_id').value, this.missions[theIndex]);
       this.form.patchValue({
         is_ir_template: this.missions[theIndex].is_ir_template
       });
@@ -256,6 +256,9 @@ export class DialogMisiEditComponent implements OnInit {
 
   getMission() {
     this.pagination.per_page = 30;
+    if (this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['search'] = this.data.data.attribute.task_template_id;
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;

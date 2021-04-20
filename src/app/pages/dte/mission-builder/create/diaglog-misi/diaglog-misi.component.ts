@@ -254,6 +254,9 @@ export class DiaglogMisiComponent implements OnInit {
 
   getMission() {
     this.pagination.per_page = 30;
+    if (this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['search'] = this.data.data.attribute.task_template_id;
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         console.log("res missions", res.data.data);
