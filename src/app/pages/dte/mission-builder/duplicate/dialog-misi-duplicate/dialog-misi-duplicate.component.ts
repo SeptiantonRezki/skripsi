@@ -258,6 +258,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
 
   getMission() {
     this.pagination.per_page = 30;
+    if (this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['search'] = this.data.data.attribute.task_template_id;
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
