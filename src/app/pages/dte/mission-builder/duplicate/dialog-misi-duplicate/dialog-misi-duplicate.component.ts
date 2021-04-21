@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { Subject, ReplaySubject } from "rxjs";
@@ -13,7 +13,7 @@ import { Page } from 'app/classes/laravel-pagination';
   templateUrl: './dialog-misi-duplicate.component.html',
   styleUrls: ['./dialog-misi-duplicate.component.scss']
 })
-export class DialogMisiDuplicateComponent implements OnInit {
+export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   pushFF: FormControl = new FormControl(false);
@@ -25,6 +25,8 @@ export class DialogMisiDuplicateComponent implements OnInit {
   private _onDestroy = new Subject<void>();
   public filterMission: FormControl = new FormControl();
   public filteredMission: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterMissionOther: FormControl = new FormControl();
+  public filteredMissionOther: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   pagination: Page = new Page();
 
@@ -39,6 +41,7 @@ export class DialogMisiDuplicateComponent implements OnInit {
     this.getMission();
     this.form = this.formBuilder.group({
       task_template_id: "",
+      task_template_other_name_id: "",
       start_date: [moment(), Validators.required],
       end_date: "",
       pushFF: this.pushFF,
@@ -57,9 +60,16 @@ export class DialogMisiDuplicateComponent implements OnInit {
         this.filteringMission();
       });
 
+    this.filterMissionOther.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringMissionOther();
+      });
+
     if (this.data !== null) {
       this.form.patchValue({
         task_template_id: this.data.data.attribute.task_template_id,
+        task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
         start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
         end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
         verification_type: this.data.data.attribute.verification_type,
@@ -95,21 +105,68 @@ export class DialogMisiDuplicateComponent implements OnInit {
     }
   }
 
-  selectChangeMisi(e: any){
+  ngOnDestroy() {
+    this._onDestroy.unsubscribe();
+  }
+
+  selectChangeMisi(e: any) {
     // console.log(e);
+    // this.filterMissionOther.setValue(e.value);
+    this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
     // console.log(this.missions[theIndex]);
-    console.log("is ir template: "+this.missions[theIndex].is_ir_template);
     this.form.patchValue({
       is_ir_template: this.missions[theIndex].is_ir_template
     });
 
-    if(this.missions[theIndex].is_ir_template === 1){
+    this.form.get('verifikasiFF').enable();
+    this.form.get('coin_verification').enable();
+    if (this.missions[theIndex].is_ir_template === 1) {
       this.form.get('verifikasiFF').patchValue(false);
       this.form.get('pushFF').patchValue(false);
       this.form.get('verifikasi').patchValue(true);
     } else {
       this.form.get('verifikasi').patchValue(false);
+      if (this.missions[theIndex].is_quiz === 1) {
+        this.form.get('verifikasiFF').disable();
+        this.form.get('verifikasi').patchValue(true);
+        let totalCoin = 0;
+        this.missions[theIndex].questions.map(qst => {
+          totalCoin += Number(qst.coin);
+        });
+        this.form.get('coin_verification').patchValue(totalCoin);
+        this.form.get('coin_verification').disable();
+      }
+    }
+  }
+
+  selectChangeMisiOtherName(e: any) {
+    // this.filterMission.setValue(e.value);
+    this.form.get("task_template_id").setValue(e.value);
+    const theIndex = this.missions.findIndex(x => x.id === e.value);
+    // console.log(this.missions[theIndex]);
+    this.form.patchValue({
+      is_ir_template: this.missions[theIndex].is_ir_template
+    });
+
+    this.form.get('verifikasiFF').enable();
+    this.form.get('coin_verification').enable();
+    if (this.missions[theIndex].is_ir_template === 1) {
+      this.form.get('verifikasiFF').patchValue(false);
+      this.form.get('pushFF').patchValue(false);
+      this.form.get('verifikasi').patchValue(true);
+    } else {
+      this.form.get('verifikasi').patchValue(false);
+      if (this.missions[theIndex].is_quiz === 1) {
+        this.form.get('verifikasiFF').disable();
+        this.form.get('verifikasi').patchValue(true);
+        let totalCoin = 0;
+        this.missions[theIndex].questions.map(qst => {
+          totalCoin += Number(qst.coin);
+        });
+        this.form.get('coin_verification').patchValue(totalCoin);
+        this.form.get('coin_verification').disable();
+      }
     }
   }
 
@@ -125,6 +182,7 @@ export class DialogMisiDuplicateComponent implements OnInit {
       (res) => {
         this.missions = res.data.data;
         this.filteredMission.next(this.missions.slice());
+        this.filteredMissionOther.next(this.missions.slice());
       },
       (err) => {
         console.log("err ", err);
@@ -134,6 +192,68 @@ export class DialogMisiDuplicateComponent implements OnInit {
     this.filteredMission.next(
       this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
+
+    this.filteredMissionOther.next(
+      this.missions.filter(item => item.other_name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  filteringMissionOther() {
+    if (!this.missions) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterMissionOther.value;
+    this.pagination.per_page = 30;
+    this.pagination.search = search;
+    this.templateTaskService.get(this.pagination).subscribe(
+      (res) => {
+        this.missions = res.data.data;
+        this.filteredMission.next(this.missions.slice());
+        this.filteredMissionOther.next(this.missions.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the banks
+    this.filteredMissionOther.next(
+      this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+
+    this.filteredMission.next(
+      this.missions.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  checkTaskTemplate() {
+    if (this.form.get('task_template_id').value && this.missions.length > 0) {
+      const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
+
+      this.form.patchValue({
+        is_ir_template: this.missions[theIndex].is_ir_template
+      });
+
+      this.form.get('verifikasiFF').enable();
+      this.form.get('coin_verification').enable();
+      if (this.missions[theIndex].is_ir_template === 1) {
+        this.form.get('verifikasiFF').patchValue(false);
+        this.form.get('pushFF').patchValue(false);
+        this.form.get('verifikasi').patchValue(true);
+      } else {
+        this.form.get('verifikasi').patchValue(false);
+        if (this.missions[theIndex].is_quiz === 1) {
+          this.form.get('verifikasiFF').disable();
+          this.form.get('verifikasi').patchValue(true);
+          let totalCoin = 0;
+          this.missions[theIndex].questions.map(qst => {
+            totalCoin += Number(qst.coin);
+          });
+          this.form.get('coin_verification').patchValue(totalCoin);
+          this.form.get('coin_verification').disable();
+        }
+      }
+    }
   }
 
   getMission() {
@@ -142,6 +262,8 @@ export class DialogMisiDuplicateComponent implements OnInit {
       (res) => {
         this.missions = res.data.data;
         this.filteredMission.next(this.missions.slice());
+        this.filteredMissionOther.next(this.missions.slice());
+        this.checkTaskTemplate();
       },
       (err) => {
         console.log("err ", err);
@@ -196,17 +318,18 @@ export class DialogMisiDuplicateComponent implements OnInit {
   }
 
   submit(form: any) {
+    this.form.get('coin_verification').enable();
     form.get('start_date').patchValue(this.formatDate(form.value.start_date));
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
 
     form.get('verification_type').patchValue(
       (form.value.verifikasiFF === false && form.value.verifikasi === false) ? null :
-      (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
-      (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
-      form.get('is_push_to_ff').patchValue(
-        (form.value.pushFF === false) ? 0 :
+        (form.value.verifikasiFF === false && form.value.verifikasi === true) ? 'principal' :
+          (form.value.verifikasiFF === true && form.value.verifikasi === false) ? 'field-force' : '');
+    form.get('is_push_to_ff').patchValue(
+      (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
-      );
+    );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);
 
