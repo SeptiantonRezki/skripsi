@@ -55,12 +55,14 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     });
 
     this.filterMission.valueChanges
+      .debounceTime(500)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMission();
       });
 
     this.filterMissionOther.valueChanges
+      .debounceTime(500)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMissionOther();
@@ -234,6 +236,8 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
 
   checkTaskTemplate() {
     if (this.form.get('task_template_id').value && this.missions.length > 0) {
+      this.filterMission.setValue(this.form.get('task_template_id').value, { emitEvent: false });
+      this.filterMissionOther.setValue(this.form.get('task_template_id').value, { emitEvent: false });
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
 
       this.form.patchValue({
