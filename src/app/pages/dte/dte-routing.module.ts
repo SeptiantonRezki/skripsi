@@ -428,21 +428,28 @@ const routes: Routes = [
     path: 'coin-disbursement',
     component: CoinDisburstmentComponent,
     data: {
-      breadcrumbs: brConfig.dte.coin_adjustment.index
+      breadcrumbs: brConfig.dte.coin_disburstment.index
     },
   },
   {
     path: 'coin-disbursement/create',
     component: CoinDisburstmentCreateComponent,
     data: {
-      breadcrumbs: brConfig.dte.coin_adjustment.index
+      breadcrumbs: brConfig.dte.coin_disburstment.create
+    },
+  },
+  {
+    path: 'coin-disbursement/edit',
+    component: CoinDisburstmentEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.coin_disburstment.edit
     },
   },
   {
     path: 'coin-disbursement/detail',
     component: CoinDisburstmentEditComponent,
     data: {
-      breadcrumbs: brConfig.dte.coin_adjustment.index
+      breadcrumbs: brConfig.dte.coin_disburstment.detail
     },
   },
 ];

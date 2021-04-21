@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Coin Disburstment'">
+    <button style="width: 170px" [routerLink]="['/dte','coin-disbursement', 'create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT
+    </button>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">List Coin Disburstment</h2>
-      </div>
       <mat-tab-group>
         <mat-tab label="Coin Disburstment">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
