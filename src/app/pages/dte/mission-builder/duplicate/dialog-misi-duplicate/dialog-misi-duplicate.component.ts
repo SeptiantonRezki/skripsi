@@ -178,6 +178,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     let search = this.filterMission.value;
     this.pagination.per_page = 30;
     this.pagination.search = search;
+    if (this.pagination['id']) {
+      delete this.pagination['id'];
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
@@ -206,6 +209,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     let search = this.filterMissionOther.value;
     this.pagination.per_page = 30;
     this.pagination.search = search;
+    if (this.pagination['id']) {
+      delete this.pagination['id'];
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
