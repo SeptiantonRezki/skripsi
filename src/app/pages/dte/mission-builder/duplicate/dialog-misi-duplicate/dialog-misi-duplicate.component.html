@@ -4,9 +4,11 @@
   <mat-dialog-content>
 
     <mat-form-field style="width: 100%">
-      <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task_template_id" (selectionChange)="selectChangeMisi($event)" #singleSelect>
+      <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task_template_id"
+        (selectionChange)="selectChangeMisi($event)" #singleSelect>
         <ngx-mat-select-search [formControl]="filterMission" [placeholderLabel]="'Cari Template Misi...'"
-          [noEntriesFoundLabel]="'Tidak ada Template Misi yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
+          [noEntriesFoundLabel]="'Tidak ada Template Misi yang ditemukan'" [clearSearchInput]="false">
+        </ngx-mat-select-search>
         <mat-option *ngFor="let item of filteredMission | async" [value]="item.id">
           {{item.name}}
         </mat-option>
@@ -14,36 +16,55 @@
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input matInput formControlName="start_date" placeholder="Tanggal Awal" [matDatepicker]="start_date" (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly/>
+      <mat-select formControlName="task_template_other_name_id" placeholder="Pilih Nama Lain Misi"
+        id="task_template_other_name_id" (selectionChange)="selectChangeMisiOtherName($event)" #singleSelect>
+        <ngx-mat-select-search [formControl]="filterMissionOther" [placeholderLabel]="'Cari Nama Lain Misi...'"
+          [noEntriesFoundLabel]="'Tidak ada Nama Lain Misi yang ditemukan'" [clearSearchInput]="false">
+        </ngx-mat-select-search>
+        <mat-option *ngFor="let item of filteredMissionOther | async" [value]="item.id">
+          {{item.other_name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%">
+      <input matInput formControlName="start_date" placeholder="Tanggal Awal" [matDatepicker]="start_date"
+        (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly />
       <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
       <mat-datepicker #start_date></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input matInput formControlName="end_date" placeholder="Tanggal Berakhir" [matDatepicker]="end_date" (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly/>
+      <input matInput formControlName="end_date" placeholder="Tanggal Berakhir" [matDatepicker]="end_date"
+        (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly />
       <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
       <mat-datepicker #end_date></mat-datepicker>
     </mat-form-field>
 
     Push To FF
-    <mat-slide-toggle style="margin-right: 20px" [formControl]="pushFF" name="push-to-ff" (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
+    <mat-slide-toggle style="margin-right: 20px" [formControl]="pushFF" name="push-to-ff"
+      (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     Verifikasi FF
-    <mat-slide-toggle style="margin-right: 20px" [formControl]="verifikasiFF" name="verifikasi-ff" (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
+    <mat-slide-toggle style="margin-right: 20px" [formControl]="verifikasiFF" name="verifikasi-ff"
+      (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     Verifikasi Manual
-    <mat-slide-toggle style="margin-right: 20px" [formControl]="verifikasi" name="verifikasi" (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
+    <mat-slide-toggle style="margin-right: 20px" [formControl]="verifikasi" name="verifikasi"
+      (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     <!--Verifikasi IR
     <mat-slide-toggle [formControl]="verifikasiIR" name="verifikasi-ir" (change)="selectChange($event)"></mat-slide-toggle>-->
     <br><br>
     <div *ngIf="form.value.pushFF === false">
       <mat-form-field style="width: 100%">
-        <input matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission" placeholder="Coin Submission"/>
+        <input matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission"
+          placeholder="Coin Submission" />
       </mat-form-field>
 
       <mat-form-field style="width: 100%">
-        <input matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification" placeholder="Coin Verification"/>
+        <input matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification"
+          placeholder="Coin Verification" />
       </mat-form-field>
     </div>
 
