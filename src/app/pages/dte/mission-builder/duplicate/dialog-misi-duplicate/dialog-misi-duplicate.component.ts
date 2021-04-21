@@ -38,7 +38,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.getMission();
+    this.getMission(true);
     this.form = this.formBuilder.group({
       task_template_id: "",
       task_template_other_name_id: "",
@@ -262,10 +262,10 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     }
   }
 
-  getMission() {
+  getMission(isFirstLoad?: boolean) {
     this.pagination.per_page = 30;
-    if (this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
-      this.pagination['search'] = this.data.data.attribute.task_template_id;
+    if (isFirstLoad && this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['id'] = this.data.data.attribute.task_template_id;
     }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
