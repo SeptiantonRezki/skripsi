@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
@@ -57,6 +57,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     { id: "sudah dibayar", name: "Sudah Dibayar" },
     { id: "gagal bayar", name: "Gagal Bayar" }
   ];
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+  files: File;
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -101,6 +104,33 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.updateFilter(res);
       });
+  }
+
+  onDocUpload(e) {
+    this.files = undefined;
+    this.files = e;
+
+    let data = {
+      titleDialog: "Upload XLS",
+      captionDialog: `Apakah anda yakin untuk Mengupload File XLS ${e.name} ini ?`,
+      confirmCallback: this.confirmUpload.bind(this),
+      buttonText: ["Lanjutkan", "Batalkan"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmUpload() {
+    this.dataService.showLoading(true);
+    let fd = new FormData();
+    fd.append('file', this.files);
+    this.coinDisburstmentService.importExchange(fd).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: "File berhasil Diimport" });
+      this.getListPenukaranKoin();
+    }, err => {
+      this.dataService.showLoading(false);
+    })
   }
 
   ngOnInit() {
@@ -686,4 +716,28 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     return newLastSelfArea;
   }
 
+  async exportExchange() {
+    this.dataService.showLoading({ show: true });
+    const params = {
+      area: this.pagination['area'],
+      self_area: this.pagination['self_area'],
+      last_self_area: this.pagination['last_self_area'],
+      after_level: this.pagination['after_level'],
+      group: this.pagination['group']
+    }
+    try {
+      this.coinDisburstmentService.exportExchange(params).subscribe(res => {
+        this.downloadLink.nativeElement.href = res.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      }, err => {
+        console.warn('err', err);
+        alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+        this.dataService.showLoading(false);
+      })
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
 }

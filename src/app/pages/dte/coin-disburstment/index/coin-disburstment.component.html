@@ -26,6 +26,9 @@
             (page)="setPage($event)" (sort)="onSort($event)">
 
             <ngx-datatable-column [width]="200" name="Nama Program Penukaran" prop="name" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+              </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column [width]="200" name="Retailer Menukarkan Koin" prop="retailer_menukarkan_koin">

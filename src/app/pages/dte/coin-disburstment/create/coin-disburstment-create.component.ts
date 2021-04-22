@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
@@ -11,6 +11,10 @@ import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.s
 import { GeotreeService } from 'app/services/geotree.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import * as moment from "moment";
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { ImportAudienceDialogComponent } from '../../audience/import/import-audience-dialog.component';
+import { IdbService } from 'app/services/idb.service';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-coin-disburstment-create',
@@ -74,6 +78,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     1
   );
   private _onDestroy = new Subject<void>();
+  @ViewChild("downloadLink") downloadLink: ElementRef;
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  selectAllOnPage: any[] = [];
+  pageOffset: number = 0;
 
   // 2 geotree property
   endArea: String;
@@ -92,7 +100,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     private groupTradeProgramService: GroupTradeProgramService,
     private audienceService: AudienceService,
     private geotreeService: GeotreeService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private idbService: IdbService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isEdit = params[1].path === 'edit' ? true : false;
@@ -135,6 +145,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.idbService.reset();
     this.getGroupTradeProgram();
 
     this.formCoin = this.formBuilder.group({
@@ -887,6 +898,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   }
 
   setPage(pageInfo) {
+    this.pageOffset = pageInfo.offset;
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
@@ -922,6 +934,27 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
       this.loadingIndicator = false;
     });
+  }
+
+  selectAll(event) {
+    console.log("event select all", event);
+    if (!this.selectAllOnPage[this.pageOffset]) {
+      // Unselect all so we dont get duplicates.
+      if (this.selected.length > 0) {
+        this.rows.map(company => {
+          this.selected = this.selected.filter((selected) => selected.uuid !== company.uuid);
+        })
+      }
+      // Select all again
+      this.selected.push(...this.rows);
+      this.selectAllOnPage[this.pageOffset] = true;
+    } else {
+      // Unselect all
+      this.rows.map(company => {
+        this.selected = this.selected.filter((selected) => selected.uuid !== company.uuid);
+      });
+      this.selectAllOnPage[this.pageOffset] = false;
+    }
   }
 
   selectFn(allRowsSelected: boolean) {
@@ -1112,7 +1145,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu Opsi Penukaran!" });
         return;
       }
-      if (this.isTargetedRetailer.value && this.selected.length === 0) {
+      if (this.isTargetedRetailer.value && !this.allRowsSelected && this.selected.length === 0) {
         this.dialogService.openSnackBar({ message: "Belum ada Retailer Terpilih di Target Penerima!" });
         return;
       }
@@ -1146,10 +1179,18 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         });
       }
 
-      if (this.isTargetedRetailer.value) {
+      if (this.isTargetedRetailer.value && !this.allRowsSelected) {
         this.selected.map(retailer => {
           fd.append("retailer_id[]", retailer.id);
         })
+      }
+      if (this.isTargetedRetailer.value && this.allRowsSelected) {
+        if (this.pagination['area'] && Array.isArray(this.pagination['area'])) {
+          this.pagination['area'].map(area => {
+            fd.append('area_id[]', area);
+          });
+        }
+        fd.append('classification', this.pagination['classification']);
       }
 
       if (this.isEdit) {
@@ -1211,6 +1252,54 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     }
 
     return null;
+  }
+
+  importAudience() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
+
+    this.dialogRef = this.dialog.open(
+      ImportAudienceDialogComponent,
+      dialogConfig
+    );
+
+    this.dialogRef.afterClosed().subscribe((response) => {
+      if (response) {
+        let rows = this.rows.map((row) => row.id);
+        this.idbService
+          .getAll((dt) => dt.is_valid)
+          .then((result) => {
+            console.log("result", result);
+            this.onSelect({ selected: result });
+            this.dialogService.openSnackBar({
+              message: "File berhasil diimport",
+            });
+          });
+      }
+    });
+  }
+
+  async exportAudience() {
+    this.exportTemplate = true;
+    const body = {
+      retailer_id:
+        this.selected.length > 0 ? this.selected.map((item) => item.id) : [],
+    };
+
+    try {
+      const response = await this.audienceService.exportExcel(body).toPromise();
+      this.downloadLink.nativeElement.href = response.data;
+      this.downloadLink.nativeElement.click();
+      this.exportTemplate = false;
+    } catch (error) {
+      console.log("err", error);
+      this.exportTemplate = false;
+      throw error;
+    }
   }
 
 }
