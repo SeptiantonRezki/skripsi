@@ -440,7 +440,7 @@ const routes: Routes = [
   },
   {
     path: 'coin-disbursement/edit',
-    component: CoinDisburstmentEditComponent,
+    component: CoinDisburstmentCreateComponent,
     data: {
       breadcrumbs: brConfig.dte.coin_disburstment.edit
     },

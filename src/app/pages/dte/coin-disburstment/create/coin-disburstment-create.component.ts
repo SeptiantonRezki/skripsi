@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
@@ -9,13 +10,15 @@ import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.serv
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-coin-disburstment-create',
   templateUrl: './coin-disburstment-create.component.html',
   styleUrls: ['./coin-disburstment-create.component.scss']
 })
-export class CoinDisburstmentCreateComponent implements OnInit {
+export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
+  selectedTab: number = 0;
   formCoin: FormGroup;
   minDate = new Date();
   groupTradePrograms: any[] = [];
@@ -70,11 +73,16 @@ export class CoinDisburstmentCreateComponent implements OnInit {
   public filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(
     1
   );
+  private _onDestroy = new Subject<void>();
 
   // 2 geotree property
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+
+  // Untuk Edit
+  isEdit: boolean;
+  detailCoin: any;
   constructor(
     private dataService: DataService,
     private dialogService: DialogService,
@@ -83,8 +91,18 @@ export class CoinDisburstmentCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private groupTradeProgramService: GroupTradeProgramService,
     private audienceService: AudienceService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private activatedRoute: ActivatedRoute
   ) {
+    activatedRoute.url.subscribe(params => {
+      this.isEdit = params[1].path === 'edit' ? true : false;
+      if (this.isEdit) {
+        this.detailCoin = this.dataService.getFromStorage("detail_coin_disburstment");
+      }
+    });
+
+    this.selectedTab = this.dataService.getFromStorage("coin_disburstment_selected_tab") ? this.dataService.getFromStorage("coin_disburstment_selected_tab") : 0;
+
     this.rows = [];
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
     this.area_id_list = this.dataService.getDecryptedProfile()["area_id"];
@@ -125,8 +143,7 @@ export class CoinDisburstmentCreateComponent implements OnInit {
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
       group_trade_id: ["", Validators.required],
-      opsi_penukaran: ["", Validators.required],
-      status: ["publish"]
+      status: ["draft"]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -148,53 +165,110 @@ export class CoinDisburstmentCreateComponent implements OnInit {
     this.initAreaV2();
     this.getRetailer();
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
+    this.formFilter.valueChanges.debounceTime(1000).takeUntil(this._onDestroy).subscribe((res) => {
       // this.searchingRetailer(res);
       // this.getRetailer();
     });
 
-    this.formFilter.get("zone").valueChanges.subscribe((res) => {
+    this.formFilter.get("zone").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       console.log("zone", res);
       if (res) {
         this.getAudienceAreaV2("region", res);
       }
     });
-    this.formFilter.get("region").valueChanges.subscribe((res) => {
+    this.formFilter.get("region").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       console.log("region", res);
       if (res) {
         this.getAudienceAreaV2("area", res);
       }
     });
-    this.formFilter.get("area").valueChanges.subscribe((res) => {
+    this.formFilter.get("area").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       console.log("area", res, this.formFilter.value["area"]);
       if (res) {
         this.getAudienceAreaV2("salespoint", res);
       }
     });
-    this.formFilter.get("salespoint").valueChanges.subscribe((res) => {
+    this.formFilter.get("salespoint").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       console.log("salespoint", res);
       if (res) {
         this.getAudienceAreaV2("district", res);
       }
     });
-    this.formFilter.get("district").valueChanges.subscribe((res) => {
+    this.formFilter.get("district").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       console.log("district", res);
       if (res) {
         this.getAudienceAreaV2("territory", res);
       }
     });
 
-    this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
+    this.formFilterRetailer.valueChanges.takeUntil(this._onDestroy).debounceTime(1000).subscribe((res) => {
       this.getRetailer();
     });
 
-    this.formFilterRetailer.get('retail_classification').valueChanges.subscribe((res) => {
+    this.formFilterRetailer.get('retail_classification').valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
       if (res) {
         this.pagination['classification'] = res;
       } else {
         delete this.pagination['classification'];
       }
     });
+
+    if (this.isEdit) {
+      this.getDetail();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.isEdit && this.dataService.getFromStorage("coin_disburstment_selected_tab")) {
+      window.localStorage.removeItem("coin_disburstment_selected_tab");
+    }
+
+    this._onDestroy.next();
+    this._onDestroy.unsubscribe();
+  }
+
+  getDetail() {
+    this.dataService.showLoading(true);
+    this.coinDisburstmentService.getDetail({ coin_id: this.detailCoin.id }).subscribe(res => {
+      console.log('res', res);
+      this.detailCoin = res.data;
+      this.formCoin.setValue({
+        name: this.detailCoin.name,
+        coin_valuation: this.detailCoin.coin_valuation,
+        start_date: this.detailCoin.start_date,
+        end_date: this.detailCoin.end_date,
+        status: this.detailCoin.status,
+        group_trade_id: this.detailCoin.group.map(grp => grp.trade_creator_group_id),
+      });
+
+      if (this.detailCoin.targeted_audience === 1) this.isTargetedRetailer.setValue(true);
+      if (this.detailCoin.opsi_penukaran === 'transfer bank') this.isTransferBank.setValue(true);
+      if (this.detailCoin.opsi_penukaran === 'saldo pojok bayar') this.isPojokBayar.setValue(true);
+      if (this.detailCoin.opsi_penukaran === 'all') {
+        this.isPojokBayar.setValue(true);
+        this.isTransferBank.setValue(true);
+      }
+
+      this.getListAudience();
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+  getListAudience() {
+    this.dataService.showLoading(true);
+    this.coinDisburstmentService.getListAudience({ coin_id: this.detailCoin.id }).subscribe(res => {
+      this.dataService.showLoading(false);
+      console.log("resss audience", res);
+      if (Array.isArray(res)) {
+        this.selected = res.map(data => ({ id: data.retailer_id }));
+        console.log('selected', this.selected);
+      }
+    }, err => {
+      console.log("err", err);
+      this.dataService.showLoading(false);
+    })
   }
 
   loadFormFilter() {
@@ -1029,6 +1103,114 @@ export class CoinDisburstmentCreateComponent implements OnInit {
     this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
       this.groupTradePrograms = res.data ? res.data.data : [];
     })
+  }
+
+  submit() {
+    let args = this.getArgsForSubmit();
+    if (this.formCoin.valid) {
+      if (!this.isPojokBayar.value && !this.isTransferBank.value) {
+        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu Opsi Penukaran!" });
+        return;
+      }
+      if (this.isTargetedRetailer.value && this.selected.length === 0) {
+        this.dialogService.openSnackBar({ message: "Belum ada Retailer Terpilih di Target Penerima!" });
+        return;
+      }
+
+      this.dataService.showLoading(true);
+      let opsiPenukaran = this.getOpsiPenukaranValue();
+      let body = {
+        name: this.formCoin.get("name").value,
+        coin_valuation: this.formCoin.get("coin_valuation").value,
+        start_date: moment(this.formCoin.get("start_date").value).format("YYYY-MM-DD"),
+        end_date: moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD"),
+        opsi_penukaran: opsiPenukaran,
+        status: args && args === 'publish' ? 'publish' : (args && args === 'unpublish' ? 'unpublish' : 'draft'),
+        targeted_audience: this.isTargetedRetailer.value ? "1" : "0"
+      }
+
+      let fd = new FormData();
+      if (this.isEdit) fd.append('_method', 'PUT');
+      fd.append("name", body['name']);
+      fd.append("coin_valuation", body['coin_valuation']);
+      fd.append("start_date", body['start_date']);
+      fd.append("end_date", body['end_date']);
+      fd.append("opsi_penukaran", body['opsi_penukaran']);
+      fd.append("status", body['status']);
+      fd.append("targeted_audience", body['targeted_audience']);
+
+      let groupTradeProgramsValue = this.formCoin.get("group_trade_id").value;
+      if (Array.isArray(groupTradeProgramsValue)) {
+        groupTradeProgramsValue.map((gtp, idx) => {
+          fd.append(`group_trade_id[]`, gtp);
+        });
+      }
+
+      if (this.isTargetedRetailer.value) {
+        this.selected.map(retailer => {
+          fd.append("retailer_id[]", retailer.id);
+        })
+      }
+
+      if (this.isEdit) {
+        this.coinDisburstmentService.update({ coin_id: this.detailCoin.id }, fd).subscribe(res => {
+          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dataService.showLoading(false);
+          this.router.navigate(['dte', 'coin-disbursement']);
+        }, err => {
+          this.dataService.showLoading(false);
+        });
+      } else {
+        this.coinDisburstmentService.create(fd).subscribe(res => {
+          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dataService.showLoading(false);
+          this.dataService.setToStorage("detail_coin_disburstment", { id: res.id });
+          this.dataService.setToStorage("coin_disburstment_selected_tab", "1");
+          this.router.navigate(['dte', 'coin-disbursement', 'edit']);
+        }, err => {
+          this.dataService.showLoading(false);
+        });
+      }
+    } else {
+      console.log(this.findInvalidControls(this.formCoin));
+      commonFormValidator.validateAllFields(this.formCoin);
+      this.dialogService.openSnackBar({ message: "Lengkapi Pengisian Formulir!" });
+    }
+  }
+
+  findInvalidControls(f: FormGroup) {
+    const invalid = [];
+    const controls = f.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
+
+  getOpsiPenukaranValue() {
+    let value = "";
+    if (this.isTransferBank.value && this.isPojokBayar.value) value = "all";
+    else if (this.isTransferBank.value && !this.isPojokBayar.value) value = "transfer bank";
+    else if (this.isPojokBayar.value && !this.isTransferBank.value) value = "saldo pojok bayar";
+
+    return value;
+  }
+
+  getArgsForSubmit() {
+    if (this.isEdit) {
+      switch (this.detailCoin.status) {
+        case "draft":
+          return "publish";
+        case "publish":
+          return "unpublish";
+        default:
+          return null;
+      }
+    }
+
+    return null;
   }
 
 }

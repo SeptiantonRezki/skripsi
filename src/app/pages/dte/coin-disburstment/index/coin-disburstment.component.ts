@@ -28,6 +28,7 @@ export class CoinDisburstmentComponent implements OnInit {
   reorderable = true;
   pagination: Page = new Page();
   offsetPagination: any;
+  id: any;
 
   constructor(
     private dialogService: DialogService,
@@ -137,7 +138,27 @@ export class CoinDisburstmentComponent implements OnInit {
   }
 
   deleteCoinDisburstment(row: any) {
-    this.dialogService.openSnackBar({ message: "Yah Masih Belum Kelar fitur nya!" });
+    this.id = row.id;
+    let data = {
+      titleDialog: "Hapus Coin Disburstment",
+      captionDialog: "Apakah anda yakin untuk menghapus Coin Disburstment ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.dataService.showLoading(true);
+    this.coinDisburstmentService.delete({ coin_id: this.id }).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.dialogService.openSnackBar({ message: "Data berhasil dihapus!" });
+      this.dataService.showLoading(false);
+      this.getCoinDisburstment();
+    }, err => {
+      console.log('err', err);
+      this.dataService.showLoading(false);
+    })
   }
 
   directEdit(row: any) {

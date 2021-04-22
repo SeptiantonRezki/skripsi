@@ -27,4 +27,24 @@ export class CoinDisburstmentService extends BaseService {
     return this.getApi(url);
   }
 
+  create(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "create");
+    return this.postApi(url, body);
+  }
+
+  update(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update", context);
+    return this.postApi(url, body);
+  }
+
+  delete(context: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "delete", context);
+    return this.deleteApi(url);
+  }
+
+  getListAudience(context: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "audience", context);
+    return this.getApi(url);
+  }
+
 }

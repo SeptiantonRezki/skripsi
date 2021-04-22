@@ -8,6 +8,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
+import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { Observable, Subject } from 'rxjs';
 
@@ -32,6 +33,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   offsetPagination: any;
 
   formFilter: FormGroup;
+  formFilterExchange: FormGroup;
 
   // 2 geotree property
   endArea: String;
@@ -42,6 +44,19 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   areaFromLogin;
 
   private _onDestroy = new Subject<void>();
+
+  groupTradePrograms: any[] = [];
+  tradeOptions: any[] = [
+    { id: "all", name: "Semua" },
+    { id: "transfer bank", name: "Transfer Bank" },
+    { id: "saldo pojok bayar", name: "Saldo Pojok Bayar" }
+  ];
+  paymentStatuses: any[] = [
+    { id: "all", name: "Semua" },
+    { id: "belum terbayar", name: "Belum Terbayar" },
+    { id: "sudah dibayar", name: "Sudah Dibayar" },
+    { id: "gagal bayar", name: "Gagal Bayar" }
+  ];
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -50,6 +65,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     private router: Router,
     private formBuilder: FormBuilder,
     private geotreeService: GeotreeService,
+    private groupTradeProgramService: GroupTradeProgramService
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
@@ -98,6 +114,13 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       territory: [""]
     });
 
+    this.formFilterExchange = this.formBuilder.group({
+      name: [""],
+      group_trade_program: [""],
+      opsi_penukaran: ["all"],
+      payment_status: ["all"],
+    })
+
     this.initAreaV2();
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
@@ -135,11 +158,23 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.formFilterExchange.valueChanges.debounceTime(800).takeUntil(this._onDestroy).subscribe(res => {
+      this.getListPenukaranKoin();
+    })
+
+    this.getGroupTradeProgram();
     this.getListPenukaranKoin();
   }
 
   ngOnDestroy() {
+    this._onDestroy.next();
     this._onDestroy.unsubscribe();
+  }
+
+  getGroupTradeProgram() {
+    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+      this.groupTradePrograms = res.data ? res.data.data : [];
+    })
   }
 
   getListPenukaranKoin() {
@@ -217,6 +252,28 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+
+    if (this.formFilterExchange.get("group_trade_program").value) {
+      this.pagination['group'] = this.formFilterExchange.get("group_trade_program").value;
+    }
+
+    if (this.formFilterExchange.get("opsi_penukaran").value !== 'all') {
+      this.pagination['opsi_penukaran'] = this.formFilterExchange.get("opsi_penukaran").value;
+    } else {
+      delete this.pagination['opsi_penukaran']
+    }
+
+    if (this.formFilterExchange.get("payment_status").value !== 'all') {
+      this.pagination['status_pembayaran'] = this.formFilterExchange.get("payment_status").value;
+    } else {
+      delete this.pagination['status_pembayaran'];
+    }
+
+    if (this.formFilterExchange.get("name").value) {
+      this.pagination['name'] = this.formFilterExchange.get('name').value;
+    } else {
+      delete this.pagination['name'];
+    }
 
     this.offsetPagination = page ? (page - 1) : 0;
 

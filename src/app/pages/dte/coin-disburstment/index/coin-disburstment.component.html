@@ -74,10 +74,10 @@
                     style="text-transform: capitalize;" *ngIf="row.status == 'unpublish'">
                     {{row.status}}
                   </p>
-                  <!-- <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: capitalize;"
-                    *ngIf="row.status == 'rejected'">
+                  <p class="status text-truncate h6 p-4 status-order mat-orange-900-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'draft'">
                     {{row.status}}
-                  </p> -->
+                  </p>
                 </div>
               </ng-template>
             </ngx-datatable-column>
