@@ -164,13 +164,6 @@ export class NotificationCreateComponent {
     if(this._typeOfRecurrence !== 'Recurring') {
       this.recurrenceType = '';
     }
-
-    if(this._typeOfRecurrence !== 'OneTime') {
-      this.formNotification.controls.is_target_audience.setValue(false);
-      this.formNotification.controls.is_target_audience.disable();
-    } else {
-      this.formNotification.controls.is_target_audience.enable();
-    }
   }
 
   @Input() get recurrenceType(): string {
@@ -196,7 +189,6 @@ export class NotificationCreateComponent {
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
-    console.log(this.areaType);
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.formNotificationError = {
@@ -1464,7 +1456,7 @@ export class NotificationCreateComponent {
     }
 
     this.dataService.showLoading(true);
-    console.log(body)
+    
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
