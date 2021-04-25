@@ -241,6 +241,7 @@ export class NotificationCreateComponent {
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
+      send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
     });
@@ -1285,6 +1286,7 @@ export class NotificationCreateComponent {
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
+      send_sfmc: this.formNotification.get('send_ayo').value ? '0': '1',
       status: this.formNotification.get('status').value
     };
 
@@ -1375,6 +1377,13 @@ export class NotificationCreateComponent {
                 bodyVideo.delete('target_audience');
               }
             }
+
+            if(this.formNotification.get('send_ayo').value) {
+              bodyVideo.append('send_sfmc', '0');
+            } else {
+              bodyVideo.append('send_sfmc', '1');
+            }
+
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if(this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
@@ -1419,6 +1428,12 @@ export class NotificationCreateComponent {
             if (bodyVideo.get('target_audience')) {
               bodyVideo.delete('target_audience');
             }
+          }
+
+          if(this.formNotification.get('send_ayo').value) {
+            bodyVideo.append('send_sfmc', '0');
+          } else {
+            bodyVideo.append('send_sfmc', '1');
           }
 
           bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
