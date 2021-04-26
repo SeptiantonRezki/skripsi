@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
@@ -81,6 +81,15 @@ export class B2CVoucherCreateComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
   inputChipList = [];
 
+  submitted: boolean = false;
+  endVoucher: any = new Date();
+  useVoucher: any = new Date();
+  usedVoucher: any = new Date();
+  usage: any[] = [
+    {label: 'Pesan Antar', value: 'coo'},
+    {label: 'Langsung ke Toko', value: 'offline'}
+  ];
+
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
@@ -156,7 +165,9 @@ export class B2CVoucherCreateComponent implements OnInit {
       limit_purchase: [false],
       product: [''],
       category: [''],
-      minimumPurchase: ['']
+      minimumPurchase: [''],
+      limit_only_purchase: [0],
+      usage: this.formBuilder.array([], [Validators.required]),
     });
 
     this.formFilter = this.formBuilder.group({
@@ -187,6 +198,37 @@ export class B2CVoucherCreateComponent implements OnInit {
         this.filterProductList();
       });
 
+  }
+
+  onDateChange(date: string, event: any) {
+    const endDate = this.formDetailVoucher.get('endDate').value;
+    const availableAt = this.formDetailVoucher.get('available_at').value;
+    switch (date) {
+      case 'startVoucher':
+        this.endVoucher = event.value;
+        this.useVoucher = event.value;
+        break;
+      case 'endVoucher':
+        this.usedVoucher = availableAt && availableAt > event.value ? availableAt : event.value;
+        break;
+      case 'useVoucher':
+        this.usedVoucher = endDate && event.value > endDate ? event.value : endDate;
+        break;
+    }
+  }
+
+  onUsageChange(event: any) {
+    const usage: FormArray = this.formDetailVoucher.get('usage') as FormArray;
+    if (event.checked) {
+      usage.push(new FormControl(event.source.value));
+    } else {
+      usage.controls.forEach((item, index) => {
+        if (item.value === event.source.value) {
+          usage.removeAt(index);
+          return;
+        }
+      });
+    }
   }
 
   _filterSku(value): any[] {
@@ -279,6 +321,7 @@ export class B2CVoucherCreateComponent implements OnInit {
     if (type === 'product') {
       this.formDetailVoucher.get('category').setValue('');
       this.formDetailVoucher.get('limit_by_category').setValue(false);
+      this.formDetailVoucher.get('limit_only_purchase').setValue(0);
       if (event) {
         this.productList = [];
         this.product.setValue(null);
@@ -440,7 +483,9 @@ export class B2CVoucherCreateComponent implements OnInit {
         limit_by: this.formDetailVoucher.get('limit_by_product').value ? 'product' :
           this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
         limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null,
-        "allocation_voucher": 10000
+        "allocation_voucher": 10000,
+        limit_only_purchase: this.formDetailVoucher.get('limit_only_purchase').value,
+        usage: this.formDetailVoucher.get('usage').value,
       };
 
       if (body['limit_by'] !== null) {
@@ -451,6 +496,11 @@ export class B2CVoucherCreateComponent implements OnInit {
       if (this.formDetailVoucher.get('limit_by_product').value === false && this.formDetailVoucher.get('limit_by_category').value === false) {
         delete body['limit_by'];
         delete body['limit_only'];
+      }
+
+      if (body['limit_by'] === 'product' && body['limit_only'].length && !body['limit_only_purchase']) {
+        alert('Batasan Pembelian Minimum berdasarkan Produk harus diisi');
+        return;
       }
 
       this.dataService.showLoading(true);
@@ -471,6 +521,7 @@ export class B2CVoucherCreateComponent implements OnInit {
         console.warn('Scrolling Error', err);
       }
     }
+    this.submitted = true;
   }
 
 

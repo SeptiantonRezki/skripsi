@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
+import { startWith, map, takeUntil, take } from 'rxjs/operators';
 import * as _ from 'underscore';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -10,11 +11,13 @@ import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
+import { DateAdapter, MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-audience-dialog.component';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
+import { ProductService } from 'app/services/sku-management/product.service';
 
 @Component({
   selector: 'app-panel-consumer-voucher',
@@ -62,6 +65,29 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
 
+  keyUpProduct = new Subject<string>();
+  listCategories: any[] = [];
+  listProduct: any[] = [];
+  filterProduct: FormControl = new FormControl('');
+  public filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  @ViewChild('singleSelect') singleSelect: MatSelect;
+
+  product: FormControl = new FormControl('');
+  listProductSkuBank: Array<any> = [];
+  filteredSkuOptions: Observable<string[]>;
+  productList: any[] = [];
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
+  inputChipList = [];
+
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+
+  private _onDestroy = new Subject<void>();
+
   typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
   listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
@@ -69,7 +95,8 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral Code', value: 'referral' },
     { name: 'Verified Customer', value: 'verified' },
     { name: 'Referral and Verified', value: 'referral-and-verified' },
-    { name: 'Referral or Verified', value: 'referral-or-verified' }
+    { name: 'Referral or Verified', value: 'referral-or-verified' },
+    { name: 'Pesan Antar', value: 'coo'},
   ];
 
   _data: any = null;
@@ -91,6 +118,22 @@ export class PanelConsumerVoucherComponent implements OnInit {
         } else if (data.dataPanelCustomer.area_id) {
           this.isArea = true;
         }
+      }
+      if (data.automation === 'coo') {
+        const auto = data.automation_indicators;
+        this.formConsumerGroup.patchValue({
+          limit_by_product: auto.limit_by === 'product',
+          limit_by_category: auto.limit_by === 'category',
+          limit_only: auto.limit_only,
+          limit_purchase: auto.limit_purchase ? true : false,
+          product: auto.limit_by === 'product' ? auto.limit_only : '',
+          category: auto.limit_by === 'category' ? auto.limit_only.map(dt => Number(dt)) : '',
+          minimumPurchase: auto.limit_purchase ? auto.limit_purchase : 0,
+          is_subscription: auto.is_subscription.toString(),
+          customer_indicator: auto.is_subscription !== null,
+          operator: auto.operator,
+        });
+        this.productList = auto.limit_only_data ? auto.limit_only_data : [];
       }
     }
   }
@@ -116,6 +159,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     private dialogService: DialogService,
     private b2bVoucherService: BtoBVoucherService,
     private b2cVoucherService: B2CVoucherService,
+    private productService: ProductService,
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -170,6 +214,17 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.keyUpProduct.debounceTime(300)
+    .flatMap(key => {
+      return Observable.of(key).delay(300);
+    })
+    .subscribe(res => {
+      this.getListProduct(res);
+      this.resetField(res);
+    });
+  this.getProducts();
+  this.getCategories();
+
     this.formConsumerGroup = this.formBuilder.group({
       allocationVoucher: [0],
       is_smoker: ['both', Validators.required],
@@ -179,6 +234,16 @@ export class PanelConsumerVoucherComponent implements OnInit {
       isTargetAudience: [false],
       areas: this.formBuilder.array([]),
       va: [''],
+      limit_only: [''],
+      limit_by_product: [false],
+      limit_by_category: [false],
+      limit_purchase: [false],
+      product: [''],
+      category: [''],
+      minimumPurchase: [''],
+      customer_indicator: [false],
+      is_subscription: [0],
+      operator: [null],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -246,6 +311,212 @@ export class PanelConsumerVoucherComponent implements OnInit {
     });
   }
 
+  _filterSku(value): any[] {
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productList.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    // this.product.setValue(null);
+  }
+
+  remove(id: string): void {
+    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productList.splice(index, 1);
+    }
+  }
+
+  selectedProduct(event: MatAutocompleteSelectedEvent): void {
+    this.productList.push(event.option.viewValue);
+    if (this.productInput) {
+      this.productInput.nativeElement.value = '';
+    }
+    this.product.setValue(null);
+  }
+
+  getListProduct(param?: any): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipList = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+      this.b2cVoucherService.getProductList({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      });
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
+  }
+
+  getProducts() {
+    this.b2cVoucherService.getProductList({ page: 'all' }).subscribe(res => {
+      this.listProduct = res.data ? res.data : [];
+      this.filteredProduct.next(res.data ? res.data : []);
+    })
+  }
+
+  getCategories() {
+    this.productService.getListCategory(null).subscribe(res => {
+      this.listCategories = res.data ? res.data.data : [];
+    })
+  }
+
+  isChecked(type: any, event: any) {
+    if (type === 'product') {
+      this.formConsumerGroup.get('category').setValue('');
+      this.formConsumerGroup.get('limit_only_purchase').setValue(0);
+      this.formConsumerGroup.get('limit_by_category').setValue(false);
+      if (event) {
+        this.productList = [];
+        this.product.setValue(null);
+        // this.product.disable();
+        this.listProductSkuBank = [];
+        this.inputChipList = [];
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+      } else {
+        this.product.enable();
+      }
+    } else {
+      this.formConsumerGroup.get('limit_by_product').setValue(false);
+      this.productList = [];
+      this.product.setValue(null);
+      // this.product.disable();
+      this.listProductSkuBank = [];
+      this.inputChipList = [];
+      if (event) {
+        this.formConsumerGroup.get('category').setValue('');
+      }
+      if (this.productInput) {
+        this.productInput.nativeElement.value = null;
+      }
+    }
+  }
+
+  isCheckedPembelianMinimum(event: any) {
+    if (event) {
+      // this.formDetailVoucher.get('limit_purchase').setValue(false);
+    }
+  }
+
+  isCheckedCustomer(event: any) {
+    if (event.checked) {
+      this.formConsumerGroup.get('operator').setValue('and');
+    } else {
+      this.formConsumerGroup.get('operator').setValue(null);
+    }
+  }
+
+  setInitialValue() {
+    this.filteredProduct
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        // setting the compareWith property to a comparison function
+        // triggers initializing the selection according to the initial value of
+        // the form control (i.e. _initializeSelection())
+        // this needs to be done after the filteredBanks are loaded initially
+        // and after the mat-option elements are available
+        this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id === b.id;
+      });
+  }
+
+  filterProductList() {
+    if (!this.listProduct) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterProduct.value;
+    if (!search) {
+      this.filteredProduct.next(this.listProduct.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the listProduct
+    this.filteredProduct.next(
+      this.listProduct.filter(prd => prd.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getProductObj(obj: any) {
+    let index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productList.push(obj);
+    }
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
+
+    if (this.inputChipList && this.inputChipList.length > 0) {
+      const itemClick = this.inputChipList.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBank = [];
+        } else {
+          this.product.setValue(itemClick.toString());
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.product.setValue(null);
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+        this.listProductSkuBank = [];
+      }
+      setTimeout(() => {
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
 
   async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
@@ -828,6 +1099,21 @@ export class PanelConsumerVoucherComponent implements OnInit {
           commonFormValidator.validateAllFields(this.formConsumerGroup);
           this.scrollToTop.emit();
           return;
+        }
+        if (this.formConsumerGroup.get('va').value === 'coo') {
+          const indicators: any = {
+            operator: this.formConsumerGroup.get('operator').value,
+            limit_purchase: this.formConsumerGroup.get('limit_purchase').value ? this.formConsumerGroup.get('minimumPurchase').value : null,
+            is_subscription: parseInt(this.formConsumerGroup.get('is_subscription').value),
+            limit_by: this.formConsumerGroup.get('limit_by_product').value ? 'product' :
+            this.formConsumerGroup.get('limit_by_category').value ? 'category' : null,
+            limit_only: []
+          };
+          if (indicators['limit_by'] !== null) {
+            indicators['limit_only'] = indicators['limit_by'] === 'product' ?
+              this.productList.map(prd => prd.sku_id) : this.formConsumerGroup.get('category').value;
+          }
+          bodyArea['automation_indicators'] = indicators;
         }
       }
     }

@@ -12,7 +12,7 @@
     <form autocomplete="off" [formGroup]="formConsumerGroup">
       <div fxLayout="row" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
 
-        <div fxFlex="45">
+        <div fxFlex="50">
 
         <div class="px-12" fxLayout="column">
           <mat-form-field fxFlex="50" class="is-light" *ngIf="isVoucherAutomation.value === true">
@@ -35,6 +35,93 @@
               Tipe Consumer harus diisi
             </mat-error>
           </mat-form-field>
+        </div>
+
+        <div class="py-16 px-12" fxLayout="column" *ngIf="isVoucherAutomation.value === true && formConsumerGroup.controls['va'].value === 'coo'">
+          <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
+            <span class="font-size-16">Indikator</span>
+          </div>
+          <div class="top-table py-8" fxFlex="100" fxLayoutGap="20px">
+            <mat-checkbox formControlName="limit_purchase" (change)="isCheckedPembelianMinimum($event)">
+              Minimum Pembelian
+            </mat-checkbox>
+            <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)">
+              SKU Produk
+            </mat-checkbox>
+            <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">
+              Produk Kategori
+            </mat-checkbox>
+            <mat-checkbox formControlName="customer_indicator" (change)="isCheckedCustomer($event)">
+              Status Konsumen
+            </mat-checkbox>
+          </div>
+          <div class="box-container">
+            <div class="box" fxFlex="100" *ngIf="formConsumerGroup.get('limit_purchase').value">
+              <mat-form-field class="is-light" fxFlex="100">
+                <input matInput type="number" placeholder="Minimum Pembelian"
+                  formControlName="minimumPurchase">
+                <input matInput type="number" placeholder="Minimum Pembelian"
+                  *ngIf="!formConsumerGroup.get('limit_purchase').value" [disabled]="true">
+                <mat-error
+                  *ngIf="formConsumerGroup.controls['minimumPurchase'].hasError('required') && formConsumerGroup.controls['minimumPurchase'].touched">
+                  Minimum Pembelian harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_by_product').value">
+              <mat-radio-group>
+                <mat-radio-button checked>And</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="box" fxFlex="100" *ngIf="formConsumerGroup.get('limit_by_product').value">
+              <mat-form-field class="is-light" fxFlex="100">
+                <mat-chip-list #chipList aria-label="Product List">
+                  <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                    (removed)="remove(product)">
+                    {{product.name}}
+                    <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                  </mat-chip>
+                  <input matInput type="text" #productInput placeholder="SKU Produk"
+                    (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
+                  <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                    (onSelectionChange)="getProductObj(item)">
+                    {{item.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_by_category').value">
+              <mat-radio-group>
+                <mat-radio-button checked>And</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="box" fxFlex="100" *ngIf="formConsumerGroup.get('limit_by_category').value">
+              <mat-form-field class="is-light" fxFlex="100">
+                <mat-select placeholder="Produk Kategori" formControlName="category"
+                  [disabled]="!formConsumerGroup.get('limit_by_category').value" multiple>
+                  <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="box box-hub" *ngIf="formConsumerGroup.get('customer_indicator').value">
+              <mat-radio-group fxLayoutGap="20px" formControlName="operator">
+                <mat-radio-button value="and" checked>And</mat-radio-button>
+                <mat-radio-button value="or">Or</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="box" fxFlex="100" *ngIf="formConsumerGroup.get('customer_indicator').value">
+              <div class="is-light py-12" fxFlex="100">
+                <mat-radio-group aria-label="Status Konsumen" fxLayoutGap="20px" formControlName="is_subscription">
+                  <mat-radio-button value="0" checked>Non Langganan</mat-radio-button>
+                  <mat-radio-button value="1">Langganan</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="pb-16 px-12">
@@ -76,7 +163,7 @@
 
         </div>
         
-        <div fxFlex="45" *ngIf="isVoucherAutomation.value === true">
+        <div fxFlex="30" *ngIf="isVoucherAutomation.value === true">
 
           <div class="pb-16 px-12">
             <mat-radio-group formControlName="va" class="radio-group">

@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
@@ -87,6 +87,14 @@ export class B2CVoucherEditComponent implements OnInit {
   dataPanelCustomer: any;
   selectedTab: number;
 
+  endVoucher: any = new Date();
+  useVoucher: any = new Date();
+  usedVoucher: any = new Date();
+  usage: any[] = [
+    {label: 'Pesan Antar', value: 'coo'},
+    {label: 'Langsung ke Toko', value: 'offline'}
+  ];
+
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
@@ -164,7 +172,9 @@ export class B2CVoucherEditComponent implements OnInit {
       limit_purchase: [false],
       product: [''],
       category: [''],
-      minimumPurchase: ['']
+      minimumPurchase: [''],
+      limit_only_purchase: [0],
+      usage: this.formBuilder.array([], [Validators.required]),
     });
 
     this.formFilter = this.formBuilder.group({
@@ -190,6 +200,37 @@ export class B2CVoucherEditComponent implements OnInit {
 
 
 
+  }
+
+  onDateChange(date: string, event: any) {
+    const endDate = this.formDetailVoucher.get('endDate').value;
+    const availableAt = this.formDetailVoucher.get('available_at').value;
+    switch (date) {
+      case 'startVoucher':
+        this.endVoucher = event.value;
+        this.useVoucher = event.value;
+        break;
+      case 'endVoucher':
+        this.usedVoucher = availableAt && availableAt > event.value ? availableAt : event.value;
+        break;
+      case 'useVoucher':
+        this.usedVoucher = endDate && event.value > endDate ? event.value : endDate;
+        break;
+    }
+  }
+
+  onUsageChange(event: any) {
+    const usage: FormArray = this.formDetailVoucher.get('usage') as FormArray;
+    if (event.checked) {
+      usage.push(new FormControl(event.source.value));
+    } else {
+      usage.controls.forEach((item, index) => {
+        if (item.value === event.source.value) {
+          usage.removeAt(index);
+          return;
+        }
+      })
+    }
   }
 
   _filterSku(value): any[] {
@@ -288,6 +329,7 @@ export class B2CVoucherEditComponent implements OnInit {
     if (type === 'product') {
       this.formDetailVoucher.get('category').setValue('');
       this.formDetailVoucher.get('limit_by_category').setValue(false);
+      this.formDetailVoucher.get('limit_only_purchase').setValue(0);
       if (event) {
         this.productList = [];
         this.product.setValue(null);
@@ -406,7 +448,7 @@ export class B2CVoucherEditComponent implements OnInit {
     this.b2cVoucherService.getDetailVoucher({ voucher_id: this.voucherDetailID }).subscribe(res => {
       this.dataService.setToStorage('detail_voucher_b2c', res.data);
       this.detailVoucher = res.data;
-      this.formDetailVoucher.setValue({
+      this.formDetailVoucher.patchValue({
         name: res.data.name,
         voucherValue: res.data.nominal || 0,
         jumlahVoucherPerConsumer: res.data.limit_per_user || 0,
@@ -421,7 +463,19 @@ export class B2CVoucherEditComponent implements OnInit {
         product: res.data.limit_by === 'product' ? res.data.limit_only : '',
         category: res.data.limit_by === 'category' ? res.data.limit_only.map(dt => Number(dt)) : '',
         minimumPurchase: res.data.limit_purchase ? res.data.limit_purchase : 0,
+        limit_only_purchase: res.data.limit_only_purchase || 0,
+        usage: [],
       });
+      if (res.data.usage.length) {
+        const usage: FormArray = this.formDetailVoucher.get('usage') as FormArray;
+        while (usage.length) usage.removeAt(0);
+        res.data.usage.forEach((item: string) => {
+          usage.push(new FormControl(item));
+        });
+      }
+      const endVoucher = moment(res.data.end_date).format('YYYY-MM-DD');
+      const useVoucher = moment(res.data.available_at).format('YYYY-MM-DD');
+      this.usedVoucher = useVoucher > endVoucher ? useVoucher : endVoucher;
       this.isLimitVoucher = res.data.limit_by ? true : false;
       this.productList = res && res.data && res.data.limit_only_data ? res.data.limit_only_data : [];
       this.getRetailerSelected();
@@ -459,6 +513,7 @@ export class B2CVoucherEditComponent implements OnInit {
     this.formDetailVoucher.get('limit_by_category').disable();
     this.formDetailVoucher.get('limit_purchase').disable();
     this.formDetailVoucher.get('minimumPurchase').disable();
+    this.formDetailVoucher.get('usage').disable();
     this.removable = false;
     this.product.disable();
   }
@@ -486,7 +541,9 @@ export class B2CVoucherEditComponent implements OnInit {
         expired_at: moment(this.formDetailVoucher.get('expired_at').value).format('YYYY-MM-DD'),
         limit_by: this.formDetailVoucher.get('limit_by_product').value ? 'product' :
           this.formDetailVoucher.get('limit_by_category').value ? 'category' : null,
-        limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null
+        limit_purchase: this.formDetailVoucher.get('limit_purchase').value ? this.formDetailVoucher.get('minimumPurchase').value : null,
+        limit_only_purchase: this.formDetailVoucher.get('limit_only_purchase').value,
+        usage: this.formDetailVoucher.get('usage').value,
       };
 
       if (body['limit_by'] !== null) {
@@ -497,6 +554,11 @@ export class B2CVoucherEditComponent implements OnInit {
       if (this.formDetailVoucher.get('limit_by_product').value === false && this.formDetailVoucher.get('limit_by_category').value === false) {
         delete body['limit_by'];
         delete body['limit_only'];
+      }
+
+      if (body['limit_by'] === 'product' && body['limit_only'].length && !body['limit_only_purchase']) {
+        alert('Batasan Pembelian Minimum berdasarkan Produk harus diisi');
+        return;
       }
 
       this.dataService.showLoading(true);

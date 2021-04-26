@@ -38,7 +38,7 @@
                 <div fxLayout.gt-xs="row" fxLayout="column" fxFlex.gt-xs="50" fxLayoutGap="20px">
                   <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
                     <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                      placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher">
+                      placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher" (dateChange)="onDateChange('startVoucher', $event)">
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                     <mat-datepicker #startPicker></mat-datepicker>
                     <mat-error
@@ -51,8 +51,8 @@
                   </mat-form-field>
 
                   <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
-                    <input matInput (focus)="endDate.open()" [min]="formDetailVoucher.controls['startDate'].value"
-                      [matDatepicker]="endDate" placeholder="Tanggal Akhir Program" formControlName="endDate">
+                    <input matInput (focus)="endDate.open()"
+                      [matDatepicker]="endDate" placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="endVoucher" (dateChange)="onDateChange('endVoucher', $event)">
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
                     <mat-error
@@ -68,7 +68,7 @@
                   <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
                     <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
                       placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at"
-                      [min]="minDateVoucher">
+                      [min]="useVoucher" (dateChange)="onDateChange('useVoucher', $event)">
                     <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
                     <mat-datepicker #voucherPicker></mat-datepicker>
                     <mat-error
@@ -82,8 +82,8 @@
 
                   <mat-form-field class="is-light form-primary pb-12" fxFlex.gt-xs="50">
                     <input matInput (focus)="voucherExpiry.open()"
-                      [min]="formDetailVoucher.controls['available_at'].value" [matDatepicker]="voucherExpiry"
-                      placeholder="Tanggal Kedaluwarsa Voucher" formControlName="expired_at">
+                      [matDatepicker]="voucherExpiry"
+                      placeholder="Tanggal Kedaluwarsa Voucher" formControlName="expired_at" [min]="usedVoucher" (dateChange)="onDateChange('usedVoucher', $event)">
                     <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
                     <mat-datepicker #voucherExpiry></mat-datepicker>
                     <mat-error
@@ -131,6 +131,10 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <mat-form-field fxFlex="50" class="is-light"
+                  *ngIf="formDetailVoucher.get('limit_by_product').value">
+                  <input matInput type="number" placeholder="Pembelian Minimum Berdasarkan Produk" formControlName="limit_only_purchase">
+                </mat-form-field>
                 <mat-form-field fxFlex="50" class="pt-24 is-light"
                   *ngIf="!formDetailVoucher.get('limit_by_product').value">
                   <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
@@ -152,6 +156,15 @@
                     Batasan Berdasarkan Pembelian harus diisi
                   </mat-error>
                 </mat-form-field>
+              </div>
+              <h4 class="ml-24 p-8" style="font-weight: bold;">Penggunaan Voucher</h4>
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8 ml-24">
+                <div fxFlex="60" fxLayoutGap="20px">
+                  <mat-checkbox *ngFor="let item of usage" [value]="item.value" [checked]="formDetailVoucher.controls['usage'].value.indexOf(item.value) >= 0" (change)="onUsageChange($event)">{{item.label}}</mat-checkbox>
+                  <mat-error *ngIf="formDetailVoucher.controls['usage'].errors?.required" class="pt-20">
+                    Penggunaan Voucher harus dipilih
+                  </mat-error>
+                </div>
               </div>
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center"
                 *ngIf="!isDetail && detailVoucher?.is_enable_detail_voucher">
