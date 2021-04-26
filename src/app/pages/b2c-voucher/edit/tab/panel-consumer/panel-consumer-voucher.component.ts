@@ -1103,7 +1103,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
           const indicators: any = {
             operator: this.formConsumerGroup.get('operator').value,
             limit_purchase: this.formConsumerGroup.get('limit_purchase').value ? this.formConsumerGroup.get('minimumPurchase').value : null,
-            is_subscription: parseInt(this.formConsumerGroup.get('is_subscription').value),
+            is_subscription: this.formConsumerGroup.get('customer_indicator').value ? parseInt(this.formConsumerGroup.get('is_subscription').value) : null,
             limit_by: this.formConsumerGroup.get('limit_by_product').value ? 'product' :
             this.formConsumerGroup.get('limit_by_category').value ? 'category' : null,
             limit_only: []
