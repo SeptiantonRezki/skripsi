@@ -41,6 +41,9 @@ import { CreatetsmComponent } from "./automation/createtsm/createtsm.component";
 import { EdittsmComponent } from "./automation/edittsm/edittsm.component";
 import { CoinAdjustmentApprovalComponent } from "./coin-adjustment-approval/index/coin-adjustment-approval.component";
 import { CoinAdjustmentApprovalDetailComponent } from "./coin-adjustment-approval/detail/coin-adjustment-approval-detail.component";
+import { CoinDisburstmentComponent } from "./coin-disburstment/index/coin-disburstment.component";
+import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin-disburstment-create.component";
+import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
 
 const routes: Routes = [
   {
@@ -418,6 +421,34 @@ const routes: Routes = [
     component: CoinAdjustmentApprovalDetailComponent,
     data: {
       breadcrumbs: brConfig.dte.coin_adjustment.detail
+    },
+  },
+  {
+    path: 'coin-disbursement',
+    component: CoinDisburstmentComponent,
+    data: {
+      breadcrumbs: brConfig.dte.coin_disburstment.index
+    },
+  },
+  {
+    path: 'coin-disbursement/create',
+    component: CoinDisburstmentCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.coin_disburstment.create
+    },
+  },
+  {
+    path: 'coin-disbursement/edit',
+    component: CoinDisburstmentCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.coin_disburstment.edit
+    },
+  },
+  {
+    path: 'coin-disbursement/detail',
+    component: CoinDisburstmentEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.coin_disburstment.detail
     },
   },
 ];

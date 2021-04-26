@@ -99,6 +99,9 @@ export class BaseInterceptor implements HttpInterceptor {
             let errorArray = Object.values(err.error.errors);
             this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
           }
+        } else if (req.method === "DELETE") {
+          let errorArray = Object.values(err.error.errors);
+          this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
         }
 
         if (req.method === "PUT") {

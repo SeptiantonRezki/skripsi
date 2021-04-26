@@ -1,0 +1,281 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disburstment'">
+    <button style="width: 170px" (click)="submit()" mat-raised-button type="button" *ngIf="!isEdit">
+      <mat-icon>save</mat-icon> SIMPAN
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <mat-tab-group [selectedIndex]="selectedTab">
+        <mat-tab label="Penukaran Coin">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formCoin">
+              <div fxLayout="row" class="px-24">
+                <mat-form-field fxFlex="48" class="is-light form-primary">
+                  <input matInput type="text" placeholder="Nama Penukaran Koin" formControlName="name" name="name">
+                  <mat-error
+                    *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
+                    Nama Penukaran Koin harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" class="px-24">
+                <mat-form-field fxFlex="48" class="is-light form-primary">
+                  <input matInput type="number" placeholder="Coin Valuation, 1 Coin = " formControlName="coin_valuation"
+                    name="coin_valuation">
+                  <mat-error
+                    *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
+                    Coin Valuation harus diisi
+                  </mat-error>
+                  <mat-error
+                    *ngIf="formCoin.controls['coin_valuation'].hasError('min') && formCoin.controls['coin_valuation'].touched">
+                    Coin Valuation harus lebih dari > 0
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+                fxFlex="50%">
+                <mat-form-field fxFlex="50%" class="is-light form-primary">
+                  <input matInput formControlName="start_date" [min]="minDate" (focus)="startDate.open()"
+                    [matDatepicker]="startDate" placeholder="Tanggal Awal Penukaran Koin">
+                  <mat-datepicker-toggle matSuffix [for]="startDate">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #startDate></mat-datepicker>
+                  <mat-error
+                    *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
+                    Tanggal Mulai harus diisi
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50%" class="is-light form-primary">
+                  <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
+                    placeholder="Tanggal Berakhir Penukaran Koin" [min]="minDate">
+                  <mat-datepicker-toggle matSuffix [for]="endDate">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #endDate></mat-datepicker>
+                  <mat-error
+                    *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
+                    Tanggal Berakhir harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row" class="px-24">
+                <mat-form-field fxFlex="48">
+                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_id" multiple>
+                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
+                    Group Trade Program harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="column" class="px-24">
+                <h4 style="font-weight: bold;">Opsi Penukaran</h4>
+                <div fxLayout="row" fxFlex="48">
+                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">Transfer Bank</mat-checkbox>
+                  <div fxFlex="1"></div>
+                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">Saldo Pojok Bayar</mat-checkbox>
+                </div>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <!-- TIPE MISI -->
+        <mat-tab label="Target Penerima">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <div fxLayout="column" class="px-24">
+              <h4 style="font-weight: bold;">Filter Audience</h4>
+              <div fxLayout="row" fxFlex="48">
+                <mat-checkbox class="example-margin" [formControl]="isTargetedRetailer">Targeted Retailer</mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="px-24">
+
+            <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="pt-16"
+              fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
+              <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()"
+                fxFlex="20">
+                Load Data
+              </button>
+            </div>
+            <form [formGroup]="formFilter" autoComplete="off">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{ item.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{
+                      item.name === "all" ? "Semua
+                      Zona" : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{
+                      item.name === "all"
+                      ? "Semua
+                      Regional"
+                      : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{
+                      item.name === "all" ? "Semua
+                      Area" : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{
+                      item.name === "all"
+                      ? "Semua
+                      Salespoint"
+                      : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{
+                      item.name === "all"
+                      ? "Semua
+                      District"
+                      : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{
+                      item.name === "all"
+                      ? "Semua
+                      Territori"
+                      : item.code
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+            <form [formGroup]="formFilterRetailer">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
+                <!--[R]-->
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="Retail Classification" formControlName="retail_classification">
+                    <mat-option *ngFor="let item of retailClassification" [value]="item.value">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="SRC Classification" formControlName="src_classification">
+                    <mat-option *ngFor="let item of srcClassification" [value]="item.value">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="31%" class="is-light form-primary">
+                  <mat-select placeholder="SRC Type" formControlName="src_type">
+                    <mat-option *ngFor="let item of srcType" [value]="item.value">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!--[R]-->
+              </div>
+            </form>
+          </div>
+
+          <div class="p-0" *ngIf="isTargetedRetailer.value === true">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+              fxLayoutAlign="end center" class="p-16 export">
+              <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
+                <mat-icon>arrow_downward</mat-icon> Import XLS
+              </button>
+              <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
+                <mat-icon>arrow_upward</mat-icon> Export Template
+              </button>
+            </div>
+            <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+            <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+              [rowHeight]="'auto'" [reorderable]="reorderable" [selected]="selected" [selectionType]="'checkbox'"
+              [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+              [selectAllRowsOnPage]="false" [externalSorting]="true" (page)="setPage($event)"
+              [sorts]="[{ prop: 'name', dir: 'asc' }]" (select)="onSelect($event)" [rowIdentity]="getId"
+              (sort)="onSort($event)" fusePerfectScrollbar #table>
+
+              <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+                <ng-template ngx-datatable-header-template let-value="value">
+                  <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                </ng-template>
+
+                <!-- <ng-template ngx-datatable-header-template let-value="value">
+                  <mat-checkbox [checked]="selectAllOnPage[pageOffset]" (change)="selectAll($event)"></mat-checkbox>
+                </ng-template> -->
+
+                <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                  let-onCheckboxChangeFn="onCheckboxChangeFn">
+                  <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+              <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+              <!--[R]-->
+              <ngx-datatable-column name="Retailer Classification" prop="retail_classification"></ngx-datatable-column>
+              <ngx-datatable-column name="SRC Classification" prop="src_classification"></ngx-datatable-column>
+              <ngx-datatable-column name="SRC Type" prop="src_type"></ngx-datatable-column>
+              <!--[R]-->
+              <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
+              <ngx-datatable-column name="Daftar Ayo" prop="status">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
+                  <span *ngIf="row.status === 'not-registered'">No</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                  let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                  <div style="padding: 10px 10px">
+                    <div *ngIf="allRowsSelected"><strong>{{ rowCount | rupiahFormaterWithoutRp }}</strong> Terpilih
+                    </div>
+                    <div *ngIf="!allRowsSelected">
+                      {{ selected.length | rupiahFormaterWithoutRp }} / {{ rowCount | rupiahFormaterWithoutRp}} Terpilih
+                    </div>
+                  </div>
+                  <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                    [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                    [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                    [hidden]="!((rowCount / pageSize) > 1)" (change)="table.onFooterPage($event)">
+                  </datatable-pager>
+                </ng-template>
+              </ngx-datatable-footer>
+            </ngx-datatable>
+          </div>
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="isEdit">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+              {{ isEdit && detailCoin.status === 'publish' ? 'UNPUBLISH' : 'SIMPAN' }}
+            </button>
+          </div>
+          <a #downloadLink></a>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

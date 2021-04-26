@@ -140,7 +140,10 @@ import { EOrdertsmeditComponent } from "./automation/edittsm/e-ordertsm/e-ordert
 import { CoinAdjustmentApprovalComponent } from './coin-adjustment-approval/index/coin-adjustment-approval.component';
 import { CoinAdjustmentApprovalTSMComponent } from './coin-adjustment-approval/index-tsm/coin-adjustment-approval-tsm.component';
 import { CoinAdjustmentApprovalDetailComponent } from './coin-adjustment-approval/detail/coin-adjustment-approval-detail.component';
-
+import { CoinDisburstmentComponent } from './coin-disburstment/index/coin-disburstment.component';
+import { CoinDisburstmentCreateComponent } from './coin-disburstment/create/coin-disburstment-create.component';
+import { CoinDisburstmentEditComponent } from './coin-disburstment/edit/coin-disburstment-edit.component';
+import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exchange/coin-disburstment-exchange.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -296,7 +299,11 @@ export const MY_FORMATS = {
     EdittsmComponent,
     CoinAdjustmentApprovalComponent,
     CoinAdjustmentApprovalTSMComponent,
-    CoinAdjustmentApprovalDetailComponent
+    CoinAdjustmentApprovalDetailComponent,
+    CoinDisburstmentComponent,
+    CoinDisburstmentCreateComponent,
+    CoinDisburstmentEditComponent,
+    CoinDisburstmentExchangeComponent,
   ],
   exports: [
     TemplateIndexComponent,
