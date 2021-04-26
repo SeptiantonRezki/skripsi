@@ -400,7 +400,6 @@ export class PanelConsumerVoucherComponent implements OnInit {
   isChecked(type: any, event: any) {
     if (type === 'product') {
       this.formConsumerGroup.get('category').setValue('');
-      this.formConsumerGroup.get('limit_only_purchase').setValue(0);
       this.formConsumerGroup.get('limit_by_category').setValue(false);
       if (event) {
         this.productList = [];

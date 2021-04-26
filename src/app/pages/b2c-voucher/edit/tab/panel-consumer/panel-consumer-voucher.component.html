@@ -68,7 +68,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_by_product').value">
+            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_purchase').value && formConsumerGroup.get('limit_by_product').value">
               <mat-radio-group>
                 <mat-radio-button checked>And</mat-radio-button>
               </mat-radio-group>
@@ -94,7 +94,7 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
-            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_by_category').value">
+            <div class="box box-hub" *ngIf="formConsumerGroup.get('limit_purchase').value && formConsumerGroup.get('limit_by_category').value">
               <mat-radio-group>
                 <mat-radio-button checked>And</mat-radio-button>
               </mat-radio-group>
@@ -107,7 +107,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="box box-hub" *ngIf="formConsumerGroup.get('customer_indicator').value">
+            <div class="box box-hub" *ngIf="(formConsumerGroup.get('limit_purchase').value || formConsumerGroup.get('limit_by_product').value || formConsumerGroup.get('limit_by_category').value) && formConsumerGroup.get('customer_indicator').value">
               <mat-radio-group fxLayoutGap="20px" formControlName="operator">
                 <mat-radio-button value="and" checked>And</mat-radio-button>
                 <mat-radio-button value="or">Or</mat-radio-button>
