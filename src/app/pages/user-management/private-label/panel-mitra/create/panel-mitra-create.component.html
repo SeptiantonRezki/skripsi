@@ -51,7 +51,7 @@
           <span style="font-size: 32px;">{{allRowsSelected? totalData: selected.length}}</span>
         </div>
       </div>
-      <div *ngIf="rows.length > 0">
+      <div *ngIf="formInput.get('filterproduct').value && formInput.get('filtersupplier').value">
       <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" >
         <div class="button-row">
           <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS</button>
@@ -111,6 +111,12 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="Hub" [formControl]="filterHub">
+            <mat-option [value]="item.value" *ngFor="let item of listFilterHub">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -132,8 +138,8 @@
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
             <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
@@ -168,13 +174,25 @@
             <span class="row-address">{{row.area || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Hub" prop="is_hub" [sortable]="false">
+          <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-label draggable">Hub</span>
+            <mat-slide-toggle class="example-margin ml-12" [color]="'primary'" (change)="onAllSelectedHub(!allHubSelected)" [checked]="allHubSelected" [disabled]="!allRowsSelected"></mat-slide-toggle>
+          </ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected">
+            <div>
+              <mat-slide-toggle class="example-margin" [color]="'primary'" (change)="onSelectedHub($event, row)" [checked]="checkHub(row)"></mat-slide-toggle>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
       </ngx-datatable>
+
       <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
           SIMPAN
         </button>
       </div>
-    </div>
+      </div>
     </div>
   </div>
 </div>
