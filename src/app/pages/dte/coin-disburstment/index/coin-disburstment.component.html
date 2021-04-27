@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Coin Disburstment'">
+  <page-content-header [contentTitle]="'Coin Disbursement'">
     <button style="width: 170px" [routerLink]="['/dte','coin-disbursement', 'create']" mat-raised-button type="button">
       <mat-icon>add</mat-icon> BUAT
     </button>
@@ -9,9 +9,9 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group>
-        <mat-tab label="Coin Disburstment">
+        <mat-tab label="Coin Disbursement">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-            <h2 class="pl-8">Coin Disburstment</h2>
+            <h2 class="pl-8">Coin Disbursement</h2>
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -91,7 +91,7 @@
                   <button mat-icon-button color="" (click)="directEdit(row)">
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
-                  <button type="button" mat-icon-button color="primary" matTooltip="Hapus Coin Disburstment"
+                  <button type="button" mat-icon-button color="primary" matTooltip="Hapus Coin Disbursement"
                     (click)="deleteCoinDisburstment(row)">
                     <mat-icon>delete</mat-icon>
                   </button>
