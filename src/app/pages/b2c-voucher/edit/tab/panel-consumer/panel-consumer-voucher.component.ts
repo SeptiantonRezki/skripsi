@@ -129,7 +129,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
           product: auto.limit_by === 'product' ? auto.limit_only : '',
           category: auto.limit_by === 'category' ? auto.limit_only.map(dt => Number(dt)) : '',
           minimumPurchase: auto.limit_purchase ? auto.limit_purchase : 0,
-          is_subscription: auto.is_subscription.toString(),
+          is_subscription: auto.is_subscription,
           customer_indicator: auto.is_subscription !== null,
           operator: auto.operator,
         });
@@ -1103,7 +1103,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
           const indicators: any = {
             operator: this.formConsumerGroup.get('operator').value,
             limit_purchase: this.formConsumerGroup.get('limit_purchase').value ? this.formConsumerGroup.get('minimumPurchase').value : null,
-            is_subscription: this.formConsumerGroup.get('customer_indicator').value ? parseInt(this.formConsumerGroup.get('is_subscription').value) : null,
+            is_subscription: this.formConsumerGroup.get('customer_indicator').value ? this.formConsumerGroup.get('is_subscription').value ? 1 : 0 : null,
             limit_by: this.formConsumerGroup.get('limit_by_product').value ? 'product' :
             this.formConsumerGroup.get('limit_by_category').value ? 'category' : null,
             limit_only: []

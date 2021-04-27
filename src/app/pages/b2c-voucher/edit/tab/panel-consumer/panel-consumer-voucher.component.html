@@ -12,7 +12,7 @@
     <form autocomplete="off" [formGroup]="formConsumerGroup">
       <div fxLayout="row" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
 
-        <div fxFlex="50">
+        <div style="min-width: 680px;">
 
         <div class="px-12" fxLayout="column">
           <mat-form-field fxFlex="50" class="is-light" *ngIf="isVoucherAutomation.value === true">
@@ -115,10 +115,9 @@
             </div>
             <div class="box" fxFlex="100" *ngIf="formConsumerGroup.get('customer_indicator').value">
               <div class="is-light py-12" fxFlex="100">
-                <mat-radio-group aria-label="Status Konsumen" fxLayoutGap="20px" formControlName="is_subscription">
-                  <mat-radio-button value="0" checked>Non Langganan</mat-radio-button>
-                  <mat-radio-button value="1">Langganan</mat-radio-button>
-                </mat-radio-group>
+                <mat-checkbox formControlName="is_subscription">
+                  Langganan
+                </mat-checkbox>
               </div>
             </div>
           </div>
@@ -163,7 +162,7 @@
 
         </div>
         
-        <div fxFlex="30" *ngIf="isVoucherAutomation.value === true">
+        <div *ngIf="isVoucherAutomation.value === true">
 
           <div class="pb-16 px-12">
             <mat-radio-group formControlName="va" class="radio-group">
