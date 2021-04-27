@@ -180,7 +180,7 @@
           </ng-template>
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected">
             <div>
-              <mat-slide-toggle class="example-margin" [color]="'primary'" (change)="onSelectedHub($event, row)" [checked]="checkHub(row)"></mat-slide-toggle>
+              <mat-slide-toggle class="example-margin" [color]="'primary'" (change)="onSelectedHub($event, row)" [checked]="checkHub(row)" [disabled]="!isSelected"></mat-slide-toggle>
             </div>
           </ng-template>
         </ngx-datatable-column>
