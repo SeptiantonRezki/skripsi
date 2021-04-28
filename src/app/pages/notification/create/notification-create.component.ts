@@ -164,6 +164,13 @@ export class NotificationCreateComponent {
     if(this._typeOfRecurrence !== 'Recurring') {
       this.recurrenceType = '';
     }
+
+    if(this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
+      this.formNotification.controls.is_target_audience.setValue(false);
+      this.formNotification.controls.is_target_audience.disable();
+    } else {
+      this.formNotification.controls.is_target_audience.enable();
+    }
   }
 
   @Input() get recurrenceType(): string {
