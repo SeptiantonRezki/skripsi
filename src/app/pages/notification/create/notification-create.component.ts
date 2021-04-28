@@ -2159,7 +2159,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification,
+        verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2187,6 +2187,7 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
+      frm.controls['send_ayo'].setValue(!(send_sfmc == 1 || send_sfmc == '1'));
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
