@@ -61,7 +61,7 @@
       </div>
 
       <form [formGroup]="formFilter" autoComplete="off">
-        <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+        <div class="pl-16 pr-16 mt-12 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
           <mat-form-field fxLayout="row" fxLayoutAlign="center center">
             <mat-select placeholder="National" formControlName="national">
               <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
@@ -109,6 +109,12 @@
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+            <mat-select placeholder="Hub" [formControl]="filterHub">
+              <mat-option [value]="item.value" *ngFor="let item of listFilterHub">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
   
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
@@ -117,7 +123,7 @@
             </mat-form-field>
           </div>
         </div>
-        </form>
+      </form>
 
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
@@ -131,8 +137,8 @@
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
             <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
@@ -167,19 +173,17 @@
             <span class="row-address">{{row.area || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <!-- <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
-                <mat-icon class="secondary-text" outline>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
-                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
-                <mat-icon>delete</mat-icon>
-              </button>
+        <ngx-datatable-column name="Hub" prop="is_hub" [sortable]="false">
+          <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-label draggable">Hub</span>
+            <mat-slide-toggle class="example-margin ml-12" [color]="'primary'" (change)="onAllSelectedHub(!allHubSelected)" [checked]="allHubSelected" [disabled]="!allRowsSelected"></mat-slide-toggle>
+          </ng-template>
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected">
+            <div>
+              <mat-slide-toggle class="example-margin" [color]="'primary'" (change)="onSelectedHub($event, row)" [checked]="checkHub(row)" [disabled]="!isSelected"></mat-slide-toggle>
             </div>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
       </ngx-datatable>
       <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
