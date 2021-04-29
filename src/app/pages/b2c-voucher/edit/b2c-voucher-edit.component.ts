@@ -298,7 +298,7 @@ export class B2CVoucherEditComponent implements OnInit {
       });
     }
     if (param.length >= 3) {
-      this.b2cVoucherService.getProductList({ page: 'all', search: param }).subscribe(res => {
+      this.b2cVoucherService.getProductList({ page: 'all', search: param, exclude_smoke: 1 }).subscribe(res => {
         this.listProductSkuBank = res.data ? res.data : [];
         this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
       });
@@ -320,7 +320,7 @@ export class B2CVoucherEditComponent implements OnInit {
   }
 
   getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
+    this.productService.getListCategory(null, { exclude_smoke: 1 }).subscribe(res => {
       this.listCategories = res.data ? res.data.data : [];
     })
   }
