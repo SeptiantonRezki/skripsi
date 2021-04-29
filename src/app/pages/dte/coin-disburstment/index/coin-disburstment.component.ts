@@ -140,8 +140,8 @@ export class CoinDisburstmentComponent implements OnInit {
   deleteCoinDisburstment(row: any) {
     this.id = row.id;
     let data = {
-      titleDialog: "Hapus Coin Disburstment",
-      captionDialog: "Apakah anda yakin untuk menghapus Coin Disburstment ini ?",
+      titleDialog: "Hapus Coin Disbursement",
+      captionDialog: "Apakah anda yakin untuk menghapus Coin Disbursement ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disburstment'">
+  <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disbursement'">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button" *ngIf="!isEdit">
       <mat-icon>save</mat-icon> SIMPAN
     </button>
@@ -14,10 +14,11 @@
             <form autocomplete="off" [formGroup]="formCoin">
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Nama Penukaran Koin" formControlName="name" name="name">
+                  <input matInput type="text" placeholder="Nama Program Penukaran Koin" formControlName="name"
+                    name="name">
                   <mat-error
                     *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
-                    Nama Penukaran Koin harus diisi
+                    Nama Program Penukaran Koin harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
