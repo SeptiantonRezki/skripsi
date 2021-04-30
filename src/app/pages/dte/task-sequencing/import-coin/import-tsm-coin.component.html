@@ -95,6 +95,26 @@
         <textarea matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
       </mat-form-field>
     </div>
+    <div fxLayout="column" fxFlex="50"
+      style="margin-left: 16px;margin-top: 5px;border: 1px solid #ddd; position: relative;" class="p-8">
+      <span class="opsi-type">Notifikasi</span>
+      <form [formGroup]="formNotifikasi">
+        <mat-form-field fxLayout="column" fxFlex="100">
+          <mat-select formControlName="name" placeholder="Nama User Penerima" id="name"
+            (selectionChange)="selectChangeReceiver($event)" #singleSelect>
+            <ngx-mat-select-search [formControl]="filterUserNames" [placeholderLabel]="'Cari Nama User ...'"
+              [noEntriesFoundLabel]="'User Tidak ditemukan!'" [clearSearchInput]="false">
+            </ngx-mat-select-search>
+            <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id">
+              {{item.fullname}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="column" fxFlex="100">
+          <input matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
+        </mat-form-field>
+      </form>
+    </div>
     <div class="p-8">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
