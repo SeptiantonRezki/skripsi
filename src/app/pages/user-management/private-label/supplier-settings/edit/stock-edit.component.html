@@ -1,0 +1,46 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Metode Pembayaran'">
+    <button style="width: 150px" mat-raised-button type="button" (click)="onSave()">
+    SIMPAN
+  </button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper" *ngIf="stockData">
+      <mat-list style="overflow: hidden;" class="pt-0">
+        <mat-list-item>
+          <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+            <span fxFlex="15" class="h6 text-semibold">Nama Produk</span>
+            <span fxFlex="15" class="h6 text-semibold">Kategori</span>
+            <span fxFlex="15" class="h6 text-semibold">Nama Perusahaan</span>
+            <span fxFlex="55" class="h6 text-semibold pl-8">Stock</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <form autocomplete="off" [formGroup]="formStock">
+          <mat-list-item class="custom-height mb-8">
+            <div fxFlex="15" >{{stockData.product_name}}</div>
+            <div fxFlex="15" >{{stockData.category_name}}</div>
+            <div fxFlex="15" >{{stockData.company_name}}</div>
+            <div fxFlex="55" class="pl-8">
+              <div fxLayout="column" *ngIf="stockData.settings.length > 0">
+                <mat-checkbox [checked]="checkAll" class="payments-column" (change)="selectionAll($event)">Pilih Semua</mat-checkbox>
+                <div fxLayout="row wrap">
+                  <div formArrayName="listStock" *ngFor="let stock of formStock.get('listStock')['controls']; let i = index;" class="payments-column" >
+                    <div [formGroupName]="i">
+                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsw_input'">Stock Input GSW</mat-checkbox>
+                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsw_input_mandatory'">Mandatory GSW</mat-checkbox>
+                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsr_input'">Stock Input GSR</mat-checkbox>
+                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsr_input_mandatory'">Mandatory GSR</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </form>
+      </mat-list>
+    </div>
+  </div>
+</div>

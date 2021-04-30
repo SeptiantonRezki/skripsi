@@ -856,28 +856,45 @@ export const brConfig = {
         }
       ]
     },
-    paymentmethod: {
+    supplierSettings: {
       index: [
         {
           type: "parent",
-          url: "/user-management/supplier-metode-pembayaran",
+          url: "/user-management/supplier-settings",
           name: "Produk Prinsipal"
         },
         {
           type: "current",
           url: "",
-          name: "Metode Pembayaran"
+          name: "Pengaturan"
         }
       ],
-      edit: [
+      stockEdit: [
         {
           type: "parent",
-          url: "/user-management/supplier-metode-pembayaran",
+          url: "/user-management/supplier-settings",
           name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-metode-pembayaran",
+          url: "/user-management/supplier-settings",
+          name: "Stock"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit"
+        }
+      ],
+      paymentMethodEdit: [
+        {
+          type: "parent",
+          url: "/user-management/supplier-settings",
+          name: "Produk Prinsipal"
+        },
+        {
+          type: "parent",
+          url: "/user-management/supplier-settings",
           name: "Metode Pembayaran"
         },
         {

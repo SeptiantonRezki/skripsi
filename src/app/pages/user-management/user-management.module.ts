@@ -72,6 +72,8 @@ import { UserSupplierIndexComponent } from "./private-label/user-supplier/index/
 
 import { PayMethodEditComponent } from "./private-label/pay-method/edit/pay-method-edit.component";
 import { PayMethodIndexComponent } from "./private-label/pay-method/index/pay-method-index.component";
+import { StockEditComponent } from './private-label/supplier-settings/edit/stock-edit.component';
+import { SupplierSettingsIndexComponent } from './private-label/supplier-settings/index/supplier-settings-index.component';
 
 import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-component";
 import { MedalIndexComponent } from "./retailer/medal-badge/medal/index/medal-index-component";
@@ -190,6 +192,8 @@ export const MY_FORMATS = {
     UserSupplierIndexComponent,
     PayMethodEditComponent,
     PayMethodIndexComponent,
+    StockEditComponent,
+    SupplierSettingsIndexComponent,
     PanelPartnershipIndexComponent,
     PanelPartnershipCreateComponent,
     PanelPartnershipEditComponent,
@@ -239,6 +243,8 @@ export const MY_FORMATS = {
     UserSupplierIndexComponent,
     PayMethodEditComponent,
     PayMethodIndexComponent,
+    StockEditComponent,
+    SupplierSettingsIndexComponent,
 
     MedalBadgeComponent,
     MedalIndexComponent,
@@ -267,6 +273,7 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
+    PayMethodIndexComponent,
   ],
   providers: [
     // PendingChangesGuard,

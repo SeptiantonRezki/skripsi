@@ -1,0 +1,80 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header [contentTitle]="'Perusahaan'">
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <mat-tab-group>
+    <mat-tab label="Stock">
+      <div class="table-wrapper p-8" >
+        <ngx-datatable class="material ngx-datatable fixed-header virtualized" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+          [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+          [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+          [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+  
+          <ngx-datatable-column name="Nama" prop="product_name">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <span>{{row.product_name || '-'}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Kategori" prop="category_name">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <span>{{row.category_name || '-'}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Perusahaan" prop="category_name">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <span>{{row.company_name || '-'}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Stock Input GSW" prop="email" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings" fxLayout="row" fxLayoutAlign="center center">
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsw_input' && setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsw_input' && !setting.value"></mat-checkbox>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Mandatory GSW" prop="lastlogin" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsw_input_mandatory' && setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsw_input_mandatory' && !setting.value"></mat-checkbox>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Stock Input GSR" prop="lastupdated" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsr_input' && setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsr_input' && !setting.value"></mat-checkbox>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Mandatory GSR" prop="status" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsr_input_mandatory' && setting.value"></mat-checkbox>
+                <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsr_input_mandatory' && !setting.value"></mat-checkbox>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div class="button-row" style="margin-left: -10px">
+                <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                  <mat-icon class="secondary-text" outline>edit</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </mat-tab>
+    <mat-tab label="Metode Pembayaran">
+      <div class="table-wrapper">
+        <app-pay-method-index></app-pay-method-index>
+      </div>
+    </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
