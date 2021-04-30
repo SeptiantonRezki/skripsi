@@ -11,6 +11,7 @@
     "build:prod": "ng build --prod",
     "build:qa": "ng build --configuration=qa",
     "build:dev-hms": "ng build --configuration=dev-hms",
+    "build:dev-hms:upHead": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --configuration=dev-hms",
     "build:training": "ng build --configuration=training",
     "build:microservices": "ng build --configuration=microservices",
     "build:dev": "ng build --aot=true --buildOptimizer=true --optimization=true --outputHashing=all --sourceMap=false --extractCss=true --namedChunks=false --extractLicenses=true --vendorChunk=false",

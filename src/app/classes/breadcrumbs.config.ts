@@ -2426,6 +2426,169 @@ export const brConfig = {
       ],
     }
   },
+  virtualaccount: {
+    company: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Perusahaan"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/virtual-account/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Perusahaan"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/virtual-account/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Perusahaan"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/virtual-account/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Perusahaan"
+        }
+      ],
+    },
+    bin: {
+      create: [
+        {
+          type: "parent",
+          url: "/virtual-account/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat BIN"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/virtual-account/companies",
+          name: "Daftar Perusahaan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah BIN"
+        }
+      ]
+    },
+    panel: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Panel Pojok Modal"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/virtual-account/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Panel Pojok Modal"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/virtual-account/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Panel Pojok Modal"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/virtual-account/panel",
+          name: "Panel Pojok Modal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Panel Pojok Modal"
+        }
+      ],
+    },
+    tnc: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Syarat & Ketentuan"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/virtual-account/terms-and-condition",
+          name: "Syarat & Ketentuan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Syarat & Ketentuan"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/virtual-account/terms-and-condition",
+          name: "Syarat & Ketentuan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Syarat & Ketentuan"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/virtual-account/terms-and-condition",
+          name: "Syarat & Ketentuan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Syarat & Ketentuan"
+        }
+      ],
+    },
+  },
   taskSequencingManagement: {
     taskSequencing: {
       index: [
