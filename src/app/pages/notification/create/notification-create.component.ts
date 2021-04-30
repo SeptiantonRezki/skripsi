@@ -165,7 +165,7 @@ export class NotificationCreateComponent {
       this.recurrenceType = '';
     }
 
-    if(this._typeOfRecurrence !== 'OneTime') {
+    if(this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
     } else {
@@ -196,7 +196,6 @@ export class NotificationCreateComponent {
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
-    console.log(this.areaType);
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.formNotificationError = {
@@ -249,6 +248,7 @@ export class NotificationCreateComponent {
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
+      send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
     });
@@ -1293,6 +1293,7 @@ export class NotificationCreateComponent {
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
+      send_sfmc: this.formNotification.get('send_ayo').value ? '0': '1',
       status: this.formNotification.get('status').value
     };
 
@@ -1383,6 +1384,13 @@ export class NotificationCreateComponent {
                 bodyVideo.delete('target_audience');
               }
             }
+
+            if(this.formNotification.get('send_ayo').value) {
+              bodyVideo.append('send_sfmc', '0');
+            } else {
+              bodyVideo.append('send_sfmc', '1');
+            }
+
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if(this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
@@ -1429,6 +1437,12 @@ export class NotificationCreateComponent {
             }
           }
 
+          if(this.formNotification.get('send_ayo').value) {
+            bodyVideo.append('send_sfmc', '0');
+          } else {
+            bodyVideo.append('send_sfmc', '1');
+          }
+
           bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
           
           if(this.typeOfRecurrence == 'Recurring') {
@@ -1464,7 +1478,7 @@ export class NotificationCreateComponent {
     }
 
     this.dataService.showLoading(true);
-    console.log(body)
+    
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
@@ -2145,7 +2159,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification,
+        verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2173,6 +2187,7 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
+      frm.controls['send_ayo'].setValue(!(send_sfmc == 1 || send_sfmc == '1'));
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
