@@ -375,6 +375,15 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
+    path: "task-sequencing/detail",
+    component: TaskSequencingEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.taskSequencing.detail
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
     path: "mission-builder/create",
     component: MissionBuilderCreateComponent,
     data: {
@@ -396,6 +405,15 @@ const routes: Routes = [
     component: MissionBuilderDuplicateComponent,
     data: {
       breadcrumbs: brConfig.dte.missionBuilder.duplicate
+    },
+    // canDeactivate: [PendingChangesGuard],
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "mission-builder/detail",
+    component: MissionBuilderEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.missionBuilder.detail
     },
     // canDeactivate: [PendingChangesGuard],
     // canActivate: [PageGuard]

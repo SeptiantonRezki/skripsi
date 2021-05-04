@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { DialogService } from "../../../../services/dialog.service";
@@ -17,7 +17,7 @@ import { ImportTsmCoinComponent } from '../import-coin/import-tsm-coin.component
   templateUrl: './task-sequencing-edit.component.html',
   styleUrls: ['./task-sequencing-edit.component.scss']
 })
-export class TaskSequencingEditComponent implements OnInit {
+export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   dialogRef: any;
 
   minDateTask: any;
@@ -54,7 +54,7 @@ export class TaskSequencingEditComponent implements OnInit {
     private sequencingService: SequencingService
   ) {
 
-    activatedRoute.url.subscribe(params => {
+    activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
@@ -86,16 +86,21 @@ export class TaskSequencingEditComponent implements OnInit {
         this.filteringGTP();
       });
 
-      this.filterGTA.valueChanges
+    this.filterGTA.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringGTA();
       });
 
-      this.setValue();
+    this.setValue();
   }
 
-  setValue(){
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
+  }
+
+  setValue() {
     this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
       this.data = res.data;
       console.log(this.data);
@@ -117,10 +122,14 @@ export class TaskSequencingEditComponent implements OnInit {
       this.actions = res.data.actions;
       this.getTradePrograms(this.data.trade_creator_name);
       this.getTradeAudience(this.data.trade_audience_group_name);
+
+      if (this.isDetail) {
+        this.taskSequenceForm.disable();
+      }
     });
   }
 
-  selectChange(e: any){
+  selectChange(e: any) {
     const theIndex = this.programs.findIndex(x => x.id === e.value);
     console.log(this.programs[theIndex]);
     this.setDate(this.programs[theIndex].end_date);
@@ -139,7 +148,7 @@ export class TaskSequencingEditComponent implements OnInit {
     this.minDate = moment(new Date()).format('YYYY-MM-DD');
   }
 
-  selectChangeAudince(e: any){
+  selectChangeAudince(e: any) {
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
     console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
@@ -153,7 +162,7 @@ export class TaskSequencingEditComponent implements OnInit {
     return date;
   }
 
-  submit(){
+  submit() {
     this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
     this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
     this.taskSequenceForm.value.actions = this.actions;

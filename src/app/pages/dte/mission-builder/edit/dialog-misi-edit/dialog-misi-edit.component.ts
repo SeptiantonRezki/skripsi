@@ -29,6 +29,7 @@ export class DialogMisiEditComponent implements OnInit {
   public filteredMissionOther: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   pagination: Page = new Page();
+  isDetail: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -105,6 +106,22 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('coin_verification').patchValue(0);
         this.form.get('verifikasi').patchValue(false);
         this.form.get('verifikasiFF').patchValue(false);
+      }
+
+      if (this.data.isDetail) {
+        this.isDetail = this.data.isDetail;
+        setTimeout(() => {
+          this.form.get("task_template_id").disable();
+          this.form.get("task_template_other_name_id").disable();
+          this.form.get("start_date").disable();
+          this.form.get("end_date").disable();
+          this.form.get("coin_submission").disable();
+          this.form.get("coin_verification").disable();
+          // this.form.get("verification_type").disable();
+          // this.form.get("is_push_to_ff").disable();
+          // this.form.get("is_ir_template").disable();
+          console.log('this form', this.form.value);
+        }, 1000)
       }
     }
   }

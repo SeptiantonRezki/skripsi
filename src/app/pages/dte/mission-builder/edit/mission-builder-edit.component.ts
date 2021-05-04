@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material";
 import { DataService } from "../../../../services/data.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DialogService } from "../../../../services/dialog.service";
 import { Subject } from 'rxjs/Subject';
 import * as shape from 'd3-shape';
@@ -20,7 +20,7 @@ import { DialogCoinEditComponent } from "./dialog-coin-edit/dialog-coin-edit.com
   templateUrl: './mission-builder-edit.component.html',
   styleUrls: ['./mission-builder-edit.component.scss']
 })
-export class MissionBuilderEditComponent implements OnInit {
+export class MissionBuilderEditComponent implements OnInit, OnDestroy {
 
   dialogMisiRef: MatDialogRef<DialogMisiEditComponent>;
   dialogPopUpNotificationRef: MatDialogRef<DialogPopUpNotifEditComponent>;
@@ -53,6 +53,8 @@ export class MissionBuilderEditComponent implements OnInit {
 
   budget: number = 0;
   overBudget: boolean = false;
+  isDetail: Boolean;
+  private _onDestroy = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -60,7 +62,11 @@ export class MissionBuilderEditComponent implements OnInit {
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
+    private activatedRoute: ActivatedRoute
   ) {
+    activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    })
     // this.actions = [];
     this.hierarchialGraph = {
       links: [],
@@ -112,6 +118,11 @@ export class MissionBuilderEditComponent implements OnInit {
       }
     });
 
+  }
+
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
   }
 
   countWeeks(array: any) {
@@ -291,6 +302,16 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   nodeDisabler(type: any) {
+    if (this.isDetail) {
+      this.noMission = true;
+      this.noPopup = true;
+      this.noPush = true;
+      this.noCoin = true;
+      this.noDecision = true;
+      this.noTime = true;
+      this.noFinish = true;
+      return;
+    }
     if (this.task.is_editable === 0) {
       this.noMission = true;
       this.noPopup = true;
@@ -864,6 +885,7 @@ export class MissionBuilderEditComponent implements OnInit {
   }
 
   openDialogMisi(node: any) {
+    node['isDetail'] = this.isDetail;
     this.dialogMisiRef = this.Dialog.open(
       DialogMisiEditComponent, { width: "600px", data: node }
     );
