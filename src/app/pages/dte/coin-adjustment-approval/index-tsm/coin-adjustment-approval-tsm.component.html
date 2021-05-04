@@ -52,6 +52,33 @@
     </div>
   </div>
 </form>
+
+<form [formGroup]="formFilterReqApp" autoComplete="off">
+  <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8">
+    <mat-form-field fxFlex="20" class="orders dropdown">
+      <mat-select formControlName="requestor_id" placeholder="Requestor" id="requestor_id" #singleSelect>
+        <ngx-mat-select-search [formControl]="filterRequestor" [placeholderLabel]="'Cari Requestor...'"
+          [noEntriesFoundLabel]="'Tidak ada Requestor yang ditemukan'" [clearSearchInput]="true">
+        </ngx-mat-select-search>
+        <mat-option>Semua</mat-option>
+        <mat-option *ngFor="let item of filteredRequestor | async" [value]="item.user_id">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex="20" class="orders dropdown">
+      <mat-select formControlName="approver_id" placeholder="Approver" id="approver_id" #singleSelect>
+        <ngx-mat-select-search [formControl]="filterApprover" [placeholderLabel]="'Cari Approver...'"
+          [noEntriesFoundLabel]="'Tidak ada Approver yang ditemukan'" [clearSearchInput]="true">
+        </ngx-mat-select-search>
+        <mat-option>Semua</mat-option>
+        <mat-option *ngFor="let item of filteredApprover | async" [value]="item.user_id">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>
 <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="48"
   [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"

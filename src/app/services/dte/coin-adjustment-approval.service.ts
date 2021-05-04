@@ -53,4 +53,14 @@ export class CoinAdjustmentApprovalService extends BaseService {
     console.log('url', url, context);
     return this.getApi(url);
   }
+
+  getApprovers(context?: any, queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'approver_data', context);
+    return this.getApi(url, queryParams);
+  }
+
+  getRequestors(context?: any, queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'requestor_data', context);
+    return this.getApi(url, queryParams);
+  }
 }
