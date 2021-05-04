@@ -58,7 +58,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua", value: "18-" }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
   listNotifType: any [] = [
@@ -170,6 +170,13 @@ export class NotificationCreateComponent {
       this.formNotification.controls.is_target_audience.disable();
     } else {
       this.formNotification.controls.is_target_audience.enable();
+    }
+
+    if(this.typeOfRecurrence == 'Bday18') {
+      this.formNotification.controls.age.setValue('18+');
+      this.formNotification.controls.age.disable();
+    } else {
+      this.formNotification.controls.age.enable();
     }
   }
 
@@ -1304,7 +1311,15 @@ export class NotificationCreateComponent {
 
     let recurrenceBody: { [key: string]: any; };
 
-    if(this.typeOfRecurrence == 'Recurring') {
+    if (body.type === 'customer') {
+      body['verification'] = this.formNotification.get('verification').value;
+      body['age'] = this.formNotification.get("age").value;
+      body['notif_type'] = this.formNotification.get('notif_type').value;
+    }
+
+    if(this.typeOfRecurrence == 'Bday18') {
+      body['age'] = '18+';
+    } else if(this.typeOfRecurrence == 'Recurring') {
       recurrenceBody = {
         recurrence_type: this.recurrenceType
       }
@@ -1340,12 +1355,6 @@ export class NotificationCreateComponent {
         ...body,
         ...recurrenceBody
       }
-    }
-
-    if (body.type === 'customer') {
-      body['verification'] = this.formNotification.get('verification').value;
-      body['age'] = this.formNotification.get("age").value;
-      body['notif_type'] = this.formNotification.get('notif_type').value;
     }
 
     if (body.content_type === 'static_page') {
