@@ -3,7 +3,11 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { SequencingService } from 'app/services/dte/sequencing.service';
 import { DataService } from 'app/services/data.service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { Page } from 'app/classes/laravel-pagination';
+import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   templateUrl: './import-tsm-coin.component.html',
@@ -11,6 +15,7 @@ import { FormControl } from '@angular/forms';
   encapsulation: ViewEncapsulation.None
 })
 export class ImportTsmCoinComponent {
+  formNotifikasi: FormGroup;
   textReason: FormControl = new FormControl();
   files: File;
   validComboDrag: boolean;
@@ -20,21 +25,90 @@ export class ImportTsmCoinComponent {
   rows: any[];
   isValid: Boolean = false;
 
+  public filterUserNames: FormControl = new FormControl();
+  public filteredUserNames: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  private _onDestroy = new Subject<void>();
+
+  users: any[] = [];
+  pagination: Page = new Page();
+  selectedUser: any;
+  parentData: any;
+
   constructor(
     public dialogRef: MatDialogRef<ImportTsmCoinComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private sequencingService: SequencingService,
-    private dataService: DataService
+    private dataService: DataService,
+    private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
+    private formBuilder: FormBuilder
   ) {
     this.rows = [];
     if (data) {
       this.show = true;
     }
+    this.parentData = data;
   }
 
   ngOnInit() {
+    this.getUserList();
+    this.formNotifikasi = this.formBuilder.group({
+      name: ["", Validators.required],
+      email: ["", Validators.required]
+    });
+
+    this.filterUserNames.valueChanges
+      .debounceTime(1000)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringMission();
+      });
+  }
+
+  getUserList() {
+    this.coinAdjustmentApprovalService.approverList({ is_tsm: this.parentData.is_tsm }, this.pagination).subscribe(
+      (res) => {
+        this.users = res.data;
+        this.filteredUserNames.next(this.users.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+  }
+
+  filteringMission() {
+    if (!this.users) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterUserNames.value;
+    this.pagination.per_page = 30;
+    this.pagination.search = search;
+    this.coinAdjustmentApprovalService.approverList({ is_tsm: this.parentData.is_tsm }, this.pagination).subscribe(
+      (res) => {
+        console.log("res users", res.data);
+        this.users = res.data;
+        this.filteredUserNames.next(this.users.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the banks
+    this.filteredUserNames.next(
+      this.users.filter(item => item.fullname.toLowerCase().indexOf(search ? search.toLowerCase() : search) > -1)
+    );
+  }
+
+  selectChangeReceiver(e: any) {
+    let indexValue = this.users.findIndex(x => x.id === e.value);
+
+    if (indexValue > -1) {
+      this.formNotifikasi.get('email').setValue(this.users[indexValue]['email']);
+      this.selectedUser = { ...this.users[indexValue] };
+    }
   }
 
   preview(event) {
@@ -71,7 +145,8 @@ export class ImportTsmCoinComponent {
     if (this.files) {
       const res = {
         coins: this.rows,
-        reason: this.textReason.value
+        reason: this.textReason.value,
+        user_id: this.formNotifikasi.get('name').value
       };
 
       this.dataService.showLoading(true);

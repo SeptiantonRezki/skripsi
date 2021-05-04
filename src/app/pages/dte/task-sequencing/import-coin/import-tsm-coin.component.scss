@@ -1,4 +1,12 @@
 @import "src/@fuse/scss/fuse";
+.opsi-type {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 3px 8px;
+  background-color: #eee;
+  font-weight: 600;
+}
 
 .adjustment-coin-dialog {
   @include media-breakpoint("xs") {
