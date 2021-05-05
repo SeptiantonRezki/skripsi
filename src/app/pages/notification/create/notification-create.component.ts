@@ -387,6 +387,8 @@ export class NotificationCreateComponent {
 
     if(this.formNotification.controls.user_group.value !== 'customer') {
       this.formNotification.controls.type_of_recurrence.disable();
+      this.formNotification.controls.send_ayo.setValue(true);
+      this.formNotification.controls.send_ayo.disable();
     }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -1186,6 +1188,8 @@ export class NotificationCreateComponent {
     if(e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
       this.formNotification.controls.type_of_recurrence.disable();
+      this.formNotification.controls.send_ayo.setValue(true);
+      this.formNotification.controls.send_ayo.disable();
     } else {
       this.formNotification.controls.type_of_recurrence.enable();
     }
@@ -2196,7 +2200,7 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
-      frm.controls['send_ayo'].setValue(!(send_sfmc == 1 || send_sfmc == '1'));
+      frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 1 || send_sfmc == '1');
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
@@ -2247,8 +2251,7 @@ export class NotificationCreateComponent {
       } else {
         this.typeOfRecurrence = type_of_recurrence
       }
-      console.log('type', type);
-      console.log('target_audience', target_audience);
+
       if(type !== 'customer' || target_audience) {
         frm.controls['is_target_audience'].setValue(target_audience ? true : false);
         if (target_audience) {
