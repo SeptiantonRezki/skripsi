@@ -266,6 +266,7 @@ export class ProductCreateComponent {
       // convertion: ["", [Validators.min(0)]]
       // jenisproduk: "",
       is_private_label: [false],
+      is_paylater: [false],
       // prioritas_produk: ["", Validators.required],
       listProdukPrivateLabel: this.formBuilder.array([])
     });
@@ -673,6 +674,8 @@ export class ProductCreateComponent {
           status: this.formProductGroup.get("status").value,
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
+          is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
+          
           // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
           // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
 
@@ -700,6 +703,7 @@ export class ProductCreateComponent {
           fd.append('end_date_pin_up', moment(this.formProductGroup.get('end_date_pin_up').value).format("YYYY/MM/DD"));
         }
         fd.append("is_private_label", body.is_private_label);
+        fd.append("is_paylater", body.is_paylater);
         // fd.append("convertion", body.convertion);
 
         let _areas = [];

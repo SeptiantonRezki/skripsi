@@ -199,6 +199,8 @@
                     SRC</mat-checkbox>
                   <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8"
                     formControlName="is_private_label">Produk Prinsipal</mat-checkbox>
+                  <mat-checkbox class="mt-4 ml-4 mb-8"
+                    formControlName="is_paylater">Produk Pilihan Pojok Modal</mat-checkbox>
                 </div>
                 <!-- <mat-radio-group formControlName="jenisproduk" class="radio-group pb-16" fxLayout="row" fxLayoutGap="20px">
                   <mat-radio-button class="radio-button" *ngFor="let item of jenisProduk" [value]="item.value" (change)="jenisProdukChange($event)">

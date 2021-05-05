@@ -34,7 +34,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
       flowingly_id: ["", Validators.required],
       paylater_group_id: ["", Validators.required],
       status: ["", Validators.required],
-      minimum_transaction: [0, Validators.required]
+      minimum_transaction: [0, Validators.required],
+      status_product_src: ["", Validators.required],
     });
 
     this.paylaterCompanyService.list({}).subscribe(res => {
@@ -72,7 +73,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
         flowingly_id: this.formCompany.get('flowingly_id').value,
         paylater_group_id: this.formCompany.get('paylater_group_id').value,
         status: this.formCompany.get('status').value,
-        min_transaction: this.formCompany.get('minimum_transaction').value
+        min_transaction: this.formCompany.get('minimum_transaction').value,
+        status_product_src: this.formCompany.get('status_product_src').value
       }
 
       this.paylaterCompanyService.create(body).subscribe(res => {

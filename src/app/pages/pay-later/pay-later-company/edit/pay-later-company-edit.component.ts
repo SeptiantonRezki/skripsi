@@ -41,7 +41,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
       flowingly_id: ["", Validators.required],
       paylater_group_id: ["", Validators.required],
       status: ["", Validators.required],
-      minimum_transaction: [0, Validators.required]
+      minimum_transaction: [0, Validators.required],
+      status_product_src: ["", Validators.required],
     });
 
     let regex = new RegExp(/[0-9]/g);
@@ -71,7 +72,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
         flowingly_id: res.data.flowingly_id,
         status: res.data.status,
         minimum_transaction: res.data.min_transaction ? res.data.min_transaction : 0,
-        paylater_group_id: res.data.paylater_group_id
+        paylater_group_id: res.data.paylater_group_id,
+        status_product_src: (res.data.status_product_src) ? res.data.status_product_src : 'inactive',
       });
       if (this.isDetail) {
         this.formCompany.disable();
@@ -101,6 +103,7 @@ export class PayLaterCompanyEditComponent implements OnInit {
         status: this.formCompany.get('status').value,
         min_transaction: this.formCompany.get('minimum_transaction').value,
         paylater_group_id: this.formCompany.get('paylater_group_id').value,
+        status_product_src: this.formCompany.get('status_product_src').value
       }
 
       this.paylaterCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {

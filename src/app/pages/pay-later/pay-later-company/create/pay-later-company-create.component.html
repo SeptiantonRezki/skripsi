@@ -87,6 +87,19 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="status_product_src" placeholder="Produk Pilihan">
+                <mat-option value="active">Aktif</mat-option>
+                <mat-option value="inactive">Tidak Aktif</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formCompany.controls['status_product_src'].hasError('required') && formCompany.controls['status_product_src'].touched">
+                Produk Pilihan harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="status" placeholder="Status">
                 <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>

@@ -245,6 +245,7 @@ export class ProductEditComponent {
         this.formProductGroup.get("status").setValue(res.data.status);
         this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
         this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
+        this.formProductGroup.get("is_paylater").setValue(res.data.is_paylater === 1 ? true : false);
         if (res && res.data.status_pin_up) {
           this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
           if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
@@ -803,6 +804,7 @@ export class ProductEditComponent {
       priority_product: [""],
       // convertion: ["", [Validators.min(0)]]
       is_private_label: [false],
+      is_paylater: [false],
       listProdukPrivateLabel: this.formBuilder.array([])
     });
   }
@@ -933,6 +935,7 @@ export class ProductEditComponent {
           status: this.formProductGroup.get("status").value,
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
+          is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
           // convertion: this.formProductGroup.get("convertion").value
         };
 
@@ -983,6 +986,7 @@ export class ProductEditComponent {
         fd.append("packaging_id", body.packaging_id);
         fd.append("status", body.status);
         fd.append("is_promo_src", body.is_promo_src);
+        fd.append("is_paylater", body.is_paylater);
 
         if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
           fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
