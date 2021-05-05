@@ -67,6 +67,13 @@
           placeholder="Coin Verification" />
       </mat-form-field>
     </div>
+    <mat-form-field style="width: 100%;" *ngIf="data && data.data && data.data.link_misi">
+      <input matInput type="text" placeholder="Link Misi" [value]="data.data.link_misi" disabled #linkMisi>
+      <mat-icon matSuffix (click)="copyMessage(data.data.link_misi)" style="cursor: pointer;"
+        matTooltip="Salin Link Misi">
+        content_copy
+      </mat-icon>
+    </mat-form-field>
 
   </mat-dialog-content>
   <br><br>

@@ -671,7 +671,11 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
           max_date: a.max_date,
         }
       };
-
+      if (a.type === 'mission') {
+        if (a.link_misi && a.link_misi !== "") {
+          node['data']['link_misi'] = a.link_misi;
+        }
+      }
       this.hierarchialGraph.nodes.push(node);
     }
     // console.log(this.nodes);
@@ -854,6 +858,7 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
   cardDoubleClick(node: any): void {
     clearTimeout(this.clickTimer);
     this.clickTimer = undefined;
+    node['isDetail'] = this.isDetail;
     if (node.data.type === 'mission') {
       this.openDialogMisi(node);
     }
@@ -885,7 +890,6 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
   }
 
   openDialogMisi(node: any) {
-    node['isDetail'] = this.isDetail;
     this.dialogMisiRef = this.Dialog.open(
       DialogMisiEditComponent, { width: "600px", data: node }
     );

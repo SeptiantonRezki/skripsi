@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
+import { DialogService } from "app/services/dialog.service";
 
 @Component({
   selector: 'app-dialog-misi-edit',
@@ -36,6 +37,7 @@ export class DialogMisiEditComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogMisiEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -124,6 +126,16 @@ export class DialogMisiEditComponent implements OnInit {
         }, 1000)
       }
     }
+  }
+
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
   }
 
   checkTaskTemplate() {

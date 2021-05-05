@@ -28,6 +28,12 @@ export class DialogWaktuTungguEditComponent implements OnInit {
         time: this.data.data.attribute.time,
         type: this.data.data.attribute.type,
       });
+
+      if (this.data.isDetail) {
+        setTimeout(() => {
+          this.form.disable();
+        }, 500);
+      }
     }
   }
 
