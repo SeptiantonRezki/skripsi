@@ -391,6 +391,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.disable();
     } else {
       this.formNotification.controls.send_ayo.enable();
+      this.formNotification.controls.send_ayo.setValue(false);
     }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -1195,6 +1196,7 @@ export class NotificationCreateComponent {
     } else {
       this.formNotification.controls.type_of_recurrence.enable();
       this.formNotification.controls.send_ayo.enable();
+      this.formNotification.controls.send_ayo.setValue(false);
     }
     console.log(this.formNotification.value.user_group);
   }
