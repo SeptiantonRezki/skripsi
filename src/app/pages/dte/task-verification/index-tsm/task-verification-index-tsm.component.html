@@ -135,11 +135,11 @@
           [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah" matTooltip="Ubah Tanggal Penjadwalan">
           <mat-icon class="secondary-text">update</mat-icon>
         </button> -->
-        <button type="button" mat-icon-button color="" [disabled]="row.task_sequencing_management_status !== 'publish'"
-          matTooltip="Export Misi" (click)="export(row)">
-          <mat-icon *ngIf="row.task_sequencing_management_status == 'publish'" class="orange-500-fg">save_alt</mat-icon>
+        <button type="button" mat-icon-button color="" matTooltip="Export Misi" (click)="export(row)">
+          <mat-icon class="orange-500-fg">save_alt</mat-icon>
+          <!-- <mat-icon *ngIf="row.task_sequencing_management_status == 'publish'" class="orange-500-fg">save_alt</mat-icon>
           <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt
-          </mat-icon>
+          </mat-icon> -->
         </button>
         <button type="button" mat-icon-button color="" matTooltip="Verified All"
           (click)="openConfirmDialog(row, 'Verification All TSM Mission')" [disabled]="isDisableVerification(row)">

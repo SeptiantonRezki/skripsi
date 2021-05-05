@@ -207,7 +207,7 @@ export class TaskSequencingIndexComponent implements OnInit {
     switch (row.status_export) {
       case "unprocessed":
         if (row.status === 'unpublish') {
-          status = { request: false, download: false };
+          status = { request: true, download: false };
         } else if (row.status === 'publish') {
           status = { request: true, download: false };
         }

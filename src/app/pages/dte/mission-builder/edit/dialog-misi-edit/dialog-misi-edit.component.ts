@@ -38,7 +38,7 @@ export class DialogMisiEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getMission();
+    this.getMission(true);
     this.form = this.formBuilder.group({
       task_template_id: "",
       task_template_other_name_id: "",
@@ -55,12 +55,14 @@ export class DialogMisiEditComponent implements OnInit {
     });
 
     this.filterMission.valueChanges
+      .debounceTime(500)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMission();
       });
 
     this.filterMissionOther.valueChanges
+      .debounceTime(500)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMissionOther();
@@ -109,8 +111,10 @@ export class DialogMisiEditComponent implements OnInit {
 
   checkTaskTemplate() {
     if (this.form.get('task_template_id').value && this.missions.length > 0) {
+      this.filterMission.setValue(this.form.get('task_template_id').value, { emitEvent: false });
+      this.filterMissionOther.setValue(this.form.get('task_template_id').value, { emitEvent: false });
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
-
+      console.log("the index", theIndex, this.form.get('task_template_id').value, this.missions[theIndex]);
       this.form.patchValue({
         is_ir_template: this.missions[theIndex].is_ir_template
       });
@@ -206,6 +210,9 @@ export class DialogMisiEditComponent implements OnInit {
     let search = this.filterMission.value;
     this.pagination.per_page = 30;
     this.pagination.search = search;
+    if (this.pagination['id']) {
+      delete this.pagination['id'];
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
@@ -234,6 +241,9 @@ export class DialogMisiEditComponent implements OnInit {
     let search = this.filterMissionOther.value;
     this.pagination.per_page = 30;
     this.pagination.search = search;
+    if (this.pagination['id']) {
+      delete this.pagination['id'];
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
@@ -254,8 +264,11 @@ export class DialogMisiEditComponent implements OnInit {
     );
   }
 
-  getMission() {
+  getMission(isFirstLoad?: boolean) {
     this.pagination.per_page = 30;
+    if (isFirstLoad && this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
+      this.pagination['id'] = this.data.data.attribute.task_template_id;
+    }
     this.templateTaskService.get(this.pagination).subscribe(
       (res) => {
         this.missions = res.data.data;
