@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { DialogService } from "../../../../services/dialog.service";
@@ -17,7 +17,7 @@ import { ImportTsmCoinComponent } from '../import-coin/import-tsm-coin.component
   templateUrl: './task-sequencing-edit.component.html',
   styleUrls: ['./task-sequencing-edit.component.scss']
 })
-export class TaskSequencingEditComponent implements OnInit {
+export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   dialogRef: any;
 
   minDateTask: any;
@@ -54,7 +54,7 @@ export class TaskSequencingEditComponent implements OnInit {
     private sequencingService: SequencingService
   ) {
 
-    activatedRoute.url.subscribe(params => {
+    activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
@@ -95,6 +95,11 @@ export class TaskSequencingEditComponent implements OnInit {
     this.setValue();
   }
 
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
+  }
+
   setValue() {
     this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
       this.data = res.data;
@@ -117,6 +122,10 @@ export class TaskSequencingEditComponent implements OnInit {
       this.actions = res.data.actions;
       this.getTradePrograms(this.data.trade_creator_name);
       this.getTradeAudience(this.data.trade_audience_group_name);
+
+      if (this.isDetail) {
+        this.taskSequenceForm.disable();
+      }
     });
   }
 

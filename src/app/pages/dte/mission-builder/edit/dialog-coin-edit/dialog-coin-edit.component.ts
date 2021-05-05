@@ -27,6 +27,12 @@ export class DialogCoinEditComponent implements OnInit {
       this.form.patchValue({
         total_coin: this.data.data.attribute.total_coin,
       });
+
+      if (this.data.isDetail) {
+        setTimeout(() => {
+          this.form.disable();
+        }, 500);
+      }
     }
   }
 

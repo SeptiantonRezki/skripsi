@@ -1243,6 +1243,13 @@ export const brConfig = {
           name: "Duplicate Mission Builder"
         }
       ],
+      detail: [
+        {
+          type: "current",
+          url: "",
+          name: "Detil Mission Builder"
+        }
+      ],
     },
     taskSequencing: {
       index: [
@@ -1286,6 +1293,18 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Duplicate Task Sequencing"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/task-sequencing",
+          name: "Daftar Task Sequencing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detil Task Sequencing"
         }
       ],
     },
