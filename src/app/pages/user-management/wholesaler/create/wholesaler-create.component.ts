@@ -16,10 +16,12 @@ export class WholesalerCreateComponent {
   verticalStepperStep1: FormGroup;
   verticalStepperStep2: FormGroup;
   verticalStepperStep3: FormGroup;
+  verticalStepperStep4: FormGroup;
 
   verticalStepperStep1Errors: any;
   verticalStepperStep2Errors: any;
   verticalStepperStep3Errors: any;
+  verticalStepperStep4Errors: any;
 
   submitting: Boolean;
 
@@ -27,6 +29,7 @@ export class WholesalerCreateComponent {
   list: any;
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
+  roles: any[] = [];
   areaFromLogin;
 
   constructor(
@@ -101,6 +104,9 @@ export class WholesalerCreateComponent {
       district: ["", Validators.required],
       territory: ["", Validators.required]
     });
+    this.verticalStepperStep4 = this.formBuilder.group({
+      role_id: ["", Validators.required],
+    })
 
     this.verticalStepperStep1.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(
@@ -122,6 +128,12 @@ export class WholesalerCreateComponent {
         this.verticalStepperStep3Errors
       );
     });
+    this.verticalStepperStep4.valueChanges.subscribe(() => {
+      commonFormValidator.parseFormChanged(
+        this.verticalStepperStep4,
+        this.verticalStepperStep4Errors
+      );
+    });
 
     this.verticalStepperStep2.get('phone').valueChanges.debounceTime(500).subscribe(res => {
       if (res.match(regex)) {
@@ -133,6 +145,9 @@ export class WholesalerCreateComponent {
     })
 
     this.initArea();
+    this.wholesalerService.getWsRoles().subscribe(({data}) => {
+      this.roles = (data) ? data : [];
+    })
   }
 
   initArea() {
@@ -288,16 +303,19 @@ export class WholesalerCreateComponent {
     console.log(event.value);
   }
 
-  step1() {
-    commonFormValidator.validateAllFields(this.verticalStepperStep1);
-  }
+  // step1() {
+  //   commonFormValidator.validateAllFields(this.verticalStepperStep1);
+  // }
 
-  step2() {
-    commonFormValidator.validateAllFields(this.verticalStepperStep2);
-  }
+  // step2() {
+  //   commonFormValidator.validateAllFields(this.verticalStepperStep2);
+  // }
 
-  step3() {
-    commonFormValidator.validateAllFields(this.verticalStepperStep3);
+  // step3() {
+  //   commonFormValidator.validateAllFields(this.verticalStepperStep3);
+  // }
+  validateFields(formGroup: FormGroup) {
+    commonFormValidator.validateAllFields(formGroup);
   }
 
   submit() {
@@ -313,7 +331,8 @@ export class WholesalerCreateComponent {
         phone: '+62' + this.verticalStepperStep2.get("phone").value,
         // areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
         areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.id),
-        type: "wholesaler"
+        type: "wholesaler",
+        role_id: this.verticalStepperStep4.get('role_id').value
       };
 
       this.wholesalerService.create(body).subscribe(
@@ -328,9 +347,10 @@ export class WholesalerCreateComponent {
         }
       );
     } else {
-      commonFormValidator.validateAllFields(this.verticalStepperStep1);
-      commonFormValidator.validateAllFields(this.verticalStepperStep2);
-      commonFormValidator.validateAllFields(this.verticalStepperStep3);
+      this.validateFields(this.verticalStepperStep1);
+      this.validateFields(this.verticalStepperStep2);
+      this.validateFields(this.verticalStepperStep3);
+      this.validateFields(this.verticalStepperStep4);
     }
   }
 

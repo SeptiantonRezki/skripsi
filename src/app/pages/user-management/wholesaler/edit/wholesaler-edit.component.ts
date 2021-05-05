@@ -60,6 +60,7 @@ export class WholesalerEditComponent {
   disableSubmit: boolean = false;
   formDoc: FormGroup;
   branchType: any[];
+  wsRoles: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -135,6 +136,7 @@ export class WholesalerEditComponent {
 
   ngOnInit() {
     this.getBanks();
+    this.getWsRoles();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
 
@@ -154,6 +156,7 @@ export class WholesalerEditComponent {
       territory: ["", Validators.required],
       branchShop: [false],
       formBranchStore: this.formBuilder.array([]),
+      role_id: ["", Validators.required],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -172,6 +175,7 @@ export class WholesalerEditComponent {
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
     this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
+
       this.detailWholesaler = resWS.data;
       // console.log('wsss', this.detailWholesaler);
       if (this.detailWholesaler.area_code) {
@@ -323,7 +327,7 @@ export class WholesalerEditComponent {
       });
 
     }
-
+    const detailws = this.detailWholesaler;
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
@@ -340,6 +344,7 @@ export class WholesalerEditComponent {
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
       branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
       formBranchStore: [],
+      role_id: this.detailWholesaler.role_id,
     });
 
     const fbs = this.formWs.get('formBranchStore') as FormArray;
@@ -398,6 +403,11 @@ export class WholesalerEditComponent {
         this.listBanks = res.data;
         this.filteredBanks.next(this.listBanks.slice());
       }, err => console.log('err', err));
+  }
+  getWsRoles() {
+    this.wholesalerService.getWsRoles().subscribe(({data}) => {
+      this.wsRoles = (data) ? data : [];
+    })
   }
 
   filteringBanks() {
@@ -611,6 +621,7 @@ export class WholesalerEditComponent {
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
+        role_id: this.formWs.get('role_id').value,
       };
 
       if (this.formWs.get("branchShop").value === true) {

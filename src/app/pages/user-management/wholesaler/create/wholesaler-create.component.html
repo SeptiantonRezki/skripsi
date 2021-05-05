@@ -43,7 +43,7 @@
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="validateFields(verticalStepperStep1)" type="button" class="confirmation-button">
                 Lanjut
               </button>
             </div>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="validateFields(verticalStepperStep2)" type="button" class="confirmation-button">
                 Lanjut
               </button>
             </div>
@@ -181,13 +181,39 @@
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext (click)="step3()" type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="validateFields(verticalStepperStep3)" type="button" class="confirmation-button">
                 Lanjut
               </button>
             </div>
 
           </form>
 
+        </mat-step>
+        <mat-step [stepControl]="verticalStepperStep4">
+          <form [formGroup]="verticalStepperStep4">
+            <ng-template matStepLabel>Tingkat Fitur</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="Tingkat Fitur" formControlName="role_id">
+                  <mat-option *ngFor="let item of roles" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="verticalStepperStep4.controls['role_id'].hasError('required') && verticalStepperStep4.controls['role_id'].touched">
+                  Tingkat Fitur harus diisi
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateFields(verticalStepperStep4)" type="button" class="confirmation-button">
+                Lanjut
+              </button>
+            </div>
+
+          </form>
         </mat-step>
 
         <mat-step>

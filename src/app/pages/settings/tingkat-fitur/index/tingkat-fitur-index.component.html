@@ -1,0 +1,60 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Daftar Tingkat Fitur'">
+    <div class="button-row" fxLayout="row">
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/settings','feature-level', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Daftar Tingkat Fitur</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [(rows)]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Tingkat Fitur" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <a class="row-name" [routerLink]="permission?.lihat ? ['/settings','feature-level', 'detail', row.id] : []">{{row.name}}</a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tipe Akun" prop="type"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date:
+            'dd/MM/yyyy'}}</ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px" *ngIf="row.editable">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" [routerLink]="['/settings', 'feature-level', 'edit', row.id]">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="permission?.lihat" color="" [routerLink]="['/settings', 'feature-level', 'detail', row.id]">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="confirmDelete(row)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+
+</div>

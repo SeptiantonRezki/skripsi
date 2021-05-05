@@ -114,6 +114,10 @@ export class PagesName {
       "/task-sequencing/task-sequencing/create": "principal.task_sequencing.buat",
       "/customer-care/pertanyaan-verifikasi-agent": "principal.customercareverificationagent.lihat",
       "/customer-care/pertanyaan-verifikasi-agent/detail": "principal.customercareverificationagent.lihat",
+      "/settings/feature-level": "principal.feature_level.lihat",
+      "/settings/feature-level/create": "principal.feature_level.buat",
+      "/settings/feature-level/edit": "principal.feature_level.ubah",
+      "/settings/feature-level/detail": "principal.feature_level.lihat",
     }
     return PAGES[name];
   }
