@@ -16,7 +16,7 @@
 
       <ngx-datatable-column name="Perusahaan" prop="company">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          <span class="row-name">{{row.virtual_account_company_id}}</span>
+          <span class="row-name">{{listCompanyMap[row.virtual_account_company_id]}}</span>
         </ng-template>
       </ngx-datatable-column>
 

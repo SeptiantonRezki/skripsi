@@ -41,6 +41,7 @@ import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { VirtualAccountRoutingModule } from "./virtual-account-routing.module";
 import { PageGuard } from 'app/classes/auth.guard';
+import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { VirtualAccountPanelMitraComponent } from './virtual-account-panel/create/virtual-account-panel-mitra/virtual-account-panel-mitra.component';
 import { VirtualAccountPanelSrcComponent } from './virtual-account-panel/create/virtual-account-panel-src/virtual-account-panel-src.component';
 import { VirtualAccountPanelSrcEditComponent } from './virtual-account-panel/edit/virtual-account-panel-src-edit/virtual-account-panel-src-edit.component';
@@ -99,6 +100,8 @@ export const MY_FORMATS = {
     MatMenuModule,
     MatDatepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
   ],
   declarations: [
       VirtualAccountCompanyComponent,

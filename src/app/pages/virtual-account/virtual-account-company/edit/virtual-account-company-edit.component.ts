@@ -17,6 +17,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
   shortDetail: any;
   detailCompany: any;
   isDetail: Boolean;
+  listBanks: any[] = [];
 
   constructor(
     private router: Router,
@@ -54,7 +55,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     })
 
     this.getDetail();
-
+    this.getBanks();
   }
 
   getDetail() {
@@ -77,6 +78,15 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
+    })
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      console.log(res);
+      this.listBanks = res.data;
+    }, err=> {
+
     })
   }
 

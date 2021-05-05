@@ -12,6 +12,7 @@ import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VirtualAccountPanelImportDialogComponent } from '../../virtual-account-panel-import-dialog/virtual-account-panel-import-dialog.component';
+import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
 
 @Component({
   selector: 'app-virtual-account-panel-mitra',
@@ -65,6 +66,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private router: Router,
     private mitraPanelService: VirtualAccountPanelService,
+    private VirtualAccountBinService: VirtualAccountBinService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService
   ) {
@@ -176,10 +178,18 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     this.dataService.setToStorage('page_mitra', 1);
   }
 
+  // getCompanies() {
+  //   this.mitraPanelService.getCompaniesPanel().subscribe(res => {
+  //     this.listCompanies = res.data;
+  //   });
+  // }
+
   getCompanies() {
-    this.mitraPanelService.getCompaniesPanel().subscribe(res => {
-      this.listCompanies = res.data;
-    });
+    this.VirtualAccountBinService.list({}).subscribe(res => {
+      this.listCompanies = res.data.data
+    }, err=> {
+
+    })
   }
 
   // getCourerList() {

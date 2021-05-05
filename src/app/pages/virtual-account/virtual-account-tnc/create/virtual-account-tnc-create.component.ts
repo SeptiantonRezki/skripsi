@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { VirtualAccountTncService } from 'app/services/virtual-account/virtual-account-tnc.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { HelpService } from 'app/services/content-management/help.service';
 
 @Component({
   selector: 'app-virtual-account-tnc-create',
@@ -13,38 +14,44 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 })
 export class VirtualAccountTncCreateComponent implements OnInit {
   formTnc: FormGroup;
-  listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
+  userGroup: any[] = [];
+  // listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
 
   constructor(
     private router: Router,
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountTncService: VirtualAccountTncService
+    private VirtualAccountTncService: VirtualAccountTncService,
+    private helpService: HelpService
   ) {
 
   }
 
   ngOnInit() {
     this.formTnc = this.formBuilder.group({
-      name: ["", Validators.required],
-      contact: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      flowingly_id: ["", Validators.required],
-      status: ["", Validators.required],
-      minimum_transaction: [0, Validators.required],
-      service_cost: [0, Validators.required]
+      title: ["", Validators.required],
+      user_group: ["", Validators.required],
     });
 
-    let regex = new RegExp(/[0-9]/g);
-    this.formTnc.get('contact').valueChanges.subscribe(res => {
-      if (res.match(regex)) {
-        if (res.substring(0, 1) == '0') {
-          let phone = res.substring(1);
-          this.formTnc.get('contact').setValue(phone, { emitEvent: false });
-        }
+    this.getUserGroups();
+  }
+
+  getUserGroups() {
+    this.helpService.getListUser().subscribe(
+      (res: any) => {
+        console.log('getListUser', res);
+        this.userGroup = res.data.map((item: any) => {
+          return (
+            { name: item, value: item }
+          );
+        });
+      },
+      err => {
+        this.userGroup = [];
+        console.error(err);
       }
-    })
+    );
   }
 
   numbersOnlyValidation(event) {
@@ -59,13 +66,8 @@ export class VirtualAccountTncCreateComponent implements OnInit {
     if (this.formTnc.valid) {
       this.dataService.showLoading(true);
       let body = {
-        name: this.formTnc.get('name').value,
-        contact: '+62' + this.formTnc.get('contact').value,
-        email: this.formTnc.get('email').value,
-        flowingly_id: this.formTnc.get('flowingly_id').value,
-        status: this.formTnc.get('status').value,
-        minimum_transaction: this.formTnc.get('minimum_transaction').value,
-        service_cost: this.formTnc.get('service_cost').value,
+        title: this.formTnc.get('title').value,
+        user_group: this.formTnc.get('user_group').value
       }
 
       this.VirtualAccountTncService.create(body).subscribe(res => {

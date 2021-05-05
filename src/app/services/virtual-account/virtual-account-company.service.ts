@@ -37,4 +37,9 @@ export class VirtualAccountCompanyService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
+
+  bankList(context): Observable<any> {
+    const url = this.getUrl("general", 'listbank', context);
+    return this.getApi(url);
+  }
 }

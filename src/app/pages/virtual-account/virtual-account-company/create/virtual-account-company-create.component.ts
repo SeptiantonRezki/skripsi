@@ -14,6 +14,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 export class VirtualAccountCompanyCreateComponent implements OnInit {
   formCompany: FormGroup;
   listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
+  listBanks: any[] = [];
 
   constructor(
     private router: Router,
@@ -45,6 +46,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
         }
       }
     })
+    this.getBanks();
   }
 
   numbersOnlyValidation(event) {
@@ -53,6 +55,14 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
     if (!/^\d+$/.test(inp)) {
       event.preventDefault()
     }
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBanks = res.data;
+    }, err=> {
+
+    })
   }
 
   submit() {

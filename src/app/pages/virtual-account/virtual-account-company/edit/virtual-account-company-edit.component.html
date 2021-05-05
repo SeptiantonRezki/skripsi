@@ -12,7 +12,9 @@
         <form autocomplete="off" [formGroup]="formCompany">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama">
+              <mat-select formControlName="name" placeholder="Nama Bank">
+                <mat-option *ngFor="let item of listBanks" [value]="item.name">{{item.name}}</mat-option>
+              </mat-select>
               <mat-error
                 *ngIf="formCompany.controls['name'].hasError('required') && formCompany.controls['name'].touched">
                 Nama harus diisi

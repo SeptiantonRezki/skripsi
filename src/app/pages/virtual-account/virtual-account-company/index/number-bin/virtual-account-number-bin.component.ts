@@ -33,6 +33,7 @@ export class VirtualAccountNumberBinComponent implements OnInit {
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
   listCompany: Array<any>;
+  listCompanyMap: any = {};
 
   constructor(
     private router: Router,
@@ -64,6 +65,9 @@ export class VirtualAccountNumberBinComponent implements OnInit {
   getCompanies() {
     this.VirtualAccountBinService.list({}).subscribe(res => {
       this.listCompany = res.data.data
+      this.listCompany.forEach(company => {
+        this.listCompanyMap[company.id] = company.name;
+      });
       console.log(res.data.data);
     }, err=> {
 
