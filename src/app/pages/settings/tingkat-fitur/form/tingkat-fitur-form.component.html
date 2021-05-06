@@ -38,7 +38,7 @@
             Fitur Akun harus dipilih
           </mat-error>
 
-          <app-tingkat-fitur-tree fxLayout="row wrap" (onChecklistSelectionChange)="onChecklistSelectionChange($event)"
+          <app-tingkat-fitur-tree fxLayout="row wrap" (onChecklistSelectionChange)="_debounceOnChecklistSelectionChange($event)"
           [disabled]="disabled"></app-tingkat-fitur-tree>
           
           <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start center" *ngIf="!disabled">

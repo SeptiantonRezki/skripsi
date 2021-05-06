@@ -6,7 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { FeatureLevelService } from 'app/services/settings/feature-level.service';
 import { TingkatFiturTreeData, TingkatFiturNode } from '../tree/tingkat-fitur-tree-data.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-
+import * as _ from 'underscore';
 @Component({
   selector: 'app-tingkat-fitur-form',
   templateUrl: './tingkat-fitur-form.component.html',
@@ -19,6 +19,7 @@ export class TingkatFiturFormComponent implements OnInit {
   onLoad:boolean;
   availablePermissions: any[];
   disabled: boolean = false;
+  _debounceOnChecklistSelectionChange;
 
 
   constructor(
@@ -32,6 +33,7 @@ export class TingkatFiturFormComponent implements OnInit {
   ) {
 
     this.onLoad = true;
+    this._debounceOnChecklistSelectionChange = _.debounce(this.onChecklistSelectionChange, 300);
 
 
     this.form = formBuilder.group({
@@ -42,12 +44,16 @@ export class TingkatFiturFormComponent implements OnInit {
     });
 
     activatedRoute.params.subscribe(({id}) => {
+      
+      // Jika action edit / detail
       if (id) {
 
             this.id = id;
             this.getDetails(id);
 
-      } else {
+      }
+      // Jika action create
+      else { 
         this.featureLevelService.getAvailablePermissions().subscribe(({data}) => {
           this.initCheckboxRoles(data);
         });
@@ -93,8 +99,6 @@ export class TingkatFiturFormComponent implements OnInit {
         const permissions = this.tingkatFiturTreeData.buildFileTree(data.role, 0, ['menu', 'value', 'value']);
         
         this.tingkatFiturTreeData.dataChange.next(permissions);
-        
-        this.tingkatFiturTreeData.defaultSelectedChange.next(permissions);
 
         setTimeout(() => { this.onLoad = false }, 1000);
       }

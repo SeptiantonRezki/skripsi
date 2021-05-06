@@ -37,7 +37,7 @@ export class TingkatFitureRolesComponent implements OnInit {
     dataSource: MatTreeFlatDataSource<TingkatFiturNode, TingkatFiturFlatNode>;
     nestedDataSource: MatTreeNestedDataSource<TingkatFiturNode>;
 
-    checklistSelection = new SelectionModel<TingkatFiturFlatNode>(true);
+    checklistSelection = new SelectionModel<TingkatFiturNode>(true);
 
     constructor(
         private featureLevelService: FeatureLevelService,
@@ -56,11 +56,8 @@ export class TingkatFitureRolesComponent implements OnInit {
         database.dataChange.subscribe(data => {
             this.dataSource.data = data;
             this.nestedDataSource.data = data
-        }
-        );
-        database.defaultSelectedChange.subscribe((defaultSelected: TingkatFiturNode[]) => {
-            if (defaultSelected.length) {
-                this.toggleDefaultSelection(defaultSelected);
+            if (data.length) {
+                this.toggleDefaultSelection();
             }
         });
         this.checklistSelection.onChange.subscribe(selectionData => {
@@ -74,10 +71,13 @@ export class TingkatFitureRolesComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    toggleDefaultSelection(selected: TingkatFiturNode[]) {
-        this.flatNodeMap.forEach((node: TingkatFiturNode, flatNode: TingkatFiturFlatNode) => {
-            if (node.value && node.status) this.selectionToggle(node);
-        });
+    toggleDefaultSelection() {
+        this.nestedNodeMap.forEach((node: TingkatFiturFlatNode, key: TingkatFiturNode) => {
+            
+            if (key.value && key.status) {
+                this.checklistSelection.toggle(key);
+            }
+        })
 
     }
 
@@ -96,9 +96,9 @@ export class TingkatFitureRolesComponent implements OnInit {
         this.nestedNodeMap.set(node, flatNode);
         return flatNode;
     }
-    getLevel = (node: TingkatFiturFlatNode) => { return node.level; };
+    getLevel = (node: TingkatFiturNode) => { return node.level; };
 
-    isExpandable = (node: TingkatFiturFlatNode) => { return node.expandable; };
+    isExpandable = (node: TingkatFiturNode) => { return node.expandable; };
 
     getChildren = (node: TingkatFiturNode): Observable<TingkatFiturNode[]> => {
         return ofObservable(node.children);
@@ -124,7 +124,16 @@ export class TingkatFitureRolesComponent implements OnInit {
     }
     descendantsAllSelected(node: TingkatFiturNode): boolean {
         const descendants = this.nestedTreeControl.getDescendants(node);
-        return descendants.every(child => this.checklistSelection.isSelected(child));
-    }
+        if (descendants.length === 0) {
+          return this.checklistSelection.isSelected(node);
+        }
+        const allselected = descendants.every(child => this.checklistSelection.isSelected(child));
+        if (allselected) {
+          this.checklistSelection.select(node);
+        } else {
+          this.checklistSelection.deselect(node);
+        }
+        return allselected;
+      }
 
 }
