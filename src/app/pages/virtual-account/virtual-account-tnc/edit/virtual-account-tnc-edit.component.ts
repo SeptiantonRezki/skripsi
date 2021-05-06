@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HelpService } from 'app/services/content-management/help.service';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-virtual-account-tnc-edit',
@@ -15,6 +16,7 @@ import { HelpService } from 'app/services/content-management/help.service';
 export class VirtualAccountTncEditComponent implements OnInit {
   formTnc: FormGroup;
   userGroup: any[] = [];
+  public options: Object = Config.FROALA_CONFIG;
   // listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
   shortDetail: any;
   detailTnc: any;
@@ -39,6 +41,7 @@ export class VirtualAccountTncEditComponent implements OnInit {
     this.formTnc = this.formBuilder.group({
       title: ["", Validators.required],
       user_group: ["", Validators.required],
+      body: ["", Validators.required],
     });
 
     // let regex = new RegExp(/[0-9]/g);
@@ -80,7 +83,8 @@ export class VirtualAccountTncEditComponent implements OnInit {
 
       this.formTnc.setValue({
         title: res.title,
-        user_group: res.user_group
+        user_group: res.user_group,
+        body: this.detailTnc.body,
       });
       if (this.isDetail) {
         this.formTnc.disable();
@@ -104,7 +108,8 @@ export class VirtualAccountTncEditComponent implements OnInit {
       this.dataService.showLoading(true);
       let body = {
         title: this.formTnc.get('title').value,
-        user_group: this.formTnc.get('user_group').value
+        user_group: this.formTnc.get('user_group').value,
+        body: this.formTnc.get("body").value,
       }
 
       this.VirtualAccountTncService.put(body, { tnc_id: this.detailTnc.id }).subscribe(res => {

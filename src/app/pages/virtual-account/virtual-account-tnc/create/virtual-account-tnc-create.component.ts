@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { VirtualAccountTncService } from 'app/services/virtual-account/virtual-account-tnc.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { HelpService } from 'app/services/content-management/help.service';
+import { Config } from 'app/classes/config';
 
 @Component({
   selector: 'app-virtual-account-tnc-create',
@@ -14,6 +15,9 @@ import { HelpService } from 'app/services/content-management/help.service';
 })
 export class VirtualAccountTncCreateComponent implements OnInit {
   formTnc: FormGroup;
+  formTncError: any;
+
+  public options: Object = Config.FROALA_CONFIG;
   userGroup: any[] = [];
   // listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
 
@@ -32,6 +36,7 @@ export class VirtualAccountTncCreateComponent implements OnInit {
     this.formTnc = this.formBuilder.group({
       title: ["", Validators.required],
       user_group: ["", Validators.required],
+      body: ["", Validators.required],
     });
 
     this.getUserGroups();
@@ -67,7 +72,8 @@ export class VirtualAccountTncCreateComponent implements OnInit {
       this.dataService.showLoading(true);
       let body = {
         title: this.formTnc.get('title').value,
-        user_group: this.formTnc.get('user_group').value
+        user_group: this.formTnc.get('user_group').value,
+        body: this.formTnc.get("body").value,
       }
 
       this.VirtualAccountTncService.create(body).subscribe(res => {
