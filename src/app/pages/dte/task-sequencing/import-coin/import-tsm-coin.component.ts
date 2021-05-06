@@ -143,21 +143,42 @@ export class ImportTsmCoinComponent {
 
   submit() {
     if (this.files) {
-      const res = {
-        coins: this.rows,
-        reason: this.textReason.value,
-        user_id: this.formNotifikasi.get('name').value
+      if (this.formNotifikasi.invalid) {
+        this.dialogService.openSnackBar({ message: "User Notifikasi Belum Di set!" })
+        return;
+      }
+
+      const data = {
+        titleDialog: `Konfirmasi`,
+        captionDialog: `Apakah anda yakin ingin menyimpan data ini (Notifikasi Akan langsung diproses kepada Penerima) ?`,
+        confirmCallback: () => this.confirmSubmit(),
+        htmlContent: true,
+        buttonText: ['Ya, Lanjutkan', 'Batal']
       };
-
-      this.dataService.showLoading(true);
-      this.sequencingService.importAdjustmentCoin(res).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogRef.close(res);
-      })
-
+      this.dialogService.openCustomConfirmationDialog(data);
     } else {
       this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
     }
+  }
+
+  confirmSubmit() {
+    const res = {
+      coins: this.rows,
+      reason: this.textReason.value,
+      user_id: this.formNotifikasi.get('name').value
+    };
+
+    this.dataService.showLoading(true);
+    this.sequencingService.importAdjustmentCoin(res).subscribe(res => {
+      this.coinAdjustmentApprovalService.sendNotification({ id: res.data.id, user_id: res.data.responded_by }, { is_tsm: true }).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogRef.close(res);
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Berhasil menyimpan data dan mengirimkan Notifikasi!" });
+      }, err => {
+        this.dataService.showLoading(false);
+      });
+    })
   }
 
   setRedIfDuplicate(item) {
