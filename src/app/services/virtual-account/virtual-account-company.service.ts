@@ -40,6 +40,6 @@ export class VirtualAccountCompanyService extends BaseService {
 
   bankList(context): Observable<any> {
     const url = this.getUrl("general", 'listbank', context);
-    return this.getApi(url);
+    return this.getApi(url); 
   }
 }

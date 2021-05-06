@@ -61,7 +61,6 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
     this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBanks = res.data;
     }, err=> {
-
     })
   }
 

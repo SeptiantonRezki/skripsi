@@ -86,7 +86,6 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       console.log(res);
       this.listBanks = res.data;
     }, err=> {
-
     })
   }
 
