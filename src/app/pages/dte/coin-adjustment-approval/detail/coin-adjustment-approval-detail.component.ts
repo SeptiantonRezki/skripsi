@@ -652,7 +652,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   takeAction(status: string) {
     const data = {
-      titleDialog: `${status === 'approved' ? 'Setujui Request Adjusment Coin' : 'Tolak Request Adjusment Coin'}`,
+      titleDialog: `${status === 'approved' ? 'Setujui Request Adjustment Coin' : 'Tolak Request Adjustment Coin'}`,
       captionDialog: `Apakah anda yakin untuk ${status === 'approved' ? 'menyetujui' : 'menolak'} request adjustment coin ini ?`,
       confirmCallback: () => this.confirmAction(status),
       buttonText: ['Ya, Lanjutkan', 'Batal']
