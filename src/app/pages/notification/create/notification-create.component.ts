@@ -2202,7 +2202,11 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
-      frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 1 || send_sfmc == '1');
+      if(type == 'customer') {
+        frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 0 || send_sfmc == '0');
+      } else {
+        frm.controls['send_ayo'].setValue(true);
+      }
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
