@@ -17,6 +17,8 @@ export class VirtualAccountCompanyComponent implements OnInit {
   selected: any[];
   id: any[];
   statusRow: string;
+  listBank: Array<any>;
+  listBankMap: any = {};
 
   loadingIndicator = true;
   reorderable = true;
@@ -52,6 +54,19 @@ export class VirtualAccountCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanies();
+    this.getBanks();
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBank = res.data;
+      this.listBank.forEach(bank => {
+        this.listBankMap[bank.code] = bank.name;
+      });
+      console.log(res.data);
+    }, err=> {
+
+    })
   }
 
   getCompanies() {

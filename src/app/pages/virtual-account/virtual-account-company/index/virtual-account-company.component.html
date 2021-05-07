@@ -34,7 +34,7 @@
 
             <ngx-datatable-column name="Nama" prop="name">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+                <span class="row-name" (click)="directDetail(row)">{{listBankMap[row.name]}}</span>
               </ng-template>
             </ngx-datatable-column>
 
