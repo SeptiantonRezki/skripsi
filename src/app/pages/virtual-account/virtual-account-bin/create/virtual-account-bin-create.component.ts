@@ -34,7 +34,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
     this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBank = res.data;
       this.listBank.forEach(bank => {
-        this.listBankMap[bank.code_bank] = bank.name;
+        this.listBankMap[bank.code] = bank.name;
       });
       console.log(res.data);
     }, err=> {
