@@ -253,7 +253,7 @@
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Panel Mitra" *ngIf="isDetail && this.formDetilVoucher.get('opsiVoucher').value !== 'src-catalogue'">
+        <mat-tab label="Panel Mitra" *ngIf="isDetail && formDetilVoucher.get('opsiVoucher').value !== 'src-catalogue'">
           <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()" [statusVoucher]="detailVoucher.status"
             [permissions]="permission">
           </app-panel-mitra-voucher>
@@ -264,7 +264,7 @@
               <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
                 <div class="button-row">
                   <button mat-flat-button style="width: 160px" color="white" (click)="importRetailer()"
-                    *ngIf="!this.permission.b2b_approval">
+                    *ngIf="permission.buat || permission.ubah">
                     <mat-icon>vertical_align_bottom</mat-icon> Import XLS
                   </button>
                 </div>
@@ -409,7 +409,7 @@
                 </ngx-datatable-column>
               </ngx-datatable>
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center"
-                *ngIf="isDetail && detailVoucher.status !== 'need-approval' && !this.permission.b2b_approval">
+                *ngIf="isDetail && detailVoucher.status !== 'need-approval' && !permission.approval">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSavePanelRetailer()">
                   SIMPAN
