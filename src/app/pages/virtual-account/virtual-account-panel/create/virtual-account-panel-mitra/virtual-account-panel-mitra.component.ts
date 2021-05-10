@@ -343,7 +343,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     this.offsetPagination = page ? (page - 1) : 0;
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      virtual_account_bank_id: this.formPanelMitra.get('company').value,
+      virtual_account_company_id: this.formPanelMitra.get('company').value,
     }).subscribe(
       res => {
         this.dataService.showLoading(false);
@@ -376,7 +376,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      virtual_account_bank_id: this.formPanelMitra.get('company').value
+      virtual_account_company_id: this.formPanelMitra.get('company').value
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -400,7 +400,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      virtual_account_bank_id: this.formPanelMitra.get('company').value
+      virtual_account_company_id: this.formPanelMitra.get('company').value
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -427,7 +427,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      virtual_account_bank_id: this.formPanelMitra.get('company').value
+      virtual_account_company_id: this.formPanelMitra.get('company').value
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -527,7 +527,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {
       type: 'wholesaler',
-      virtual_account_bank_id: this.formPanelMitra.get('company').value
+      virtual_account_company_id: this.formPanelMitra.get('company').value
     };
 
     this.dialogRef = this.dialog.open(VirtualAccountPanelImportDialogComponent, dialogConfig);
@@ -562,7 +562,6 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
 
       this.dataService.showLoading(true);
       let body = {
-        // virtual_account_bank_id: this.formPanelMitra.get('company').value,
         virtual_account_company_id: this.formPanelMitra.get('company').value,
         type: "wholesaler",
         detail: this.selected.map(mtr => {
