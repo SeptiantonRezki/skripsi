@@ -15,6 +15,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
   formCompany: FormGroup;
   listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
   listBanks: any[] = [];
+  listBankMap: any[] = [];
 
   constructor(
     private router: Router,
@@ -60,6 +61,9 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
   getBanks() {
     this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBanks = res.data;
+      this.listBanks.forEach(bank => {
+        this.listBankMap[bank.code] = bank.name;
+      });
     }, err=> {
       
     })
@@ -69,7 +73,8 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
     if (this.formCompany.valid) {
       this.dataService.showLoading(true);
       let body = {
-        name: this.formCompany.get('name').value,
+        code_bank: this.formCompany.get('name').value,
+        name: this.listBankMap[this.formCompany.get('name').value],
         contact: '+62' + this.formCompany.get('contact').value,
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
@@ -77,6 +82,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
         minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
       }
+      console.log(body)
 
       this.VirtualAccountCompanyService.create(body).subscribe(res => {
         this.dataService.showLoading(false);

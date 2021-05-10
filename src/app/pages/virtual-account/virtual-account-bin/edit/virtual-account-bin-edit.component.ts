@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
+import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,8 +17,10 @@ export class VirtualAccountBinEditComponent implements OnInit {
   shortDetail: any;
   detailBin: any;
   isDetail: Boolean;
-  listCompany: Array<any> = [{ name: 'Bank Permata', id: '1' }];
-  // listCompany: Array<any> = [];
+  // listCompany: Array<any> = [{ name: 'Bank Permata', id: '1' }];
+  listCompany: Array<any> = [];
+  listBank: Array<any>;
+  listBankMap: any = {};
 
   constructor(
     private router: Router,
@@ -25,11 +28,24 @@ export class VirtualAccountBinEditComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private VirtualAccountBinService: VirtualAccountBinService,
+    private VirtualAccountCompanyService: VirtualAccountCompanyService,
     private activatedRoute: ActivatedRoute
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_bin');
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+    })
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBank = res.data;
+      this.listBank.forEach(bank => {
+        this.listBankMap[bank.code_bank] = bank.name;
+      });
+      console.log(res.data);
+    }, err=> {
+
     })
   }
 
@@ -49,7 +65,7 @@ export class VirtualAccountBinEditComponent implements OnInit {
 
     this.getDetail();
     this.getCompanies();
-
+    this.getBanks();
   }
     
   getDetail() {

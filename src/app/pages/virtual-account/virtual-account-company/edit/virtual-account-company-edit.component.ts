@@ -18,6 +18,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
   detailCompany: any;
   isDetail: Boolean;
   listBanks: any[] = [];
+  listBankMap: any[] = [];
 
   constructor(
     private router: Router,
@@ -64,7 +65,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       this.detailCompany = res;
 
       this.formCompany.setValue({
-        name: res.name,
+        name: res.code_bank,
         email: res.email,
         contact: res.contact ? (res.contact.split("+62")[1] ? res.contact.split("+62")[1] : res.contact) : '',
         flowingly_id: res.flowingly_id,
@@ -83,8 +84,10 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
 
   getBanks() {
     this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
-      console.log(res);
       this.listBanks = res.data;
+      this.listBanks.forEach(bank => {
+        this.listBankMap[bank.code] = bank.name;
+      });
     }, err=> {
       
     })
@@ -102,7 +105,8 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     if (this.formCompany.valid) {
       this.dataService.showLoading(true);
       let body = {
-        name: this.formCompany.get('name').value,
+        code_bank: this.formCompany.get('name').value,
+        name: this.listBankMap[this.formCompany.get('name').value],
         contact: '+62' + this.formCompany.get('contact').value,
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,

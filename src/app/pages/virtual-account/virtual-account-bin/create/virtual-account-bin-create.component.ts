@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
+import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({
@@ -15,20 +16,36 @@ export class VirtualAccountBinCreateComponent implements OnInit {
   formBin: FormGroup;
   // listCompany: Array<any> = [{ name: 'Bank Permata', id: '1' }];
   listCompany: Array<any>;
+  listBank: Array<any>;
+  listBankMap: any = {};
 
   constructor(
     private router: Router,
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountBinService: VirtualAccountBinService
+    private VirtualAccountBinService: VirtualAccountBinService,
+    private VirtualAccountCompanyService: VirtualAccountCompanyService
   ) {
 
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBank = res.data;
+      this.listBank.forEach(bank => {
+        this.listBankMap[bank.code_bank] = bank.name;
+      });
+      console.log(res.data);
+    }, err=> {
+
+    })
   }
 
   getCompanies() {
     this.VirtualAccountBinService.list({}).subscribe(res => {
       this.listCompany = res.data.data
+      console.log(res.data.data)
     }, err=> {
 
     })
@@ -40,6 +57,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
       bin: ["", Validators.required],
     });
     this.getCompanies();
+    this.getBanks();
   }
 
   submit() {

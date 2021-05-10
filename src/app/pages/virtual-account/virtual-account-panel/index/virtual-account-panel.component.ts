@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual-account-panel.service';
+import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,6 +19,10 @@ export class VirtualAccountPanelComponent implements OnInit {
   selected: any[];
   id: any[];
   statusRow: string;
+  listCompany: Array<any>;
+  listCompanyMap: any = {};
+  listBank: Array<any>;
+  listBankMap: any = {};
 
   loadingIndicator = true;
   reorderable = true;
@@ -36,7 +41,8 @@ export class VirtualAccountPanelComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private VirtualAccountPanelServicer: VirtualAccountPanelService
+    private VirtualAccountPanelServicer: VirtualAccountPanelService,
+    private VirtualAccountCompanyService: VirtualAccountCompanyService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -53,6 +59,32 @@ export class VirtualAccountPanelComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanies();
+    this.getBanks();
+  }
+
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBank = res.data;
+      this.listBank.forEach(bank => {
+        this.listBankMap[bank.code] = bank.name;
+      });
+      console.log(res.data);
+      this.getCompanyName();
+    }, err=> {
+
+    })
+  }
+  
+  getCompanyName() {
+    this.VirtualAccountPanelServicer.list({}).subscribe(res => {
+      this.listCompany = res.data.data
+      this.listCompany.forEach(company => {
+        this.listCompanyMap[company.id] = this.listBankMap[company.name];
+      });
+      console.log(res.data.data);
+    }, err=> {
+
+    })
   }
 
   getCompanies() {
@@ -69,6 +101,7 @@ export class VirtualAccountPanelComponent implements OnInit {
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
+        console.log(this.rows)
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -78,6 +111,7 @@ export class VirtualAccountPanelComponent implements OnInit {
       }
     );
   }
+
 
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);

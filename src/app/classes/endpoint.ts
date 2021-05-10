@@ -709,11 +709,11 @@ export class Endpoint {
         preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/preview-import`
       },
       virtual_account_tnc: {
-        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/terms-and-condition`,
-        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/terms-and-condition/${context.tnc_id}`,
-        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/terms-and-condition`,
-        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/terms-and-condition/${context.tnc_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/terms-and-condition/${context.tnc_id}`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
       },
       new_sign_menu: {
         icon_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/icon`,

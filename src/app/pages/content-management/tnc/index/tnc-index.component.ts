@@ -66,6 +66,7 @@ export class TncIndexComponent {
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
+        console.log(res.data)
         this.onLoad = false;
         this.loadingIndicator = false;
       },

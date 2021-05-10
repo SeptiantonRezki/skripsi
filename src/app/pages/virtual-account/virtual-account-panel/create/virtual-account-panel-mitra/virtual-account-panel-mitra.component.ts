@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VirtualAccountPanelImportDialogComponent } from '../../virtual-account-panel-import-dialog/virtual-account-panel-import-dialog.component';
 import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
+import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 
 @Component({
   selector: 'app-virtual-account-panel-mitra',
@@ -43,6 +44,8 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
   @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
   @ViewChild('table') table: DatatableComponent;
   listCompanies: any[] = [];
+  listBank: Array<any>;
+  listBankMap: any = {};
   allSelected: Boolean;
 
   // 2 geotree property
@@ -67,6 +70,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     private router: Router,
     private mitraPanelService: VirtualAccountPanelService,
     private VirtualAccountBinService: VirtualAccountBinService,
+    private VirtualAccountCompanyService: VirtualAccountCompanyService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService
   ) {
@@ -163,6 +167,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
       }
     });
     this.getCompanies();
+    this.getBanks();
     // this.getPanelMitraList();
 
     this.formPanelMitra.get('company')
@@ -184,9 +189,22 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
   //   });
   // }
 
+  getBanks() {
+    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+      this.listBank = res.data;
+      this.listBank.forEach(bank => {
+        this.listBankMap[bank.code] = bank.name;
+      });
+      console.log(res.data);
+    }, err=> {
+
+    })
+  }
+
   getCompanies() {
     this.VirtualAccountBinService.list({}).subscribe(res => {
       this.listCompanies = res.data.data
+      console.log(this.listCompanies)
     }, err=> {
 
     })
@@ -544,10 +562,16 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
 
       this.dataService.showLoading(true);
       let body = {
-        virtual_account_bank_id: this.formPanelMitra.get('company').value,
+        // virtual_account_bank_id: this.formPanelMitra.get('company').value,
+        virtual_account_company_id: this.formPanelMitra.get('company').value,
         type: "wholesaler",
         detail: this.selected.map(mtr => {
-          return { business_id: mtr.id };
+          return { 
+            business_id: mtr.id,
+			      virtual_account_bin_id: mtr.bin,
+            subcode: mtr.virtual_account_subcode,
+			      rekening_number: mtr.rekening_number
+          };
         })
       };
 

@@ -2503,43 +2503,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Panel Pojok Modal"
+          name: "Panel Virtual Account"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/virtual-account/panel",
-          name: "Panel Pojok Modal"
+          name: "Panel Virtual Account"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Panel Pojok Modal"
+          name: "Buat Panel Virtual Account"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/virtual-account/panel",
-          name: "Panel Pojok Modal"
+          name: "Panel Virtual Account"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Panel Pojok Modal"
+          name: "Ubah Panel Virtual Account"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/virtual-account/panel",
-          name: "Panel Pojok Modal"
+          name: "Panel Virtual Account"
         },
         {
           type: "current",
           url: "",
-          name: "Detil Panel Pojok Modal"
+          name: "Detil Panel Virtual Account"
         }
       ],
     },

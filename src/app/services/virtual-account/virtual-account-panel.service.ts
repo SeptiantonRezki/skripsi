@@ -72,4 +72,8 @@ export class VirtualAccountPanelService extends BaseService {
     return this.postApi(url, body);
   }
 
+  list(context): Observable<any> {
+    const url = this.getUrl('virtual_account_bin', 'list', context);
+    return this.getApi(url);
+  }
 }

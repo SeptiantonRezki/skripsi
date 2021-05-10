@@ -37,7 +37,7 @@ export class VirtualAccountCompanyComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService
+    private VirtualAccountCompanyService: VirtualAccountCompanyService 
   ) {
     this.onLoad = true;
     this.selected = [];
