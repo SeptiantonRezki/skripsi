@@ -54,6 +54,7 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
 
     fd.append('file', this.files);
     fd.append('type', this.payload.type);
+    fd.append('type', this.payload.virtual_account_company_id);
 
     this.dataService.showLoading(true);
     this.mitraPanelService.importFile(fd).subscribe(

@@ -114,7 +114,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
       }
-
+    console.log(body)
       this.VirtualAccountCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
