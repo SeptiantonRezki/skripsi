@@ -400,7 +400,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   whyYouCantSeeMe() {
-    if (this.permission.b2b_approval && !this.isCreate) { return false; } else if (this.isCreate && this.permission.buat) { return true; } else if (!this.isCreate && this.permission.ubah) { return true; } else { return false; }
+    if (this.permission.approval && !this.isCreate) { return false; } else if (this.isCreate && this.permission.buat) { return true; } else if (!this.isCreate && this.permission.ubah) { return true; } else { return false; }
   }
 
   checkForNonApprover() {
@@ -408,7 +408,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       // console.log('thissss', this.detailVoucher, this.permission);
       switch (this.detailVoucher.status) {
         case 'need-approval':
-          return this.permission.b2b_approval ? true : false;
+          return this.permission.approval ? true : false;
         default:
           return true;
       }
@@ -443,7 +443,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         ([value, name]) => ({ value, name })
       ) : [];
 
-      if (this.permission.b2b_approval) { this.formDetilVoucher.disable(); }
+      if (this.permission.approval) { this.formDetilVoucher.disable(); }
 
       if (res.data.status === 'need-approval') {
         this.formDetilVoucher.disable();
@@ -1332,7 +1332,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   extraPermission() {
-    if (this.permission.b2b_approval) {
+    if (this.permission.approval) {
       return false;
     }
     switch (this.detailVoucher.status) {
@@ -1346,7 +1346,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   takeAction(action) {
-    if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
+    if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.approval) {
       this.dialogService.openSnackBar({ message: 'Anda Tidak Memilik Hak Akses untuk Approval!' });
       return;
     }

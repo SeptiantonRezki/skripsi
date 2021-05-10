@@ -172,7 +172,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   }
 
   extraPermission() {
-    if (this.permissions.b2b_approval) {
+    if (this.permissions.approval) {
       return false;
     }
     switch (this.statusVoucher) {
