@@ -26,9 +26,9 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama Perusahaan" prop="virtual_account_company_id">
+        <ngx-datatable-column name="Nama Perusahaan" prop="virtual_account_company_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{listCompanyMap[row.virtual_account_company_id]}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.virtual_account_company_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
