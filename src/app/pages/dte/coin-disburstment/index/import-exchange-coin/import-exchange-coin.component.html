@@ -1,0 +1,110 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah File XLS</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+        <br>
+        <span matPrefix>Tarik File Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+      </div>
+    </div>
+    <br>
+    <div class="">
+      <!-- <small>Total Row Valid : {{rows ? validData : '-'}}</small> -->
+    </div>
+    <div class="responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th nowrap>Nama Program Penukaran</th>
+            <th nowrap>Customer Code</th>
+            <th nowrap>Opsi Penukaran</th>
+            <th nowrap>Bank</th>
+            <th nowrap>Nomor Rekening</th>
+            <th nowrap>Nama Pemilik Rekening</th>
+            <th nowrap>Akun Pojok Bayar</th>
+            <th nowrap>Status Pembayaran</th>
+            <th nowrap>Nominal Pembayaran</th>
+            <th nowrap>Tanggal Pembayaran</th>
+            <th nwrap>Alasan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#efaea8'}">
+            <td nowrap>
+              {{ item.nama_program_penukaran_coin }}
+            </td>
+            <td nowrap>
+              {{ item.retailer_code }}
+            </td>
+            <td nowrap style="text-transform: capitalize;">
+              {{ item.opsi_penukaran }}
+            </td>
+            <td nowrap>
+              {{ item.bank }}
+            </td>
+            <td nowrap>
+              {{ item.nomer_rekening }}
+            </td>
+            <td nowrap>
+              {{ item.nama_pemilik_rekening }}
+            </td>
+            <td nowrap>
+              {{ item.akun_pojok_bayar }}
+            </td>
+            <td nowrap style="text-transform: capitalize;">
+              {{ item.status_pembayaran }}
+            </td>
+            <td nowrap>
+              {{ item.nominal_pembayaran | rupiahFormater }}
+            </td>
+            <td nowrap>
+              {{ item.tanggal_pembayaran | date: 'dd/MM/yyyy' }}
+            </td>
+            <td nowrap>
+              {{ item.reason || '-' }}
+            </td>
+          </tr>
+          <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="10">
+              Tidak ada file yang dipilih
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="!is_valid || rows.length === 0">Kirim</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -10,7 +10,9 @@ import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { IdbService } from 'app/services/idb.service';
 import { Observable, Subject } from 'rxjs';
+import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
 
 @Component({
   selector: 'app-coin-disburstment-exchange',
@@ -59,6 +61,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   ];
   @ViewChild('downloadLink') downloadLink: ElementRef;
   files: File;
+  dialogRef: any;
 
   constructor(
     private dialogService: DialogService,
@@ -68,7 +71,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     private router: Router,
     private formBuilder: FormBuilder,
     private geotreeService: GeotreeService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private idbService: IdbService,
+    private dialog: MatDialog
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
@@ -106,31 +111,18 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       });
   }
 
-  onDocUpload(e) {
-    this.files = undefined;
-    this.files = e;
+  onDocUpload() {
+    const dialogConfig = new MatDialogConfig();
 
-    let data = {
-      titleDialog: "Upload XLS",
-      captionDialog: `Apakah anda yakin untuk Mengupload File XLS ${e.name} ini ?`,
-      confirmCallback: this.confirmUpload.bind(this),
-      buttonText: ["Lanjutkan", "Batalkan"]
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {};
 
-  confirmUpload() {
-    this.dataService.showLoading(true);
-    let fd = new FormData();
-    fd.append('file', this.files);
-    this.coinDisburstmentService.importExchange(fd).subscribe(res => {
-      this.dialogService.brodcastCloseConfirmation();
-      this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: "File berhasil Diimport" });
-      this.getListPenukaranKoin();
-    }, err => {
-      this.dataService.showLoading(false);
-    })
+    this.dialogRef = this.dialog.open(ImportExchangeCoinComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+    });
   }
 
   ngOnInit() {
@@ -723,8 +715,25 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       self_area: this.pagination['self_area'],
       last_self_area: this.pagination['last_self_area'],
       after_level: this.pagination['after_level'],
-      group: this.pagination['group']
+      group: this.pagination['group'],
     }
+
+    if (this.formFilterExchange.get("group_trade_program").value) {
+      params['group'] = this.formFilterExchange.get("group_trade_program").value;
+    }
+
+    if (this.formFilterExchange.get("opsi_penukaran").value !== 'all') {
+      params['opsi_penukaran'] = this.formFilterExchange.get("opsi_penukaran").value;
+    }
+
+    if (this.formFilterExchange.get("payment_status").value !== 'all') {
+      params['status_pembayaran'] = this.formFilterExchange.get("payment_status").value;
+    }
+
+    if (this.formFilterExchange.get("name").value) {
+      params['name'] = this.formFilterExchange.get('name').value;
+    }
+
     try {
       this.coinDisburstmentService.exportExchange(params).subscribe(res => {
         this.downloadLink.nativeElement.href = res.data;
