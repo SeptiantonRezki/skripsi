@@ -3,7 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual-account-panel.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-virtual-account-panel-import-dialog',
@@ -29,6 +29,7 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
     private dialogService: DialogService,
     private mitraPanelService: VirtualAccountPanelService,
     private dataService: DataService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;
@@ -80,22 +81,57 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
     )
   }
 
+  // submit() {
+  //   if (this.rows.length > 0) {
+  //     const res = this.rows.map(item => { return { ...item } });
+  //     console.log('ini submit', res)
+    
+  //     // let body = {
+  //     // }
+  //     // this.coinService.adjustCoin(body)
+  //     //   .subscribe(res => {
+  //     //     this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
+  //     //     this.dialogRef.close(res);
+  //     //   }, err => {
+  //     //     console.log('err', err);
+  //     //   })
+  //     this.dialogRef.close(this.rows);
+  //   } else {
+  //     this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+  //   }
+  // }
+
   submit() {
-    if (this.rows.length > 0) {
-      // const res = this.rows.map(item => { return { ...item } });
-      // let body = {
-      // }
-      // this.coinService.adjustCoin(body)
-      //   .subscribe(res => {
-      //     this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
-      //     this.dialogRef.close(res);
-      //   }, err => {
-      //     console.log('err', err);
-      //   })
-      this.dialogRef.close(this.rows);
-    } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
-    }
+      const res = this.rows.map(item => { return { ...item } });
+      console.log(res)
+      this.dataService.showLoading(true);
+      let body = {
+        virtual_account_company_id: this.payload.virtual_account_company_id,
+        type: "wholesaler",
+        detail: res.map(mtr => {
+          return { 
+            business_id: mtr.id,
+			      virtual_account_bin_id: mtr.virtual_account_bin_id,
+            subcode: mtr.subcode,
+			      rekening_number: mtr.rekening_number
+          };
+        })
+      };
+      console.log('initial', body.detail)
+
+      console.log('my body', body);
+      this.mitraPanelService.store(body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Data berhasil disimpan"
+        });
+        this.dialogRef.close();
+        this.dataService.setToStorage("detail_virtual_account_panel", res.data);
+        this.router.navigate(['virtual-account', 'panel', 'edit']);
+      }, err => {
+        console.log('err create panel mitra', err);
+        this.dataService.showLoading(false);
+      })
   }
 
 

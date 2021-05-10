@@ -137,9 +137,9 @@
               {{row.classification ? row.classification : '-'}}
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Subcode" prop="virtual_account_subcode" [sortable]="false">
+          <ngx-datatable-column name="Subcode" prop="subcode" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              {{row.virtual_account_subcode ? row.virtual_account_subcode : '-'}}
+              {{row.subcode ? row.subcode : '-'}}
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="BIN" prop="bin" [sortable]="false">

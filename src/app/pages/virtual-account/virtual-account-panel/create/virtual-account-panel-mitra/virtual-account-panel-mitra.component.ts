@@ -564,15 +564,16 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
       let body = {
         virtual_account_company_id: this.formPanelMitra.get('company').value,
         type: "wholesaler",
-        detail: this.selected.map(mtr => {
+        detail: this.selected.filter(mtr => mtr.name).map(mtr => {
           return { 
-            business_id: mtr.id,
-			      virtual_account_bin_id: mtr.bin,
-            subcode: mtr.virtual_account_subcode,
+            business_id: mtr.business_id,
+			      virtual_account_bin_id: mtr.virtual_account_bin_id,
+            subcode: mtr.subcode,
 			      rekening_number: mtr.rekening_number
           };
         })
       };
+      console.log('initial', body.detail)
 
       if (this.allRowsSelected) {
         body['all'] = '1';

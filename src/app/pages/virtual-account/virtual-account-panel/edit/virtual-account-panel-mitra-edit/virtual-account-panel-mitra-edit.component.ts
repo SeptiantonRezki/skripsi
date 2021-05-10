@@ -58,6 +58,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
   shortDetail: any;
   detailPanel: any;
   isDetail: Boolean;
+  filteredMitraId: any[];
 
   @Output()
   onRowsSelected = new EventEmitter<any>();
@@ -212,9 +213,11 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
         // this.getPanelMitraList();
         // console.log('res', res);
         let filteredMitra = [];
+        this.filteredMitraId = [];
         this.currentMitraCount = res.data ? res.data.mitra.length : 0;
         if (res && res.data) {
           filteredMitra = res.data.mitra.map(mtr => {
+            this.filteredMitraId.push(mtr['business_id']);
             return { id: mtr['business_id'] }
           })
         }
@@ -326,7 +329,9 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
         this.onLoad = false;
         this.loaded = true;
         this.loadingIndicator = false;
-
+        this.rows = this.rows.filter(row => {
+          return this.filteredMitraId.indexOf(row.business_id) !== -1;
+        });
       },
       err => {
         this.dataService.showLoading(false);
@@ -539,15 +544,17 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
       let body = {
         virtual_account_company_id: this.formPanelMitra.get('company').value,
         type: "wholesaler",
-        detail: this.selected.map(mtr => {
-          return { 
-            business_id: mtr.id,
-			      virtual_account_bin_id: mtr.bin,
-            subcode: mtr.virtual_account_subcode,
+        detail: this.selected.filter(mtr => mtr.name).map(mtr => {
+          return {
+            business_id: mtr.business_id,
+			      virtual_account_bin_id: mtr.virtual_account_bin_id || mtr.bin,
+            subcode: mtr.subcode,
 			      rekening_number: mtr.rekening_number
            };
         })
       };
+
+      console.log(this.selected)
 
       if (this.allRowsSelected) {
         body['all'] = '1';

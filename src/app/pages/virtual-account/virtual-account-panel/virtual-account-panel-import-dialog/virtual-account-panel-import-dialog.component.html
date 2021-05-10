@@ -37,9 +37,12 @@
         <thead>
           <tr>
             <th nowrap>Penjual</th>
+            <th nowrap>No. Rekening</th>
             <th nowrap>No. Ponsel</th>
             <th nowrap>Kode</th>
             <th nowrap>Tipe</th>
+            <th nowrap>Subcode</th>
+            <th nowrap>BIN</th>
             <th nowrap>Kode Divisi</th>
             <th nowrap>Wilayah</th>
             <th nowrap>Area</th>
@@ -53,13 +56,22 @@
               {{ item.name ? item.name : '-' }}
             </td>
             <td nowrap>
+              {{ item.rekening_number ? item.rekening_number : '-' }}
+            </td>
+            <td nowrap>
               {{ item.phone ? item.phone : '-' }}
             </td>
             <td nowrap>
               {{ item.code ? item.code : '-' }}
             </td>
             <td nowrap>
-              {{ item.classification ? item.classification : '-' }}
+              {{ item.type ? item.type : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.subcode ? item.subcode : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.bin ? item.bin : '-' }}
             </td>
             <td nowrap>
               {{ item.division ? item.division : '-' }}
