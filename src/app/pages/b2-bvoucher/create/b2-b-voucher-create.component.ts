@@ -453,7 +453,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       //   this.formDetilVoucher.get('category').disable();
       // }
 
-      if (this.permission.approval) this.formDetilVoucher.disable();
+      if (this.permission.b2b_approval) this.formDetilVoucher.disable();
 
       if (res.data.status === 'need-approval') {
         this.formDetilVoucher.disable();
@@ -485,7 +485,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     if (this.detailVoucher) {
       switch (this.detailVoucher.status) {
         case "need-approval":
-          return this.permission.approval ? true : false;
+          return this.permission.b2b_approval ? true : false;
         default:
           return true;
       }
@@ -495,7 +495,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   takeAction(action) {
-    if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.approval) {
+    if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
       this.dialogService.openSnackBar({ message: "Anda Tidak Memilik Hak Akses untuk Approval!" });
       return;
     }
@@ -527,7 +527,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   whyYouCantSeeMe() {
-    if (this.permission.approval && !this.isCreate) return false;
+    if (this.permission.b2b_approval && !this.isCreate) return false;
     else if (this.isCreate && this.permission.buat) return true;
     else if (!this.isCreate && this.permission.ubah) return true;
     else return false;

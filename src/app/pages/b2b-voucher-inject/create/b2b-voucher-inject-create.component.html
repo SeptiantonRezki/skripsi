@@ -170,7 +170,7 @@
               <!-- <div fxLayout="row">
                 <div fxFlex="60"></div>
                 <div fxFlex="20">
-                  <div fxLayout="column" *ngIf="listStatuses.length > 0 && permission.approval">
+                  <div fxLayout="column" *ngIf="listStatuses.length > 0 && permission.b2b_approval">
                     <button *ngFor="let item of listStatuses" mat-raised-button type="button"
                       [ngClass]="item.value === 'rejected' ? 'confirmation-button' : 'mat-green-800-bg'" fxFlex="20"
                       style="margin-bottom: 10px;" (click)="takeAction(item)">
