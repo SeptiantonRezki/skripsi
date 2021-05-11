@@ -112,10 +112,13 @@
               <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
             </ng-template>
 
-            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row" let-isSelected="isSelected"
               let-onCheckboxChangeFn="onCheckboxChangeFn">
-              <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected"
+              <mat-checkbox [checked]="isSelected || filteredMitraId.indexOf(row.business_id) !== -1" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected"
                 *ngIf="!allRowsSelected"></mat-checkbox>
+
+                <!-- <mat-checkbox [checked]="((row.isSelected) || (filteredMitraId.indexOf(row.business_id) !== -1))" (change)="onCheckboxChangeFn($event, row)" [disabled]="allRowsSelected"
+                *ngIf="!allRowsSelected"></mat-checkbox> -->
               <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"
                 class="mat-checkbox-all"></mat-checkbox>
             </ng-template>

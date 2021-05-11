@@ -329,9 +329,9 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
         this.onLoad = false;
         this.loaded = true;
         this.loadingIndicator = false;
-        this.rows = this.rows.filter(row => {
-          return this.filteredMitraId.indexOf(row.business_id) !== -1;
-        });
+        // this.rows = this.rows.filter(row => {
+        //   return this.filteredMitraId.indexOf(row.business_id) !== -1;
+        // });
       },
       err => {
         this.dataService.showLoading(false);
