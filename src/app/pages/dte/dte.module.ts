@@ -144,6 +144,7 @@ import { CoinDisburstmentComponent } from './coin-disburstment/index/coin-disbur
 import { CoinDisburstmentCreateComponent } from './coin-disburstment/create/coin-disburstment-create.component';
 import { CoinDisburstmentEditComponent } from './coin-disburstment/edit/coin-disburstment-edit.component';
 import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exchange/coin-disburstment-exchange.component';
+import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-exchange-coin/import-exchange-coin.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -304,6 +305,7 @@ export const MY_FORMATS = {
     CoinDisburstmentCreateComponent,
     CoinDisburstmentEditComponent,
     CoinDisburstmentExchangeComponent,
+    ImportExchangeCoinComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -357,7 +359,8 @@ export const MY_FORMATS = {
     DialogMisiDuplicateComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent
+    DialogPushNotifDuplicateComponent,
+    ImportExchangeCoinComponent
   ],
   providers: [
     RupiahFormaterPipe,
@@ -408,7 +411,8 @@ export const MY_FORMATS = {
     DialogMisiDuplicateComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent
+    DialogPushNotifDuplicateComponent,
+    ImportExchangeCoinComponent
   ],
 })
 export class DteModule { }
