@@ -79,4 +79,8 @@ export class WholesalerService extends BaseService {
     const url = this.getUrl(this.namespace, "store_import");
     return this.postApi(url, body);
   }
+  getWsRoles(): Observable<any> {
+    const url = this.getUrl(this.namespace, "roles");
+    return this.getApi(url);
+  }
 }

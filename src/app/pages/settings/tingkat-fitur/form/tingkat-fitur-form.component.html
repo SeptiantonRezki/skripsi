@@ -1,0 +1,57 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Tingkatan Fitur'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-bg-white">
+
+      <form [formGroup]="form">
+
+        <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+          <h3>Detail Consumer</h3>
+
+        </div>
+        <div class="ayo-middle pt-24" fxLayout="column">
+          
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field class="is-light form-primary" fxFlex="50">
+              <input matInput placeholder="Nama Tingkat Fitur" type="text" formControlName="name">
+              <mat-error *ngIf="form.controls['name'].hasError('required') && form.controls['name'].touched">
+                Nama Tingkat Fitur harus diisi
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <label for="">Tipe Akun</label>
+          <mat-radio-group formControlName="type" class="radio-group pb-16">
+            <mat-radio-button class="radio-button" value="wholesaler">Wholesaler</mat-radio-button>
+            <mat-error *ngIf="form.controls['type'].hasError('required') && form.controls['type'].touched">
+              Tipe Akun harus diisi
+            </mat-error>
+          </mat-radio-group>
+
+          <label for="">Fitur Akun</label>
+          <mat-error *ngIf="form.controls['permissions'].hasError('required') && form.controls['permissions'].touched">
+            Fitur Akun harus dipilih
+          </mat-error>
+
+          <app-tingkat-fitur-tree fxLayout="row wrap" (onChecklistSelectionChange)="_debounceOnChecklistSelectionChange($event)"
+          [disabled]="disabled"></app-tingkat-fitur-tree>
+          
+          <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start center" *ngIf="!disabled">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+              (click)="submit()">
+              SIMPAN
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

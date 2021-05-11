@@ -11,6 +11,8 @@ import { ForceUpdateAppsComponent } from "./force-update-apps/force-update-apps.
 import { SupportComponent } from "./support/support.component";
 import { OTPSettingsComponent } from "./otpsettings/otpsettings.component";
 import { NewSignComponent } from "./new-sign/new-sign.component";
+import { TingkatFiturIndexComponent } from "./tingkat-fitur/index/tingkat-fitur-index.component";
+import { TingkatFiturFormComponent } from "./tingkat-fitur/form/tingkat-fitur-form.component";
 
 const routes: Routes = [
   {
@@ -88,6 +90,34 @@ const routes: Routes = [
     component: NewSignComponent,
     data: {
       breadcrumbs: brConfig.settings.new_sign
+    }
+  },
+  {
+    path: "feature-level",
+    component: TingkatFiturIndexComponent,
+    data: {
+      breadcrumbs: brConfig.settings.tingkat_fitur.index
+    }
+  },
+  {
+    path: "feature-level/create",
+    component: TingkatFiturFormComponent,
+    data: {
+      breadcrumbs: brConfig.settings.tingkat_fitur.create
+    }
+  },
+  {
+    path: "feature-level/edit/:id",
+    component: TingkatFiturFormComponent,
+    data: {
+      breadcrumbs: brConfig.settings.tingkat_fitur.edit
+    }
+  },
+  {
+    path: "feature-level/detail/:id",
+    component: TingkatFiturFormComponent,
+    data: {
+      breadcrumbs: brConfig.settings.tingkat_fitur.detail
     }
   },
 ];

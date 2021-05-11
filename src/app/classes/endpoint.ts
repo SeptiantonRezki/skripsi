@@ -95,6 +95,8 @@ export class Endpoint {
         exportWhosaller: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/list`,
         import_preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/preview`,
         store_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/list`,
+        // roles: `http://demo6191696.mockable.io/api/v1/business/principal/wholesaler/tingkat-fitur`,
+        roles: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/wholesaler/list`
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
@@ -828,6 +830,15 @@ export class Endpoint {
         export_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export`,
         import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`
       },
+      feature_level: {
+        list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level`,
+        detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
+        available_permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/available-permissions`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level`,
+        put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
+        
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
