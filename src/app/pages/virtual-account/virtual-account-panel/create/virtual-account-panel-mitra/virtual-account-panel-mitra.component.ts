@@ -569,6 +569,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
             business_id: mtr.business_id,
 			      virtual_account_bin_id: mtr.virtual_account_bin_id,
             subcode: mtr.subcode,
+            rekening_name: mtr.rekening_name,
 			      rekening_number: mtr.rekening_number
           };
         })
