@@ -5,6 +5,7 @@ import { AccessService } from '../../../../services/settings/access.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
+import { RetailerService } from '../../../../services/user-management/retailer.service';
 
 import * as _ from 'underscore';
 
@@ -35,7 +36,8 @@ export class RoleEditComponent {
     private accessService: AccessService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private retailerService: RetailerService,
   ) {
     this.onLoad = true;
     this.roles = this.activatedRoute.snapshot.data['menu'];
@@ -385,6 +387,11 @@ export class RoleEditComponent {
     let hasActiveParents = [];
     let hasActiveChildren = [];
 
+    if (targetItem.nama == 'idnumber' && !targetRole.status) {
+        this.retailerService.getAccessCashier({}).toPromise();
+    } else {
+        this.retailerService.getIdNumber({}).toPromise();
+    }
 
     _.map(targetItems.value, (val) => {
       if (!val.submenu) {
