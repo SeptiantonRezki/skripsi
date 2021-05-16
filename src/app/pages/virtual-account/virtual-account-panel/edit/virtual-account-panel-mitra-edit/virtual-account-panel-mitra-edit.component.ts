@@ -234,6 +234,19 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
     }
   }
 
+  loadChecked() {
+    if (!this.rows) {
+      return;
+    }
+    this.selected = [];
+    this.filteredMitraId.forEach(id => {
+      let item = this.rows.find(row => row.business_id === id);
+      if (item) {
+        this.selected.push(item);
+      }
+    });
+  }
+
   getPanelMitraList() {
     let wsIds = this.selectedMitra.map(mtr => mtr.id);
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
@@ -329,6 +342,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
         this.onLoad = false;
         this.loaded = true;
         this.loadingIndicator = false;
+        this.loadChecked();
         // this.rows = this.rows.filter(row => {
         //   return this.filteredMitraId.indexOf(row.business_id) !== -1;
         // });
@@ -360,6 +374,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.loadChecked();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
@@ -384,6 +399,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.loadChecked();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
@@ -410,6 +426,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.loadChecked();
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -450,7 +467,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
     let fd = new FormData();
     fd.append('area', "1");
     this.selected.map(item => {
-      fd.append('business_id[]', item.id);
+      fd.append('business_id[]', item.business_id);
     })
     fd.append('type', 'wholesaler');
     try {
