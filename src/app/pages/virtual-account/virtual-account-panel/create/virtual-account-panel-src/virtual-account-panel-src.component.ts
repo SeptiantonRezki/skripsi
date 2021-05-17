@@ -504,6 +504,7 @@ export class VirtualAccountPanelSrcComponent implements OnInit, OnDestroy {
     this.selected.map(item => {
       fd.append('business_id[]', item.id);
     })
+    fd.append('virtual_account_company_id', this.virtualAccountCompanyId);
     fd.append('type', 'retailer');
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
@@ -599,7 +600,7 @@ export class VirtualAccountPanelSrcComponent implements OnInit, OnDestroy {
         type: "retailer",
         // detail: await this.selected.map(mtr => {
         detail: await this.selected.filter(mtr => mtr.name).map(mtr => {
-          return { business_id: mtr.business_id };
+          return { business_id: mtr.id };
         })
       };
 

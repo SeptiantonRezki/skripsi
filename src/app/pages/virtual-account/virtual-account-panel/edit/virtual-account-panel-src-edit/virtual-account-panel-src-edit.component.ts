@@ -272,7 +272,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
     }
     this.selected = [];
     this.filteredSrcId.forEach(id => {
-      let item = this.rows.find(row => row.business_id === id);
+      let item = this.rows.find(row => row.id === id);
       if (item) {
         this.selected.push(item);
       }
@@ -388,6 +388,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
         this.onLoad = false;
       }
     );
+    console.log('wholesaler ID.......', this.mitraSelected)
   }
 
   async setPage(pageInfo) {
@@ -522,8 +523,9 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
     fd.append('area', "1");
     this.selected.map(item => {
       fd.append('business_id[]', item.id);
-      fd.append('business_id[]', item.business_id);
+      // fd.append('business_id[]', item.business_id);
     })
+    fd.append('virtual_account_company_id', this.VirtualAccountCompanyId);
     fd.append('type', 'retailer');
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
@@ -617,7 +619,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
         type: "retailer",
         detail: await this.selected.filter(mtr => mtr.name).map(mtr => {
         // detail: await this.selected.map(mtr => {
-          return { business_id: mtr.business_id };
+          return { business_id: mtr.id };
         })
       };
 

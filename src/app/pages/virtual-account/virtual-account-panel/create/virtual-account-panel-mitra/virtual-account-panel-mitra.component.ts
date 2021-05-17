@@ -471,8 +471,9 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     let fd = new FormData();
     fd.append('area', "1");
     this.selected.map(item => {
-      fd.append('business_id[]', item.id);
+      fd.append('business_id[]', item.business_id);
     })
+    fd.append('virtual_account_company_id', this.formPanelMitra.get('company').value);
     fd.append('type', 'wholesaler');
     try {
       const response = await this.mitraPanelService.exportPanel(fd).toPromise();
