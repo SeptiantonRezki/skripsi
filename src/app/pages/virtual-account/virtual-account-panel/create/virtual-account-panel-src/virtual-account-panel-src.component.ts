@@ -597,8 +597,9 @@ export class VirtualAccountPanelSrcComponent implements OnInit, OnDestroy {
         // virtual_account_company_id: this.formPanelSrc.get('company').value,
         virtual_account_company_id: this.dataService.getFromStorage('company_selected'),
         type: "retailer",
-        detail: await this.selected.map(mtr => {
-          return { business_id: mtr.id };
+        // detail: await this.selected.map(mtr => {
+        detail: await this.selected.filter(mtr => mtr.name).map(mtr => {
+          return { business_id: mtr.business_id };
         })
       };
 

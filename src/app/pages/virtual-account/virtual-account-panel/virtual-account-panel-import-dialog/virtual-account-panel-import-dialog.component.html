@@ -37,12 +37,12 @@
         <thead>
           <tr>
             <th nowrap>Penjual</th>
-            <th nowrap>No. Rekening</th>
+            <th nowrap *ngIf="dialogData.type === 'wholesaler'">Nama Rekening</th>
             <th nowrap>No. Ponsel</th>
             <th nowrap>Kode</th>
             <th nowrap>Tipe</th>
-            <th nowrap>Subcode</th>
-            <th nowrap>BIN</th>
+            <th nowrap *ngIf="dialogData.type === 'wholesaler'">Subcode</th>
+            <th nowrap *ngIf="dialogData.type === 'wholesaler'">BIN</th>
             <th nowrap>Kode Divisi</th>
             <th nowrap>Wilayah</th>
             <th nowrap>Area</th>
@@ -55,7 +55,7 @@
             <td nowrap>
               {{ item.name ? item.name : '-' }}
             </td>
-            <td nowrap>
+            <td nowrap *ngIf="dialogData.type === 'wholesaler'">
               {{ item.rekening_number ? item.rekening_number : '-' }}
             </td>
             <td nowrap>
@@ -67,10 +67,10 @@
             <td nowrap>
               {{ item.type ? item.type : '-' }}
             </td>
-            <td nowrap>
+            <td nowrap *ngIf="dialogData.type === 'wholesaler'">
               {{ item.subcode ? item.subcode : '-' }}
             </td>
-            <td nowrap>
+            <td nowrap *ngIf="dialogData.type === 'wholesaler'">
               {{ item.bin ? item.bin : '-' }}
             </td>
             <td nowrap>

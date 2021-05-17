@@ -58,6 +58,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
   shortDetail: any;
   detailPanel: any;
   isDetail: Boolean;
+  filteredSrcId: any[];
 
   _data: any = null;
   mitraSelected: any[] = [];
@@ -239,9 +240,11 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
         // this.getPanelMitraList();
         // console.log('res', res);
         let filteredSrc = [];
+        this.filteredSrcId = [];
         this.currentMitraCount = res.data ? res.data.src.length : 0;
         if (res && res.data) {
           filteredSrc = res.data.src.map(mtr => {
+            this.filteredSrcId.push(mtr['business_id']);
             return { id: mtr['business_id'] }
           })
         }
@@ -261,6 +264,19 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
         this.aturPanelMitra();
       }, 1000);
     }
+  }
+
+  loadChecked() {
+    if (!this.rows) {
+      return;
+    }
+    this.selected = [];
+    this.filteredSrcId.forEach(id => {
+      let item = this.rows.find(row => row.business_id === id);
+      if (item) {
+        this.selected.push(item);
+      }
+    });
   }
 
   async getPanelSrcList() {
@@ -361,6 +377,10 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
         this.onLoad = false;
         this.loaded = true;
         this.loadingIndicator = false;
+        this.loadChecked();
+        // // this.rows = this.rows.filter(row => {
+        // //   return this.filteredSrcId.indexOf(row.business_id) !== -1;
+        // // });
       },
       err => {
         this.dataService.showLoading(false);
@@ -396,6 +416,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.loadChecked();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
@@ -427,6 +448,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.loadChecked();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
@@ -461,6 +483,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
+      this.loadChecked();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
@@ -499,6 +522,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
     fd.append('area', "1");
     this.selected.map(item => {
       fd.append('business_id[]', item.id);
+      fd.append('business_id[]', item.business_id);
     })
     fd.append('type', 'retailer');
     try {
@@ -591,8 +615,9 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       let body = {
         virtual_account_company_id: this.VirtualAccountCompanyId,
         type: "retailer",
-        detail: await this.selected.map(mtr => {
-          return { business_id: mtr.id };
+        detail: await this.selected.filter(mtr => mtr.name).map(mtr => {
+        // detail: await this.selected.map(mtr => {
+          return { business_id: mtr.business_id };
         })
       };
 

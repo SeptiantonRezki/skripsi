@@ -107,14 +107,22 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
       this.dataService.showLoading(true);
       let body = {
         virtual_account_company_id: this.payload.virtual_account_company_id,
-        type: "wholesaler",
+        type: this.dialogData.type,
         detail: res.map(mtr => {
-          return { 
+          let mtrObj = {
             business_id: mtr.id,
-			      virtual_account_bin_id: mtr.virtual_account_bin_id,
-            subcode: mtr.subcode,
-			      rekening_number: mtr.rekening_number
+            virtual_account_bin_id: undefined,
+            subcode: undefined,
+            rekening_name: undefined,
+            rekening_number: undefined
           };
+          if (this.dialogData.type === 'wholesaler') {
+            mtrObj.virtual_account_bin_id = mtr.virtual_account_bin_id,
+            mtrObj.subcode = mtr.subcode,
+            mtrObj.rekening_name = mtr.rekening_name,
+			      mtrObj.rekening_number = mtr.rekening_number
+          }
+          return mtrObj;
         })
       };
       console.log('initial', body.detail)
@@ -126,8 +134,9 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
           message: "Data berhasil disimpan"
         });
         this.dialogRef.close();
-        this.dataService.setToStorage("detail_virtual_account_panel", res.data);
-        this.router.navigate(['virtual-account', 'panel', 'edit']);
+        // this.dataService.setToStorage("detail_virtual_account_panel", res.data);
+        // this.router.navigate(['virtual-account', 'panel', 'edit']);
+        this.router.navigate(['virtual-account', 'panel']);
       }, err => {
         console.log('err create panel mitra', err);
         this.dataService.showLoading(false);
