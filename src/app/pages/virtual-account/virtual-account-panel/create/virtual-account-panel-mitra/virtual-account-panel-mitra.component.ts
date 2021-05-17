@@ -449,8 +449,11 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     this.onRowsSelected.emit({ allRowsSelected: allRowsSelected });
-    if (!allRowsSelected) this.selected = [];
-    else this.selected.length = this.totalData;
+    if (!allRowsSelected) {
+      this.selected = [];
+    } else {
+      this.selected = this.rows;
+    }
   }
 
   getId(row) {
@@ -580,7 +583,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
       if (this.allRowsSelected) {
         body['all'] = '1';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
-        delete body['detail'];
+        // delete body['detail'];
       } else {
         body['all'] = '0';
         body['area'] = [1];

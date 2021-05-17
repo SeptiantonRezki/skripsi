@@ -500,8 +500,11 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
   selectFn(allRowsSelected: boolean) {
     console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
-    if (!allRowsSelected) this.selected = [];
-    else this.selected.length = this.totalData;
+    if (!allRowsSelected) {
+      this.selected = [];
+    } else {
+      this.selected = this.rows;
+    }
   }
 
   getId(row) {
@@ -617,7 +620,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       let body = {
         virtual_account_company_id: this.VirtualAccountCompanyId,
         type: "retailer",
-        detail: await this.selected.filter(mtr => mtr.name).map(mtr => {
+        detail: this.selected.filter(mtr => mtr.name).map(mtr => {
         // detail: await this.selected.map(mtr => {
           return { business_id: mtr.id };
         })
@@ -626,7 +629,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
       if (this.allRowsSelected) {
         body['all'] = '1';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
-        delete body['detail'];
+        // delete body['detail'];
       } else {
         body['all'] = '0';
         body['area'] = [1];
