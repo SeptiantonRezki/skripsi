@@ -41,7 +41,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       email: ["", [Validators.required, Validators.email]],
       flowingly_id: ["", Validators.required],
       status: ["", Validators.required],
-      minimum_transaction: [0, Validators.required],
+      // minimum_transaction: [0, Validators.required],
       service_cost: [0, Validators.required]
     });
 
@@ -70,7 +70,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         contact: res.contact ? (res.contact.split("+62")[1] ? res.contact.split("+62")[1] : res.contact) : '',
         flowingly_id: res.flowingly_id,
         status: res.status,
-        minimum_transaction: res.minimum_transaction ? res.minimum_transaction : 0,
+        // minimum_transaction: res.minimum_transaction ? res.minimum_transaction : 0,
         service_cost: res.service_cost
       });
       if (this.isDetail) {
@@ -111,7 +111,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
         status: this.formCompany.get('status').value,
-        minimum_transaction: this.formCompany.get('minimum_transaction').value,
+        // minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
       }
     console.log(body)

@@ -34,7 +34,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
       email: ["", [Validators.required, Validators.email]],
       flowingly_id: ["", Validators.required],
       status: ["", Validators.required],
-      minimum_transaction: [0, Validators.required],
+      // minimum_transaction: [0, Validators.required],
       service_cost: [0, Validators.required]
     });
 
@@ -79,7 +79,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
         email: this.formCompany.get('email').value,
         flowingly_id: this.formCompany.get('flowingly_id').value,
         status: this.formCompany.get('status').value,
-        minimum_transaction: this.formCompany.get('minimum_transaction').value,
+        // minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
       }
       console.log(body)
