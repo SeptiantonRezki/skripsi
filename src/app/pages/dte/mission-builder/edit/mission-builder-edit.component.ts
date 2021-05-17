@@ -92,6 +92,10 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
 
     this.dataService.getDataSequencingInfo().subscribe((res) => {
       this.task = res.data;
+      let detailTask = this.dataService.getFromStorage("detail_task_sequencing");
+      if (detailTask) {
+        this.task.is_editable = detailTask.is_editable;
+      }
       if (this.task == null) {
         this.dialogService.openSnackBar({
           message: "Tidak dapat mengakses halaman ini secara langsung!!!"

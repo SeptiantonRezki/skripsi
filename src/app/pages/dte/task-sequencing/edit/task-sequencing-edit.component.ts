@@ -103,7 +103,6 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   setValue() {
     this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
       this.data = res.data;
-      console.log(this.data);
       this.taskSequenceForm.patchValue({
         id: this.data.id,
         name: this.data.name,
