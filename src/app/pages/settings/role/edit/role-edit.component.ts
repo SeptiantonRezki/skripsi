@@ -317,6 +317,7 @@ export class RoleEditComponent {
         res => {
           this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
           this.router.navigate(['settings', 'access']);
+          this.dataService.setEncryptedPermissions(body.permissions);
         },
         err => {
           console.log(err.error.message);
