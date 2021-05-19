@@ -1575,6 +1575,51 @@ export const brConfig = {
         }
       ]
     },
+    coin_disburstment: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Coin Disburstment"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/coin-disbursement",
+          name: "Coin Disburstment"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Coin Disburstment"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/coin-disbursement",
+          name: "Coin Disburstment"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Coin Disburstment"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/coin-disbursement",
+          name: "Coin Disburstment"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Coin Disburstment"
+        }
+      ]
+    },
     taskVerification: {
       index: [
         {

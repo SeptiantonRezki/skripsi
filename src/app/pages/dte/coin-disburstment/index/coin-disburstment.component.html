@@ -1,0 +1,111 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Coin Disbursement'">
+    <button style="width: 170px" [routerLink]="['/dte','coin-disbursement', 'create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> BUAT
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group>
+        <mat-tab label="Coin Disbursement">
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+            <h2 class="pl-8">Coin Disbursement</h2>
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+              <mat-icon>search</mat-icon>
+              <mat-form-field autoComplete="off" class="is-light tab-search">
+                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+              </mat-form-field>
+            </div>
+          </div>
+          <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+            [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+            [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+            (page)="setPage($event)" (sort)="onSort($event)">
+
+            <ngx-datatable-column [width]="200" name="Nama Program Penukaran" prop="name" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" name="Retailer Menukarkan Koin" prop="retailer_menukarkan_koin">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" name="Jumlah Koin yang sudah ditukarkan"
+              prop="jml_koin_yang_sudah_ditukar">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" name="Jumlah SRC yang menukar Saldo Pojok Bayar"
+              prop="jml_src_yang_menukar_saldo_pojok_bayar">
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="200" name="Jumlah SRC yang menukar Transfer Bank"
+              prop="jml_src_yang_menukar_transfer_bank">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" name="Jumlah SRC yang ditukar Saldo Pojok Bayar"
+              prop="jml_coin_yang_ditukar_saldo_pojok_bayar">
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="200" name="Jumlah SRC yang ditukar Transfer Bank"
+              prop="jml_coin_yang_ditukar_transfer_bank">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Awal Penukaran Koin" prop="created_at"
+              [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{row.created_at | dateToMoment}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Berakhir Penukaran Koin"
+              prop="end_date" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{row.end_date | dateToMoment}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [sortable]="false" name="Status" prop="status" [flexGrow]="3">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="name-container">
+                  <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'publish'">
+                    {{row.status}}
+                  </p>
+                  <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'unpublish'">
+                    {{row.status}}
+                  </p>
+                  <p class="status text-truncate h6 p-4 status-order mat-orange-900-bg"
+                    style="text-transform: capitalize;" *ngIf="row.status == 'draft'">
+                    {{row.status}}
+                  </p>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="button-row" style="margin-left: -10px">
+                  <button mat-icon-button color="" (click)="directEdit(row)">
+                    <mat-icon class="secondary-text">edit</mat-icon>
+                  </button>
+                  <button type="button" mat-icon-button color="primary" matTooltip="Hapus Coin Disbursement"
+                    (click)="deleteCoinDisburstment(row)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </mat-tab>
+
+        <!-- TIPE MISI -->
+        <mat-tab label="List Penukaran Coin">
+          <app-coin-disburstment-exchange></app-coin-disburstment-exchange>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

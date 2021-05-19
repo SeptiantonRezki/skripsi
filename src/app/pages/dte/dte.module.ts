@@ -140,7 +140,11 @@ import { EOrdertsmeditComponent } from "./automation/edittsm/e-ordertsm/e-ordert
 import { CoinAdjustmentApprovalComponent } from './coin-adjustment-approval/index/coin-adjustment-approval.component';
 import { CoinAdjustmentApprovalTSMComponent } from './coin-adjustment-approval/index-tsm/coin-adjustment-approval-tsm.component';
 import { CoinAdjustmentApprovalDetailComponent } from './coin-adjustment-approval/detail/coin-adjustment-approval-detail.component';
-
+import { CoinDisburstmentComponent } from './coin-disburstment/index/coin-disburstment.component';
+import { CoinDisburstmentCreateComponent } from './coin-disburstment/create/coin-disburstment-create.component';
+import { CoinDisburstmentEditComponent } from './coin-disburstment/edit/coin-disburstment-edit.component';
+import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exchange/coin-disburstment-exchange.component';
+import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-exchange-coin/import-exchange-coin.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -291,7 +295,12 @@ export const MY_FORMATS = {
     DialogPushNotifDuplicateComponent,
     CoinAdjustmentApprovalComponent,
     CoinAdjustmentApprovalTSMComponent,
-    CoinAdjustmentApprovalDetailComponent
+    CoinAdjustmentApprovalDetailComponent,
+    CoinDisburstmentComponent,
+    CoinDisburstmentCreateComponent,
+    CoinDisburstmentEditComponent,
+    CoinDisburstmentExchangeComponent,
+    ImportExchangeCoinComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -345,7 +354,8 @@ export const MY_FORMATS = {
     DialogMisiDuplicateComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent
+    DialogPushNotifDuplicateComponent,
+    ImportExchangeCoinComponent
   ],
   providers: [
     RupiahFormaterPipe,
@@ -396,7 +406,8 @@ export const MY_FORMATS = {
     DialogMisiDuplicateComponent,
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
-    DialogPushNotifDuplicateComponent
+    DialogPushNotifDuplicateComponent,
+    ImportExchangeCoinComponent
   ],
 })
 export class DteModule { }
