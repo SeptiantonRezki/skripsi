@@ -184,6 +184,7 @@ export class DiaglogMisiComponent implements OnInit {
         console.log("res missions", res.data.data);
         this.missions = res.data.data;
         this.filteredMission.next(this.missions.slice());
+        this.filteredMissionOther.next(this.missions.slice());
       },
       (err) => {
         console.log("err ", err);
