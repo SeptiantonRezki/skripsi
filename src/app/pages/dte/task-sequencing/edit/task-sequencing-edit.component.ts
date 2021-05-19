@@ -86,19 +86,18 @@ export class TaskSequencingEditComponent implements OnInit {
         this.filteringGTP();
       });
 
-      this.filterGTA.valueChanges
+    this.filterGTA.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringGTA();
       });
 
-      this.setValue();
+    this.setValue();
   }
 
-  setValue(){
+  setValue() {
     this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
       this.data = res.data;
-      console.log(this.data);
       this.taskSequenceForm.patchValue({
         id: this.data.id,
         name: this.data.name,
@@ -120,7 +119,7 @@ export class TaskSequencingEditComponent implements OnInit {
     });
   }
 
-  selectChange(e: any){
+  selectChange(e: any) {
     const theIndex = this.programs.findIndex(x => x.id === e.value);
     console.log(this.programs[theIndex]);
     this.setDate(this.programs[theIndex].end_date);
@@ -139,7 +138,7 @@ export class TaskSequencingEditComponent implements OnInit {
     this.minDate = moment(new Date()).format('YYYY-MM-DD');
   }
 
-  selectChangeAudince(e: any){
+  selectChangeAudince(e: any) {
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
     console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
@@ -153,7 +152,7 @@ export class TaskSequencingEditComponent implements OnInit {
     return date;
   }
 
-  submit(){
+  submit() {
     this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
     this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
     this.taskSequenceForm.value.actions = this.actions;
