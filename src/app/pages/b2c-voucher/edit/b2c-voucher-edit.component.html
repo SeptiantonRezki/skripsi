@@ -122,7 +122,7 @@
                     <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
                       (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
                       [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)" *ngIf="!detailVoucher?.is_enable_detail_voucher">
+                      (matChipInputTokenEnd)="add($event)" *ngIf="detailVoucher?.is_enable_detail_voucher">
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
