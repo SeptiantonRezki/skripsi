@@ -47,6 +47,12 @@ export class DialogPopUpNotifEditComponent implements OnInit {
         notification_id: this.data.data.attribute.notification_id,
         time: this.data.data.attribute.time,
       });
+
+      if (this.data.isDetail) {
+        setTimeout(() => {
+          this.form.disable();
+        }, 500);
+      }
     }
   }
 

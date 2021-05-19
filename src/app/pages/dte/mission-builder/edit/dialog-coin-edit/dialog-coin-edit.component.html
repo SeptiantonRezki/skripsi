@@ -4,13 +4,14 @@
   <mat-dialog-content>
 
     <mat-form-field style="width: 100%">
-      <input matInput type="text" (keypress)="numberOnly($event)" formControlName="total_coin" placeholder="Total Coin" />
+      <input matInput type="text" (keypress)="numberOnly($event)" formControlName="total_coin"
+        placeholder="Total Coin" />
     </mat-form-field>
 
   </mat-dialog-content>
   <br><br>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
+    <button mat-raised-button color="success" type="submit" [disabled]="data && data.isDetail">Simpan</button>
     <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Batal</button>
   </mat-dialog-actions>
 

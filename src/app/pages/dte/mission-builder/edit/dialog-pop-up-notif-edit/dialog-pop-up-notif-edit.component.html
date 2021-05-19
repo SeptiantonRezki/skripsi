@@ -3,18 +3,19 @@
 
   <mat-dialog-content>
 
-  <mat-form-field style="width: 100%">
-    <mat-select formControlName="notification_id" placeholder="Pilih Pop Up Notification" id="notification_id" #singleSelect>
-      <ngx-mat-select-search [formControl]="filterPopup" [placeholderLabel]="'Cari Pop Up Notification...'"
-        [noEntriesFoundLabel]="'Tidak ada Pop Up Notification yang ditemukan'"></ngx-mat-select-search>
-      <mat-option *ngFor="let item of filteredPopup | async" [value]="item.id">
-        {{item.title}}
-      </mat-option>
-    </mat-select>
+    <mat-form-field style="width: 100%">
+      <mat-select formControlName="notification_id" placeholder="Pilih Pop Up Notification" id="notification_id"
+        #singleSelect>
+        <ngx-mat-select-search [formControl]="filterPopup" [placeholderLabel]="'Cari Pop Up Notification...'"
+          [noEntriesFoundLabel]="'Tidak ada Pop Up Notification yang ditemukan'"></ngx-mat-select-search>
+        <mat-option *ngFor="let item of filteredPopup | async" [value]="item.id">
+          {{item.title}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+      <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="time" [format]="24" readonly />
       <mat-icon matSuffix>access_time</mat-icon>
       <ngx-material-timepicker #time></ngx-material-timepicker>
     </mat-form-field>
@@ -22,7 +23,7 @@
   </mat-dialog-content>
   <br><br>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
+    <button mat-raised-button color="success" type="submit" [disabled]="data && data.isDetail">Simpan</button>
     <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Batal</button>
   </mat-dialog-actions>
 

@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
+import { DialogService } from "app/services/dialog.service";
 
 @Component({
   selector: 'app-dialog-misi-edit',
@@ -29,12 +30,14 @@ export class DialogMisiEditComponent implements OnInit {
   public filteredMissionOther: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   pagination: Page = new Page();
+  isDetail: Boolean;
 
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogMisiEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -106,7 +109,33 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('verifikasi').patchValue(false);
         this.form.get('verifikasiFF').patchValue(false);
       }
+
+      if (this.data.isDetail) {
+        this.isDetail = this.data.isDetail;
+        setTimeout(() => {
+          this.form.get("task_template_id").disable();
+          this.form.get("task_template_other_name_id").disable();
+          this.form.get("start_date").disable();
+          this.form.get("end_date").disable();
+          this.form.get("coin_submission").disable();
+          this.form.get("coin_verification").disable();
+          // this.form.get("verification_type").disable();
+          // this.form.get("is_push_to_ff").disable();
+          // this.form.get("is_ir_template").disable();
+          console.log('this form', this.form.value);
+        }, 1000)
+      }
     }
+  }
+
+  copyMessage(linkMisi: any) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkMisi));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: "Link Misi Disalin!" });
   }
 
   checkTaskTemplate() {
