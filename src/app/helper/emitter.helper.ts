@@ -26,6 +26,7 @@ export class Emitter {
   private readQMC = new BehaviorSubject<object>({});
   private deliveredQMC = new BehaviorSubject<object>({});
   private payMethodDataEmitter = new BehaviorSubject<object>({});
+  private stockDataEmitter = new BehaviorSubject<object>({});
 
 
   // Observable navItem stream
@@ -51,6 +52,7 @@ export class Emitter {
   listenReadQMC = this.readQMC.asObservable();
   listenDeliveredQMC = this.deliveredQMC.asObservable();
   listenPayMethodDataEmitter = this.payMethodDataEmitter.asObservable();
+  listenStockDataEmitter = this.stockDataEmitter.asObservable();
 
   // service command
   emitNewMessageQ(message: any) {
@@ -112,6 +114,7 @@ export class Emitter {
     this.privateLabelEmitter.next(message);
   }
   emitPayMethodDataEmitter(message: any) { this.payMethodDataEmitter.next(message); }
+  emitStockDataEmitter(message: any) { this.stockDataEmitter.next(message); }
 
   //NOTIFICATION - DETAIL
   private notifDetailEmitter = new BehaviorSubject<object>({});

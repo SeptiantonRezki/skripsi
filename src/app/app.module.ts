@@ -72,6 +72,7 @@ import { UserSupplierService } from "./services/user-management/private-label/us
 import { PanelMitraService } from "./services/user-management/private-label/panel-mitra.service";
 import { OrdertoSupplierService } from "./services/user-management/private-label/orderto-supplier.service";
 import { PayMethodService } from "./services/user-management/private-label/pay-method.service";
+import { PLStockService } from './services/user-management/private-label/stock.service';
 
 import { UserIdleModule } from "angular-user-idle";
 import { IdleService } from "./services/idle.service";
@@ -214,6 +215,7 @@ const config = {
     ProductCatalogueService,
     StoreTemplateLayoutService,
     PayMethodService,
+    PLStockService,
     TaskVerificationService,
     PayLaterCompanyService,
     PayLaterPanelService,
