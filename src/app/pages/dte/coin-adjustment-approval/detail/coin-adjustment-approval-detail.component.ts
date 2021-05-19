@@ -652,7 +652,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   takeAction(status: string) {
     const data = {
-      titleDialog: `${status === 'approved' ? 'Setujui Request Adjusment Coin' : 'Tolak Request Adjusment Coin'}`,
+      titleDialog: `${status === 'approved' ? 'Setujui Request Adjustment Coin' : 'Tolak Request Adjustment Coin'}`,
       captionDialog: `Apakah anda yakin untuk ${status === 'approved' ? 'menyetujui' : 'menolak'} request adjustment coin ini ?`,
       confirmCallback: () => this.confirmAction(status),
       buttonText: ['Ya, Lanjutkan', 'Batal']
@@ -677,15 +677,34 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
       this.dialogService.openSnackBar({ message: "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)" })
       return;
     }
-    const dialogConfig = new MatDialogConfig();
+    // const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.autoFocus = true;
-    dialogConfig.disableClose = true;
-    dialogConfig.width = "450px";
-    dialogConfig.panelClass = "popup-notif";
-    dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: 'BATAL', is_tsm: this.isTSM };
+    // dialogConfig.autoFocus = true;
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = "450px";
+    // dialogConfig.panelClass = "popup-notif";
+    // dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: 'BATAL', is_tsm: this.isTSM };
 
-    this.dialog.open(NotificationCoinAdjustmentDialogComponent, dialogConfig);
+    // this.dialog.open(NotificationCoinAdjustmentDialogComponent, dialogConfig);
+    const data = {
+      titleDialog: `Kirim Email Notifikasi`,
+      captionDialog: `Anda akan mengirimkan email notifikasi ke <b>${this.dataApproval.approver || 'Tidak Ada user yang terpilih'}</b> ?`,
+      confirmCallback: () => this.confirmSubmitNotification(),
+      htmlContent: true,
+      buttonText: ['Ya, Lanjutkan', 'Batal']
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmSubmitNotification() {
+    this.dataService.showLoading(true);
+    this.coinAdjustmentApprovalService.sendNotification({ id: Number(this.dataApproval.id), user_id: this.dataApproval.responded_by }, { is_tsm: this.isTSM }).subscribe(res => {
+      this.dataService.showLoading(false);
+      this.dialogService.brodcastCloseConfirmation();
+      this.dialogService.openSnackBar({ message: "Berhasil mengirimkan Notifikasi!" });
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }

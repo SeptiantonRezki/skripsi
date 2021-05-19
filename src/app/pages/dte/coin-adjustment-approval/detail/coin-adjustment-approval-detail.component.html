@@ -182,7 +182,7 @@
 
         <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
           fxLayoutGap.lt-md="0px"
-          *ngIf="permissionCoinAdjustment?.ubah && dataApproval['status'] && dataApproval['status'] === 'pending'">
+          *ngIf="dataApproval.can_approve && dataApproval['status'] && dataApproval['status'] === 'pending'">
           <button mat-raised-button type="button" class="primary-green"
             style="width: 220px; height: 50px; font-size: 18px;border-radius:5px;" (click)="takeAction('approved')">
             APPROVE

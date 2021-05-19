@@ -279,7 +279,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'adjustment-coin-dialog';
-    dialogConfig.data = this.data;
+    dialogConfig.data = { ...this.data, is_tsm: true };
 
     this.dialogRef = this.dialog.open(ImportTsmCoinComponent, dialogConfig);
 
