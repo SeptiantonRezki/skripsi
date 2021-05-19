@@ -1,0 +1,16 @@
+.box {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 24px;
+    border: 1px solid #eee;
+}
+
+.box-hub {
+    background: #f3f3f3;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.box-container {
+    margin: 16px 0;
+}

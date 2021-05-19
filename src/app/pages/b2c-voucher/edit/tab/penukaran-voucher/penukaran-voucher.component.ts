@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-penukaran-voucher',
@@ -117,6 +118,7 @@ export class PenukaranVoucherComponent implements OnInit {
 
   getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
+    console.log(this.detailVoucher);
     if (this.detailVoucher) {
       this.isVoucherAutomation.setValue(this.detailVoucher.is_reimburse === 1 ? true : false);
         this.formPenukaranVoucher.get('startDate').setValue(this.detailVoucher.reimburse_start_date);
@@ -177,10 +179,12 @@ export class PenukaranVoucherComponent implements OnInit {
             }
           });
         }
+        let startDate = this.formPenukaranVoucher.get('startDate').value;
+        let endDate = this.formPenukaranVoucher.get('endDate').value;
         const body = {
           'is_reimburse': this.isVoucherAutomation.value ? 1 : 0,
-          'reimburse_start_date': this.formPenukaranVoucher.get('startDate').value,
-          'reimburse_end_date': this.formPenukaranVoucher.get('endDate').value,
+          'reimburse_start_date': moment.isMoment(startDate) ? moment(startDate).format('YYYY-MM-DD') : startDate,
+          'reimburse_end_date': moment.isMoment(endDate) ? moment(endDate).format('YYYY-MM-DD') : endDate,
           'reimburse_is_b2b_voucher': this.formPenukaranVoucher.get('isVoucherB2B').value ? 1 : 0,
           'reimburse_transfer_bank': transferBankValue.length > 0 ? transferBankValue : [],
           'reimburse_pojok_bayar': saldoPojokBayarValue.length > 0 ? saldoPojokBayarValue : [],
