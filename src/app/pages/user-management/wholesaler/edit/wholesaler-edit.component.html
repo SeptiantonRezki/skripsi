@@ -10,7 +10,16 @@
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
           <h3>Detil Wholesaler</h3>
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
+            <div fxFlex="50" class="px-8">
 
+              <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+                <mat-select formControlName="role_id">
+                  <mat-option [value]="wsRole.id" *ngFor="let wsRole of wsRoles">{{wsRole.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+            
             <div fxFlex="50" class="px-8">
 
               <mat-form-field

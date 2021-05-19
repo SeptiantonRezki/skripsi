@@ -1,0 +1,24 @@
+.mat-tree {
+  background-color: transparent !important;
+}
+.tingkat-fitur-tree-invisible {
+  display: none;
+}
+
+.tingkat-fitur-tree ul,
+.tingkat-fitur-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.tingkat-fitur-tree {
+  width: 100%;
+}
+.tingkat-fitur-parent {
+  display: inline-block;
+  width: 30%;
+  vertical-align: top;
+}
+.tingkat-fitur-parent-label{
+  font-weight: 800;
+}

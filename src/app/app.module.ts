@@ -60,6 +60,7 @@ import { HelpService } from "./services/content-management/help.service";
 import { CategoryService } from "./services/newsfeed-management/category.service";
 import { NewsService } from "./services/newsfeed-management/news.service";
 import { AccessService } from "./services/settings/access.service";
+import { FeatureLevelService } from "./services/settings/feature-level.service";
 import { AccountService } from "./services/settings/account.service";
 import { GoogleAnalyticsService } from "./services/google-analytics.service";
 import { NavigationService } from "./services/navigation.service";
@@ -191,6 +192,7 @@ const config = {
     CategoryService,
     NewsService,
     AccessService,
+    FeatureLevelService,
     AccountService,
     AuthGuard,
     GoogleAnalyticsService,

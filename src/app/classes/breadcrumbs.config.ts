@@ -2064,7 +2064,52 @@ export const brConfig = {
         url: "",
         name: "Ubah Pengaturan OTP"
       }
-    ]
+    ],
+    tingkat_fitur: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Tingkat Fitur"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/settings/feature-level",
+          name: "Tingkat Fitur"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Tingkat Fitur"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/settings/feature-level",
+          name: "Tingkat Fitur"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Tingkat Fitur"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/settings/feature-level",
+          name: "Tingkat Fitur"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Tingkat Fitur"
+        }
+      ]
+    }
   },
   admin: {
     user: {

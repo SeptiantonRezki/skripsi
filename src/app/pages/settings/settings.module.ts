@@ -30,6 +30,7 @@ import {
   MAT_DATE_LOCALE,
   MAT_DATE_FORMATS,
   MatTooltipModule,
+  MatTreeModule,
 } from "@angular/material";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { FuseSharedModule } from "@fuse/shared.module";
@@ -48,8 +49,11 @@ import { ngfModule } from "angular-file";
 import { NewSignComponent } from './new-sign/new-sign.component';
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
-
-
+import { TingkatFiturIndexComponent } from "./tingkat-fitur/index/tingkat-fitur-index.component";
+import { TingkatFiturFormComponent } from "./tingkat-fitur/form/tingkat-fitur-form.component";
+import { TingkatFitureRolesComponent } from "./tingkat-fitur/tree/tingkat-fitur-tree.component";
+import {CdkTreeModule} from '@angular/cdk/tree';
+import { TingkatFiturTreeData } from './tingkat-fitur/tree/tingkat-fitur-tree-data.service';
 export const MY_FORMATS = {
   parse: {
     dateInput: "LL"
@@ -92,7 +96,9 @@ export const MY_FORMATS = {
     EllipsisModule,
     ngfModule,
     NgxMaterialTimepickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTreeModule,
+    CdkTreeModule,
   ],
   declarations: [
     RoleIndexComponent,
@@ -105,7 +111,10 @@ export const MY_FORMATS = {
     DialogOtherHelp,
     OTPSettingsComponent,
     UploadImageComponent,
-    NewSignComponent
+    NewSignComponent,
+    TingkatFiturIndexComponent,
+    TingkatFiturFormComponent,
+    TingkatFitureRolesComponent,
   ],
   exports: [
     RoleIndexComponent,
@@ -119,7 +128,9 @@ export const MY_FORMATS = {
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ListMenuResolver, PageGuard],
+    ListMenuResolver, PageGuard,
+    TingkatFiturTreeData,
+  ],
   entryComponents: [DialogOtherHelp, UploadImageComponent]
 })
 export class SettingsModule { }
