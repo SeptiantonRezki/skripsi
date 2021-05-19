@@ -42,6 +42,8 @@
           <div>
             <span style="font-weight: 800;">Syarat & Ketentuan</span>
             <ul class="pl-16 m-0">
+              <li *ngIf="detailVoucher?.usage.length === 2">Voucher dapat digunakan pada fitur Pesan Antar dan pembelian langsung ke SRC</li>
+              <li>Voucher tidak berlaku untuk pembelian produk ROKOK dan SUSU FORMULA BAYI DIBAWAH 6 BULAN</li>
               <li>Voucher potongan ini senilai {{detailVoucher?.nominal | rupiahFormater}}</li>
               <li *ngIf="detailVoucher?.limit_by === 'product'">Hanya dapat digunakan untuk pembelian produk {{dataLimitMap()}}</li>
               <li *ngIf="detailVoucher?.limit_by === 'category'">Hanya dapat digunakan untuk pembelian kategori produk {{dataLimitMap()}}</li>

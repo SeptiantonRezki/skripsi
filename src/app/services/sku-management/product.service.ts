@@ -36,9 +36,9 @@ export class ProductService extends BaseService {
     return this.deleteApi(url, context);
   }
 
-  getListCategory(id): Observable<any> {
+  getListCategory(id, body?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_category", { parent_id: id });
-    return this.getApi(url);
+    return this.getApi(url, body);
   }
 
   getListCategoryVendor(): Observable<any> {
