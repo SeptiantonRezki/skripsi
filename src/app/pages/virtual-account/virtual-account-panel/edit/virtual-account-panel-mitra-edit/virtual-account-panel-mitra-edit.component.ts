@@ -457,12 +457,12 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
   }
 
   async export() {
-    if (this.selected.length === 0) {
-      this.dialogService.openSnackBar({
-        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
-      })
-      return;
-    }
+    // if (this.selected.length === 0) {
+    //   this.dialogService.openSnackBar({
+    //     message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+    //   })
+    //   return;
+    // }
 
     this.dataService.showLoading(true);
     // let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
