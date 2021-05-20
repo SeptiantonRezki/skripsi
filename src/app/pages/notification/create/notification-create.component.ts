@@ -58,7 +58,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua", value: "18-" }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
   listNotifType: any [] = [
@@ -165,11 +165,18 @@ export class NotificationCreateComponent {
       this.recurrenceType = '';
     }
 
-    if(this._typeOfRecurrence !== 'OneTime') {
+    if(this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
     } else {
       this.formNotification.controls.is_target_audience.enable();
+    }
+
+    if(this.typeOfRecurrence == 'Bday18') {
+      this.formNotification.controls.age.setValue('18+');
+      this.formNotification.controls.age.disable();
+    } else {
+      this.formNotification.controls.age.enable();
     }
   }
 
@@ -196,7 +203,6 @@ export class NotificationCreateComponent {
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
-    console.log(this.areaType);
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.formNotificationError = {
@@ -249,6 +255,7 @@ export class NotificationCreateComponent {
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
+      send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
     });
@@ -380,6 +387,8 @@ export class NotificationCreateComponent {
 
     if(this.formNotification.controls.user_group.value !== 'customer') {
       this.formNotification.controls.type_of_recurrence.disable();
+      this.formNotification.controls.send_ayo.setValue(true);
+      this.formNotification.controls.send_ayo.disable();
     }
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
@@ -1179,8 +1188,12 @@ export class NotificationCreateComponent {
     if(e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
       this.formNotification.controls.type_of_recurrence.disable();
+      this.formNotification.controls.send_ayo.setValue(true);
+      this.formNotification.controls.send_ayo.disable();
     } else {
       this.formNotification.controls.type_of_recurrence.enable();
+      this.formNotification.controls.send_ayo.enable();
+      this.formNotification.controls.send_ayo.setValue(false);
     }
     console.log(this.formNotification.value.user_group);
   }
@@ -1293,6 +1306,7 @@ export class NotificationCreateComponent {
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
+      send_sfmc: this.formNotification.get('send_ayo').value ? '0': '1',
       status: this.formNotification.get('status').value
     };
 
@@ -1303,7 +1317,15 @@ export class NotificationCreateComponent {
 
     let recurrenceBody: { [key: string]: any; };
 
-    if(this.typeOfRecurrence == 'Recurring') {
+    if (body.type === 'customer') {
+      body['verification'] = this.formNotification.get('verification').value;
+      body['age'] = this.formNotification.get("age").value;
+      body['notif_type'] = this.formNotification.get('notif_type').value;
+    }
+
+    if(this.typeOfRecurrence == 'Bday18') {
+      body['age'] = '18+';
+    } else if(this.typeOfRecurrence == 'Recurring') {
       recurrenceBody = {
         recurrence_type: this.recurrenceType
       }
@@ -1339,12 +1361,6 @@ export class NotificationCreateComponent {
         ...body,
         ...recurrenceBody
       }
-    }
-
-    if (body.type === 'customer') {
-      body['verification'] = this.formNotification.get('verification').value;
-      body['age'] = this.formNotification.get("age").value;
-      body['notif_type'] = this.formNotification.get('notif_type').value;
     }
 
     if (body.content_type === 'static_page') {
@@ -1383,6 +1399,13 @@ export class NotificationCreateComponent {
                 bodyVideo.delete('target_audience');
               }
             }
+
+            if(this.formNotification.get('send_ayo').value) {
+              bodyVideo.append('send_sfmc', '0');
+            } else {
+              bodyVideo.append('send_sfmc', '1');
+            }
+
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if(this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
@@ -1429,6 +1452,12 @@ export class NotificationCreateComponent {
             }
           }
 
+          if(this.formNotification.get('send_ayo').value) {
+            bodyVideo.append('send_sfmc', '0');
+          } else {
+            bodyVideo.append('send_sfmc', '1');
+          }
+
           bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
           
           if(this.typeOfRecurrence == 'Recurring') {
@@ -1464,7 +1493,7 @@ export class NotificationCreateComponent {
     }
 
     this.dataService.showLoading(true);
-    console.log(body)
+    
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
@@ -2145,7 +2174,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification,
+        verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2173,6 +2202,11 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
+      if(type == 'customer') {
+        frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 0 || send_sfmc == '0');
+      } else {
+        frm.controls['send_ayo'].setValue(true);
+      }
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
@@ -2223,8 +2257,7 @@ export class NotificationCreateComponent {
       } else {
         this.typeOfRecurrence = type_of_recurrence
       }
-      console.log('type', type);
-      console.log('target_audience', target_audience);
+
       if(type !== 'customer' || target_audience) {
         frm.controls['is_target_audience'].setValue(target_audience ? true : false);
         if (target_audience) {
