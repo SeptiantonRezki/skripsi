@@ -156,7 +156,7 @@ export class WholesalerEditComponent {
       territory: ["", Validators.required],
       branchShop: [false],
       formBranchStore: this.formBuilder.array([]),
-      role_id: ["", Validators.required],
+      role_id: ["", [Validators.required]],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -346,6 +346,10 @@ export class WholesalerEditComponent {
       formBranchStore: [],
       role_id: this.detailWholesaler.role_id,
     });
+    let roleIdValidator = [Validators.required];
+    if (this.detailWholesaler.is_branch) roleIdValidator = [];
+
+    this.formWs.get('role_id').setValidators(roleIdValidator);
 
     const fbs = this.formWs.get('formBranchStore') as FormArray;
     this.detailWholesaler.data_branch.map((item: any, index: number) => {
@@ -621,7 +625,7 @@ export class WholesalerEditComponent {
         bank_account_number: this.formBankAccount.get("account_number").value === "" ? null : this.formBankAccount.get("account_number").value,
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
-        role_id: this.formWs.get('role_id').value,
+        role_id: (!this.detailWholesaler.is_branch) ? this.formWs.get('role_id').value : undefined,
       };
 
       if (this.formWs.get("branchShop").value === true) {
