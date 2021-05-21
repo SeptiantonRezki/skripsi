@@ -49,7 +49,7 @@ export class TingkatFiturIndexComponent implements OnInit {
       .subscribe(data => {
         this.search(data);
       });
-      this.permission = this.roles.getRoles('principal.b2b_voucher');
+      this.permission = this.roles.getRoles('principal.feature_level');
   }
 
   ngOnInit() {
