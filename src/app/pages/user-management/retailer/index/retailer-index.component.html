@@ -21,7 +21,7 @@
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
-      <button (click)="export()" mat-raised-button type="button" class="is-danger">
+      <button (click)="export()" mat-raised-button type="button" class="is-danger" disabled>
         <mat-icon>arrow_upward</mat-icon> Export XLS
       </button>
     </div>
@@ -45,14 +45,16 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Zone" formControlName="zone" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
                 Zona' :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Regional" formControlName="region" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
+                ? 'Semua
                 Regional'
                 :
                 item.code}}</mat-option>
@@ -60,7 +62,8 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Area" formControlName="area" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
                 Area'
                 :
                 item.code}}</mat-option>
@@ -68,7 +71,8 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                'all' ?
                 'Semua
                 Salespoint'
                 :
@@ -77,7 +81,8 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="District" formControlName="district" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                'all' ? 'Semua
                 District'
                 :
                 item.code}}</mat-option>
@@ -85,7 +90,8 @@
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
             <mat-select placeholder="Territory" formControlName="territory" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                'all' ? 'Semua
                 Territori'
                 :
                 item.code}}</mat-option>
@@ -185,7 +191,7 @@
 
         <ngx-datatable-column name="SRC Type" prop="src_type" summary-template="activeCell">
         </ngx-datatable-column>
-        
+
         <ngx-datatable-column name="GSR" prop="gsr_flag" summary-template="activeCell">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.gsr_flag === 1 ? 'On' : 'Off'}}
