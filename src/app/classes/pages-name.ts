@@ -152,6 +152,15 @@ export class PagesName {
       });
     }
 
+    const exports = filterPermission.filter(item => item.indexOf('export') >= 0);
+    if (exports) {
+      exports.forEach(value => {
+        let submenuKey = value.split('.');
+        submenuKey = submenuKey[submenuKey.length - 1];
+        roles[submenuKey] = value.replace('.export.', '.');
+      });
+    }
+
     return roles
   }
 }

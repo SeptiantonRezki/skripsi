@@ -1159,7 +1159,14 @@ export class RetailerIndexComponent {
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
       // const selectedRetailer = [];
-      const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
+      // const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
+      let response;
+      if (!this.permission.idnumber) {
+        response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
+      } else {
+        response = await this.retailerService.getIdNumber({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
+      }
+
       console.log('he', response.headers);
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
