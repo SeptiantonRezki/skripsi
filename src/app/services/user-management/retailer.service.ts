@@ -66,6 +66,11 @@ export class RetailerService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
+  getIdNumber(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_id_number");
+    return this.postBlobApi(url, body);
+  }
+
   importExcel(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "import_access_cashier");
     return this.multipartPost(url, body);
