@@ -125,6 +125,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "virtual-account",
+    loadChildren: "./pages/virtual-account/virtual-account.module#VirtualAccountModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'b2b-voucher',
     loadChildren: './pages/b2-bvoucher/b2-bvoucher.module#B2BVoucherModule',
     canActivate: [AuthGuard]

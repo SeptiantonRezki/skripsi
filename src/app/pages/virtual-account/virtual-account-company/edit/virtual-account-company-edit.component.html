@@ -1,0 +1,110 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Perusahaan'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">{{ isDetail ? 'Detil' : 'Ubah' }} Perusahaan</h2>
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formCompany">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="name" placeholder="Nama Bank">
+                <mat-option *ngFor="let item of listBanks" [value]="item.code">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formCompany.controls['name'].hasError('required') && formCompany.controls['name'].touched">
+                Nama harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxFlex="45">
+            <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light form-primary">
+              <input matInput value="+62" readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light form-primary">
+              <input matInput type="tel" min="0" formControlName="contact" placeholder="Nomor Kontak"
+                (keypress)="numbersOnlyValidation($event)">
+            </mat-form-field>
+          </div>
+          <mat-error
+            *ngIf="formCompany.controls['contact'].hasError('required') && formCompany.controls['contact'].touched">
+            Nomor Kontak harus diisi
+          </mat-error>
+          <mat-error
+            *ngIf="formCompany.controls['contact'].hasError('pattern') && formCompany.controls['contact'].touched">
+            Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka
+          </mat-error>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="email" formControlName="email" placeholder="Email">
+              <mat-error
+                *ngIf="formCompany.controls['email'].hasError('required') && formCompany.controls['email'].touched">
+                Email harus diisi
+              </mat-error>
+              <mat-error
+                *ngIf="formCompany.controls['email'].hasError('email') && formCompany.controls['email'].touched">
+                Email tidak valid
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="flowingly_id" placeholder="Flowingly ID">
+              <mat-error
+                *ngIf="formCompany.controls['flowingly_id'].hasError('required') && formCompany.controls['flowingly_id'].touched">
+                Flowingly ID harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="minimum_transaction"
+                placeholder="Minimum Transaksi" numericOnly>
+              <mat-error
+                *ngIf="formCompany.controls['minimum_transaction'].hasError('required') && formCompany.controls['minimum_transaction'].touched">
+                Minimum Transaksi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div> -->
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="tel" currencyMask min="0" formControlName="service_cost"
+                placeholder="Biaya Layanan" numericOnly>
+              <mat-error
+                *ngIf="formCompany.controls['service_cost'].hasError('required') && formCompany.controls['service_cost'].touched">
+                Biaya Layanan harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="status" placeholder="Status">
+                <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formCompany.controls['status'].hasError('required') && formCompany.controls['status'].touched">
+                Status harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+        SIMPAN
+      </button>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>

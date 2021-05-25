@@ -1,0 +1,50 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Syarat & Ketentuan'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">Buat Syarat & Ketentuan</h2>
+      </div>
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formTnc">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" formControlName="title" placeholder="Judul S&K">
+              <mat-error
+                *ngIf="formTnc.controls['title'].hasError('required') && formTnc.controls['title'].touched">
+                Judul harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxFlex="45">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="user_group" placeholder="Grup Pengguna">
+                <mat-option *ngFor="let item of userGroup" [value]="item.value" style="text-transform: capitalize;">
+                  {{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formTnc.controls['user_group'].hasError('required') && formTnc.controls['user_group'].touched">
+                Grup Pengguna harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+            <h3 class="">Konten Syarat & Ketentuan</h3>
+          </div>
+          <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+        </form>
+      </div>
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+        SIMPAN
+      </button>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>

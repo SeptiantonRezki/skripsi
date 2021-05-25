@@ -1,0 +1,75 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Panel Virtual Account'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/virtual-account', 'panel', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Panel Virtual Account</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Nama Perusahaan" prop="virtual_account_company_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.virtual_account_company_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Mitra SRC" prop="mitra_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.mitra_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah SRC" prop="src_count">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.src_count}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Last Update By" prop="updated_by">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.updated_by}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Last Update At" prop="updated_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.updated_at | date:'dd/MM/yyyy HH:mm'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="" matTooltip="Ubah Perusahaan" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button type="button" mat-icon-button color="" matTooltip="Export All Panel" (click)="export(row.id)">
+                <mat-icon class="orange-500-fg">save_alt</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteCompany(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

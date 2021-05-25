@@ -2,26 +2,27 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
-import { TncService } from 'app/services/content-management/tnc.service';
-import { Router } from '@angular/router';
+import { VirtualAccountTncService } from 'app/services/virtual-account/virtual-account-tnc.service';
 
 @Component({
-  selector: 'app-tnc-index',
-  templateUrl: './tnc-index.component.html',
-  styleUrls: ['./tnc-index.component.scss']
+  selector: 'app-virtual-account-tnc',
+  templateUrl: './virtual-account-tnc.component.html',
+  styleUrls: ['./virtual-account-tnc.component.scss']
 })
-export class TncIndexComponent {
-
+export class VirtualAccountTncComponent implements OnInit {
   rows: any[];
   selected: any[];
   id: any[];
+  statusRow: string;
 
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
+  offsetPagination: any;
 
   keyUp = new Subject<string>();
 
@@ -31,10 +32,10 @@ export class TncIndexComponent {
   activeCellTemp: TemplateRef<any>;
 
   constructor(
+    private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private tncService: TncService,
-    private router: Router
+    private VirtualAccountTncService: VirtualAccountTncService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -50,23 +51,23 @@ export class TncIndexComponent {
   }
 
   ngOnInit() {
-    // this._fuseSplashScreenService.show();
-    // this.http.get("api/ayo-b2b-user").subscribe((contacts: any) => {
-    //   this.rows = contacts;
-    //   this.loadingIndicator = false;
-    // });
-    // setTimeout(() => {
-    //     this._fuseSplashScreenService.hide();
-    // }, 3000);
-    this.getTnc();
+    this.getTncs();
   }
 
-  getTnc() {
-    this.tncService.get(this.pagination).subscribe(
+  getTncs() {
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+    this.VirtualAccountTncService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
-        console.log(res.data)
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -80,17 +81,15 @@ export class TncIndexComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-
-    console.log("Select Event", selected, this.selected);
   }
 
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.tncService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.VirtualAccountTncService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -103,9 +102,9 @@ export class TncIndexComponent {
 
     console.log("check pagination", this.pagination);
 
-    this.tncService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.VirtualAccountTncService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -116,30 +115,30 @@ export class TncIndexComponent {
     this.pagination.search = string;
     this.pagination.page = 1;
 
-    this.tncService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    console.log(this.pagination);
+
+    this.VirtualAccountTncService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
   directEdit(param?: any): void {
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: param
-    // }
-    this.dataService.setToStorage("detail_tnc", param);
-    this.router.navigate(['content-management','terms-and-condition', 'edit']);
+    this.dataService.setToStorage("detail_virtual_account_tnc", param);
+    this.router.navigate(["virtual-account", "terms-and-condition", "edit"]);
   }
 
-  getActives() {
-    return this.rows.map(row => row["active_status"]);
+  directDetail(param?: any): void {
+    this.dataService.setToStorage("detail_virtual_account_tnc", param);
+    this.router.navigate(["virtual-account", "terms-and-condition", "detail"]);
   }
 
-  deletePage(id): void {
+  deleteTnc(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Syarat & Ketentuan",
-      captionDialog: "Apakah anda yakin untuk menghapus data syarat & ketentuan ini ?",
+      titleDialog: "Hapus Spanduk",
+      captionDialog: "Apakah anda yakin untuk menghapus spanduk ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -147,17 +146,14 @@ export class TncIndexComponent {
   }
 
   confirmDelete() {
-    this.tncService.delete({ content_id: this.id }).subscribe(
-      res => {
+    this.VirtualAccountTncService.delete({ tnc_id: this.id }).subscribe(res => {
+      if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.getTncs();
 
-        this.getTnc();
-      },
-      err => {
-        this.dialogService.openSnackBar({ message: err.error.message });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
-    );
+    });
   }
 
 }
