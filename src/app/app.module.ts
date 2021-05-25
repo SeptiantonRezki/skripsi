@@ -94,6 +94,10 @@ import { TaskVerificationService } from "./services/dte/task-verification.servic
 import { PayLaterCompanyService } from "./services/pay-later/pay-later-company.service";
 import { PayLaterPanelService } from "./services/pay-later/pay-later-panel.service";
 import { PayLaterDeactivateService } from "./services/pay-later/pay-later-deactivate.service";
+import { VirtualAccountCompanyService } from "./services/virtual-account/virtual-account-company.service";
+import { VirtualAccountBinService } from "./services/virtual-account/virtual-account-bin.service";
+import { VirtualAccountPanelService } from "./services/virtual-account/virtual-account-panel.service";
+import { VirtualAccountTncService } from "./services/virtual-account/virtual-account-tnc.service";
 import { MedalBadgeService } from "./services/user-management/retailer/medal-badge.service";
 
 // firebase notification
@@ -222,6 +226,10 @@ const config = {
     PayLaterCompanyService,
     PayLaterPanelService,
     PayLaterDeactivateService,
+    VirtualAccountCompanyService,
+    VirtualAccountBinService,
+    VirtualAccountPanelService,
+    VirtualAccountTncService,
     MedalBadgeService,
     CoinAdjustmentApprovalService,
     CoinDisburstmentService,

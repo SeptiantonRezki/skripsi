@@ -352,6 +352,7 @@ export class Endpoint {
         category_product: `${AYO_API}/api/general/analytic/category-product`,
         unlocked: `${AYO_API}/api/${type_api}/user/${context.type}/unlocked`,
         banks: `${AYO_API}/api/v2/general/bank`,
+        listbank: `${AYO_API}/api/v2/general/listbank`,
         app_versions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/version`,
         // cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
         cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`
@@ -682,6 +683,45 @@ export class Endpoint {
       paylater_activate: {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
         activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`
+      },
+      virtual_account_company: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company/${context.company_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company/${context.company_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company/${context.company_id}`,
+        // update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company/update-status/${context.company_id}`,
+        // list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/group`,
+      },
+      virtual_account_bin: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/bin`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/bin/${context.bin_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/bin`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/bin/${context.bin_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/bin/${context.bin_id}`,
+        list_companies: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company/list`,
+        list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company`,
+      },
+      virtual_account_panel: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel`,
+        get_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/mitra/list`,
+        get_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/src/list`,
+        check_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/check`,
+        panel_companies: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/company/list`,
+        export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/export`,
+        export_all_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/list/export`,
+        store: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/${context.panel_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/${context.panel_id}`,
+        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/import`,
+        preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/panel/preview-import`
+      },
+      virtual_account_tnc: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/tnc/${context.tnc_id}`,
       },
       new_sign_menu: {
         icon_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/sign-menu/list/icon`,
