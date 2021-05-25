@@ -51,8 +51,9 @@ export class PayMethodEditComponent implements OnInit {
     this.checkAll = false;
 
     this.activatedRoute.url.subscribe(param => {
-      this.isDetail = param[1].path === 'detail' ? true : false;
-      this.payMethodId = param[2].path;
+      console.log('param', param)
+      this.isDetail = param[2].path === 'detail' ? true : false;
+      this.payMethodId = param[3].path;
 
     });
 
