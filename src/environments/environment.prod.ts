@@ -31,4 +31,5 @@ export const server = {
   community: "community",
   order: "order",
   orderCashier: 'cashier-order',
+  productCashier: "cashier-product",
 }

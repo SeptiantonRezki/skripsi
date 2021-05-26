@@ -3,6 +3,9 @@ import { Routes, RouterModule } from "@angular/router";
 import { ProductIndexComponent } from "./product/index/product-index.component";
 import { ProductCreateComponent } from "./product/create/product-create.component";
 import { ProductEditComponent } from "./product/edit/product-edit.component";
+import { CashierIndexComponent } from "./product-cashier/index/index.component";
+import { CashierCreateComponent } from "./product-cashier/create/create.component";
+import { CashierEditComponent } from "./product-cashier/edit/edit.component";
 import { brConfig } from "../../classes/breadcrumbs.config";
 import { RewardIndexComponent } from "./reward/index/reward-index.component";
 import { RewardCreateComponent } from "./reward/create/reward-create.component";
@@ -68,6 +71,30 @@ const routes: Routes = [
       listBrand: ListBrandResolver,
       listCategory: ListCategoryResolver,
       listPackaging: ListPackagingResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier",
+    component: CashierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/create",
+    component: CashierCreateComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.create
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/edit/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.edit
     },
     canActivate: [PageGuard]
   },

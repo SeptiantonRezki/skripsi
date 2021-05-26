@@ -1,0 +1,89 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header [contentTitle]="'Ubah Produk Kasir'">
+    <button
+      *ngIf="!isDetail"
+      mat-raised-button
+      aria-label="Simpan"
+      (click)="submit()"
+      type="button"
+    >
+      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
+    </button>
+  </page-content-header>
+  <div
+    *ngIf="onLoad"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    class="pt-48"
+  >
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <form
+        autocomplete="off"
+        [formGroup]="formProductGroup"
+        (keydown.enter)="$event.preventDefault()"
+      >
+        <mat-tab-group>
+          <mat-tab label="Informasi Produk">
+            <div class="ayo-middle" fxLayout="column">
+              <div class="p-24" fxLayout="column">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Nama Produk"
+                    formControlName="name"
+                    readonly
+                  />
+                  <mat-error
+                    *ngIf="
+                      formProductGroup.controls['name'].hasError('required') &&
+                      formProductGroup.controls['name'].touched
+                    "
+                  >
+                    Nama Produk harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Barcode"
+                    formControlName="barcode"
+                    readonly
+                  />
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="numeric"
+                    currencyMask
+                    min="0"
+                    placeholder="Harga Beli"
+                    formControlName="purchase_price"
+                  />
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="numeric"
+                    currencyMask
+                    min="0"
+                    placeholder="Harga Jual"
+                    formControlName="selling_price"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </div>
+  </div>
+</div>

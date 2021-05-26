@@ -182,6 +182,10 @@ export class Endpoint {
           }&status=active`,
         generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
       },
+      product_cashier: {
+        get: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product`,
+        detail: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
+      },
       template_task: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
