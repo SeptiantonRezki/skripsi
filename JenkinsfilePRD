@@ -1,0 +1,79 @@
+pipeline{  
+       agent   {  
+          node      {  
+                 label 'jenkins-slave-2-ayo-src' 
+    
+      }
+   }
+    environment {
+        REGION="ap-southeast-1"
+        PROJECT_NAME="ayo-principal"
+        AWSCRED="ayo-ws"
+        scannerHome = tool 'Sonar-Scanner-4.0.0.1744'
+        BUILDID = "${env.BUILD_ID}"
+        //APPROVER="dputra4@pmintl.net, elorenz@pmintl.net, azimah@pmintl.net, badityat@pmintl.net, mtjen1@pmintl.net, fsujito1@pmintl.net, awibawa2@pmintl.net, rrinaldo1@pmintl.net, mchandra@pmintl.net, mpuspita1@pmintl.net, mmelissa1@pmintl.net, shadiasa@pmintl.net, aandyant@pmintl.net"    
+    }
+    stages {
+        stage('Unit Test'){
+            steps{
+                echo "Run Unit Test"
+                // checkout scm
+                // script{
+                    // dockImage = docker.build("${PROJECT_NAME}:${env.BUILD_ID}")
+                // }
+            }
+        }
+       
+       
+             
+        stage('Prepare to Build') {
+            agent {
+                docker { 
+                    image 'hikmahgumelar/ng-cli:7.2.3'
+                    label 'jenkins-slave-2-ayo-src' 
+                    args '-u root:root'
+                    }
+            }
+            stages{
+                stage('Prepare AWS CLI'){
+                    steps {
+                        sh 'df -h'
+                        withCredentials(
+                        [[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            credentialsId: AWSCRED,  // ID of credentials in Jenkins
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                        ]]){
+                           
+                            sh 'aws configure --profile ${PROJECT_NAME} set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
+                            sh 'aws configure --profile ${PROJECT_NAME} set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
+                            sh 'aws configure --profile ${PROJECT_NAME} set region ${REGION}'
+                           
+                        }
+                    }
+                }
+                stage('Build Frontend'){
+                    steps{
+                        sh 'echo BUILD APP WITH ID :${BUILD_NUMBER}'
+                        sh 'npm ci'
+                        sh 'npm install --save path'
+                        sh 'rm -rf ${WORKSPACE}/dist '
+                        sh 'node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --prod'
+
+                        echo "START : DEPLOY TO S3 BUCKET"
+                            sh 'aws s3 --profile ${PROJECT_NAME} sync s3://qa-ayo-hms/_Deployment_PRD/ ${WORKSPACE}/backup-principal-prod'                           
+                            sh 'aws s3 --profile ${PROJECT_NAME} sync  ${WORKSPACE}/backup-principal-prod/ s3://src-assets-qa/backup-prod-ayo-hms --delete'
+                            sh 'aws s3 --profile ${PROJECT_NAME} sync  ${WORKSPACE}/dist/ayo-principal/ s3://qa-ayo-hms/_Deployment_PRD/ --delete'  
+                        echo "DONE : DEPLOY TO S3 BUCKET" 
+                    }
+                }   
+                stage('Done'){
+                    steps{
+                        echo "Done" 
+                    }
+                }
+            }
+        }
+    }
+}
