@@ -89,6 +89,17 @@ export class BaseService {
     return this.http.post(url, request, { ...requestConfig, headers, params: query });
   }
 
+  protected postApiTest(url, request, params: any = null, requestConfig?) {
+    if (!requestConfig) {
+      requestConfig = {};
+    }
+    let query = this.loopParams(params);
+    this.clean(request);
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    headers.set('Content-Type','application/json')
+    return this.http.post(url, request, {  responseType: 'blob', headers, params: query });
+  }
+
   protected multipartPost(url, request) {
     return this.http.post(url, request)
   }

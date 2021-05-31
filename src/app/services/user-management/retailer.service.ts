@@ -68,7 +68,7 @@ export class RetailerService extends BaseService {
 
   getIdNumber(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export_id_number");
-    return this.postBlobApi(url, body);
+    return this.postApiTest(url, body);
   }
 
   importExcel(body?): Observable<any> {
