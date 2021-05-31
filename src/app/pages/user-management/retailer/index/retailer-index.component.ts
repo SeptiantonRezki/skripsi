@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, ElementRef, NgZone } from '@angular/core';
+import { Component, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -1160,7 +1160,7 @@ export class RetailerIndexComponent {
     try {
       // const selectedRetailer = [];
       // const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
-      let response;
+      let response:any;
       if (!this.permission.idnumber) {
         response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
       } else {
@@ -1168,7 +1168,10 @@ export class RetailerIndexComponent {
       }
 
       console.log('he', response.headers);
-      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(blob);
+      window.open(url);
+      // this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.exportAccessCashier = false;
