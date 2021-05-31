@@ -808,6 +808,9 @@ export class RetailerEditComponent {
       this.pkp.updateValueAndValidity();
 
     }
+    if (!this.isCan(['gsm_pl'])) {
+      this.disableFields(['gsm_pl']);
+    }
     // if (!this.isCan(['ubah', 'akses_kasir'])) {
     //   const fields = ['cashier'];
     //   this.disableFields(fields);
