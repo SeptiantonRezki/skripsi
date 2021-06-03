@@ -686,7 +686,8 @@ export class Endpoint {
       },
       paylater_activate: {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
-        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`
+        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/src/export`,
       },
       virtual_account_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company`,
