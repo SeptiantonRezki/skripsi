@@ -3,7 +3,7 @@
   fxLayout="column"
   fusePerfectScrollbar
 >
-  <page-content-header [contentTitle]="'Ubah Produk Kasir'">
+  <page-content-header [contentTitle]="isDetail ? 'Detail Produk Kasir' : 'Ubah Produk Kasir'">
     <button
       *ngIf="!isDetail"
       mat-raised-button
@@ -49,7 +49,16 @@
                     [value]="formProductGroup.get('barcode').value"
                   />
                 </mat-form-field>
-                <mat-form-field fxFlex="100" class="is-light">
+
+                <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+                  <mat-label>Harga Beli</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('purchase_price').value"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="!isDetail"  fxFlex="100" class="is-light">
                   <input
                     matInput
                     type="tel"
@@ -72,7 +81,16 @@
                     Harga Beli harus diisi
                   </mat-error>
                 </mat-form-field>
-                <mat-form-field fxFlex="100" class="is-light">
+
+                <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+                  <mat-label>Harga Jual</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('selling_price').value"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="!isDetail"  fxFlex="100" class="is-light">
                   <input
                     matInput
                     type="tel"

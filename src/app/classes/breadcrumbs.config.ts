@@ -1075,6 +1075,18 @@ export const brConfig = {
           name: "Ubah Produk"
         }
       ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
+        }
+      ],
     },
     reward: {
       index: [

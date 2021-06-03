@@ -1,9 +1,11 @@
 import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
 import { DataService } from "app/services/data.service";
 import { ProductCashierService } from "app/services/sku-management/product-cashier.service";
 import { PagesName } from "app/classes/pages-name";
+import { DialogService } from "app/services/dialog.service";
 
 @Component({
   selector: "app-cashier-index",
@@ -19,6 +21,9 @@ export class CashierIndexComponent implements OnInit {
   rows: any[];
   roles: PagesName = new PagesName();
   permission: any;
+  id: any[];
+
+  keyUp = new Subject<string>();
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -28,13 +33,104 @@ export class CashierIndexComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private ProductCashierService: ProductCashierService
+    private productCashierService: ProductCashierService,
+    private dialogService: DialogService
   ) {
-    this.permission = this.roles.getRoles('principal.produk_kasir');
+    this.permission = this.roles.getRoles("principal.produk_kasir");
+    const observable = this.keyUp
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .flatMap((search) => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe((data) => {
+        this.updateFilter(data);
+      });
   }
 
   ngOnInit() {
     this.getProducts();
+  }
+
+  updateFilter(string) {
+    this.loadingIndicator = true;
+    this.pagination.search = string;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? page - 1 : 0;
+    }
+
+    this.productCashierService.get(this.pagination).subscribe((res) => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data ? res.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
+    this.loadingIndicator = true;
+
+    if (this.pagination["search"]) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.productCashierService.get(this.pagination).subscribe((res) => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data ? res.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    const sortName = event.column.prop.split(".")[0];
+    this.pagination.sort = sortName;
+    this.pagination.sort_type = event.newValue.toUpperCase();
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", sortName);
+    this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
+
+    this.productCashierService.get(this.pagination).subscribe((res) => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data ? res.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  deleteProduct(id): void {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Produk",
+      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"],
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.productCashierService.delete({ product_id: this.id }).subscribe(
+      (res) => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+
+        this.getProducts();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   getProducts() {
@@ -48,7 +144,7 @@ export class CashierIndexComponent implements OnInit {
 
     this.offsetPagination = page ? page - 1 : 0;
 
-    this.ProductCashierService.get(this.pagination).subscribe(
+    this.productCashierService.get(this.pagination).subscribe(
       (res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data ? res.data : [];
@@ -62,19 +158,5 @@ export class CashierIndexComponent implements OnInit {
     );
   }
 
-  onSelect(event: any) {
-
-  }
-
-  onSort(event:any) {
-
-  }
-
-  setPage(event: any) {
-
-  }
-
-  deleteProduct(id: number) {
-
-  }
+  onSelect(event: any) {}
 }

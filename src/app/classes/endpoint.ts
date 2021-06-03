@@ -187,6 +187,7 @@ export class Endpoint {
         detail: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
         create: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product`,
         put: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
         barcode: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku?search=${context.product_id}`,
       },
       template_task: {

@@ -99,6 +99,14 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "product-cashier/detail/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "reward",
     component: RewardIndexComponent,
     data: {
