@@ -72,6 +72,7 @@ import { TsmImportAdjustmenCoinDialogComponent } from './coin/index/tsm-import-a
 import { CashierIndexComponent } from './product-cashier/index/index.component';
 import { CashierCreateComponent } from './product-cashier/create/create.component';
 import { CashierEditComponent } from './product-cashier/edit/edit.component';
+import { CashierImportDialogComponent } from './product-cashier/index/import-dialog/import-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -153,6 +154,7 @@ export const MY_FORMATS = {
     CashierIndexComponent,
     CashierCreateComponent,
     CashierEditComponent,
+    CashierImportDialogComponent
   ],
   exports: [
     ProductIndexComponent,
@@ -165,9 +167,10 @@ export const MY_FORMATS = {
     CoinIndexComponent,
     DetailTradeProgramComponent,
     DetailRetailerComponent,
-    ImportFileDialogComponent
+    ImportFileDialogComponent,
+    CashierImportDialogComponent
   ],
-  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent],
+  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent, CashierImportDialogComponent],
   providers: [
     ListBrandResolver,
     ListCategoryResolver,

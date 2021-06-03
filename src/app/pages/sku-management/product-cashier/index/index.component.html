@@ -9,6 +9,7 @@
       mat-raised-button
       aria-label="Produk"
       type="button"
+      (click)="import()"
     >
       <mat-icon style="font-size: 20px; margin-right: 6px"
         >arrow_downward</mat-icon
@@ -19,6 +20,7 @@
       mat-raised-button
       aria-label="Produk"
       type="button"
+      (click)="export()"
     >
       <mat-icon style="font-size: 20px; margin-right: 6px"
         >arrow_upward</mat-icon
@@ -34,6 +36,7 @@
       <mat-icon style="font-size: 20px; margin-right: 6px">add</mat-icon>Tambah
       Produk
     </button>
+    <a #downloadLink></a>
   </page-content-header>
   <div
     *ngIf="onLoad"

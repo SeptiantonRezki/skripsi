@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
@@ -6,6 +6,8 @@ import { DataService } from "app/services/data.service";
 import { ProductCashierService } from "app/services/sku-management/product-cashier.service";
 import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { CashierImportDialogComponent } from "./import-dialog/import-dialog.component";
 
 @Component({
   selector: "app-cashier-index",
@@ -22,6 +24,7 @@ export class CashierIndexComponent implements OnInit {
   roles: PagesName = new PagesName();
   permission: any;
   id: any[];
+  dialogRef: any;
 
   keyUp = new Subject<string>();
 
@@ -31,13 +34,16 @@ export class CashierIndexComponent implements OnInit {
   @ViewChild("activeCell")
   activeCellTemp: TemplateRef<any>;
 
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+
   constructor(
     private dataService: DataService,
     private productCashierService: ProductCashierService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private dialog: MatDialog
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
-    const observable = this.keyUp
+    this.keyUp
       .debounceTime(500)
       .distinctUntilChanged()
       .flatMap((search) => {
@@ -159,4 +165,36 @@ export class CashierIndexComponent implements OnInit {
   }
 
   onSelect(event: any) {}
+
+  export() {
+    this.dataService.showLoading(true);
+    this.productCashierService.export().subscribe(
+      (res) => {
+        this.downloadLink.nativeElement.href = res.data.url;
+        this.downloadLink.nativeElement.target = "_blank";
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      },
+      (err) => {
+        this.dataService.showLoading(false);
+      }
+    )
+  }
+
+  import() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+
+    this.dialogRef = this.dialog.open(CashierImportDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.getProducts();
+      }
+    });
+  }
 }

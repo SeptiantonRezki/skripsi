@@ -40,4 +40,19 @@ export class ProductCashierService extends BaseService {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url, context);
   }
+
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.getApi(url, queryParams);
+  }
+
+  previewImport(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview_import");
+    return this.postApi(url, body)
+  }
+
+  import(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "import");
+    return this.postApi(url, body)
+  }
 }
