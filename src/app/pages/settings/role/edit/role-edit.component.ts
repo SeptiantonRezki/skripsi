@@ -388,12 +388,6 @@ export class RoleEditComponent {
     let hasActiveParents = [];
     let hasActiveChildren = [];
 
-    if (targetItem.nama == 'idnumber' && !targetRole.status) {
-        this.retailerService.getAccessCashier({}).toPromise();
-    } else {
-        this.retailerService.getIdNumber({}).toPromise();
-    }
-
     _.map(targetItems.value, (val) => {
       if (!val.submenu) {
         if (val.nama === 'ubah') {
