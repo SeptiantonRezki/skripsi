@@ -145,9 +145,9 @@ export class PayMethodIndexComponent implements OnInit {
     );
   }
 
-  directDetail(item?: any): void {
-    this.router.navigate(["user-management", "supplier-settings", "detail", item.id]);
-  }
+  // directDetail(item?: any): void {
+  //   this.router.navigate(["user-management", "supplier-settings", "detail", item.id]);
+  // }
 
   selectionStatus(event: any, item: any, i: number) {
     const e = event.value;
