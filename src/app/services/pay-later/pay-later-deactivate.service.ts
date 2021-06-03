@@ -43,4 +43,10 @@ export class PayLaterDeactivateService extends BaseService {
   refreshActivationSRC(event) {
     this._triggerActivationSRC.next(event);
   }
+
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl("paylater_activate", 'export');
+    return this.getBlobAsJsonApi(url, queryParams);
+  }
+  
 }
