@@ -10,6 +10,7 @@
       aria-label="Simpan"
       (click)="submit()"
       type="button"
+      [disabled]="!hasBarcode"
     >
       <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
     </button>
@@ -43,7 +44,14 @@
                   <mat-icon class="secondary-text">horizontal_split</mat-icon>
                   <span class="h5 text-center">SCAN BARCODE</span>
                 </div>
-                <mat-form-field fxFlex="100" class="is-light">
+                <mat-form-field *ngIf="!hasBarcode" fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    disabled
+                    placeholder="Nama Produk"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="hasBarcode" fxFlex="100" class="is-light">
                   <input
                     matInput
                     type="text"
@@ -59,16 +67,25 @@
                     Nama Produk harus diisi
                   </mat-error>
                 </mat-form-field>
+
                 <mat-form-field fxFlex="100" class="is-light">
+                  <mat-label *ngIf="hasBarcode" >Barcode</mat-label>
                   <input
                     matInput
-                    type="text"
+                    disabled
                     placeholder="Barcode"
-                    formControlName="barcode"
-                    readonly
+                    [value]="formProductGroup.get('barcode').value"
                   />
                 </mat-form-field>
-                <mat-form-field fxFlex="100" class="is-light">
+
+                <mat-form-field *ngIf="!hasBarcode" fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    disabled
+                    placeholder="Harga Beli"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="hasBarcode"  fxFlex="100" class="is-light">
                   <input
                     matInput
                     type="tel"
@@ -91,7 +108,15 @@
                     Harga Beli harus diisi
                   </mat-error>
                 </mat-form-field>
-                <mat-form-field fxFlex="100" class="is-light">
+
+                <mat-form-field *ngIf="!hasBarcode" fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    disabled
+                    placeholder="Harga Jual"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="hasBarcode"  fxFlex="100" class="is-light">
                   <input
                     matInput
                     type="tel"
