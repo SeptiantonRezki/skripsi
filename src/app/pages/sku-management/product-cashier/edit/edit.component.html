@@ -34,50 +34,66 @@
             <div class="ayo-middle" fxLayout="column">
               <div class="p-24" fxLayout="column">
                 <mat-form-field fxFlex="100" class="is-light">
+                  <mat-label>Nama Produk</mat-label>
                   <input
                     matInput
-                    type="text"
-                    placeholder="Nama Produk"
-                    formControlName="name"
-                    readonly
+                    disabled
+                    [value]="formProductGroup.get('name').value"
                   />
-                  <mat-error
-                    *ngIf="
-                      formProductGroup.controls['name'].hasError('required') &&
-                      formProductGroup.controls['name'].touched
-                    "
-                  >
-                    Nama Produk harus diisi
-                  </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
+                  <mat-label>Barcode</mat-label>
                   <input
                     matInput
-                    type="text"
-                    placeholder="Barcode"
-                    formControlName="barcode"
-                    readonly
+                    disabled
+                    [value]="formProductGroup.get('barcode').value"
                   />
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
                   <input
                     matInput
-                    type="numeric"
+                    type="tel"
                     currencyMask
                     min="0"
                     placeholder="Harga Beli"
                     formControlName="purchase_price"
                   />
+                  <mat-error
+                    *ngIf="
+                      (formProductGroup
+                        .get('purchase_price')
+                        .hasError('required') ||
+                        formProductGroup
+                          .get('purchase_price')
+                          .hasError('min')) &&
+                      formProductGroup.get('purchase_price').touched
+                    "
+                  >
+                    Harga Beli harus diisi
+                  </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
                   <input
                     matInput
-                    type="numeric"
+                    type="tel"
                     currencyMask
                     min="0"
                     placeholder="Harga Jual"
                     formControlName="selling_price"
                   />
+                  <mat-error
+                    *ngIf="
+                      (formProductGroup
+                        .get('selling_price')
+                        .hasError('required') ||
+                        formProductGroup
+                          .get('selling_price')
+                          .hasError('min')) &&
+                      formProductGroup.get('selling_price').touched
+                    "
+                  >
+                    Harga Jual harus diisi
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>

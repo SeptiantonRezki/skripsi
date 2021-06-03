@@ -16,8 +16,23 @@ export class ProductCashierService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  barcode(id): Observable<any> {
+    const url = this.getUrl(this.namespace, "barcode", { product_id: id });
+    return this.getApi(url);
+  }
+
   getdetail(id): Observable<any> {
     const url = this.getUrl(this.namespace, "detail", { product_id: id });
     return this.getApi(url);
+  }
+
+  create(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "create");
+    return this.postApi(url, body);
+  }
+
+  put(body, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put", context);
+    return this.postApi(url, body);
   }
 }
