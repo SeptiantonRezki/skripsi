@@ -42,7 +42,8 @@ export class RetailerCreateComponent {
     { name: "GT", value: "GT" },
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
-    { name: "KA", value: "KA"}
+    { name: "KA", value: "KA"},
+    { name: "Official Store", value: "Official Store"}
   ];
 
   constructor(
@@ -358,6 +359,8 @@ export class RetailerCreateComponent {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid) {
       this.submitting = true;
 
+      let icValue = this.verticalStepperStep4.get("InternalClassification").value;
+
       let body = {
         name: this.verticalStepperStep1.get("name").value,
         address: this.verticalStepperStep1.get("address").value,
@@ -367,7 +370,7 @@ export class RetailerCreateComponent {
         areas: [this.verticalStepperStep3.get("territory").value],
         latitude: this.verticalStepperStep3.get("latitude").value ? this.verticalStepperStep3.get("latitude").value : null,
         longitude: this.verticalStepperStep3.get("longitude").value ? this.verticalStepperStep3.get("longitude").value : null,
-        type: (this.verticalStepperStep4.get("InternalClassification").value === 'SRC' || this.verticalStepperStep4.get("InternalClassification").value === 'NON-SRC') ? "General Trade" : this.verticalStepperStep4.get("InternalClassification").value,
+        type: (icValue === 'SRC' || icValue === 'NON-SRC' || icValue === 'Official Store') ? "General Trade" : icValue,
         InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
       };
 
