@@ -1043,6 +1043,51 @@ export const brConfig = {
         }
       ]
     },
+    productCashier: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Produk Kasir",
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Tambah Produk"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Produk"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
+        }
+      ],
+    },
     reward: {
       index: [
         {
