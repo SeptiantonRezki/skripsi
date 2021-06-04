@@ -5,7 +5,6 @@
 >
   <page-content-header [contentTitle]="'Tambah Produk Kasir'">
     <button
-      *ngIf="!isDetail"
       mat-raised-button
       aria-label="Simpan"
       (click)="submit()"
@@ -35,7 +34,6 @@
             <div class="ayo-middle" fxLayout="column">
               <div class="p-24" fxLayout="column">
                 <div
-                  *ngIf="!isDetail"
                   class="button mb-16"
                   fxLayout="row wrap"
                   fxLayoutAlign="space-between center"
