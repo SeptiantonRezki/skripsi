@@ -46,6 +46,7 @@ import { RetailerService } from "./services/user-management/retailer.service";
 import { BannerService } from "./services/inapp-marketing/banner.service";
 import { LandingPageService } from "./services/inapp-marketing/landing-page.service";
 import { ProductService } from "./services/sku-management/product.service";
+import { ProductCashierService } from "./services/sku-management/product-cashier.service";
 import { RewardService } from "./services/sku-management/reward.service";
 import { RewardHistoryService } from "./services/sku-management/reward-history.service";
 import { CoinService } from "./services/sku-management/coin.service";
@@ -181,6 +182,7 @@ const config = {
     BannerService,
     LandingPageService,
     ProductService,
+    ProductCashierService,
     RewardService,
     RewardHistoryService,
     CoinService,
