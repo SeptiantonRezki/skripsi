@@ -33,6 +33,7 @@ export class WholesalerEditComponent {
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
   dialogRef: any;
+  listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
 
   listLevelArea: any[];
   list: any;
@@ -41,7 +42,6 @@ export class WholesalerEditComponent {
   detailAreaSelected: any[];
 
   isDetail: Boolean;
-
   listBanks: any[];
   filterBank: FormControl = new FormControl();
   filteredBanks: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -143,6 +143,7 @@ export class WholesalerEditComponent {
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
+      gsw: [""],
       code: ["", Validators.required],
       owner: ["", Validators.required],
       phone: ["", Validators.required],
@@ -343,6 +344,7 @@ export class WholesalerEditComponent {
       district: this.getArea('district') ? this.getArea('district') : '',
       territory: this.getArea('teritory') ? this.getArea('teritory') : '',
       branchShop: this.detailWholesaler.has_branch === 1 ? true : false,
+      gsw: this.detailWholesaler.gsw === 1 ? 'on' : 'off',
       formBranchStore: [],
       role_id: this.detailWholesaler.role_id,
     });
@@ -626,6 +628,7 @@ export class WholesalerEditComponent {
         bank_name: this.formBankAccount.get("bank_name").value === "" ? null : this.formBankAccount.get("bank_name").value,
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
         role_id: (!this.detailWholesaler.is_branch) ? this.formWs.get('role_id').value : undefined,
+        gsw: this.formWs.get("gsw").value === 'on' ? 1 : 0,
       };
 
       if (this.formWs.get("branchShop").value === true) {
@@ -741,7 +744,16 @@ export class WholesalerEditComponent {
       this.disableFields(fields);
       this.rmValidators(fields);
 
-    };
+    }
+
+    if (!this.isCan(['ubah', 'gsw'])) {
+
+      const fields = ['gsw'];
+
+      this.disableFields(fields);
+      this.rmValidators(fields);
+
+    }
 
     if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
