@@ -1,0 +1,21 @@
+.preview {
+    padding: 16px 0;
+    margin: -6px;
+}
+
+.preview-table {
+    border-collapse: collapse;
+
+    th, td {
+        padding: 6px;
+    }
+    th {
+        border-bottom: 1px solid #eee;
+    }
+    tr:nth-child(odd) td {
+        background: #f5f5f5;
+    }
+    .price {
+        text-align: right;
+    }
+}
