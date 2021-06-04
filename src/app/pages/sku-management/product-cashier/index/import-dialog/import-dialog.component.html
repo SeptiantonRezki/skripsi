@@ -37,32 +37,43 @@
       </div>
     </div>
     <div *ngIf="rows.length > 0" class="preview">
-      <table class="preview-table">
-        <thead>
-          <tr>
-            <th>Nama Produk</th>
-            <th nowrap>Barcode</th>
-            <th nowrap class="price">Harga Beli</th>
-            <th nowrap class="price">Harga Jual</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of rows">
-            <td>
-              {{ item.nama_produk }}
-            </td>
-            <td nowrap>
-              {{ item.barcode }}
-            </td>
-            <td nowrap class="price">
-              {{ (item.harga_beli | rupiahFormater) }}
-            </td>
-            <td nowrap class="price">
-              {{ item.harga_jual | rupiahFormater }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="preview-container">
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th nowrap>Nama Produk</th>
+              <th nowrap>Barcode</th>
+              <th nowrap class="price">Harga Beli</th>
+              <th nowrap class="price">Harga Jual</th>
+              <th nowrap class="status">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of rows" [ngClass]="{ error: item.flag }">
+              <td nowrap>
+                {{ item.nama_produk }}
+              </td>
+              <td nowrap>
+                {{ item.barcode }}
+              </td>
+              <td nowrap class="price">
+                {{ item.harga_beli | rupiahFormater }}
+              </td>
+              <td nowrap class="price">
+                {{ item.harga_jual | rupiahFormater }}
+              </td>
+              <td *ngIf="item.reason" nowrap class="status">
+                {{ item.reason }}
+              </td>
+              <td *ngIf="!item.reason" nowrap class="status">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="preview-total">
+        {{ rowsLength }} <span *ngIf="rowsLength === 1">Product</span
+        ><span *ngIf="rowsLength > 1">Products</span>
+      </div>
     </div>
     <div class="border-top">
       <div class="p-16">
@@ -79,6 +90,7 @@
             mat-raised-button
             color="primary"
             (click)="submit()"
+            [disabled]="!isValid"
           >
             Kirim
           </button>
