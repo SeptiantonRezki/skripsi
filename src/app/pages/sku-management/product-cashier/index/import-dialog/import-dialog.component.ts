@@ -31,6 +31,8 @@ export class CashierImportDialogComponent implements OnInit {
   listVendor: Array<any>;
   vendorCompany: FormControl = new FormControl('');
   vendor_id: any;
+  isValid: boolean = false;
+  rowsLength: number;
 
   constructor(
     public dialogRef: MatDialogRef<CashierImportDialogComponent>,
@@ -60,6 +62,8 @@ export class CashierImportDialogComponent implements OnInit {
     this.rows = [];
     this.files = undefined;
     this.files = event;
+    this.isValid = false;
+    this.rowsLength = 0;
 
     let fd = new FormData();
     fd.append('file', this.files);
@@ -68,6 +72,9 @@ export class CashierImportDialogComponent implements OnInit {
     this.productCashierService.previewImport(fd).subscribe(
       (res) => {
         this.rows = res.data.result;
+        this.rowsLength = res.data.result.length;
+        if (this.rows.reduce((s, i) => s + (i.flag === true ? 1 : 0), 0) === 0)
+          this.isValid = true;
         this.dataService.showLoading(false);
       },
       (err) => {
