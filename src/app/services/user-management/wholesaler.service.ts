@@ -83,4 +83,19 @@ export class WholesalerService extends BaseService {
     const url = this.getUrl(this.namespace, "roles");
     return this.getApi(url);
   }
+
+  exportWholesalerlist(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportWhosaller", context);
+    return this.getBlobApi(url);
+  }
+
+  importExcel(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_preview");
+    return this.multipartPost(url, body);
+  }
+
+  storeImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "store_import");
+    return this.postApi(url, body);
+  }
 }

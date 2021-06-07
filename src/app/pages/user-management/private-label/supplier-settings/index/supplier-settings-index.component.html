@@ -1,5 +1,5 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Perusahaan'">
+  <page-content-header [contentTitle]="'Pengaturan Produk Prinsipal'">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -55,6 +55,27 @@
               <div *ngFor="let setting of row.settings">
                 <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="setting.name == 'gsr_input_mandatory' && setting.value"></mat-checkbox>
                 <mat-checkbox [checked]="setting.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="setting.name == 'gsr_input_mandatory' && !setting.value"></mat-checkbox>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Packs Per Box" prop="packs_per_box">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <span *ngIf="setting.name == 'packs_per_box'">{{setting.value || '0'}}</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Packs Per Bale" prop="packs_per_bale">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <span *ngIf="setting.name == 'packs_per_bale'">{{setting.value || '0'}}</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Packs Per Slop" prop="packs_per_slop">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div *ngFor="let setting of row.settings">
+                <span *ngIf="setting.name == 'packs_per_slop'">{{setting.value || '0'}}</span>
               </div>
             </ng-template>
           </ngx-datatable-column>

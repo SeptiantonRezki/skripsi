@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Metode Pembayaran'">
+  <page-content-header [contentTitle]="'Stock'">
     <button style="width: 150px" mat-raised-button type="button" (click)="onSave()">
     SIMPAN
   </button>
@@ -26,13 +26,31 @@
             <div fxFlex="55" class="pl-8">
               <div fxLayout="column" *ngIf="stockData.settings.length > 0">
                 <mat-checkbox [checked]="checkAll" class="payments-column" (change)="selectionAll($event)">Pilih Semua</mat-checkbox>
-                <div fxLayout="row wrap">
-                  <div formArrayName="listStock" *ngFor="let stock of formStock.get('listStock')['controls']; let i = index;" class="payments-column" >
+                <div fxLayout="row wrap" fxLayoutGap="12px">
+                  <div formArrayName="listStock" *ngFor="let stock of formStock.get('listStock')['controls']; let i = index;">
+                    <div [formGroupName]="i" fxLayout="column">
+                        <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8 pt-8" *ngIf="stock.value.name == 'gsw_input'">Stock Input GSW</mat-checkbox>
+                        <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8 pt-8" *ngIf="stock.value.name == 'gsw_input_mandatory'">Mandatory GSW</mat-checkbox>
+                        <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8 pt-8" *ngIf="stock.value.name == 'gsr_input'">Stock Input GSR</mat-checkbox>
+                        <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8 pt-8" *ngIf="stock.value.name == 'gsr_input_mandatory'">Mandatory GSR</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.gt-xs="row" fxLayoutAlign="start start">
+                  <div formArrayName="listStock" *ngFor="let stock of formStock.get('listStock')['controls']; let i = index;">
                     <div [formGroupName]="i">
-                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsw_input'">Stock Input GSW</mat-checkbox>
-                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsw_input_mandatory'">Mandatory GSW</mat-checkbox>
-                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsr_input'">Stock Input GSR</mat-checkbox>
-                      <mat-checkbox formControlName="value" [checked]="stock.value.value" class="pr-8" *ngIf="stock.value.name == 'gsr_input_mandatory'">Mandatory GSR</mat-checkbox>
+                        <div fxFlex="100" fxLayoutAlign="center center" fxLayout="column" class="p-8 ml-8 mt-8" *ngIf="stock.value.name == 'packs_per_box'">
+                          <span style="color: #555">Packs Per Box</span>
+                          <input formControlName="value" matInput placeholder="Box" class="input-field qty-input" autocomplete="off" type="number" min="0">
+                        </div>
+                        <div fxFlex="100" fxLayoutAlign="center center" fxLayout="column" class="p-8 ml-8 mt-8" *ngIf="stock.value.name == 'packs_per_bale'">
+                          <span style="color: #555">Packs Per Bale</span>
+                          <input formControlName="value" matInput placeholder="Box" class="input-field qty-input" autocomplete="off" type="number" min="0">
+                        </div>
+                        <div fxFlex="100" fxLayoutAlign="center center" fxLayout="column" class="p-8 ml-8 mt-8" *ngIf="stock.value.name == 'packs_per_slop'">
+                          <span style="color: #555">Packs Per Slop</span>
+                          <input formControlName="value" matInput placeholder="Box" class="input-field qty-input" autocomplete="off" type="number" min="0">
+                        </div>
                     </div>
                   </div>
                 </div>

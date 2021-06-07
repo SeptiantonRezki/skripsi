@@ -76,6 +76,7 @@ export class WholesalerEditComponent {
     this.formdataErrors = {
       name: {},
       address: {},
+      gsw: {},
       code: {},
       owner: {},
       phone: {},
@@ -139,7 +140,7 @@ export class WholesalerEditComponent {
     this.getWsRoles();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
-
+    
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
@@ -744,7 +745,7 @@ export class WholesalerEditComponent {
       this.disableFields(fields);
       this.rmValidators(fields);
 
-    };
+    }
 
     if (!this.isCan(['ubah', 'gsw'])) {
 
@@ -753,7 +754,7 @@ export class WholesalerEditComponent {
       this.disableFields(fields);
       this.rmValidators(fields);
 
-    };
+    }
 
     if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
