@@ -152,7 +152,7 @@ export class WholesalerIndexComponent {
         this.getAudienceAreaV2('territory', res);
       }
     });
-    
+
     this.gsw.valueChanges.subscribe(res =>{
       if (res) {
         this.getWholesalerList();

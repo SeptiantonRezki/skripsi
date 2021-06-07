@@ -95,6 +95,7 @@ export class Endpoint {
         exportWhosaller: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/list`,
         import_preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/preview`,
         store_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/list`,
+        roles: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/wholesaler/list`,
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
