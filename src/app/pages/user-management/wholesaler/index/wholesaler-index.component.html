@@ -142,6 +142,12 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
+        
+        <ngx-datatable-column name="GSW" prop="GSW">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.gsw == '1' ? 'ON' : 'OFF'}}
+          </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column [width]="120" name="Status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
