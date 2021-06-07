@@ -40,6 +40,7 @@ import { LightboxModule } from "ngx-lightbox";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { ImportPopUpAudienceComponent } from "../popup-notification/import-pop-up-audience/import-pop-up-audience.component";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 export const MY_FORMATS = {
   parse: {
@@ -80,7 +81,8 @@ export const MY_FORMATS = {
     MatIconModule,
     MatDialogModule,
     MatToolbarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgxMatSelectSearchModule
   ],
   declarations: [
     NotificationIndexComponent,

@@ -11,7 +11,7 @@ import * as _ from 'underscore';
 import { Config } from 'app/classes/config';
 import { NotificationService } from 'app/services/notification.service';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
@@ -19,6 +19,8 @@ import { RetailerService } from 'app/services/user-management/retailer.service';
 import { CustomerService } from 'app/services/user-management/customer.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { takeUntil } from 'rxjs/operators';
+import { ProductService } from 'app/services/sku-management/product.service';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -49,6 +51,11 @@ export class PopupNotificationCreateComponent {
   listLandingPage: any[] = [];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
+
+  // Attribute for Content New Product
+  public filterProduct: FormControl = new FormControl();
+  filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  listProducts: any[] = [];
 
   imageConverted: any;
 
@@ -88,6 +95,7 @@ export class PopupNotificationCreateComponent {
   lastLevel: any;
 
   is_mission_builder: FormControl = new FormControl(false);
+  private _onDestroy = new Subject<void>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -102,7 +110,8 @@ export class PopupNotificationCreateComponent {
     private retailerService: RetailerService,
     private customerService: CustomerService,
     private wholesalerService: WholesalerService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private productService: ProductService
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -171,7 +180,8 @@ export class PopupNotificationCreateComponent {
       type: ["limit"],
       transfer_token: ["yes", Validators.required],
       is_target_audience: [false],
-      is_mission_builder: this.is_mission_builder
+      is_mission_builder: this.is_mission_builder,
+      product: [""]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -224,7 +234,7 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new_product" }];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
@@ -399,6 +409,66 @@ export class PopupNotificationCreateComponent {
       }
     });
     // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+    this.formPopupGroup.get('content_type').valueChanges.subscribe(value => {
+      if (value && value === 'new_product') {
+        console.log("its New Product Selected!")
+        this.formPopupGroup.get("product").setValidators([Validators.required])
+      } else {
+        this.formPopupGroup.get("product").setValidators(null)
+      }
+      this.formPopupGroup.get("product").updateValueAndValidity();
+    })
+    this.filterProduct
+      .valueChanges
+      .debounceTime(500)
+      .pipe(
+        takeUntil(this._onDestroy)
+      )
+      .subscribe((val) => {
+        if (val.length > 2) {
+          this._filterProducts()
+        }
+      });
+
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.productService.get({ per_page: 15 }).subscribe(
+      (res) => {
+        this.listProducts = res.data.data;
+        this.filteredProduct.next(this.listProducts.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+  }
+
+  _filterProducts() {
+    if (this.listProducts.length === 0) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterProduct.value;
+    this.pagination.per_page = 30;
+    this.pagination.search = search;
+    if (this.pagination['id']) {
+      delete this.pagination['id'];
+    }
+    this.productService.get(this.pagination).subscribe(
+      (res) => {
+        this.listProducts = res.data.data;
+        this.filteredProduct.next(this.listProducts.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the products
+    this.filteredProduct.next(
+      this.listProducts.filter(product => product.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   initAreaV2() {
@@ -1298,6 +1368,10 @@ export class PopupNotificationCreateComponent {
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
       } else {
         if (body['target_audience']) delete body['target_audience'];
+      }
+
+      if (this.formPopupGroup.get("content_type").value === 'new_product') {
+        body['product'] = this.formPopupGroup.get('product').value;
       }
 
       this.notificationService.createPopup(body).subscribe(
