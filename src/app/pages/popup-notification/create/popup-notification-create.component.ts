@@ -21,6 +21,8 @@ import { WholesalerService } from 'app/services/user-management/wholesaler.servi
 import { GeotreeService } from 'app/services/geotree.service';
 import { takeUntil } from 'rxjs/operators';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -96,6 +98,8 @@ export class PopupNotificationCreateComponent {
 
   is_mission_builder: FormControl = new FormControl(false);
   private _onDestroy = new Subject<void>();
+  permission: any;
+  roles: PagesName = new PagesName();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -111,13 +115,14 @@ export class PopupNotificationCreateComponent {
     private customerService: CustomerService,
     private wholesalerService: WholesalerService,
     private geotreeService: GeotreeService,
-    private productService: ProductService
+    private b2bVoucherInjectService: B2BVoucherInjectService
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.customAge = false;
+    this.permission = this.roles.getRoles('principal.popupnotification');
     // this.minDate = moment();
     // this.validComboDrag = true;
 
@@ -234,7 +239,10 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new_product" }];
+        this.listContentType = [{ name: "Iframe", value: "iframe" }];
+        if (this.permission.new_product) {
+          this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }];
+        }
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
@@ -410,7 +418,7 @@ export class PopupNotificationCreateComponent {
     });
     // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
     this.formPopupGroup.get('content_type').valueChanges.subscribe(value => {
-      if (value && value === 'new_product') {
+      if (value && value === 'new-product') {
         console.log("its New Product Selected!")
         this.formPopupGroup.get("product").setValidators([Validators.required])
       } else {
@@ -434,9 +442,9 @@ export class PopupNotificationCreateComponent {
   }
 
   getProducts() {
-    this.productService.get({ per_page: 15 }).subscribe(
+    this.b2bVoucherInjectService.getProductList({ per_page: 15, search: "" }).subscribe(
       (res) => {
-        this.listProducts = res.data.data;
+        this.listProducts = res.data;
         this.filteredProduct.next(this.listProducts.slice());
       },
       (err) => {
@@ -456,9 +464,9 @@ export class PopupNotificationCreateComponent {
     if (this.pagination['id']) {
       delete this.pagination['id'];
     }
-    this.productService.get(this.pagination).subscribe(
+    this.b2bVoucherInjectService.getProductList(this.pagination).subscribe(
       (res) => {
-        this.listProducts = res.data.data;
+        this.listProducts = res.data;
         this.filteredProduct.next(this.listProducts.slice());
       },
       (err) => {
@@ -1266,7 +1274,11 @@ export class PopupNotificationCreateComponent {
   }
 
   submit() {
-    if (this.formPopupGroup.valid && this.files) {
+    if (this.formPopupGroup.valid) {
+      if (this.formPopupGroup.get('content_type').value !== 'new-product' && !this.files) {
+        this.dialogService.openSnackBar({ message: "Gambar popup notifikasi belum dipilih!" });
+        return;
+      }
 
       this.dataService.showLoading(true);
 
@@ -1370,8 +1382,8 @@ export class PopupNotificationCreateComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
-      if (this.formPopupGroup.get("content_type").value === 'new_product') {
-        body['product'] = this.formPopupGroup.get('product').value;
+      if (body.action === 'new-product') {
+        body['action_data'] = this.formPopupGroup.get('product').value;
       }
 
       this.notificationService.createPopup(body).subscribe(

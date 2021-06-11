@@ -90,7 +90,7 @@
           </div>
           <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
-              <strong>Gambar Popup Notifikasi {{formPopupGroup.get('content_type').value === 'new_product' ?
+              <strong>Gambar Popup Notifikasi {{formPopupGroup.get('content_type').value === 'new-product' ?
                 '(Disabled)' : ''}}</strong>
             </h3>
           </div>
@@ -98,13 +98,13 @@
             <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
               accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
               (fileChange)="changeImage($event)"
-              [fileDropDisabled]="formPopupGroup.get('content_type').value === 'new_product'" [ngStyle]="{'cursor': formPopupGroup.get('content_type').value ===
-              'new_product' ? 'no-drop' : null}">
+              [fileDropDisabled]="formPopupGroup.get('content_type').value === 'new-product'" [ngStyle]="{'cursor': formPopupGroup.get('content_type').value ===
+              'new-product' ? 'no-drop' : null}">
               <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                 <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                 <br>
                 <span matPrefix>Tarik gambar popup notifikasi kesini. {{formPopupGroup.get('content_type').value ===
-                  'new_product' ?
+                  'new-product' ?
                   '(Disabled)' : ''}}</span>
                 <!-- <span matPrefix>Besar file maksimal 2mb</span> -->
               </div>
@@ -229,14 +229,14 @@
             </div>
           </div>
 
-          <div class="px-24" *ngIf="formPopupGroup.get('content_type').value === 'new_product'">
+          <div class="px-24" *ngIf="formPopupGroup.get('content_type').value === 'new-product'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="product" placeholder="Nama Product" id="product_name" #singleSelect>
                   <ngx-mat-select-search [formControl]="filterProduct" [placeholderLabel]="'Cari Product...'"
                     [noEntriesFoundLabel]="'Tidak ada Product yang ditemukan'" [clearSearchInput]="false">
                   </ngx-mat-select-search>
-                  <mat-option *ngFor="let item of filteredProduct | async" [value]="item.id">
+                  <mat-option *ngFor="let item of filteredProduct | async" [value]="item.sku_id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>
