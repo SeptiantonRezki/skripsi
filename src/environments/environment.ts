@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  server: "https://api.dev.src.id",
-  server_service: "https://api.dev.src.id",
+  server: 'https://dev.ayo-api.dxtr.asia',
+  server_service: 'https://dev.ayo-api.dxtr.asia',
   label: "DEVELOPMENT",
   show_label: true,
   image: "assets/images/ayo/icon/dev.png",
@@ -13,24 +13,23 @@ export const environment = {
 };
 
 export const serviceServer = (server) => {
-  return `https://${server}.api.dev.src.id`;
+  return `https://${server}.ayo-micro.dxtr.asia`;
 }
 
 export const server = {
-  user: "users",
-  business: "businesses",
-  area: "areas",
-  auth: "auth",
-  newsfeed: "newsfeed",
-  banner: "banner",
-  content: "contentstatic",
-  product: "product",
-  task: "task-management",
-  submission: "task-submission",
-  coin: "coin-management",
-  community: "community",
-  order: "order",
-  bora: "bora",
+  user: 'user',
+  business: 'business',
+  area: 'area',
+  auth: 'auth',
+  newsfeed: 'newsfeed',
+  banner: 'banner',
+  content: 'content',
+  product: 'product',
+  task: 'task',
+  submission: 'submission',
+  coin: 'coin',
+  community: 'community',
+  order: 'order',
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
 };

@@ -25,7 +25,7 @@
 
         <!-- RIGHT -->
         <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('vendorhms') > -1 && onMessageSameName(q.username_real, i)">
+          *ngIf="userWhiteList(q) && onMessageSameName(q.username_real, i)">
           <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <span class="message-name-right">{{q.username_as}}</span>
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
@@ -60,7 +60,7 @@
           <div class="extras-right" fxLayout="column" fxLayoutAlign="center end">
             <span class="message-time">{{q.time}}</span>
             <button [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)"
-              *ngIf="!chatIsOver" mat-button>
+              *ngIf="!chatIsOver && userProfile?.type !== 'principal'" mat-button>
               <!-- <mat-icon>reply</mat-icon> -->
               Balas
             </button>
@@ -69,7 +69,7 @@
 
         <div id="{{q.id}}" class="message-container-next-right" (mouseover)="messageOnHover(i)"
           (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('vendorhms') > -1 && !onMessageSameName(q.username_real, i)">
+          *ngIf="userWhiteList(q) && !onMessageSameName(q.username_real, i)">
           <div class="message-content-right" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
               <div class="replied-content" fxLayout="column">
@@ -104,7 +104,7 @@
           <div class="extras-right" fxLayout="column" fxLayoutAlign="center end">
             <span class="message-time">{{q.time}}</span>
             <button [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)"
-              *ngIf="!chatIsOver" mat-button>
+              *ngIf="!chatIsOver && userProfile?.type !== 'principal'" mat-button>
               <!-- <mat-icon>reply</mat-icon> -->
               Balas
             </button>
@@ -113,7 +113,7 @@
 
         <!-- LEFT -->
         <div id="{{q.id}}" class="message-container" (mouseover)="messageOnHover(i)" (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('vendorhms') == -1 && onMessageSameName(q.username_real, i)">
+          *ngIf="!userWhiteList(q) && onMessageSameName(q.username_real, i)">
           <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <span class="message-name-left">{{q.username_as}}</span>
             <div class="replied-content" fxLayout="column">
@@ -146,7 +146,7 @@
           <div class="extras-left" fxLayout="column" fxLayoutAlign="center start">
             <span class="message-time">{{q.time}}</span>
             <button [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)"
-              *ngIf="!chatIsOver" mat-button>
+              *ngIf="!chatIsOver && userProfile?.type !== 'principal'" mat-button>
               <!-- <mat-icon>reply</mat-icon> -->
               Balas
             </button>
@@ -155,7 +155,7 @@
 
         <div id="{{q.id}}" class="message-container-next-left" (mouseover)="messageOnHover(i)"
           (mouseout)="messageOnHover(-1)"
-          *ngIf="q.username_real.search('vendorhms') == -1 && !onMessageSameName(q.username_real, i)">
+          *ngIf="!userWhiteList(q) && !onMessageSameName(q.username_real, i)">
           <div class="message-content-left" [ngStyle]="{'max-width': ((qContainer.offsetWidth * 2) / 3) }">
             <div class="replied-container-on-message" *ngIf="q.payload.replied_comment_id">
               <div class="replied-content" fxLayout="column">
@@ -185,7 +185,7 @@
           <div class="extras-left" fxLayout="column" fxLayoutAlign="center start">
             <span class="message-time">{{q.time}}</span>
             <button [ngClass]="messageIndexHover == i ? 'is-reply' : 'no-reply'" (click)="onReplyMessage(q)"
-              *ngIf="!chatIsOver" mat-button>
+              *ngIf="!chatIsOver && userProfile?.type !== 'principal'" mat-button>
               <!-- <mat-icon>reply</mat-icon> -->
               Balas
             </button>
@@ -218,7 +218,7 @@
         </button>
       </div>
     </div>
-    <div class="q-card-row" *ngIf="!chatIsOver">
+    <div class="q-card-row" *ngIf="!chatIsOver && userProfile?.type !== 'principal'">
       <div class="q-card-templates" fxLayout="row" fxLayoutAlign="start start" fusePerfectScrollbar>
         <div class="q-card-templates-button" *ngFor="let template of templates; let i = index">
           <button mat-button (click)="applyTemplate(template)" ellipsis [ellipsis-content]>
@@ -227,7 +227,7 @@
         </div>
       </div>
     </div>
-    <mat-card-footer class="q-card-footer" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="!chatIsOver">
+    <mat-card-footer class="q-card-footer" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="!chatIsOver && userProfile?.type !== 'principal'">
       <button class="q-attachment-btn" mat-icon-button (click)="openMedia('product_tagging')">
         <img mat-list-icon src="assets/images/chat/product_tagging2x.png" />
       </button>
