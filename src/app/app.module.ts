@@ -36,6 +36,7 @@ import { BaseInterceptor } from "./services/interceptor.module";
 import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
 import { CallObjectiveSerive } from './services/call-objective/call-objective.service';
+import { NotesRetailerService } from './services/notes-retailer/notes-retailer.service';
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
 import { VendorsService } from "./services/src-catalogue/vendors.service";
@@ -188,6 +189,7 @@ const config = {
     CoinService,
     TemplateTaskService,
     CallObjectiveSerive,
+    NotesRetailerService,
     TradeProgramService,
     ScheduleTradeProgramService,
     AudienceService,

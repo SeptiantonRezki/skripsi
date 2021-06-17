@@ -55,6 +55,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'notesretailer',
+    loadChildren: './pages/notes-retailer/notes-retailer.module#NotesRetailerModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'notifications',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]
