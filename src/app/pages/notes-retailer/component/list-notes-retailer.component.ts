@@ -44,7 +44,7 @@ import {
     keyUp = new Subject<string>();
 
     constructor(
-        private callObjService: NotesRetailerService,
+        private notesService: NotesRetailerService,
         private dataService: DataService,
         private audienceService: AudienceService,
         private dialogService: DialogService,
@@ -72,7 +72,7 @@ import {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-    this.callObjService.getList(this.pagination).subscribe((res) => {
+    this.notesService.getList(this.pagination).subscribe((res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
     });
@@ -95,7 +95,7 @@ import {
   }
 
   confirmDelete(id) {
-    this.callObjService.delete({ objective_id: this.id }).subscribe(res => {
+    this.notesService.delete({ objective_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         // this.getAudience();
@@ -117,7 +117,7 @@ import {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.callObjService.getList(this.pagination).subscribe(res => {
+    this.notesService.getList(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 
@@ -134,7 +134,7 @@ import {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.callObjService.getList(this.pagination).subscribe(res => {
+    this.notesService.getList(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 

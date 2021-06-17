@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { NotesRetailerRoutingModule } from './notes-retailer.routing';
-import { PendingChangesGuard } from 'app/pages/call-objective/call-objective.guard';
+import { PendingChangesGuard } from 'app/pages/notes-retailer/notes-retailer.guard';
 
 import {
   MatFormFieldModule,
@@ -142,4 +142,4 @@ export const MY_FORMATS = {
     ImportNotesDialogComponent
   ],
 })
-export class CallobjectiveModule {}
+export class NotesRetailerModule {}
