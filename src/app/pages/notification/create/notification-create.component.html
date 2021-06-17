@@ -391,6 +391,15 @@
               </mat-form-field>
             </div>
           </div>
+          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="subscription_status" placeholder="Status Berlangganan">
+                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
 
           <div class="pb-16" *ngIf="formNotification.controls['user_group'].value === 'customer'">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">

@@ -42,6 +42,7 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscriptionStatus: any[] = [{name: 'Semua', value: 'all'}, {name: 'Berlangganan', value: 'subscribed'}, {name: 'Tidak Berlangganan', value:'not-subscribed'}]
   userGroup: any[] = [
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
@@ -244,6 +245,7 @@ export class NotificationCreateComponent {
       body: ["", Validators.required],
       user_group: ["retailer", Validators.required],
       verification: ["all"],
+      subscription_status: ['all'],
       age: ["18+", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
@@ -1190,6 +1192,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
+      this.formNotification.controls.subscription_status.setValue('all');
     } else {
       this.formNotification.controls.type_of_recurrence.enable();
       this.formNotification.controls.send_ayo.enable();
@@ -1303,6 +1306,7 @@ export class NotificationCreateComponent {
       title: this.formNotification.get("title").value,
       body: this.formNotification.get("body").value,
       type: this.formNotification.get("user_group").value,
+      subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
@@ -1384,6 +1388,7 @@ export class NotificationCreateComponent {
             bodyVideo.append('title', body.title);
             bodyVideo.append('body', body.body);
             bodyVideo.append('type', body.type);
+            bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
             this.multipleImageContentType.forEach((element, i) => {
@@ -1438,6 +1443,7 @@ export class NotificationCreateComponent {
           bodyVideo.append('title', body.title);
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
+          bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
           bodyVideo.append('video_value', this.videoContentType);
@@ -2173,7 +2179,7 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
         verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
@@ -2196,6 +2202,7 @@ export class NotificationCreateComponent {
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
+      frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
       frm.controls['age'].setValue(age);
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
