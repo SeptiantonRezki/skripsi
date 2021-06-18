@@ -254,6 +254,7 @@ export class NotificationCreateComponent {
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
+      searchKeyword: [""],
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
@@ -1282,6 +1283,19 @@ export class NotificationCreateComponent {
       
     }
 
+    let audiences = null
+    if (this.formNotification.get("is_target_audience").value) {
+      let audiences = this.audienceSelected.map(aud => aud.id);
+      let unique_set = new Set(audiences);
+      if(audiences.length !== unique_set.size)  {
+        this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return;
+      }
+      audiences = Array.from(unique_set);
+    }
+
     let _areas = [];
     let areas = [];
     let value = this.formNotification.getRawValue();
@@ -1490,10 +1504,10 @@ export class NotificationCreateComponent {
         return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
       }
     }
-
+    
     if (this.formNotification.get("is_target_audience").value) {
       body['target_audience'] = 1;
-      body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      body['target_audiences'] = audiences;
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
@@ -1774,6 +1788,11 @@ export class NotificationCreateComponent {
       }
     }
 
+    if(this.formNotification.get('searchKeyword').value.length > 0) {
+      this.pagination['search'] = this.formNotification.get('searchKeyword').value;
+    }
+    
+
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
@@ -1788,6 +1807,8 @@ export class NotificationCreateComponent {
     } else {
       delete this.pagination['type'];
     }
+
+    //#region not used
     // if (this.formPopupGroup.get("user_group").value === 'retailer') {
     //   this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
     //   delete this.pagination['customer_smoking'];
@@ -1809,6 +1830,7 @@ export class NotificationCreateComponent {
     //   this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
     //   this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
     // }
+    //#endregion
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -1823,6 +1845,7 @@ export class NotificationCreateComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.audienceSelected = this.selected;
   }
 
   setPage(pageInfo) {
@@ -2060,17 +2083,17 @@ export class NotificationCreateComponent {
     return row.name !== 'Ethel Price';
   }
 
-  onSelectAudience(event, row) {
-    console.log('onnnnnn', event);
-    let index = this.audienceSelected.findIndex(r => r.id === row.id);
-    if (index > - 1) {
-      this.audienceSelected.splice(index, 1);
-    } else {
-      this.audienceSelected.push(row);
-    }
-    this.onSelect({ selected: this.audienceSelected });
-    console.log('asdasd', this.audienceSelected);
-  }
+  // onSelectAudience(event, row) {
+  //   console.log('onnnnnn', event);
+  //   let index = this.audienceSelected.findIndex(r => r.id === row.id);
+  //   if (index > - 1) {
+  //     this.audienceSelected.splice(index, 1);
+  //   } else {
+  //     this.audienceSelected.push(row);
+  //   }
+  //   this.onSelect({ selected: this.audienceSelected });
+  //   console.log('asdasd', this.audienceSelected);
+  // }
 
   selectCheck(row, column, value) {
     console.log('selectcheck', row, column, value);

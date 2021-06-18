@@ -640,6 +640,10 @@
           </div>
           <div class="p-0" *ngIf="formNotification.get('is_target_audience').value === true">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+              fxLayoutAlign="start center" class="p-16">
+              <input matInput type="text" formControlName="searchKeyword" placeholder="Search..." />
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
               <a #downloadLink></a>
               <button mat-raised-button type="button" class="is-danger" (click)="import()">
@@ -656,20 +660,30 @@
               [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
               [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
               [selectCheck]='selectCheck'>
-
-              <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+              
+              <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false"> -->
                 <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                   let-selectFn="selectFn">
                   <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
                 </ng-template> -->
 
-                <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
                   let-onCheckboxChangeFn="onCheckboxChangeFn">
                   <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
                   </mat-checkbox>
                 </ng-template>
-              </ngx-datatable-column>
+              </ngx-datatable-column> -->
 
+              <ngx-datatable-column
+                [width]="68"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [draggable]="false"
+                [resizeable]="false"
+                [headerCheckboxable]="true"
+                [checkboxable]="true"
+              >
+              </ngx-datatable-column>
               <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
               <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
