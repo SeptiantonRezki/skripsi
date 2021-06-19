@@ -639,9 +639,11 @@
             </mat-form-field> -->
           </div>
           <div class="p-0" *ngIf="formNotification.get('is_target_audience').value === true">
-            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-              fxLayoutAlign="start center" class="p-16">
-              <input matInput type="text" formControlName="searchKeyword" placeholder="Search..." />
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+              <mat-icon>search</mat-icon>
+              <mat-form-field autoComplete="off" class="is-light tab-search">
+                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+              </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
