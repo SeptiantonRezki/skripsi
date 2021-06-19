@@ -1283,17 +1283,14 @@ export class NotificationCreateComponent {
       
     }
 
-    let audiences = null
     if (this.formNotification.get("is_target_audience").value) {
-      let audiences = this.audienceSelected;
-      let unique_set = new Set(audiences);
-      if(audiences.length !== unique_set.size)  {
+      let unique_set = new Set(this.audienceSelected);
+      if(this.audienceSelected.length !== unique_set.size)  {
         this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return;
       }
-      audiences = Array.from(unique_set);
     }
 
     let _areas = [];
@@ -1507,7 +1504,7 @@ export class NotificationCreateComponent {
     
     if (this.formNotification.get("is_target_audience").value) {
       body['target_audience'] = 1;
-      body['target_audiences'] = audiences;
+      body['target_audiences'] = this.audienceSelected;
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
