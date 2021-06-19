@@ -662,9 +662,8 @@
               [selectCheck]='selectCheck'>
               
               <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-                <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-                  let-selectFn="selectFn">
-                  <mat-checkbox [checked]="allRowsSelected" (change)="onSelectAll(!allRowsSelected)"></mat-checkbox>
+                <ng-template ngx-datatable-header-template>
+                  <mat-checkbox [checked]="allRowsSelected" (change)="onSelectAll(!allRowsSelected);"></mat-checkbox>
                 </ng-template>
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
                   let-onCheckboxChangeFn="onCheckboxChangeFn">

@@ -1975,9 +1975,9 @@ export class NotificationCreateComponent {
     return index > -1;
   }
 
-  onSelectAll(val) {
-    this.allRowsSelected = val
-    console.log('allRowsSelected', this.allRowsSelected);
+  onSelectAll(allRowsSelected: boolean) {
+    console.log('allRowsSelected', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
     if(this.allRowsSelected) {
       this.setPagination();
       this.loadingIndicator = true;
