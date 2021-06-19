@@ -140,6 +140,7 @@ export class NotificationCreateComponent {
   rows: any[];
   selected: any[] = [];
   id: any[];
+  allRowsSelected = false;
   reorderable = true;
   pagination: Page = new Page();
 
@@ -1785,11 +1786,6 @@ export class NotificationCreateComponent {
       }
     }
 
-    if(this.formNotification.get('searchKeyword').value.length > 0) {
-      this.pagination['search'] = this.formNotification.get('searchKeyword').value;
-    }
-    
-
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
@@ -1844,7 +1840,7 @@ export class NotificationCreateComponent {
     this.selected.push(...selected);
   }
 
-  setPage(pageInfo) {
+  setPagination() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
@@ -1910,6 +1906,10 @@ export class NotificationCreateComponent {
         }
       }
     }
+  }
+  
+  setPage(pageInfo) {
+    this.setPagination();
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
@@ -1924,71 +1924,8 @@ export class NotificationCreateComponent {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
+    
+    this.setPagination();
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -2002,71 +1939,8 @@ export class NotificationCreateComponent {
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
+    
+    this.setPagination();
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -2099,6 +1973,20 @@ export class NotificationCreateComponent {
   bindSelector(isSelected, row) {
     let index = this.audienceSelected.findIndex(id => id === row.id);
     return index > -1;
+  }
+
+  onSelectAll(val) {
+    this.allRowsSelected = val
+    console.log('allRowsSelected', this.allRowsSelected);
+    if(this.allRowsSelected) {
+      this.setPagination();
+      this.loadingIndicator = true;
+      this.notificationService.getPushNotifAudienceIDs(this.pagination).subscribe(res => {
+        this.audienceSelected = res;
+        console.log(this.audienceSelected);
+        this.loadingIndicator = false;
+      });
+    }
   }
 
   isTargetAudience(event) {

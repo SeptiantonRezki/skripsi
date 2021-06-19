@@ -118,6 +118,11 @@ export class NotificationService extends BaseService {
     return this.postApi(url, body);
   }
 
+  getPushNotifAudienceIDs(queryParams?): Observable<any> {
+    let url = this.getUrl(this.namespace, "get_pn_audience_ids");
+    return this.getApi(url, queryParams);
+  }
+
   getPushNotifAudience(queryParams?): Observable<any> {
     let url = this.getUrl(this.namespace, "get_pn_audience");
     return this.getApi(url, queryParams);
