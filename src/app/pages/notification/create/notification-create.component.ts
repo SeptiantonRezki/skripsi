@@ -1285,7 +1285,7 @@ export class NotificationCreateComponent {
 
     let audiences = null
     if (this.formNotification.get("is_target_audience").value) {
-      let audiences = this.audienceSelected.map(aud => aud.id);
+      let audiences = this.audienceSelected;
       let unique_set = new Set(audiences);
       if(audiences.length !== unique_set.size)  {
         this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
@@ -1410,8 +1410,8 @@ export class NotificationCreateComponent {
             });
             if (this.formNotification.get('is_target_audience').value) {
               bodyVideo.append('target_audience', '1');
-              const ta = await this.audienceSelected.map((aud, i) => {
-                bodyVideo.append(`target_audiences[${i}]`, aud.id);
+              const ta = await this.audienceSelected.map((id, i) => {
+                bodyVideo.append(`target_audiences[${i}]`, id);
               });
             } else {
               if (bodyVideo.get('target_audience')) {
@@ -1463,8 +1463,8 @@ export class NotificationCreateComponent {
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
             bodyVideo.append('target_audience', '1');
-            const ta = await this.audienceSelected.map((aud, i) => {
-              bodyVideo.append(`target_audiences[${i}]`, aud.id);
+            const ta = await this.audienceSelected.map((id, i) => {
+              bodyVideo.append(`target_audiences[${i}]`, id);
             });
           } else {
             if (bodyVideo.get('target_audience')) {
@@ -1845,7 +1845,6 @@ export class NotificationCreateComponent {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-    this.audienceSelected = this.selected;
   }
 
   setPage(pageInfo) {
@@ -2083,17 +2082,17 @@ export class NotificationCreateComponent {
     return row.name !== 'Ethel Price';
   }
 
-  // onSelectAudience(event, row) {
-  //   console.log('onnnnnn', event);
-  //   let index = this.audienceSelected.findIndex(r => r.id === row.id);
-  //   if (index > - 1) {
-  //     this.audienceSelected.splice(index, 1);
-  //   } else {
-  //     this.audienceSelected.push(row);
-  //   }
-  //   this.onSelect({ selected: this.audienceSelected });
-  //   console.log('asdasd', this.audienceSelected);
-  // }
+  onSelectAudience(event, row) {
+    console.log('onnnnnn', event);
+    let index = this.audienceSelected.findIndex(id => id === row.id);
+    if (index > - 1) {
+      this.audienceSelected.splice(index, 1);
+    } else {
+      this.audienceSelected.push(row.id);
+    }
+    this.onSelect({ selected: this.audienceSelected });
+    console.log('asdasd', this.audienceSelected);
+  }
 
   selectCheck(row, column, value) {
     console.log('selectcheck', row, column, value);
@@ -2101,11 +2100,8 @@ export class NotificationCreateComponent {
   }
 
   bindSelector(isSelected, row) {
-    let index = this.audienceSelected.findIndex(r => r.id === row.id);
-    if (index > - 1) {
-      return true;
-    }
-    return false;
+    let index = this.audienceSelected.findIndex(id => id === row.id);
+    return index > -1;
   }
 
   isTargetAudience(event) {
@@ -2118,7 +2114,7 @@ export class NotificationCreateComponent {
       return;
     }
     this.dataService.showLoading(true);
-    let body = this.audienceSelected.map(aud => aud.id);
+    let body = this.audienceSelected;
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
     else {
@@ -2190,7 +2186,7 @@ export class NotificationCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = response;
+        this.audienceSelected = response.map(r => r.id);
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
