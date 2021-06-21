@@ -1996,12 +1996,13 @@ export class NotificationCreateComponent {
       this.notificationService.getPushNotifAudienceIDs(this.pagination).subscribe(res => {
         this.audienceSelected = res;
         console.log(this.audienceSelected);
+        this.onSelect({ selected: this.audienceSelected });
         this.loadingIndicator = false;
       });
     } else {
       this.audienceSelected = [];
+      this.onSelect({ selected: this.audienceSelected });
     }
-    this.onSelect({ selected: this.audienceSelected });
   }
 
   isTargetAudience(event) {
