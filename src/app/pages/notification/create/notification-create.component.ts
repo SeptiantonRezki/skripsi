@@ -1955,6 +1955,7 @@ export class NotificationCreateComponent {
       this.rows = res.data;
       this.allRowsSelected = false;
       this.audienceSelected = [];
+      this.onSelect({ selected: this.audienceSelected });
       this.loadingIndicator = false;
     });
   }
@@ -2000,6 +2001,7 @@ export class NotificationCreateComponent {
     } else {
       this.audienceSelected = [];
     }
+    this.onSelect({ selected: this.audienceSelected });
   }
 
   isTargetAudience(event) {
