@@ -328,7 +328,7 @@ export class ProductEditComponent {
             wilayah.push(fb);
 
             this.initArea(index);
-            this.initFormGroup(response, index);
+            await this.initFormGroup(response, index);
 
             if (this.detailProduct.areas.length === (index + 1)) {
               this.onLoad = false;
@@ -500,22 +500,22 @@ export class ProductEditComponent {
           wilayah.at(index).get('national').disable();
           break
         case 'division':
-          wilayah.at(index).get('zone').disable();
+          // wilayah.at(index).get('zone').disable();
           break;
         case 'region':
-          wilayah.at(index).get('region').disable();
+          // wilayah.at(index).get('region').disable();
           break;
         case 'area':
-          wilayah.at(index).get('area').disable();
+          // wilayah.at(index).get('area').disable();
           break;
         case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
+          // wilayah.at(index).get('salespoint').disable();
           break;
         case 'district':
-          wilayah.at(index).get('district').disable();
+          // wilayah.at(index).get('district').disable();
           break;
         case 'territory':
-          wilayah.at(index).get('territory').disable();
+          // wilayah.at(index).get('territory').disable();
           break;
       }
     })
