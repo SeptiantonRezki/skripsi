@@ -399,8 +399,9 @@ export class ProductEditComponent {
             if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key))) {
               console.log("skip private label", res.data.is_promo_src, wilayah.length, index)
             } else {
+              fb.get('national').disable()
               wilayah.push(fb);
-              this.initArea(index);
+              // this.initArea(index);
               this.initFormGroup(response, index);
               console.log('wilayah yang didapat pas else', wilayah);
             }
@@ -493,32 +494,34 @@ export class ProductEditComponent {
 
   initArea(index) {
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
-    console.log('area from Login', this.areaFromLogin);
-    this.areaFromLogin.map(item => {
-      switch (item.type.trim()) {
-        case 'national':
-          wilayah.at(index).get('national').disable();
-          break
-        case 'division':
-          // wilayah.at(index).get('zone').disable();
-          break;
-        case 'region':
-          // wilayah.at(index).get('region').disable();
-          break;
-        case 'area':
-          // wilayah.at(index).get('area').disable();
-          break;
-        case 'salespoint':
-          // wilayah.at(index).get('salespoint').disable();
-          break;
-        case 'district':
-          // wilayah.at(index).get('district').disable();
-          break;
-        case 'territory':
-          // wilayah.at(index).get('territory').disable();
-          break;
-      }
-    })
+    console.log("[initArea]", index, wilayah)
+    wilayah.at(index).get('national').disable();
+    // this.areaFromLogin.map(item => {
+    //   switch (item.type.trim()) {
+    //     case 'national':
+    //       console.log("ada gak cuk", wilayah.at(index), index, wilayah)
+    //       wilayah.at(index).get('national').disable();
+    //       break
+    //     case 'division':
+    //       // wilayah.at(index).get('zone').disable();
+    //       break;
+    //     case 'region':
+    //       // wilayah.at(index).get('region').disable();
+    //       break;
+    //     case 'area':
+    //       // wilayah.at(index).get('area').disable();
+    //       break;
+    //     case 'salespoint':
+    //       // wilayah.at(index).get('salespoint').disable();
+    //       break;
+    //     case 'district':
+    //       // wilayah.at(index).get('district').disable();
+    //       break;
+    //     case 'territory':
+    //       // wilayah.at(index).get('territory').disable();
+    //       break;
+    //   }
+    // })
   }
 
   initFormGroup(response, index) {
