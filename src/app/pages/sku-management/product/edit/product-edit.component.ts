@@ -343,8 +343,8 @@ export class ProductEditComponent {
         if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
           let productPrices = res.data.product_prices;
           this.productPrices = res.data.product_prices;
-          Object.keys(productPrices).map(async (key, index) => {
-            const response = await this.productService.getParentArea({ parent: key == "-99" ? "1" : key }).toPromise();
+          productPrices.map(async (key, index) => {
+            const response = await this.productService.getParentArea({ parent: key.area_id == "-99" ? "1" : key.area_id }).toPromise();
             let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
             let fb = this.formBuilder.group({
@@ -365,18 +365,16 @@ export class ProductEditComponent {
               time_period: [false],
               start_date: [""],
               end_date: [""],
-              listProdukPrivateLabel: this.formBuilder.array(productPrices[key].map(item => {
-                let fbPL = this.formBuilder.group({
-                  packaging: [item.packaging, Validators.required],
-                  packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
-                  price: [Number(item.price), Validators.required],
-                  price_discount: [Number(item.price_discount), Validators.required],
-                  price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
-                  tipe: [item.price_type]
-                });
-                return fbPL;
-              }
-              ))
+              listProdukPrivateLabel: this.formBuilder.array(
+                [this.formBuilder.group({
+                  packaging: [key.packaging, Validators.required],
+                  packaging_amount: [Number(key.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+                  price: [Number(key.price), Validators.required],
+                  price_discount: [Number(key.price_discount), Validators.required],
+                  price_discount_expires_at: [{ value: key.price_discount_expires_at ? moment(key.price_discount_expires_at) : "", disabled: key.price_discount_expires_at ? false : true }, Validators.required],
+                  tipe: [key.price_type]
+                })]
+              )
             });
 
             fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
