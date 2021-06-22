@@ -156,4 +156,11 @@ export class PopupNotificationIndexComponent {
     });
   }
 
+  // checkRolePermission(row) {
+  //   if (row.action !== 'new-product') return true;
+  //   else if (row.action === 'new-product' && this.permission.new_product) return true;
+  //   else if (row.action === 'new-product' && !this.permission.new_product) return false;
+  //   else return true;
+  // }
+
 }
