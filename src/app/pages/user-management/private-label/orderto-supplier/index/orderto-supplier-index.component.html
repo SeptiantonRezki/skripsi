@@ -103,7 +103,7 @@
         <ngx-datatable-column name="Status" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
-              {{row.status_indo ? row.status_indo.replace('-', ' ').toUpperCase() : row.status_indo}}
+              {{row.status_indo ? row.status_indo.replace('-', ' ').toUpperCase() : row.status}}
             </p>
           </ng-template>
         </ngx-datatable-column>

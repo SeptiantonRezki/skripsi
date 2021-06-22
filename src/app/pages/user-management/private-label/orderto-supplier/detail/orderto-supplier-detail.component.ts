@@ -216,13 +216,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           });
 
           if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
-            const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
-            if (dayLimit < 30) {
+            // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
+            // if (dayLimit < 30) {
               // this.initDataQiscus(res);
               this.qiscusCheck(this.detailOrder); // check login qiscus
-            } else {
-              this.emitter.emitChatIsOpen(false); // for open chat
-            }
+            // } else {
+            //   this.emitter.emitChatIsOpen(false); // for open chat
+            // }
           } else {
             // this.initDataQiscus(res);
             this.qiscusCheck(this.detailOrder); // check login qiscus
@@ -624,7 +624,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       // console.log("PAYLOAD", payload);
       this.qs.qiscusCreateUpdateRoomOrderPL({ orderId: this.orderId }).subscribe(async (qRes: any) => {
         // console.log("RESP", qRes);
-        if (qRes.status) {
+        if (qRes.status && qRes.data && qRes.data.room_id) {
+          item.qiscus_room_id = qRes.data.room_id;
           await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
             this.emitter.emitChatIsOpen(true); // for open chat
             this.emitter.emitDataChat(item);
@@ -634,6 +635,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           }).catch((qiscusError: any) => {
             console.log('q_error_013bb', qiscusError);
           });
+        } else {
+          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!'});
         }
       });
     }
