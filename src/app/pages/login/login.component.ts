@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
 
   async qiscusLoginOrRegister(profile: any) {
     if (profile) {
-      return this.qs.qiscusMC.getNonce().then((gn: any) => {
+      this.qs.qiscusMC.getNonce().then((gn: any) => {
         if (gn && gn.nonce) {
           return new Promise((resolve, reject) => {
             this.qs.createJWTMC({ nonce: gn.nonce }).subscribe((res: any) => {
@@ -137,33 +137,27 @@ export class LoginComponent implements OnInit {
           return userData;
         }
       });
-      if (profile.id !== undefined && profile.id !== null && profile.vendor_company_id) {
-        this.qs.qiscus.getNonce().then(async (gn: any) => {
-          if (gn && gn.nonce) {
-            return new Promise((resolve, reject) => {
-              this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
-                resolve(res);
-              }, (err) => {
-                reject(err);
-              });
-            });
-          }
-        }).then((jwt: any) => {
-          if (jwt && jwt.data) {
-            return this.qs.qiscus.verifyIdentityToken(jwt.data);
-          }
-        }).then((userData: any) => {
-          if (userData) {
-            this.qs.qiscus.setUserWithIdentityToken(userData);
-            return userData;
-          }
-        });
 
-      } else {
-        console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
-        // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
-        return false;
-      }
+      this.qs.qiscus.getNonce().then(async (gn: any) => {
+        if (gn && gn.nonce) {
+          return new Promise((resolve, reject) => {
+            this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
+              resolve(res);
+            }, (err) => {
+              reject(err);
+            });
+          });
+        }
+      }).then((jwt: any) => {
+        if (jwt && jwt.data) {
+          return this.qs.qiscus.verifyIdentityToken(jwt.data);
+        }
+      }).then((userData: any) => {
+        if (userData) {
+          this.qs.qiscus.setUserWithIdentityToken(userData);
+          return userData;
+        }
+      });
     } else {
       console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
       // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });

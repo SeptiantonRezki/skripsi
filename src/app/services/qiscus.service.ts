@@ -167,6 +167,11 @@ export class QiscusService extends BaseService {
     return this.getApi(url);
   }
 
+  qiscusCreateUpdateRoomOrderPL(context): Observable<any> {
+    const url = this.getUrl(this.namespace, "createUpdateRoomOrderPL", context);
+    return this.getApi(url);
+  }
+
   getMessageTemplates(context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "getMessageTemplates", context);
     return this.getApi(url);
