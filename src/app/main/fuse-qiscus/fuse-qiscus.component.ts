@@ -186,23 +186,22 @@ export class FuseQiscusComponent {
   }
 
   async ngOnInit() {
+    const urlWhiteList = [
+      '/src-catalogue/orders/detail/',
+      '/src-catalogue/notifications',
+      '/user-management/supplier-order/detail/'
+    ];
+    let isAnyURL = false;
 
-    if (this.dataTransaction) {
-      if (this.router.url.search('/src-catalogue/orders/detail/' + this.dataTransaction.id) == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
-        console.log('pertama');
-        this.emitter.emitChatIsOpen(false);
-      } else {
-        if (this.router.url.search('/src-catalogue/orders/detail/') == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
-          console.log('kedua');
-          this.emitter.emitChatIsOpen(false);
-        }
+    urlWhiteList.map((v) => {
+      if (this.router.url.search(v) > -1) {
+        isAnyURL = true;
       }
-    } else {
-      if (this.router.url.search('/src-catalogue/orders/detail/') == -1 && this.router.url.search('/src-catalogue/notifications') == -1) {
-        console.log('ketiga');
-        this.emitter.emitChatIsOpen(false);
-      }
+    });
+    if (!isAnyURL) {
+      this.emitter.emitChatIsOpen(false);
     }
+
     if (this.dataQiscus == null) {
       if (this.dataTransaction) {
         this._loadRoom(this.dataTransaction.qiscus_room_id);
@@ -211,6 +210,7 @@ export class FuseQiscusComponent {
     // this.userProfile = await this.dataService.getFromStorage('profile');
     this.userProfile = await this.dataService.getDecryptedProfile();
     this.userQiscus = await this.storageHelper.getUserQiscus();
+    console.log('this.userProfile', this.userProfile)
     this.scrollToBottom();
   }
 
@@ -490,10 +490,19 @@ export class FuseQiscusComponent {
   sendChat() {
     // console.log('Sending...', this.message );
     // console.log("MESSAGES", this.message);
-    const extras = {
-      invoiceNumber: this.dataTransaction.invoice_number,
-      vendorName: this.dataTransaction.vendor_company.name,
+    const extras: any = {
+      invoiceNumber: this.dataTransaction.invoice_number
     };
+
+    if (this.dataTransaction.vendor_company) {
+      extras.vendorName = this.dataTransaction.vendor_company.name;
+    }
+
+    if (this.dataTransaction.supplier_company_name) {
+      extras.wholesalerName = this.dataTransaction.wholesaler_name;
+      extras.supplierName = this.dataTransaction.supplier_company_name;
+    }
+
     function isEmpty(obj: any) {
       for (const prop in obj) {
         if (obj.hasOwnProperty(prop)) {
@@ -719,10 +728,18 @@ export class FuseQiscusComponent {
   openMedia(type: any, idx: any) {
     console.log('data', this.dataTransaction);
     const dialogConfig = new MatDialogConfig();
-    const extras = {
-      invoiceNumber: this.dataTransaction.invoice_number,
-      vendorName: this.dataTransaction.vendor_company.name,
+    const extras: any = {
+      invoiceNumber: this.dataTransaction.invoice_number
     };
+
+    if (this.dataTransaction.vendor_company) {
+      extras.vendorName = this.dataTransaction.vendor_company.name;
+    }
+
+    if (this.dataTransaction.supplier_company_name) {
+      extras.wholesalerName = this.dataTransaction.wholesaler_name,
+      extras.supplierName = this.dataTransaction.supplier_company_name;
+    }
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -736,7 +753,7 @@ export class FuseQiscusComponent {
         switch (type) {
           case 'product_tagging':
             // this.templateTaskForm.get('image').setValue(response);
-            console.log('asokdlasdas', JSON.parse(response.payload));
+            // console.log('asokdlasdas', JSON.parse(response.payload));
             const dataChatTempProduct = {
               id: response.uniqueId,
               uniqueId: response.uniqueId,
@@ -789,14 +806,14 @@ export class FuseQiscusComponent {
               isRead: false,
               isSent: false,
               is_deleted: false,
-              payload: response.payload,
+              payload: JSON.parse(response.payload),
               time: moment().format('HH:mm'),
               date: moment().format('DD-MM-YYYY'),
               status: 'sending',
               type: 'image',
               username_as: this.userProfile.fullname,
               username_real: this.userQiscus.email
-            }
+            };
             // console.log('message success!')
             this.dataChat.push(dataChatTemp);
             setTimeout(() => {
@@ -861,6 +878,23 @@ export class FuseQiscusComponent {
         }
       });
     }
+  }
+
+  userWhiteList(q: any) {
+    const list = [
+      'vendorhms',
+      'supplierhms',
+      'principalhms'
+    ];
+    let isTrue = false;
+
+    list.map((v) => {
+      if (q.username_real.search(v) > -1) {
+        isTrue = true;
+      }
+    });
+
+    return isTrue;
   }
 
   ngOnDestroy() {

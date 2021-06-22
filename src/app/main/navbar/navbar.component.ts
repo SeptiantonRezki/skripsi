@@ -171,33 +171,27 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
           return userData;
         }
       });
-      if (profile.id  && profile.vendor_company_id) {
-        this.qs.qiscus.getNonce().then(async (gn: any) => {
-          if (gn && gn.nonce) {
-            return new Promise((resolve, reject) => {
-              this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
-                resolve(res);
-              }, (err) => {
-                reject(err);
-              });
-            });
-          }
-        }).then((jwt: any) => {
-          if (jwt && jwt.data) {
-            return this.qs.qiscus.verifyIdentityToken(jwt.data);
-          }
-        }).then((userData: any) => {
-          if (userData) {
-            this.qs.qiscus.setUserWithIdentityToken(userData);
-            return userData;
-          }
-        });
 
-      } else {
-        console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
-        // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
-        return false;
-      }
+      this.qs.qiscus.getNonce().then(async (gn: any) => {
+        if (gn && gn.nonce) {
+          return new Promise((resolve, reject) => {
+            this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
+              resolve(res);
+            }, (err) => {
+              reject(err);
+            });
+          });
+        }
+      }).then((jwt: any) => {
+        if (jwt && jwt.data) {
+          return this.qs.qiscus.verifyIdentityToken(jwt.data);
+        }
+      }).then((userData: any) => {
+        if (userData) {
+          this.qs.qiscus.setUserWithIdentityToken(userData);
+          return userData;
+        }
+      });
     } else {
       console.warn('Maaf, Terjadi Kesalahan Server! failed to redirecting realtime server');
       // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });

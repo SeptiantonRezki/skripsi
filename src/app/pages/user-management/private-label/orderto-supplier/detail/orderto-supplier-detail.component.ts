@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 
 // import { OrdersService } from "../../../services/orders.service";
@@ -17,6 +17,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { OrdertoSupplierService } from "app/services/user-management/private-label/orderto-supplier.service";
+import { QiscusService } from "app/services/qiscus.service";
 
 
 @Component({
@@ -24,7 +25,7 @@ import { OrdertoSupplierService } from "app/services/user-management/private-lab
   templateUrl: './orderto-supplier-detail.component.html',
   styleUrls: ['./orderto-supplier-detail.component.scss']
 })
-export class OrdertoSupplierDetailComponent {
+export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   orderId: any;
   body: any;
   detailOrder: any;
@@ -74,15 +75,11 @@ export class OrdertoSupplierDetailComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private fuseSplashScreen: FuseSplashScreenService,
-    private qzTrayService: QzTrayService,
     private convertRp: RupiahFormaterWithoutRpPipe,
     private dataService: DataService,
     private emitter: Emitter,
-    private dialog: MatDialog,
     private ordertoSupplierService: OrdertoSupplierService,
-    // private productService: ProductService,
-    // private ordersService: OrdersService,
+    private qs: QiscusService,
   ) {
 
     const observable = this.keyUp.debounceTime(1000)
@@ -117,6 +114,10 @@ export class OrdertoSupplierDetailComponent {
     this.onLoad = true;
     this.getDetailOrder();
     this.document.disable();
+  }
+
+  ngOnDestroy() {
+    this.emitter.emitChatIsOpen(false);
   }
 
   copyMessage(docType: string) {
@@ -186,7 +187,7 @@ export class OrdertoSupplierDetailComponent {
           this.isAnyUpdate = res && res.order_products ? res.order_products.findIndex(product => product.price_update_status) : -1;
 
           // let tierPrice = this.detailOrder.tier;
-          console.log('allproductlevels get detail', this.allProductLevels);
+          // console.log('allproductlevels get detail', this.allProductLevels);
           res.order_products.map((item: any, idx: number) => {
             this.total = parseInt(this.total) + parseInt(item.total_price);
             listProducts.push(
@@ -213,6 +214,20 @@ export class OrdertoSupplierDetailComponent {
             this.edited = true;
             this.editable = true;
           });
+
+          if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
+            // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
+            // if (dayLimit < 30) {
+              // this.initDataQiscus(res);
+              this.qiscusCheck(this.detailOrder); // check login qiscus
+            // } else {
+            //   this.emitter.emitChatIsOpen(false); // for open chat
+            // }
+          } else {
+            // this.initDataQiscus(res);
+            this.qiscusCheck(this.detailOrder); // check login qiscus
+          }
+
         }
       },
       err => {
@@ -554,4 +569,90 @@ export class OrdertoSupplierDetailComponent {
       return item.value.split('Rp ')[1];
     }
   }
+
+  initLoginQiscus() {
+    this.qs.qiscus.getNonce().then(async (gn: any) => {
+      if (gn && gn.nonce) {
+        return new Promise((resolve, reject) => {
+          this.qs.createJWT({ nonce: gn.nonce }).subscribe((res: any) => {
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
+        });
+      }
+    }).then((jwt: any) => {
+      if (jwt && jwt.data) {
+        return this.qs.qiscus.verifyIdentityToken(jwt.data);
+      }
+    }).then((userData: any) => {
+      if (userData) {
+        this.qs.qiscus.setUserWithIdentityToken(userData);
+        return userData;
+      }
+    });
+  }
+
+  async initDataQiscus(item: any) {
+    console.log('DATAROOM', item);
+    if (item === 'pesanan-dibatalkan' || item === 'selesai') {
+      // this.setState({ dataQiscus: null });
+      this.emitter.emitChatIsOpen(true); // for open chat
+      this.emitter.emitDataChat(item);
+      return false;
+    } else if (
+      item.qiscus_room_id !== null &&
+      item.qiscus_room_id !== '' &&
+      item.qiscus_room_id !== undefined
+    ) {
+      await this.qs.qiscus.getRoomById(item.qiscus_room_id)
+        .then(async (getRoom: any) => {
+          // this.setState({ dataQiscus: { ...this.props.dataQiscus, ...getRoom } });
+          this.emitter.emitChatIsOpen(true); // for open chat
+          this.emitter.emitDataChat(item);
+          return true;
+        }, (err: any) => {
+          console.log('error_012', err);
+          setTimeout(() => {
+            this.initDataQiscus(item);
+          }, 1500);
+        })
+        .catch((qiscusError: any) => {
+          console.log('q_error', qiscusError);
+        });
+    } else {
+      // console.log("PAYLOAD", payload);
+      this.qs.qiscusCreateUpdateRoomOrderPL({ orderId: this.orderId }).subscribe(async (qRes: any) => {
+        // console.log("RESP", qRes);
+        if (qRes.status && qRes.data && qRes.data.room_id) {
+          item.qiscus_room_id = qRes.data.room_id;
+          await this.qs.qiscus.getRoomById(qRes.data.room_id).then((getRoom: any) => {
+            this.emitter.emitChatIsOpen(true); // for open chat
+            this.emitter.emitDataChat(item);
+            return true;
+          }, (err: any) => {
+            console.log('q_error_013b', err);
+          }).catch((qiscusError: any) => {
+            console.log('q_error_013bb', qiscusError);
+          });
+        } else {
+          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!'});
+        }
+      });
+    }
+    return false;
+  }
+
+  qiscusCheck(res: any) {
+    if (this.qs.qiscus.isLogin) {
+      this.initDataQiscus(res);
+    } else {
+      setTimeout(() => {
+        this.qiscusCheck(res);
+      }, 1500);
+      this.initLoginQiscus();
+      // this.emitter.emitChatIsOpen(true);
+    }
+  }
+
 }
