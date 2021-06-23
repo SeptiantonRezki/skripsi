@@ -18,6 +18,7 @@ import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { OrdertoSupplierService } from "app/services/user-management/private-label/orderto-supplier.service";
 import { QiscusService } from "app/services/qiscus.service";
+import { PagesName } from "app/classes/pages-name";
 
 
 @Component({
@@ -56,6 +57,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   total: any;
   static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
   document: FormControl = new FormControl('');
+  permission: any;
+  roles: PagesName = new PagesName();
 
 
   @HostListener('window:beforeunload')
@@ -81,6 +84,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
     private ordertoSupplierService: OrdertoSupplierService,
     private qs: QiscusService,
   ) {
+    this.permission = this.roles.getRoles('principal.supplierorder');
+    // console.log('roles',this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -93,7 +98,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
 
     this.edited = false;
     this.activatedRoute.url.subscribe(params => {
-      console.log('params', params)
+      // console.log('params', params)
       this.orderId = params[2].path;
     });
     // this.listLevel = this.activatedRoute.snapshot.data["listLevel"].data
@@ -153,7 +158,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           // setTimeout(() => {
           res = res.data;
           this.detailOrder = res;
-          console.log('detail order', this.detailOrder);
+          // console.log('detail order', this.detailOrder);
           let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
           this.productsNota = products;
           this.total = 0;
@@ -215,17 +220,21 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             this.editable = true;
           });
 
-          if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
-            // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
-            // if (dayLimit < 30) {
+          if (this.permission.chat) {
+            if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
+              // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
+              // if (dayLimit < 30) {
+                // this.initDataQiscus(res);
+                this.qiscusCheck(this.detailOrder); // check login qiscus
+              // } else {
+              //   this.emitter.emitChatIsOpen(false); // for open chat
+              // }
+            } else {
               // this.initDataQiscus(res);
               this.qiscusCheck(this.detailOrder); // check login qiscus
-            // } else {
-            //   this.emitter.emitChatIsOpen(false); // for open chat
-            // }
+            }
           } else {
-            // this.initDataQiscus(res);
-            this.qiscusCheck(this.detailOrder); // check login qiscus
+            this.emitter.emitChatIsOpen(false);
           }
 
         }
@@ -302,7 +311,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       let body: Object = {
         _method: "PUT",
         products: this.productsForm.get("listProducts").value.map((item, index) => {
-          console.log('item', item.levels);
+          // console.log('item', item.levels);
           let tierPrice = this.detailOrder.tier;
           return {
             product_id: item.id,
@@ -359,13 +368,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   saveUpdateQtyV2() {
 
     const products = this.productsForm.get('listProducts').value;
-    console.log({ products });
+    // console.log({ products });
     if (products.length) {
 
       this.loadingIndicator = true;
 
       const body = { products: products.map(({ id, amount }) => ({ product_id: id, amount })) }
-      console.log({ body });
+      // console.log({ body });
 
       this.ordertoSupplierService.updateQty(body, { orderId: this.orderId }).subscribe(response => {
         this.loadingIndicator = false;
@@ -443,7 +452,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   }
 
   onPriceChange(data) {
-    console.log('index idx', data.i);
+    // console.log('index idx', data.i);
     let tierPrice = this.detailOrder.tier;
     let tierPriceFound = this.detailOrder.products[data.i] ? this.detailOrder.products[data.i].levels.findIndex(lvl => lvl.business_level_id === tierPrice) : -1;
     let listProducts = this.productsForm.get("listProducts") as FormArray;
@@ -594,7 +603,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   }
 
   async initDataQiscus(item: any) {
-    console.log('DATAROOM', item);
+    // console.log('DATAROOM', item);
     if (item === 'pesanan-dibatalkan' || item === 'selesai') {
       // this.setState({ dataQiscus: null });
       this.emitter.emitChatIsOpen(true); // for open chat
