@@ -1051,7 +1051,8 @@ export class PopupNotificationEditComponent {
       }
 
       if (response.action === 'new-product') {
-        this.formPopupGroup.get('product').setValue(response.action_data);
+        this.filterProduct.setValue(response.action_data.name)
+        this.formPopupGroup.get('product').setValue(response.action_data.sku_id);
         // this.filterProduct.setValue(response.action_data);
         // this._filterProducts()
       }
