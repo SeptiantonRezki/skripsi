@@ -91,6 +91,7 @@ export class PopupNotificationEditComponent {
   id: any[];
   reorderable = true;
   pagination: Page = new Page();
+  paginationProduct: Page = new Page();
 
   keyUp = new Subject<string>();
   areaType: any[] = [];
@@ -486,12 +487,12 @@ export class PopupNotificationEditComponent {
     }
     // get the search keyword
     let search = this.filterProduct.value;
-    this.pagination.per_page = 30;
-    this.pagination.search = search;
-    if (this.pagination['id']) {
-      delete this.pagination['id'];
+    this.paginationProduct.per_page = 30;
+    this.paginationProduct.search = search;
+    if (this.paginationProduct['id']) {
+      delete this.paginationProduct['id'];
     }
-    this.b2bInjectVoucherService.getProductList(this.pagination).subscribe(
+    this.b2bInjectVoucherService.getProductList(this.paginationProduct).subscribe(
       (res) => {
         this.listProducts = res.data;
         this.filteredProduct.next(this.listProducts.slice());
