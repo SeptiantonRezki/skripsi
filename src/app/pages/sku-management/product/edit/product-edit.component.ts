@@ -343,79 +343,77 @@ export class ProductEditComponent {
         if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
           let productPrices = res.data.product_prices;
           this.productPrices = res.data.product_prices;
-          productPrices.map(async (key, index) => {
-            const response = await this.productService.getParentArea({ parent: key[0] && key[0].area_id ? key[0].area_id : "1" }).toPromise();
-            let wilayah = this.formProductGroup.controls['areas'] as FormArray;
+          this.forkGetParentArea(productPrices).subscribe(areaResponse => {
+            productPrices.map(async (key, index) => {
+              // const response = await this.productService.getParentArea({ parent: key[0] && key[0].area_id ? key[0].area_id : "1" }).toPromise();
+              let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
-            let fb = this.formBuilder.group({
-              national: [this.getArea(response, 'national'), Validators.required],
-              zone: [this.getArea(response, 'division')],
-              region: [this.getArea(response, 'region')],
-              area: [this.getArea(response, 'area')],
-              salespoint: [this.getArea(response, 'salespoint')],
-              district: [this.getArea(response, 'district')],
-              territory: [this.getArea(response, 'teritory')],
-              list_national: this.formBuilder.array(this.listLevelArea),
-              list_zone: this.formBuilder.array([]),
-              list_region: this.formBuilder.array([]),
-              list_area: this.formBuilder.array([]),
-              list_salespoint: this.formBuilder.array([]),
-              list_district: this.formBuilder.array([]),
-              list_territory: this.formBuilder.array([]),
-              time_period: [false],
-              start_date: [""],
-              end_date: [""],
-              listProdukPrivateLabel: this.formBuilder.array(key.map(item => this.formBuilder.group({
-                packaging: [item.packaging, Validators.required],
-                packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
-                price: [Number(item.price), Validators.required],
-                price_discount: [Number(item.price_discount), Validators.required],
-                price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
-                tipe: [item.price_type]
-              })))
-            });
+              let fb = this.formBuilder.group({
+                national: [this.getArea(areaResponse[index], 'national'), Validators.required],
+                zone: [this.getArea(areaResponse[index], 'division')],
+                region: [this.getArea(areaResponse[index], 'region')],
+                area: [this.getArea(areaResponse[index], 'area')],
+                salespoint: [this.getArea(areaResponse[index], 'salespoint')],
+                district: [this.getArea(areaResponse[index], 'district')],
+                territory: [this.getArea(areaResponse[index], 'teritory')],
+                list_national: this.formBuilder.array(this.listLevelArea),
+                list_zone: this.formBuilder.array([]),
+                list_region: this.formBuilder.array([]),
+                list_area: this.formBuilder.array([]),
+                list_salespoint: this.formBuilder.array([]),
+                list_district: this.formBuilder.array([]),
+                list_territory: this.formBuilder.array([]),
+                time_period: [false],
+                start_date: [""],
+                end_date: [""],
+                listProdukPrivateLabel: this.formBuilder.array(key.map(item => this.formBuilder.group({
+                  packaging: [item.packaging, Validators.required],
+                  packaging_amount: [Number(item.packaging_amount), [Validators.required, Validators.min(1), Validators.max(1000)]],
+                  price: [Number(item.price), Validators.required],
+                  price_discount: [Number(item.price_discount), Validators.required],
+                  price_discount_expires_at: [{ value: item.price_discount_expires_at ? moment(item.price_discount_expires_at) : "", disabled: item.price_discount_expires_at ? false : true }, Validators.required],
+                  tipe: [item.price_type]
+                })))
+              });
 
-            fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
-              let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
-              (res || []).map((item, index) => {
-                if (item.price) {
-                  listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
-                  listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
-                }
+              fb.controls['listProdukPrivateLabel'].valueChanges.debounceTime(300).subscribe(res => {
+                let listProdukPrivateLabel = fb.get('listProdukPrivateLabel') as FormArray;
+                (res || []).map((item, index) => {
+                  if (item.price) {
+                    listProdukPrivateLabel.at(index).get('price_discount').setValidators([Validators.max(item.price - 1)]);
+                    listProdukPrivateLabel.at(index).get('price_discount').updateValueAndValidity();
+                  }
 
-                if (item.price_discount) {
-                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
-                } else {
-                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
-                  listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
-                }
-              })
-            });
+                  if (item.price_discount) {
+                    listProdukPrivateLabel.at(index).get('price_discount_expires_at').enable();
+                  } else {
+                    listProdukPrivateLabel.at(index).get('price_discount_expires_at').reset();
+                    listProdukPrivateLabel.at(index).get('price_discount_expires_at').disable();
+                  }
+                })
+              });
 
-            if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key))) {
-              console.log("skip private label", res.data.is_promo_src, wilayah.length, index)
-            } else {
-              fb.get('national').disable()
-              wilayah.push(fb);
-              // this.initArea(index);
-              this.initFormGroup(response, index);
-              console.log('wilayah yang didapat pas else', wilayah);
-            }
-
-            setTimeout(() => {
-              if (wilayah.length === (index + 1)) {
-                this.onLoad = false;
+              if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key))) {
+                console.log("skip private label", res.data.is_promo_src, wilayah.length, index)
+              } else {
+                fb.get('national').disable()
+                wilayah.push(fb);
+                // this.initArea(index);
+                this.initFormGroup(areaResponse[index], index);
+                console.log('wilayah yang didapat pas else', wilayah);
               }
-            }, 500);
-          });
+
+              setTimeout(() => {
+                if (wilayah.length === (index + 1)) {
+                  this.onLoad = false;
+                }
+              }, 500);
+            });
+          })
           if (Array.isArray(productPrices) && productPrices.length === 0) {
             this.addArea();
           }
         }
-
-        setTimeout(() => {
-          this.onLoad = false;
-        }, 500);
 
         if (this.isDetail) this.formProductGroup.disable();
 
@@ -423,6 +421,15 @@ export class ProductEditComponent {
     } catch (ex) {
       console.log('ex', ex);
     }
+  }
+
+  forkGetParentArea(areas) {
+    let requests = []
+    areas.map(area => {
+      requests.push(this.productService.getParentArea({ parent: area[0] && area[0].area_id ? area[0].area_id : "1" }))
+    });
+
+    return forkJoin(requests)
   }
 
   createArea(): FormGroup {
