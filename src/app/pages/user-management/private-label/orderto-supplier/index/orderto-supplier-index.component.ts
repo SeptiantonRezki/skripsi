@@ -257,7 +257,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     }
     try {
       const response = await this.ordertoSupplierService.exportPO(this.pagination).toPromise();
-      console.log('he', response.headers);
+      // console.log('he', response.headers);
       this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
@@ -369,7 +369,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   }
 
   getDokumen(row) {
-    console.log("row", row);
+    // console.log("row", row);
     if (row.document) {
       this.downloadLink.nativeElement.href = row.document_image_url;
       this.downloadLink.nativeElement.click();
