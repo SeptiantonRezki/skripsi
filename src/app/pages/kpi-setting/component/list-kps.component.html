@@ -1,0 +1,51 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'KPI Setting'">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Daftar KPS</h2>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Tahun" prop="year">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-year" >{{row.year}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="KPS" prop="kps_number">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-kps_number" >{{row.kps_number}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="90" name="Tanggal Mulai" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.start_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="90" name="Tanggal Berakhir" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.end_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" (click)="directEdit(row)" [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
