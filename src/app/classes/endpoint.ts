@@ -337,6 +337,7 @@ export class Endpoint {
         export_audience: `${AYO_API}/api/principal/pop-up-notification/audience/export`,
         import_audience: `${AYO_API}/api/principal/pop-up-notification/audience/import`,
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
+        get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
         import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
       },

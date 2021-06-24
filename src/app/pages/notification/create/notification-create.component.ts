@@ -12,7 +12,7 @@ import * as moment from "moment";
 import { Config } from 'app/classes/config';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
@@ -42,6 +42,7 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscriptionStatus: any[] = [{name: 'Semua', value: 'all'}, {name: 'Berlangganan', value: 'subscribed'}, {name: 'Tidak Berlangganan', value:'not-subscribed'}]
   userGroup: any[] = [
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
@@ -139,6 +140,7 @@ export class NotificationCreateComponent {
   rows: any[];
   selected: any[] = [];
   id: any[];
+  allRowsSelected = false;
   reorderable = true;
   pagination: Page = new Page();
 
@@ -236,6 +238,15 @@ export class NotificationCreateComponent {
       this.idNotif = (params[2]) ? params[2].path : null;
       this.actionType = params[1].path;
     })
+
+    this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
   }
 
   ngOnInit() {
@@ -244,6 +255,7 @@ export class NotificationCreateComponent {
       body: ["", Validators.required],
       user_group: ["retailer", Validators.required],
       verification: ["all"],
+      subscription_status: ['all'],
       age: ["18+", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
@@ -1190,6 +1202,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
+      this.formNotification.controls.subscription_status.setValue('all');
     } else {
       this.formNotification.controls.type_of_recurrence.enable();
       this.formNotification.controls.send_ayo.enable();
@@ -1279,6 +1292,16 @@ export class NotificationCreateComponent {
       
     }
 
+    if (this.formNotification.get("is_target_audience").value) {
+      let unique_set = new Set(this.audienceSelected);
+      if(this.audienceSelected.length !== unique_set.size)  {
+        this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+        return;
+      }
+    }
+
     let _areas = [];
     let areas = [];
     let value = this.formNotification.getRawValue();
@@ -1303,6 +1326,7 @@ export class NotificationCreateComponent {
       title: this.formNotification.get("title").value,
       body: this.formNotification.get("body").value,
       type: this.formNotification.get("user_group").value,
+      subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
       area_id: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
@@ -1384,6 +1408,7 @@ export class NotificationCreateComponent {
             bodyVideo.append('title', body.title);
             bodyVideo.append('body', body.body);
             bodyVideo.append('type', body.type);
+            bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
             this.multipleImageContentType.forEach((element, i) => {
@@ -1391,8 +1416,8 @@ export class NotificationCreateComponent {
             });
             if (this.formNotification.get('is_target_audience').value) {
               bodyVideo.append('target_audience', '1');
-              const ta = await this.audienceSelected.map((aud, i) => {
-                bodyVideo.append(`target_audiences[${i}]`, aud.id);
+              const ta = await this.audienceSelected.map((id, i) => {
+                bodyVideo.append(`target_audiences[${i}]`, id);
               });
             } else {
               if (bodyVideo.get('target_audience')) {
@@ -1438,13 +1463,14 @@ export class NotificationCreateComponent {
           bodyVideo.append('title', body.title);
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
+          bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
             bodyVideo.append('target_audience', '1');
-            const ta = await this.audienceSelected.map((aud, i) => {
-              bodyVideo.append(`target_audiences[${i}]`, aud.id);
+            const ta = await this.audienceSelected.map((id, i) => {
+              bodyVideo.append(`target_audiences[${i}]`, id);
             });
           } else {
             if (bodyVideo.get('target_audience')) {
@@ -1484,10 +1510,10 @@ export class NotificationCreateComponent {
         return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
       }
     }
-
+    
     if (this.formNotification.get("is_target_audience").value) {
       body['target_audience'] = 1;
-      body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+      body['target_audiences'] = this.audienceSelected;
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
@@ -1782,6 +1808,8 @@ export class NotificationCreateComponent {
     } else {
       delete this.pagination['type'];
     }
+
+    //#region not used
     // if (this.formPopupGroup.get("user_group").value === 'retailer') {
     //   this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
     //   delete this.pagination['customer_smoking'];
@@ -1803,6 +1831,7 @@ export class NotificationCreateComponent {
     //   this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
     //   this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
     // }
+    //#endregion
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -1819,7 +1848,7 @@ export class NotificationCreateComponent {
     this.selected.push(...selected);
   }
 
-  setPage(pageInfo) {
+  setPagination() {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
 
@@ -1885,6 +1914,10 @@ export class NotificationCreateComponent {
         }
       }
     }
+  }
+  
+  setPage(pageInfo) {
+    this.setPagination();
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
@@ -1899,71 +1932,8 @@ export class NotificationCreateComponent {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
+    
+    this.setPagination();
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -1977,75 +1947,15 @@ export class NotificationCreateComponent {
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
+    
+    this.setPagination();
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
+      this.allRowsSelected = false;
+      this.audienceSelected = [];
+      this.onSelect({ selected: this.audienceSelected });
       this.loadingIndicator = false;
     });
   }
@@ -2056,11 +1966,12 @@ export class NotificationCreateComponent {
 
   onSelectAudience(event, row) {
     console.log('onnnnnn', event);
-    let index = this.audienceSelected.findIndex(r => r.id === row.id);
+    let index = this.audienceSelected.findIndex(id => id === row.id);
     if (index > - 1) {
       this.audienceSelected.splice(index, 1);
+      this.allRowsSelected = false;
     } else {
-      this.audienceSelected.push(row);
+      this.audienceSelected.push(row.id);
     }
     this.onSelect({ selected: this.audienceSelected });
     console.log('asdasd', this.audienceSelected);
@@ -2072,11 +1983,26 @@ export class NotificationCreateComponent {
   }
 
   bindSelector(isSelected, row) {
-    let index = this.audienceSelected.findIndex(r => r.id === row.id);
-    if (index > - 1) {
-      return true;
+    let index = this.audienceSelected.findIndex(id => id === row.id);
+    return index > -1;
+  }
+
+  onSelectAll(allRowsSelected: boolean) {
+    console.log('allRowsSelected', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if(this.allRowsSelected) {
+      this.setPagination();
+      this.loadingIndicator = true;
+      this.notificationService.getPushNotifAudienceIDs(this.pagination).subscribe(res => {
+        this.audienceSelected = res;
+        console.log(this.audienceSelected);
+        this.onSelect({ selected: this.audienceSelected });
+        this.loadingIndicator = false;
+      });
+    } else {
+      this.audienceSelected = [];
+      this.onSelect({ selected: this.audienceSelected });
     }
-    return false;
   }
 
   isTargetAudience(event) {
@@ -2089,7 +2015,7 @@ export class NotificationCreateComponent {
       return;
     }
     this.dataService.showLoading(true);
-    let body = this.audienceSelected.map(aud => aud.id);
+    let body = this.audienceSelected;
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
     else {
@@ -2161,7 +2087,7 @@ export class NotificationCreateComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.audienceSelected = response;
+        this.audienceSelected = response.map(r => r.id);
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
           this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
@@ -2173,7 +2099,7 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
         verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
@@ -2196,6 +2122,7 @@ export class NotificationCreateComponent {
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
+      frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
       frm.controls['age'].setValue(age);
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
