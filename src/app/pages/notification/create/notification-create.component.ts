@@ -2004,8 +2004,8 @@ export class NotificationCreateComponent {
           const res = await this.notificationService.getPushNotifAudienceIDs(queryParams).toPromise();
           this.audienceSelected = [...this.audienceSelected, ...res];
           this.selected = [...this.audienceSelected];
-          if(res.length > 0) {
-            offset += 20000;
+          if(res.length >= 20000) {
+            offset += res.length;
           } else {
             loadMoreIds = false;
           }
