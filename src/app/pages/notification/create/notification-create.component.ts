@@ -1965,7 +1965,6 @@ export class NotificationCreateComponent {
   }
 
   onSelectAudience(event, row) {
-    console.log('onnnnnn', event);
     let index = this.audienceSelected.findIndex(id => id === row.id);
     if (index > - 1) {
       this.audienceSelected.splice(index, 1);
@@ -1993,12 +1992,28 @@ export class NotificationCreateComponent {
     if(this.allRowsSelected) {
       this.setPagination();
       this.loadingIndicator = true;
-      this.notificationService.getPushNotifAudienceIDs(this.pagination).subscribe(res => {
-        this.audienceSelected = res;
-        console.log(this.audienceSelected);
-        this.onSelect({ selected: this.audienceSelected });
+      this.audienceSelected = this.selected = [];
+      (async () => {
+        let loadMoreIds = true;
+        let offset = 0;
+        while(loadMoreIds) {
+          let queryParams = {
+            ...this.pagination,
+            offset
+          }
+          const res = await this.notificationService.getPushNotifAudienceIDs(queryParams).toPromise();
+          this.audienceSelected = [...this.audienceSelected, ...res];
+          this.selected = [...this.audienceSelected];
+          if(res.length >= 20000) {
+            offset += res.length;
+          } else {
+            loadMoreIds = false;
+          }
+        }
+        
         this.loadingIndicator = false;
-      });
+      })();
+      
     } else {
       this.audienceSelected = [];
       this.onSelect({ selected: this.audienceSelected });
