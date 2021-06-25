@@ -259,7 +259,7 @@ export class QiscusService extends BaseService {
   }
 
   qLoginSuccessMC = async (data: any) => {
-    console.log('SUCCESS_LOGIN');
+    // console.log('SUCCESS_LOGIN');
   };
 
   qLoginErrorMC = (data: any) => {

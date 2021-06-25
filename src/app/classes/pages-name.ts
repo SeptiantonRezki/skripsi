@@ -149,6 +149,9 @@ export class PagesName {
       roles['new_product'] = filterPermission.filter(item => item.indexOf('popupnotification.new_product') >= 0)[0]
     }
 
+    if (name.indexOf('supplierorder') > -1) {
+      roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
+    }
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {
       submenus.map((value) => {
