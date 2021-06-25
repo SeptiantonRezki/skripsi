@@ -1933,6 +1933,7 @@ export class NotificationCreateComponent {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
+    this.formNotification.controls.search.disable();
     
     this.setPagination();
 
@@ -1940,6 +1941,7 @@ export class NotificationCreateComponent {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.formNotification.controls.search.enable();
     });
   }
 
@@ -1996,6 +1998,7 @@ export class NotificationCreateComponent {
     if(this.allRowsSelected) {
       this.setPagination();
       this.loadingIndicator = true;
+      this.formNotification.controls.search.disable();
       this.audienceSelected = this.selected = [];
       (async () => {
         let loadMoreIds = true;
@@ -2016,6 +2019,7 @@ export class NotificationCreateComponent {
         }
         
         this.loadingIndicator = false;
+        this.formNotification.controls.search.enable();
       })();
       
     } else {
