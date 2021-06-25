@@ -264,6 +264,7 @@ export class NotificationCreateComponent {
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
+      search: [""],
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
       recurrence_type: [""],
@@ -1950,6 +1951,8 @@ export class NotificationCreateComponent {
     
     this.setPagination();
 
+    this.formNotification.controls.search.disable();
+
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
@@ -1957,6 +1960,7 @@ export class NotificationCreateComponent {
       this.audienceSelected = [];
       this.onSelect({ selected: this.audienceSelected });
       this.loadingIndicator = false;
+      this.formNotification.controls.search.enable();
     });
   }
 
