@@ -415,6 +415,10 @@ export class ProductEditComponent {
           }
         }
 
+        setTimeout(() => {
+          this.onLoad = false;
+        }, 1500);
+
         if (this.isDetail) this.formProductGroup.disable();
 
       })
