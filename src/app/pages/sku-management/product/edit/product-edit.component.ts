@@ -393,7 +393,7 @@ export class ProductEditComponent {
                 })
               });
 
-              if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key))) {
+              if (res.data.is_promo_src === 1 && wilayah.length === 1 && (res.data.areas.length > 0 && res.data.areas[0]['area_id'] === Number(key[0]['area_id']))) {
                 console.log("skip private label", res.data.is_promo_src, wilayah.length, index)
               } else {
                 fb.get('national').disable()
@@ -430,7 +430,7 @@ export class ProductEditComponent {
   forkGetParentArea(areas) {
     let requests = []
     areas.map(area => {
-      requests.push(this.productService.getParentArea({ parent: area[0] && area[0].area_id ? area[0].area_id : "1" }))
+      requests.push(this.productService.getParentArea({ parent: area[0] && area[0].area_id && area[0].area_id !== '-99' ? area[0].area_id : "1" }))
     });
 
     return forkJoin(requests)
