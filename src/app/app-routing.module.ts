@@ -166,13 +166,13 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: '**',
-    loadChildren: './pages/404/error-404.module#Error404Module'
-  },
-  {
     path: 'kpisetting',
     loadChildren: './pages/kpi-setting/kpi-setting.module#KPISettingModule',
     canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    loadChildren: './pages/404/error-404.module#Error404Module'
   },
 ];
 
