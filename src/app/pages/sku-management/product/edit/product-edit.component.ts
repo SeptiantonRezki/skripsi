@@ -270,8 +270,8 @@ export class ProductEditComponent {
             let wilayah = this.formProductGroup.controls['areas'] as FormArray;
 
             let product_pricesOnPS = [];
-            if (res.data.is_private_label === 1 && res.data.product_prices && res.data.product_prices[val.area_id]) {
-              product_pricesOnPS = res.data.product_prices[val.area_id];
+            if (res.data.is_private_label === 1 && res.data.product_prices && res.data.product_prices[index]) {
+              product_pricesOnPS = res.data.product_prices[index].filter(pps => pps.area_id == val.area_id)
               console.log("product_pricess on PS", product_pricesOnPS);
             }
 
@@ -430,7 +430,7 @@ export class ProductEditComponent {
   forkGetParentArea(areas) {
     let requests = []
     areas.map(area => {
-      requests.push(this.productService.getParentArea({ parent: area[0] && area[0].area_id && area[0].area_id !== '-99' ? area[0].area_id : "1" }))
+      requests.push(this.productService.getParentArea({ parent: area[0] && area[0].area_id && area[0].area_id != '-99' ? area[0].area_id : "1" }))
     });
 
     return forkJoin(requests)
