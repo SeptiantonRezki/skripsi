@@ -32,7 +32,7 @@
                   <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                     fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
                     <button
-                      *ngIf="formKPI.get('kpis').value.length === 1 || i === (formFF.get('kpis').value.length - 1)"
+                      *ngIf="formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1)"
                       mat-raised-button type="button" (click)="addKPI()">
                       <mat-icon>add</mat-icon>
                     </button>
@@ -55,8 +55,8 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.controls['category'].value == 'visit'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Brand" formControlName="brand">
-                      <!-- <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
-                      </mat-option> -->
+                      <mat-option *ngFor="let item of brands" [value]="item.id">{{ item.code }}
+                      </mat-option>
                       <mat-option value="AFL12">AFL12</mat-option>
                     </mat-select>
                     <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
@@ -64,22 +64,13 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
-                    <mat-select placeholder="Brand" formControlName="brand">
-                      <!-- <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
-                      </mat-option> -->
-                      <mat-option value="1">AFL12</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
-                      Brand harus diisi
-                    </mat-error>
-                  </mat-form-field>
-                  <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Parameter" formControlName="parameter">
-                      <!-- <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
-                      </mat-option> -->
-                      <mat-option value="1">OMZET ALL HMS 1 MINGGU (RUPIAH)</mat-option>
+                      <mat-option *ngIf="kpi.get('category').value == 'brand'" *ngFor="let item of brand_parameters" [value]="item.id">{{ item.parameter }}
+                      </mat-option>
+                      <mat-option *ngIf="kpi.get('category').value == 'trade_program'" *ngFor="let item of trade_program_objectives" [value]="item.id">{{ item.objective_description }}
+                      </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
+                    <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
                       Parameter harus diisi
                     </mat-error>
                   </mat-form-field>

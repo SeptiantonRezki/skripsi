@@ -34,12 +34,9 @@ import { MasterKPIService } from '../../../services/kpi-setting/master-kpi.servi
 export class EditKPISettingComponent implements OnInit {
   formKPI: FormGroup;
   formdataErrors: any;
-  parameters: Array<string>;
   paramEdit: any = null;
 
   indexDelete: any;
-
-  valueChange: Boolean;
 
   private subscription: Subscription;
   kpiSetting: KPISettingModel;
@@ -55,21 +52,6 @@ export class EditKPISettingComponent implements OnInit {
   brand_parameters: Array<any>;
   trade_program_objectives: Array<any>;
 
-  @ViewChild("downloadLink") downloadLink: ElementRef;
-  @ViewChild("singleSelect") singleSelect: MatSelect;
-  private _onDestroy = new Subject<void>();
-
-  @HostListener("window:beforeunload")
-  canDeactivate(): Observable<boolean> | boolean {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
-
-    if (this.valueChange && !this.saveData)
-      return false;
-    return true;
-  }
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -77,7 +59,6 @@ export class EditKPISettingComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private masterKPIService: MasterKPIService,
-    private idbService: IdbService,
     private route: ActivatedRoute,
   ) {
     this.kpiSetting = new KPISettingModel();
@@ -88,15 +69,15 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.idbService.reset();
 
     this.subscription = this.route.params.subscribe((params) => {
       if (params['id']) {
         this.paramEdit = params['id'];
-        this.kpiSetting =  this.dataService.getFromStorage('kpi_setting');
-        console.log(this.kpiSetting);
       }
     });
+
+    this.kpiSetting =  this.dataService.getFromStorage('kpi_setting');
+    console.log(this.kpiSetting);
 
     this.masterKPIService.getBrands().subscribe((res) => {
       this.brands = res
@@ -140,7 +121,7 @@ export class EditKPISettingComponent implements OnInit {
 
   addKPI() {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
-    kpis.push(this.createKPI())
+    kpis.push(this.createKPI());
   }
 
   createKPI(): FormGroup {
