@@ -65,10 +65,15 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Parameter" formControlName="parameter">
-                      <mat-option *ngIf="kpi.get('category').value == 'brand'" *ngFor="let item of brand_parameters" [value]="item.id">{{ item.parameter }}
-                      </mat-option>
-                      <mat-option *ngIf="kpi.get('category').value == 'trade_program'" *ngFor="let item of trade_program_objectives" [value]="item.id">{{ item.objective_description }}
-                      </mat-option>
+                      <ng-container *ngIf="kpi.get('category').value == 'brand'">
+                        <mat-option *ngFor="let item of brand_parameters" [value]="item.id">{{ item.parameter }}
+                        </mat-option>
+                      </ng-container>
+                      <ng-container *ngIf="kpi.get('category').value == 'trade_program'">
+                        <mat-option *ngFor="let item of trade_program_objectives" [value]="item.id">{{ item.objective_description }}
+                        </mat-option>
+                      </ng-container>
+                      
                     </mat-select>
                     <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
                       Parameter harus diisi
