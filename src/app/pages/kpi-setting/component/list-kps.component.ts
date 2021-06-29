@@ -74,6 +74,6 @@ import {
 
   directEdit(param?: any): void {
     this.rows = [];
-    this.dataService.setToStorage('kpi_setting', param);
+    this.dataService.setToStorage('kps', param);
   }
 }

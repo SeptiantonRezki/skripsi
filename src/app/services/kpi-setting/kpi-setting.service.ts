@@ -22,9 +22,9 @@ export class KPISettingService extends BaseService {
     const url = this.getUrl(this.namespace, 'get_by_id', context);
     return this.getApi(url);
   }
-  // put(body, context): Observable<any> {
-  //   console.log('nyampe service', context);
-  //   const url = this.getUrl(this.namespace, 'put', context);
-  //   return this.putApi(url, body);
-  // }
+
+  put(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put');
+    return this.putApi(url, body);
+  }
 }
