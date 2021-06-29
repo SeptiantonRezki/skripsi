@@ -21,23 +21,34 @@ import * as _ from "underscore";
 import { environment } from "environments/environment";
 import { IdbService } from "app/services/idb.service";
 import {KPISettingModel} from 'app/pages/kpi-setting/kpi-setting.model';
+import { commonFormValidator } from "app/classes/commonFormValidator";
+import * as moment from 'moment';
+import { DialogService } from "app/services/dialog.service";
 
 @Component({
   selector: 'app-edit-kpi-setting.component',
-  templateUrl: './edit-kpi-setting.component.html'
+  templateUrl: './edit-kpi-setting.component.html',
+  styleUrls: ['./edit-kpi-setting.component.scss']
 })
 export class EditKPISettingComponent implements OnInit {
+  formKPI: FormGroup;
+  formdataErrors: any;
   parameters: Array<string>;
   paramEdit: any = null;
 
+  indexDelete: any;
+
   valueChange: Boolean;
-  dialogRef: any;
 
   private subscription: Subscription;
   kpiSetting: KPISettingModel;
 
   loadingIndicator: Boolean;
   saveData: Boolean;
+
+  categories = [
+    'visit', 'brand', 'trade program', 'ecosystem'
+  ];
 
   @ViewChild("downloadLink") downloadLink: ElementRef;
   @ViewChild("singleSelect") singleSelect: MatSelect;
@@ -55,14 +66,19 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   constructor(
+    private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private dialogService: DialogService,
     private dataService: DataService,
     private idbService: IdbService,
     private route: ActivatedRoute,
   ) {
     this.kpiSetting = new KPISettingModel();
+
+    this.formdataErrors = {
+      category: {}
+    };
   }
 
   ngOnInit() {
@@ -75,5 +91,68 @@ export class EditKPISettingComponent implements OnInit {
         console.log(this.kpiSetting);
       }
     });
+    
+    
+    let startDate = moment(this.kpiSetting.start_date).format('DD-MMM-YYYY');
+    let endDate = moment(this.kpiSetting.end_date).format('DD-MMM-YYYY');
+    let dateStr = `${startDate} - ${endDate}`;
+
+    this.formKPI = this.formBuilder.group({
+      year: [this.kpiSetting.year],
+      kps_number: [this.kpiSetting.kps_number],
+      date: [dateStr],
+      kpis: this.formBuilder.array([], Validators.required)
+    });
+
+    this.formKPI.valueChanges.subscribe(() => {
+      commonFormValidator.parseFormChanged(this.formKPI, this.formdataErrors);
+    })
+
+    this.formKPI.get('year').disable();
+    this.formKPI.get('kps_number').disable();
+    this.formKPI.get('date').disable();
+
+    this.setDetail();
+  }
+
+  setDetail() {
+  }
+
+  addKPI() {
+    let kpis = this.formKPI.controls['kpis'] as FormArray;
+    kpis.push(this.createKPI())
+  }
+
+  createKPI(): FormGroup {
+    return this.formBuilder.group({
+      category: ['', Validators.required]
+    })
+  }
+
+  deleteKPI(pos) {
+    let dialogData = {
+      titleDialog: 'Hapus KPI',
+      captionDialog: `Apa Anda yakin menghapus KPI ${pos+1}?`,
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ['Hapus', 'Batal']
+    }
+    this.dialogService.openCustomConfirmationDialog(dialogData);
+  }
+
+  confirmDelete() {
+    let kpis = this.formKPI.controls.kpis as FormArray;
+    kpis.removeAt(this.indexDelete);
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  submit() {
+    if(this.formKPI.valid) {
+      let kpis = this.formKPI.controls.kpis as FormArray;
+
+      console.log(kpis);
+    } else {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formKPI);
+    }
   }
 }
