@@ -19,7 +19,7 @@
             <mat-form-field fxFlex="100" class="is-light px-24">
               <input matInput placeholder="Tanggal" type="text" formControlName="date">
             </mat-form-field>
-            <div class="" formArrayName="kpi" *ngFor="let kpi of formKPI.get('kpis').controls; let i = index;">
+            <div class="" formArrayName="kpi" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
               <div [formGroupName]="i">
                 <div class="mb-16 kpi" fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxFlex="50">
