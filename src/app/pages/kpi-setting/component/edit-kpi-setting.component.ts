@@ -24,6 +24,7 @@ import {KPISettingModel} from 'app/pages/kpi-setting/kpi-setting.model';
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import * as moment from 'moment';
 import { DialogService } from "app/services/dialog.service";
+import { MasterKPIService } from '../../../services/kpi-setting/master-kpi.service';
 
 @Component({
   selector: 'app-edit-kpi-setting.component',
@@ -50,6 +51,10 @@ export class EditKPISettingComponent implements OnInit {
     'visit', 'brand', 'trade program', 'ecosystem'
   ];
 
+  brands: Array<any>;
+  brand_parameters: Array<any>;
+  trade_program_objectives: Array<any>;
+
   @ViewChild("downloadLink") downloadLink: ElementRef;
   @ViewChild("singleSelect") singleSelect: MatSelect;
   private _onDestroy = new Subject<void>();
@@ -71,6 +76,7 @@ export class EditKPISettingComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
+    private masterKPIService: MasterKPIService,
     private idbService: IdbService,
     private route: ActivatedRoute,
   ) {
@@ -91,6 +97,20 @@ export class EditKPISettingComponent implements OnInit {
         console.log(this.kpiSetting);
       }
     });
+
+    this.masterKPIService.getBrands().subscribe((res) => {
+      this.brands = res
+      console.log(res)
+    })
+
+    this.masterKPIService.getBrandParameters().subscribe((res) => {
+      this.brand_parameters = res
+      console.log(res)
+    })
+    this.masterKPIService.getTradeProgramObjectives().subscribe((res) =>{
+      this.trade_program_objectives = res
+      console.log(res)
+    })
     
     
     let startDate = moment(this.kpiSetting.start_date).format('DD-MMM-YYYY');
@@ -125,7 +145,9 @@ export class EditKPISettingComponent implements OnInit {
 
   createKPI(): FormGroup {
     return this.formBuilder.group({
-      category: ['', Validators.required]
+      category: ['', Validators.required],
+      brand: [''],
+      parameter: ['']
     })
   }
 
@@ -146,6 +168,7 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   submit() {
+    console.log(this.formKPI.kpis['controls'])
     if(this.formKPI.valid) {
       let kpis = this.formKPI.controls.kpis as FormArray;
 

@@ -38,6 +38,7 @@ import { DataService } from "./services/data.service";
 import { CallObjectiveSerive } from './services/call-objective/call-objective.service';
 import { NotesRetailerService } from './services/notes-retailer/notes-retailer.service';
 import { KPISettingService } from './services/kpi-setting/kpi-setting.service';
+import { MasterKPIService } from './services/kpi-setting/master-kpi.service';
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
 import { VendorsService } from "./services/src-catalogue/vendors.service";
@@ -192,6 +193,7 @@ const config = {
     CallObjectiveSerive,
     NotesRetailerService,
     KPISettingService,
+    MasterKPIService,
     TradeProgramService,
     ScheduleTradeProgramService,
     AudienceService,

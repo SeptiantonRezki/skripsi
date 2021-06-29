@@ -23,7 +23,7 @@
             <mat-form-field fxFlex="100" class="is-light px-24">
               <input matInput placeholder="Tanggal" type="text" formControlName="date">
             </mat-form-field>
-            <div class="" formArrayName="kpi" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
+            <div class="" formArrayName="kpis" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
               <div [formGroupName]="i">
                 <div class="mb-16 kpi" fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxFlex="50">
@@ -63,7 +63,7 @@
                       Brand harus diisi
                     </mat-error>
                   </mat-form-field>
-                  <mat-form-field *ngIf="kpi.controls['category'].value == 'brand' || kpi.controls['category'].value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
+                  <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Brand" formControlName="brand">
                       <!-- <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
                       </mat-option> -->
@@ -73,7 +73,7 @@
                       Brand harus diisi
                     </mat-error>
                   </mat-form-field>
-                  <mat-form-field *ngIf="kpi.controls['category'].value == 'brand' || kpi.controls['category'].value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
+                  <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Parameter" formControlName="parameter">
                       <!-- <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
                       </mat-option> -->

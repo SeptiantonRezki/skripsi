@@ -79,6 +79,11 @@ export class Endpoint {
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer/${context}`,
         get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer/${context}`
       },
+      masterKPI: {
+        brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
+        brand_parameters: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brand_parameters`,
+        trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives`,
+      },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
