@@ -168,7 +168,7 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.formKPI.kpis['controls'])
+    console.log(this.formKPI.get('kpis'))
     if(this.formKPI.valid) {
       let kpis = this.formKPI.controls.kpis as FormArray;
 
