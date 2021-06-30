@@ -166,6 +166,7 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   resetKPIDetail(pos) {
+    console.log(pos);
     let kpis = this.formKPI.controls.kpis as FormArray;
     let kpi = kpis[pos];
     kpi.controls.brand.setValue('');
@@ -173,6 +174,8 @@ export class EditKPISettingComponent implements OnInit {
 
     let brandRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
     let parameterRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
+    console.log('brandRequired', brandRequired);
+    console.log('parameterRequired', parameterRequired);
     if(brandRequired) {
       kpi.controls.brand.setValidators([Validators.required]);
     } else {
@@ -183,6 +186,8 @@ export class EditKPISettingComponent implements OnInit {
     } else {
       kpi.controls.parameter.setValidators(null);
     }
+    this.formKPI.updateValueAndValidity();
+    this.formKPI.updateValueAndValidity();
   }
 
   submit() {
