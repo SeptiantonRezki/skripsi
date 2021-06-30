@@ -9,7 +9,7 @@
           <div class="ayo-top px-24" fxLayout="row" fxLayoutAlign="space-between center">
             <h3 class="font-weight-700">Edit KPI Setting</h3>
             <button
-              mat-raised-button type="button" (click)="addKPI()">
+              mat-raised-button type="button" color="primary" (click)="addKPI()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -42,10 +42,9 @@
                     </button>
                   </div>
                 </div>
-                <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
-                  fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                <div class="pb-8 px-24">
                   <mat-form-field fxLayout="row wrap" class="is-light form-primary">
-                    <mat-select placeholder="Kategori KPI" formControlName="category">
+                    <mat-select placeholder="Kategori KPI" formControlName="category" (selectionChange)="resetKPIDetail(i)">
                       <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
                       </mat-option>
                     </mat-select>

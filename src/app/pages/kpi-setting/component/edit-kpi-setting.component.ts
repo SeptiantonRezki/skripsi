@@ -126,10 +126,12 @@ export class EditKPISettingComponent implements OnInit {
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     for(let kpi_setting of this.KPS.kpi_settings){
+      let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade_program';
+      let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade_program';
       kpis.push(this.formBuilder.group({
         category: [kpi_setting.category, Validators.required],
-        brand: [kpi_setting.brand_id],
-        parameter: [kpi_setting.parameter_id]
+        brand: [kpi_setting.brand_id, ...(brandRequired && [Validators.required])],
+        parameter: [kpi_setting.parameter_id, ...(parameterRequired && [Validators.required])]
       }))
     }
   }
@@ -163,6 +165,26 @@ export class EditKPISettingComponent implements OnInit {
     this.dialogService.brodcastCloseConfirmation();
   }
 
+  resetKPIDetail(pos) {
+    let kpis = this.formKPI.controls.kpis as FormArray;
+    let kpi = kpis.at(pos);
+    kpi.controls.brand.setValue('');
+    kpi.controls.parameter.setValue('');
+
+    let brandRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
+    let parameterRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
+    if(brandRequired) {
+      kpi.controls.brand.setValidators([Validators.required]);
+    } else {
+      kpi.controls.brand.setValidators(null);
+    }
+    if(parameterRequired) {
+      kpi.controls.parameter.setValidators([Validators.required]);
+    } else {
+      kpi.controls.parameter.setValidators(null);
+    }
+  }
+
   submit() {
     console.log(this.formKPI.get('kpis'))
     
@@ -183,7 +205,7 @@ export class EditKPISettingComponent implements OnInit {
       this.kpiSettingService.put(body).subscribe(res => {
         if(res.status == 'success') {
           this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-          this.router.navigate(["kpi-setting", "kps-list"]);
+          this.router.navigate(["kpisetting", "kps-list"]);
           window.localStorage.removeItem("kps");
         }
       });
