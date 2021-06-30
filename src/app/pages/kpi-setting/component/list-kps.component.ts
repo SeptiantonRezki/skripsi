@@ -54,6 +54,16 @@ import {
     });
   }
 
+  setPage(pageInfo) {
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+    this.kpiSettingService.getList(this.pagination).subscribe((res) => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
   onSort(event) {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;

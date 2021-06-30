@@ -10,7 +10,7 @@
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (sort)="onSort($event)">
+         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column name="Tahun" prop="year">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

@@ -76,7 +76,7 @@ import {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
     });
-    }
+  }
 
   deleteNotes(id) {
     this.dataService.showLoading(true);
@@ -124,6 +124,17 @@ import {
       this.loadingIndicator = false;
     });
   }
+
+  setPage(pageInfo) {
+    this.loadingIndicator = true;
+    this.pagination.page = pageInfo.offset + 1;
+    this.notesService.getList(this.pagination).subscribe((res) => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+    });
+  }
+
   onSort(event) {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
