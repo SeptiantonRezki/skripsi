@@ -167,7 +167,7 @@ export class EditKPISettingComponent implements OnInit {
 
   resetKPIDetail(pos) {
     let kpis = this.formKPI.controls.kpis as FormArray;
-    let kpi = kpis.at(pos);
+    let kpi = kpis[pos];
     kpi.controls.brand.setValue('');
     kpi.controls.parameter.setValue('');
 
