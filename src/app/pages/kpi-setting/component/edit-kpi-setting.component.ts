@@ -78,16 +78,13 @@ export class EditKPISettingComponent implements OnInit {
 
     this.masterKPIService.getBrands().subscribe((res) => {
       this.brands = res
-      console.log(res)
     })
 
     this.masterKPIService.getBrandParameters().subscribe((res) => {
       this.brand_parameters = res
-      console.log(res)
     })
     this.masterKPIService.getTradeProgramObjectives().subscribe((res) =>{
       this.trade_program_objectives = res
-      console.log(res)
     })
 
     this.formKPI = this.formBuilder.group({
@@ -104,12 +101,10 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI.get('year').disable();
     this.formKPI.get('kps_number').disable();
     this.formKPI.get('date').disable();
-
-    console.log('paramEdit', this.paramEdit);
+    
     this.kpiSettingService.getById(this.paramEdit).subscribe(res => {
       this.KPS = res;
       // this.KPS =  this.dataService.getFromStorage('kps');
-      console.log(this.KPS);
       this.setDetail();
     });
   }
@@ -126,8 +121,8 @@ export class EditKPISettingComponent implements OnInit {
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     for(let kpi_setting of this.KPS.kpi_settings){
-      let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade_program';
-      let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade_program';
+      let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
+      let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
       kpis.push(this.formBuilder.group({
         category: [kpi_setting.category, Validators.required],
         brand: [kpi_setting.brand_id, ...(brandRequired && [Validators.required])],
@@ -166,20 +161,17 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   resetKPIDetail(pos) {
-    console.log(pos);
     let kpis = this.formKPI.controls.kpis as FormArray;
     let kpi = kpis.at(pos);
-    console.log(kpi);
     
     let category = kpi.get('category').value
-    console.log(category);
+    
     kpi.get('brand').setValue('');
     kpi.get('parameter').setValue('');
 
-    let brandRequired = category == 'brand' || category == 'trade_program';
-    let parameterRequired = category == 'brand' || category == 'trade_program';
-    console.log('brandRequired', brandRequired);
-    console.log('parameterRequired', parameterRequired);
+    let brandRequired = category == 'brand' || category == 'trade program';
+    let parameterRequired = category == 'brand' || category == 'trade program';
+
     if(brandRequired) {
       kpi.get('brand').setValidators([Validators.required]);
     } else {
@@ -191,12 +183,9 @@ export class EditKPISettingComponent implements OnInit {
       kpi.get('parameter').setValidators(null);
     }
     this.formKPI.updateValueAndValidity();
-    this.formKPI.updateValueAndValidity();
   }
 
   submit() {
-    console.log(this.formKPI.get('kpis'))
-    
     if(this.formKPI.valid) {
       let kpis = this.formKPI.controls.kpis as FormArray;
       let kpi_settings = kpis.value.map(kpi => {
@@ -210,7 +199,7 @@ export class EditKPISettingComponent implements OnInit {
         id: this.paramEdit,
         kpi_settings
       };
-      console.log(body);
+      
       this.kpiSettingService.put(body).subscribe(res => {
         if(res.status == 'success') {
           this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
