@@ -168,23 +168,27 @@ export class EditKPISettingComponent implements OnInit {
   resetKPIDetail(pos) {
     console.log(pos);
     let kpis = this.formKPI.controls.kpis as FormArray;
-    let kpi = kpis[pos];
-    kpi.controls.brand.setValue('');
-    kpi.controls.parameter.setValue('');
+    let kpi = kpis.at(pos);
+    console.log(kpi);
+    
+    let category = kpi.get('category').value
+    console.log(category);
+    kpi.get('brand').setValue('');
+    kpi.get('parameter').setValue('');
 
-    let brandRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
-    let parameterRequired = kpi.controls.category.value.category == 'brand' || kpi.controls.category.value.category == 'trade_program';
+    let brandRequired = category == 'brand' || category == 'trade_program';
+    let parameterRequired = category == 'brand' || category == 'trade_program';
     console.log('brandRequired', brandRequired);
     console.log('parameterRequired', parameterRequired);
     if(brandRequired) {
-      kpi.controls.brand.setValidators([Validators.required]);
+      kpi.get('brand').setValidators([Validators.required]);
     } else {
-      kpi.controls.brand.setValidators(null);
+      kpi.get('brand').setValidators(null);
     }
     if(parameterRequired) {
-      kpi.controls.parameter.setValidators([Validators.required]);
+      kpi.get('parameter').setValidators([Validators.required]);
     } else {
-      kpi.controls.parameter.setValidators(null);
+      kpi.get('parameter').setValidators(null);
     }
     this.formKPI.updateValueAndValidity();
     this.formKPI.updateValueAndValidity();
