@@ -1173,7 +1173,7 @@ export class ProductEditComponent {
               return;
             }
           })
-          fd.append('special_rates', this.formProductGroup.get('special_rate')['controls']['rates']);
+          fd.append('special_rates', this.formProductGroup.get('special_rate')['controls']['rates'].getRawValue());
         }
         console.log({fd});
         this.dataService.showLoading(true);
