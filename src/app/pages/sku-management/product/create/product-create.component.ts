@@ -338,30 +338,30 @@ export class ProductCreateComponent {
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  initArea(index) {
+  async initArea(index) {
     let wilayah = this.formProductGroup.controls['areas'] as FormArray;
-    this.areaFromLogin.map(item => {
+    this.areaFromLogin.map(async item => {
       switch (item.type.trim()) {
         case 'national':
           wilayah.at(index).get('national').disable();
           break
         case 'division':
-          wilayah.at(index).get('zone').disable();
+          // wilayah.at(index).get('zone').disable();
           break;
         case 'region':
-          wilayah.at(index).get('region').disable();
+          // wilayah.at(index).get('region').disable();
           break;
         case 'area':
-          wilayah.at(index).get('area').disable();
+          // wilayah.at(index).get('area').disable();
           break;
         case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
+          // wilayah.at(index).get('salespoint').disable();
           break;
         case 'district':
-          wilayah.at(index).get('district').disable();
+          // wilayah.at(index).get('district').disable();
           break;
         case 'territory':
-          wilayah.at(index).get('territory').disable();
+          // wilayah.at(index).get('territory').disable();
           break;
       }
     })
@@ -675,7 +675,7 @@ export class ProductCreateComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
-          
+
           // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
           // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
 

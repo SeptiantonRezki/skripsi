@@ -130,7 +130,7 @@ export class PagesName {
     let localPerm = window.localStorage.getItem('_prmdxtrn');
     let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
     const permission = JSON.parse(perm);
-    // console.log("all permission", permission.find(prm => prm.indexOf("approval") > -1));
+    // console.log("all permission", permission.filter(prm => prm.indexOf("principal.popupnotification.new_product") > -1));
     if (!permission) return;
 
     let query = name.toLowerCase();
@@ -143,6 +143,14 @@ export class PagesName {
     };
     if (name.indexOf("b2b_voucher") > -1) {
       roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
+    }
+
+    if (name.indexOf("popupnotification") > -1) {
+      roles['new_product'] = filterPermission.filter(item => item.indexOf('popupnotification.new_product') >= 0)[0]
+    }
+
+    if (name.indexOf('supplierorder') > -1) {
+      roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
     }
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {

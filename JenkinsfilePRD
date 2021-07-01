@@ -11,7 +11,8 @@ pipeline{
         AWSCRED="ayo-ws"
         scannerHome = tool 'Sonar-Scanner-4.0.0.1744'
         BUILDID = "${env.BUILD_ID}"
-        //APPROVER="dputra4@pmintl.net, elorenz@pmintl.net, azimah@pmintl.net, badityat@pmintl.net, mtjen1@pmintl.net, fsujito1@pmintl.net, awibawa2@pmintl.net, rrinaldo1@pmintl.net, mchandra@pmintl.net, mpuspita1@pmintl.net, mmelissa1@pmintl.net, shadiasa@pmintl.net, aandyant@pmintl.net"    
+        APPROVER="dputra4@pmintl.net, elorenz@pmintl.net, azimah@pmintl.net, badityat@pmintl.net, mtjen1@pmintl.net, fsujito1@pmintl.net, awibawa2@pmintl.net, rrinaldo1@pmintl.net, mchandra@pmintl.net, mpuspita1@pmintl.net, mmelissa1@pmintl.net, shadiasa@pmintl.net, aandyant@pmintl.net"   
+        GIT_AUTH = credentials('s-ayodevops') 
     }
     stages {
         stage('Unit Test'){
@@ -67,6 +68,19 @@ pipeline{
                             sh 'aws s3 --profile ${PROJECT_NAME} sync  ${WORKSPACE}/dist/ayo-principal/ s3://qa-ayo-hms/_Deployment_PRD/ --delete'  
                         echo "DONE : DEPLOY TO S3 BUCKET" 
                     }
+                }
+                stage('Merge to Master'){
+                           steps{
+                             script{
+                                echo "Merge micro-qa to master after deployment"
+                                sh 'git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"'
+                                sh 'git checkout micro-qa'
+                                sh 'git checkout master'
+                                sh 'git merge micro-qa'
+                                sh 'git status'
+                                sh 'git push origin'
+                             }
+                       }
                 }   
                 stage('Done'){
                     steps{

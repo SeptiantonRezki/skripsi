@@ -351,6 +351,7 @@ export class Endpoint {
         export_audience: `${AYO_API}/api/principal/pop-up-notification/audience/export`,
         import_audience: `${AYO_API}/api/principal/pop-up-notification/audience/import`,
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
+        get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
         import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
       },
@@ -468,6 +469,7 @@ export class Endpoint {
       qiscus: {
         updateRoomIdTransaksi: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/wholesaler/order/update/${context.orderId}`,
         createUpdateRoomOrderId: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/create-qiscus-room`,
+        createUpdateRoomOrderPL: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/create-qiscus-room/${context.orderId}`,
         getMessageTemplates: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
         loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`, // DEPRECATED
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,

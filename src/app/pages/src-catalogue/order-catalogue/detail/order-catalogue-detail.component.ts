@@ -203,29 +203,29 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
       async res => {
         // setTimeout(() => {
         this.detailOrder = res.data;
-        console.log('detail order', this.detailOrder);
+        // console.log('detail order', this.detailOrder);
         let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.qty > 0) : [];
         this.productsNota = products;
-        console.log('products nota', this.productsNota);
+        // console.log('products nota', this.productsNota);
 
         let profile = this.dataService.getDecryptedProfile();
-        console.log("profile", profile);
+        // console.log("profile", profile);
         if (profile.type === 'vendor') {
           await this.qs.getMessageTemplates({ user: 'vendor' }).subscribe((res_2: any) => {
             // this.emitter.emitDataChat({ templates: res_2.data });
             res['data'].templates = res_2.data;
             // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
-            if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
-              const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
+            if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
+              const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
               if (dayLimit < 30) {
                 // this.initDataQiscus(res);
-                this.qiscusCheck(res.data); // check login qiscus
+                this.qiscusCheck(this.detailOrder); // check login qiscus
               } else {
                 this.emitter.emitChatIsOpen(false); // for open chat
               }
             } else {
               // this.initDataQiscus(res);
-              this.qiscusCheck(res.data); // check login qiscus
+              this.qiscusCheck(this.detailOrder); // check login qiscus
             }
           })
         }

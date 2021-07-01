@@ -55,7 +55,7 @@ export class FuseMainComponent implements OnDestroy {
         this.navigation = navigation;
         this.environment = environment;
         this.emitter.listenChatIsOpenQ.subscribe((value) => {
-            console.log('wehhhh', value);
+            // console.log('wehhhh', value);
             this.chatIsOpen = value;
         });
     }
