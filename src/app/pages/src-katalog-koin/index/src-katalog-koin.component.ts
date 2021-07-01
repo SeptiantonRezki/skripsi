@@ -32,10 +32,11 @@ export class SrcKatalogKoinComponent implements OnInit {
     const targetPath = this.router.url;
     this.authService.getEncryptedToken().subscribe(res => {
       const baseurl = environment.SRC_KATALOG_KOIN_BASE_IFRAME_URL;
-      const authData = this.dataService.getDecryptedAuth();
+      // const authData = this.dataService.getDecryptedAuth();
       // const httpParams = new HttpParams().set('dceauth', authData.access_token).set('destination', `${targetPath}`).set('platform', 'principal').set('allowBack', '1');
-      const httpParams = new HttpParams().set('dceauth', authData.access_token).set('platform', 'principal').set('allowBack', '1');
-      const fullUrl = `${baseurl}?${httpParams.toString()}`;
+      const encodedToken = encodeURI(res.data);
+      const httpParams = new HttpParams().set('dceauth', encodedToken).set('platform', 'principal').set('allowBack', '1');
+      const fullUrl = `${baseurl}/src-katalog-koin?${httpParams.toString()}`;
       // console.log({ fullUrl });
 
       this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
