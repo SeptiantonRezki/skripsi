@@ -149,6 +149,11 @@ const appRoutes: Routes = [
     loadChildren: "./pages/b2c-voucher/b2c-voucher.module#B2CVoucherModule",
     canActivate: [AuthGuard]
   },
+  {
+    path: "src-katalog-koin",
+    loadChildren: "./pages/src-katalog-koin/src-katalog-koin.module#SrcKatalogKoinModule",
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: "admin",
   //   loadChildren: "./pages/admin/admin.module#AdminModule",
