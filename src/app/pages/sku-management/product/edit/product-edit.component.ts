@@ -15,6 +15,8 @@ import { ScanBarcodeDialogComponent } from "../create/dialog/scan-barcode-dialog
 import html2canvas from 'html2canvas';
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
+import { WholesalerService } from "app/services/user-management/wholesaler.service";
+import { WholesalerSpecialPriceService } from "app/services/sku-management/wholesaler-special-price.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -102,6 +104,7 @@ export class ProductEditComponent {
 
   linkProduct: FormControl = new FormControl();
   productPrices: any;
+  selectedWs: any = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -110,7 +113,8 @@ export class ProductEditComponent {
     private dialogService: DialogService,
     private productService: ProductService,
     private dialog: MatDialog,
-    private dataService: DataService
+    private dataService: DataService,
+    private wholesalerSpecialPriceService: WholesalerSpecialPriceService,
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -157,6 +161,7 @@ export class ProductEditComponent {
       district: [],
       territory: []
     }
+    this.removeRates = this.removeRates.bind(this);
   }
 
   generateLink() {
@@ -224,6 +229,7 @@ export class ProductEditComponent {
   getDetails() {
     try {
       this.productService.getdetail(this.idProduct).subscribe(async (res) => {
+        console.log({res});
         this.detailProduct = res.data;
 
         let alias = this.formProductGroup.get("alias") as FormArray;
@@ -343,6 +349,7 @@ export class ProductEditComponent {
         if (res.data.is_private_label === 1 && res.data.product_prices !== null) {
           let productPrices = res.data.product_prices;
           this.productPrices = res.data.product_prices;
+          console.log({productPrices});
           Object.keys(productPrices).map(async (key, index) => {
             const response = await this.productService.getParentArea({ parent: key == "-99" ? "1" : key }).toPromise();
             let wilayah = this.formProductGroup.controls['areas'] as FormArray;
@@ -414,6 +421,8 @@ export class ProductEditComponent {
           if (Array.isArray(productPrices) && productPrices.length === 0) {
             this.addArea();
           }
+
+          this.initSpecialRates(res);
         }
 
         setTimeout(() => {
@@ -426,6 +435,34 @@ export class ProductEditComponent {
     } catch (ex) {
       console.log('ex', ex);
     }
+  }
+
+  initSpecialRates(res) {
+
+    const specialRate = this.formProductGroup.get('special_rate');
+    specialRate.get('smallest_package').setValue('Karton edited');
+    const rates = specialRate.get('rates') as FormArray;
+    const rate = this.formBuilder.group({
+      id: [null],
+      type: [''],
+      panels: [[]],
+      except: [[]],
+      panels_count: [0],
+      prices: this.formBuilder.array([
+        this.formBuilder.group({
+          qty: [0],
+          price: [0],
+          price_discount: [0],
+          price_discount_expires_at: [null],
+          delivery_cost: [0],
+        })
+      ])
+    })
+    rates.push(rate);
+
+    const ss = this.formProductGroup.get('special_rate')['controls']['rates']['controls'];
+    console.log({specialRate, ss});
+
   }
 
   createArea(): FormGroup {
@@ -489,6 +526,74 @@ export class ProductEditComponent {
       buttonText: ["Hapus", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
+  }
+  addSpecialRatePrices(item, priceIndex, rateIndex) {
+
+    const specialRate = this.formProductGroup.get('special_rate');
+
+    const rates = specialRate.get('rates') as FormArray;
+    const prices = rates.at(rateIndex).get('prices') as FormArray;
+    prices.push(
+      this.formBuilder.group({
+        qty: [0],
+        price: [0],
+        price_discount: [0],
+        price_discount_expires_at: [null],
+        delivery_cost: [0],
+      })
+    )
+  }
+  removeSpecialRatePrices(item, priceIndex, rateIndex) {
+
+    const specialRate = this.formProductGroup.get('special_rate');
+
+    const rates = specialRate.get('rates') as FormArray;
+    const prices = rates.at(rateIndex).get('prices') as FormArray;
+    prices.removeAt(priceIndex);
+  }
+  addRates(i) {
+
+    const specialRate = this.formProductGroup.get('special_rate');
+    const rates = specialRate.get('rates') as FormArray;
+    const rate = this.formBuilder.group({
+      id: [null],
+      type: [''],
+      panels: [[]],
+      except: [[]],
+      panels_count: [0],
+      prices: this.formBuilder.array([
+        this.formBuilder.group({
+          qty: [0],
+          price: [0],
+          price_discount: [0],
+          price_discount_expires_at: [null],
+          delivery_cost: [0],
+        })
+      ])
+    })
+    rates.push(rate);
+  }
+  removeRates(i, confirmed = false) {
+    if (confirmed) {
+      // do deleted
+      const specialRate = this.formProductGroup.get('special_rate');
+      const rates = specialRate.get('rates') as FormArray;
+      rates.removeAt(i);
+      this.dialogService.brodcastCloseConfirmation();
+      console.log('confirmed');
+      return;
+    }
+    else {
+
+      let data = {
+        titleDialog: "Hapus Special Rate",
+        captionDialog: `Apakah anda yakin untuk menghapus Special Rate ${i + 1} ?`,
+        confirmCallback: () => { this.removeRates(i, true)},
+        buttonText: ["Hapus", "Batal"]
+      }
+      this.dialogService.openCustomConfirmationDialog(data);
+      return;
+    }
   }
 
   initArea(index) {
@@ -798,6 +903,10 @@ export class ProductEditComponent {
       // otherSubCategory: ["", Validators.required],
       packaging: ["", Validators.required],
       areas: this.formBuilder.array([]),
+      special_rate: this.formBuilder.group({
+        smallest_package: [''],
+        rates: this.formBuilder.array([]),
+      }),
       start_date_pin_up: [""],
       end_date_pin_up: [""],
       status_pin_up: [""],
@@ -876,6 +985,8 @@ export class ProductEditComponent {
   }
 
   async submit() {
+    // console.log(this.formProductGroup);
+    // return;
     if (!this.formProductGroup.get('is_private_label').value && !this.is_private_label_res) {
       this.dialogService.openSnackBar({ message: `Product ini masih terasosiasi dengan panel Mitra` });
     } else {
@@ -1062,7 +1173,9 @@ export class ProductEditComponent {
               return;
             }
           })
+          fd.append('special_rates', this.formProductGroup.get('special_rate')['controls']['rates']);
         }
+        console.log({fd});
         this.dataService.showLoading(true);
         this.productService.put(fd, { product_id: this.idProduct }).subscribe(
           res => {
@@ -1306,6 +1419,46 @@ export class ProductEditComponent {
 
     this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
     this.dialogService.brodcastCloseConfirmation();
+  }
+
+  onSelectedWs(index, event) {
+    console.log({event});
+    const specialRate = this.formProductGroup.get('special_rate') as FormGroup;
+    const rates = specialRate.get('rates') as FormArray;
+    const currentSelectedWs = _.pluck(event, 'id');
+    const rate = rates.at(index) as FormGroup;
+    rate.get('panels').setValue(currentSelectedWs);
+    rate.get('panels_count').setValue(currentSelectedWs.length);
+
+    this.filterAllSelectedWs();
+  
+    console.log({currentSelectedWs});
+
+    console.log({rate});
+    console.log({index, event});
+  }
+  filterAllSelectedWs() {
+    const specialRate = this.formProductGroup.get('special_rate') as FormGroup;
+    const rates = specialRate.get('rates') as FormArray;
+    const allPanels = _.flatten(_.pluck(rates.value, 'panels'));
+    this.selectedWs = allPanels;
+  }
+
+  getExceptId(rateIndex) {
+    const specialRate = this.formProductGroup.get('special_rate') as FormGroup;
+    const rates = specialRate.get('rates') as FormArray;
+    const rate = rates.at(rateIndex);
+    console.log({rates, rate});
+    console.log({rateIndex});
+
+    return 1;
+  }
+  onOpenListMitra(rateIndex) {
+    const specialRate = this.formProductGroup.get('special_rate') as FormGroup;
+    const rates = specialRate.get('rates') as FormArray;
+    const rate = rates.at(rateIndex);
+    // const except = rate.get('except');
+    // console.log({rateIndex, except});
   }
 
 }

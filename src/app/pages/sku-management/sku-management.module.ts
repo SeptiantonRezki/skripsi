@@ -38,6 +38,7 @@ import {
   MatDialogModule,
   MatDatepicker,
   MatProgressSpinnerModule,
+  MatExpansionModule,
 } from "@angular/material";
 import {
   DateAdapter,
@@ -49,6 +50,7 @@ import {
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxCurrencyModule } from "ngx-currency";
+import {UserManagementModule} from '../user-management/user-management.module';
 
 import {
   ListBrandResolver,
@@ -73,6 +75,7 @@ import { CashierIndexComponent } from './product-cashier/index/index.component';
 import { CashierCreateComponent } from './product-cashier/create/create.component';
 import { CashierEditComponent } from './product-cashier/edit/edit.component';
 import { CashierImportDialogComponent } from './product-cashier/index/import-dialog/import-dialog.component';
+import { WholesalerSpecialPriceComponent } from './product/wholesaler-special-price/wholesaler-special-price.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -128,6 +131,8 @@ export const MY_FORMATS = {
     MatDividerModule,
     MatListModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
+    UserManagementModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
@@ -154,7 +159,8 @@ export const MY_FORMATS = {
     CashierIndexComponent,
     CashierCreateComponent,
     CashierEditComponent,
-    CashierImportDialogComponent
+    CashierImportDialogComponent,
+    WholesalerSpecialPriceComponent
   ],
   exports: [
     ProductIndexComponent,

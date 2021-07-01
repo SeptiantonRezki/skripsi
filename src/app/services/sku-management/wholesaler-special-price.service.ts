@@ -2,14 +2,13 @@ import { Injectable } from "@angular/core";
 import { BaseService } from "../base.service";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "../../../../node_modules/rxjs";
+import { WholesalerService } from "../user-management/wholesaler.service";
 
 @Injectable()
-export class WholesalerService extends BaseService {
-  public namespace = "wholesaler";
+export class WholesalerSpecialPriceService extends WholesalerService {
+  public namespace = "wholesaler_special_price";
 
   /** ADD MORE ADJUSTABLE PAGE WHOLESALER->INDEX */
-  sharedComponent = false;
-
 
   constructor(http: HttpClient) {
     super(http);
@@ -17,7 +16,8 @@ export class WholesalerService extends BaseService {
 
   get(queryParams?, body?): Observable<any> {
     const url = this.getUrl(this.namespace, "get");
-    return this.getApi(url, queryParams);
+    return this.postApi(url, body, queryParams).map(res => res['data']);
+    return this.postApi(url, body, queryParams);
   }
 
   show(context?): Observable<any> {

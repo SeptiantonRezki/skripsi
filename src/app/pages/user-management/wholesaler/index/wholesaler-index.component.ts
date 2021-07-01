@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from "@angular/core";
 import { Page } from "app/classes/laravel-pagination";
 import { Subject, Observable } from "../../../../../../node_modules/rxjs";
 import { DatatableComponent } from "../../../../../../node_modules/@swimlane/ngx-datatable";
@@ -54,7 +54,14 @@ export class WholesalerIndexComponent {
   endArea: String;
   lastLevel: any;
   listGsw: any[] = [{ name: 'Semua GSW', value: 'all' },  { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
+  
+  /** shared component */
+  // @Input() customExportImport = false;
+  // @Input() wholesalerSelectable = false;
+  // @Output() onSelectWholesaler = new EventEmitter();
+  @Input() paramsPaginate = {};
 
+  private wholesalerServiceGetList;
 
   constructor(
     private router: Router,
@@ -66,6 +73,8 @@ export class WholesalerIndexComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService
   ) {
+    this.wholesalerServiceGetList = this.wholesalerService.get;
+    
     this.onLoad = true;
     this.selected = [];
 
@@ -691,7 +700,7 @@ export class WholesalerIndexComponent {
     return newLastSelfArea;
   }
 
-  getWholesalerList() {
+  getWholesalerList(body?) {
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
@@ -771,7 +780,7 @@ export class WholesalerIndexComponent {
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination['gsw'] = this.gsw.value;
     if (this.gsw.value === 'all') this.pagination['gsw'] = null;
-    this.wholesalerService.get(this.pagination).subscribe(
+    this.wholesalerService.get(this.pagination, body).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
@@ -787,14 +796,21 @@ export class WholesalerIndexComponent {
     );
   }
 
-  onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+  onSelect(event, row) {
+    // this.selected.splice(0, this.selected.length);
+    // this.selected.push(...selected);
+    const index = this.selected.findIndex(item => item.id === row.id);
 
-    console.log("Select Event", selected, this.selected);
+    if (index >= 0) {
+      this.selected.splice(index, 1);
+    } else {
+      this.selected.push(row);
+    }
+
+    // this.onSelectWholesaler.emit(this.selected);
   }
 
-  setPage(pageInfo) {
+  setPage(pageInfo, body?) {
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
@@ -805,7 +821,7 @@ export class WholesalerIndexComponent {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.wholesalerService.get(this.pagination).subscribe(res => {
+    this.wholesalerService.get(this.pagination, body).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -834,7 +850,7 @@ export class WholesalerIndexComponent {
     );
   }
 
-  updateFilter(string) {
+  updateFilter(string, body?) {
     this.loadingIndicator = true;
     this.pagination.search = string;
 
@@ -847,7 +863,7 @@ export class WholesalerIndexComponent {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.wholesalerService.get(this.pagination).subscribe(res => {
+    this.wholesalerService.get(this.pagination, body).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -911,7 +927,7 @@ export class WholesalerIndexComponent {
     }
   }
 
-  async exportwholesaler() {
+  async exportwholesaler(body?) {
     this.dataService.showLoading(true);
     try {
       const response = await this.wholesalerService.exportWholesalerlist().toPromise();
