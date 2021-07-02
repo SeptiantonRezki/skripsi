@@ -498,7 +498,7 @@
                             <label for="">Jumlah Mitra Terpilih: <strong>{{rate.get('panels_count').value}}</strong></label>
                           </div>
                           <div fxFlex="30">
-                            <button mat-button color="primary">Pilih Mitra</button>
+                            <button mat-button color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Pilih Mitra</button>
                           </div>
                         </div>
                         <div>
@@ -605,8 +605,10 @@
 
                           </mat-list>
                         </div>
-                        <mat-accordion>
-                          <mat-expansion-panel hideToggle (opened)="onOpenListMitra($event, i)">
+                        <!-- <mat-accordion> -->
+                          <mat-expansion-panel (opened)="onOpenListMitra($event, i)"
+                          [expanded]="rate.get('expanded_mitra').value">
+                          
 
                             <mat-expansion-panel-header style="background-color:#3a3a3a; ">
                               <mat-panel-title style="color: white;">
@@ -616,16 +618,22 @@
                                 This is a summary of the content
                               </mat-panel-description> -->
                             </mat-expansion-panel-header>
-                            <app-wholesaler-special-price
-                            (onSelectWholesaler)="onSelectedWs(i, $event)"
-                            [productId]="detailProduct.id"
-                            [exceptId]="selectedWs | excludeArray: rate.get('panels').value"
-                            [businessId]="rate.get('panels').value"
-                            ></app-wholesaler-special-price>
+
+                              <app-wholesaler-special-price
+                              *ngIf="rate.get('expanded_mitra').value"
+                              (onSelectWholesaler)="onSelectedWs(i, $event)"
+                              [productId]="detailProduct.id"
+                              [exceptId]="selectedWs | excludeArray: rate.get('panels').value"
+                              [businessId]="rate.get('panels').value"
+                              >
+                              <div *specialPriceSaveMitra>
+                                  <button mat-raised-button type="button" color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Simpan</button>
+                              </div>
+                            </app-wholesaler-special-price>
                           
                           </mat-expansion-panel>
 
-                        </mat-accordion>
+                        <!-- </mat-accordion> -->
                       </div>
                       <!-- FORM SPECIAL RATES (i) -->
 

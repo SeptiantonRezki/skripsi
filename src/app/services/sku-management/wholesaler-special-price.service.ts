@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { BaseService } from "../base.service";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "../../../../node_modules/rxjs";
+import { BehaviorSubject, Observable } from "../../../../node_modules/rxjs";
 import { WholesalerService } from "../user-management/wholesaler.service";
 
 @Injectable()
 export class WholesalerSpecialPriceService extends WholesalerService {
   public namespace = "wholesaler_special_price";
+
+  _fetching = new BehaviorSubject(false);
 
   /** ADD MORE ADJUSTABLE PAGE WHOLESALER->INDEX */
 
@@ -14,10 +16,15 @@ export class WholesalerSpecialPriceService extends WholesalerService {
     super(http);
   }
 
+  fetching() {
+    return this._fetching.asObservable();
+  }
   get(queryParams?, body?): Observable<any> {
+    this._fetching.next(true);
     const url = this.getUrl(this.namespace, "get");
-    return this.postApi(url, body, queryParams).map(res => res['data']);
-    return this.postApi(url, body, queryParams);
+    return this.postApi(url, body, queryParams).map(res => res['data']).finally(() => {
+      this._fetching.next(false);
+    });
   }
 
   show(context?): Observable<any> {

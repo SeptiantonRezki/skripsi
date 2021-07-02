@@ -75,7 +75,7 @@ import { CashierIndexComponent } from './product-cashier/index/index.component';
 import { CashierCreateComponent } from './product-cashier/create/create.component';
 import { CashierEditComponent } from './product-cashier/edit/edit.component';
 import { CashierImportDialogComponent } from './product-cashier/index/import-dialog/import-dialog.component';
-import { WholesalerSpecialPriceComponent } from './product/wholesaler-special-price/wholesaler-special-price.component';
+import { WholesalerSpecialPriceComponent, WholesalerSpecialPriceSaveButton } from './product/wholesaler-special-price/wholesaler-special-price.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -160,7 +160,8 @@ export const MY_FORMATS = {
     CashierCreateComponent,
     CashierEditComponent,
     CashierImportDialogComponent,
-    WholesalerSpecialPriceComponent
+    WholesalerSpecialPriceComponent,
+    WholesalerSpecialPriceSaveButton,
   ],
   exports: [
     ProductIndexComponent,
@@ -174,7 +175,8 @@ export const MY_FORMATS = {
     DetailTradeProgramComponent,
     DetailRetailerComponent,
     ImportFileDialogComponent,
-    CashierImportDialogComponent
+    CashierImportDialogComponent,
+    WholesalerSpecialPriceSaveButton,
   ],
   entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent, CashierImportDialogComponent],
   providers: [

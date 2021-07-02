@@ -435,33 +435,80 @@ export class ProductEditComponent {
     }
   }
 
-  initSpecialRates(res) {
-
+  initSpecialRates({data}) {
+    console.log('INIT SPECIAL RATES',{data});
     const specialRate = this.formProductGroup.get('special_rate');
-    specialRate.get('smallest_package').setValue('Karton edited');
-    const rates = specialRate.get('rates') as FormArray;
-    const rate = this.formBuilder.group({
-      id: [null],
-      type: [''],
-      panels: [[]],
-      except: [[]],
-      panels_count: [0],
-      prices: this.formBuilder.array([
-        this.formBuilder.group({
-          qty: [0],
-          price: [0],
-          price_discount: [0],
-          price_discount_expires_at: [null],
-          delivery_cost: [0],
-        })
-      ])
-    })
-    rates.push(rate);
+    let selectedWs = [];
+    const smallestPackage = '';
+    if (data.special_rate && data.special_rate.rates.length > 0) {
+      
+      const {special_rate} = data;
 
-    const ss = this.formProductGroup.get('special_rate')['controls']['rates']['controls'];
-    console.log({specialRate, ss});
+      specialRate.get('smallest_package').setValue(special_rate.smallest_package);
+      const rates = specialRate.get('rates') as FormArray;
+      special_rate.rates.map( ({id, type, panels, panels_count, prices}, rateIndex) => {
+        selectedWs = selectedWs.concat(panels);
+        const rate = this.formBuilder.group({
+
+          id: [id],
+          type: [type],
+          panels: [panels],
+          panels_count: [panels_count],
+          prices: this.formBuilder.array([
+          ]),
+          expanded_mitra: false
+        });
+        rates.push(rate);
+
+        const _prices = rates.at(rateIndex).get('prices') as FormArray;
+
+        prices.map(({qty, price, price_discount, price_discount_expires_at, delivery_cost}) => {
+            _prices.push(
+              this.formBuilder.group({
+                qty: [qty],
+                price: [price],
+                price_discount: [price_discount],
+                price_discount_expires_at: [moment(price_discount_expires_at)],
+                delivery_cost: [delivery_cost],
+              })
+            )
+        })
+
+      })
+
+    } else {
+
+      specialRate.get('smallest_package').setValue(smallestPackage);
+      const rates = specialRate.get('rates') as FormArray;
+      const rate = this.formBuilder.group({
+
+        id: [null],
+        type: [''],
+        panels: [[]],
+        // except: [],
+        panels_count: [0],
+        prices: this.formBuilder.array([
+          this.formBuilder.group({
+            qty: [0],
+            price: [0],
+            price_discount: [0],
+            price_discount_expires_at: [null],
+            delivery_cost: [0],
+          })
+        ]),
+        expanded_mitra: false
+      });
+      rates.push(rate);
+
+    }
+
+    console.log({selectedWs});
+    this.selectedWs = selectedWs;
+    
   }
-  
+  getSmallestPackage() {
+    
+  }
   forkGetParentArea(areas) {
     let requests = []
     areas.map(area => {
@@ -575,7 +622,8 @@ export class ProductEditComponent {
           price_discount_expires_at: [null],
           delivery_cost: [0],
         })
-      ])
+      ]),
+      expanded_mitra: false
     })
     rates.push(rate);
   }
@@ -1193,7 +1241,7 @@ export class ProductEditComponent {
               fd.append(`special_rates[${index}][rates][${priceIndex}][qty]`, price.qty);
               fd.append(`special_rates[${index}][rates][${priceIndex}][price]`, price.price);
               fd.append(`special_rates[${index}][rates][${priceIndex}][price_discount]`, price.price_discount);
-              fd.append(`special_rates[${index}][rates][${priceIndex}][price_discount_expires_at]`, price.price_discount_expires_at);
+              fd.append(`special_rates[${index}][rates][${priceIndex}][price_discount_expires_at]`, this.convertDate(price.price_discount_expires_at));
               fd.append(`special_rates[${index}][rates][${priceIndex}][delivery_cost]`, price.delivery_cost);
 
             })
@@ -1483,6 +1531,22 @@ export class ProductEditComponent {
     const rate = rates.at(rateIndex);
     // const except = rate.get('except');
     // console.log({rateIndex, except});
+  }
+  toggleListMitra(expanded, index) {
+    console.log({expanded});
+    const form = this.formProductGroup.get('special_rate');
+    const rates = form.get('rates') as FormArray;
+    const allExpanded = _.pluck(rates.value, 'expanded_mitra');
+
+    const nextVal = !expanded;
+    if (nextVal && allExpanded.includes(true)) {
+      this.dialogService.openSnackBar({ message: "Ada mita yang belum tersimpan!" });
+      return;
+    }
+
+    const rate = rates.at(index);
+    rate.get('expanded_mitra').setValue(!expanded);
+    rate.updateValueAndValidity();
   }
 
 }

@@ -1001,4 +1001,5 @@ export class WholesalerIndexComponent {
     console.log(error);
     // alert('Open console to see the error')
   }
+  getdataservice() { return this.dataService }
 }
