@@ -1181,9 +1181,25 @@ export class ProductEditComponent {
               return;
             }
           })
-          fd.append('special_rates', this.formProductGroup.get('special_rate')['controls']['rates'].getRawValue());
+          const rates = this.formProductGroup.get('special_rate')['controls']['rates'].getRawValue();
+          
+
+          rates.map((rate, index) => {
+            fd.append(`special_rates[${index}][type]`, rate.type);
+            rate.panels.map((panel, panelIndex) => {
+              fd.append(`special_rates[${index}][panels][${panelIndex}]`, panel);
+            })
+            rate.prices.map((price, priceIndex) => {
+              fd.append(`special_rates[${index}][rates][${priceIndex}][qty]`, price.qty);
+              fd.append(`special_rates[${index}][rates][${priceIndex}][price]`, price.price);
+              fd.append(`special_rates[${index}][rates][${priceIndex}][price_discount]`, price.price_discount);
+              fd.append(`special_rates[${index}][rates][${priceIndex}][price_discount_expires_at]`, price.price_discount_expires_at);
+              fd.append(`special_rates[${index}][rates][${priceIndex}][delivery_cost]`, price.delivery_cost);
+
+            })
+          })
+          // console.log({rates});
         }
-        console.log({fd});
         this.dataService.showLoading(true);
         this.productService.put(fd, { product_id: this.idProduct }).subscribe(
           res => {
