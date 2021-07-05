@@ -436,15 +436,11 @@ export class ProductEditComponent {
   }
 
   initSpecialRates({data}) {
-    console.log('INIT SPECIAL RATES',{data});
     const specialRate = this.formProductGroup.get('special_rate');
     let selectedWs = [];
-    const smallestPackage = '';
     if (data.special_rate && data.special_rate.rates.length > 0) {
       
       const {special_rate} = data;
-
-      specialRate.get('smallest_package').setValue(special_rate.smallest_package);
       const rates = specialRate.get('rates') as FormArray;
       special_rate.rates.map( ({id, type, panels, panels_count, prices}, rateIndex) => {
         selectedWs = selectedWs.concat(panels);
@@ -462,7 +458,8 @@ export class ProductEditComponent {
 
         const _prices = rates.at(rateIndex).get('prices') as FormArray;
 
-        prices.map(({qty, price, price_discount, price_discount_expires_at, delivery_cost}) => {
+        prices.map(({qty, price, price_discount, price_discount_expires_at, delivery_cost}, i) => {
+
             _prices.push(
               this.formBuilder.group({
                 qty: [qty],
@@ -472,13 +469,22 @@ export class ProductEditComponent {
                 delivery_cost: [delivery_cost],
               })
             )
+            if (parseInt(price)) {
+              _prices.at(i).get('price_discount').setValidators([Validators.max(price.price - 1)]);
+              _prices.at(i).get('price_discount').updateValueAndValidity();
+            }
+            if (parseInt(price_discount)) {
+              _prices.at(i).get('price_discount_expires_at').enable();
+              _prices.at(i).get('price_discount_expires_at').setValidators([Validators.required]);
+            } else {
+              _prices.at(i).get('price_discount_expires_at').reset();
+              _prices.at(i).get('price_discount_expires_at').disable();
+            }
         })
 
       })
 
     } else {
-
-      specialRate.get('smallest_package').setValue(smallestPackage);
       const rates = specialRate.get('rates') as FormArray;
       const rate = this.formBuilder.group({
 
@@ -501,8 +507,27 @@ export class ProductEditComponent {
       rates.push(rate);
 
     }
+    specialRate.get('rates').valueChanges.debounceTime(300).subscribe(res => {
+      const sr = this.formProductGroup.get('special_rate');
+      let _rates = sr.get('rates') as FormArray;
+      (res || []).map( (item, index) => {
+        let _prices = _rates.at(index).get('prices') as FormArray;
 
-    console.log({selectedWs});
+        (item.prices || []).map((price, priceIndex) => {
+          if (price.price) {
+            _prices.at(priceIndex).get('price_discount').setValidators([Validators.max(price.price - 1)]);
+            _prices.at(priceIndex).get('price_discount').updateValueAndValidity();
+          }
+          if (price.price_discount) {
+            _prices.at(priceIndex).get('price_discount_expires_at').enable();
+          } else {
+            _prices.at(priceIndex).get('price_discount_expires_at').reset();
+            _prices.at(priceIndex).get('price_discount_expires_at').disable();
+          }
+        });
+
+      })
+    });
     this.selectedWs = selectedWs;
     
   }
@@ -1547,6 +1572,14 @@ export class ProductEditComponent {
     const rate = rates.at(index);
     rate.get('expanded_mitra').setValue(!expanded);
     rate.updateValueAndValidity();
+  }
+  onTabChanged(event) {
+    const areas = this.formProductGroup.get('areas') as FormArray;
+    const pl = areas.at(0).get('listProdukPrivateLabel') as FormArray;
+    const sorted = _.sortBy(pl.value, 'packaging_amount');
+    const specialRate = this.formProductGroup.get('special_rate');
+    specialRate.get('smallest_package').setValue(sorted[0].packaging);
+
   }
 
 }

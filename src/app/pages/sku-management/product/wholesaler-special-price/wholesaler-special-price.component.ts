@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, ContentChildren, Directive, TemplateRef, QueryList } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { WholesalerIndexComponent } from 'app/pages/user-management/wholesaler/index/wholesaler-index.component';
@@ -9,7 +9,8 @@ import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { WholesalerSpecialPriceService } from 'app/services/sku-management/wholesaler-special-price.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
-
+import { ImportWholesalerSpecialPriceComponent } from '../import-wholesaler-special-price/import-wholesaler-special-price.component';
+import * as _ from 'underscore';
 @Directive({
   selector: '[specialPriceSaveMitra]'
 })
@@ -29,6 +30,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
   @Input() productId;
   @Input() exceptId;
   @Input() businessId;
+  @Input() rateId;
   @Output() onSelectWholesaler = new EventEmitter();
 
   constructor(
@@ -60,13 +62,15 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
     super.getdataservice().setToStorage("sort", '');
     this.initSelected();
     super.ngOnInit();
+    console.log('oninit');
   }
 
   initSelected() {
     this._wholesalerService.fetching().subscribe(isFetching => {
+      console.warn('CALLED');
       if (!isFetching && this.rows && this.rows.length) {
         const selected = this.rows.filter(row => this.businessId.includes(row.id) );
-        this.selected = selected;
+        this.selected = this.selected.concat(selected);
       }
     });
   }
@@ -106,6 +110,43 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
       business_id: this.businessId,
     }
     super.updateFilter(string, body);
+  }
+  async exportwholesaler() {
+    const body = { business_id: this.businessId };
+    const exportFileName = `Export_list_Wholesaler_special_price${new Date().toLocaleString()}.xls`;
+    super.exportwholesaler(body, exportFileName);
+  }
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {
+      product_id: this.productId,
+      rate_id: this.rateId,
+      except_id: this.exceptId
+    };
+
+    this.dialogRef = this.dialog.open(ImportWholesalerSpecialPriceComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(rows => {
+      if (rows) {
+        this.mergeSelected(rows);
+        setTimeout(() => {
+          this.getWholesalerList();
+        }, 300);
+      }
+    });
+    // super.import();
+  }
+
+  mergeSelected(rows) {
+
+    const selected = _.pluck( this.selected, 'id');
+    const filtered = rows.filter(row => !selected.includes(row.id));
+    this.selected = this.selected.concat(filtered);
+    this.onSelectWholesaler.emit(this.selected);
   }
   // exportwholesaler() {
   //   const body = {

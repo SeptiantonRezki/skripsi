@@ -76,18 +76,22 @@ export class WholesalerSpecialPriceService extends WholesalerService {
     return this.getBlobApi(url);
   }
 
-  exportWholesalerlist(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "exportWhosaller", context);
-    return this.getBlobApi(url);
+  exportWholesalerlist(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportWholesaller");
+    return this.postBlobApi(url, body);
   }
   
   importExcel(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "import_preview");
+    const url = this.getUrl(this.namespace, "store_import");
     return this.multipartPost(url, body);
+  }
+  importPreview(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_preview");
+    return this.postApi(url, body);
   }
   
   storeImport(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "store_import");
+    const url = this.getUrl(this.namespace, "import_preview");
     return this.postApi(url, body);
   }
   getWsRoles(): Observable<any> {

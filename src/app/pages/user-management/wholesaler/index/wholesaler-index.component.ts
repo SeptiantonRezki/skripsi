@@ -65,12 +65,12 @@ export class WholesalerIndexComponent {
 
   constructor(
     private router: Router,
-    private dialogService: DialogService,
+    public dialogService: DialogService,
     private dataService: DataService,
     private fuseSplashScreen: FuseSplashScreenService,
     private wholesalerService: WholesalerService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     private geotreeService: GeotreeService
   ) {
     this.wholesalerServiceGetList = this.wholesalerService.get;
@@ -927,12 +927,13 @@ export class WholesalerIndexComponent {
     }
   }
 
-  async exportwholesaler(body?) {
+  async exportwholesaler(context?, exportFileName?) {
     this.dataService.showLoading(true);
+    const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`;
     try {
-      const response = await this.wholesalerService.exportWholesalerlist().toPromise();
+      const response = await this.wholesalerService.exportWholesalerlist(context).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
