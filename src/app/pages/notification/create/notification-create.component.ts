@@ -60,6 +60,7 @@ export class NotificationCreateComponent {
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua", value: "18-" }];
+  listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
   listNotifType: any [] = [
@@ -257,6 +258,7 @@ export class NotificationCreateComponent {
       verification: ["all"],
       subscription_status: ['all'],
       age: ["18+", Validators.required],
+      employee_filter: ["all", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
@@ -1346,6 +1348,9 @@ export class NotificationCreateComponent {
       body['verification'] = this.formNotification.get('verification').value;
       body['age'] = this.formNotification.get("age").value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
+      if(body.send_sfmc == '0') {
+        body['employee_filter'] = this.formNotification.get('employee_filter').value;
+      }
     }
 
     if(this.typeOfRecurrence == 'Bday18') {
@@ -1428,6 +1433,7 @@ export class NotificationCreateComponent {
 
             if(this.formNotification.get('send_ayo').value) {
               bodyVideo.append('send_sfmc', '0');
+              bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             } else {
               bodyVideo.append('send_sfmc', '1');
             }
@@ -1481,6 +1487,7 @@ export class NotificationCreateComponent {
 
           if(this.formNotification.get('send_ayo').value) {
             bodyVideo.append('send_sfmc', '0');
+            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           } else {
             bodyVideo.append('send_sfmc', '1');
           }
