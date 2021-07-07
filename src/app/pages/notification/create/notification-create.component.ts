@@ -356,11 +356,16 @@ export class NotificationCreateComponent {
     });
 
     this.formNotification.controls['age'].valueChanges.debounceTime(50).subscribe(res => {
-      if (this.formNotification.get("is_target_audience").value === true) {
-        this.getAudience();
-      };
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
+      this.resetAudience();
+    });
+    this.formNotification.controls['verification'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
+    });
+    this.formNotification.controls['subscription_status'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
+    });
+    this.formNotification.controls['employee_filter'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
     });
 
     this.formNotification.controls['user_group'].setValue('retailer');
@@ -449,6 +454,14 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+  }
+
+  resetAudience() {
+    if (this.formNotification.get("is_target_audience").value === true) {
+      this.getAudience();
+    };
+    this.selected.splice(0, this.selected.length);
+    this.audienceSelected = [];
   }
 
   initAreaV2() {
@@ -1806,9 +1819,17 @@ export class NotificationCreateComponent {
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
       this.pagination['age'] = age;
+      this.pagination['verification'] = this.formNotification.get('verification').value;
+      this.pagination['subscription_status'] = this.formNotification.get('subscription_status').value;
+      if(this.formNotification.get('send_ayo').value) {
+        this.pagination['employee_filter'] = this.formNotification.get('employee_filter').value;
+      }
     }
     else {
       if (this.pagination['age']) delete this.pagination['age'];
+      if (this.pagination['verification']) delete this.pagination['verification'];
+      if (this.pagination['subscription_status']) delete this.pagination['subscription_status'];
+      if (this.pagination['employee_filter']) delete this.pagination['employee_filter'];
     }
 
     if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page_value").value === 'pojok-modal') {
