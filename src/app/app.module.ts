@@ -4,7 +4,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
-import { ColorPickerModule } from 'ngx-color-picker';
 import { MatDialogModule, MatSnackBarModule, MatRadioModule } from "@angular/material";
 import "hammerjs";
 
@@ -142,7 +141,6 @@ const config = {
   ],
   imports: [
     BrowserModule,
-    ColorPickerModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
