@@ -69,7 +69,6 @@
     "moment": "2.22.1",
     "ng2-charts": "1.6.0",
     "ngrx-store-freeze": "0.2.2",
-    "ngx-color-picker": "6.0.0",
     "ngx-cookie-service": "1.0.10",
     "ngx-daterangepicker-material": "^1.2.7",
     "ngx-drag-drop": "^2.0.0",

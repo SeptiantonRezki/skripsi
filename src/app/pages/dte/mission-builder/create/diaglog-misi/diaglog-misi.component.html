@@ -2,6 +2,9 @@
   <h2 class="">Pengaturan Misi</h2>
 
   <mat-dialog-content>
+    <div class="pt-8 pb-16">
+      <mat-checkbox [formControl]="status_pin_up" name="status_pin_up">Pin Up Misi</mat-checkbox>
+    </div>
 
     <mat-form-field style="width: 100%">
       <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task_template_id"

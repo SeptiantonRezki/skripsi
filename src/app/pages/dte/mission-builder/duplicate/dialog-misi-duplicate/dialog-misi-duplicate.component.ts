@@ -19,6 +19,8 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
   pushFF: FormControl = new FormControl(false);
   verifikasi: FormControl = new FormControl(false);
   verifikasiFF: FormControl = new FormControl(false);
+  status_pin_up: FormControl = new FormControl(false);
+
   missions: any[];
   minDate: any;
   maxDate: any;
@@ -52,6 +54,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       coin_submission: "",
       coin_verification: "",
       is_ir_template: null,
+      status_pin_up: this.status_pin_up,
     });
 
     this.filterMission.valueChanges
@@ -104,6 +107,11 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
         this.form.get('verifikasiFF').patchValue(false);
       }
 
+      if (parseInt(this.data.data.attribute.status_pin_up) === 0) {
+        this.form.get('status_pin_up').patchValue(false);
+      } else if (parseInt(this.data.data.attribute.status_pin_up) === 1) {
+        this.form.get('status_pin_up').patchValue(true);
+      }
     }
   }
 
@@ -343,6 +351,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
     );
+    form.get('status_pin_up').patchValue(
+      (form.value.status_pin_up === true) ? 1 : 0
+    );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);
 
@@ -361,7 +372,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       min_date: this.minDate,
       max_date: this.maxDate
     }
-    console.log(returnObject);
+    console.log('update => ',returnObject);
     this.dialogRef.close(returnObject);
   }
 
