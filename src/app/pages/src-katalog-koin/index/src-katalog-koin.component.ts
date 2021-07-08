@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PagesName } from 'app/classes/pages-name';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
@@ -15,6 +16,8 @@ export class SrcKatalogKoinComponent implements OnInit {
   url = '';
   urlSafe: SafeResourceUrl;
   loading = true;
+  permission: any;
+  roles: PagesName = new PagesName();
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -24,6 +27,7 @@ export class SrcKatalogKoinComponent implements OnInit {
     private route: ActivatedRoute,
     // private serializer: UrlSerializer,
   ) {
+    this.permission = this.roles.getArrayRoles('principal.src_katalog_coin');
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl('');
   }
 
@@ -35,8 +39,8 @@ export class SrcKatalogKoinComponent implements OnInit {
       // const authData = this.dataService.getDecryptedAuth();
       // const httpParams = new HttpParams().set('dceauth', authData.access_token).set('destination', `${targetPath}`).set('platform', 'principal').set('allowBack', '1');
       const encodedToken = encodeURI(res.data);
-      const httpParams = new HttpParams().set('dceauth', encodedToken).set('platform', 'principal').set('allowBack', '1');
-      const fullUrl = `${baseurl}/src-katalog-koin?${httpParams.toString()}`;
+      const httpParams = new HttpParams().set('dceauth', encodedToken).set('destination', targetPath).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
+      const fullUrl = `${baseurl}?${httpParams.toString()}`;
       // console.log({ fullUrl });
 
       this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
