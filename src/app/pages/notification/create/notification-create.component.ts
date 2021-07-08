@@ -1817,7 +1817,11 @@ export class NotificationCreateComponent {
 
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
-      let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+      let age = this.formNotification.get("age").value;
+      if(age === '18+') age = '18plus';
+      else if(age === '18-') age = '18-';
+      else age = 'all';
+
       this.pagination['age'] = age;
       this.pagination['verification'] = this.formNotification.get('verification').value;
       this.pagination['subscription_status'] = this.formNotification.get('subscription_status').value;
