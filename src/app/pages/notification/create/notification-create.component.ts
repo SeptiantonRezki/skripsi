@@ -2154,7 +2154,7 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, subscription_status, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
         verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
