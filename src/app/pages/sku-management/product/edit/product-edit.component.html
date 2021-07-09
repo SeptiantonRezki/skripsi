@@ -199,245 +199,453 @@
                   </mat-checkbox>
                 </div>
               </div>
-              <div class="" formArrayName="areas"
-                *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
-                <div [formGroupName]="i">
-                  <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
-                    <div fxFlex="50">
-                      <h3 class="">Geotree {{i+1}}</h3>
-                    </div>
-                    <div *ngIf="formProductGroup.get('is_private_label').value && !isDetail" fxFlex="50"
-                      fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px"
-                      fxLayoutGap.lt-md="0px">
-                      <button
-                        *ngIf="formProductGroup.get('areas').value.length === 1 || i === (formProductGroup.get('areas').value.length - 1)"
-                        mat-raised-button type="button" (click)="addArea(i)">
-                        <mat-icon>add</mat-icon>
-                      </button>
-                      <button *ngIf="formProductGroup.get('areas').value.length > 1" mat-raised-button color="primary"
-                        type="button" (click)="deleteArea(i)">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-                  <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap"
-                    *ngIf="formProductGroup.get('is_promo_src').value && i === 0">
-                    <div fxFlex="15" style="margin-top: 15px;">
-                      <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
-                    </div>
-                    <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
-                      <mat-form-field fxFlex="20" class="is-light form-primary">
-                        <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                          placeholder="Tanggal Mulai" formControlName="start_date">
-                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #startPicker></mat-datepicker>
-                      </mat-form-field>
-                      <div fxFlex="2"></div>
-                      <mat-form-field fxFlex="20" class="is-light form-primary">
-                        <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
-                          placeholder="Tanggal Berakhir" formControlName="end_date">
-                        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                        <mat-datepicker #endDate></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
-                    fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="National" formControlName="national">
-                        <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
-                          {{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error
-                        *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                        National harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="Zone" formControlName="zone"
-                        (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                        Zone harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="Regional" formControlName="region"
-                        (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">
-                          {{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                        Regional harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="Area" formControlName="area"
-                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                        Area harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="Salespoint" formControlName="salespoint"
-                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
-                          {{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error
-                        *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                        Salespoint harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="District" formControlName="district"
-                        (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
-                        <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
-                          {{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error
-                        *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                        Distrik harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="31%" class="is-light form-primary">
-                      <mat-select placeholder="Territory" formControlName="territory">
-                        <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
-                          {{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error
-                        *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                        Territori harus diisi
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div *ngIf="formProductGroup.get('is_private_label').value">
-                    <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
-                      <div fxFlex="50">
-                        <h3 class="">Harga Produk Geotree {{i+1}}
-                        </h3>
+              
+              <mat-tab-group (selectedTabChange)="onTabChanged($event);">
+                
+                <!-- GEOTREE TAB -->
+                <mat-tab label="Geotree">
+                  <div class="" formArrayName="areas"
+                    *ngFor="let wil of formProductGroup.get('areas')['controls']; let i = index;">
+                    <div [formGroupName]="i">
+                      <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="50">
+                          <h3 class="">Geotree {{i+1}}</h3>
+                        </div>
+                        <div *ngIf="formProductGroup.get('is_private_label').value && !isDetail" fxFlex="50"
+                          fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px"
+                          fxLayoutGap.lt-md="0px">
+                          <button
+                            *ngIf="formProductGroup.get('areas').value.length === 1 || i === (formProductGroup.get('areas').value.length - 1)"
+                            mat-raised-button type="button" (click)="addArea(i)">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                          <button *ngIf="formProductGroup.get('areas').value.length > 1" mat-raised-button
+                            color="primary" type="button" (click)="deleteArea(i)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
                       </div>
-                      <div class="button-row">
-                        <button mat-flat-button color="white" matTooltip="Tambah Kemasan" (click)="addProductPrice(i)"
-                          [disabled]="isDetail">
-                          <mat-icon>add</mat-icon>
-                        </button>
+                      <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap"
+                        *ngIf="formProductGroup.get('is_promo_src').value && i === 0">
+                        <div fxFlex="15" style="margin-top: 15px;">
+                          <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
+                        </div>
+                        <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
+                          <mat-form-field fxFlex="20" class="is-light form-primary">
+                            <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                              placeholder="Tanggal Mulai" formControlName="start_date">
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                          </mat-form-field>
+                          <div fxFlex="2"></div>
+                          <mat-form-field fxFlex="20" class="is-light form-primary">
+                            <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
+                              placeholder="Tanggal Berakhir" formControlName="end_date">
+                            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                            <mat-datepicker #endDate></mat-datepicker>
+                          </mat-form-field>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <mat-list style="overflow: hidden;" class="pt-0">
-                        <mat-divider></mat-divider>
-                        <mat-list-item>
-                          <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                            <span fxFlex="15" class="h6 text-semibold">Kemasan</span>
-                            <span fxFlex="15" class="h6 text-semibold">Jumlah per Kemasan</span>
-                            <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
-                            <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
-                            <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
-                            <span fxFlex="15" class="h6 text-semibold">Tipe</span>
-                            <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
-                              <span class="h6 text-semibold">Hapus</span>
-                            </div>
+                      <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
+                        fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="National" formControlName="national"
+                            matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
+                            <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
+                              {{item.name}}</mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
+                            National harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="Zone" formControlName="zone"
+                            matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}"
+                            (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
+                            <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">
+                              {{item.name}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
+                            Zone harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="Regional" formControlName="region"
+                            matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
+                            (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
+                            <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">
+                              {{item.name}}</mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
+                            Regional harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="Area" formControlName="area"
+                            matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
+                            (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                            <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
+                              {{item.name}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                            Area harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="Salespoint" formControlName="salespoint"
+                            matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
+                            (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                            <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
+                              {{item.name}}</mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                            Salespoint harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="District" formControlName="district"
+                            matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
+                            (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
+                            <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
+                              {{item.name}}</mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
+                            Distrik harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="31%" class="is-light form-primary">
+                          <mat-select placeholder="Territory" formControlName="territory"
+                            matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
+                            <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
+                              {{item.name}}</mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
+                            Territori harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div *ngIf="formProductGroup.get('is_private_label').value">
+                        <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                          <div fxFlex="50">
+                            <h3 class="">Harga Produk Geotree {{i+1}}
+                            </h3>
                           </div>
-                        </mat-list-item>
-                        <mat-divider></mat-divider>
-                        <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel"
-                          *ngFor="let item of wil.get('listProdukPrivateLabel')['controls']; let j = index;">
-                          <div [formGroupName]="j">
-                            <mat-list-item class="custom-height mb-8">
-                              <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
-                                <div fxFlex="15">
-                                  <mat-form-field class="is-light packaging">
-                                    <input matInput type="text" formControlName="packaging">
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
-                                      Nama Kemasan harus diisi
-                                    </mat-error>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="15">
-                                  <mat-form-field class="is-light packaging-amount">
-                                    <input matInput type="number" formControlName="packaging_amount">
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['packaging_amount'].hasError('required') && item.controls['packaging_amount'].touched">
-                                      Jumlah per Kemasan harus diisi
-                                    </mat-error>
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['packaging_amount'].hasError('min') && item.controls['packaging_amount'].touched">
-                                      Jumlah per Kemasan min. 1
-                                    </mat-error>
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['packaging_amount'].hasError('max') && item.controls['packaging_amount'].touched">
-                                      Jumlah per Kemasan maks. 1000
-                                    </mat-error>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="15">
-                                  <mat-form-field class="is-light packaging">
-                                    <input matInput type="tel" currencyMask min="0" formControlName="price">
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
-                                      Harga Produk harus diisi
-                                    </mat-error>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="17">
-                                  <mat-form-field class="is-light packaging">
-                                    <input matInput type="tel" currencyMask min="0" formControlName="price_discount">
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
-                                      Tidak boleh melebihi harga produk
-                                    </mat-error>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="15">
-                                  <mat-form-field class="is-light packaging">
-                                    <input matInput [matDatepicker]="dp" (focus)="dp.open()" [min]="minDate"
-                                      formControlName="price_discount_expires_at">
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
-                                      Tanggal Berakhir Diskon harus diisi
-                                    </mat-error>
-                                    <mat-error style="font-size: .8em"
-                                      *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
-                                      Tidak boleh kurang dari tanggal hari ini
-                                    </mat-error>
-                                    <mat-datepicker-toggle matSuffix [for]="dp">
-                                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
-                                    </mat-datepicker-toggle>
-                                    <mat-datepicker #dp></mat-datepicker>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="15">
-                                  <mat-form-field class="is-light packaging">
-                                    <mat-select formControlName="tipe">
-                                      <mat-option *ngFor="let item of listTipe" [value]="item.value">
-                                        {{item.name}}</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-                                </div>
-                                <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
-                                  <button type="button" mat-icon-button color="primary"
-                                    (click)="removePackaging(item, j, i)"
-                                    [disabled]="wil.get('listProdukPrivateLabel').controls.length === 1 && !isDetail || isDetail">
-                                    <mat-icon>delete</mat-icon>
-                                  </button>
+                          <div class="button-row">
+                            <button mat-flat-button color="white" matTooltip="Tambah Kemasan"
+                              (click)="addProductPrice(i)" [disabled]="isDetail">
+                              <mat-icon>add</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <mat-list style="overflow: hidden;" class="pt-0">
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                              <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+                                <span fxFlex="15" class="h6 text-semibold">Kemasan</span>
+                                <span fxFlex="15" class="h6 text-semibold">Jumlah per Kemasan</span>
+                                <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
+                                <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
+                                <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                                <span fxFlex="15" class="h6 text-semibold">Tipe</span>
+                                <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
+                                  <span class="h6 text-semibold">Hapus</span>
                                 </div>
                               </div>
                             </mat-list-item>
                             <mat-divider></mat-divider>
-                          </div>
+                            <div fxFlex="1 0 auto" formArrayName="listProdukPrivateLabel"
+                              *ngFor="let item of wil.get('listProdukPrivateLabel')['controls']; let j = index;">
+                              <div [formGroupName]="j">
+                                <mat-list-item class="custom-height mb-8">
+                                  <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
+                                    <div fxFlex="15">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="text" formControlName="packaging">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
+                                          Nama Kemasan harus diisi
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="15">
+                                      <mat-form-field class="is-light packaging-amount">
+                                        <input matInput type="number" formControlName="packaging_amount">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['packaging_amount'].hasError('required') && item.controls['packaging_amount'].touched">
+                                          Jumlah per Kemasan harus diisi
+                                        </mat-error>
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['packaging_amount'].hasError('min') && item.controls['packaging_amount'].touched">
+                                          Jumlah per Kemasan min. 1
+                                        </mat-error>
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['packaging_amount'].hasError('max') && item.controls['packaging_amount'].touched">
+                                          Jumlah per Kemasan maks. 1000
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="15">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="tel" currencyMask min="0" formControlName="price">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
+                                          Harga Produk harus diisi
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="17">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="tel" currencyMask min="0"
+                                          formControlName="price_discount">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
+                                          Tidak boleh melebihi harga produk
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="15">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput [matDatepicker]="dp" (focus)="dp.open()" [min]="minDate"
+                                          formControlName="price_discount_expires_at">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
+                                          Tanggal Berakhir Diskon harus diisi
+                                        </mat-error>
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
+                                          Tidak boleh kurang dari tanggal hari ini
+                                        </mat-error>
+                                        <mat-datepicker-toggle matSuffix [for]="dp">
+                                          <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #dp></mat-datepicker>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="15">
+                                      <mat-form-field class="is-light packaging">
+                                        <mat-select formControlName="tipe">
+                                          <mat-option *ngFor="let item of listTipe" [value]="item.value">
+                                            {{item.name}}</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center">
+                                      <button type="button" mat-icon-button color="primary"
+                                        (click)="removePackaging(item, j, i)"
+                                        [disabled]="wil.get('listProdukPrivateLabel').controls.length === 1 && !isDetail || isDetail">
+                                        <mat-icon>delete</mat-icon>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                              </div>
+                            </div>
+                          </mat-list>
                         </div>
-                      </mat-list>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                  
+                </mat-tab><!--/ EOC GEOTREE TAB -->
+
+                <mat-tab label="Special Rate" formGroupName="special_rate">
+                  
+                  <div class="" style="margin-bottom: 20px;" formArrayName="rates" *ngFor="let rate of formProductGroup.get('special_rate')['controls']['rates']['controls']; let i = index;">
+                    
+                    <div [formGroupName]="i">
+                      <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="50">
+                          <h3 class="">Rate {{i+1}}</h3>
+                        </div>
+                        <div *ngIf="formProductGroup.get('is_private_label').value && !isDetail" fxFlex="50"
+                          fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px"
+                          fxLayoutGap.lt-md="0px">
+                          <button mat-raised-button type="button" (click)="addRates(i)">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                          <button mat-raised-button
+                            color="primary" type="button" (click)="removeRates(i)"
+                            [disabled]="formProductGroup.get('special_rate')['controls']['rates']['controls'].length === 1 || isDetail">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- FORM SPECIAL RATES (i) -->
+                      <div *ngIf="formProductGroup.get('is_private_label').value">
+                        <div class="pl-8 mb-16" fxLayout="row">
+                          <div fxFlex="30">
+                            <label for="">Kemasan Terkecil: <strong>{{formProductGroup.get('special_rate')['controls']['smallest_package'].value}}</strong></label>
+                          </div>
+                          <div fxFlex="30">
+                            <mat-form-field fxFlex="100%" class="is-light form-primary special-rate-tipe">
+                              <mat-select placeholder="Tipe" formControlName="type">
+                                <mat-option *ngFor="let item of listTipe" [value]="item.value">
+                                  {{item.name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="30">
+                            <label for="">Jumlah Mitra Terpilih: <strong>{{rate.get('panels_count').value}}</strong></label>
+                          </div>
+                          <div fxFlex="30">
+                            <button mat-button color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Pilih Mitra</button>
+                          </div>
+                        </div>
+                        <div>
+                          <mat-list style="overflow: hidden;" class="pt-0">
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                              <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+                                <span fxFlex="15" class="h6 text-semibold">Minimum Qty</span>
+                                <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
+                                <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
+                                <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                                <span fxFlex="15" class="h6 text-semibold">Delivery Cost</span>
+                                <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-between center">
+                                  <span class="h6 text-semibold">Tambah</span>
+                                  <span class="h6 text-semibold">Hapus</span>
+                                </div>
+                              </div>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <div class="mb-16" fxFlex="1 0 auto" formArrayName="prices"
+                              *ngFor="let item of rate.get('prices')['controls']; let j = index;">
+                              <div [formGroupName]="j">
+
+                                <!-- RATES -->
+                                <mat-list-item class="custom-height mb-8">
+                                  <div class="pl-8" fxFlex="auto" fxLayoutAlign="space-between center" fxLayout="row">
+                                    <div fxFlex="10">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="text" formControlName="qty">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['qty'].hasError('required') && item.controls['qty'].touched">
+                                          Minimum Qty harus diisi
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="10">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="tel" currencyMask min="0" formControlName="price">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
+                                          Harga Produk harus diisi
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="10">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="tel" currencyMask min="0"
+                                          formControlName="price_discount">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
+                                          Tidak boleh melebihi harga produk
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="10" class="mr-8">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput [matDatepicker]="dp" (focus)="dp.open()" [min]="minDate"
+                                          formControlName="price_discount_expires_at">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
+                                          Tanggal Berakhir Diskon harus diisi
+                                        </mat-error>
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
+                                          Tidak boleh kurang dari tanggal hari ini
+                                        </mat-error>
+                                        <mat-datepicker-toggle matSuffix [for]="dp">
+                                          <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #dp></mat-datepicker>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="10">
+                                      <mat-form-field class="is-light packaging">
+                                        <input matInput type="tel" currencyMask min="0" formControlName="delivery_cost">
+                                        <mat-error style="font-size: .8em"
+                                          *ngIf="item.controls['delivery_cost'].hasError('required') && item.controls['delivery_cost'].touched">
+                                          Harga Produk harus diisi
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-between center">
+                                      
+                                      <button type="button" mat-icon-button color="primary"
+                                        (click)="addSpecialRatePrices(item, j, i)"
+                                        [disabled]="isDetail">
+                                        <mat-icon>add</mat-icon>
+                                      </button>
+
+                                      <button type="button" mat-icon-button color="primary"
+                                        (click)="removeSpecialRatePrices(item, j, i)"
+                                        [disabled]="rate.get('prices').controls.length === 1">
+                                        <mat-icon>delete</mat-icon>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </mat-list-item>
+                                <!--/ RATES -->
+                                <mat-divider></mat-divider>
+
+                              </div>
+                            </div>
+                            <mat-divider></mat-divider>
+
+                          </mat-list>
+                        </div>
+                        <!-- <mat-accordion> -->
+                          <mat-expansion-panel (opened)="onOpenListMitra($event, i)"
+                          [expanded]="rate.get('expanded_mitra').value">
+                          
+
+                            <mat-expansion-panel-header style="background-color:#3a3a3a; ">
+                              <mat-panel-title style="color: white;">
+                                Mitra
+                              </mat-panel-title>
+                              <!-- <mat-panel-description>
+                                This is a summary of the content
+                              </mat-panel-description> -->
+                            </mat-expansion-panel-header>
+
+                              <app-wholesaler-special-price
+                              *ngIf="rate.get('expanded_mitra').value"
+                              (onSelectWholesaler)="onSelectedWs(i, $event)"
+                              [productId]="detailProduct.id"
+                              [exceptId]="selectedWs | excludeArray: rate.get('panels').value"
+                              [businessId]="rate.get('panels').value"
+                              >
+                              <div *specialPriceSaveMitra>
+                                  <button mat-raised-button type="button" color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Simpan</button>
+                              </div>
+                            </app-wholesaler-special-price>
+                          
+                          </mat-expansion-panel>
+
+                        <!-- </mat-accordion> -->
+                      </div>
+                      <!-- FORM SPECIAL RATES (i) -->
+
+
+                    </div>
+                    
+                  </div>
+
+                </mat-tab>
+                
+              </mat-tab-group>
+
             </div>
           </mat-tab>
           <mat-tab label="Gambar Produk">

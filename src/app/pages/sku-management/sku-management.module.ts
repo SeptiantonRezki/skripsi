@@ -38,6 +38,7 @@ import {
   MatDialogModule,
   MatDatepicker,
   MatProgressSpinnerModule,
+  MatExpansionModule,
 } from "@angular/material";
 import {
   DateAdapter,
@@ -49,6 +50,7 @@ import {
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxCurrencyModule } from "ngx-currency";
+import {UserManagementModule} from '../user-management/user-management.module';
 
 import {
   ListBrandResolver,
@@ -73,6 +75,8 @@ import { CashierIndexComponent } from './product-cashier/index/index.component';
 import { CashierCreateComponent } from './product-cashier/create/create.component';
 import { CashierEditComponent } from './product-cashier/edit/edit.component';
 import { CashierImportDialogComponent } from './product-cashier/index/import-dialog/import-dialog.component';
+import { WholesalerSpecialPriceComponent, WholesalerSpecialPriceSaveButton } from './product/wholesaler-special-price/wholesaler-special-price.component';
+import { ImportWholesalerSpecialPriceComponent } from './product/import-wholesaler-special-price/import-wholesaler-special-price.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -128,6 +132,8 @@ export const MY_FORMATS = {
     MatDividerModule,
     MatListModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
+    UserManagementModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   declarations: [
@@ -154,7 +160,10 @@ export const MY_FORMATS = {
     CashierIndexComponent,
     CashierCreateComponent,
     CashierEditComponent,
-    CashierImportDialogComponent
+    CashierImportDialogComponent,
+    WholesalerSpecialPriceComponent,
+    WholesalerSpecialPriceSaveButton,
+    ImportWholesalerSpecialPriceComponent,
   ],
   exports: [
     ProductIndexComponent,
@@ -168,9 +177,12 @@ export const MY_FORMATS = {
     DetailTradeProgramComponent,
     DetailRetailerComponent,
     ImportFileDialogComponent,
-    CashierImportDialogComponent
+    CashierImportDialogComponent,
+    WholesalerSpecialPriceSaveButton,
   ],
-  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent, CashierImportDialogComponent],
+  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent, CashierImportDialogComponent,
+    ImportWholesalerSpecialPriceComponent,
+  ],
   providers: [
     ListBrandResolver,
     ListCategoryResolver,

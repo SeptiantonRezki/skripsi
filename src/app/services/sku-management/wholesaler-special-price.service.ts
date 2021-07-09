@@ -1,23 +1,30 @@
 import { Injectable } from "@angular/core";
 import { BaseService } from "../base.service";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "../../../../node_modules/rxjs";
+import { BehaviorSubject, Observable } from "../../../../node_modules/rxjs";
+import { WholesalerService } from "../user-management/wholesaler.service";
 
 @Injectable()
-export class WholesalerService extends BaseService {
-  public namespace = "wholesaler";
+export class WholesalerSpecialPriceService extends WholesalerService {
+  public namespace = "wholesaler_special_price";
+
+  _fetching = new BehaviorSubject(false);
 
   /** ADD MORE ADJUSTABLE PAGE WHOLESALER->INDEX */
-  sharedComponent = false;
-
 
   constructor(http: HttpClient) {
     super(http);
   }
 
+  fetching() {
+    return this._fetching.asObservable();
+  }
   get(queryParams?, body?): Observable<any> {
+    this._fetching.next(true);
     const url = this.getUrl(this.namespace, "get");
-    return this.getApi(url, queryParams);
+    return this.postApi(url, body, queryParams).map(res => res['data']).finally(() => {
+      this._fetching.next(false);
+    });
   }
 
   show(context?): Observable<any> {
@@ -69,18 +76,22 @@ export class WholesalerService extends BaseService {
     return this.getBlobApi(url);
   }
 
-  exportWholesalerlist(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "exportWhosaller", context);
-    return this.getBlobApi(url);
+  exportWholesalerlist(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "exportWholesaller");
+    return this.postBlobApi(url, body);
   }
   
   importExcel(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "import_preview");
+    const url = this.getUrl(this.namespace, "store_import");
     return this.multipartPost(url, body);
+  }
+  importPreview(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_preview");
+    return this.postApi(url, body);
   }
   
   storeImport(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "store_import");
+    const url = this.getUrl(this.namespace, "import_preview");
     return this.postApi(url, body);
   }
   getWsRoles(): Observable<any> {
