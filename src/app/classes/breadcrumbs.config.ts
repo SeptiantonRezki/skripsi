@@ -569,13 +569,13 @@ export const brConfig = {
       index: [
         {
           type: "parent",
-          url: "/user-management/panel-partnership",
+          url: "/user-management/pengaturan-pendaftaran",
           name: "Strategic Partnership"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Partnership"
+          name: "Pengaturan Pendaftaran"
         }
       ],
       create: [
