@@ -142,6 +142,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
         }
 
         this.dataSubmission = dataSubmission_;
+        console.log('dataSub => ', this.dataSubmission);
       }, err => {
         this.onLoad = false;
         this.dataService.showLoading(false);

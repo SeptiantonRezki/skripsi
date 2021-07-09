@@ -206,10 +206,13 @@
                 </table>
               </div>
             </div>
-            <div class="item-question-img" fxLayout="column" fxLayoutAlign="center center">
+            <div class="mb-8 item-question-img" fxLayout="column" fxLayoutAlign="center center">
               <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)" />
               <span class="planogram-template-caption">Bukti Foto</span>
             </div>
+            <!-- ambil correct/incorret dari dataSubmission.data.submissions -->
+            <div class="p-4 status-ir--green">Correct</div>
+            <div class="p-4 status-ir--red">Incorrect</div>
           </div>
 
           <div class="item-question-img"
