@@ -152,6 +152,9 @@ export class PagesName {
     if (name.indexOf('supplierorder') > -1) {
       roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
     }
+    if (name.indexOf("src_katalog_coin") > -1) {
+      roles['approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
+    }
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {
       submenus.map((value) => {
@@ -174,5 +177,18 @@ export class PagesName {
     }
 
     return roles
+  }
+
+  getArrayRoles(name) {
+    let localPerm = window.localStorage.getItem('_prmdxtrn');
+    let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
+    const permission = JSON.parse(perm);
+    // console.log("all permission", permission.filter(prm => prm.indexOf("principal.popupnotification.new_product") > -1));
+    if (!permission) return;
+
+    let query = name.toLowerCase();
+    let filterPermission = permission.filter(item => item !== null).filter(item => item.indexOf(query) >= 0);
+
+    return filterPermission
   }
 }

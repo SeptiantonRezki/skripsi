@@ -56,6 +56,10 @@
           <div class="button-row pb-16">
             <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
           </div>
+          <div fxFlex="20" style="text-align: center;margin-left: 25px;">
+            <p style="font-weight: bold;">Grand Total Reedem Coin</p>
+            <p style="font-weight: bold;">{{ grand_total_coin_nominal_rupiah }}</p>
+          </div>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -79,11 +83,17 @@
         <ngx-datatable-column name="Alamat" prop="address"></ngx-datatable-column>
         <ngx-datatable-column name="Area" prop="area"></ngx-datatable-column>
         <ngx-datatable-column name="No. Telepon" prop="phone"></ngx-datatable-column>
-        <ngx-datatable-column name="Total" prop="total">
+        <ngx-datatable-column name="Total Pembayaran" prop="total">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
             <p class="text-truncate" style="text-align: right !important;">{{row.grand_total | rupiahFormater}}</p>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="Total Reedem Coin" prop="coin_nominal">
+          <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            <p class="text-truncate" style="text-align: right !important;">{{row.coin_nominal | rupiahFormater}}</p>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Group Trade Program" prop="group_name"></ngx-datatable-column>
         <ngx-datatable-column name="Tanggal" prop="created_at">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
             {{row.created_at | date: 'dd/MM/yyyy HH:mm'}}
