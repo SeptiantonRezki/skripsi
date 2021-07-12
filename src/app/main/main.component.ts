@@ -9,6 +9,7 @@ import { navigation } from 'app/navigation/navigation';
 import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 import { Emitter } from 'app/helper/emitter.helper';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'fuse-main',
@@ -27,6 +28,9 @@ export class FuseMainComponent implements OnDestroy {
 
 
     progress: any;
+    isShowGTM: Boolean;
+    gtmUrl: string = "https://www.googletagmanager.com/ns.html?id=GTM-WPLNLPW"
+    urlSafe: SafeResourceUrl;
 
     @HostBinding('attr.fuse-layout-mode') layoutMode;
 
@@ -38,6 +42,7 @@ export class FuseMainComponent implements OnDestroy {
         private dataService: DataService,
         @Inject(DOCUMENT) private document: any,
         private emitter: Emitter,
+        private sanitizer: DomSanitizer,
     ) {
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
@@ -58,6 +63,9 @@ export class FuseMainComponent implements OnDestroy {
             // console.log('wehhhh', value);
             this.chatIsOpen = value;
         });
+
+        this.isShowGTM = environment.show_gtm;
+        this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.gtmUrl);
     }
 
     ngOnInit() {

@@ -94,11 +94,16 @@ export class AuthenticationService extends BaseService {
 
   checkUserStatus(username): Observable<any> {
     const url = this.getUrl(this.namespace, "check_user_status");
-    return this.postApi(url, {username});
+    return this.postApi(url, { username });
   }
-   
+
   getUserCognitoAD(authCode): Observable<any> {
     const url = this.getUrl(this.namespace, "get_user_cognito_ad");
-    return this.postApi(url, {code: authCode});
+    return this.postApi(url, { code: authCode });
   }
- }
+
+  getEncryptedToken(): Observable<any> {
+    const url = this.getUrl(this.namespace, "encrypted_token");
+    return this.getApi(url);
+  }
+}
