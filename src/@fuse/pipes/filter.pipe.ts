@@ -27,3 +27,13 @@ export class DateToMomentPipe implements PipeTransform {
     return moment(value).format("D MMMM YYYY");
   }
 }
+
+@Pipe({name: "excludeArray"})
+export class ExcludeArrayPipe implements PipeTransform {
+  transform(target: any[], toRemove: any[]): any {
+    console.log({target, toRemove});
+    const result = target.filter((item) => !toRemove.includes(item))
+    console.log({result});
+    return result;
+  }
+}

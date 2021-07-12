@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { KeysPipe } from "./keys.pipe";
 import { GetByIdPipe } from "./getById.pipe";
 import { HtmlToPlaintextPipe } from "./htmlToPlaintext.pipe";
-import { FilterPipe, DateToMomentPipe } from "./filter.pipe";
+import { FilterPipe, DateToMomentPipe, ExcludeArrayPipe } from "./filter.pipe";
 import { CamelCaseToDashPipe } from "./camelCaseToDash.pipe";
 import {
   RupiahFormaterPipe,
@@ -23,6 +23,7 @@ import { TimeRemainingPipe } from "./time-remaining.pipe";
     CapitalizePipe,
     RupiahFormaterWithoutRpPipe,
     DateToMomentPipe,
+    ExcludeArrayPipe,
     TimeRemainingPipe
   ],
   imports: [],
@@ -36,6 +37,7 @@ import { TimeRemainingPipe } from "./time-remaining.pipe";
     CapitalizePipe,
     RupiahFormaterWithoutRpPipe,
     DateToMomentPipe,
+    ExcludeArrayPipe,
     TimeRemainingPipe
   ]
 })

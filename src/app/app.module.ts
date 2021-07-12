@@ -42,6 +42,7 @@ import { VendorsService } from "./services/src-catalogue/vendors.service";
 import { FieldForceService } from "./services/user-management/field-force.service";
 import { PaguyubanService } from "./services/user-management/paguyuban.service";
 import { WholesalerService } from "./services/user-management/wholesaler.service";
+import {WholesalerSpecialPriceService} from './services/sku-management/wholesaler-special-price.service';
 import { RetailerService } from "./services/user-management/retailer.service";
 import { BannerService } from "./services/inapp-marketing/banner.service";
 import { LandingPageService } from "./services/inapp-marketing/landing-page.service";
@@ -178,6 +179,7 @@ const config = {
     PaguyubanService,
     CustomerService,
     WholesalerService,
+    WholesalerSpecialPriceService,
     RetailerService,
     BannerService,
     LandingPageService,
