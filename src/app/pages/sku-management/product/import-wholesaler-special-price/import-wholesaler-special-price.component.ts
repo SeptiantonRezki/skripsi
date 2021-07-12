@@ -80,7 +80,7 @@ export class ImportWholesalerSpecialPriceComponent implements OnInit {
   }
   submit() {
     if (this.rows.length > 0) {
-      const res = this.rows.map(item => { return { ...item } });
+      const res = this.validData.map(item => { return { ...item } });
       this.dialogRef.close(res);
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
