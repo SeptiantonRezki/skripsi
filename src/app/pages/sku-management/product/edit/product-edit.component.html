@@ -144,6 +144,10 @@
                             placeholder="Tanggal Mulai" formControlName="start_date_pin_up">
                           <mat-datepicker-toggle matSuffix [for]="startPinUp"></mat-datepicker-toggle>
                           <mat-datepicker #startPinUp></mat-datepicker>
+                          <mat-error style="font-size: .8em"
+                            *ngIf="formProductGroup.get('start_date_pin_up').hasError('matDatepickerMin') && formProductGroup.get('start_date_pin_up').touched">
+                            Tidak boleh kurang dari tanggal hari ini
+                          </mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex="50" class="is-light" style="margin-left: 30px;">
@@ -152,6 +156,10 @@
                             formControlName="end_date_pin_up">
                           <mat-datepicker-toggle matSuffix [for]="endPinUp"></mat-datepicker-toggle>
                           <mat-datepicker #endPinUp></mat-datepicker>
+                          <mat-error style="font-size: .8em"
+                            *ngIf="formProductGroup.get('end_date_pin_up').hasError('matDatepickerMin') && formProductGroup.get('end_date_pin_up').touched">
+                            Harus lebih lama dari tanggal mulai
+                          </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
