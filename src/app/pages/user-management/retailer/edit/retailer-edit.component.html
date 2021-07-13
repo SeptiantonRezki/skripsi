@@ -356,6 +356,42 @@
           </div>
 
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3>Detail Akun Pojok Bayar</h3>
+          </div>
+
+          <div class="table-wrapper" style="box-shadow: none !important; border: 1px solid #e3e3e3;">
+            <ngx-datatable class="material" [rows]="detailRetailer?.detail_pojok_bayar" [columnMode]="'force'"
+              [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5">
+              <ngx-datatable-column name="Nomor Handphone Pojok Bayar" prop="no_pojok_bayar">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.no_pojok_bayar || '-'}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="First Validation" prop="first_validation">
+                <ng-template let-column="column" ngx-datatable-header-template> 
+                  <span class="datatable-header-cell-wrapper">1<sup>st</sup> Layer Validation</span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.first_validation}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Second Validation" prop="second_validation">
+                <ng-template let-column="column" ngx-datatable-header-template> 
+                  <span class="datatable-header-cell-wrapper">2<sup>nd</sup> Layer Validation</span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.second_validation}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Final Validation" [sortable]="false" prop="final_validation">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="name-container">{{row.final_validation}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+
+          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
             <h3>Daftar Consumer</h3>
           </div>
 
