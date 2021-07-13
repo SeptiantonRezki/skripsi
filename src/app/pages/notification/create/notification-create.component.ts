@@ -2178,6 +2178,7 @@ export class NotificationCreateComponent {
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
       frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
+      frm.controls['employee_filter'].setValue(employee_filter ? employee_filter: 'all');
       frm.controls['age'].setValue(age);
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
