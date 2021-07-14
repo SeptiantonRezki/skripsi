@@ -59,7 +59,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: "Semua", value: "all" }];
   listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
@@ -1427,6 +1427,13 @@ export class NotificationCreateComponent {
             bodyVideo.append('title', body.title);
             bodyVideo.append('body', body.body);
             bodyVideo.append('type', body.type);
+
+            if(body.type == 'customer') {
+              bodyVideo.append('verification', body.verification);
+              bodyVideo.append('age', body.age);
+              bodyVideo.append('notif_type', body.notif_type);
+            }
+
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
@@ -1483,6 +1490,11 @@ export class NotificationCreateComponent {
           bodyVideo.append('title', body.title);
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
+          if(body.type == 'customer') {
+            bodyVideo.append('verification', body.verification);
+            bodyVideo.append('age', body.age);
+            bodyVideo.append('notif_type', body.notif_type);
+          }
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
