@@ -32,6 +32,7 @@ export const server = {
   order: 'order',
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
+  export: 'export',
 };
 
 

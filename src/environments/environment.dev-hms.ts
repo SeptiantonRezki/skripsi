@@ -33,4 +33,5 @@ export const server = {
   bora: "bora",
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
+  export: 'export',
 }
