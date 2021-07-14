@@ -413,6 +413,18 @@
               </mat-radio-button>
             </mat-radio-group>
           </div>
+          <div class="pb-16" *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.controls['send_ayo'].value">
+            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Employee</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="employee_filter" class="radio-group">
+              <mat-radio-button class="radio-button" *ngFor="let item of listEmployeeFilter" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
         </div>
 
         <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe'">
