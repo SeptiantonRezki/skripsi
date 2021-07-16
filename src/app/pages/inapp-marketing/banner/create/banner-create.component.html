@@ -173,6 +173,20 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="employee" placeholder="Tipe Employee">
+                    <mat-option *ngFor="let item of listEmployee" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['employee'].hasError('required') && formBannerGroup.controls['employee'].touched">
+                    Employee harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
                   <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
                     <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>

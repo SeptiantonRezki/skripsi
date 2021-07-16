@@ -75,6 +75,9 @@ pipeline{
                                 echo "Merge micro-qa to master after deployment"
                                 sh 'git config --local credential.helper "!f() { echo username=\\$GIT_AUTH_USR; echo password=\\$GIT_AUTH_PSW; }; f"'
                                 sh 'git checkout micro-qa'
+                                sh 'git config --global user.email "jenkins@sampoerna.com"'
+                                sh 'git config --global user.name "jenkins"'
+                                sh 'git stash'
                                 sh 'git checkout master'
                                 sh 'git merge micro-qa'
                                 sh 'git status'

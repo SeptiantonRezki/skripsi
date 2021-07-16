@@ -58,6 +58,7 @@ export class BannerCreateComponent {
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
   listCustomerBanners: any[] = [];
+  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -187,6 +188,7 @@ export class BannerCreateComponent {
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       verification: ["all"],
+      employee: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: [""],
@@ -1114,6 +1116,7 @@ export class BannerCreateComponent {
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+        fd.append('employee', this.formBannerGroup.get('employee').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
         fd.append('type_banner', null);
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
