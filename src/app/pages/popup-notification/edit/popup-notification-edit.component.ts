@@ -52,6 +52,7 @@ export class PopupNotificationEditComponent {
   listLandingPage: any[] = [];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
+  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -184,6 +185,7 @@ export class PopupNotificationEditComponent {
       landing_page: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       verification: ["all"],
+      employee: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
@@ -1029,6 +1031,7 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('gender').setValue(response.gender || 'both');
         this.formPopupGroup.get('age_consumer_from').setValue(response.age_from);
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
+        this.formPopupGroup.get('employee').setValue(response.employee);
         this.formPopupGroup.get('is_smoker').setValue(smoker_type);
         if (smoker_type !== 'yes') {
           this.formPopupGroup.get('verification').setValue(response.verification || 'all');
@@ -1483,6 +1486,7 @@ export class PopupNotificationEditComponent {
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
+        body['employee'] = this.formPopupGroup.get('employee').value;
         if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
           body['verification'] = this.formPopupGroup.get('verification').value;
         }
