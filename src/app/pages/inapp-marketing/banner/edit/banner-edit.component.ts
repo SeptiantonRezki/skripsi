@@ -60,6 +60,7 @@ export class BannerEditComponent {
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
   listCustomerBanners: any[] = [];
+  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -196,6 +197,7 @@ export class BannerEditComponent {
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       verification: ["all"],
+      employee: ["all"],
       is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: [""],
@@ -771,12 +773,14 @@ export class BannerEditComponent {
       this.formBannerGroup.get('gender').setValue(this.detailBanner.gender || 'both');
       this.formBannerGroup.get('age_consumer_from').setValue(this.detailBanner.age_from);
       this.formBannerGroup.get('age_consumer_to').setValue(this.detailBanner.age_to);
+      this.formBannerGroup.get('employee').setValue(this.detailBanner.employee || 'all');
       this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
       if (this.detailBanner.smoker !== 'yes') {
         try {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
+      this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
@@ -1288,6 +1292,7 @@ export class BannerEditComponent {
         fd.append('gender', this.formBannerGroup.get('gender').value);
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+        fd.append('employee', this.formBannerGroup.get('employee').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
         fd.append('type_banner', '');
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
