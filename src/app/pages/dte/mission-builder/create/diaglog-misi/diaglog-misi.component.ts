@@ -17,6 +17,7 @@ export class DiaglogMisiComponent implements OnInit {
   pushFF: FormControl = new FormControl(false);
   verifikasi: FormControl = new FormControl(false);
   verifikasiFF: FormControl = new FormControl(false);
+  status_pin_up: FormControl = new FormControl(false);
 
   missions: any[];
   minDate: any;
@@ -52,6 +53,7 @@ export class DiaglogMisiComponent implements OnInit {
       coin_submission: null,
       coin_verification: null,
       is_ir_template: null,
+      status_pin_up: this.status_pin_up
     });
 
     this.filterMission.valueChanges
@@ -78,7 +80,7 @@ export class DiaglogMisiComponent implements OnInit {
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
         is_push_to_ff: this.data.data.attribute.is_push_to_ff,
-        is_ir_template: this.data.data.attribute.is_ir_template
+        is_ir_template: this.data.data.attribute.is_ir_template,
       });
       this.minDate = this.data.data.min_date;
       this.maxDate = this.data.data.max_date;
@@ -104,11 +106,15 @@ export class DiaglogMisiComponent implements OnInit {
         this.form.get('verifikasiFF').patchValue(false);
       }
 
+      if (this.data.data.attribute.status_pin_up === 0) {
+        this.form.get('status_pin_up').patchValue(false);
+      } else if (this.data.data.attribute.status_pin_up === 1) {
+        this.form.get('status_pin_up').patchValue(true);
+      }
     }
   }
 
   selectChangeMisi(e: any) {
-    // console.log(e);
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
 
@@ -340,6 +346,9 @@ export class DiaglogMisiComponent implements OnInit {
       (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
     );
+    form.get('status_pin_up').patchValue(
+      (form.value.status_pin_up === true) ? 1 : 0
+    );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);
 
@@ -358,6 +367,7 @@ export class DiaglogMisiComponent implements OnInit {
       min_date: this.minDate,
       max_date: this.maxDate
     }
+    console.log('update => ',returnObject);
     this.dialogRef.close(returnObject);
   }
 

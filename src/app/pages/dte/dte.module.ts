@@ -145,6 +145,7 @@ import { CoinDisburstmentCreateComponent } from './coin-disburstment/create/coin
 import { CoinDisburstmentEditComponent } from './coin-disburstment/edit/coin-disburstment-edit.component';
 import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exchange/coin-disburstment-exchange.component';
 import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-exchange-coin/import-exchange-coin.component';
+import { BackgroundMisiComponent } from './template/dialog/background-misi/background-misi.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -306,6 +307,7 @@ export const MY_FORMATS = {
     CoinDisburstmentEditComponent,
     CoinDisburstmentExchangeComponent,
     ImportExchangeCoinComponent,
+    BackgroundMisiComponent,
   ],
   exports: [
     TemplateIndexComponent,

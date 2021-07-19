@@ -20,6 +20,8 @@ export class DialogMisiEditComponent implements OnInit {
   pushFF: FormControl = new FormControl(false);
   verifikasi: FormControl = new FormControl(false);
   verifikasiFF: FormControl = new FormControl(false);
+  status_pin_up: FormControl = new FormControl(false);
+
   missions: any[];
   minDate: any;
   maxDate: any;
@@ -55,6 +57,7 @@ export class DialogMisiEditComponent implements OnInit {
       coin_submission: "",
       coin_verification: "",
       is_ir_template: null,
+      status_pin_up: this.status_pin_up
     });
 
     this.filterMission.valueChanges
@@ -81,7 +84,8 @@ export class DialogMisiEditComponent implements OnInit {
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
         is_push_to_ff: parseInt(this.data.data.attribute.is_push_to_ff),
-        is_ir_template: parseInt(this.data.data.attribute.is_ir_template)
+        is_ir_template: parseInt(this.data.data.attribute.is_ir_template),
+        status_pin_up: this.data.data.attribute.status_pin_up
       });
       this.minDate = this.data.data.min_date;
       this.maxDate = this.data.data.max_date;
@@ -110,6 +114,12 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('verifikasiFF').patchValue(false);
       }
 
+      if (parseInt(this.data.data.attribute.status_pin_up) === 0) {
+        this.form.get('status_pin_up').patchValue(false);
+      } else if (parseInt(this.data.data.attribute.status_pin_up) === 1) {
+        this.form.get('status_pin_up').patchValue(true);
+      }
+
       if (this.data.isDetail) {
         this.isDetail = this.data.isDetail;
         setTimeout(() => {
@@ -122,6 +132,7 @@ export class DialogMisiEditComponent implements OnInit {
           // this.form.get("verification_type").disable();
           // this.form.get("is_push_to_ff").disable();
           // this.form.get("is_ir_template").disable();
+          this.form.get("status_pin_up").disable();
           console.log('this form', this.form.value);
         }, 1000)
       }
@@ -370,6 +381,9 @@ export class DialogMisiEditComponent implements OnInit {
       (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
     );
+    form.get('status_pin_up').patchValue(
+      (form.value.status_pin_up === true) ? 1 : 0
+    );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);
 
@@ -388,7 +402,7 @@ export class DialogMisiEditComponent implements OnInit {
       min_date: this.minDate,
       max_date: this.maxDate
     }
-    console.log(returnObject);
+    console.log('update => ',returnObject);
     this.dialogRef.close(returnObject);
   }
 
