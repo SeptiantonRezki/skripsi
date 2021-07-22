@@ -504,7 +504,7 @@ export class ProductEditComponent {
         ]),
         expanded_mitra: false
       });
-      rates.push(rate);
+      // rates.push(rate);
 
     }
     specialRate.get('rates').valueChanges.debounceTime(300).subscribe(res => {
@@ -1255,7 +1255,7 @@ export class ProductEditComponent {
             }
           })
           const rates = this.formProductGroup.get('special_rate')['controls']['rates'].getRawValue();
-          
+
 
           rates.map((rate, index) => {
             fd.append(`special_rates[${index}][type]`, rate.type);
