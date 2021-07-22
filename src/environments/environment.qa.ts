@@ -12,10 +12,14 @@ export const environment = {
   cognito_login_url: 'https://ayo-principal-qa.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-qa&redirect_uri=https://hms.qa.src.id/login&response_type=CODE&client_id=3h4042k701id4jimgf4or1jd14&scope=aws.cognito.signin.user.admin email openid phone profile'
 };
 
-export const serviceServer = (server) => {
-  return `https://${server}.api.qa.src.id`;
+// export const serviceServer = (server) => {
+//   return `https://${server}.api.qa.src.id`;
+// }
+export const serviceServer = (server, paths = ['api'], env='qa') => {
+  let path = (paths.length) ? `${paths.join('.')}.` : '';
+  let _env = (env) ? `${env}.` : '';
+  return `https://${server}.${path}${_env}src.id`;
 }
-
 export const server = {
   user: "users",
   business: "businesses",

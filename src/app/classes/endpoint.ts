@@ -667,7 +667,7 @@ export class Endpoint {
         list_trade_audience__group: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/list/trade-audience-tsm`,
         check_budget: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/check/budget`,
         // export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing-data/export`,
-        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/tsm/request-export`,
+        export: `${AYO_API_SERVICE(SERVER.export, [])}/api/v1/export/dte/tsm/request-export`,
         get_popup: `${AYO_API}/api/principal/sequencing/list/pop-up-notification`,
         get_push: `${AYO_API}/api/principal/sequencing/list/notification`,
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,

@@ -12,8 +12,13 @@ export const environment = {
   cognito_login_url: 'https://ayo-principal-dev.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-dev&redirect_uri=https://hms.dev.src.id/login&response_type=CODE&client_id=1oe00f63c64c3lpseof1bgcuah&scope=aws.cognito.signin.user.admin email openid phone profile'
 };
 
-export const serviceServer = (server) => {
-  return `https://${server}.ayo-micro.dxtr.asia`;
+// export const serviceServer = (server) => {
+//   return `https://${server}.ayo-micro.dxtr.asia`;
+// }
+export const serviceServer = (server, paths = [], env='ayo-micro') => {
+  let path = (paths.length) ? `${paths.join('.')}.` : '';
+  let _env = (env) ? `${env}.` : '';
+  return `https://${server}.${path}${_env}dxtr.asia`;
 }
 
 export const server = {
