@@ -400,7 +400,7 @@ export class NotificationCreateComponent {
 
     this.initAreaV2();
 
-    this.toggleSendAyo(false);
+    
     if (this.actionType === 'detail') {
       console.log('GET DETAILS');
       this.getDetails();
@@ -411,6 +411,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
@@ -2212,10 +2213,8 @@ export class NotificationCreateComponent {
       if(type == 'customer') {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
-        this.toggleSendAyo(send_ayo);
       } else {
         frm.controls['send_ayo'].setValue(true);
-        this.toggleSendAyo(true);
       }
       setTimeout(() => {
         /**
