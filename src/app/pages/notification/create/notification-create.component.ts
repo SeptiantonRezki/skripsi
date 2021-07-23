@@ -400,6 +400,7 @@ export class NotificationCreateComponent {
 
     this.initAreaV2();
 
+    this.toggleSendAyo(false);
     if (this.actionType === 'detail') {
       console.log('GET DETAILS');
       this.getDetails();
