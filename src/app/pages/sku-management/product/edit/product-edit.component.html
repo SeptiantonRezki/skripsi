@@ -466,6 +466,24 @@
                 </mat-tab><!--/ EOC GEOTREE TAB -->
 
                 <mat-tab label="Special Rate" formGroupName="special_rate">
+                  <div class="" style="margin-bottom: 20px;" *ngIf="!formProductGroup.get('special_rate')['controls']['rates']['controls'].length && formProductGroup.get('is_private_label').value && !isDetail">
+                    <div>
+                      
+                      <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="50">
+                          <!-- <h3 class="">Rate {{i+1}}</h3> -->
+                        </div>
+                        <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                            
+                            <button mat-raised-button type="button" (click)="addRates(i)">
+                              <mat-icon>add</mat-icon>
+                            </button>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
                   
                   <div class="" style="margin-bottom: 20px;" formArrayName="rates" *ngFor="let rate of formProductGroup.get('special_rate')['controls']['rates']['controls']; let i = index;">
                     
@@ -482,7 +500,7 @@
                           </button>
                           <button mat-raised-button
                             color="primary" type="button" (click)="removeRates(i)"
-                            [disabled]="formProductGroup.get('special_rate')['controls']['rates']['controls'].length === 1 || isDetail">
+                            [disabled]="isDetail">
                             <mat-icon>delete</mat-icon>
                           </button>
                         </div>
