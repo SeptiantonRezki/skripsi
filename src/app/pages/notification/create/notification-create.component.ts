@@ -59,7 +59,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: "Semua", value: "all" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }];
   listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
@@ -1831,7 +1831,7 @@ export class NotificationCreateComponent {
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value;
       if(age === '18+') age = '18plus';
-      else if(age === '18-') age = '18-';
+      else if(age === '18-') age = '18min';
       else age = 'all';
 
       this.pagination['age'] = age;
@@ -2075,6 +2075,17 @@ export class NotificationCreateComponent {
   isTargetAudience(event) {
     if (event.checked) this.getAudience();
   }
+  sendAYOChange(event) {
+    this.toggleSendAyo(event.checked);
+  }
+
+  toggleSendAyo(val){
+    if(val) {
+      this.listAge.push({ name: "Semua", value: "all" });
+    } else {
+      this.listAge = this.listAge.filter(option => option.name !== 'Semua');
+    }
+  }
 
   async export() {
     if (this.audienceSelected.length === 0) {
@@ -2198,9 +2209,12 @@ export class NotificationCreateComponent {
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       if(type == 'customer') {
-        frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 0 || send_sfmc == '0');
+        let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
+        frm.controls['send_ayo'].setValue(send_ayo);
+        this.toggleSendAyo(send_ayo);
       } else {
         frm.controls['send_ayo'].setValue(true);
+        this.toggleSendAyo(true);
       }
       setTimeout(() => {
         /**
