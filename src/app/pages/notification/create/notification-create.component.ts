@@ -1227,6 +1227,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(false);
     }
     console.log(this.formNotification.value.user_group);
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
   }
 
   async submit() {
@@ -2083,9 +2084,11 @@ export class NotificationCreateComponent {
 
   toggleSendAyo(val){
     if(val) {
-      this.listAge.push({ name: "Semua", value: "all" });
+      if(!this.listAge.find(option => option.value == 'all')) {
+        this.listAge.push({ name: "Semua", value: "all" });
+      }
     } else {
-      this.listAge = this.listAge.filter(option => option.name !== 'Semua');
+      this.listAge = this.listAge.filter(option => option.value !== 'all');
     }
   }
 
