@@ -2100,7 +2100,15 @@ export class NotificationCreateComponent {
     this.dataService.showLoading(true);
     let body = this.audienceSelected;
     let age = null
-    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+    if (this.formNotification.get("user_group").value === 'customer') {
+      if(this.formNotification.get("age").value === "18+") {
+        age = "18plus";
+      } else if(this.formNotification.get("age").value === '18-') {
+        age = "18min";
+      } else {
+        age = null;
+      }
+    }
     else {
       if (age) age = null
     }
