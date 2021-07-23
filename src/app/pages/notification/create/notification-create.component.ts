@@ -2107,7 +2107,7 @@ export class NotificationCreateComponent {
     let body = this.audienceSelected;
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') {
-      let age = this.formNotification.get("age").value;
+      age = this.formNotification.get("age").value;
       if(this.formNotification.get('send_ayo').value) {
         if(age === '18+') age = '18plus';
         else if(age === '18-') age = '18min';
