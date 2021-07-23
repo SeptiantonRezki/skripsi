@@ -1833,9 +1833,15 @@ export class NotificationCreateComponent {
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value;
-      if(age === '18+') age = '18plus';
-      else if(age === '18-') age = '18min';
-      else age = 'all';
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
+      } else {
+        if(age === '18+') age = '18plus';
+        else age = '18min';
+      }
+      
 
       this.pagination['age'] = age;
       this.pagination['verification'] = this.formNotification.get('verification').value;
@@ -2101,16 +2107,18 @@ export class NotificationCreateComponent {
     let body = this.audienceSelected;
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') {
-      if(this.formNotification.get("age").value === "18+") {
-        age = "18plus";
-      } else if(this.formNotification.get("age").value === '18-') {
-        age = "18min";
+      let age = this.formNotification.get("age").value;
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
       } else {
-        age = null;
+        if(age === '18+') age = '18plus';
+        else age = '18min';
       }
     }
     else {
-      if (age) age = null
+      if (age) age = null;
     }
     try {
       const response = await this.notificationService.exportPushNotifAudience({ selected: body, audience: this.formNotification.get("user_group").value, age: age }).toPromise();
