@@ -18,6 +18,11 @@ export const environment = {
 export const serviceServer = (server) => {
   return `https://${server}.ayo-micro.dxtr.asia`;
 }
+// export const serviceServer = (server, paths = [], env='ayo-micro') => {
+//   let path = (paths.length) ? `${paths.join('.')}.` : '';
+//   let _env = (env) ? `${env}.` : '';
+//   return `https://${server}.${path}${_env}dxtr.asia`;
+// }
 
 export const server = {
   user: 'user',
@@ -35,4 +40,5 @@ export const server = {
   order: 'order',
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
-}
+  export: 'export',
+};

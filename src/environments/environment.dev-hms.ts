@@ -17,6 +17,11 @@ export const environment = {
 export const serviceServer = (server) => {
   return `https://${server}.api.dev.src.id`;
 }
+// export const serviceServer = (server, paths = ['api'], env='dev') => {
+//   let path = (paths.length) ? `${paths.join('.')}.` : '';
+//   let _env = (env) ? `${env}.` : '';
+//   return `https://${server}.${path}${_env}src.id`;
+// }
 
 export const server = {
   user: "users",
@@ -35,4 +40,5 @@ export const server = {
   bora: "bora",
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
+  export: 'export',
 }

@@ -18,6 +18,12 @@ export const serviceServer = (server) => {
   return `https://${server}.api.src.id`;
 }
 
+// export const serviceServer = (server, paths = ['api'], env=null) => {
+//   let path = (paths.length) ? `${paths.join('.')}.` : '';
+//   let _env = (env) ? `${env}.` : '';
+//   return `https://${server}.${path}${_env}src.id`;
+// }
+
 export const server = {
   user: "users",
   business: "businesses",
@@ -34,4 +40,5 @@ export const server = {
   order: "order",
   orderCashier: 'cashier-order',
   productCashier: "cashier-product",
+  export: 'export',
 }
