@@ -106,6 +106,8 @@ export class ProductEditComponent {
   productPrices: any;
   selectedWs: any = [];
 
+  SPECIAL_RATE_TAB: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
