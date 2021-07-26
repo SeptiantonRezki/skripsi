@@ -59,7 +59,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: "Semua", value: "all" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }];
   listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
@@ -400,6 +400,7 @@ export class NotificationCreateComponent {
 
     this.initAreaV2();
 
+    
     if (this.actionType === 'detail') {
       console.log('GET DETAILS');
       this.getDetails();
@@ -410,6 +411,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
@@ -1225,6 +1227,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(false);
     }
     console.log(this.formNotification.value.user_group);
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
   }
 
   async submit() {
@@ -1830,9 +1833,15 @@ export class NotificationCreateComponent {
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value;
-      if(age === '18+') age = '18plus';
-      else if(age === '18-') age = '18-';
-      else age = 'all';
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
+      } else {
+        if(age === '18+') age = '18plus';
+        else age = '18min';
+      }
+      
 
       this.pagination['age'] = age;
       this.pagination['verification'] = this.formNotification.get('verification').value;
@@ -2075,6 +2084,19 @@ export class NotificationCreateComponent {
   isTargetAudience(event) {
     if (event.checked) this.getAudience();
   }
+  sendAYOChange(event) {
+    this.toggleSendAyo(event.checked);
+  }
+
+  toggleSendAyo(val){
+    if(val) {
+      if(!this.listAge.find(option => option.value == 'all')) {
+        this.listAge.push({ name: "Semua", value: "all" });
+      }
+    } else {
+      this.listAge = this.listAge.filter(option => option.value !== 'all');
+    }
+  }
 
   async export() {
     if (this.audienceSelected.length === 0) {
@@ -2084,9 +2106,19 @@ export class NotificationCreateComponent {
     this.dataService.showLoading(true);
     let body = this.audienceSelected;
     let age = null
-    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+    if (this.formNotification.get("user_group").value === 'customer') {
+      age = this.formNotification.get("age").value;
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
+      } else {
+        if(age === '18+') age = '18plus';
+        else age = '18min';
+      }
+    }
     else {
-      if (age) age = null
+      if (age) age = null;
     }
     try {
       const response = await this.notificationService.exportPushNotifAudience({ selected: body, audience: this.formNotification.get("user_group").value, age: age }).toPromise();
@@ -2198,7 +2230,8 @@ export class NotificationCreateComponent {
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       if(type == 'customer') {
-        frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 0 || send_sfmc == '0');
+        let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
+        frm.controls['send_ayo'].setValue(send_ayo);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
