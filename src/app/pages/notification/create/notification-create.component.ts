@@ -1360,9 +1360,10 @@ export class NotificationCreateComponent {
 
     let recurrenceBody: { [key: string]: any; };
 
+    body['age'] = this.formNotification.get("age").value;
+    
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
-      body['age'] = this.formNotification.get("age").value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
       if(body.send_sfmc == '0') {
         body['employee_filter'] = this.formNotification.get('employee_filter').value;
