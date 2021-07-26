@@ -1441,6 +1441,7 @@ export class NotificationCreateComponent {
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
             });
@@ -1502,6 +1503,7 @@ export class NotificationCreateComponent {
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
             bodyVideo.append('target_audience', '1');
