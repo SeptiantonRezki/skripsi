@@ -1360,9 +1360,10 @@ export class NotificationCreateComponent {
 
     let recurrenceBody: { [key: string]: any; };
 
+    body['age'] = this.formNotification.get("age").value;
+    
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
-      body['age'] = this.formNotification.get("age").value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
       if(body.send_sfmc == '0') {
         body['employee_filter'] = this.formNotification.get('employee_filter').value;
@@ -1440,6 +1441,7 @@ export class NotificationCreateComponent {
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
             });
@@ -1501,6 +1503,7 @@ export class NotificationCreateComponent {
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
             bodyVideo.append('target_audience', '1');
@@ -2223,7 +2226,9 @@ export class NotificationCreateComponent {
       frm.controls['user_group'].setValue(type);
       frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
       frm.controls['employee_filter'].setValue(employee_filter ? employee_filter: 'all');
-      frm.controls['age'].setValue(age);
+      if(age) {
+        frm.controls['age'].setValue(age);
+      }
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
       frm.controls['static_page_body'].setValue(static_page_body);
