@@ -465,7 +465,7 @@
                   
                 </mat-tab><!--/ EOC GEOTREE TAB -->
 
-                <mat-tab label="Special Rate" formGroupName="special_rate">
+                <mat-tab label="Special Rate" formGroupName="special_rate" *ngIf="SPECIAL_RATE_TAB">
                   <div class="" style="margin-bottom: 20px;" *ngIf="!formProductGroup.get('special_rate')['controls']['rates']['controls'].length && formProductGroup.get('is_private_label').value && !isDetail">
                     <div>
                       
