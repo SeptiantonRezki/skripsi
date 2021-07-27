@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, Observable } from 'rxjs';
@@ -30,7 +30,6 @@ export class PanelPartnershipIndexComponent {
   endPoint: Endpoint = new Endpoint();
   offsetPagination: any;
 
-  @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -125,7 +124,6 @@ export class PanelPartnershipIndexComponent {
             this.rows_copy = res.data.data.map((item: any) => ({ ...item }));
             this.onLoad = false;
             this.loadingIndicator = false;
-            console.log('rows => ', this.rows);
           }
         } else {
           Page.renderPagination(this.pagination, res.data);
@@ -230,50 +228,6 @@ export class PanelPartnershipIndexComponent {
       this.getList();
       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
     });
-  }
-
-  reqDownloadCondition(row): any {
-    let status = { request: false, download: false };
-    switch (row.status_export) {
-      case "unprocessed":
-        if (row.status_scheduler === 'draft') {
-          status = { request: false, download: false };
-        } else if (row.status_scheduler === 'publish') {
-          status = { request: true, download: false };
-        }
-        break;
-      case "running":
-        status = { request: false, download: false };
-        break;
-      case "done":
-        if (row.download_url) {
-          status = { request: this.pastDate(row.last_request) ? true : false, download: true };
-        } else {
-          status = { request: false, download: false };
-        }
-        break;
-    }
-    return status;
-  }
-
-  pastDate(lastDate) {
-    if (!lastDate) return false;
-
-    lastDate = new Date(lastDate);
-    let now = new Date();
-    if (now.setHours(0, 0, 0, 0) - lastDate.setHours(0, 0, 0, 0) > 1) {
-      return true;
-    }
-    return false;
-  }
-
-  async downloadFile(item) {
-    this.dataService.showLoading(true);
-    setTimeout(() => {
-      this.downloadLink.nativeElement.href = item.download_url;
-      this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-    }, 1000);
   }
 
 }

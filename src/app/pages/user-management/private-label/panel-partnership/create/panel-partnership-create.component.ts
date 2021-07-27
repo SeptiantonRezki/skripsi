@@ -76,7 +76,6 @@ export class PanelPartnershipCreateComponent {
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
-  selectedTab: number;
 
   @HostListener("window:beforeunload")
   canDeactivate(): Observable<boolean> | boolean {
@@ -151,10 +150,8 @@ export class PanelPartnershipCreateComponent {
     this.createForm = this.formBuilder.group({
       namaSupplier: ["", Validators.required],
       status: ["", Validators.required],
-      startDateRegistration: ["", Validators.required],
-      endDateRegistration: ["", Validators.required],
-      startDateProgram: ["", Validators.required],
-      endDateProgram: ["", Validators.required],
+      startDate: ["", Validators.required],
+      endDate: ["", Validators.required],
       title: ["", Validators.required],
       detail: ["", Validators.required],
       business_checkbox: true,
@@ -1186,14 +1183,6 @@ export class PanelPartnershipCreateComponent {
           });
       }
     });
-  }
-
-  setSelectedTab(tab: number) {
-    this.selectedTab = tab;
-  }
-
-  onChangeTab(event: any) {
-    this.selectedTab = event.index;
   }
 
 

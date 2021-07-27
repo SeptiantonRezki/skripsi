@@ -1,5 +1,5 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Pengaturan Pendaftaran'">
+  <page-content-header [contentTitle]="'Panel Partnership'">
     <button style="width: 170px" [routerLink]="['/user-management', 'panel-partnership','create']" mat-raised-button type="button">
       <mat-icon>add</mat-icon> TAMBAH
     </button>
@@ -8,7 +8,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Pengaturan Pendaftaran Partnership</h2>
+        <h2 class="pl-8">Daftar Panel Partnership</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -36,28 +36,18 @@
             <span class="row-total_audience">{{row.total_audience}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Mulai Pendaftaran" prop="start_date">
+        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-start_date">{{row.start_date}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Berakhir Pendaftaran" prop="end_date">
+        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-end_date">{{row.end_date}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Mulai Program" prop="start_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-start_date">{{row.start_date}}</span>
-          </ng-template>
+        <ngx-datatable-column [width]="1">
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Berakhir Program" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-end_date">{{row.end_date}}</span>
-          </ng-template>
-        </ngx-datatable-column>
-        <!-- <ngx-datatable-column [width]="1">
-        </ngx-datatable-column> -->
         <ngx-datatable-column name="Status Program" prop="status_program">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.status_program}}</span>
@@ -78,14 +68,9 @@
             <!-- </span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="150" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="100" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="button-row" style="margin-left: -10px" fxLayout="row">
-              <button type="button" mat-icon-button color="" [disabled]="reqDownloadCondition(row)['download'] === false"
-                matTooltip="Eksport Trade Program" (click)="downloadFile(row)">
-                <mat-icon *ngIf="reqDownloadCondition(row)['download'] === true" class="orange-500-fg">save_alt</mat-icon>
-                <mat-icon *ngIf="reqDownloadCondition(row)['download'] === false" class="secondary-text">save_alt</mat-icon>
-              </button>
+            <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button color="primary" matTooltip="Edit" (click)="directEdit(row)" [disabled]="!permission?.ubah">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
