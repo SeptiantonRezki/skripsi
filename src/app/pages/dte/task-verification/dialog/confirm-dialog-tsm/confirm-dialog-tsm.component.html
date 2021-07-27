@@ -180,6 +180,8 @@
               <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)" />
               <span class="planogram-template-caption">Bukti Foto</span>
             </div>
+            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">Correct</div>
+            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">Incorrect</div>
           </div>
 
           <div class="item-question-img" *ngIf="item.type == 'stock_check_ir'" fxLayout="column"
@@ -211,8 +213,8 @@
               <span class="planogram-template-caption">Bukti Foto</span>
             </div>
             <!-- ambil correct/incorret dari dataSubmission.data.submissions -->
-            <div class="p-4 status-ir--green">Correct</div>
-            <div class="p-4 status-ir--red">Incorrect</div>
+            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">Correct</div>
+            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">Incorrect</div>
           </div>
 
           <div class="item-question-img"
