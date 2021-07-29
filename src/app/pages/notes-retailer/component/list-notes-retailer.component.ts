@@ -83,8 +83,8 @@ import {
     this.loadingIndicator = true;
     this.id = id;
     let data = {
-      titleDialog: "Hapus Objective",
-      captionDialog: "Apakah anda yakin untuk menghapus Objective ini ?",
+      titleDialog: "Hapus Notes",
+      captionDialog: "Apakah anda yakin untuk menghapus Notes ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };

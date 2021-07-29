@@ -87,7 +87,29 @@ import {
     this.dataService.setToStorage('kpi-group', param);
   }
 
-  delete(param?: any): void {
-    console.log(param)
+  delete(id) {
+    this.dataService.showLoading(true);
+    this.loadingIndicator = true;
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus KPI Group",
+      captionDialog: "Apakah anda yakin untuk menghapus KPI group ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+    this.dataService.showLoading(false);
+    this.loadingIndicator = false;
+    this.router.navigate(["kpisetting", "kpi-groups-list"]);
+  }
+
+  confirmDelete(id) {
+    this.kpiSettingService.delete(this.id).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.ngOnInit();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
+    });
   }
 }

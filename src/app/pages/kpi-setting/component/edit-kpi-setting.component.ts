@@ -134,6 +134,20 @@ export class EditKPISettingComponent implements OnInit {
     })
   }
 
+  moveUp(pos) {
+    let kpis = this.formKPI.controls['kpis'] as FormArray;
+    let kpi = kpis.at(pos);
+    kpis.removeAt(pos);
+    kpis.insert(pos-1, kpi);
+  }
+
+  moveDown(pos) {
+    let kpis = this.formKPI.controls['kpis'] as FormArray;
+    let kpi = kpis.at(pos);
+    kpis.removeAt(pos);
+    kpis.insert(pos+1, kpi);
+  }
+
   deleteKPI(pos) {
     let dialogData = {
       titleDialog: 'Hapus KPI',
@@ -178,11 +192,12 @@ export class EditKPISettingComponent implements OnInit {
   async submit() {
     if(this.formKPI.valid) {
       let kpis = this.formKPI.controls.kpis as FormArray;
-      let kpi_settings = kpis.value.map(kpi => {
+      let kpi_settings = kpis.value.map((kpi, idx) => {
         return {
           category: kpi.category,
           ...(kpi.brand && {brand_id: kpi.brand}),
           ...(kpi.parameter && {parameter_id: kpi.parameter}),
+          priority: idx + 1
         };
       })
       let body = {

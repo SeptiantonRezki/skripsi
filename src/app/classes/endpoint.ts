@@ -80,6 +80,7 @@ export class Endpoint {
         get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`,
         post: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`
       },
       masterKPI: {
         brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
