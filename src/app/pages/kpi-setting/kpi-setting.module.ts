@@ -53,7 +53,7 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { LightboxModule } from 'ngx-lightbox';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { EditKPISettingComponent } from './component/edit-kpi-setting.component';
-import {KPSListComponent} from './component/list-kps.component';
+import {KPIGroupsList} from './component/list-kpi-groups.component';
 
 export const customCurrencyMaskConfig = {
   align: 'left',
@@ -120,7 +120,7 @@ export const MY_FORMATS = {
   ],
   declarations: [
     EditKPISettingComponent,
-    KPSListComponent
+    KPIGroupsList
   ],
   exports: [
   ],

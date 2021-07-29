@@ -18,12 +18,21 @@ export class KPISettingService extends BaseService {
     const url = this.getUrl(this.namespace, 'get');
     return this.getApi(url, queryParams);
   }
+  getKPS(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_kps');
+    return this.getApi(url, queryParams);
+  }
   getById(context): Observable<any> {
     const url = this.getUrl(this.namespace, 'get_by_id', context);
     return this.getApi(url);
   }
 
-  put(body): Observable<any> {
+  create(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'post');
+    return this.postApi(url, body);
+  }
+
+  update(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'put');
     return this.putApi(url, body);
   }

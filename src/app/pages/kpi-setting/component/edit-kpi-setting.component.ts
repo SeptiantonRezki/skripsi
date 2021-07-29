@@ -20,7 +20,7 @@ import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 import * as _ from "underscore";
 import { environment } from "environments/environment";
 import { IdbService } from "app/services/idb.service";
-import {KPSModel} from 'app/pages/kpi-setting/kpi-setting.model';
+import {KPIGroupModel} from 'app/pages/kpi-setting/kpi-setting.model';
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import * as moment from 'moment';
 import { DialogService } from "app/services/dialog.service";
@@ -40,10 +40,12 @@ export class EditKPISettingComponent implements OnInit {
   indexDelete: any;
 
   private subscription: Subscription;
-  KPS: KPSModel;
+  KPIGroup: KPIGroupModel;
 
   loadingIndicator: Boolean;
   saveData: Boolean;
+
+  KPSList: any;
 
   categories = [
     'visit', 'brand', 'trade program', 'ecosystem'
@@ -69,7 +71,7 @@ export class EditKPISettingComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.subscription = this.route.params.subscribe((params) => {
       if (params['id']) {
         this.paramEdit = params['id'];
@@ -88,9 +90,8 @@ export class EditKPISettingComponent implements OnInit {
     })
 
     this.formKPI = this.formBuilder.group({
-      year: [''],
-      kps_number: ['this.KPS.kps_number'],
-      date: [''],
+      start_kps: [null, Validators.required],
+      end_kps: [null, Validators.required],
       kpis: this.formBuilder.array([], Validators.required)
     });
 
@@ -98,29 +99,18 @@ export class EditKPISettingComponent implements OnInit {
       commonFormValidator.parseFormChanged(this.formKPI, this.formdataErrors);
     })
 
-    this.formKPI.get('year').disable();
-    this.formKPI.get('kps_number').disable();
-    this.formKPI.get('date').disable();
+    this.KPSList = await this.kpiSettingService.getKPS(this.paramEdit).toPromise();
     
-    this.kpiSettingService.getById(this.paramEdit).subscribe(res => {
-      this.KPS = res;
-      // this.KPS =  this.dataService.getFromStorage('kps');
-      this.setDetail();
-    });
+    this.KPIGroup = await this.kpiSettingService.getById(this.paramEdit).toPromise();
+    this.setDetail();
   }
 
   setDetail() {
-    this.formKPI.controls['year'].setValue(this.KPS.year);
-    this.formKPI.controls['kps_number'].setValue(this.KPS.kps_number);
-
-    let startDate = moment(this.KPS.start_date).format('DD MMM YYYY');
-    let endDate = moment(this.KPS.end_date).format('DD MMM YYYY');
-    let dateStr = `${startDate} - ${endDate}`;
-
-    this.formKPI.controls['date'].setValue(dateStr);
+    this.formKPI.controls['start_kps'].setValue(this.KPIGroup.start_kps);
+    this.formKPI.controls['end_kps'].setValue(this.KPIGroup.end_kps);
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
-    for(let kpi_setting of this.KPS.kpi_settings){
+    for(let kpi_setting of this.KPIGroup.kpi_settings){
       let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
       let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
       kpis.push(this.formBuilder.group({
@@ -185,7 +175,7 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI.updateValueAndValidity();
   }
 
-  submit() {
+  async submit() {
     if(this.formKPI.valid) {
       let kpis = this.formKPI.controls.kpis as FormArray;
       let kpi_settings = kpis.value.map(kpi => {
@@ -197,16 +187,24 @@ export class EditKPISettingComponent implements OnInit {
       })
       let body = {
         id: this.paramEdit,
+        start_kps: this.formKPI.controls['start_kps'].value,
+        end_kps: this.formKPI.controls['end_kps'].value,
         kpi_settings
       };
-      
-      this.kpiSettingService.put(body).subscribe(res => {
-        if(res.status == 'success') {
-          this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-          this.router.navigate(["kpisetting", "kps-list"]);
-          window.localStorage.removeItem("kps");
-        }
-      });
+      let res;
+      if(!this.paramEdit) {
+        res = await this.kpiSettingService.create(body).toPromise();
+      }
+      else {
+        body.id = this.paramEdit;
+        res = await this.kpiSettingService.update(body).toPromise();
+      }
+
+      if(res.status == 'success') {
+        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+        this.router.navigate(["kpisetting", "kpi-groups-list"]);
+        window.localStorage.removeItem("kps");
+      }
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formKPI);

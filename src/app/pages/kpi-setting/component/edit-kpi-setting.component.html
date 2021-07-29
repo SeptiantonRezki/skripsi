@@ -7,22 +7,32 @@
       <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
         <form [formGroup]="formKPI">
           <div class="ayo-top px-24" fxLayout="row" fxLayoutAlign="space-between center">
-            <h3 class="font-weight-700">Edit KPI Setting</h3>
+            <h3 class="font-weight-700">Edit KPI Group</h3>
             <button
               mat-raised-button type="button" color="primary" (click)="addKPI()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
           <div class="ayo-middle pt-24" fxLayout="column">
-            <mat-form-field fxFlex="100" class="is-light px-24">
-              <input matInput placeholder="Tahun" type="text" formControlName="year">
+            <mat-form-field fxLayout="row wrap" class="is-light form-primary">
+              <mat-select placeholder="start" formControlName="start_kps">
+                <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.start_date  | date:'dd/MM/yyyy'}})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formKPI.controls['start_kps'].hasError('required') && formKPI.controls['start_kps'].touched">
+                Start KPS harus diisi
+              </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light px-24">
-              <input matInput placeholder="KPS" type="text" formControlName="kps_number">
+            <mat-form-field fxLayout="row wrap" class="is-light form-primary">
+              <mat-select placeholder="end" formControlName="end_kps">
+                <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.end_date  | date:'dd/MM/yyyy'}})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formKPI.controls['end_kps'].hasError('required') && formKPI.controls['end_kps'].touched">
+                End KPS harus diisi
+              </mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="100" class="is-light px-24">
-              <input matInput placeholder="Tanggal" type="text" formControlName="date">
-            </mat-form-field>
+            
             <div class="" formArrayName="kpis" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
               <div [formGroupName]="i">
                 <div class="mb-16 kpi" fxLayout="row" fxLayoutAlign="space-between center">

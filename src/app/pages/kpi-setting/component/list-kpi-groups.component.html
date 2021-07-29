@@ -6,32 +6,25 @@
   <div class="content p-24">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-        <h2 class="pl-8">Daftar KPS</h2>
+        <h2 class="pl-8">Daftar KPI Group</h2>
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
          [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Tahun" prop="year">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-year" >{{row.year}}</span>
+        <ngx-datatable-column name="Group ID" prop="id">
+          <ng-template ngx-datatable-cell-template let-row="row" let=-value="value">
+            <span class="row-id">{{row.id}}</span>
           </ng-template>
         </ngx-datatable-column>
-
-        <ngx-datatable-column name="KPS" prop="kps_number">
+        <ngx-datatable-column name="KPS Start" prop="start_kps">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-kps_number" >{{row.kps_number}}</span>
+            <span class="row-start-kps" >{{row.start_kps}} ({{row.start_date  | date:'dd/MM/yyyy'}})</span>
           </ng-template>
         </ngx-datatable-column>
-
-        <ngx-datatable-column [width]="90" name="Tanggal Mulai" prop="start_date">
+        <ngx-datatable-column name="KPS End" prop="end_kps">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.start_date | date:'dd/MM/yyyy'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column [width]="90" name="Tanggal Berakhir" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.end_date | date:'dd/MM/yyyy'}}
+            <span class="row-end-kps" >{{row.end_kps}} ({{row.end_date  | date:'dd/MM/yyyy'}})</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -39,8 +32,11 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)" [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
+              <button mat-icon-button color="" (click)="edit(row)" [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
                 <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" (click)="delete(row)">
+                <mat-icon class="secondary-text">delete</mat-icon>
               </button>
             </div>
           </ng-template>

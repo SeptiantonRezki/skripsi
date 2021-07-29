@@ -19,10 +19,10 @@ import {
   import { KPISettingService } from '../../../services/kpi-setting/kpi-setting.service';
 
   @Component({
-    selector: 'app-list-kps.component',
-    templateUrl: './list-kps.component.html'
+    selector: 'app-list-kpi-groups.component',
+    templateUrl: './list-kpi-groups.component.html'
   })
-  export class KPSListComponent implements OnInit {
+  export class KPIGroupsList implements OnInit {
     rows: any[];
     pagination: Page = new Page();
     offsetPagination: any;
@@ -82,8 +82,12 @@ import {
     });
   }
 
-  directEdit(param?: any): void {
+  edit(param?: any): void {
     this.rows = [];
-    this.dataService.setToStorage('kps', param);
+    this.dataService.setToStorage('kpi-group', param);
+  }
+
+  delete(param?: any): void {
+    console.log(param)
   }
 }
