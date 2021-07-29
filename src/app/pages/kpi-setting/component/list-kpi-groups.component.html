@@ -13,7 +13,7 @@
          [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column name="Group ID" prop="id">
-          <ng-template ngx-datatable-cell-template let-row="row" let=-value="value">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-id">{{row.id}}</span>
           </ng-template>
         </ngx-datatable-column>
