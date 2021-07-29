@@ -14,6 +14,10 @@ const routes: Routes = [
     }
   },
   {
+    path: 'kpi-setting-create',
+    component: EditKPISettingComponent
+  },
+  {
     path: 'kpi-setting-edit/:id',
     component: EditKPISettingComponent,
     data: {
