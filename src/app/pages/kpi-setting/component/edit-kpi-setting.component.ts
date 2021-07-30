@@ -693,7 +693,7 @@ export class EditKPISettingComponent implements OnInit {
       }
 
       if(areaIDs.length == 0) {
-        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        this.dialogService.openSnackBar({ message: "Silakan pilih minimal satu area!" });
         commonFormValidator.validateAllFields(this.formKPI);
         return;
       }
@@ -732,6 +732,9 @@ export class EditKPISettingComponent implements OnInit {
         this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
         commonFormValidator.validateAllFields(this.formKPI);
       }
+    } else {
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      commonFormValidator.validateAllFields(this.formKPI);
     }
   }
 }
