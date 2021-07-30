@@ -237,6 +237,7 @@ export class EditKPISettingComponent implements OnInit {
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()["areas"] || [];
+    console.log('initArea', areas);
     this.geotreeService.getFilter2Geotree(areas);
     let sameArea = this.geotreeService.diffLevelStarted;
     let areasDisabled = this.geotreeService.disableArea(sameArea);
@@ -295,13 +296,8 @@ export class EditKPISettingComponent implements OnInit {
           this.list[this.parseArea(level.type)] = isExist
             ? [...this.list[this.parseArea(level.type)]]
             : [...this.list[this.parseArea(level.type)], level];
-          console.log(
-            "area you choose",
-            level.type,
-            this.parseArea(level.type),
-            this.geotreeService.getNextLevel(this.parseArea(level.type))
-          );
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled)
+          
+           if (!this.formFilter.controls[this.parseArea(level.type)].disabled)
             this.getAudienceAreaV2(
               this.geotreeService.getNextLevel(this.parseArea(level.type)),
               level.id
@@ -680,46 +676,62 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   async submit() {
-    // if(this.formKPI.valid) {
+    if(this.formKPI.valid) {
       let areaSelected = Object.entries(this.formFilter.getRawValue())
         .map(([key, value]) => ({ key, value }))
         .filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    
-      console.log("rawValue", this.formFilter.getRawValue());
+        
       console.log("areaSelected", areaSelected);
 
-    //   let kpis = this.formKPI.controls.kpis as FormArray;
-    //   let kpi_settings = kpis.value.map((kpi, idx) => {
-    //     return {
-    //       category: kpi.category,
-    //       ...(kpi.brand && {brand_id: kpi.brand}),
-    //       ...(kpi.parameter && {parameter_id: kpi.parameter}),
-    //       priority: idx + 1
-    //     };
-    //   })
-    //   let body = {
-    //     id: this.paramEdit,
-    //     start_kps: this.formKPI.controls['start_kps'].value,
-    //     end_kps: this.formKPI.controls['end_kps'].value,
-    //     kpi_settings
-    //   };
-    //   let res;
-    //   if(!this.paramEdit) {
-    //     res = await this.kpiSettingService.create(body).toPromise();
-    //   }
-    //   else {
-    //     body.id = this.paramEdit;
-    //     res = await this.kpiSettingService.update(body).toPromise();
-    //   }
 
-    //   if(res.status == 'success') {
-    //     this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
-    //     this.router.navigate(["kpisetting", "kpi-groups-list"]);
-    //     window.localStorage.removeItem("kps");
-    //   }
-    // } else {
-    //   this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-    //   commonFormValidator.validateAllFields(this.formKPI);
-    // }
+      let lastAreaSelected = areaSelected[areaSelected.length - 1];
+      let areaIDs: any;
+      if(typeof lastAreaSelected.value == 'number') {
+        areaIDs = [lastAreaSelected.value];
+      } else {
+        areaIDs = lastAreaSelected.value;
+      }
+
+      if(areaIDs.length == 0) {
+        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        commonFormValidator.validateAllFields(this.formKPI);
+        return;
+      }
+
+      let kpis = this.formKPI.controls.kpis as FormArray;
+      let kpi_settings = kpis.value.map((kpi, idx) => {
+        return {
+          category: kpi.category,
+          ...(kpi.brand && {brand_id: kpi.brand}),
+          ...(kpi.parameter && {parameter_id: kpi.parameter}),
+          priority: idx + 1
+        };
+      })
+      let body = {
+        id: this.paramEdit,
+        start_kps: this.formKPI.controls['start_kps'].value,
+        end_kps: this.formKPI.controls['end_kps'].value,
+        kpi_settings,
+        areas: areaIDs
+      };
+      let res;
+      if(!this.paramEdit) {
+        res = await this.kpiSettingService.create(body).toPromise();
+      }
+      else {
+        body.id = this.paramEdit;
+        res = await this.kpiSettingService.update(body).toPromise();
+      }
+
+      if(res.status == 'success') {
+        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+        this.router.navigate(["kpisetting", "kpi-groups-list"]);
+        window.localStorage.removeItem("kps");
+      }
+      else {
+        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        commonFormValidator.validateAllFields(this.formKPI);
+      }
+    }
   }
 }
