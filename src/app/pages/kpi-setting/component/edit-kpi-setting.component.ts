@@ -76,6 +76,16 @@ export class EditKPISettingComponent implements OnInit {
   area_id_list: any = [];
   lastLevel: any;
 
+  levels: {
+    national: 1,
+    zone: 2,
+    region: 3,
+    area: 4,
+    salespoint: 5,
+    district: 6,
+    territory: 7
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -293,9 +303,12 @@ export class EditKPISettingComponent implements OnInit {
             (ls) => ls.id === level.id
           );
           level["area_type"] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist
-            ? [...this.list[this.parseArea(level.type)]]
-            : [...this.list[this.parseArea(level.type)], level];
+
+          if(isExist) {
+            this.list[this.parseArea(level.type)] = [...this.list[this.parseArea(level.type)]];
+          } else {
+            this.list[this.parseArea(level.type)] = [...this.list[this.parseArea(level.type)], level];
+          }
           
            if (!this.formFilter.controls[this.parseArea(level.type)].disabled)
             this.getAudienceAreaV2(
@@ -692,6 +705,8 @@ export class EditKPISettingComponent implements OnInit {
         areaIDs = lastAreaSelected.value;
       }
 
+      let level = this.levels[lastAreaSelected.key];
+
       if(areaIDs.length == 0) {
         this.dialogService.openSnackBar({ message: "Silakan pilih minimal satu area!" });
         commonFormValidator.validateAllFields(this.formKPI);
@@ -712,6 +727,7 @@ export class EditKPISettingComponent implements OnInit {
         start_kps: this.formKPI.controls['start_kps'].value,
         end_kps: this.formKPI.controls['end_kps'].value,
         kpi_settings,
+        area_level: level,
         areas: areaIDs
       };
       let res;
