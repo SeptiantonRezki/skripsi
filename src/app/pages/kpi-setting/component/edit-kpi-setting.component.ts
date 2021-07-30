@@ -67,7 +67,6 @@ export class EditKPISettingComponent implements OnInit {
   dialogRef: any;
 
   listLevelArea: any[];
-  private subscription: Subscription;
   list: any;
   areaFromLogin;
   formFilter: FormGroup;
