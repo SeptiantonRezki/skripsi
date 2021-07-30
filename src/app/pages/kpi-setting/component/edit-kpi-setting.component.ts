@@ -680,7 +680,7 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   async submit() {
-    if(this.formKPI.valid) {
+    // if(this.formKPI.valid) {
       let areaSelected = Object.entries(this.formFilter.getRawValue())
         .map(([key, value]) => ({ key, value }))
         .filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
@@ -720,6 +720,6 @@ export class EditKPISettingComponent implements OnInit {
     // } else {
     //   this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
     //   commonFormValidator.validateAllFields(this.formKPI);
-    }
+    // }
   }
 }
