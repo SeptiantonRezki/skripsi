@@ -76,15 +76,7 @@ export class EditKPISettingComponent implements OnInit {
   area_id_list: any = [];
   lastLevel: any;
 
-  levels: {
-    national: 1,
-    zone: 2,
-    region: 3,
-    area: 4,
-    salespoint: 5,
-    district: 6,
-    territory: 7
-  }
+  levels: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -120,6 +112,16 @@ export class EditKPISettingComponent implements OnInit {
       salespoint: [],
       district: [],
       territory: [],
+    };
+
+    this.levels = {
+      national: 1,
+      zone: 2,
+      region: 3,
+      area: 4,
+      salespoint: 5,
+      district: 6,
+      territory: 7
     };
 
     this.area = dataService.getDecryptedProfile()["area_type"];
