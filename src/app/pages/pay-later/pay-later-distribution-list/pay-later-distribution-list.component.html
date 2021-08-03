@@ -1,0 +1,87 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Distribution List'">
+    <div class="button-row" fxLayout="row">
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+
+    <div class="table-wrapper">
+
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+
+        <form fxFlex="100" *ngIf="{results: filteredOptions | async} as obs">
+
+          <mat-form-field class="is-light form-primary" [style.width.%]="30">
+            <input type="text" placeholder="Cari Nama Admin Principal" matInput [formControl]="distributionControl"
+              [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getOptionText">
+              <mat-option disabled class="loading" *ngIf="loadingSearch" fxLayoutAlign="center center">
+                <mat-spinner diameter="35"></mat-spinner>
+              </mat-option>
+              <mat-option disabled *ngIf="obs.results?.length === 0 && !loadingSearch">
+                Tidak ada hasil
+              </mat-option>
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option[FILTER_BY]}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <button mat-button matSuffix mat-raised-button color="primary" class="add-btn" aria-label="add"
+            (click)="addDistribution(distributionControl.value)" [disabled]="!distributionControl.value?.id">
+            <mat-icon>add</mat-icon>TAMBAH
+          </button>
+
+        </form>
+        <div>
+
+        </div>
+      </div>
+
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Nama Admin Principal" prop="paylater_company_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Email" prop="paylater_company_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Last Updated At" prop="paylater_company_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+
+              <button mat-icon-button color="primary" (click)="deleteDistribution(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable>
+
+    </div>
+
+  </div>
+
+</div>
