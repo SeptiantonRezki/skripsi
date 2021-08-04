@@ -10,7 +10,7 @@
 
     <div class="table-wrapper">
 
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8" *ngIf="permission?.buat">
 
         <form fxFlex="100" *ngIf="{results: filteredOptions | async} as obs">
 
@@ -35,9 +35,6 @@
           </button>
 
         </form>
-        <div>
-
-        </div>
       </div>
 
       <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
@@ -45,21 +42,21 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Admin Principal" prop="paylater_company_name">
+        <ngx-datatable-column name="Nama Admin Principal" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+            <span class="row-name">{{row.fullname}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Email" prop="paylater_company_name">
+        <ngx-datatable-column name="Email" prop="email">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+            <span class="row-name">{{row.email}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Last Updated At" prop="paylater_company_name">
+        <ngx-datatable-column name="Last Updated At" prop="updated_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.paylater_company_name}}</span>
+            <span class="row-name">{{row.updated_at}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -70,8 +67,12 @@
             style="justify-content: center !important">
             <div class="button-row pl-8">
 
-              <button mat-icon-button color="primary" (click)="deleteDistribution(row.id)">
-                <mat-icon>delete</mat-icon>
+              <button mat-icon-button color="primary" (click)="deleteDistribution(row.id)" [disabled]="onDeleting==row.id || !permission?.hapus" fxLayoutAlign="center center">
+                <!-- <mat-spinner  diameter="10"></mat-spinner> -->
+                <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
+                <ng-template #showIcon>
+                  <mat-icon>delete</mat-icon>
+                </ng-template>
               </button>
               
             </div>

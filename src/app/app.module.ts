@@ -112,6 +112,7 @@ import { StorageHelper } from "./helper/storage.helper";
 import { CoinAdjustmentApprovalService } from "./services/dte/coin-adjustment-approval.service";
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
 import { CoinDisburstmentService } from "./services/dte/coin-disburstment.service";
+import { PayLaterDistributionListService } from "./services/pay-later/pay-later-distribution-list.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -230,6 +231,7 @@ const config = {
     PayLaterCompanyService,
     PayLaterPanelService,
     PayLaterDeactivateService,
+    PayLaterDistributionListService,
     VirtualAccountCompanyService,
     VirtualAccountBinService,
     VirtualAccountPanelService,

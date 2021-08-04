@@ -95,11 +95,12 @@ const routes: Routes = [
     }
   },
   {
-    path: "distribution-list",
+    path: "distribution",
     component: PayLaterDistributionListComponent,
     data: {
       breadcrumbs: brConfig.paylater.distributionlist.index
-    }
+    },
+    canActivate: [PageGuard]
   },
 ];
 

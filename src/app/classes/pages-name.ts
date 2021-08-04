@@ -122,6 +122,7 @@ export class PagesName {
       "/settings/feature-level/create": "principal.feature_level.buat",
       "/settings/feature-level/edit": "principal.feature_level.ubah",
       "/settings/feature-level/detail": "principal.feature_level.lihat",
+      "/paylater/distribution": "principal.paylater_distribution.lihat",
     }
     return PAGES[name];
   }
