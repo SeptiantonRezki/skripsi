@@ -189,7 +189,7 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select placeholder="Brand" formControlName="brand">
-                      <mat-option *ngFor="let item of brands" [value]="item.id">{{ item.code }}
+                      <mat-option *ngFor="let item of brands" [value]="item.code">{{ item.code }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
@@ -198,11 +198,11 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'" fxLayout="row wrap" class="is-light form-primary">
                     <mat-select *ngIf="kpi.get('category').value == 'brand'" placeholder="Parameter" formControlName="parameter">
-                      <mat-option *ngFor="let item of brand_parameters" [value]="item.id">{{ item.parameter }}
+                      <mat-option *ngFor="let item of brand_parameters" [value]="item.parameter">{{ item.parameter }}
                       </mat-option>
                     </mat-select>
                     <mat-select *ngIf="kpi.get('category').value == 'trade program'" placeholder="Parameter" formControlName="parameter">
-                      <mat-option *ngFor="let item of trade_program_objectives" [value]="item.id">{{ item.objective_description }}
+                      <mat-option *ngFor="let item of trade_program_objectives" [value]="item.objective_description">{{ item.objective_description }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">

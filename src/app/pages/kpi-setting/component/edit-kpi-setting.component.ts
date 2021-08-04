@@ -214,8 +214,8 @@ export class EditKPISettingComponent implements OnInit {
       let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
       kpis.push(this.formBuilder.group({
         category: [kpi_setting.category, Validators.required],
-        brand: [kpi_setting.brand_id, ...(brandRequired && [Validators.required])],
-        parameter: [kpi_setting.parameter_id, ...(parameterRequired && [Validators.required])]
+        brand: [kpi_setting.brand_code, ...(brandRequired && [Validators.required])],
+        parameter: [kpi_setting.parameter, ...(parameterRequired && [Validators.required])]
       }))
     }
   }
@@ -719,8 +719,8 @@ export class EditKPISettingComponent implements OnInit {
       let kpi_settings = kpis.value.map((kpi, idx) => {
         return {
           category: kpi.category,
-          ...(kpi.brand && {brand_id: kpi.brand}),
-          ...(kpi.parameter && {parameter_id: kpi.parameter}),
+          ...(kpi.brand && {brand_code: kpi.brand}),
+          ...(kpi.parameter && {parameter: kpi.parameter}),
           priority: idx + 1
         };
       })
