@@ -38,7 +38,7 @@
                   Status</mat-slide-toggle>
                 </h3>
             </div>
-            <form [formGroup]="formFilter" autoComplete="off" [disabled]="!enableEdit">
+            <form [formGroup]="formFilter" autoComplete="off" *ngIf="enableEdit">
               <div
                 fxLayout="row wrap"
                 fxLayoutAlign="space-between stretch"
