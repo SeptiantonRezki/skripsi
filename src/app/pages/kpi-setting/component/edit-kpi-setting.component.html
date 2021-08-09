@@ -32,11 +32,15 @@
                 End KPS harus diisi
               </mat-error>
             </mat-form-field>
-            <div fxLayout="row">
+            <div fxLayout="row" *ngIf="enableEdit">
               <h3>
-                <mat-slide-toggle formControlName="status" [disabled]="!enableEdit">
-                  Status</mat-slide-toggle>
-                </h3>
+                <mat-slide-toggle formControlName="status">
+                  Status
+                </mat-slide-toggle>
+              </h3>
+            </div>
+            <div fxLayout="row" *ngIf="!enableEdit">
+              <h3>Status: <span class="text-boxed mat-green-700-bg">active</span></h3>
             </div>
             <form [formGroup]="formFilter" autoComplete="off" *ngIf="enableEdit">
               <div
@@ -173,7 +177,7 @@
                       <mat-icon>arrow_downward</mat-icon>
                     </button>
                     <button
-                      *ngIf="enableEdit && formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1)"
+                      *ngIf="enableEdit && (formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1))"
                       mat-raised-button type="button" (click)="addKPI()">
                       <mat-icon>add</mat-icon>
                     </button>
