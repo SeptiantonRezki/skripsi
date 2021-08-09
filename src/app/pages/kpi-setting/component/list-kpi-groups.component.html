@@ -38,7 +38,12 @@
             <span class="row-areas" >{{row.areas.join(',')}}</span>
           </ng-template>
         </ngx-datatable-column>
-
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span *ngIf="row.status === 'inactive'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
+            <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
