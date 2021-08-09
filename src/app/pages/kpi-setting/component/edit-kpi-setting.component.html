@@ -34,7 +34,7 @@
             </mat-form-field>
             <div fxLayout="row">
               <h3>
-                <mat-slide-toggle [(ngModel)]="switchStatus" name="switchStatus" [readonly]="!enableEdit">
+                <mat-slide-toggle [(ngModel)]="switchStatus" name="switchStatus" [disabled]="!enableEdit">
                   Status</mat-slide-toggle>
                 </h3>
             </div>
