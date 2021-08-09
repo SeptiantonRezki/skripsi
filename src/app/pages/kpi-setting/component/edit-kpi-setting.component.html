@@ -15,7 +15,7 @@
           </div>
           <div class="ayo-middle pt-24" fxLayout="column">
             <mat-form-field fxLayout="row wrap" class="is-light form-primary">
-              <mat-select placeholder="Start KPS" formControlName="start_kps" [readonly]="!enableEdit">
+              <mat-select placeholder="Start KPS" formControlName="start_kps" [disabled]="!enableEdit">
                 <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.start_date  | date:'dd/MM/yyyy'}})
                 </mat-option>
               </mat-select>
@@ -24,7 +24,7 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field fxLayout="row wrap" class="is-light form-primary">
-              <mat-select placeholder="End KPS" formControlName="end_kps" [readonly]="!enableEdit">
+              <mat-select placeholder="End KPS" formControlName="end_kps" [disabled]="!enableEdit">
                 <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.end_date  | date:'dd/MM/yyyy'}})
                 </mat-option>
               </mat-select>
@@ -38,7 +38,7 @@
                   Status</mat-slide-toggle>
                 </h3>
             </div>
-            <form [formGroup]="formFilter" autoComplete="off">
+            <form [formGroup]="formFilter" autoComplete="off" [disabled]="!enableEdit">
               <div
                 fxLayout="row wrap"
                 fxLayoutAlign="space-between stretch"
@@ -186,7 +186,7 @@
                 </div>
                 <div class="pb-8 px-24">
                   <mat-form-field fxLayout="row wrap" class="is-light form-primary">
-                    <mat-select placeholder="Kategori KPI" formControlName="category" [readonly]="!enableEdit" (selectionChange)="resetKPIDetail(i)">
+                    <mat-select placeholder="Kategori KPI" formControlName="category" [disabled]="!enableEdit" (selectionChange)="resetKPIDetail(i)">
                       <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
                       </mat-option>
                     </mat-select>
@@ -196,7 +196,7 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'"
                     fxLayout="row wrap" class="is-light form-primary">
-                    <mat-select placeholder="Brand" formControlName="brand"[readonly]="!enableEdit">
+                    <mat-select placeholder="Brand" formControlName="brand"[disabled]="!enableEdit">
                       <mat-option *ngFor="let item of brands" [value]="item.code">{{ item.code }}
                       </mat-option>
                     </mat-select>
@@ -206,11 +206,11 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'"
                     fxLayout="row wrap" class="is-light form-primary">
-                    <mat-select *ngIf="kpi.get('category').value == 'brand'" [readonly]="!enableEdit" placeholder="Parameter" formControlName="parameter">
+                    <mat-select *ngIf="kpi.get('category').value == 'brand'" [disabled]="!enableEdit" placeholder="Parameter" formControlName="parameter">
                       <mat-option *ngFor="let item of brand_parameters" [value]="item.parameter">{{ item.parameter }}
                       </mat-option>
                     </mat-select>
-                    <mat-select *ngIf="kpi.get('category').value == 'trade program'" [readonly]="!enableEdit" placeholder="Parameter" formControlName="parameter">
+                    <mat-select *ngIf="kpi.get('category').value == 'trade program'" [disabled]="!enableEdit" placeholder="Parameter" formControlName="parameter">
                       <mat-option *ngFor="let item of trade_program_objectives" [value]="item.objective_description">{{ item.objective_description }}
                       </mat-option>
                     </mat-select>
