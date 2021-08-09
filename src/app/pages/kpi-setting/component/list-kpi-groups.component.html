@@ -18,7 +18,7 @@
          [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
          [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Group ID" prop="id">
+        <ngx-datatable-column name="Group ID" prop="id" [width]="24">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-id">{{row.id}}</span>
           </ng-template>

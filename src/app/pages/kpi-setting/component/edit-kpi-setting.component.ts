@@ -78,7 +78,6 @@ export class EditKPISettingComponent implements OnInit {
 
   levels: any;
 
-  switchStatus:  Boolean = false;
   enableEdit: Boolean = true;
 
   constructor(
@@ -151,6 +150,7 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI = this.formBuilder.group({
       start_kps: [null, Validators.required],
       end_kps: [null, Validators.required],
+      status: [false, Validators.required],
       kpis: this.formBuilder.array([], Validators.required)
     });
 
@@ -201,9 +201,9 @@ export class EditKPISettingComponent implements OnInit {
       commonFormValidator.parseFormChanged(this.formKPI, this.formdataErrors);
     });
 
-    if(this.paramEdit) {
-      this.KPSList = await this.kpiSettingService.getKPS(this.paramEdit).toPromise();
+    this.KPSList = await this.kpiSettingService.getKPS(this.paramEdit).toPromise();
     
+    if(this.paramEdit) {
       this.KPIGroup = await this.kpiSettingService.getById(this.paramEdit).toPromise();
       this.setDetail();
     }
@@ -225,7 +225,7 @@ export class EditKPISettingComponent implements OnInit {
     }
 
     if(this.KPIGroup.status == 'active') {
-      this.switchStatus = true;
+      this.formKPI.controls['status'].setValue(true);
       this.enableEdit = false;
     }
   }
@@ -702,7 +702,6 @@ export class EditKPISettingComponent implements OnInit {
 
   async submit() {
     if(this.formKPI.valid) {
-      console.log(this.switchStatus)
       let areaSelected = Object.entries(this.formFilter.getRawValue())
         .map(([key, value]) => ({ key, value }))
         .filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
@@ -739,7 +738,7 @@ export class EditKPISettingComponent implements OnInit {
         id: this.paramEdit,
         start_kps: this.formKPI.controls['start_kps'].value,
         end_kps: this.formKPI.controls['end_kps'].value,
-        status: this.switchStatus ? 'active': 'inactive',
+        status: this.formKPI.controls['status'].value ? 'active': 'inactive',
         kpi_settings,
         area_level: level,
         areas: areaIDs
