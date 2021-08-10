@@ -89,7 +89,7 @@
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
                   <button type="button" mat-icon-button [disabled]="!row.retailer_menukarkan_koin"
-                    matTooltip="Export Detail" (click)="exchangeComponent.exportExchange(true, row)">
+                    matTooltip="Export Detail" (click)="download(row.id)">
                     <mat-icon *ngIf="row.retailer_menukarkan_koin" class="orange-500-fg">save_alt</mat-icon>
                     <mat-icon *ngIf="!row.retailer_menukarkan_koin" class="secondary-text">save_alt</mat-icon>
                   </button>
@@ -108,5 +108,5 @@
       </mat-tab-group>
     </div>
   </div>
-  <app-coin-disburstment-exchange #exchangeComponent hidden></app-coin-disburstment-exchange>
+  <a #downloadLink></a>
 </div>
