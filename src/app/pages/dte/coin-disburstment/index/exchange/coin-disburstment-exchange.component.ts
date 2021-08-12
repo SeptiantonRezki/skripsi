@@ -716,7 +716,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     return newLastSelfArea;
   }
 
-  async exportExchange(isDetail: boolean, row) {
+  async exportExchange(isDetail: boolean) {
     this.dataService.showLoading({ show: true });
     const params = {
       area: this.pagination['area'],
@@ -724,7 +724,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       last_self_area: this.pagination['last_self_area'],
       after_level: this.pagination['after_level'],
       group: this.pagination['group'],
-      coin_disbursement_id: row ? row.id : this.detailCoin.id
+      coin_disbursement_id: this.detailCoin.id
     }
 
     if (this.formFilterExchange.get("group_trade_program").value) {
@@ -741,9 +741,6 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
 
     if (this.formFilterExchange.get("name").value) {
       params['name'] = this.formFilterExchange.get('name').value;
-    }
-    if (row) {
-      params['name'] = row.name;
     }
 
     try {
