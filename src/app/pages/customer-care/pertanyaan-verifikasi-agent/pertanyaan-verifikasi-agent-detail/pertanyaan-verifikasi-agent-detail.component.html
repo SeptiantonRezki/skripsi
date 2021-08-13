@@ -4,55 +4,64 @@
     </page-content-header>
     <!-- / HEADER -->
     <div class="content p-24">
-      <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
-  
-  
-        <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
-        <mat-tab-group>
-          <mat-tab label="Detil Retailer">
-            <app-retailer-edit [formOnly]="true"></app-retailer-edit>
-          </mat-tab>
-          <mat-tab label="Detil Data Verifikasi Dinamis">
-            <form [formGroup]="formVerifikasiDinamis">
-                <div class="p-28" fxLayout="column">
-                    <mat-form-field fxFlex="100" class="is-light">
-                        <input matInput placeholder="Tanggal Transaksi Terakhir" type="text" formControlName="tanggal_transaksi">
-                    </mat-form-field>
-    
-                    <mat-form-field fxFlex="100" class="is-light">
-                        <input matInput placeholder="Transaksi Terakhir dilakukan di Mitra" type="text" formControlName="wholesaler_name">
-                    </mat-form-field>
-    
-                    <mat-form-field fxFlex="100" class="is-light">
-                        <input matInput placeholder="Kode Pesanan Transaksi Terakhir" type="text" formControlName="kode_pesanan">
-                    </mat-form-field>
-                    <div fxLayout="row" fxLayoutAlign="space-between">
-                        <div fxFlex="45">
-                            <label for="">Detil Transaksi Terakhir</label>
-                            <ol>
-                                <li *ngFor="let item of renderDetailSku()">{{item}}</li>
-                            </ol>
-                            <!-- <textarea>
+        <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+
+            <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
+            <mat-tab-group>
+                <mat-tab label="Detil Retailer">
+                    <app-retailer-edit [formOnly]="true"></app-retailer-edit>
+                </mat-tab>
+                <mat-tab label="Detil Data Verifikasi Dinamis">
+                    <form [formGroup]="formVerifikasiDinamis">
+                        <div class="p-28" fxLayout="column">
+                            <mat-form-field fxFlex="100" class="is-light">
+                                <input matInput placeholder="Tanggal Transaksi Terakhir" type="text"
+                                    formControlName="tanggal_transaksi">
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="100" class="is-light">
+                                <input matInput placeholder="Transaksi Terakhir dilakukan di Mitra" type="text"
+                                    formControlName="wholesaler_name">
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="100" class="is-light">
+                                <input matInput placeholder="Kode Pesanan Transaksi Terakhir" type="text"
+                                    formControlName="kode_pesanan">
+                            </mat-form-field>
+                            <div fxLayout="row" fxLayoutAlign="space-between">
+                                <div fxFlex="45">
+                                    <label for="">Detil Transaksi Terakhir</label>
+                                    <ol>
+                                        <li *ngFor="let item of renderDetailSku()">{{item}}</li>
+                                    </ol>
+                                    <!-- <textarea>
                                 {{renderDetailSku()}}
                             </textarea> -->
-                        </div>
-                        <!-- <mat-form-field fxFlex="45" class="is-light">
+                                </div>
+                                <!-- <mat-form-field fxFlex="45" class="is-light">
                           <input matInput placeholder="Detil Transaksi Terakhir" type="text" formControlName="detil_sku">
                         </mat-form-field> -->
-        
-                        <mat-form-field fxFlex="45" class="is-light">
-                            <input matInput placeholder="Metode Pengiriman Transaksi Terakhir" type="text" formControlName="shipping_type">
-                        </mat-form-field>
-                    </div>
-                    
-                    <mat-form-field fxFlex="100" class="is-light">
-                        <input matInput placeholder="Total SKU Transaksi Terakhir" type="text" formControlName="total_sku">
-                    </mat-form-field>
-                    <mat-form-field fxFlex="100" class="is-light">
-                        <input matInput placeholder="Total Nominal Transaksi Terakhir" type="text" formControlName="total_transaksi">
-                    </mat-form-field>
 
-                </div>
-            </form>
-          </mat-tab>
-        </mat-tab-group>
+                                <mat-form-field fxFlex="45" class="is-light">
+                                    <input matInput placeholder="Metode Pengiriman Transaksi Terakhir" type="text"
+                                        formControlName="shipping_type">
+                                </mat-form-field>
+                            </div>
+
+                            <mat-form-field fxFlex="100" class="is-light">
+                                <input matInput placeholder="Total SKU Transaksi Terakhir" type="text"
+                                    formControlName="total_sku">
+                            </mat-form-field>
+                            <mat-form-field fxFlex="100" class="is-light">
+                                <input matInput placeholder="Total Nominal Transaksi Terakhir" type="text"
+                                    formControlName="total_transaksi">
+                            </mat-form-field>
+
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Pemulihan Perangkat">
+                    <app-device-recover></app-device-recover>
+                </mat-tab>
+            </mat-tab-group>

@@ -4,6 +4,7 @@ import { brConfig } from "../../classes/breadcrumbs.config";
 import { PageGuard } from "app/classes/auth.guard";
 import { PertanyaanVerifikasiAgentComponent } from './pertanyaan-verifikasi-agent/pertanyaan-verifikasi-agent.component';
 import { PertanyaanVerifikasiAgentDetailComponent } from './pertanyaan-verifikasi-agent/pertanyaan-verifikasi-agent-detail/pertanyaan-verifikasi-agent-detail.component';
+import { DeviceRecoveredComponent } from './device-recovered/device-recovered.component';
 const routes: Routes = [
   {
     path: "",
@@ -26,6 +27,14 @@ const routes: Routes = [
     },
     canActivate: [PageGuard]
   },
+  {
+    path: "device-recovered",
+    component: DeviceRecoveredComponent,
+    data: {
+      breadcrumbs: brConfig.customer_care.device_recovered
+    },
+    // canActivate: [PageGuard]
+  }
 ];
 
 @NgModule({

@@ -10,7 +10,7 @@ import {
   MatInputModule,
   MatCheckboxModule,
   MatTabsModule,
-  
+
 } from "@angular/material";
 
 import { CustomerCareRoutingModule } from "./customer-care-routing.module";
@@ -18,6 +18,9 @@ import { PertanyaanVerifikasiAgentComponent } from './pertanyaan-verifikasi-agen
 import { PertanyaanVerifikasiAgentDetailComponent } from './pertanyaan-verifikasi-agent/pertanyaan-verifikasi-agent-detail/pertanyaan-verifikasi-agent-detail.component';
 import { UserManagementModule } from '../user-management/user-management.module';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
+import { DeviceRecoverComponent } from './device-recover/device-recover.component';
+import { DeviceRecoveredComponent } from './device-recovered/device-recovered.component';
+import { DeviceRecoveredSettingsComponent } from './device-recovered/device-recovered-settings/device-recovered-settings.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,10 +38,16 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
   declarations: [
     PertanyaanVerifikasiAgentComponent,
     PertanyaanVerifikasiAgentDetailComponent,
+    DeviceRecoverComponent,
+    DeviceRecoveredComponent,
+    DeviceRecoveredSettingsComponent,
   ],
   providers: [
     PageGuard,
     RupiahFormaterPipe,
   ],
+  exports: [
+    DeviceRecoverComponent
+  ]
 })
 export class CustomerCareModule { }

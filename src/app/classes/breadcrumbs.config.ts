@@ -2936,6 +2936,18 @@ export const brConfig = {
         name: "Detail Pertanyaan Verifikasi Agent"
       },
 
-    ]
+    ],
+    device_recovered: [
+      {
+        type: "parent",
+        url: "/customer-care/device-recovered",
+        name: "Customer Care"
+      },
+      {
+        type: "current",
+        url: "/customer-care/device-recovered",
+        name: "Perangkat dipulihkan dan Pengaturan"
+      }
+    ],
   }
 };

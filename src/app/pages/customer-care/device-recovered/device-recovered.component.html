@@ -1,0 +1,117 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Perangkat Dipulihkan dan Pengaturan'">
+    <div class="button-row" fxLayout="row">
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/notifications', 'popup-notification', 'create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button> -->
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-tab-group>
+        <mat-tab label="Perangkat yang dipulihkan">
+          <div class="table-wrapper">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+              <h2 class="pl-8">Perangkat yang dipulihkan dan Pengaturan</h2>
+              <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+                <mat-icon>search</mat-icon>
+                <mat-form-field class="is-light tab-search">
+                  <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                </mat-form-field>
+              </div>
+            </div>
+            <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+              [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+              [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+              (select)="onSelect($event)">
+
+              <ngx-datatable-column name="Nomor Ponsel Pemohon" prop="id">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  {{row.id}}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Nama Pemohon" prop="title">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
+                  {{row.title}}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Kode Agen yang diblokir" prop="type">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Nama Toko" prop="static_page_slug"></ngx-datatable-column>
+
+              <ngx-datatable-column name="Waktu Diblokir" prop="created_at">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date:
+                  'dd/MM/yyyy
+                  HH:mm:ss'}}</ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Waktu Pemulihan" prop="created_at">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date:
+                  'dd/MM/yyyy
+                  HH:mm:ss'}}</ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Alasan" prop="static_page_slug"></ngx-datatable-column>
+
+
+              <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+                  style="justify-content: center !important">
+                  <div class="button-row" style="margin-left: -10px">
+                    <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Detail Popup Notifikasi"
+                      [routerLink]="['/notifications', 'popup-notification', 'detail', row.id]">
+                      <mat-icon class="secondary-text">assignment</mat-icon>
+                    </button>
+                    <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Popup Notifikasi"
+                      [routerLink]="['/notifications', 'popup-notification', 'edit', row.id]">
+                      <mat-icon class="secondary-text">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" matTooltip="Hapus Popup Notifikasi" (click)="deletePopup(row.id)"
+                      [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column> -->
+            </ngx-datatable>
+          </div>
+        </mat-tab>
+        <mat-tab label="Pengaturan">
+          <div class="table-wrapper">
+            <form [formGroup]="formVerifikasiDinamis">
+              <div class="p-28" fxLayout="column" fxFlex="50">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput placeholder="Jumlah Maksimal akun retailer pada 1 perangkat" type="number"
+                    [formControl]="max_retailer">
+                </mat-form-field>
+              </div>
+              <div class="confirm p-16" fxLayout="row" fxLayoutGap="20px">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                  SIMPAN
+                </button>
+              </div>
+              <div class="p-28" fxLayout="column" fxFlex="50">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput placeholder="Alasan" type="text" [formControl]="reasonRecovery">
+                </mat-form-field>
+              </div>
+              <div class="confirm p-16" fxLayout="row" fxLayoutGap="20px">
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                  SIMPAN
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
