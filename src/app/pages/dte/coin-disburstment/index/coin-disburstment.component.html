@@ -88,6 +88,11 @@
             <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
+                  <button type="button" mat-icon-button [disabled]="!row.retailer_menukarkan_koin"
+                    matTooltip="Export Detail" (click)="download(row.id)">
+                    <mat-icon *ngIf="row.retailer_menukarkan_koin" class="orange-500-fg">save_alt</mat-icon>
+                    <mat-icon *ngIf="!row.retailer_menukarkan_koin" class="secondary-text">save_alt</mat-icon>
+                  </button>
                   <button mat-icon-button color="" (click)="directEdit(row)">
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
@@ -100,12 +105,8 @@
             </ngx-datatable-column>
           </ngx-datatable>
         </mat-tab>
-
-        <!-- TIPE MISI -->
-        <mat-tab label="List Penukaran Coin">
-          <app-coin-disburstment-exchange></app-coin-disburstment-exchange>
-        </mat-tab>
       </mat-tab-group>
     </div>
   </div>
+  <a #downloadLink></a>
 </div>

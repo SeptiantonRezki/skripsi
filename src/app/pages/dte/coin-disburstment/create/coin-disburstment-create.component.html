@@ -276,6 +276,10 @@
           </div>
           <a #downloadLink></a>
         </mat-tab>
+
+        <mat-tab label="List Penukaran Coin" *ngIf="isEdit && detailCoin.status === 'publish'">
+          <app-coin-disburstment-exchange></app-coin-disburstment-exchange>
+        </mat-tab>
       </mat-tab-group>
     </div>
   </div>
