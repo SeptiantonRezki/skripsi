@@ -2595,6 +2595,15 @@ export const brConfig = {
           name: "Daftar Pengajuan Deaktivasi"
         }
       ],
+    },
+    distributionlist: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Distribution List"
+        }
+      ]
     }
   },
   virtualaccount: {

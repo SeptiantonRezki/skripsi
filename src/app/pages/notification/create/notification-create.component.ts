@@ -59,7 +59,8 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "Semua", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }];
+  listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
   listNotifType: any [] = [
@@ -257,6 +258,7 @@ export class NotificationCreateComponent {
       verification: ["all"],
       subscription_status: ['all'],
       age: ["18+", Validators.required],
+      employee_filter: ["all", Validators.required],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
@@ -354,11 +356,16 @@ export class NotificationCreateComponent {
     });
 
     this.formNotification.controls['age'].valueChanges.debounceTime(50).subscribe(res => {
-      if (this.formNotification.get("is_target_audience").value === true) {
-        this.getAudience();
-      };
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
+      this.resetAudience();
+    });
+    this.formNotification.controls['verification'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
+    });
+    this.formNotification.controls['subscription_status'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
+    });
+    this.formNotification.controls['employee_filter'].valueChanges.debounceTime(50).subscribe(res => {
+      this.resetAudience();
     });
 
     this.formNotification.controls['user_group'].setValue('retailer');
@@ -393,6 +400,7 @@ export class NotificationCreateComponent {
 
     this.initAreaV2();
 
+    
     if (this.actionType === 'detail') {
       console.log('GET DETAILS');
       this.getDetails();
@@ -403,6 +411,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
@@ -447,6 +456,14 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+  }
+
+  resetAudience() {
+    if (this.formNotification.get("is_target_audience").value === true) {
+      this.getAudience();
+    };
+    this.selected.splice(0, this.selected.length);
+    this.audienceSelected = [];
   }
 
   initAreaV2() {
@@ -1210,6 +1227,7 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(false);
     }
     console.log(this.formNotification.value.user_group);
+    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
   }
 
   async submit() {
@@ -1342,10 +1360,14 @@ export class NotificationCreateComponent {
 
     let recurrenceBody: { [key: string]: any; };
 
+    body['age'] = this.formNotification.get("age").value;
+    
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
-      body['age'] = this.formNotification.get("age").value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
+      if(body.send_sfmc == '0') {
+        body['employee_filter'] = this.formNotification.get('employee_filter').value;
+      }
     }
 
     if(this.typeOfRecurrence == 'Bday18') {
@@ -1409,9 +1431,17 @@ export class NotificationCreateComponent {
             bodyVideo.append('title', body.title);
             bodyVideo.append('body', body.body);
             bodyVideo.append('type', body.type);
+
+            if(body.type == 'customer') {
+              bodyVideo.append('verification', body.verification);
+              bodyVideo.append('age', body.age);
+              bodyVideo.append('notif_type', body.notif_type);
+            }
+
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
             bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
             });
@@ -1428,6 +1458,7 @@ export class NotificationCreateComponent {
 
             if(this.formNotification.get('send_ayo').value) {
               bodyVideo.append('send_sfmc', '0');
+              bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             } else {
               bodyVideo.append('send_sfmc', '1');
             }
@@ -1464,9 +1495,15 @@ export class NotificationCreateComponent {
           bodyVideo.append('title', body.title);
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
+          if(body.type == 'customer') {
+            bodyVideo.append('verification', body.verification);
+            bodyVideo.append('age', body.age);
+            bodyVideo.append('notif_type', body.notif_type);
+          }
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
           bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
             bodyVideo.append('target_audience', '1');
@@ -1481,6 +1518,7 @@ export class NotificationCreateComponent {
 
           if(this.formNotification.get('send_ayo').value) {
             bodyVideo.append('send_sfmc', '0');
+            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           } else {
             bodyVideo.append('send_sfmc', '1');
           }
@@ -1797,11 +1835,29 @@ export class NotificationCreateComponent {
 
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
-      let age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+      let age = this.formNotification.get("age").value;
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
+      } else {
+        if(age === '18+') age = '18plus';
+        else age = '18min';
+      }
+      
+
       this.pagination['age'] = age;
+      this.pagination['verification'] = this.formNotification.get('verification').value;
+      this.pagination['subscription_status'] = this.formNotification.get('subscription_status').value;
+      if(this.formNotification.get('send_ayo').value) {
+        this.pagination['employee_filter'] = this.formNotification.get('employee_filter').value;
+      }
     }
     else {
       if (this.pagination['age']) delete this.pagination['age'];
+      if (this.pagination['verification']) delete this.pagination['verification'];
+      if (this.pagination['subscription_status']) delete this.pagination['subscription_status'];
+      if (this.pagination['employee_filter']) delete this.pagination['employee_filter'];
     }
 
     if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page_value").value === 'pojok-modal') {
@@ -2031,6 +2087,19 @@ export class NotificationCreateComponent {
   isTargetAudience(event) {
     if (event.checked) this.getAudience();
   }
+  sendAYOChange(event) {
+    this.toggleSendAyo(event.checked);
+  }
+
+  toggleSendAyo(val){
+    if(val) {
+      if(!this.listAge.find(option => option.value == 'all')) {
+        this.listAge.push({ name: "Semua", value: "all" });
+      }
+    } else {
+      this.listAge = this.listAge.filter(option => option.value !== 'all');
+    }
+  }
 
   async export() {
     if (this.audienceSelected.length === 0) {
@@ -2040,9 +2109,19 @@ export class NotificationCreateComponent {
     this.dataService.showLoading(true);
     let body = this.audienceSelected;
     let age = null
-    if (this.formNotification.get("user_group").value === 'customer') age = this.formNotification.get("age").value === "18+" ? "18plus" : "18min";
+    if (this.formNotification.get("user_group").value === 'customer') {
+      age = this.formNotification.get("age").value;
+      if(this.formNotification.get('send_ayo').value) {
+        if(age === '18+') age = '18plus';
+        else if(age === '18-') age = '18min';
+        else age = 'all';
+      } else {
+        if(age === '18+') age = '18plus';
+        else age = '18min';
+      }
+    }
     else {
-      if (age) age = null
+      if (age) age = null;
     }
     try {
       const response = await this.notificationService.exportPushNotifAudience({ selected: body, audience: this.formNotification.get("user_group").value, age: age }).toPromise();
@@ -2122,7 +2201,7 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, subscription_status, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
         verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
@@ -2146,14 +2225,18 @@ export class NotificationCreateComponent {
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
       frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
-      frm.controls['age'].setValue(age);
+      frm.controls['employee_filter'].setValue(employee_filter ? employee_filter: 'all');
+      if(age) {
+        frm.controls['age'].setValue(age);
+      }
       frm.controls['content_type'].setValue(content_type);
       frm.controls['static_page_title'].setValue(static_page_slug);
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       if(type == 'customer') {
-        frm.controls['send_ayo'].setValue(send_sfmc == null || send_sfmc == 0 || send_sfmc == '0');
+        let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
+        frm.controls['send_ayo'].setValue(send_ayo);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }

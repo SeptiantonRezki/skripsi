@@ -91,6 +91,7 @@ export class TemplateCreateComponent {
 
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
+  isBackgroundMisi: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -182,7 +183,6 @@ export class TemplateCreateComponent {
   }
 
   ngOnInit() {
-    console.log('Unnecessary Check')
     this.getListKategoriToolbox();
     this.getListTipeMisi();
     this.getListTingkatInternalMisi();
@@ -250,6 +250,8 @@ export class TemplateCreateComponent {
       kategori_misi: ["", Validators.required],
       project_misi: ["", Validators.required],
       image: [""],
+      background_image: [""],
+      background_font_color: [""],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -712,7 +714,6 @@ export class TemplateCreateComponent {
         this.listChoose = [...this.listChooseOriginal]
       }
     }
-
   }
 
   changeType(item, idx?) {
@@ -1097,6 +1098,7 @@ export class TemplateCreateComponent {
     }
     console.log('ini is', this.isDetailBanner);
   }
+  
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1119,6 +1121,8 @@ export class TemplateCreateComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
+        background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1407,6 +1411,22 @@ export class TemplateCreateComponent {
         }
       }
     });
+  }
+
+  uploadImageBgMisi(e: any){
+    this.templateTaskForm.get('background_image').setValue(e.image);    
+    this.templateTaskForm.get('background_font_color').setValue(e.color);    
+    console.log('update => ', this.templateTaskForm);
+  }
+
+  onChangeBgMisi(){
+    if (!this.isBackgroundMisi.value) {
+      const update = {
+        image: '',
+        color: ''
+      }
+      this.uploadImageBgMisi(update);
+    }
   }
 
   deleteImage(type, idx) {

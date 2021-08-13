@@ -910,6 +910,12 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
 
+      },
+      distribution_list: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
+        autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
