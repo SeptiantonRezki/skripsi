@@ -29,7 +29,8 @@ import {
   MatDatepickerModule,
   DateAdapter,
   MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
+  MAT_DATE_FORMATS,
+  MatAutocompleteModule
 } from "@angular/material";
 import { ngfModule } from 'angular-file';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -47,6 +48,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation.component';
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { PayLaterDistributionListComponent } from './pay-later-distribution-list/pay-later-distribution-list.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -97,8 +99,9 @@ export const MY_FORMATS = {
     MatMenuModule,
     MatDatepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    MatAutocompleteModule,
   ],
-  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent],
+  declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent, PayLaterDistributionListComponent],
   providers: [
     {
       provide: DateAdapter,
