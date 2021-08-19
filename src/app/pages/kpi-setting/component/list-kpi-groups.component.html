@@ -1,0 +1,63 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'KPI Setting'">
+    <div class="button-row" fxLayout="row">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/kpisetting', 'kpi-setting-create']">
+        <mat-icon>add</mat-icon>BUAT
+      </button>
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+        <h2 class="pl-8">Daftar KPI Group</h2>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Group ID" prop="id" [width]="24">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-id">{{row.id}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="KPS Start" prop="start_kps">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-start-kps" >{{row.start_kps}} ({{row.start_date  | date:'dd/MM/yyyy'}})</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="KPS End" prop="end_kps">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-end-kps" >{{row.end_kps}} ({{row.end_date  | date:'dd/MM/yyyy'}})</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Area Audience" prop="areas">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas" >{{row.areas.join(',')}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span *ngIf="row.status === 'inactive'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
+            <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" (click)="edit(row)" [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" (click)="delete(row.id)">
+                <mat-icon class="secondary-text">delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
