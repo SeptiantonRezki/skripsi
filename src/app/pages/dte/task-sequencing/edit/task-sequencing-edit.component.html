@@ -2,10 +2,13 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Task Sequence'">
     <div class="button-row" fxLayout="row">
-      <button mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()">
-        <mat-icon>arrow_upward</mat-icon>
-        EXPORT COIN
-      </button>
+      <div fxLayout="column">
+        <button mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()" [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)">
+          <mat-icon>arrow_upward</mat-icon>
+          EXPORT COIN
+        </button>
+        <label *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)" style="margin: 0px 0 0 15px;">Requesting File</label>
+      </div>
       <a #downloadLink></a>
       <button mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail">
         <mat-icon>arrow_downward</mat-icon>
