@@ -33,6 +33,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   minDate: any;
 
   isDetail: Boolean;
+  ENABLE_EXPORT_IF = ['done', 'failed'];
 
   private _onDestroy = new Subject<void>();
   public filterGTP: FormControl = new FormControl();
@@ -78,6 +79,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       current_week: ["", Validators.required],
       total_week: ["", Validators.required],
       status: ["", Validators.required],
+      export_coin_status: [""],
+      export_coin_result: [""],
     })
 
     this.filterGTP.valueChanges
@@ -117,6 +120,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         current_week: this.data.current_week,
         total_week: this.data.total_week,
         status: this.data.status,
+        export_coin_status: this.data.export_coin_status,
+        export_coin_result: this.data.export_coin_result,
       });
       this.actions = res.data.actions;
       this.getTradePrograms(this.data.trade_creator_name);
@@ -255,20 +260,31 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   }
 
   export() {
+    if (this.taskSequenceForm.get('export_coin_result').value) {
 
-    this.dataService.showLoading(true);
-    const body = {
-      trade_creator_id: this.data.trade_creator_id,
-      task_sequencing_management_id: this.data.id
-    }
-    this.sequencingService.downloadAdjustmentCoin(body).subscribe(res => {
-
-      this.downloadLink.nativeElement.href = res.data;
+      this.downloadLink.nativeElement.href = this.taskSequenceForm.get('export_coin_result').value;
       this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-    }, err => {
-      this.dataService.showLoading(false);
-    })
+
+    } else {
+    
+      this.dataService.showLoading(true);
+      const body = {
+        trade_creator_id: this.data.trade_creator_id,
+        task_sequencing_management_id: this.data.id
+      }
+      this.sequencingService.downloadAdjustmentCoin(body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: `Request file berhasil.`,
+        });
+        this.refreshRequestingFileStatus();
+        // this.downloadLink.nativeElement.href = res.data;
+        // this.downloadLink.nativeElement.click();
+      }, err => {
+        this.dataService.showLoading(false);
+      })
+
+    }
   }
 
   import() {
@@ -288,6 +304,24 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
       }
     })
+  }
+
+  refreshRequestingFileStatus() {
+
+    this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
+
+      if ( !this.ENABLE_EXPORT_IF.includes(res.data.export_coin_status) ) {
+        setTimeout(() => {
+          this.refreshRequestingFileStatus();
+        }, 1000);
+
+      } else {
+        this.taskSequenceForm.get('export_coin_status').setValue(res.data.export_coin_status);
+        this.taskSequenceForm.get('export_coin_result').setValue(res.data.export_coin_result);
+      }
+
+    }, err => {});
+
   }
 
 }
