@@ -2,6 +2,10 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Notifikasi'">
     <div class="button-row" fxLayout="row">
+      <button mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/notifications', 'push-notification', 'create-custom']">
+        <mat-icon>add</mat-icon>Buat Customized Push Notification
+      </button>
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/notifications', 'push-notification', 'create']">
         <mat-icon>add</mat-icon>BUAT
@@ -21,14 +25,26 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+      <ngx-datatable class="material"
+        [rows]="rows"
+        [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'"
+        [headerHeight]="48"
+        [footerHeight]="56"
+        [rowHeight]="'auto'"
+        [scrollbarH]="true"
+        [reorderable]="reorderable"
+        [count]="pagination.total"
+        [limit]="pagination.per_page"
+        [externalPaging]="true"
+        [externalSorting]="true"
+        (page)="setPage($event)"
+        (sort)="onSort($event)"
+        (select)="onSelect($event)">
 
-        <ngx-datatable-column name="ID" prop="id">
+        <ngx-datatable-column name="Tipe Content Notification" prop="notification_content_type">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.id}}
+            {{row.notification_content_type}}
           </ng-template>
         </ngx-datatable-column>
 

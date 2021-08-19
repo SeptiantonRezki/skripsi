@@ -138,6 +138,22 @@ export class NotificationService extends BaseService {
     return this.postApi(url, body);
   }
 
+  previewImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview_import");
+    return this.postApi(url, body);
+  }
+  exportCustom(body?): Observable<any> {    
+    const url = this.getUrl(this.namespace, "export_custom");
+    return this.postBlobApi(url, body);
+  }  
+  createCustom(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_custom');
+    return this.postApi(url, body);
+  }
+  showCustom(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show_custom', context);
+    return this.getApi(url);
+  }
   /**
    * update token in firebase database
    * 
