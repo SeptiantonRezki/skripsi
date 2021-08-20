@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
 import { Router } from '@angular/router';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-notification-index',
@@ -29,6 +30,8 @@ export class NotificationIndexComponent {
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  roles: PagesName = new PagesName();
+  permission: any;
 
   constructor(
     private router: Router,
@@ -58,6 +61,8 @@ export class NotificationIndexComponent {
     // setTimeout(() => {
     //     this._fuseSplashScreenService.hide();
     // }, 3000);
+    this.permission = this.roles.getRoles('principal.notifikasi');
+    console.log(this.permission);
     this.getNotifList();
   }
 
@@ -125,32 +130,37 @@ export class NotificationIndexComponent {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_notif", param);
-    this.router.navigate(["/notifications", "push-notification", "detail", param.id]);
+    if (param.notification_content_type === 'customized') {
+      this.router.navigate(["/notifications", "push-notification", "detail-custom", param.id]);      
+    }
+    else if (param.notification_content_type === 'general') {
+      this.router.navigate(["/notifications", "push-notification", "detail", param.id]);      
+    }
   }
 
-  // deleteUser(id): void {
-  //   this.id = id;
-  //   let data = {
-  //     titleDialog: "Hapus Admin Principal",
-  //     captionDialog: "Apakah anda yakin untuk menghapus Admin Principal ini ?",
-  //     confirmCallback: this.confirmDelete.bind(this),
-  //     buttonText: ["Hapus", "Batal"]
-  //   };
-  //   this.dialogService.openCustomConfirmationDialog(data);
-  // }
+  deleteNotif(id): void {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Notifikasi",
+      captionDialog: "Apakah anda yakin untuk menghapus notifikasi ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
 
-  // confirmDelete() {
-  //   this.notificationService.delete({ principal_id: this.id }).subscribe(
-  //     res => {
-  //       this.dialogService.brodcastCloseConfirmation();
-  //       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+  confirmDelete() {
+    this.notificationService.deleteCustom({ notification_id: this.id }).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
 
-  //       this.getNotifList();
-  //     },
-  //     err => {
-  //       this.dialogService.openSnackBar({ message: err.error.message });
-  //     }
-  //   );
-  // }
+        this.getNotifList();
+      },
+      err => {
+        this.dialogService.openSnackBar({ message: err.error.message });
+      }
+    );
+  }
 
 }

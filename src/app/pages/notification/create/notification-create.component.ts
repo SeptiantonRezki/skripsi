@@ -55,6 +55,7 @@ export class NotificationCreateComponent {
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
   indexDelete: any;
+  minStartDate: any = new Date();
 
   listLevelArea: any[];
   list: any;

@@ -374,7 +374,12 @@ export class Endpoint {
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
         get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
-        import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
+        import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`,
+        preview_import: `${AYO_API}/api/principal/customized-notification/target-detail/preview`,
+        export_custom: `${AYO_API}/api/principal/customized-notification/target-detail/export`,
+        create_custom: `${AYO_API}/api/principal/customized-notification`,
+        show_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
+        delete_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
       },
       notif: {
         list_notif: `${AYO_API}/api/general/user_notif`,
