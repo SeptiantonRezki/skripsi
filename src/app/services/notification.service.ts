@@ -154,6 +154,10 @@ export class NotificationService extends BaseService {
     const url = this.getUrl(this.namespace, 'show_custom', context);
     return this.getApi(url);
   }
+  deleteCustom(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_custom', context);
+    return this.deleteApi(url);
+  }
   /**
    * update token in firebase database
    * 

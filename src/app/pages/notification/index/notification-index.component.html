@@ -66,15 +66,15 @@
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="50" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
+              <button mat-icon-button color="primary" matTooltip="Hapus Notifikasi" (click)="deleteNotif(row.id)" [disabled]="row.notification_content_type === 'general'">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
           </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
       </ngx-datatable>
     </div>
   </div>

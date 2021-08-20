@@ -47,9 +47,13 @@ export class ImportCustomNotificationComponent implements OnInit {
       res => {
         this.dataService.showLoading(false);
         console.log('preview => ', res);
-        if (res && res.data && res.is_valid) {
+        if (res && res.data) {
           this.rows = res.data;
           this.is_valid = res.is_valid;
+
+          if (!res.is_valid) {
+            this.dialogService.openSnackBar({ message: "File yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
+          }
         } else {
           this.files = undefined;
           this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })

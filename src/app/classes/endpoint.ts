@@ -359,6 +359,7 @@ export class Endpoint {
         export_custom: `${AYO_API}/api/principal/customized-notification/target-detail/export`,
         create_custom: `${AYO_API}/api/principal/customized-notification`,
         show_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
+        delete_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
       },
       notif: {
         list_notif: `${AYO_API}/api/general/user_notif`,

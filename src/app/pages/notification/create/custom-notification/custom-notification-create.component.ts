@@ -326,22 +326,23 @@ export class CustomNotificationCreateComponent implements OnInit {
 
     let recurrence_time = this.formNotification.get('recurrence_time').value;
     let recurrence_start_date = startDate.format('YYYY-MM-DD');
-
-    if (this.actionType === 'detail-custom') {
-      let timeLength = recurrence_time.split(":").length;
-      if (timeLength > 2) {
-        body.publish_at = recurrence_start_date + " " + recurrence_time;        
-      } else{
-        body.publish_at = recurrence_start_date + " " + recurrence_time + ":00";
-      }
-    } else{
-      body.publish_at = recurrence_start_date + " " + recurrence_time + ":00";
-    }
+    body.publish_at = recurrence_start_date + " " + recurrence_time + ":00";
     
-    //if edit
-    if(this.idNotif) {
-      body.id = Number(this.idNotif);
-    }
+    // if (this.actionType === 'detail-custom') {
+    //   let timeLength = recurrence_time.split(":").length;
+    //   if (timeLength > 2) {
+    //     body.publish_at = recurrence_start_date + " " + recurrence_time;        
+    //   } else{
+    //     body.publish_at = recurrence_start_date + " " + recurrence_time + ":00";
+    //   }
+    // } else{
+    //   body.publish_at = recurrence_start_date + " " + recurrence_time + ":00";
+    // }
+    
+    // //if edit
+    // if(this.idNotif) {
+    //   body.id = Number(this.idNotif);
+    // }
 
     this.dataService.showLoading(true);
     console.log('body',body);
@@ -638,6 +639,7 @@ export class CustomNotificationCreateComponent implements OnInit {
       frm.controls['recurrence_time'].setValue(publish[1]);
 
       // end request
+      frm.disable();
       this.dataService.showLoading(false);
     } catch (error) {
       console.log({ error });
