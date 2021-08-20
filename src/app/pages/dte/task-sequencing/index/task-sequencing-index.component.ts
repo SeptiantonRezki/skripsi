@@ -67,20 +67,9 @@ export class TaskSequencingIndexComponent implements OnInit {
 
   ngOnInit() {
     this.getSequencing();
-    setTimeout(() => {
-      document.querySelector("datatable-body").id = "datatable-body";
-      document.querySelectorAll("datatable-row-wrapper").forEach((row,idx) => {
-        row.id = 'data-row-'+String(idx+1);
-        let temp = idx+1;
-        row.querySelectorAll("datatable-body-cell").forEach((cell,idx)=>{
-          cell.id = 'data-cell-'+String(temp)+'-'+String(idx+1);
-        })
-      })
-    }, 1500);
   }
 
   getSequencing() {
-
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -98,11 +87,30 @@ export class TaskSequencingIndexComponent implements OnInit {
         this.onLoad = false;
         this.loadingIndicator = false;
         console.log(res.data);
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1500);
       },
       err => {
         this.onLoad = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      let numberRow = index + 1;
+      rows[index].id = 'data-row-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   onSelect({ selected }) {

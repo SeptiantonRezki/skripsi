@@ -84,16 +84,6 @@ export class TemplateIndexComponent implements OnInit {
     setTimeout(() => {
       this.getTemplateTask();
     }, 800);
-    setTimeout(() => {
-      document.querySelector("datatable-body").id = "datatable-body";
-      document.querySelectorAll("datatable-row-wrapper").forEach((row,idx) => {
-        row.id = 'data-row-'+String(idx+1);
-        let temp = idx+1;
-        row.querySelectorAll("datatable-body-cell").forEach((cell,idx)=>{
-          cell.id = 'data-cell-'+String(temp)+'-'+String(idx+1);
-        })
-      })
-    }, 1500);
   }
 
   getTemplateTask() {
@@ -125,11 +115,31 @@ export class TemplateIndexComponent implements OnInit {
           this.onLoad = false;
           this.loadingIndicator = false;
         }
+        
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1500);
       },
       err => {
         this.onLoad = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    console.log('rows', rows);
+    for (let index = 0; index < rows.length; index++) {
+      let numberRow = index + 1;
+      rows[index].id = 'data-row-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   load() {
