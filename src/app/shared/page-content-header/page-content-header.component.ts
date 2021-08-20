@@ -16,6 +16,7 @@ export class PageContentComponent {
   @Input()
   contentTitle: string;
   breadcrumbs: Array<any> = [];
+  newContentTitle: string;
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.route.data.subscribe(data => {
@@ -24,5 +25,7 @@ export class PageContentComponent {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.newContentTitle = this.contentTitle.toLowerCase().split(" ").join("_");
+  }
 }

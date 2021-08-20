@@ -13,7 +13,7 @@
       </ng-container>
     </div>
     <div fxLayout="row" fxLayout.xs="column" class="middle-container" fxLayoutAlign="space-between center">
-      <div class="h1 mt-16">{{contentTitle}}</div>
+      <div [id]="'header-'+newContentTitle" class="h1 mt-16">{{contentTitle}}</div>
       <div class="button-header">
         <ng-content></ng-content>
       </div>

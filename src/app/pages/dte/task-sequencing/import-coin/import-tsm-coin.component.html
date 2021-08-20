@@ -18,7 +18,7 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+    <div id="import-coin" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
       accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
       (fileChange)="preview($event)">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
@@ -49,33 +49,33 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows"
+          <tr [id]="'row-'+(idx+1)" *ngFor="let item of rows; let idx = index;"
             [ngStyle]="{ 'background-color': setRedIfDuplicate(item), color: item.flag === 'duplicate' ? 'white' : 'black' }">
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-1'" nowrap>
               {{ item.group_trade_program_name }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-2'" nowrap>
               {{ item.trade_program_name }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-3'" nowrap>
               {{ item.audience_name }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-4'" nowrap>
               {{ item.name }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-5'" nowrap>
               {{ item.status }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-6'" nowrap>
               {{ item.current_coin }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-7'" nowrap>
               {{ item.current_coin_group_trade_program }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-8'" nowrap>
               {{ item.coin }}
             </td>
-            <td nowrap>
+            <td [id]="'row-'+(idx+1)+'-9'" nowrap>
               {{ item.flag_reason }}
             </td>
           </tr>
@@ -118,7 +118,7 @@
     <div class="p-8">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
-        <button type="button" mat-raised-button color="primary" (click)="submit()"
+        <button id="btn-submit-import" type="button" mat-raised-button color="primary" (click)="submit()"
           [disabled]="!files || rows.length === 0 || !isValid">Kirim</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>

@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h2 class="">Pengaturan Misi</h2>
+  <h2 id="header-card-mission" class="">Pengaturan Misi</h2>
 
   <mat-dialog-content>
     <div class="pt-8 pb-16">
@@ -74,8 +74,8 @@
   </mat-dialog-content>
   <br><br>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
-    <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Batal</button>
+    <button id="btn-submit-card-mission" mat-raised-button color="success" type="submit">Simpan</button>
+    <button id="btn-cancel-card-mission" mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Batal</button>
   </mat-dialog-actions>
 
 </form>

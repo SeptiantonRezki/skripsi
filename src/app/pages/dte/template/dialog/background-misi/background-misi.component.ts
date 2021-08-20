@@ -32,6 +32,10 @@ export class BackgroundMisiComponent implements OnInit {
     if (this.judulMisi.length > 120){
       this.judulMisi = this.judulMisi.slice(0, 120) + "...";
     }
+
+    setTimeout(() => {
+      document.getElementById("bg-misi").getElementsByTagName("input")[0].id = "upload-file-misi";
+    }, 500);
   }
 
   ngOnChanges(changes: SimpleChanges){
