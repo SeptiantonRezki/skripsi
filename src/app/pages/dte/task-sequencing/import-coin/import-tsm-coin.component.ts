@@ -64,6 +64,10 @@ export class ImportTsmCoinComponent {
       .subscribe(() => {
         this.filteringMission();
       });
+
+    setTimeout(() => {
+      document.getElementById("import-coin").getElementsByTagName("input")[0].id = "upload-file-import";
+    }, 500);
   }
 
   getUserList() {

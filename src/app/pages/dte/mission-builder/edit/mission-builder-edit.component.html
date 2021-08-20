@@ -205,7 +205,7 @@
             *ngIf="!isDetail">Save As Draft</button>
         </div>
         <div fxFlex="10">
-          <button mat-raised-button type="button" style="width:100%;" class="confirmation-button"
+          <button id="btn-publish" mat-raised-button type="button" style="width:100%;" class="confirmation-button"
             (click)="updateStatus()" *ngIf="!isDetail">{{task.status === 'publish' ? 'Unpublish' : 'Publish'}}</button>
         </div>
         <!-- <div fxFlex="10" *ngIf="task.status === 'unpublish'">

@@ -100,8 +100,7 @@
               </mat-error>
             </mat-form-field>
 
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
-              [disabled]="taskSequenceForm.valid === false" [routerLink]="['/dte','mission-builder','create']">
+            <button id="btn-submit-task_sequencing" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled]="taskSequenceForm.valid === false" [routerLink]="['/dte','mission-builder','create']">
               SUBMIT
             </button>
 

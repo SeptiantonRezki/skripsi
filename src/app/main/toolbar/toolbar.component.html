@@ -30,7 +30,7 @@
       <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
         <div fxLayout="row" fxLayoutAlign="center center">
           <img class="avatar" [src]="profile?.image_url || 'assets/images/avatars/profile.jpg'">
-          <span class="username mr-12" fxHide fxShow.gt-sm>{{profile?.fullname || 'John Doe'}}</span>
+          <span id="account-name" class="username mr-12" fxHide fxShow.gt-sm>{{profile?.fullname || 'John Doe'}}</span>
           <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
         </div>
       </button>

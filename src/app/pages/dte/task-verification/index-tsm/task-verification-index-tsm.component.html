@@ -52,7 +52,7 @@
     </div>
   </div>
 </form>
-<ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+<ngx-datatable id="datatable-tsm" class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="48"
   [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
   [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
@@ -62,7 +62,7 @@
     prop="nama_task_sequencing_management" [flexGrow]="3">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <!-- <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]"> -->
-      <span class="row">
+      <span [id]="'name-'+row.task_sequencing_management_id" class="row">
         {{row.task_sequencing_management_name}}
       </span>
     </ng-template>
@@ -102,15 +102,15 @@
     [flexGrow]="3">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="name-container">
-        <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
+        <p [id]="'status-'+row.task_sequencing_management_id" class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
           *ngIf="row.task_sequencing_management_status == 'publish'">
           {{row.task_sequencing_management_status}}
         </p>
-        <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg" style="text-transform: uppercase;"
+        <p [id]="'status-'+row.task_sequencing_management_id" class="status text-truncate h6 p-4 status-order mat-yellow-900-bg" style="text-transform: uppercase;"
           *ngIf="row.task_sequencing_management_status == 'draft'">
           {{row.task_sequencing_management_status}}
         </p>
-        <p class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
+        <p [id]="'status-'+row.task_sequencing_management_id" class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
           *ngIf="row.task_sequencing_management_status == 'unpublish'">
           {{row.task_sequencing_management_status}}
         </p>
@@ -125,7 +125,7 @@
   <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="button-row" style="margin-left: -10px">
-        <button type="button" mat-icon-button color="" matTooltip="Lihat"
+        <button [id]="'btn-lihat-'+row.task_sequencing_management_id" type="button" mat-icon-button color="" matTooltip="Lihat"
           [routerLink]="['/dte', 'taskverification', 'detailtsm', row.task_sequencing_management_id, row.task_sequencing_management_template_id]"
           [disabled]="!permissionVerifikasiMisi?.lihat">
           <mat-icon class="secondary-text">assignment</mat-icon>
@@ -135,18 +135,18 @@
           [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah" matTooltip="Ubah Tanggal Penjadwalan">
           <mat-icon class="secondary-text">update</mat-icon>
         </button> -->
-        <button type="button" mat-icon-button color="" matTooltip="Export Misi" (click)="export(row)">
+        <button [id]="'btn-export-'+row.task_sequencing_management_id" type="button" mat-icon-button color="" matTooltip="Export Misi" (click)="export(row)">
           <mat-icon class="orange-500-fg">save_alt</mat-icon>
           <!-- <mat-icon *ngIf="row.task_sequencing_management_status == 'publish'" class="orange-500-fg">save_alt</mat-icon>
           <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt
           </mat-icon> -->
         </button>
-        <button type="button" mat-icon-button color="" matTooltip="Verified All"
+        <button [id]="'btn-verfied-'+row.task_sequencing_management_id" type="button" mat-icon-button color="" matTooltip="Verified All"
           (click)="openConfirmDialog(row, 'Verification All TSM Mission')" [disabled]="isDisableVerification(row)">
           <mat-icon *ngIf="!isDisableVerification(row)" class="orange-500-fg">assignment_turned_in</mat-icon>
           <mat-icon *ngIf="isDisableVerification(row)" class="secondary-text">assignment_turned_in</mat-icon>
         </button>
-        <button type="button" mat-icon-button color="" matTooltip="Release Coin"
+        <button [id]="'btn-release-'+row.task_sequencing_management_id" type="button" mat-icon-button color="" matTooltip="Release Coin"
           (click)="openConfirmDialog(row, 'Release TSM Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
           <mat-icon *ngIf="!isDisableReleaseCoin(row)" class="orange-500-fg">call_made</mat-icon>
           <mat-icon *ngIf="isDisableReleaseCoin(row)" class="secondary-text">call_made</mat-icon>

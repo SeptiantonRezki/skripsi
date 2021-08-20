@@ -143,12 +143,32 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
           this.onLoad = false;
           this.loadingIndicator = false;
         }
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1500);
       }, err => {
         console.error(err);
         this.onLoad = false;
         this.loadingIndicator = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    let tableTSM = document.getElementById("datatable-tsm");
+    
+    let rows = tableTSM.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      let numberRow = index + 1;
+      rows[index].id = 'data-row-tsm-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell-tsm-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   convertDate(param?: Date) {
