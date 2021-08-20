@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Buat Tugas'">
-    <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+    <button id="btn-simpan-tugas" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
       type="button">SIMPAN</button>
   </page-content-header>
   <!-- / HEADER -->
@@ -63,7 +63,7 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-                <textarea matInput [froalaEditor]="options" formControlName="description" id="froala-editor"></textarea>
+                <textarea matInput [froalaEditor]="options" formControlName="description" data-froala-id="froala-tugas"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
                   Deskripsi Tugas harus diisi
@@ -340,7 +340,7 @@
                     </button>
                   </div>
 
-                  <mat-form-field class="chooice is-light" fxFlex="30">
+                  <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
                     <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
                       <mat-select-trigger>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
@@ -367,7 +367,7 @@
                     *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                     <textarea matInput [froalaEditor]="options" formControlName="question"
                       (focus)="$event.target.select()"
-                      (change)="defaultValue($event, 'questions', 'Pertanyaan', i)"></textarea>
+                      (change)="defaultValue($event, 'questions', 'Pertanyaan', i)" [attr.data-froala-id]="'question-'+(i+1)"></textarea>
                   </mat-form-field>
                 </div>
                 <!-- <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
@@ -555,7 +555,7 @@
                           <mat-form-field
                             [fxFlex]="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 30 : 85"
                             class="opsi is-light">
-                            <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
+                            <input [id]="'opsi-'+(i+1)+'-'+(j+1)" class="option" matInput formControlName="option" (focus)="$event.target.select()"
                               (change)="defaultValue($event, 'questions', 'Opsi ', i, j)"
                               [readonly]="checkIsRadioTypeWasOther(additional.value)">
                           </mat-form-field>
@@ -636,7 +636,7 @@
                         <mat-icon class="secondary-text" fxFlex="5">
                           {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
-                        <div class="more-option">
+                        <div id="more-option" class="more-option">
                           <span class="add-option" (click)="addAdditional(i)">Tambahkan opsi </span>
 
                           <!-- &nbsp;{{
@@ -740,7 +740,7 @@
               </div>
               <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                 <div class="more-option">
-                  <span class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
+                  <span id="add-option" class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
                 </div>
               </div>
             </div>
@@ -762,7 +762,7 @@
       <!-- </div> -->
 
       <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column">
-        <button mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
+        <button id="add-question" mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
           (click)="addQuestion()">
           <mat-icon>add_circle</mat-icon>
         </button>

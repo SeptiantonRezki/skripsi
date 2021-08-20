@@ -1,7 +1,7 @@
 <ng-container *ngIf="!item.hidden">
 
     <!-- item.url -->
-    <a class="nav-link" *ngIf="item.url && !item.function" [routerLink]="[item.url]" routerLinkActive="active"
+    <a [id]="'menu-'+item.id" class="nav-link" *ngIf="item.url && !item.function" [routerLink]="[item.url]" routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: item.exactMatch || false}" matRipple>
         <ng-container *ngTemplateOutlet="itemContent"></ng-container>
     </a>

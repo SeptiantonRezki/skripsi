@@ -67,6 +67,16 @@ export class TaskSequencingIndexComponent implements OnInit {
 
   ngOnInit() {
     this.getSequencing();
+    setTimeout(() => {
+      document.querySelector("datatable-body").id = "datatable-body";
+      document.querySelectorAll("datatable-row-wrapper").forEach((row,idx) => {
+        row.id = 'data-row-'+String(idx+1);
+        let temp = idx+1;
+        row.querySelectorAll("datatable-body-cell").forEach((cell,idx)=>{
+          cell.id = 'data-cell-'+String(temp)+'-'+String(idx+1);
+        })
+      })
+    }, 1500);
   }
 
   getSequencing() {

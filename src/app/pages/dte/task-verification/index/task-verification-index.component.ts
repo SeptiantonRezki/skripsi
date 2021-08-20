@@ -89,6 +89,17 @@ export class TaskVerificationIndexComponent implements OnInit {
       end_date: '',
       status: '',
     });
+    
+    setTimeout(() => {
+      document.querySelector("datatable-body").id = "datatable-body";
+      document.querySelectorAll("datatable-row-wrapper").forEach((row,idx) => {
+        row.id = 'data-row-'+String(idx+1);
+        let temp = idx+1;
+        row.querySelectorAll("datatable-body-cell").forEach((cell,idx)=>{
+          cell.id = 'data-cell-'+String(temp)+'-'+String(idx+1);
+        })
+      })
+    }, 1500);
   }
 
   updateFilter(string) {

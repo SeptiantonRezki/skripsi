@@ -2,7 +2,7 @@
   <!-- <mat-card-content> -->
     <div class="pt-24 m-0">
       
-      <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
+      <div id="bg-misi" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
         [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="onSelectFile($event)" *ngIf="!isDetail">
         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
           <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
@@ -20,7 +20,7 @@
             <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
           </div>
           <div class="" fxLayout="row" fxLayoutGap="32px">
-            <div class="preview-bg-misi" [ngStyle]="{color: colorFont}">
+            <div id="preview-bg-misi" class="preview-bg-misi" [ngStyle]="{color: colorFont}">
 
               <div class="previewBanner" [ngStyle]="{'background-image': 'url(' + bgMisi + ')'}"></div>
 
@@ -142,7 +142,7 @@
             <!-- Memilih warna font -->
             <div class="pt-16" fxLayout="column" fxLayoutGap="8px" *ngIf="!isDetail">
               <span>Pengaturan warna font :</span>
-              <input type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
+              <input id="color-font" type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
             </div>
           </div>
         </div>

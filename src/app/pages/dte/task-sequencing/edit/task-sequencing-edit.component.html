@@ -2,12 +2,12 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Task Sequence'">
     <div class="button-row" fxLayout="row">
-      <button mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()">
+      <button id="btn-export-coin" mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()">
         <mat-icon>arrow_upward</mat-icon>
         EXPORT COIN
       </button>
       <a #downloadLink></a>
-      <button mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail">
+      <button id="btn-import-coin" mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail">
         <mat-icon>arrow_downward</mat-icon>
         IMPORT COIN
       </button>

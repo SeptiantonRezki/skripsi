@@ -9,6 +9,7 @@ import { TemplateTaskService } from '../../../../services/dte/template-task.serv
 import { Endpoint } from '../../../../classes/endpoint';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-template-index',
@@ -81,8 +82,18 @@ export class TemplateIndexComponent implements OnInit {
     this.getListTingkatInternalMisi();
     this.getListTipeMisi();
     setTimeout(() => {
-    this.getTemplateTask();
+      this.getTemplateTask();
     }, 800);
+    setTimeout(() => {
+      document.querySelector("datatable-body").id = "datatable-body";
+      document.querySelectorAll("datatable-row-wrapper").forEach((row,idx) => {
+        row.id = 'data-row-'+String(idx+1);
+        let temp = idx+1;
+        row.querySelectorAll("datatable-body-cell").forEach((cell,idx)=>{
+          cell.id = 'data-cell-'+String(temp)+'-'+String(idx+1);
+        })
+      })
+    }, 1500);
   }
 
   getTemplateTask() {

@@ -10,11 +10,11 @@
     </mat-radio-group>
   </div>
   <div mat-dialog-actions class="actions">
-    <button *ngIf="!data.isDisagree" mat-button class="confirm" style="cursor: pointer;"
+    <button id="btn-confirm-import" *ngIf="!data.isDisagree" mat-button class="confirm" style="cursor: pointer;"
       (click)="data.confirmCallback()">{{data.buttonText[0]}}</button>
-    <button *ngIf="data.isDisagree && valueRadio" mat-button class="confirm" style="cursor: pointer;"
+    <button id="btn-confirm-import" *ngIf="data.isDisagree && valueRadio" mat-button class="confirm" style="cursor: pointer;"
       (click)="data.confirmCallback(valueRadio)">{{data.buttonText[0]}}</button>
-    <button *ngIf="data.isDisagree && !valueRadio" mat-button class="disable" style="cursor: no-drop;"
+    <button id="btn-confirm-import" *ngIf="data.isDisagree && !valueRadio" mat-button class="disable" style="cursor: no-drop;"
       [disabled]="!valueRadio">{{data.buttonText[0]}}</button>
     <button mat-button class="reject" style="cursor: pointer;" (click)="closeDialog()">{{data.buttonText[1]}}</button>
   </div>
