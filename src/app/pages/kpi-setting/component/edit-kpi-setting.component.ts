@@ -666,6 +666,7 @@ export class EditKPISettingComponent implements OnInit {
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ['Hapus', 'Batal']
     }
+    this.indexDelete = pos;
     this.dialogService.openCustomConfirmationDialog(dialogData);
   }
 
