@@ -4,6 +4,7 @@ export class KPIGroupModel {
         public start_kps: any,
         public end_kps: any,
         public status: any,
+        public areas: Array<any>,
         public kpi_settings?: Array<any>
     ) {
     }
