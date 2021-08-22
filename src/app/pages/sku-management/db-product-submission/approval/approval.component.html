@@ -1,0 +1,84 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="Pengaturan Approval"></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">Pengaturan Approval</h2>
+      </div>
+      <form [formGroup]="approval" class="py-24">
+        <div fxLayout="column" fxFlex="50" fxLayoutAlign="start stretch">
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="user1"
+              placeholder="Approver 1"
+              #singleSelect
+            >
+              <ngx-mat-select-search
+                [formControl]="filterUser1"
+                [placeholderLabel]="'Cari Approver 1...'"
+                [noEntriesFoundLabel]="'Tidak ada approver 1 yang ditemukan'"
+              ></ngx-mat-select-search>
+              <mat-option
+                *ngFor="let item of filteredUser1 | async"
+                [value]="item.id"
+              >
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                approval.controls.user1.hasError('required') &&
+                approval.controls.user1.touched
+              "
+            >
+              Approver 1 harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="userDb"
+              placeholder="Approver Produk DB"
+              #singleSelect
+            >
+              <ngx-mat-select-search
+                [formControl]="filterUserDb"
+                [placeholderLabel]="'Cari Approver Produk DB...'"
+                [noEntriesFoundLabel]="
+                  'Tidak ada approver produk DB yang ditemukan'
+                "
+              ></ngx-mat-select-search>
+              <mat-option
+                *ngFor="let item of filteredUserDb | async"
+                [value]="item.id"
+              >
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                approval.controls.userDb.hasError('required') &&
+                approval.controls.userDb.touched
+              "
+            >
+              Approver produk DB harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px" class="pt-20">
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit()"
+          >
+            Simpan Pengaturan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="dialog-content-wrapper" style="width: 800px;">
+  <div mat-dialog-content fusePerfectScrollbar>
+    <div
+      ngfDrop
+      selectable="1"
+      class="rectangle-16"
+      [(validDrag)]="validComboDrag"
+      [(file)]="files"
+      accept="image/*"
+      [class.invalid-drag]="validComboDrag === false"
+      [class.valid-drag]="validComboDrag"
+      (fileChange)="selectFile($event)"
+    >
+      <div fxLayout="column" fxLayoutAlign="center center" class="p-16">
+        <mat-icon class="secondary-text s-48"
+          >add_photo_alternate_outline</mat-icon
+        >
+        <br />
+        <span matPrefix
+          >Tarik Gambar Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+        <span matPrefix>Ukuran 800x800 piksel, Maksimum 2MB</span>
+      </div>
+    </div>
+    <div
+      *ngIf="
+        files &&
+        ['image/gif', 'image/png', 'image/jpeg'].indexOf(files.type) > -1
+      "
+      class="pt-36 pb-16"
+    >
+      <div class="deleteBanner">
+        <mat-icon style="cursor: pointer" (click)="removeImage()"
+          >cancel_outline</mat-icon
+        >
+      </div>
+      <div class="previewImage" [ngfBackground]="files"></div>
+    </div>
+    <div class="border-top mt-16">
+      <div class="mt-16">
+        <div
+          fxFlexLayout="row"
+          fxLayoutAlign="start center"
+          fxLayout.lt-md="row"
+          fxLayoutGap="20px"
+          fxLayoutGap.lt-md="10px"
+          fxFlex="1 0 auto"
+        >
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="submit()"
+            [disabled]="!files"
+          >
+            Pilih
+          </button>
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="dialogRef.close()"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

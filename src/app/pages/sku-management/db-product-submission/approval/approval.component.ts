@@ -1,0 +1,127 @@
+import { Component, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { DataService } from "app/services/data.service";
+import { DialogService } from "app/services/dialog.service";
+import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
+import { ReplaySubject, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
+@Component({
+  selector: "db-product-submission-approval",
+  templateUrl: "./approval.component.html",
+  styleUrls: ["./approval.component.scss"],
+})
+export class DbProductSubmissionApprovalComponent implements OnInit {
+  approval: FormGroup;
+
+  user1: Array<any>;
+  filterUser1: FormControl = new FormControl();
+  filteredUser1: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  userDb: Array<any>;
+  filterUserDb: FormControl = new FormControl();
+  filteredUserDb: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  filterDestroy = new Subject();
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private dataService: DataService,
+    private dialogService: DialogService,
+    private submissionService: ProductSubmissionService
+  ) {}
+
+  ngOnInit() {
+    this.createForm();
+    this.getUsers();
+    this.filterUser1.valueChanges
+      .pipe(takeUntil(this.filterDestroy))
+      .subscribe(() => {
+        this.filteringUser1();
+      });
+    this.filterUserDb.valueChanges
+      .pipe(takeUntil(this.filterDestroy))
+      .subscribe(() => {
+        this.filteringUserDb();
+      });
+  }
+
+  createForm() {
+    this.approval = this.formBuilder.group({
+      user1: ["", Validators.required],
+      userDb: ["", Validators.required],
+    });
+  }
+
+  getUsers() {
+    this.submissionService.getUser().subscribe((res) => {
+      const listUser = res.data.map((item: any) => {
+        if (item.approver_type === "approver-1")
+          this.approval.get("user1").setValue(item.id);
+        if (item.approver_type === "approver-produk-db")
+          this.approval.get("userDb").setValue(item.id);
+        return {
+          ...item,
+          name: item.fullname,
+        };
+      });
+      this.user1 = listUser;
+      this.filteredUser1.next(this.user1.slice());
+      this.userDb = listUser;
+      this.filteredUserDb.next(this.userDb.slice());
+    });
+  }
+
+  filteringUser1() {
+    const search = this.filterUser1.value;
+    if (!this.user1) return;
+    if (!search) {
+      this.filteredUser1.next(this.user1.slice());
+      return;
+    }
+    this.filteredUser1.next(
+      this.user1.filter(
+        (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
+      )
+    );
+  }
+
+  filteringUserDb() {
+    const search = this.filterUserDb.value;
+    if (!this.userDb) return;
+    if (!search) {
+      this.filteredUserDb.next(this.userDb.slice());
+      return;
+    }
+    this.filteredUserDb.next(
+      this.userDb.filter(
+        (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
+      )
+    );
+  }
+
+  submit() {
+    let body = {
+      approver_1_id: this.approval.controls["user1"].value,
+      approver_produk_db_id: this.approval.controls["userDb"].value,
+    };
+    this.dataService.showLoading(true);
+    this.submissionService.putUser(body).subscribe(
+      (res) => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: "Data Berhasil Disimpan",
+        });
+      },
+      (err) => {
+        console.log(err);
+        this.dataService.showLoading(false);
+      }
+    );
+  }
+}

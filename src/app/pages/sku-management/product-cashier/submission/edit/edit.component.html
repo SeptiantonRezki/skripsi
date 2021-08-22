@@ -1,0 +1,113 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="Detail Produk Diajukan"></page-content-header>
+  <div
+    *ngIf="onLoad"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    class="pt-48"
+  >
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <form
+        autocomplete="off"
+        [formGroup]="formProductGroup"
+        (keydown.enter)="$event.preventDefault()"
+      >
+        <mat-tab-group>
+          <mat-tab label="Informasi Produk">
+            <div class="ayo-middle" fxLayout="column">
+              <div class="p-24" fxLayout="column">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <mat-label>Nama Produk</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('name').value"
+                  />
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <mat-label>Barcode</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('barcode').value"
+                  />
+                </mat-form-field>
+
+                <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+                  <mat-label>Harga Beli</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('purchase_price').value"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="!isDetail"  fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="tel"
+                    currencyMask
+                    min="0"
+                    placeholder="Harga Beli"
+                    formControlName="purchase_price"
+                  />
+                  <mat-error
+                    *ngIf="
+                      (formProductGroup
+                        .get('purchase_price')
+                        .hasError('required') ||
+                        formProductGroup
+                          .get('purchase_price')
+                          .hasError('min')) &&
+                      formProductGroup.get('purchase_price').touched
+                    "
+                  >
+                    Harga Beli harus diisi
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="isDetail" fxFlex="100" class="is-light">
+                  <mat-label>Harga Jual</mat-label>
+                  <input
+                    matInput
+                    disabled
+                    [value]="formProductGroup.get('selling_price').value"
+                  />
+                </mat-form-field>
+                <mat-form-field *ngIf="!isDetail"  fxFlex="100" class="is-light">
+                  <input
+                    matInput
+                    type="tel"
+                    currencyMask
+                    min="0"
+                    placeholder="Harga Jual"
+                    formControlName="selling_price"
+                  />
+                  <mat-error
+                    *ngIf="
+                      (formProductGroup
+                        .get('selling_price')
+                        .hasError('required') ||
+                        formProductGroup
+                          .get('selling_price')
+                          .hasError('min')) &&
+                      formProductGroup.get('selling_price').touched
+                    "
+                  >
+                    Harga Jual harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </div>
+  </div>
+</div>

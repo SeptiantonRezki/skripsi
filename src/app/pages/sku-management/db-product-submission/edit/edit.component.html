@@ -1,0 +1,256 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header
+    contentTitle="Pengajuan Produk Databank"
+  ></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">Informasi Produk</h2>
+      </div>
+      <form [formGroup]="product" class="py-24">
+        <div fxLayout="row" fxLayoutGap="30px">
+          <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50">
+            <mat-form-field class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="Nama Produk"
+                formControlName="name"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.name.hasError('required') &&
+                  product.controls.name.touched
+                "
+              >
+                Nama Produk harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="is-light form-primary">
+              <mat-select
+                formControlName="brand"
+                placeholder="Perusahaan"
+                #singleSelect
+              >
+                <ngx-mat-select-search
+                  [formControl]="filterBrands"
+                  [placeholderLabel]="'Cari Perusahaan...'"
+                  [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"
+                ></ngx-mat-select-search>
+                <mat-option
+                  *ngFor="let item of filteredBrands | async"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  product.controls.brand.hasError('required') &&
+                  product.controls.brand.touched
+                "
+              >
+                Perusahaan harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="start stretch" fxFlex="50">
+            <mat-form-field class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="Barcode"
+                formControlName="barcode"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.barcode.hasError('required') &&
+                  product.controls.barcode.touched
+                "
+              >
+                Barcode harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="is-light form-primary">
+              <mat-select
+                formControlName="category"
+                placeholder="Kategori"
+                #singleSelect
+              >
+                <ngx-mat-select-search
+                  [formControl]="filterCategories"
+                  [placeholderLabel]="'Cari Kategori...'"
+                  [noEntriesFoundLabel]="
+                    'Tidak ada kategori yang ditemukan'
+                  "
+                ></ngx-mat-select-search>
+                <mat-option
+                  *ngFor="let item of filteredCategories | async"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  product.controls.category.hasError('required') &&
+                  product.controls.category.touched
+                "
+              >
+                Kategori harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="is-light form-primary">
+              <mat-select
+                formControlName="subCategory"
+                placeholder="Sub Kategori"
+                #singleSelect
+              >
+                <ngx-mat-select-search
+                  [formControl]="filterSubCategories"
+                  [placeholderLabel]="'Cari Sub Kategori...'"
+                  [noEntriesFoundLabel]="
+                    'Tidak ada sub kategori yang ditemukan'
+                  "
+                ></ngx-mat-select-search>
+                <mat-option
+                  *ngFor="let item of filteredSubCategories | async"
+                  [value]="item.id"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  product.controls.subCategory.hasError('required') &&
+                  product.controls.subCategory.touched
+                "
+              >
+                Sub Kategori harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px">
+          <div fxLayout="column" fxFlex="25">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="SRC yang mengajukan"
+                formControlName="businessName"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.businessName.hasError('required') &&
+                  product.controls.businessName.touched
+                "
+              >
+                SRC harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="Zone"
+                formControlName="businessZone"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.businessZone.hasError('required') &&
+                  product.controls.businessZone.touched
+                "
+              >
+                Zone harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="Regional"
+                formControlName="businessRegional"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.businessRegional.hasError('required') &&
+                  product.controls.businessRegional.touched
+                "
+              >
+                Regional harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="25">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <input
+                matInput
+                type="text"
+                placeholder="Area"
+                formControlName="businessArea"
+              />
+              <mat-error
+                *ngIf="
+                  product.controls.businessArea.hasError('required') &&
+                  product.controls.businessArea.touched
+                "
+              >
+                Area harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="mat-custom-label">Foto Produk</div>
+            <div fxLayout="row" fxLayoutGap="30px">
+              <div fxFlex="50" class="rectangle-16">
+                <img [src]="imageUrl" style="display:block;max-height:100%;max-width:100%;margin:auto;">
+              </div>
+              <div fxLayout="column" fxLayoutGap="10px" fxFlex="50">
+                <button mat-stroked-button (click)="previewImage()">
+                  <mat-icon class="mr-8">remove_red_eye</mat-icon>
+                  <span>Lihat Foto Produk</span>
+                </button>
+                <button mat-stroked-button (click)="uploadImage()">
+                  <mat-icon class="mr-8">photo</mat-icon>
+                  <span>Unggah Foto Produk</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="50">
+            
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px" class="pt-36">
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button mat-green-800-bg"
+            (click)="submit()"
+          >
+            Setuju Untuk Masuk ke DB
+          </button>
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit()"
+          >
+            Ditolak
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

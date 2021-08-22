@@ -3,51 +3,22 @@
   fxLayout="column"
   fusePerfectScrollbar
 >
-  <page-content-header [contentTitle]="'Produk Kasir'">
+  <page-content-header contentTitle="Pengajuan Produk DB">
     <button
       style="min-width: 170px"
-      mat-raised-button
-      aria-label="Produk"
-      type="button"
-      (click)="import()"
-    >
-      <mat-icon style="font-size: 20px; margin-right: 6px"
-        >arrow_downward</mat-icon
-      >Import Produk
-    </button>
-    <button
-      style="min-width: 170px"
-      mat-raised-button
-      aria-label="Produk"
-      type="button"
-      (click)="export()"
-    >
-      <mat-icon style="font-size: 20px; margin-right: 6px"
-        >arrow_upward</mat-icon
-      >Export Produk
-    </button>
-    <button
-      style="min-width: 170px"
-      [routerLink]="['/sku-management', 'product-cashier', 'create']"
+      [routerLink]="['/sku-management', 'db-product-submission', 'approval']"
       mat-raised-button
       aria-label="Produk"
       type="button"
     >
-      <mat-icon style="font-size: 20px; margin-right: 6px">add</mat-icon>Tambah
-      Produk
+      <mat-icon style="font-size: 20px; margin-right: 6px">settings</mat-icon
+      >Pengaturan Approval
     </button>
-    <a #downloadLink></a>
   </page-content-header>
   <div class="content p-24">
-    <div class="ayo-main-wrapper mat-white-bg p-0">
-      <nav mat-tab-nav-bar>
-        <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
-        <a
-          mat-tab-link
-          [routerLink]="['/sku-management', 'product-cashier', 'submission']"
-          class="tab-link"
-          >Produk Diajukan</a
-        >
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="p-20">
+        <h2 style="margin: unset">Daftar Produk</h2>
         <div class="search-field">
           <input
             matInput
@@ -57,7 +28,7 @@
           />
           <mat-icon style="font-size: 20px">search</mat-icon>
         </div>
-      </nav>
+      </div>
       <div
         *ngIf="onLoad"
         fxLayout="row"
@@ -96,16 +67,7 @@
               let-row="row"
               let-value="value"
             >
-              <span
-                class="row-name"
-                [routerLink]="[
-                  '/sku-management',
-                  'product-cashier',
-                  'detail',
-                  row.id
-                ]"
-                >{{ row.name }}</span
-              >
+              <span>{{ row.name }}</span>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column
@@ -122,14 +84,6 @@
             prop="category"
           ></ngx-datatable-column>
           <ngx-datatable-column
-            name="Harga Beli"
-            prop="purchase_price.formatted"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Harga Jual"
-            prop="selling_price.formatted"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
             [width]="100"
             name="Tindakan"
             headerClass="textright"
@@ -143,27 +97,12 @@
               <div class="button-row" style="white-space: nowrap">
                 <button
                   mat-icon-button
-                  *ngIf="!permission?.ubah"
-                  color=""
-                  matTooltip="Detail Produk"
-                  [routerLink]="[
-                    '/sku-management',
-                    'product-cashier',
-                    'detail',
-                    row.id
-                  ]"
-                >
-                  <mat-icon class="secondary-text">assignment</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  *ngIf="permission?.ubah"
                   color=""
                   matTooltip="Ubah Produk"
                   [routerLink]="[
                     '/sku-management',
-                    'product-cashier',
-                    'edit',
+                    'db-product-submission',
+                    'detail',
                     row.id
                   ]"
                 >
@@ -174,12 +113,41 @@
                   color="primary"
                   matTooltip="Hapus Produk"
                   (click)="deleteProduct(row.id)"
-                  [ngStyle]="{ cursor: !permission?.hapus ? 'no-drop' : '' }"
-                  [disabled]="!permission?.hapus"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Status" prop="status" [sortable]="false">
+            <ng-template let-column="column" ngx-datatable-header-template>
+              <div
+                class="datatable-header-cell-label draggable"
+                style="
+                  display: inline-block;
+                  height: 48px;
+                  line-height: 48px;
+                  width: 150px;
+                  cursor: pointer;
+                "
+                [matMenuTriggerFor]="statusMenu"
+              >
+                {{ column.name
+                }}{{
+                  approvalStatusActive && approvalStatusActive !== "Semua"
+                    ? " - " + approvalStatusActive
+                    : ""
+                }}
+              </div>
+              <mat-menu #statusMenu="matMenu" yPosition="below">
+                <button
+                  mat-menu-item
+                  *ngFor="let item of approvalStatus"
+                  (click)="approvalStatusChange(item)"
+                >
+                  {{ item.name }}
+                </button>
+              </mat-menu>
             </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>

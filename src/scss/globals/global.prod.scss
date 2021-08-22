@@ -925,6 +925,18 @@ a {
   border: 1px solid gray;
 }
 
+.previewImage {
+  height: 210px;
+  width: 410px;
+  border-radius: 6px;
+  background-color: #ffffff;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 10px;
+  border: 1px solid gray;
+}
+
 .image {
   height: 190px;
   width: 190px !important;
@@ -1341,4 +1353,17 @@ a {
     color: #003872;
     font-weight: bold;
   }
+}
+
+.table-mat-tooltip {
+  font-size: 14px!important;
+  line-height: 1.5;
+}
+
+.mat-custom-label {
+  font-family: "Proxima Nova";
+  font-weight: normal;
+  font-size: 10px;
+  color: black;
+  padding-bottom: 10px;
 }

@@ -1,20 +1,25 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
 import { DataService } from "app/services/data.service";
-import { ProductCashierService } from "app/services/sku-management/product-cashier.service";
 import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
-import { MatDialogConfig, MatDialog } from '@angular/material';
-import { CashierImportDialogComponent } from "./import-dialog/import-dialog.component";
+import { MatDialogConfig, MatDialog } from "@angular/material";
+import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 
 @Component({
-  selector: "app-cashier-index",
+  selector: "cashier-submission",
   templateUrl: "./index.component.html",
   styleUrls: ["./index.component.scss"],
 })
-export class CashierIndexComponent implements OnInit {
+export class CashierSubmissionComponent implements OnInit {
   onLoad: boolean = true;
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
@@ -34,15 +39,15 @@ export class CashierIndexComponent implements OnInit {
   @ViewChild("activeCell")
   activeCellTemp: TemplateRef<any>;
 
-  @ViewChild('downloadLink') downloadLink: ElementRef;
-
   constructor(
     private dataService: DataService,
-    private productCashierService: ProductCashierService,
+    private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
-    this.permission = this.roles.getRoles("principal.produk_kasir");
+    this.permission = this.roles.getRoles(
+      "principal.produk_kasir.pengajuan_produk"
+    );
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
@@ -71,7 +76,7 @@ export class CashierIndexComponent implements OnInit {
       this.offsetPagination = page ? page - 1 : 0;
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -89,7 +94,7 @@ export class CashierIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -99,19 +104,44 @@ export class CashierIndexComponent implements OnInit {
   onSort(event) {
     const sortName = event.column.prop.split(".")[0];
     this.pagination.sort = sortName;
-    this.pagination.sort_type = event.newValue.toUpperCase();
+    this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
     this.dataService.setToStorage("page", this.pagination.page);
     this.dataService.setToStorage("sort", sortName);
-    this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
+    this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
     });
+  }
+
+  getProducts() {
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? page - 1 : 0;
+
+    this.submissionService.get(this.pagination).subscribe(
+      (res) => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data ? res.data : [];
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      },
+      (err) => {
+        console.error(err);
+        this.onLoad = false;
+      }
+    );
   }
 
   deleteProduct(id): void {
@@ -126,75 +156,17 @@ export class CashierIndexComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.productCashierService.delete({ product_id: this.id }).subscribe(
-      (res) => {
-        this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-
-        this.getProducts();
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
-
-  getProducts() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
-
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
-
-    this.offsetPagination = page ? page - 1 : 0;
-
-    this.productCashierService.get(this.pagination).subscribe(
-      (res) => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data ? res.data : [];
-        this.onLoad = false;
-        this.loadingIndicator = false;
-      },
-      (err) => {
-        console.error(err);
-        this.onLoad = false;
-      }
-    );
+    // this.productService.delete({ product_id: this.id }).subscribe(
+    //   (res) => {
+    //     this.dialogService.brodcastCloseConfirmation();
+    //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+    //     this.getProducts();
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   }
+    // );
   }
 
   onSelect(event: any) {}
-
-  export() {
-    this.dataService.showLoading(true);
-    this.productCashierService.export().subscribe(
-      (res) => {
-        this.downloadLink.nativeElement.href = res.data.url;
-        this.downloadLink.nativeElement.target = "_blank";
-        this.downloadLink.nativeElement.click();
-        this.dataService.showLoading(false);
-      },
-      (err) => {
-        this.dataService.showLoading(false);
-      }
-    )
-  }
-
-  import() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-
-    this.dialogRef = this.dialog.open(CashierImportDialogComponent, dialogConfig);
-
-    this.dialogRef.afterClosed().subscribe(response => {
-      if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        this.getProducts();
-      }
-    });
-  }
 }

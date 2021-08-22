@@ -20,6 +20,11 @@ import {
 } from "../../resolver/product.resolver";
 import { DetailTradeProgramComponent } from "./coin/detail/detail-trade-program/detail-trade-program.component";
 import { DetailRetailerComponent } from "./coin/detail/detail-retailer/detail-retailer.component";
+import { CashierSubmissionEditComponent } from "./product-cashier/submission/edit/edit.component";
+import { CashierSubmissionComponent } from "./product-cashier/submission/index/index.component";
+import { DbProductSubmissionComponent } from "./db-product-submission/index/index.component";
+import { DbProductSubmissionEditComponent } from "./db-product-submission/edit/edit.component";
+import { DbProductSubmissionApprovalComponent } from "./db-product-submission/approval/approval.component";
 
 const routes: Routes = [
   {
@@ -103,6 +108,51 @@ const routes: Routes = [
     component: CashierEditComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.productCashier.detail
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/submission",
+    component: CashierSubmissionComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.submission
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/submission/detail/:id",
+    component: CashierSubmissionEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.submissionDetail
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "db-product-submission",
+    component: DbProductSubmissionComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.dbSubmission.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "db-product-submission/detail/:id",
+    component: DbProductSubmissionEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.dbSubmission.detail
+    },
+    resolve: {
+      listBrand: ListBrandResolver,
+      listCategory: ListCategoryResolver,
+      listPackaging: ListPackagingResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "db-product-submission/approval",
+    component: DbProductSubmissionApprovalComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.dbSubmission.approval
     },
     canActivate: [PageGuard]
   },
