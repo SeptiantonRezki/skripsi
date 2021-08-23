@@ -150,23 +150,7 @@ export class CustomNotificationCreateComponent implements OnInit {
 
     this.typeOfRecurrence = 'OneTime';
 
-    this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res !== 'customer') {
-        this.formNotification.get('notif_type').setValidators([]);
-        this.formNotification.get('notif_type').setValue('');
-        this.formNotification.updateValueAndValidity();
-      } else {
-        this.formNotification.get('notif_type').setValidators([Validators.required]);
-        this.formNotification.get('notif_type').setValue('notif');
-        this.formNotification.updateValueAndValidity();
-      }
-
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
-    });
-
     this.formNotification.controls['user_group'].setValue('retailer');
-    this.formNotification.controls['url_iframe'].disable();
 
     this.formNotification.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formNotification, this.formNotificationError);
@@ -200,19 +184,11 @@ export class CustomNotificationCreateComponent implements OnInit {
   }
 
   selectChange(e: any) {
-    // console.log(e);
-    if (e.source.value === 'tsm') {
-      this.formNotification.get('user_group').patchValue('tsm');
-    }
-
     if(e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
-      this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
-      this.formNotification.controls.subscription_status.setValue('all');
     } else {
-      this.formNotification.controls.type_of_recurrence.enable();
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }

@@ -26,8 +26,7 @@
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="Tipe Konten"
-                  (selectionChange)="contentType(formNotification.get('content_type').value)">
+                <mat-select formControlName="content_type" placeholder="Tipe Konten">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
