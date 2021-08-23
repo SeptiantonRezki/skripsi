@@ -53,6 +53,9 @@ export class ImportCustomNotificationComponent implements OnInit {
 
           if (!res.is_valid) {
             this.dialogService.openSnackBar({ message: "File yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
+
+            // meletakkan row yang error ke posisi atas
+            this.rows.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
           }
         } else {
           this.files = undefined;
