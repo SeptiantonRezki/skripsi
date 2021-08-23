@@ -30,36 +30,15 @@ import { ImportCustomNotificationComponent } from './import/import-custom-notifi
 export class CustomNotificationCreateComponent implements OnInit {
   onLoad: boolean;
   loadingIndicator: boolean;
-  formFilter: FormGroup;
 
   formNotification: FormGroup;
-  formArea: FormGroup;
   formNotificationError: any;
-
-  formDailyRecurrence: FormGroup;
-  formRecurrenceCommon: FormGroup;
-
   dialogRef: any;
-  typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
-  indexDelete: any;
   minStartDate: any = new Date();
 
-  listLevelArea: any[];
-  list: any;
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }];
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
-
-  imageContentType: File;
-  imageContentTypeBase64: any;
-  imagePrivew: string;
-
-  multipleImageContentType: any[];
-  videoContentType: File;
-  videoContentTypeURL: any;
-
-  // public options: Object = Config.FROALA_CONFIG;
-  // public optionsStaticPage: Object = Config.FROALA_CONFIG_NOTIFICATION; // Static Page Only
 
   audienceSelected: any[] = [];
 
@@ -123,7 +102,6 @@ export class CustomNotificationCreateComponent implements OnInit {
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
   ) {
-    this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -137,37 +115,20 @@ export class CustomNotificationCreateComponent implements OnInit {
     };
     this.rows = [];
 
-    this.listLevelArea = [
-      {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
-      }
-    ];
-
-    this.list = {
-      zone: [],
-      region: [],
-      area: [],
-      salespoint: [],
-      district: [],
-      territory: []
-    }
     route.url.subscribe(params => {
       console.log({ params });
       this.idNotif = (params[2]) ? params[2].path : null;
       this.actionType = params[1].path;
     })
     
-    this.keyUp.debounceTime(1000)
-      .distinctUntilChanged()
-      .flatMap(search => {
-        return Observable.of(search).delay(500);
-      })
-      .subscribe(data => {
-        this.updateFilter(data);
-      });
+    // this.keyUp.debounceTime(1000)
+    //   .distinctUntilChanged()
+    //   .flatMap(search => {
+    //     return Observable.of(search).delay(500);
+    //   })
+    //   .subscribe(data => {
+    //     this.updateFilter(data);
+    //   });
   }
 
   ngOnInit() {
@@ -189,57 +150,11 @@ export class CustomNotificationCreateComponent implements OnInit {
 
     this.typeOfRecurrence = 'OneTime';
 
-    this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      // if (res === 'retailer' || res === 'tsm') {
-      //   this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
-      //   // this.formNotification.controls['landing_page_value'].disable();
-      // } else {
-      //   this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-      //   // this.formNotification.controls['landing_page_value'].enable();
-      // }
-      if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }];
-      } else {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }];
-      }
-
-      if (res !== 'customer') {
-        this.formNotification.get('notif_type').setValidators([]);
-        this.formNotification.get('notif_type').setValue('');
-        this.formNotification.updateValueAndValidity();
-      } else {
-        this.formNotification.get('notif_type').setValidators([Validators.required]);
-        this.formNotification.get('notif_type').setValue('notif');
-        this.formNotification.updateValueAndValidity();
-      }
-
-      // if (this.formNotification.get("is_target_audience").value === true) {
-      //   this.getAudience();
-      // };
-
-      this.selected.splice(0, this.selected.length);
-      this.audienceSelected = [];
-      this.contentType(this.formNotification.controls['content_type'].value);
-    });
-
     this.formNotification.controls['user_group'].setValue('retailer');
-    this.formNotification.controls['url_iframe'].disable();
 
     this.formNotification.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formNotification, this.formNotificationError);
     });
-
-    this.formRecurrenceCommon.get('recurrence_end_date').valueChanges.subscribe(val => {
-      if(val) {
-        this.formRecurrenceCommon.controls['end_option'].setValue('end_date');
-      }
-    })
-
-    this.formRecurrenceCommon.get('end_recurrence_count').valueChanges.subscribe(val => {
-      if(val) {
-        this.formRecurrenceCommon.controls['end_option'].setValue('end_count');
-      }
-    })
 
     if(this.formNotification.controls.user_group.value !== 'customer') {
       this.formNotification.controls.type_of_recurrence.disable();
@@ -269,19 +184,11 @@ export class CustomNotificationCreateComponent implements OnInit {
   }
 
   selectChange(e: any) {
-    // console.log(e);
-    if (e.source.value === 'tsm') {
-      this.formNotification.get('user_group').patchValue('tsm');
-    }
-
     if(e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
-      this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
-      this.formNotification.controls.subscription_status.setValue('all');
     } else {
-      this.formNotification.controls.type_of_recurrence.enable();
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }
@@ -361,86 +268,11 @@ export class CustomNotificationCreateComponent implements OnInit {
       }
     );
   }
-
-  contentType(value) {
-    if (this.imageContentTypeBase64 && this.imageContentType) {
-      this.imageContentType = undefined;
-      this.imageContentTypeBase64 = undefined;
-    }
-
-    if (this.multipleImageContentType && this.imageContentType) {
-      this.imageContentType = undefined;
-      this.multipleImageContentType = [];
-    }
-
-    if (this.videoContentType && this.videoContentTypeURL) {
-      this.videoContentType = undefined;
-      this.videoContentTypeURL = null;
-    }
-
-    if (value !== 'static_page') {
-      this.formNotification.controls['static_page_title'].setValue('');
-      this.formNotification.controls['static_page_body'].setValue('');
-      this.formNotification.controls['static_page_title'].disable();
-      this.formNotification.controls['static_page_body'].disable();
-    } else {
-      this.formNotification.controls['static_page_title'].enable();
-      this.formNotification.controls['static_page_body'].enable();
-    }
-
-    if (value === 'iframe') {
-      this.formNotification.controls['url_iframe'].setValue('');
-      this.formNotification.controls['url_iframe'].enable();
-    } else {
-      this.formNotification.controls['url_iframe'].disable();
-    }
-
-    if (value === 'landing_page') {
-      this.formNotification.controls['landing_page_value'].setValue('');
-      this.formNotification.controls['landing_page_value'].enable();
-    } else {
-      this.formNotification.controls['landing_page_value'].disable();
-    }
-  }
-
-  getToolTipData(value, array) {
-    if (value && array.length) {
-      let msg = array.filter(item => item.id === value)[0]['name'];
-      return msg;
-    } else {
-      return "";
-    }
-  }
-
-  findDuplicate(array) {
-    var object = {};
-    var result = [];
-
-    array.forEach(function (item) {
-      if (!object[item])
-        object[item] = 0;
-      object[item] += 1;
-    })
-
-    for (var prop in object) {
-      if (object[prop] >= 2) {
-        result.push(prop);
-      }
-    }
-
-    return result;
-  }
-
-  onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-  }
   
   setPage(pageInfo) {
-    // this.setPagination();
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getCustom(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
@@ -452,104 +284,13 @@ export class CustomNotificationCreateComponent implements OnInit {
     this.pagination.sort_type = event.newValue;
     this.pagination.page = 1;
     this.loadingIndicator = true;
-    this.formNotification.controls.search.disable();
-    
-    // this.setPagination();
 
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
+    this.notificationService.getCustom(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
-      this.formNotification.controls.search.enable();
     });
   }
-
-  updateFilter(string) {
-    this.loadingIndicator = true;
-    this.table.offset = 0;
-    this.pagination.search = string;
-    this.pagination.page = 1;
-    
-    // this.setPagination();
-
-    this.formNotification.controls.search.disable();
-
-    this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.allRowsSelected = false;
-      this.audienceSelected = [];
-      this.onSelect({ selected: this.audienceSelected });
-      this.loadingIndicator = false;
-      this.formNotification.controls.search.enable();
-    });
-  }
-
-  displayCheck(row) {
-    return row.name !== 'Ethel Price';
-  }
-
-  onSelectAudience(event, row) {
-    let index = this.audienceSelected.findIndex(id => id === row.id);
-    if (index > - 1) {
-      this.audienceSelected.splice(index, 1);
-      this.allRowsSelected = false;
-    } else {
-      this.audienceSelected.push(row.id);
-    }
-    this.onSelect({ selected: this.audienceSelected });
-    console.log('asdasd', this.audienceSelected);
-  }
-
-  selectCheck(row, column, value) {
-    console.log('selectcheck', row, column, value);
-    return row.id !== null;
-  }
-
-  bindSelector(isSelected, row) {
-    let index = this.audienceSelected.findIndex(id => id === row.id);
-    return index > -1;
-  }
-
-  onSelectAll(allRowsSelected: boolean) {
-    console.log('allRowsSelected', allRowsSelected);
-    this.allRowsSelected = allRowsSelected;
-    if(this.allRowsSelected) {
-      // this.setPagination();
-      this.loadingIndicator = true;
-      this.formNotification.controls.search.disable();
-      this.audienceSelected = this.selected = [];
-      (async () => {
-        let loadMoreIds = true;
-        let offset = 0;
-        while(loadMoreIds) {
-          let queryParams = {
-            ...this.pagination,
-            offset
-          }
-          const res = await this.notificationService.getPushNotifAudienceIDs(queryParams).toPromise();
-          this.audienceSelected = [...this.audienceSelected, ...res];
-          this.selected = [...this.audienceSelected];
-          if(res.length >= 50000) {
-            offset += res.length;
-          } else {
-            loadMoreIds = false;
-          }
-        }
-        
-        this.loadingIndicator = false;
-        this.formNotification.controls.search.enable();
-      })();
-      
-    } else {
-      this.audienceSelected = [];
-      this.onSelect({ selected: this.audienceSelected });
-    }
-  }
-
-  // isTargetAudience(event) {
-  //   if (event.checked) this.getAudience();
-  // }
 
   async export() {
     this.dataService.showLoading(true);
@@ -596,17 +337,6 @@ export class CustomNotificationCreateComponent implements OnInit {
     }, 100);
   }
 
-  handleError(error) {
-    console.log('Here')
-    console.log(error)
-
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    }
-    console.log(error);
-    // alert('Open console to see the error')
-  }
-
   async getDetails() {
     try {
       this.dataService.showLoading(true);
@@ -618,7 +348,6 @@ export class CustomNotificationCreateComponent implements OnInit {
       frm.controls['content_type'].setValue(data.content_type);
       frm.controls['status'].setValue(data.status);
       frm.controls['type_of_recurrence'].setValue(data.type_of_recurrence);
-      frm.controls['type_of_recurrence'].setValue(data.type_of_recurrence);
 
       if(data.type == 'customer') {
         frm.controls['send_ayo'].setValue(data.send_sfmc == null || data.send_sfmc == 0 || data.send_sfmc == '0');
@@ -626,17 +355,11 @@ export class CustomNotificationCreateComponent implements OnInit {
         frm.controls['send_ayo'].setValue(true);
       }
 
-      if (data.target_details.length) {
-        let res = {
-          total: data.target_details.length
-        }
-        Page.renderPagination(this.pagination, res);
-        this.rows = data.target_details;
-      }
-
       let publish = data.publish_at.split(" ");
       frm.controls['recurrence_start_date'].setValue(publish[0]);
       frm.controls['recurrence_time'].setValue(publish[1]);
+
+      this.getTargetDetails();
 
       // end request
       frm.disable();
@@ -646,5 +369,19 @@ export class CustomNotificationCreateComponent implements OnInit {
       this.dataService.showLoading(false);
 
     }
+  }
+
+  getTargetDetails(){
+    this.pagination.notification_id = this.idNotif;
+    this.notificationService.getCustom(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        this.loadingIndicator = false;
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 }

@@ -375,6 +375,7 @@ export class Endpoint {
         get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
         import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`,
+        get_custom: `${AYO_API}/api/principal/customized-notification/target-detail`,
         preview_import: `${AYO_API}/api/principal/customized-notification/target-detail/preview`,
         export_custom: `${AYO_API}/api/principal/customized-notification/target-detail/export`,
         create_custom: `${AYO_API}/api/principal/customized-notification`,
