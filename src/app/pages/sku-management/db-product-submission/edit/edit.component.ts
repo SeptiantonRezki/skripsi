@@ -34,10 +34,6 @@ export class DbProductSubmissionEditComponent implements OnInit {
   filterCategories: FormControl = new FormControl();
   filteredCategories: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
-  subCategories: Array<any>;
-  filterSubCategories: FormControl = new FormControl();
-  filteredSubCategories: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-
   filterDestroy = new Subject();
 
   files: File;
@@ -63,10 +59,24 @@ export class DbProductSubmissionEditComponent implements OnInit {
       : [];
     this.filteredBrands.next(this.brands.slice());
     this.categories = this.activatedRoute.snapshot.data["listCategory"].data
-      ? this.activatedRoute.snapshot.data["listCategory"].data.data
+      ? this.getCategories(this.activatedRoute.snapshot.data["listCategory"].data.data)
       : [];
-    console.log(this.categories);
     this.filteredCategories.next(this.categories.slice());
+  }
+
+  getCategories(items) {
+    let categories = [];
+    this.getCategoryChildren(items, categories);
+    return categories;
+  }
+
+  getCategoryChildren(children, categories) {
+    if (children.length) {
+      children.forEach((item) => {
+        categories.push(item);
+        this.getCategoryChildren(item.childrens, categories);
+      });
+    }
   }
 
   ngOnInit() {
@@ -82,14 +92,6 @@ export class DbProductSubmissionEditComponent implements OnInit {
       .subscribe(() => {
         this.filteringCategories();
       });
-    this.filterSubCategories.valueChanges
-      .pipe(takeUntil(this.filterDestroy))
-      .subscribe(() => {
-        this.filteringSubCategories();
-      });
-    this.product
-      .get("category")
-      .valueChanges.subscribe(this.getSubCategories.bind(this));
   }
 
   createForm() {
@@ -97,8 +99,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       name: ["", Validators.required],
       barcode: [{ value: "", disabled: true }],
       brand: ["", Validators.required],
-      category: [""],
-      subCategory: ["", Validators.required],
+      category: ["", Validators.required],
       businessName: [{ value: "", disabled: true }],
       businessZone: [{ value: "", disabled: true }],
       businessRegional: [{ value: "", disabled: true }],
@@ -146,18 +147,6 @@ export class DbProductSubmissionEditComponent implements OnInit {
     }
   }
 
-  getSubCategories(value: any) {
-    this.productService.getListCategory(value).subscribe(
-      (res) => {
-        this.subCategories = res.data ? res.data.data : [];
-        this.filteredSubCategories.next(this.subCategories.slice());
-      },
-      (err) => {
-        this.subCategories = [];
-      }
-    );
-  }
-
   filteringBrands() {
     const search = this.filterBrands.value;
     if (!this.brands) return;
@@ -167,20 +156,6 @@ export class DbProductSubmissionEditComponent implements OnInit {
     }
     this.filteredBrands.next(
       this.brands.filter(
-        (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
-      )
-    );
-  }
-
-  filteringSubCategories() {
-    const search = this.filterSubCategories.value;
-    if (!this.subCategories) return;
-    if (!search) {
-      this.filteredSubCategories.next(this.subCategories.slice());
-      return;
-    }
-    this.filteredSubCategories.next(
-      this.subCategories.filter(
         (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
       )
     );
