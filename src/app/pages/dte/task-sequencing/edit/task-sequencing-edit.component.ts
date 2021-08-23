@@ -260,12 +260,12 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   }
 
   export() {
-    if (this.taskSequenceForm.get('export_coin_result').value) {
+    // if (  this.taskSequenceForm.get('export_coin_result').value) {
 
-      this.downloadLink.nativeElement.href = this.taskSequenceForm.get('export_coin_result').value;
-      this.downloadLink.nativeElement.click();
+    //   this.downloadLink.nativeElement.href = this.taskSequenceForm.get('export_coin_result').value;
+    //   this.downloadLink.nativeElement.click();
 
-    } else {
+    // } else {
     
       this.dataService.showLoading(true);
       const body = {
@@ -284,7 +284,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         this.dataService.showLoading(false);
       })
 
-    }
+    // }
   }
 
   import() {
