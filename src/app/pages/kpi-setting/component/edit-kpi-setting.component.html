@@ -42,22 +42,23 @@
             <div fxLayout="row" *ngIf="!enableEdit">
               <h3>Status: <span class="text-boxed mat-green-700-bg">active</span></h3>
             </div>
-            <div *ngIf="existingAreas && existingAreas.length > 0">
+            <div fxLayout="row mb-16" *ngIf="existingAreas && existingAreas.length > 0">
+              <h3>Existing Areas</h3>
               <ngx-datatable class="material" [rows]="existingAreas" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
                 [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
                 [count]="existingAreas.length" [externalSorting]="false" (page)="setPage($event)">
 
-                <ngx-datatable-column name="Group ID" prop="id" [width]="24">
+                <!-- <ngx-datatable-column name="Area ID" prop="id" [width]="24">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-id">{{row.id}}</span>
                   </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
                 <ngx-datatable-column name="Code" prop="code">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                    <span class="row-code" >{{row.code}})</span>
+                    <span class="row-code" >{{row.code}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+                <ngx-datatable-column *ngIf="enableEdit" [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
                     style="justify-content: center !important">
                     <div class="button-row" style="margin-left: -10px">
@@ -69,6 +70,7 @@
                 </ngx-datatable-column>
               </ngx-datatable>
             </div>
+            <h3 *ngIf="enableEdit && existingAreas && existingAreas.length > 0">Add Areas:</h3>
             <form [formGroup]="formFilter" autoComplete="off" *ngIf="enableEdit">
               <div
                 fxLayout="row wrap"
