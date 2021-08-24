@@ -91,6 +91,12 @@
           (sort)="onSort($event)"
         >
 
+          <ngx-datatable-column [width]="100" name="ID" prop="id">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.id}}
+            </ng-template>
+          </ngx-datatable-column>
+
           <ngx-datatable-column [width]="200" name="Target User" prop="target_user">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.target_user}}
