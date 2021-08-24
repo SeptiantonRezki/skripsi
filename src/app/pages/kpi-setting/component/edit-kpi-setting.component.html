@@ -42,13 +42,13 @@
             <div fxLayout="row" *ngIf="!enableEdit">
               <h3>Status: <span class="text-boxed mat-green-700-bg">active</span></h3>
             </div>
-            <div fxLayout="row" *ngIf="existingAreas && existingAreas.length > 0">
-              <h3>Existing Areas</h3>
-            </div>
-            <div fxLayout="row" *ngIf="existingAreas && existingAreas.length > 0">
+            <div class="table-wrapper" *ngIf="existingAreas && existingAreas.length > 0">
+              <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+                <h3 class="pl-8">Existing Areas</h3>
+              </div>
               <ngx-datatable class="material" [rows]="existingAreas" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
                 [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-                [count]="existingAreas.length" [externalSorting]="false" (page)="setPage($event)">
+                [count]="existingAreas.length" [externalSorting]="false">
 
                 <!-- <ngx-datatable-column name="Area ID" prop="id" [width]="24">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
