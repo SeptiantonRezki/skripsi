@@ -721,7 +721,11 @@ export class EditKPISettingComponent implements OnInit {
       let lastAreaSelected = areaSelected[areaSelected.length - 1];
       let areaIDs: any;
       if(typeof lastAreaSelected.value == 'number') {
-        areaIDs = [lastAreaSelected.value];
+        if(lastAreaSelected.value == 1 && existingAreaIds.length > 0) {
+          areaIDs = [];
+        } else {
+          areaIDs = [lastAreaSelected.value];
+        }
       } else {
         areaIDs = lastAreaSelected.value;
       }
