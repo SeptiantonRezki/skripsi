@@ -116,6 +116,9 @@ import { ImportAudienceDialogComponent } from "./private-label/panel-partnership
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { DokumenDialogComponent } from './wholesaler/dokumen-dialog/dokumen-dialog.component';
 import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesaler/import-list-wholesaler.component';
+import { RcaAgentComponent } from './rca-agent/rca-agent.component';
+import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
+import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -261,6 +264,9 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
+    RcaAgentComponent,
+    RcaAgentCreateComponent,
+    RcaAgentEditComponent,
 
   ],
   entryComponents: [

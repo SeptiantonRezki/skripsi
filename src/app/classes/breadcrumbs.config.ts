@@ -311,6 +311,15 @@ export const brConfig = {
       }
     ]
   },
+  rca_agent: {
+    index: [
+      {
+        type: "current",
+        url: "/user-management/rca-agents",
+        name: "Daftar RCA Agent"
+      }
+    ],
+  },
   paguyuban: {
     index: [
       {

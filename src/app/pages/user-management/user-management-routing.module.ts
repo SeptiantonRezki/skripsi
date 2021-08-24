@@ -57,6 +57,8 @@ import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-componen
 import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
 import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
+import { RcaAgentComponent } from "./rca-agent/rca-agent.component";
+import { RcaAgentCreateComponent } from "./rca-agent/create/rca-agent-create.component";
 
 
 const routes: Routes = [
@@ -556,6 +558,22 @@ const routes: Routes = [
     component: PanelPartnershipEditComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.panelpartnership.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "rca-agents",
+    component: RcaAgentComponent,
+    data: {
+      breadcrumbs: brConfig.rca_agent.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "rca-agents/create",
+    component: RcaAgentCreateComponent,
+    data: {
+      breadcrumbs: brConfig.rca_agent.index
     },
     // canActivate: [PageGuard]
   },
