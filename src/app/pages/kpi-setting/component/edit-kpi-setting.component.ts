@@ -78,6 +78,8 @@ export class EditKPISettingComponent implements OnInit {
 
   levels: any;
 
+  existingAreas = [];
+
   enableEdit: Boolean = true;
 
   constructor(
@@ -212,6 +214,7 @@ export class EditKPISettingComponent implements OnInit {
   setDetail() {
     this.formKPI.controls['start_kps'].setValue(this.KPIGroup.start_kps);
     this.formKPI.controls['end_kps'].setValue(this.KPIGroup.end_kps);
+    this.existingAreas = this.KPIGroup.areas;
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     for(let kpi_setting of this.KPIGroup.kpi_settings){
@@ -659,6 +662,10 @@ export class EditKPISettingComponent implements OnInit {
     return areaList;
   }
 
+  deleteArea(id) {
+    this.existingAreas = this.existingAreas.filter(area => area.id !== id);
+  }
+
   deleteKPI(pos) {
     let dialogData = {
       titleDialog: 'Hapus KPI',
@@ -666,6 +673,7 @@ export class EditKPISettingComponent implements OnInit {
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ['Hapus', 'Batal']
     }
+    this.indexDelete = pos;
     this.dialogService.openCustomConfirmationDialog(dialogData);
   }
 
@@ -708,18 +716,25 @@ export class EditKPISettingComponent implements OnInit {
         
       console.log("areaSelected", areaSelected);
 
+      let existingAreaIds = this.existingAreas.map(area => area.id);
 
       let lastAreaSelected = areaSelected[areaSelected.length - 1];
       let areaIDs: any;
       if(typeof lastAreaSelected.value == 'number') {
-        areaIDs = [lastAreaSelected.value];
+        if(lastAreaSelected.value == 1 && existingAreaIds.length > 0) {
+          areaIDs = [];
+        } else {
+          areaIDs = [lastAreaSelected.value];
+        }
       } else {
         areaIDs = lastAreaSelected.value;
       }
 
+      let newAreaIDs = Array.from(new Set<number>([...existingAreaIds, ...areaIDs]));
+
       let level = this.levels[lastAreaSelected.key];
 
-      if(areaIDs.length == 0) {
+      if(newAreaIDs.length == 0) {
         this.dialogService.openSnackBar({ message: "Silakan pilih minimal satu area!" });
         commonFormValidator.validateAllFields(this.formKPI);
         return;
@@ -741,7 +756,7 @@ export class EditKPISettingComponent implements OnInit {
         status: this.formKPI.controls['status'].value ? 'active': 'inactive',
         kpi_settings,
         area_level: level,
-        areas: areaIDs
+        areas: newAreaIDs
       };
       let res;
       if(!this.paramEdit) {
