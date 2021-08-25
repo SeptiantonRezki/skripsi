@@ -44,8 +44,8 @@
                 </mat-form-field>
                 <div fxFlex="1"></div>
                 <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
-                  <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-                    placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+                  <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" placeholder="Sampai Tanggal"
+                    formControlName="end_date" readonly>
                   <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button
                     aria-label="Clear" (click)="formFilter.get('end_date').setValue('')">
                     <mat-icon>close</mat-icon>

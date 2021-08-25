@@ -131,7 +131,7 @@ export class DeviceRecoveredComponent implements OnInit {
     });
   }
 
-  updateFilter(string) {
+  updateFilter(string?) {
     this.loadingIndicator = true;
     this.table.offset = 0;
     this.pagination.search = string;

@@ -19,7 +19,6 @@ import {
 
 } from "@angular/material";
 import { DeviceRecoveredComponent } from './device-recovered/device-recovered.component';
-import { DeviceRecoveredSettingsComponent } from './device-recovered/device-recovered-settings/device-recovered-settings.component';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { RouterModule, Routes } from '@angular/router';
 import { brConfig } from 'app/classes/breadcrumbs.config';
@@ -54,7 +53,6 @@ const routes: Routes = [
   ],
   declarations: [
     DeviceRecoveredComponent,
-    DeviceRecoveredSettingsComponent
   ],
   providers: [
     PageGuard,
