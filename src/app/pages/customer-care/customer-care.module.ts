@@ -10,6 +10,8 @@ import {
   MatInputModule,
   MatCheckboxModule,
   MatTabsModule,
+  MatTableModule,
+  MatButtonModule,
 
 } from "@angular/material";
 
@@ -19,8 +21,7 @@ import { PertanyaanVerifikasiAgentDetailComponent } from './pertanyaan-verifikas
 import { UserManagementModule } from '../user-management/user-management.module';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { DeviceRecoverComponent } from './device-recover/device-recover.component';
-import { DeviceRecoveredComponent } from './device-recovered/device-recovered.component';
-import { DeviceRecoveredSettingsComponent } from './device-recovered/device-recovered-settings/device-recovered-settings.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -34,13 +35,13 @@ import { DeviceRecoveredSettingsComponent } from './device-recovered/device-reco
     MatCheckboxModule,
     MatTabsModule,
     UserManagementModule,
+    MatTableModule,
+    MatButtonModule
   ],
   declarations: [
     PertanyaanVerifikasiAgentComponent,
     PertanyaanVerifikasiAgentDetailComponent,
     DeviceRecoverComponent,
-    DeviceRecoveredComponent,
-    DeviceRecoveredSettingsComponent,
   ],
   providers: [
     PageGuard,

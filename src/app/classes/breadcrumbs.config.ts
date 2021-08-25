@@ -2937,15 +2937,12 @@ export const brConfig = {
       },
 
     ],
-    device_recovered: [
-      {
-        type: "parent",
-        url: "/customer-care/device-recovered",
-        name: "Customer Care"
-      },
+  },
+  device_management: {
+    index: [
       {
         type: "current",
-        url: "/customer-care/device-recovered",
+        url: "/device-management/recovery",
         name: "Perangkat dipulihkan dan Pengaturan"
       }
     ],
