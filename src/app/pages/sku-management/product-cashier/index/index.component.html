@@ -43,6 +43,7 @@
       <nav mat-tab-nav-bar>
         <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
         <a
+          *ngIf="permission.pengajuan_produk"
           mat-tab-link
           [routerLink]="['/sku-management', 'product-cashier', 'submission']"
           class="tab-link"

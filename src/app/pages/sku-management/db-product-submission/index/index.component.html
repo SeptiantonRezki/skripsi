@@ -5,7 +5,7 @@
 >
   <page-content-header contentTitle="Pengajuan Produk DB">
     <button
-      *ngIf="hasPermission.pengaturan_approval"
+      *ngIf="permission.pengaturan_approval"
       style="min-width: 170px"
       [routerLink]="['/sku-management', 'db-product-submission', 'approval']"
       mat-raised-button

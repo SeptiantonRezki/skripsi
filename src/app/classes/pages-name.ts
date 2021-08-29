@@ -147,6 +147,10 @@ export class PagesName {
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
 
+    if (name.indexOf("produk_kasir") >= 0) {
+      roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
+    }
+
     if (name.indexOf("pengajuan_produk_db") >= 0) {
       roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
       roles["pengaturan_approval"] = filterPermission.filter((item) => item.indexOf("pengaturan_approval") >= 0)[0];

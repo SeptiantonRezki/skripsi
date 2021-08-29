@@ -29,6 +29,7 @@ export class CashierSubmissionComponent implements OnInit {
   roles: PagesName = new PagesName();
   permission: any;
   id: any[];
+  selectedItem: any;
   dialogRef: any;
 
   keyUp = new Subject<string>();
@@ -45,9 +46,7 @@ export class CashierSubmissionComponent implements OnInit {
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
-    this.permission = this.roles.getRoles(
-      "principal.produk_kasir.pengajuan_produk"
-    );
+    this.permission = this.roles.getRoles("principal.produk_kasir");
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
@@ -55,7 +54,7 @@ export class CashierSubmissionComponent implements OnInit {
         return Observable.of(search).delay(300);
       })
       .subscribe((data) => {
-        this.updateFilter(data);
+        if (data.length === 0 || data.length >= 3) this.updateFilter(data);
       });
   }
 
@@ -127,8 +126,8 @@ export class CashierSubmissionComponent implements OnInit {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
-
     this.offsetPagination = page ? page - 1 : 0;
+    this.loadingIndicator = true;
 
     this.submissionService.get(this.pagination).subscribe(
       (res) => {
@@ -144,8 +143,23 @@ export class CashierSubmissionComponent implements OnInit {
     );
   }
 
-  deleteProduct(id): void {
-    this.id = id;
+  approveProduct(item) {
+    const body = {
+      purchase_price: item.purchase_price.raw,
+      selling_price: item.selling_price.raw,
+    };
+    this.dataService.showLoading(true);
+    this.submissionService
+      .putApprove(body, { product_id: item.id })
+      .subscribe((res) => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+        this.getProducts();
+      });
+  }
+
+  disapproveProduct(item): void {
+    this.selectedItem = item;
     let data = {
       titleDialog: "Hapus Produk",
       captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
@@ -156,16 +170,24 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   confirmDelete() {
-    // this.productService.delete({ product_id: this.id }).subscribe(
-    //   (res) => {
-    //     this.dialogService.brodcastCloseConfirmation();
-    //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-    //     this.getProducts();
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
+    const body = {
+      purchase_price: this.selectedItem.purchase_price.raw,
+      selling_price: this.selectedItem.selling_price.raw,
+    };
+    this.dataService.showLoading(true);
+    this.submissionService
+      .putDisapprove(body, { product_id: this.selectedItem.id })
+      .subscribe(
+        (res) => {
+          this.dataService.showLoading(false);
+          this.dialogService.brodcastCloseConfirmation();
+          this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+          this.getProducts();
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   onSelect(event: any) {}

@@ -27,7 +27,7 @@ export class DbProductSubmissionComponent implements OnInit {
   offsetPagination: any;
   rows: any[];
   roles: PagesName = new PagesName();
-  hasPermission: any;
+  permission: any;
   hasApprovalPermission: any;
   id: any[];
   dialogRef: any;
@@ -62,7 +62,7 @@ export class DbProductSubmissionComponent implements OnInit {
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
-    this.hasPermission = this.roles.getRoles("principal.pengajuan_produk_db");
+    this.permission = this.roles.getRoles("principal.pengajuan_produk_db");
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
