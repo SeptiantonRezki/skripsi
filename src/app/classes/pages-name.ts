@@ -146,6 +146,12 @@ export class PagesName {
       "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
+
+    if (name.indexOf("pengajuan_produk_db") >= 0) {
+      roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
+      roles["pengaturan_approval"] = filterPermission.filter((item) => item.indexOf("pengaturan_approval") >= 0)[0];
+    }
+
     if (name.indexOf("b2b_voucher") > -1) {
       roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }

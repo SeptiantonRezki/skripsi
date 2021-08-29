@@ -1,18 +1,4 @@
 <div class="dialog-content-wrapper" style="width: 800px">
-  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ payload.imageName }}</span>
-      </div>
-    </div>
-    <button
-      mat-icon-button
-      (click)="dialogRef.close()"
-      aria-label="Close Dialog"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
   <div mat-dialog-content fusePerfectScrollbar>
     <img [src]="payload.imageUrl" style="display: block;max-width: 800px;margin: 24px auto;">
   </div>

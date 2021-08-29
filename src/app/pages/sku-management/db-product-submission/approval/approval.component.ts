@@ -106,6 +106,13 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
   }
 
   submit() {
+    if (!this.approval.valid) {
+      this.validateFormGroup(this.approval);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi data terlebih dahulu!",
+      });
+      return;
+    }
     let body = {
       approver_1_id: this.approval.controls["user1"].value,
       approver_produk_db_id: this.approval.controls["userDb"].value,
@@ -123,5 +130,20 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
         this.dataService.showLoading(false);
       }
     );
+  }
+
+  hasError(name) {
+    return this.approval.get(name).invalid && this.approval.get(name).touched;
+  }
+
+  validateFormGroup(form: FormGroup) {
+    Object.keys(form.controls).forEach((field) => {
+      const control = form.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateFormGroup(control);
+      }
+    });
   }
 }

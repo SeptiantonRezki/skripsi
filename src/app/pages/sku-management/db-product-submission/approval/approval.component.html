@@ -25,16 +25,12 @@
               <mat-option
                 *ngFor="let item of filteredUser1 | async"
                 [value]="item.id"
+                [disabled]="item.id === approval.controls.userDb.value"
               >
                 {{ item.name }}
               </mat-option>
             </mat-select>
-            <mat-error
-              *ngIf="
-                approval.controls.user1.hasError('required') &&
-                approval.controls.user1.touched
-              "
-            >
+            <mat-error *ngIf="hasError('user1')">
               Approver 1 harus diisi
             </mat-error>
           </mat-form-field>
@@ -54,16 +50,12 @@
               <mat-option
                 *ngFor="let item of filteredUserDb | async"
                 [value]="item.id"
+                [disabled]="item.id === approval.controls.user1.value"
               >
                 {{ item.name }}
               </mat-option>
             </mat-select>
-            <mat-error
-              *ngIf="
-                approval.controls.userDb.hasError('required') &&
-                approval.controls.userDb.touched
-              "
-            >
+            <mat-error *ngIf="hasError('userDb')">
               Approver produk DB harus diisi
             </mat-error>
           </mat-form-field>

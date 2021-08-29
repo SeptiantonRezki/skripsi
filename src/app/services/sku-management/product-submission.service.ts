@@ -51,23 +51,28 @@ export class ProductSubmissionService extends BaseService {
     return this.postApi(url, body);
   }
 
-  putApprover1(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_approver_1", context);
+  putApprove1(body, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_approve_1", context);
     return this.postApi(url, body);
   }
 
-  putDisapprover1(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_disapprover_1", context);
+  putDisapprove1(body, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_disapprove_1", context);
     return this.postApi(url, body);
   }
 
-  putApproverDbProduct(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_approver_db_product", context);
+  putApproveDbProduct(body, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_approve_db_product", context);
     return this.postApi(url, body);
   }
 
-  putDisapproverDbProduct(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_disapprover_db_product", context);
+  putDisapproveDbProduct(body, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_disapprove_db_product", context);
     return this.postApi(url, body);
+  }
+
+  getBarcode(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_barcode");
+    return this.getApi(url);
   }
 }

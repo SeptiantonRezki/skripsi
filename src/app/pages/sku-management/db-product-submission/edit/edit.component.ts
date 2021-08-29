@@ -37,9 +37,15 @@ export class DbProductSubmissionEditComponent implements OnInit {
   filterDestroy = new Subject();
 
   files: File;
+  filesError: boolean = false;
   imageUrl: any;
 
   dialogRef: any;
+
+  gettingBarcode: boolean = false;
+  hasBarcode: boolean;
+
+  approverType: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -59,24 +65,11 @@ export class DbProductSubmissionEditComponent implements OnInit {
       : [];
     this.filteredBrands.next(this.brands.slice());
     this.categories = this.activatedRoute.snapshot.data["listCategory"].data
-      ? this.getCategories(this.activatedRoute.snapshot.data["listCategory"].data.data)
+      ? this.getCategories(
+          this.activatedRoute.snapshot.data["listCategory"].data.data
+        )
       : [];
     this.filteredCategories.next(this.categories.slice());
-  }
-
-  getCategories(items) {
-    let categories = [];
-    this.getCategoryChildren(items, categories);
-    return categories;
-  }
-
-  getCategoryChildren(children, categories) {
-    if (children.length) {
-      children.forEach((item) => {
-        categories.push(item);
-        this.getCategoryChildren(item.childrens, categories);
-      });
-    }
   }
 
   ngOnInit() {
@@ -112,6 +105,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       this.submissionService
         .getDbDetail(this.productId)
         .subscribe(({ data }) => {
+          console.log(data);
           const business = data.business || {};
           const patchData = {
             name: data.name,
@@ -138,12 +132,40 @@ export class DbProductSubmissionEditComponent implements OnInit {
           if (data.image_url) {
             this.imageUrl = data.image_url;
           }
-          console.log(data);
+          if (!data.barcode) {
+            this.product.get("barcode").setValidators([Validators.required]);
+            this.product.get("barcode").enable();
+          }
+          this.approverType = data.status.toLowerCase();
+          this.hasBarcode = data.barcode ? true : false;
           this.product.patchValue(patchData);
           this.onLoad = false;
         });
     } catch (error) {
       this.onLoad = false;
+    }
+  }
+
+  getBarcode() {
+    this.gettingBarcode = true;
+    this.submissionService.getBarcode().subscribe((res) => {
+      this.product.get("barcode").setValue(res.data);
+      this.gettingBarcode = false;
+    });
+  }
+
+  getCategories(items) {
+    let categories = [];
+    this.getCategoryChildren(items, categories);
+    return categories;
+  }
+
+  getCategoryChildren(children, categories) {
+    if (children.length) {
+      children.forEach((item) => {
+        categories.push(item);
+        this.getCategoryChildren(item.childrens, categories);
+      });
     }
   }
 
@@ -176,9 +198,10 @@ export class DbProductSubmissionEditComponent implements OnInit {
   }
 
   previewImage() {
+    if (!this.imageUrl) return;
+
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
     dialogConfig.data = {
@@ -208,12 +231,17 @@ export class DbProductSubmissionEditComponent implements OnInit {
       if (res) {
         this.imageUrl = res.src;
         this.files = res.file;
+        this.filesError = false;
       }
     });
   }
 
-  submit() {
-    if (!this.product.valid) {
+  submit(action: string) {
+    if (!this.product.valid || !this.imageUrl) {
+      this.validateFormGroup(this.product);
+      if (!this.imageUrl) {
+        this.filesError = true;
+      }
       this.dialogService.openSnackBar({
         message: "Silahkan lengkapi data terlebih dahulu!",
       });
@@ -230,16 +258,55 @@ export class DbProductSubmissionEditComponent implements OnInit {
     }
     console.log("payload", body);
     this.dataService.showLoading(true);
-    this.submissionService
-      .putApprover1(body, {
-        product_id: this.productId,
-      })
-      .subscribe(this.submitSuccess, this.submitError);
+    if (action === "approve") {
+      if (this.approverType === "approver 1") {
+        this.submissionService
+          .putApprove1(body, {
+            product_id: this.productId,
+          })
+          .subscribe(
+            this.submitSuccess.bind(this),
+            this.submitError.bind(this)
+          );
+      }
+      if (this.approverType === "approver produk db") {
+        this.submissionService
+          .putApproveDbProduct(body, {
+            product_id: this.productId,
+          })
+          .subscribe(
+            this.submitSuccess.bind(this),
+            this.submitError.bind(this)
+          );
+      }
+    }
+    if (action === "disapprove") {
+      if (this.approverType === "approver 1") {
+        this.submissionService
+          .putDisapprove1(body, {
+            product_id: this.productId,
+          })
+          .subscribe(
+            this.submitSuccess.bind(this),
+            this.submitError.bind(this)
+          );
+      }
+      if (this.approverType === "approver produk db") {
+        this.submissionService
+          .putDisapproveDbProduct(body, {
+            product_id: this.productId,
+          })
+          .subscribe(
+            this.submitSuccess.bind(this),
+            this.submitError.bind(this)
+          );
+      }
+    }
   }
 
   submitSuccess(res: any) {
     this.onLoad = false;
-    this.router.navigate(["sku-management", "product-cashier", "submission"]);
+    this.router.navigate(["sku-management", "db-product-submission"]);
     this.dialogService.openSnackBar({ message: "Data berhasil diubah" });
     this.dataService.showLoading(false);
   }
@@ -247,5 +314,20 @@ export class DbProductSubmissionEditComponent implements OnInit {
   submitError(err: any) {
     this.onLoad = false;
     this.dataService.showLoading(false);
+  }
+
+  hasError(name) {
+    return this.product.get(name).invalid && this.product.get(name).touched;
+  }
+
+  validateFormGroup(form: FormGroup) {
+    Object.keys(form.controls).forEach((field) => {
+      const control = form.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateFormGroup(control);
+      }
+    });
   }
 }

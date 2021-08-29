@@ -1,11 +1,17 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
 import { DataService } from "app/services/data.service";
 import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
-import { MatDialogConfig, MatDialog } from '@angular/material';
+import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 
 @Component({
@@ -25,7 +31,7 @@ export class DbProductSubmissionComponent implements OnInit {
   hasApprovalPermission: any;
   id: any[];
   dialogRef: any;
-
+  approverType: string;
   approvalStatusActive: any;
   approvalStatus: any[] = [
     {
@@ -56,10 +62,7 @@ export class DbProductSubmissionComponent implements OnInit {
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
-    this.hasPermission = this.roles.getRoles("principal.pengajuan_produk_db.pengajuan_produk");
-    this.hasApprovalPermission = this.roles.getRoles("principal.pengajuan_produk_db.pengaturan_approval");
-    console.log('submission', this.hasPermission);
-    console.log('approval', this.hasApprovalPermission);
+    this.hasPermission = this.roles.getRoles("principal.pengajuan_produk_db");
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
@@ -168,7 +171,6 @@ export class DbProductSubmissionComponent implements OnInit {
     //   (res) => {
     //     this.dialogService.brodcastCloseConfirmation();
     //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-
     //     this.getProducts();
     //   },
     //   (err) => {
@@ -192,6 +194,9 @@ export class DbProductSubmissionComponent implements OnInit {
       (response) => {
         const res = response.data ? response.data : {};
         Page.renderPagination(this.pagination, res);
+        this.approverType = this.approvalStatus.filter(
+          (item) => item.id === res.approver.type
+        )[0]["name"];
         this.rows = res.data ? res.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -204,6 +209,4 @@ export class DbProductSubmissionComponent implements OnInit {
   }
 
   onSelect(event: any) {}
-
 }
-

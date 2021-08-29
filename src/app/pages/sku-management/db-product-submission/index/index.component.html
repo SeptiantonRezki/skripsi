@@ -5,6 +5,7 @@
 >
   <page-content-header contentTitle="Pengajuan Produk DB">
     <button
+      *ngIf="hasPermission.pengaturan_approval"
       style="min-width: 170px"
       [routerLink]="['/sku-management', 'db-product-submission', 'approval']"
       mat-raised-button
@@ -83,42 +84,6 @@
             name="Kategori"
             prop="category"
           ></ngx-datatable-column>
-          <ngx-datatable-column
-            [width]="100"
-            name="Tindakan"
-            headerClass="textright"
-            [sortable]="false"
-          >
-            <ng-template
-              ngx-datatable-cell-template
-              let-row="row"
-              let-value="value"
-            >
-              <div class="button-row" style="white-space: nowrap">
-                <button
-                  mat-icon-button
-                  color=""
-                  matTooltip="Ubah Produk"
-                  [routerLink]="[
-                    '/sku-management',
-                    'db-product-submission',
-                    'detail',
-                    row.id
-                  ]"
-                >
-                  <mat-icon class="secondary-text">edit</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  color="primary"
-                  matTooltip="Hapus Produk"
-                  (click)="deleteProduct(row.id)"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
           <ngx-datatable-column name="Status" prop="status" [sortable]="false">
             <ng-template let-column="column" ngx-datatable-header-template>
               <div
@@ -148,6 +113,46 @@
                   {{ item.name }}
                 </button>
               </mat-menu>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="100"
+            name="Tindakan"
+            headerClass="textright"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div
+                *ngIf="row.status === approverType"
+                class="button-row"
+                style="white-space: nowrap"
+              >
+                <button
+                  mat-icon-button
+                  color=""
+                  matTooltip="Ubah Produk"
+                  [routerLink]="[
+                    '/sku-management',
+                    'db-product-submission',
+                    'detail',
+                    row.id
+                  ]"
+                >
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Hapus Produk"
+                  (click)="deleteProduct(row.id)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>
