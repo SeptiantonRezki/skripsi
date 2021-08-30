@@ -916,6 +916,11 @@ export class Endpoint {
       },
       customer_care: {
         questions: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/customer-care/pertanyaan-verifikasi-agent/list`,
+        recovery_info: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/customer-care/recovery-device/${context.business_id}`,
+        recovery_device_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device`,
+        recovery_device_update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/${context.business_id}`,
+        export_recovery_device: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/export`,
+        recovery_device_settings: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/settings`
       },
       CoinDisburstment: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
