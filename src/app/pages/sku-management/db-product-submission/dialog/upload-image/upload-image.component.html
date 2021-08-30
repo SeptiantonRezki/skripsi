@@ -52,7 +52,7 @@
             mat-raised-button
             color="primary"
             (click)="submit()"
-            [disabled]="!files"
+            [disabled]="!files || invalid"
           >
             Pilih
           </button>

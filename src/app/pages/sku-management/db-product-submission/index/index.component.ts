@@ -30,6 +30,7 @@ export class DbProductSubmissionComponent implements OnInit {
   permission: any;
   hasApprovalPermission: any;
   id: any[];
+  selectedItem: any;
   dialogRef: any;
   approverType: string;
   approvalStatusActive: any;
@@ -155,30 +156,6 @@ export class DbProductSubmissionComponent implements OnInit {
     });
   }
 
-  deleteProduct(id): void {
-    this.id = id;
-    let data = {
-      titleDialog: "Hapus Produk",
-      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"],
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
-
-  confirmDelete() {
-    // this.productCashierService.delete({ product_id: this.id }).subscribe(
-    //   (res) => {
-    //     this.dialogService.brodcastCloseConfirmation();
-    //     this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-    //     this.getProducts();
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
-  }
-
   getProducts() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -209,4 +186,54 @@ export class DbProductSubmissionComponent implements OnInit {
   }
 
   onSelect(event: any) {}
+
+  disapproveProduct(item): void {
+    this.selectedItem = item;
+    let data = {
+      titleDialog: "Hapus Produk",
+      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"],
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    const status = this.selectedItem.status.toLowerCase();
+    const productId = this.selectedItem.id;
+    this.dataService.showLoading(true);
+    this.dialogService.brodcastCloseConfirmation();
+    if (status === "approver 1") {
+      this.submissionService
+        .putDisapprove1(null, {
+          product_id: productId,
+        })
+        .subscribe(
+          this.submitSuccess.bind(this),
+          this.submitError.bind(this)
+        );
+    }
+    if (status === "approver produk db") {
+      this.submissionService
+        .putDisapproveDbProduct(null, {
+          product_id: productId,
+        })
+        .subscribe(
+          this.submitSuccess.bind(this),
+          this.submitError.bind(this)
+        );
+    }
+  }
+
+  submitSuccess(res: any) {
+    this.onLoad = false;
+    this.dataService.showLoading(false);
+    this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+    this.getProducts();
+  }
+
+  submitError(err: any) {
+    this.onLoad = false;
+    this.dataService.showLoading(false);
+  }
 }

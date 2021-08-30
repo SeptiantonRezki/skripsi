@@ -3,14 +3,28 @@
   fxLayout="column"
   fusePerfectScrollbar
 >
-  <page-content-header contentTitle="Pengaturan Approval"></page-content-header>
+  <page-content-header contentTitle="Pengaturan Approval"
+    ><button
+      mat-raised-button
+      aria-label="Simpan"
+      (click)="submit()"
+      type="button"
+    >
+      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
+    </button></page-content-header
+  >
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
         <h2 style="margin: unset">Pengaturan Approval</h2>
       </div>
       <form [formGroup]="approval" class="py-24">
-        <div fxLayout="column" fxFlex="50" fxLayoutAlign="start stretch" fxLayoutGap="16px">
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxLayoutAlign="start stretch"
+          fxLayoutGap="16px"
+        >
           <mat-form-field class="is-light form-primary">
             <mat-select
               formControlName="user1"
@@ -59,16 +73,6 @@
               Approver produk DB harus diisi
             </mat-error>
           </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutGap="30px" class="pt-20">
-          <button
-            mat-raised-button
-            type="button"
-            class="confirmation-button"
-            (click)="submit()"
-          >
-            Simpan Pengaturan
-          </button>
         </div>
       </form>
     </div>

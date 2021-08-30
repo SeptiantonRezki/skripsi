@@ -237,31 +237,29 @@ export class DbProductSubmissionEditComponent implements OnInit {
   }
 
   submit(action: string) {
-    if (!this.product.valid || !this.imageUrl) {
-      this.validateFormGroup(this.product);
-      if (!this.imageUrl) {
-        this.filesError = true;
-      }
-      this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi data terlebih dahulu!",
-      });
-      return;
-    }
-    const body = {
-      name: this.product.get("name").value,
-      barcode: this.product.get("barcode").value,
-      brand_id: this.product.get("brand").value,
-      category_id: this.product.get("category").value,
-    };
-    if (this.files) {
-      body["image"] = this.files;
-    }
-    console.log("payload", body);
-    this.dataService.showLoading(true);
     if (action === "approve") {
+      if (!this.product.valid || !this.imageUrl) {
+        this.validateFormGroup(this.product);
+        if (!this.imageUrl) {
+          this.filesError = true;
+        }
+        this.dialogService.openSnackBar({
+          message: "Silahkan lengkapi data terlebih dahulu!",
+        });
+        return;
+      }
+      const fd = new FormData();
+      fd.append("name", this.product.get("name").value);
+      fd.append("barcode", this.product.get("barcode").value);
+      fd.append("brand_id", this.product.get("brand").value);
+      fd.append("category_id", this.product.get("category").value);
+      if (this.files) {
+        fd.append("image", this.files);
+      }
+      this.dataService.showLoading(true);
       if (this.approverType === "approver 1") {
         this.submissionService
-          .putApprove1(body, {
+          .putApprove1(fd, {
             product_id: this.productId,
           })
           .subscribe(
@@ -271,7 +269,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       }
       if (this.approverType === "approver produk db") {
         this.submissionService
-          .putApproveDbProduct(body, {
+          .putApproveDbProduct(fd, {
             product_id: this.productId,
           })
           .subscribe(
@@ -281,9 +279,10 @@ export class DbProductSubmissionEditComponent implements OnInit {
       }
     }
     if (action === "disapprove") {
+      this.dataService.showLoading(true);
       if (this.approverType === "approver 1") {
         this.submissionService
-          .putDisapprove1(body, {
+          .putDisapprove1(null, {
             product_id: this.productId,
           })
           .subscribe(
@@ -293,7 +292,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       }
       if (this.approverType === "approver produk db") {
         this.submissionService
-          .putDisapproveDbProduct(body, {
+          .putDisapproveDbProduct(null, {
             product_id: this.productId,
           })
           .subscribe(

@@ -170,17 +170,13 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   confirmDelete() {
-    const body = {
-      purchase_price: this.selectedItem.purchase_price.raw,
-      selling_price: this.selectedItem.selling_price.raw,
-    };
     this.dataService.showLoading(true);
+    this.dialogService.brodcastCloseConfirmation();
     this.submissionService
-      .putDisapprove(body, { product_id: this.selectedItem.id })
+      .putDisapprove(null, { product_id: this.selectedItem.id })
       .subscribe(
         (res) => {
           this.dataService.showLoading(false);
-          this.dialogService.brodcastCloseConfirmation();
           this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
           this.getProducts();
         },

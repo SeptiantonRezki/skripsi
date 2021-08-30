@@ -67,19 +67,19 @@ export class CashierSubmissionEditComponent implements OnInit {
   }
 
   submit(action: string) {
-    if (!this.product.valid) {
-      this.validateFormGroup(this.product);
-      this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi data terlebih dahulu!",
-      });
-      return;
-    }
-    const body = {
-      selling_price: this.product.get("selling_price").value,
-      purchase_price: this.product.get("purchase_price").value,
-    };
-    this.dataService.showLoading(true);
     if (action === "approve") {
+      if (!this.product.valid) {
+        this.validateFormGroup(this.product);
+        this.dialogService.openSnackBar({
+          message: "Silahkan lengkapi data terlebih dahulu!",
+        });
+        return;
+      }
+      const body = {
+        selling_price: this.product.get("selling_price").value,
+        purchase_price: this.product.get("purchase_price").value,
+      };
+      this.dataService.showLoading(true);
       this.submissionService
         .putApprove(body, {
           product_id: this.productId,
@@ -88,7 +88,7 @@ export class CashierSubmissionEditComponent implements OnInit {
     }
     if (action === "disapprove") {
       this.submissionService
-        .putDisapprove(body, {
+        .putDisapprove(null, {
           product_id: this.productId,
         })
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
