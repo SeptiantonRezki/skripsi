@@ -162,6 +162,7 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
+    MatSlideToggleModule
   ],
   exports: [
     FieldForceIndexComponent,

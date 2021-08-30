@@ -1,3 +1,129 @@
-<p>
-  rca-agent-edit works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' RCA Agent'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formRcaAgent">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
+          <h2 class="">{{ isDetail ? 'Detil' : 'Ubah' }} RCA Agent</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div fxLayout="column">
+            <mat-form-field fxFlex="30" class="is-light form-primary">
+              <input matInput type="text" formControlName="name" placeholder="Nama RCA Agent">
+              <mat-error
+                *ngIf="formRcaAgent.controls['name'].hasError('required') && formRcaAgent.controls['name'].touched">
+                Nama RCA Agent harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="30" class="is-light form-primary">
+              <input matInput type="text" formControlName="username" placeholder="Username">
+              <mat-error
+                *ngIf="formRcaAgent.controls['username'].hasError('required') && formRcaAgent.controls['username'].touched">
+                Username RCA Agent harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="30" class="is-light form-primary">
+              <input matInput type="email" formControlName="email" placeholder="Email RCA Agent">
+              <mat-error
+                *ngIf="formRcaAgent.controls['email'].hasError('required') && formRcaAgent.controls['email'].touched">
+                Email RCA Agent harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="py-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+          fxLayoutAlign="space-between stretch">
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Zone" formControlName="zone"
+              (selectionChange)="getAudienceArea('region', formRcaAgent.get('zone').value)">
+              <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Regional" formControlName="region"
+              (selectionChange)="getAudienceArea('area', formRcaAgent.get('region').value)">
+              <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Area" formControlName="area"
+              (selectionChange)="getAudienceArea('salespoint', formRcaAgent.get('area').value)">
+              <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Salespoint" formControlName="salespoint"
+              (selectionChange)="getAudienceArea('district', formRcaAgent.get('salespoint').value)">
+              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="District" formControlName="district"
+              (selectionChange)="getAudienceArea('territory', formRcaAgent.get('district').value)">
+              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Territory" formControlName="territory">
+              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="column">
+          <h4 style="font-weight: bold;">Position Code</h4>
+          <section>
+            <mat-slide-toggle formControlName="isNewPositionCode">New</mat-slide-toggle>
+          </section>
+        </div>
+        <div fxLayout="row" fxFlex="30">
+          <mat-form-field fxFlex="100" class="is-light form-primary">
+            <mat-select placeholder="Existing" [formControl]="existingPositionCode"
+              [disabled]="formRcaAgent.get('isNewPositionCode').value">
+              <mat-option *ngFor="let item of listExistingPositionCodes" [value]=" item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="30">
+          <mat-form-field fxFlex="100" class="is-light form-primary">
+            <input matInput type="password" formControlName="password" placeholder="Password">
+            <mat-error
+              *ngIf="formRcaAgent.controls['password'].hasError('required') && formRcaAgent.controls['password'].touched">
+              Password harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxFlex="30">
+          <mat-form-field fxFlex="100" class="is-light form-primary">
+            <input matInput type="password" formControlName="retype_password" placeholder="Retype Password">
+            <mat-error
+              *ngIf="formRcaAgent.controls['retype_password'].hasError('required') && formRcaAgent.controls['retype_password'].touched">
+              Retype Password harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxFlex="30">
+          <mat-error *ngIf="formRcaAgent.hasError('notSame')">
+            Password yang kamu masukan tidak sama!.
+          </mat-error>
+        </div>
+
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

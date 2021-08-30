@@ -166,6 +166,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "rca",
+    loadChildren: "./pages/remote-call-activation/remote-call-activation.module#RemoteCallActivationModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   }

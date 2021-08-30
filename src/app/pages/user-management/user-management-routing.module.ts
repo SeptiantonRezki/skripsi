@@ -59,6 +59,7 @@ import { PanelPartnershipCreateComponent } from "./private-label/panel-partnersh
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
 import { RcaAgentComponent } from "./rca-agent/rca-agent.component";
 import { RcaAgentCreateComponent } from "./rca-agent/create/rca-agent-create.component";
+import { RcaAgentEditComponent } from "./rca-agent/edit/rca-agent-edit.component";
 
 
 const routes: Routes = [
@@ -573,7 +574,23 @@ const routes: Routes = [
     path: "rca-agents/create",
     component: RcaAgentCreateComponent,
     data: {
-      breadcrumbs: brConfig.rca_agent.index
+      breadcrumbs: brConfig.rca_agent.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "rca-agents/edit",
+    component: RcaAgentEditComponent,
+    data: {
+      breadcrumbs: brConfig.rca_agent.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "rca-agents/detail",
+    component: RcaAgentEditComponent,
+    data: {
+      breadcrumbs: brConfig.rca_agent.detail
     },
     // canActivate: [PageGuard]
   },

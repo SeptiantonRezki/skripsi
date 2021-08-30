@@ -112,7 +112,6 @@ export class RcaAgentComponent implements OnInit {
       district: [""],
       territory: [""]
     })
-    this.getVersions();
 
     // this.initArea()
     this.initAreaV2();
@@ -164,13 +163,6 @@ export class RcaAgentComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
-  }
-
-  getVersions() {
-    this.generalService.getAppVersions({ type: 'field-force' }).subscribe(res => {
-      this.listVersions = [{ version: 'Semua Versi' }, ...res];
-      console.log('res versions', res);
-    })
   }
 
   initAreaV2() {
@@ -857,12 +849,12 @@ export class RcaAgentComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_field_force", param);
-    this.router.navigate(["user-management", "field-force", "edit"]);
+    this.router.navigate(["user-management", "rca-agents", "edit"]);
   }
 
   directDetail(param?: any): void {
     this.dataService.setToStorage(" ", param);
-    this.router.navigate(["user-management", "field-force", "detail"]);
+    this.router.navigate(["user-management", "rca-agents", "detail"]);
   }
 
 }

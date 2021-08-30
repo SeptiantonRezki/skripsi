@@ -319,6 +319,42 @@ export const brConfig = {
         name: "Daftar RCA Agent"
       }
     ],
+    create: [
+      {
+        type: "parent",
+        url: "/user-management/rca-agents",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat RCA Agent"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/rca-agents",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit RCA Agent"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/rca-agents",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Voucher"
+      }
+    ]
   },
   paguyuban: {
     index: [
@@ -2946,5 +2982,5 @@ export const brConfig = {
       },
 
     ]
-  }
+  },
 };
