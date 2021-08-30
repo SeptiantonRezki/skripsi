@@ -166,6 +166,12 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'device-management',
+    loadChildren:
+      './pages/device-management/device-management.module#DeviceManagementModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   }
