@@ -157,7 +157,7 @@ export class DeviceRecoveredComponent implements OnInit {
   }
 
   submit(submitType) {
-    let title = submitType === 'setting' ? 'Ubah Pengaturan' : 'Ubah Jumlah Maksimal akun pada 1 perangkat';
+    let title = submitType === 'setting' ? 'Ubah Pengaturan' : 'Pulihkan Semua Perangkat';
     let caption = submitType === 'setting' ? `Anda akan merubah jumlah maksimal akun retailer yang dapat login pada 1 perangkat.
     <br>Jika angka terbaru < angka sebelumnya, anda perlu melakukan pemulihan perangkat agar system berjalan semestinya.
     <br><br>
