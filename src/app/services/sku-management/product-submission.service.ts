@@ -71,8 +71,8 @@ export class ProductSubmissionService extends BaseService {
     return this.postApi(url, body);
   }
 
-  getBarcode(): Observable<any> {
-    const url = this.getUrl(this.namespace, "get_barcode");
+  getBarcode(id): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_barcode", { product_id: id });
     return this.getApi(url);
   }
 }

@@ -148,7 +148,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
 
   getBarcode() {
     this.gettingBarcode = true;
-    this.submissionService.getBarcode().subscribe((res) => {
+    this.submissionService.getBarcode(this.productId).subscribe((res) => {
       this.product.get("barcode").setValue(res.data);
       this.gettingBarcode = false;
     });
