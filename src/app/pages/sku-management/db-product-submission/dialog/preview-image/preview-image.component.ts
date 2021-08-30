@@ -11,9 +11,9 @@ export class PreviewImageComponent implements OnInit {
   payload: any;
 
   constructor(
-    private dialog: MatDialog,
     private dialogService: DialogService,
-    private dialogRef: MatDialogRef<PreviewImageComponent>,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<PreviewImageComponent>,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;

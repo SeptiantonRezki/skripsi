@@ -21,9 +21,9 @@ export class UploadImageComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialog: MatDialog,
     private dialogService: DialogService,
-    private dialogRef: MatDialogRef<UploadImageComponent>
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<UploadImageComponent>
   ) {}
 
   ngOnInit() {
