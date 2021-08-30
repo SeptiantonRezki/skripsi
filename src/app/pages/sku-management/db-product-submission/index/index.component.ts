@@ -171,9 +171,10 @@ export class DbProductSubmissionComponent implements OnInit {
       (response) => {
         const res = response.data ? response.data : {};
         Page.renderPagination(this.pagination, res);
-        this.approverType = this.approvalStatus.filter(
+        const approverType = this.approvalStatus.filter(
           (item) => item.id === res.approver.type
-        )[0]["name"];
+        );
+        this.approverType = approverType.length ? approverType[0]["name"] : "";
         this.rows = res.data ? res.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -208,20 +209,14 @@ export class DbProductSubmissionComponent implements OnInit {
         .putDisapprove1(null, {
           product_id: productId,
         })
-        .subscribe(
-          this.submitSuccess.bind(this),
-          this.submitError.bind(this)
-        );
+        .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
     if (status === "approver produk db") {
       this.submissionService
         .putDisapproveDbProduct(null, {
           product_id: productId,
         })
-        .subscribe(
-          this.submitSuccess.bind(this),
-          this.submitError.bind(this)
-        );
+        .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
   }
 
