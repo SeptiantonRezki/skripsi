@@ -4,6 +4,7 @@ import { brConfig } from "../../classes/breadcrumbs.config";
 import { PageGuard } from "app/classes/auth.guard";
 import { PertanyaanVerifikasiAgentComponent } from './pertanyaan-verifikasi-agent/pertanyaan-verifikasi-agent.component';
 import { PertanyaanVerifikasiAgentDetailComponent } from './pertanyaan-verifikasi-agent/pertanyaan-verifikasi-agent-detail/pertanyaan-verifikasi-agent-detail.component';
+
 const routes: Routes = [
   {
     path: "",

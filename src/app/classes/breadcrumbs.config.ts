@@ -2945,6 +2945,15 @@ export const brConfig = {
         name: "Detail Pertanyaan Verifikasi Agent"
       },
 
-    ]
+    ],
+  },
+  device_management: {
+    index: [
+      {
+        type: "current",
+        url: "/device-management/recovery",
+        name: "Perangkat dipulihkan dan Pengaturan"
+      }
+    ],
   }
 };
