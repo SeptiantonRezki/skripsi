@@ -65,15 +65,16 @@
               <span>{{ row.name }}</span>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column
-            name="Barcode"
-            prop="barcode"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Perusahaan"
-            prop="brand"
-            [width]="100"
-          ></ngx-datatable-column>
+          <ngx-datatable-column name="Barcode" prop="barcode">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Perusahaan" prop="brand" [width]="100">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
           <ngx-datatable-column
             [width]="88"
             name="Kategori"

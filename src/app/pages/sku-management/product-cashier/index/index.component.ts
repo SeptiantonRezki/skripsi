@@ -55,6 +55,7 @@ export class CashierIndexComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resetPagination();
     this.getProducts();
   }
 
@@ -94,6 +95,12 @@ export class CashierIndexComponent implements OnInit {
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
     });
+  }
+
+  resetPagination() {
+    this.dataService.setToStorage("page", 1);
+    this.dataService.setToStorage("sort", "");
+    this.dataService.setToStorage("sort_type", "");
   }
 
   onSort(event) {

@@ -59,6 +59,7 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resetPagination();
     this.getProducts();
   }
 
@@ -100,16 +101,22 @@ export class CashierSubmissionComponent implements OnInit {
     });
   }
 
+  resetPagination() {
+    this.dataService.setToStorage("page", 1);
+    this.dataService.setToStorage("sort", "");
+    this.dataService.setToStorage("sort_type", "");
+  }
+
   onSort(event) {
     const sortName = event.column.prop.split(".")[0];
     this.pagination.sort = sortName;
-    this.pagination.sort_type = event.newValue;
+    this.pagination.sort_type = event.newValue.toUpperCase();
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
     this.dataService.setToStorage("page", this.pagination.page);
     this.dataService.setToStorage("sort", sortName);
-    this.dataService.setToStorage("sort_type", event.newValue);
+    this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
 
     this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);

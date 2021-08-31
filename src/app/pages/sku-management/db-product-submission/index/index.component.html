@@ -71,14 +71,16 @@
               <span>{{ row.name }}</span>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column
-            name="Barcode"
-            prop="barcode"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Perusahaan"
-            prop="brand"
-          ></ngx-datatable-column>
+          <ngx-datatable-column name="Barcode" prop="barcode">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Perusahaan" prop="brand">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
           <ngx-datatable-column
             [width]="88"
             name="Kategori"
@@ -126,21 +128,19 @@
               let-row="row"
               let-value="value"
             >
-              <div
-                *ngIf="row.status === approverType"
-                class="button-row"
-                style="white-space: nowrap"
-              >
+              <div class="button-row" style="white-space: nowrap">
                 <button
                   mat-icon-button
                   color=""
                   matTooltip="Ubah Produk"
+                  class="mat-custom-icon"
                   [routerLink]="[
                     '/sku-management',
                     'db-product-submission',
                     'detail',
                     row.id
                   ]"
+                  [disabled]="row.status !== approverType"
                 >
                   <mat-icon class="secondary-text">edit</mat-icon>
                 </button>
@@ -148,7 +148,9 @@
                   mat-icon-button
                   color="primary"
                   matTooltip="Hapus Produk"
+                  class="mat-custom-icon"
                   (click)="disapproveProduct(row)"
+                  [disabled]="row.status !== approverType"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>

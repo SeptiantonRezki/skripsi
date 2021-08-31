@@ -1369,3 +1369,9 @@ a {
   color: #f44336;
   margin-top: 8px;
 }
+
+.mat-custom-icon:disabled {
+  .material-icons {
+    color: #bdbdbd;
+  }
+}

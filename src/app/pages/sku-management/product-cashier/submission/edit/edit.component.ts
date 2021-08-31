@@ -87,6 +87,7 @@ export class CashierSubmissionEditComponent implements OnInit {
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
     if (action === "disapprove") {
+      this.dataService.showLoading(true);
       this.submissionService
         .putDisapprove(null, {
           product_id: this.productId,
