@@ -101,27 +101,29 @@
           </div>
         </mat-tab>
         <mat-tab label="Pengaturan">
-          <div class="table-wrapper">
+          <div class="table-wrapper p-24">
             <form>
-              <div class="p-28" fxLayout="row">
-                <mat-form-field fxFlex="40" class="is-light">
+              <div class="" fxLayout="row">
+                <mat-form-field fxFlex="50" class="is-light">
                   <input matInput placeholder="Jumlah Maksimal akun retailer pada 1 perangkat" type="number"
                     [formControl]="max_retailer">
                 </mat-form-field>
               </div>
-              <div class="confirm p-16" fxLayout="row" fxLayoutGap="20px">
+              <div class="confirm" fxLayout="row" fxLayoutGap="20px">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
                   (click)="submit('setting')">
                   SIMPAN
                 </button>
               </div>
-              <div class="p-28" fxLayout="row">
+              <div class="pt-16" fxLayout="column">
                 <h2>Pemulihan semua Perangkat</h2>
-                <mat-form-field fxFlex="40" class="is-light">
-                  <input matInput placeholder="Alasan" type="text" [formControl]="reasonRecovery">
-                </mat-form-field>
+                <div class="" fxLayout="row">
+                  <mat-form-field fxFlex="50" class="is-light">
+                    <input matInput placeholder="Alasan" type="text" [formControl]="reasonRecovery">
+                  </mat-form-field>
+                </div>
               </div>
-              <div class="confirm p-16" fxLayout="row" fxLayoutGap="20px">
+              <div class="confirm" fxLayout="row" fxLayoutGap="20px">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
                   (click)="submit('recovery')">
                   SIMPAN
