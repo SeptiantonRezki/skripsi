@@ -277,7 +277,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({
           message: `Request file berhasil.`,
         });
-        this.refreshRequestingFileStatus();
+        // this.refreshRequestingFileStatus();
         // this.downloadLink.nativeElement.href = res.data;
         // this.downloadLink.nativeElement.click();
       }, err => {
