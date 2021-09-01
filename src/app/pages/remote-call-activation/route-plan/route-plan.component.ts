@@ -35,6 +35,8 @@ export class RoutePlanComponent implements OnInit {
 
   positionCode: FormControl = new FormControl('');
   positionCodesList: any[] = [];
+  offsetPagination: any;
+  reorderable = true;
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -117,6 +119,7 @@ export class RoutePlanComponent implements OnInit {
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
+    this.offsetPagination = pageInfo.offset;
 
     // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
     //   Page.renderPagination(this.pagination, res.data);
@@ -142,5 +145,9 @@ export class RoutePlanComponent implements OnInit {
     // }, err => {
     //   this.dataService.showLoading(false);
     // });
+  }
+  submit() {
+    throw new Error("Not Implemented!");
+    
   }
 }

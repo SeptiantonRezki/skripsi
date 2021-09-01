@@ -24,6 +24,8 @@ export class GroupingPelangganIndexComponent implements OnInit {
   pagination: Page = new Page();
   keyUp = new Subject<string>();
   formSearch: FormControl = new FormControl('');
+  offsetPagination: any;
+  reorderable = true;
 
   summaries: any[] = [];
   constructor(
@@ -218,6 +220,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
+    this.offsetPagination = pageInfo.offset;
 
     // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
     //   Page.renderPagination(this.pagination, res.data);
@@ -578,6 +581,11 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     return newLastSelfArea;
+  }
+
+  submit() {
+    throw new Error("Not Implemented!");
+    
   }
 
 }
