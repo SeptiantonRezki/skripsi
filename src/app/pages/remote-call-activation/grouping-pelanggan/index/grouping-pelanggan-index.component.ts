@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -21,8 +23,20 @@ export class GroupingPelangganIndexComponent implements OnInit {
   areaFromLogin: any;
   loadingIndicator: boolean;
   rows: any[];
+  selected: any[];
+  id: any;
+  statusRow: any;
+
+  reorderable = true;
   pagination: Page = new Page();
+  onLoad: boolean;
+
+  offsetPagination: Number = null;
+
   keyUp = new Subject<string>();
+
+  @ViewChild('activeCell') activeCellTemp: TemplateRef<any>;
+  @ViewChild('table') table: DatatableComponent;
   formSearch: FormControl = new FormControl('');
 
   summaries: any[] = [];
@@ -31,6 +45,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
+    private rcaAgentService: RcaAgentService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -113,15 +128,25 @@ export class GroupingPelangganIndexComponent implements OnInit {
     });
 
     this.initAreaV2();
+
+    this.getListGroupingPelanggan();
+    this.getSummary();
+  }
+
+
+  getSummary() {
+    this.rcaAgentService.getGPSummary({}).subscribe(res => {
+      this.summaries = res || [];
+    });
   }
 
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
 
-    // this.getListAudience(this.trade_audience_group_id, search)
+    this.getListGroupingPelanggan();
   }
 
-  getListGroupingPelanggan(id: any, search?: string) {
+  getListGroupingPelanggan() {
     this.dataService.showLoading(true);
     this.pagination.page = 1;
     this.pagination.sort = 'name';
@@ -199,34 +224,31 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     this.loadingIndicator = true;
-    this.pagination['search'] = search;
+    if (this.formSearch.value) this.pagination['search'] = this.formSearch.value;
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
-    // this.taskVerificationService.getListAudience({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.pagination.status = null;
-    //   delete this.pagination['status_coin'];
-    //   delete this.pagination['ir_check'];
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   onSort(event) {
@@ -235,14 +257,14 @@ export class GroupingPelangganIndexComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   initAreaV2() {
@@ -578,6 +600,10 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     return newLastSelfArea;
+  }
+
+  submit() {
+
   }
 
 }

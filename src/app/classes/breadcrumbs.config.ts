@@ -2983,4 +2983,20 @@ export const brConfig = {
 
     ]
   },
+  remote_call_activation: {
+    grouping_pelanggan: [
+      {
+        type: "current",
+        url: "/rca/grouping-pelanggan",
+        name: "Grouping Pelanggan"
+      }
+    ],
+    route_plan: [
+      {
+        type: "current",
+        url: "/rca/rute-kunjungan",
+        name: "Rute Kunjungan"
+      }
+    ],
+  }
 };

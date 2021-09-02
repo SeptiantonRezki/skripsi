@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -35,11 +37,25 @@ export class RoutePlanComponent implements OnInit {
 
   positionCode: FormControl = new FormControl('');
   positionCodesList: any[] = [];
+
+  selected: any[];
+  id: any;
+  statusRow: any;
+
+  reorderable = true;
+  onLoad: boolean;
+
+  offsetPagination: Number = null;
+
+
+  @ViewChild('activeCell') activeCellTemp: TemplateRef<any>;
+  @ViewChild('table') table: DatatableComponent;
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
+    private rcaAgentService: RcaAgentService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -84,48 +100,66 @@ export class RoutePlanComponent implements OnInit {
     });
 
     // this.initAreaV2();
+    this.getListRoutePlan();
+    this.getRPPositionCodes();
+    this.getRPSummary();
   }
-
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
 
-    // this.getListAudience(this.trade_audience_group_id, search)
+    this.getListRoutePlan(search)
   }
 
-  getListRoutePlan(id: any, search?: string) {
+  getRPPositionCodes() {
+    this.rcaAgentService.getRPPositionCode({ perPage: 15 }).subscribe(res => {
+      console.log("resss", res);
+      this.positionCodesList = res.data;
+    })
+  }
+
+  getRPSummary() {
+    this.rcaAgentService.getRPSummary({}).subscribe(res => {
+      this.summaries = res;
+    })
+  }
+
+  getListRoutePlan(search?: string) {
     this.dataService.showLoading(true);
     this.pagination.page = 1;
-    this.pagination.sort = 'name';
-    this.pagination.sort_type = 'asc';
 
     this.loadingIndicator = true;
     this.pagination['search'] = search;
+    this.pagination['area'] = 1;
+    if (this.positionCode.value) {
+      let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
+      if (position) {
+        this.pagination['area'] = position['area_id'];
+        this.pagination['position'] = this.positionCode.value;
+      }
+    }
 
-    // this.taskVerificationService.getListAudience({ audience_id: id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.pagination.status = null;
-    //   delete this.pagination['status_coin'];
-    //   delete this.pagination['ir_check'];
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   onSort(event) {
@@ -134,13 +168,17 @@ export class RoutePlanComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    // this.taskVerificationService.getListAudience({ audience_id: this.trade_audience_group_id, template_id: this.idTemplate }, this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res.data);
-    //   this.rows = res.data.data;
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+  submit() {
+
   }
 }

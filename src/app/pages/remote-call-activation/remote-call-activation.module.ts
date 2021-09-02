@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GroupingPelangganIndexComponent } from './grouping-pelanggan/index/grouping-pelanggan-index.component';
-import { GroupingPelangganCreateComponent } from './grouping-pelanggan/create/grouping-pelanggan-create.component';
-import { GroupingPelangganeditComponent } from './grouping-pelanggan/edit/grouping-pelangganedit.component';
-import { GroupingPelangganSummaryComponent } from './grouping-pelanggan/summary/grouping-pelanggan-summary.component';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
@@ -19,7 +16,7 @@ const routes: Routes = [
     path: "grouping-pelanggan",
     component: GroupingPelangganIndexComponent,
     data: {
-      breadcrumbs: brConfig.b2b_voucher.index
+      breadcrumbs: brConfig.remote_call_activation.grouping_pelanggan
     },
     // canActivate: [PageGuard]
   },
@@ -27,7 +24,7 @@ const routes: Routes = [
     path: "rute-kunjungan",
     component: RoutePlanComponent,
     data: {
-      breadcrumbs: brConfig.b2b_voucher.index
+      breadcrumbs: brConfig.remote_call_activation.route_plan
     },
   }
 ]
@@ -59,6 +56,6 @@ const routes: Routes = [
     MatAutocompleteModule,
     MatChipsModule
   ],
-  declarations: [GroupingPelangganIndexComponent, GroupingPelangganCreateComponent, GroupingPelangganeditComponent, GroupingPelangganSummaryComponent, RoutePlanComponent]
+  declarations: [GroupingPelangganIndexComponent, RoutePlanComponent]
 })
 export class RemoteCallActivationModule { }

@@ -22,4 +22,32 @@ export class RcaAgentService extends BaseService {
     const url = this.getUrl(this.namespace, "position_code", context);
     return this.getApi(url)
   }
+
+  // Grouping Pelanggan
+  getGroupingPelanggan(queryParams?): Observable<any> {
+    const url = this.getUrl("grouping_pelanggan", "get");
+    return this.getApi(url, queryParams);
+  }
+
+  getGPSummary(queryParams): Observable<any> {
+    const url = this.getUrl("grouping_pelanggan", "summary");
+    return this.getApi(url, queryParams);
+  }
+
+
+  // Route Plan
+  getRoutePlan(queryParams?): Observable<any> {
+    const url = this.getUrl("route_plan", "get");
+    return this.getApi(url, queryParams);
+  }
+
+  getRPSummary(queryParams): Observable<any> {
+    const url = this.getUrl("route_plan", "summary");
+    return this.getApi(url, queryParams);
+  }
+
+  getRPPositionCode(queryParams?): Observable<any> {
+    const url = this.getUrl("route_plan", "position_codes");
+    return this.getApi(url, queryParams)
+  }
 }
