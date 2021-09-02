@@ -102,6 +102,17 @@ export class TradeCreateComponent {
       .subscribe(() => {
         this.filteringGTP();
       });
+    
+    setTimeout(() => {
+      document.getElementById("trade-create").getElementsByTagName("input")[0].id = "upload-file-trade";
+    }, 500);
+  }
+
+  selectStatusTrade(){
+    for (let index = 0; index < this.statusTP.length; index++) {
+      let id = 'mat-option-'+index;
+      document.getElementById(id).getElementsByClassName("mat-option-text")[0].id = "status-"+index;
+    }
   }
 
   filteringGTP() {
