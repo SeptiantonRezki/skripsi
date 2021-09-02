@@ -96,17 +96,17 @@
               <!-- <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button> -->
-              <button mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
+              <button id="btn-duplikat" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
                 <mat-icon class="secondary-text">content_copy</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="" matTooltip="Request File" (click)="requestFile(row)"
+              <button id="btn-request_file" type="button" mat-icon-button color="" matTooltip="Request File" (click)="requestFile(row)"
                 [disabled]="reqDownloadCondition(row)['request'] === false">
                 <mat-icon *ngIf="reqDownloadCondition(row)['request'] === true" class="orange-500-fg">
                   account_balance_wallet</mat-icon>
                 <mat-icon *ngIf="reqDownloadCondition(row)['request'] === false" class="secondary-text">
                   account_balance_wallet</mat-icon>
               </button>
-              <button type="button" mat-icon-button color="" matTooltip="Eksport Task Sequencing"
+              <button id="btn-export" type="button" mat-icon-button color="" matTooltip="Eksport Task Sequencing"
                 (click)="downloadFile(row)" [disabled]="reqDownloadCondition(row)['download'] === false">
                 <mat-icon *ngIf="reqDownloadCondition(row)['download'] === true" class="orange-500-fg">save_alt
                 </mat-icon>
@@ -117,7 +117,7 @@
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
+              <button id="btn-delete" mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
                 matTooltip="Hapus Task Sequencing" (click)="deleteTaskSequencing(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
