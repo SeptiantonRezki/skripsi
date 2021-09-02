@@ -240,6 +240,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
   setPage(pageInfo) {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
+    this.offsetPagination = pageInfo.offset;
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -603,7 +604,6 @@ export class GroupingPelangganIndexComponent implements OnInit {
   }
 
   submit() {
-
   }
 
 }
