@@ -5,7 +5,7 @@ import * as _ from "underscore";
 import { SequencingService } from "../../../../services/dte/sequencing.service";
 import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import * as moment from 'moment';
+import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 
 @Component({

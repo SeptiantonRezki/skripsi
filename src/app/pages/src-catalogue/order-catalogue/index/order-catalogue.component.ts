@@ -9,7 +9,7 @@ import { DateAdapter } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { Emitter } from 'app/helper/emitter.helper';
 import { GeneralService } from 'app/services/general.service';
-import * as moment from "moment";
+import moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { QiscusService } from 'app/services/qiscus.service';
 import { StorageHelper } from 'app/helper/storage.helper';

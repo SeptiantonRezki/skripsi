@@ -10,7 +10,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { GeotreeService } from 'app/services/geotree.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportRedeemDialogComponent } from './import-redeem-dialog/import-redeem-dialog.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';

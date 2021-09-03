@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
     selector   : 'fuse-countdown',

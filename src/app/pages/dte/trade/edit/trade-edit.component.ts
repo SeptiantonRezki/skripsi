@@ -6,7 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TradeProgramService } from 'app/services/dte/trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';

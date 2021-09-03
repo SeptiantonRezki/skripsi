@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatMenuTrigger } from '@angular/material';
 import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
-import * as moment from "moment";
+import moment from 'moment';
 import { QiscusService } from 'app/services/qiscus.service';
 import { Subject } from "rxjs/Subject";
 import { Page } from "../../../../../../../classes/laravel-pagination";

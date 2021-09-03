@@ -6,7 +6,7 @@ import { DialogService } from "../../../../services/dialog.service";
 import { Subject } from 'rxjs/Subject';
 import * as shape from 'd3-shape';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogCoinDuplicateComponent } from "./dialog-coin-duplicate/dialog-coin-duplicate.component";
 import { DialogMisiDuplicateComponent } from "./dialog-misi-duplicate/dialog-misi-duplicate.component";
 import { DialogPopUpNotifDuplicateComponent } from "./dialog-pop-up-notif-duplicate/dialog-pop-up-notif-duplicate.component";

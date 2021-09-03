@@ -8,7 +8,7 @@ import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operator
 import { DialogService } from 'app/services/dialog.service';
 import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-audience-trade-program',

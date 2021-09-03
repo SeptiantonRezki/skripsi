@@ -6,7 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
 import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../import-coin/import-coin.component';

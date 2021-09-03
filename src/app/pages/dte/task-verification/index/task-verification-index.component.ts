@@ -5,7 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
