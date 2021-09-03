@@ -18,6 +18,13 @@
                     Nama Voucher harus diisi.
                   </mat-error>
                 </mat-form-field>
+                <mat-form-field fxFlex.gt-xs="50" class="is-light pb-12">
+                  <input matInput type="text" placeholder="Nama Lain Voucher" formControlName="alias">
+                  <mat-error
+                    *ngIf="formDetailVoucher.controls['alias'].hasError('required') && formDetailVoucher.controls['alias'].touched ">
+                    Nama Lain Voucher harus diisi.
+                  </mat-error>
+                </mat-form-field>
                 <div fxLayout.gt-xs="row" fxLayout="column" fxFlex.gt-xs="50" fxLayoutGap="20px">
                   <mat-form-field class="is-light pb-12" fxFlex.gt-xs="50">
                     <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucherValue">
