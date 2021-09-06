@@ -1,0 +1,179 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header [contentTitle]="'Produk Diajukan'"></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0">
+      <nav mat-tab-nav-bar>
+        <a
+          mat-tab-link
+          [routerLink]="['/sku-management', 'product-cashier']"
+          class="tab-link"
+          >Daftar Produk Kasir</a
+        >
+        <a mat-tab-link [active]="true" class="tab-link">Produk Diajukan</a>
+        <div class="search-field">
+          <input
+            matInput
+            placeholder="Cari"
+            (keyup)="keyUp.next($event.target.value)"
+            autocomplete="off"
+          />
+          <mat-icon style="font-size: 20px">search</mat-icon>
+        </div>
+      </nav>
+      <div
+        *ngIf="onLoad"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="py-48"
+      >
+        <mat-spinner
+          [strokeWidth]="6"
+          [diameter]="50"
+          color="accent"
+        ></mat-spinner>
+      </div>
+      <div *ngIf="!onLoad">
+        <ngx-datatable
+          class="material"
+          [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
+          [columnMode]="'force'"
+          [offset]="offsetPagination"
+          [headerHeight]="48"
+          [footerHeight]="56"
+          [rowHeight]="'auto'"
+          [scrollbarH]="true"
+          [reorderable]="reorderable"
+          [count]="pagination.total"
+          [limit]="pagination.per_page"
+          [externalPaging]="true"
+          [externalSorting]="true"
+          (page)="setPage($event)"
+          (sort)="onSort($event)"
+          (select)="onSelect($event)"
+        >
+          <ngx-datatable-column name="Nama Produk" prop="name">
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span>{{ row.name }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Barcode" prop="barcode">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Perusahaan" prop="brand" [width]="100">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="88"
+            name="Kategori"
+            prop="category"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Harga Beli"
+            prop="purchase_price.formatted"
+            [width]="100"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Harga Jual"
+            prop="selling_price.formatted"
+            [width]="100"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="100"
+            prop="in_databank"
+            name="Ada di Databank?"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div
+                class="table-btn-label"
+                [ngClass]="row.in_databank ? 'label-green' : 'label-red'"
+              >
+                {{ row.in_databank ? "Ada" : "Tidak" }}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="200"
+            name="Status"
+            headerClass="table-align-center"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <ng-container *ngIf="row.in_databank">
+                <div class="button-row" style="white-space: nowrap">
+                  <button
+                    mat-stroked-button
+                    class="mr-16"
+                    color="primary"
+                    (click)="approveProduct(row)"
+                  >
+                    Setujui
+                  </button>
+                  <button
+                    mat-icon-button
+                    color=""
+                    matTooltip="Ubah Produk"
+                    [routerLink]="[
+                      '/sku-management',
+                      'product-cashier',
+                      'submission',
+                      'detail',
+                      row.id
+                    ]"
+                  >
+                    <mat-icon class="secondary-text">edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    matTooltip="Hapus Produk"
+                    (click)="disapproveProduct(row)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!row.in_databank">
+                <div
+                  class="table-label table-label-tooltip"
+                  (click)="tooltip.toggle()"
+                >
+                  <span
+                    #tooltip="matTooltip"
+                    matTooltip="Cek Produk di Menu Pengajuan Produk, agar bisa disetujui sebagai produk kasir dan pesan antar, produk harus terlebih dulu didaftarkan sebagai Produk Databank."
+                    matTooltipPosition="right"
+                    matTooltipClass="table-mat-tooltip"
+                  ></span>
+                  <span>Menunggu Tindakan</span>
+                  <mat-icon class="table-label-icon" color="primary"
+                    >info</mat-icon
+                  >
+                </div>
+              </ng-container>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>

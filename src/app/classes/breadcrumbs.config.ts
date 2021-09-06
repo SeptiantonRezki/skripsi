@@ -1087,6 +1087,63 @@ export const brConfig = {
           name: "Detail Produk"
         }
       ],
+      submission: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Produk Diajukan"
+        }
+      ],
+      submissionDetail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/submission",
+          name: "Produk Diajukan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
+        }
+      ],
+    },
+    dbSubmission: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pengajuan Produk DB",
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk Diajukan"
+        }
+      ],
+      approval: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan Approval"
+        }
+      ],
     },
     reward: {
       index: [
