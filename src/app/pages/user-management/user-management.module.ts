@@ -265,9 +265,6 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
-    RcaAgentComponent,
-    RcaAgentCreateComponent,
-    RcaAgentEditComponent,
 
   ],
   entryComponents: [

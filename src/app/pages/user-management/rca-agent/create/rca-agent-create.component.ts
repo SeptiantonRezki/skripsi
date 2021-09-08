@@ -43,7 +43,6 @@ export class RcaAgentCreateComponent implements OnInit {
     private wholesalerService: WholesalerService,
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
-
     this.listLevelArea = [
       {
         "id": 1,
@@ -68,18 +67,18 @@ export class RcaAgentCreateComponent implements OnInit {
       name: ["", Validators.required],
       username: ["", Validators.required],
       email: ["", Validators.required],
-      position: ["", Validators.required],
+      position: [""],
       password: ["", Validators.required],
       retype_password: ["", Validators.required],
       isNewPositionCode: [false],
       areas: this.formBuilder.array([]),
-      national: ["", Validators.required],
-      zone: ["", Validators.required],
-      region: ["", Validators.required],
-      area: ["", Validators.required],
-      salespoint: ["", Validators.required],
-      district: ["", Validators.required],
-      territory: ["", Validators.required]
+      national: [""],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
     }, {
       validator: this.checkPasswords
     });
@@ -133,6 +132,7 @@ export class RcaAgentCreateComponent implements OnInit {
 
   getAudienceArea(selection, id) {
     let item: any;
+    this.getPositionCode(id);
     switch (selection) {
       case 'zone':
         this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
@@ -240,24 +240,65 @@ export class RcaAgentCreateComponent implements OnInit {
   getPositionCode(id = 1) {
     this.rcaAgentService.getPositionCode({ area_id: id }).subscribe(res => {
       console.log("res", res);
+      this.listExistingPositionCodes = res.data;
     })
   }
 
   async submit() {
+    let formRcaAgent = this.formRcaAgent.getRawValue();
+    let formArea = {
+      national: formRcaAgent['national'],
+      zone: formRcaAgent['zone'],
+      region: formRcaAgent['region'],
+      area: formRcaAgent['area'],
+      salespoint: formRcaAgent['salespoint'],
+      district: formRcaAgent['district'],
+      territory: formRcaAgent['territory'],
+    }
+    let areaSelected = Object.entries(formArea).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let area_id = areaSelected[areaSelected.length - 1].value;
+
+
+    let position_code = null;
+    if (this.formRcaAgent.get('isNewPositionCode').value) {
+      if (this.listExistingPositionCodes.length > 0) {
+        let latestCode = this.listExistingPositionCodes.slice(0, 1);
+        let latestIncrement = latestCode[0]['code'].split("-")
+        if (latestIncrement.length > 0) {
+          let latestNumber = Number(latestIncrement[1]);
+          position_code = latestIncrement[0] + "-" + (latestNumber + 1);
+        }
+      } else {
+        let areaSelectedRaw = areaSelected[areaSelected.length - 1];
+        let areaCodeSelected = this.list[areaSelectedRaw['key']].find(val => val.id === areaSelectedRaw['value']);
+        if (areaCodeSelected) position_code = areaCodeSelected['name'] + "-" + "1";
+      }
+
+      if (position_code === null) {
+        return this.dialogService.openSnackBar({ message: "Gagal Generate New Position Code!" });
+      }
+    }
     if (this.formRcaAgent.valid) {
       this.dataService.showLoading(true);
-      let body = {
 
+      let body = {
+        name: this.formRcaAgent.get('name').value,
+        email: this.formRcaAgent.get('email').value,
+        area_id: area_id,
+        username: this.formRcaAgent.get('username').value,
+        position_code: this.formRcaAgent.get('isNewPositionCode').value ? position_code : this.formRcaAgent.get('position').value,
+        password: this.formRcaAgent.get('password').value,
+        status: "active"
       }
-      // this.rcaAgentService.create(fd).subscribe(res => {
-      //   this.dataService.showLoading(false);
-      //   this.dialogService.openSnackBar({
-      //     message: "Data berhasil disimpan!"
-      //   });
-      //   this.rotuer.navigate(['/src-catalogue', 'store-layout-template']);
-      // }, err => {
-      //   this.dataService.showLoading(false);
-      // })
+
+      this.rcaAgentService.create(body).subscribe(res => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+        this.rotuer.navigate(['rca', 'agent-pengguna']);
+      }, err => {
+        console.log('err', err);
+        this.dataService.showLoading(false);
+      })
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
@@ -273,5 +314,4 @@ export class RcaAgentCreateComponent implements OnInit {
 
     return pass === confirmPass ? null : { notSame: true }
   }
-
 }

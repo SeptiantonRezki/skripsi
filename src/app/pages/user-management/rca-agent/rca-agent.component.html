@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="'Daftar RCA Agent'">
     <div class="button-row" fxLayout="row">
       <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/user-management','rca-agents','create']">
+        [routerLink]="['/rca','agent-pengguna','create']">
         <mat-icon>add</mat-icon>BUAT
       </button>
     </div>
@@ -98,17 +98,6 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
-          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
-          </ng-template>
-
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected"></mat-checkbox>
-          </ng-template>
-        </ngx-datatable-column> -->
-
         <ngx-datatable-column name="Nama" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
@@ -145,16 +134,13 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <!-- <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deleteFf(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
-              </button>
+              </button> -->
             </div>
           </ng-template>
         </ngx-datatable-column>

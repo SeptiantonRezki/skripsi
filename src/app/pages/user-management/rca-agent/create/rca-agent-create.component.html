@@ -89,7 +89,7 @@
           <mat-form-field fxFlex="100" class="is-light form-primary">
             <mat-select placeholder="Existing" [formControl]="existingPositionCode"
               [disabled]="formRcaAgent.get('isNewPositionCode').value">
-              <mat-option *ngFor="let item of listExistingPositionCodes" [value]=" item.id">{{item.name}}</mat-option>
+              <mat-option *ngFor="let item of listExistingPositionCodes" [value]=" item.code">{{item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

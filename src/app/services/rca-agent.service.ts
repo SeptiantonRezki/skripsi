@@ -23,6 +23,16 @@ export class RcaAgentService extends BaseService {
     return this.getApi(url)
   }
 
+  create(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "create");
+    return this.postApi(url, body);
+  }
+
+  getDetail(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail", context);
+    return this.getApi(url);
+  }
+
   // Grouping Pelanggan
   getGroupingPelanggan(queryParams?): Observable<any> {
     const url = this.getUrl("grouping_pelanggan", "get");

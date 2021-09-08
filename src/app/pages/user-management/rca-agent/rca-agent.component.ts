@@ -848,13 +848,13 @@ export class RcaAgentComponent implements OnInit {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage("detail_field_force", param);
-    this.router.navigate(["user-management", "rca-agents", "edit"]);
+    this.dataService.setToStorage("detail_rca_agent", param);
+    this.router.navigate(["rca", "agent-pengguna", "edit"]);
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage(" ", param);
-    this.router.navigate(["user-management", "rca-agents", "detail"]);
+    this.dataService.setToStorage("detail_rca_agent", param);
+    this.router.navigate(["rca", "agent-pengguna", "detail"]);
   }
 
 }

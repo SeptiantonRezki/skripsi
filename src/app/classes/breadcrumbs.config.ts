@@ -315,14 +315,14 @@ export const brConfig = {
     index: [
       {
         type: "current",
-        url: "/user-management/rca-agents",
+        url: "/rca/agent-pengguna",
         name: "Daftar RCA Agent"
       }
     ],
     create: [
       {
         type: "parent",
-        url: "/user-management/rca-agents",
+        url: "/rca/agent-pengguna",
         name: "RCA Agent"
       },
       {
@@ -334,7 +334,7 @@ export const brConfig = {
     edit: [
       {
         type: "parent",
-        url: "/user-management/rca-agents",
+        url: "/rca/agent-pengguna",
         name: "RCA Agent"
       },
       {
@@ -346,13 +346,13 @@ export const brConfig = {
     detail: [
       {
         type: "parent",
-        url: "/user-management/rca-agents",
+        url: "/rca/agent-pengguna",
         name: "RCA Agent"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Voucher"
+        name: "Detail RCA Agent"
       }
     ]
   },

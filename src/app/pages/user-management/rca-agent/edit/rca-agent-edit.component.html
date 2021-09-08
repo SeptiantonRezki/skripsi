@@ -81,41 +81,14 @@
 
         <div fxLayout="column">
           <h4 style="font-weight: bold;">Position Code</h4>
-          <section>
-            <mat-slide-toggle formControlName="isNewPositionCode">New</mat-slide-toggle>
-          </section>
         </div>
         <div fxLayout="row" fxFlex="30">
           <mat-form-field fxFlex="100" class="is-light form-primary">
-            <mat-select placeholder="Existing" [formControl]="existingPositionCode"
+            <mat-select placeholder="Position" [formControl]="existingPositionCode"
               [disabled]="formRcaAgent.get('isNewPositionCode').value">
               <mat-option *ngFor="let item of listExistingPositionCodes" [value]=" item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
-
-        <div fxLayout="row" fxFlex="30">
-          <mat-form-field fxFlex="100" class="is-light form-primary">
-            <input matInput type="password" formControlName="password" placeholder="Password">
-            <mat-error
-              *ngIf="formRcaAgent.controls['password'].hasError('required') && formRcaAgent.controls['password'].touched">
-              Password harus diisi
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row" fxFlex="30">
-          <mat-form-field fxFlex="100" class="is-light form-primary">
-            <input matInput type="password" formControlName="retype_password" placeholder="Retype Password">
-            <mat-error
-              *ngIf="formRcaAgent.controls['retype_password'].hasError('required') && formRcaAgent.controls['retype_password'].touched">
-              Retype Password harus diisi
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row" fxFlex="30">
-          <mat-error *ngIf="formRcaAgent.hasError('notSame')">
-            Password yang kamu masukan tidak sama!.
-          </mat-error>
         </div>
 
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">

@@ -6,6 +6,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
+import { FieldForceService } from 'app/services/user-management/field-force.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 @Component({
@@ -34,6 +35,8 @@ export class RcaAgentEditComponent implements OnInit {
   showInvalidPassword: boolean = false;
   isDetail: boolean = false;
 
+  detailRcaAgent: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -41,12 +44,14 @@ export class RcaAgentEditComponent implements OnInit {
     private rcaAgentService: RcaAgentService,
     private rotuer: Router,
     private wholesalerService: WholesalerService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private fieldforceService: FieldForceService
   ) {
     activatedRoute.url.subscribe(params => {
-      this.isDetail = params[0].path === 'detail' ? true : false;
+      this.isDetail = params[1].path === 'detail' ? true : false;
     });
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    this.detailRcaAgent = this.dataService.getFromStorage('detail_rca_agent');
 
     this.listLevelArea = [
       {
@@ -72,23 +77,44 @@ export class RcaAgentEditComponent implements OnInit {
       name: ["", Validators.required],
       username: ["", Validators.required],
       email: ["", Validators.required],
-      position: ["", Validators.required],
-      password: ["", Validators.required],
-      retype_password: ["", Validators.required],
+      position: [""],
       isNewPositionCode: [false],
       areas: this.formBuilder.array([]),
-      national: ["", Validators.required],
-      zone: ["", Validators.required],
-      region: ["", Validators.required],
-      area: ["", Validators.required],
-      salespoint: ["", Validators.required],
-      district: ["", Validators.required],
-      territory: ["", Validators.required]
-    }, {
-      validator: this.checkPasswords
+      national: [""],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
     });
 
+    this.getDetail();
+
     this.initArea();
+  }
+
+  getDetail() {
+    this.rcaAgentService.getDetail({ agent_id: this.detailRcaAgent.id }).subscribe(res => {
+      this.formRcaAgent.get('name').setValue(res.fullname);
+      this.formRcaAgent.get('email').setValue(res.email);
+      this.formRcaAgent.get('username').setValue(res.username);
+      this.formRcaAgent.get('position').setValue(res.position);
+
+      this.fieldforceService.getParentByCode({ parent: res.area_id && res.area_id.length > 0 ? res.area_id[0] : null }).subscribe(resArea => {
+
+        // national: [this.getArea(response, 'national'), Validators.required],
+        //   zone: [this.getArea(response, 'division'), Validators.required],
+        //   region: [this.getArea(response, 'region'), Validators.required],
+        //   area: [this.getArea(response, 'area'), Validators.required],
+        //   salespoint: [this.getArea(response, 'salespoint'), Validators.required],
+        //   district: [this.getArea(response, 'district'), Validators.required],
+        //   territory: [this.getArea(response, 'teritory'), Validators.required],
+
+        // this.initArea(index);
+      })
+      if (this.isDetail) this.formRcaAgent.disable();
+    })
   }
 
   initArea() {
@@ -253,15 +279,6 @@ export class RcaAgentEditComponent implements OnInit {
       let body = {
 
       }
-      // this.rcaAgentService.create(fd).subscribe(res => {
-      //   this.dataService.showLoading(false);
-      //   this.dialogService.openSnackBar({
-      //     message: "Data berhasil disimpan!"
-      //   });
-      //   this.rotuer.navigate(['/src-catalogue', 'store-layout-template']);
-      // }, err => {
-      //   this.dataService.showLoading(false);
-      // })
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
@@ -270,13 +287,4 @@ export class RcaAgentEditComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formRcaAgent);
     }
   }
-
-  checkPasswords: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-    let pass = group.get('password').value;
-    let confirmPass = group.get('retype_password').value
-
-    return pass === confirmPass ? null : { notSame: true }
-  }
-
-
 }
