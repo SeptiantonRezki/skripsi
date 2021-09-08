@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "../../shared/shared.module";
@@ -50,33 +50,43 @@ import {
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxCurrencyModule } from "ngx-currency";
-import {UserManagementModule} from '../user-management/user-management.module';
+import { UserManagementModule } from "../user-management/user-management.module";
 
 import {
   ListBrandResolver,
   ListCategoryResolver,
-  ListPackagingResolver
+  ListPackagingResolver,
 } from "../../resolver/product.resolver";
 import { ScanBarcodeDialogComponent } from "./product/create/dialog/scan-barcode-dialog.component";
-import { AutofocusModule } from 'angular-autofocus-fix';
-import { DetailTradeProgramComponent } from './coin/detail/detail-trade-program/detail-trade-program.component';
-import { DetailRetailerComponent } from './coin/detail/detail-retailer/detail-retailer.component';
+import { AutofocusModule } from "angular-autofocus-fix";
+import { DetailTradeProgramComponent } from "./coin/detail/detail-trade-program/detail-trade-program.component";
+import { DetailRetailerComponent } from "./coin/detail/detail-retailer/detail-retailer.component";
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
-import { RetailerComponent } from './coin/index/retailer/retailer.component';
-import { ProgramComponent } from './coin/index/program/program.component';
-import { ImportAdjustmentCoinDialogComponent } from './coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
-import { ImportFileDialogComponent } from './product/index/import-file-dialog/import-file-dialog.component';
-import { NontsmComponent } from './coin/index/nontsm/nontsm.component';
-import { TsmComponent } from './coin/index/tsm/tsm.component';
-import { RetailertsmComponent } from './coin/index/retailertsm/retailertsm.component';
-import { ProgramtsmComponent } from './coin/index/programtsm/programtsm.component';
-import { TsmImportAdjustmenCoinDialogComponent } from './coin/index/tsm-import-adjustmen-coin-dialog/tsm-import-adjustmen-coin-dialog.component';
-import { CashierIndexComponent } from './product-cashier/index/index.component';
-import { CashierCreateComponent } from './product-cashier/create/create.component';
-import { CashierEditComponent } from './product-cashier/edit/edit.component';
-import { CashierImportDialogComponent } from './product-cashier/index/import-dialog/import-dialog.component';
-import { WholesalerSpecialPriceComponent, WholesalerSpecialPriceSaveButton } from './product/wholesaler-special-price/wholesaler-special-price.component';
-import { ImportWholesalerSpecialPriceComponent } from './product/import-wholesaler-special-price/import-wholesaler-special-price.component';
+import { RetailerComponent } from "./coin/index/retailer/retailer.component";
+import { ProgramComponent } from "./coin/index/program/program.component";
+import { ImportAdjustmentCoinDialogComponent } from "./coin/index/import-adjustment-coin-dialog/import-adjustment-coin-dialog.component";
+import { ImportFileDialogComponent } from "./product/index/import-file-dialog/import-file-dialog.component";
+import { NontsmComponent } from "./coin/index/nontsm/nontsm.component";
+import { TsmComponent } from "./coin/index/tsm/tsm.component";
+import { RetailertsmComponent } from "./coin/index/retailertsm/retailertsm.component";
+import { ProgramtsmComponent } from "./coin/index/programtsm/programtsm.component";
+import { TsmImportAdjustmenCoinDialogComponent } from "./coin/index/tsm-import-adjustmen-coin-dialog/tsm-import-adjustmen-coin-dialog.component";
+import { CashierIndexComponent } from "./product-cashier/index/index.component";
+import { CashierCreateComponent } from "./product-cashier/create/create.component";
+import { CashierEditComponent } from "./product-cashier/edit/edit.component";
+import { CashierImportDialogComponent } from "./product-cashier/index/import-dialog/import-dialog.component";
+import {
+  WholesalerSpecialPriceComponent,
+  WholesalerSpecialPriceSaveButton,
+} from "./product/wholesaler-special-price/wholesaler-special-price.component";
+import { ImportWholesalerSpecialPriceComponent } from "./product/import-wholesaler-special-price/import-wholesaler-special-price.component";
+import { CashierSubmissionComponent } from "./product-cashier/submission/index/index.component";
+import { CashierSubmissionEditComponent } from "./product-cashier/submission/edit/edit.component";
+import { DbProductSubmissionComponent } from "./db-product-submission/index/index.component";
+import { DbProductSubmissionApprovalComponent } from "./db-product-submission/approval/approval.component";
+import { DbProductSubmissionEditComponent } from "./db-product-submission/edit/edit.component";
+import { UploadImageComponent } from "./db-product-submission/dialog/upload-image/upload-image.component";
+import { PreviewImageComponent } from './db-product-submission/dialog/preview-image/preview-image.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -87,19 +97,19 @@ export const customCurrencyMaskConfig = {
   prefix: "",
   suffix: "",
   thousands: ".",
-  nullable: false
+  nullable: false,
 };
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: "LL"
+    dateInput: "LL",
   },
   display: {
     dateInput: "LL",
     monthYearLabel: "MMM YYYY",
     dateA11yLabel: "LL",
-    monthYearA11yLabel: "MMMM YYYY"
-  }
+    monthYearA11yLabel: "MMMM YYYY",
+  },
 };
 
 @NgModule({
@@ -127,6 +137,7 @@ export const MY_FORMATS = {
     MatProgressBarModule,
     MatDialogModule,
     MatToolbarModule,
+    MatMenuModule,
     ngfModule,
     AutofocusModule,
     MatDividerModule,
@@ -164,6 +175,13 @@ export const MY_FORMATS = {
     WholesalerSpecialPriceComponent,
     WholesalerSpecialPriceSaveButton,
     ImportWholesalerSpecialPriceComponent,
+    CashierSubmissionComponent,
+    CashierSubmissionEditComponent,
+    DbProductSubmissionComponent,
+    DbProductSubmissionEditComponent,
+    DbProductSubmissionApprovalComponent,
+    UploadImageComponent,
+    PreviewImageComponent,
   ],
   exports: [
     ProductIndexComponent,
@@ -180,8 +198,15 @@ export const MY_FORMATS = {
     CashierImportDialogComponent,
     WholesalerSpecialPriceSaveButton,
   ],
-  entryComponents: [ScanBarcodeDialogComponent, ImportAdjustmentCoinDialogComponent, ImportFileDialogComponent, TsmImportAdjustmenCoinDialogComponent, CashierImportDialogComponent,
+  entryComponents: [
+    ScanBarcodeDialogComponent,
+    ImportAdjustmentCoinDialogComponent,
+    ImportFileDialogComponent,
+    TsmImportAdjustmenCoinDialogComponent,
+    CashierImportDialogComponent,
     ImportWholesalerSpecialPriceComponent,
+    UploadImageComponent,
+    PreviewImageComponent,
   ],
   providers: [
     ListBrandResolver,
@@ -192,9 +217,9 @@ export const MY_FORMATS = {
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
+      deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ]
+  ],
 })
-export class SkuManagementModule { }
+export class SkuManagementModule {}

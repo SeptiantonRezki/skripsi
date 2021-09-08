@@ -1,20 +1,25 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
 import { DataService } from "app/services/data.service";
-import { ProductCashierService } from "app/services/sku-management/product-cashier.service";
 import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
-import { MatDialogConfig, MatDialog } from '@angular/material';
-import { CashierImportDialogComponent } from "./import-dialog/import-dialog.component";
+import { MatDialogConfig, MatDialog } from "@angular/material";
+import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 
 @Component({
-  selector: "app-cashier-index",
+  selector: "cashier-submission",
   templateUrl: "./index.component.html",
   styleUrls: ["./index.component.scss"],
 })
-export class CashierIndexComponent implements OnInit {
+export class CashierSubmissionComponent implements OnInit {
   onLoad: boolean = true;
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
@@ -24,6 +29,7 @@ export class CashierIndexComponent implements OnInit {
   roles: PagesName = new PagesName();
   permission: any;
   id: any[];
+  selectedItem: any;
   dialogRef: any;
 
   keyUp = new Subject<string>();
@@ -34,11 +40,9 @@ export class CashierIndexComponent implements OnInit {
   @ViewChild("activeCell")
   activeCellTemp: TemplateRef<any>;
 
-  @ViewChild('downloadLink') downloadLink: ElementRef;
-
   constructor(
     private dataService: DataService,
-    private productCashierService: ProductCashierService,
+    private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
@@ -50,7 +54,7 @@ export class CashierIndexComponent implements OnInit {
         return Observable.of(search).delay(300);
       })
       .subscribe((data) => {
-        this.updateFilter(data);
+        if (data.length === 0 || data.length >= 3) this.updateFilter(data);
       });
   }
 
@@ -72,7 +76,7 @@ export class CashierIndexComponent implements OnInit {
       this.offsetPagination = page ? page - 1 : 0;
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -90,7 +94,7 @@ export class CashierIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -114,36 +118,11 @@ export class CashierIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", sortName);
     this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.submissionService.get(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
     });
-  }
-
-  deleteProduct(id): void {
-    this.id = id;
-    let data = {
-      titleDialog: "Hapus Produk",
-      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"],
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
-
-  confirmDelete() {
-    this.productCashierService.delete({ product_id: this.id }).subscribe(
-      (res) => {
-        this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
-
-        this.getProducts();
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
   }
 
   getProducts() {
@@ -154,10 +133,10 @@ export class CashierIndexComponent implements OnInit {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
-
     this.offsetPagination = page ? page - 1 : 0;
+    this.loadingIndicator = true;
 
-    this.productCashierService.get(this.pagination).subscribe(
+    this.submissionService.get(this.pagination).subscribe(
       (res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data ? res.data : [];
@@ -171,37 +150,48 @@ export class CashierIndexComponent implements OnInit {
     );
   }
 
-  onSelect(event: any) {}
-
-  export() {
+  approveProduct(item) {
+    const body = {
+      purchase_price: item.purchase_price.raw,
+      selling_price: item.selling_price.raw,
+    };
     this.dataService.showLoading(true);
-    this.productCashierService.export().subscribe(
-      (res) => {
-        this.downloadLink.nativeElement.href = res.data.url;
-        this.downloadLink.nativeElement.target = "_blank";
-        this.downloadLink.nativeElement.click();
+    this.submissionService
+      .putApprove(body, { product_id: item.id })
+      .subscribe((res) => {
         this.dataService.showLoading(false);
-      },
-      (err) => {
-        this.dataService.showLoading(false);
-      }
-    )
-  }
-
-  import() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-
-    this.dialogRef = this.dialog.open(CashierImportDialogComponent, dialogConfig);
-
-    this.dialogRef.afterClosed().subscribe(response => {
-      if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
         this.getProducts();
-      }
-    });
+      });
   }
+
+  disapproveProduct(item): void {
+    this.selectedItem = item;
+    let data = {
+      titleDialog: "Hapus Produk",
+      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"],
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.dataService.showLoading(true);
+    this.dialogService.brodcastCloseConfirmation();
+    this.submissionService
+      .putDisapprove(null, { product_id: this.selectedItem.id })
+      .subscribe(
+        (res) => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+          this.getProducts();
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+  onSelect(event: any) {}
 }

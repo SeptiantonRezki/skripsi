@@ -1,0 +1,80 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="Pengaturan Approval"
+    ><button
+      mat-raised-button
+      aria-label="Simpan"
+      (click)="submit()"
+      type="button"
+    >
+      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
+    </button></page-content-header
+  >
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">Pengaturan Approval</h2>
+      </div>
+      <form [formGroup]="approval" class="py-24">
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxLayoutAlign="start stretch"
+          fxLayoutGap="16px"
+        >
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="user1"
+              placeholder="Approver 1"
+              #singleSelect
+            >
+              <ngx-mat-select-search
+                [formControl]="filterUser1"
+                [placeholderLabel]="'Cari Approver 1...'"
+                [noEntriesFoundLabel]="'Tidak ada approver 1 yang ditemukan'"
+              ></ngx-mat-select-search>
+              <mat-option
+                *ngFor="let item of filteredUser1 | async"
+                [value]="item.id"
+                [disabled]="item.id === approval.controls.userDb.value"
+              >
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('user1')">
+              Approver 1 harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="userDb"
+              placeholder="Approver Produk DB"
+              #singleSelect
+            >
+              <ngx-mat-select-search
+                [formControl]="filterUserDb"
+                [placeholderLabel]="'Cari Approver Produk DB...'"
+                [noEntriesFoundLabel]="
+                  'Tidak ada approver produk DB yang ditemukan'
+                "
+              ></ngx-mat-select-search>
+              <mat-option
+                *ngFor="let item of filteredUserDb | async"
+                [value]="item.id"
+                [disabled]="item.id === approval.controls.user1.value"
+              >
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('userDb')">
+              Approver produk DB harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
