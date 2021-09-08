@@ -284,7 +284,9 @@ export class Endpoint {
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/import-audience`,
         show_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/dte/show-import-audience`,
-        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`
+        // export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/${type_api}/dte/audience/request-export`,
+        
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -714,8 +716,11 @@ export class Endpoint {
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
         // download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/download`,
         download_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-export-coin`,
-        preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
-        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        // preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-preview-import-coin`,
+        get_import_preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/preview-import-coin`,
+        // import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        import_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-import-coin`,
         adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer` //ini yang di coin mangement
       },
       pengaturan_attribute_misi: {
@@ -916,6 +921,11 @@ export class Endpoint {
       },
       customer_care: {
         questions: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/customer-care/pertanyaan-verifikasi-agent/list`,
+        recovery_info: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/customer-care/recovery-device/${context.business_id}`,
+        recovery_device_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device`,
+        recovery_device_update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/${context.business_id}`,
+        export_recovery_device: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/export`,
+        recovery_device_settings: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/recovery-device/settings`
       },
       CoinDisburstment: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
