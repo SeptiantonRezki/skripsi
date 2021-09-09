@@ -9,6 +9,15 @@
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="end center" class="p-16 export">
+      <button mat-raised-button type="button" class="is-danger" (click)="importGrouping()">
+        <mat-icon>arrow_downward</mat-icon> Import XLS
+      </button>
+      <button mat-raised-button type="button" class="is-danger" (click)="exportGrouping()">
+        <mat-icon>arrow_upward</mat-icon> Export XLS
+      </button>
+    </div>
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-tab-group>
         <mat-tab label="Pelanggan">

@@ -80,7 +80,7 @@ export class PositionCodeDialogComponent implements OnInit {
       this.rcaAgentService.setMappingPosition({ business_id: this.data.id, position_id: this.positionCode.value }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan!" });
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       }, err => {
         this.dataService.showLoading(false);
       })

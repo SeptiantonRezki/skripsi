@@ -626,4 +626,14 @@ export class GroupingPelangganIndexComponent implements OnInit {
   submit() {
   }
 
+  exportGrouping() {
+    this.dataService.showLoading(true);
+    this.rcaAgentService.exportGrouping({ area: this.pagination['area'] }).subscribe(res => {
+      console.log('res', res);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
+
 }

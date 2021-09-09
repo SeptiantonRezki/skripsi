@@ -253,6 +253,23 @@ export class RoutePlanComponent implements OnInit {
     })
   }
 
+  exportGrouping() {
+    this.dataService.showLoading(true);
+    if (this.positionCode.value) {
+      let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
+      if (position) {
+        this.pagination['area'] = position['area_id'];
+        this.pagination['position'] = this.positionCode.value;
+      }
+    }
+    this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'] }).subscribe(res => {
+      console.log('res', res);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    })
+  }
+
   submit() {
 
   }

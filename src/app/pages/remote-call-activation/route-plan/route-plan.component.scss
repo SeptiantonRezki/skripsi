@@ -34,3 +34,9 @@
   font-weight: bold;
   color: #3E3E3E;
 }
+
+:host {
+  .export {
+    background-color: #3a3a3a !important;
+  }
+}
