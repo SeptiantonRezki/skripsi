@@ -80,7 +80,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
       })
       .subscribe(data => {
         this.formSearch.setValue(data);
-        this.loadFormFilter(data);
+        // this.loadFormFilter(data);
       });
   }
 
@@ -146,7 +146,6 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
-    console.log("kena kah")
     this.getListGroupingPelanggan();
   }
 

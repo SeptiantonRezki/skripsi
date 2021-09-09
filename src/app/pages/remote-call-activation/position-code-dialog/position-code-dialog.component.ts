@@ -89,4 +89,8 @@ export class PositionCodeDialogComponent implements OnInit {
     }
   }
 
+  close() {
+    this.dialogRef.close()
+  }
+
 }
