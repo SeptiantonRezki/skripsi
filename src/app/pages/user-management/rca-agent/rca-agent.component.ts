@@ -741,10 +741,6 @@ export class RcaAgentComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
     this.pagination['status'] = this.status.value;
-    this.pagination['version'] = this.version.value;
-    this.pagination['classification'] = this.clasification.value;
-    if (this.version.value === 'Semua Versi') this.pagination['version'] = null;
-    if (this.status.value === '-1') this.pagination['status'] = null;
     this.rcaAgentService.getList(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);

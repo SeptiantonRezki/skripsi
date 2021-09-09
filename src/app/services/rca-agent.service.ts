@@ -43,6 +43,11 @@ export class RcaAgentService extends BaseService {
     return this.deleteApi(url);
   }
 
+  getCurrentPositionCode(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "current_position_code", context);
+    return this.getApi(url)
+  }
+
   // Grouping Pelanggan
   getGroupingPelanggan(queryParams?): Observable<any> {
     const url = this.getUrl("grouping_pelanggan", "get");

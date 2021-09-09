@@ -915,7 +915,8 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna`,
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/${context.agent_id}`,
-        position_code: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code/${context.area_id}`
+        position_code: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code/${context.area_id}`,
+        current_position_code: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/current-position-code/${context.area_id}`
       },
       grouping_pelanggan: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan`,

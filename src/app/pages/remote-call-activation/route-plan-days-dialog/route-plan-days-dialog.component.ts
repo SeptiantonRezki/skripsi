@@ -35,7 +35,7 @@ export class RoutePlanDaysDialogComponent implements OnInit {
   submit() {
     if (this.planDay.valid) {
       this.dataService.showLoading(true);
-      this.rcaAgentService.setRPMappingPosition({ position_id: this.data.position_id, kunjungan: this.planDay.value }).subscribe(res => {
+      this.rcaAgentService.setRPMappingPosition({ position_id: this.data.business_rca_position_id, kunjungan: this.planDay.value }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Data berhasil Disimpan!" });
         this.dialogRef.close(true);

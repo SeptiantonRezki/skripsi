@@ -33,6 +33,7 @@ export class RcaAgentCreateComponent implements OnInit {
   existingPositionCode: FormControl = new FormControl('');
 
   showInvalidPassword: boolean = false;
+  current_position_code: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -70,7 +71,7 @@ export class RcaAgentCreateComponent implements OnInit {
       position: [""],
       password: ["", Validators.required],
       retype_password: ["", Validators.required],
-      isNewPositionCode: [false],
+      isNewPositionCode: [true],
       areas: this.formBuilder.array([]),
       national: [""],
       zone: [""],
@@ -244,7 +245,28 @@ export class RcaAgentCreateComponent implements OnInit {
     })
   }
 
+  getCurrentPositionCode() {
+    let formRcaAgent = this.formRcaAgent.getRawValue();
+    let formArea = {
+      national: formRcaAgent['national'],
+      zone: formRcaAgent['zone'],
+      region: formRcaAgent['region'],
+      area: formRcaAgent['area'],
+      salespoint: formRcaAgent['salespoint'],
+      district: formRcaAgent['district'],
+      territory: formRcaAgent['territory'],
+    }
+    let areaSelected = Object.entries(formArea).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let area_id = areaSelected[areaSelected.length - 1].value;
+    this.rcaAgentService.getCurrentPositionCode({ area_id }).subscribe(res => {
+      this.current_position_code = res;
+    });
+  }
+
   async submit() {
+    if (this.formRcaAgent.get('isNewPositionCode').value) {
+      this.getCurrentPositionCode();
+    }
     let formRcaAgent = this.formRcaAgent.getRawValue();
     let formArea = {
       national: formRcaAgent['national'],
@@ -258,35 +280,14 @@ export class RcaAgentCreateComponent implements OnInit {
     let areaSelected = Object.entries(formArea).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area_id = areaSelected[areaSelected.length - 1].value;
 
-
-    let position_code = null;
-    if (this.formRcaAgent.get('isNewPositionCode').value) {
-      if (this.listExistingPositionCodes.length > 0) {
-        let latestCode = this.listExistingPositionCodes.slice(0, 1);
-        let latestIncrement = latestCode[0]['code'].split("-")
-        if (latestIncrement.length > 0) {
-          let latestNumber = Number(latestIncrement[1]);
-          position_code = latestIncrement[0] + "-" + (latestNumber + 1);
-        }
-      } else {
-        let areaSelectedRaw = areaSelected[areaSelected.length - 1];
-        let areaCodeSelected = this.list[areaSelectedRaw['key']].find(val => val.id === areaSelectedRaw['value']);
-        if (areaCodeSelected) position_code = areaCodeSelected['name'] + "-" + "1";
-      }
-
-      if (position_code === null) {
-        return this.dialogService.openSnackBar({ message: "Gagal Generate New Position Code!" });
-      }
-    }
     if (this.formRcaAgent.valid) {
       this.dataService.showLoading(true);
-
       let body = {
         name: this.formRcaAgent.get('name').value,
         email: this.formRcaAgent.get('email').value,
         area_id: area_id,
         username: this.formRcaAgent.get('username').value,
-        position_code: this.formRcaAgent.get('isNewPositionCode').value ? position_code : this.formRcaAgent.get('position').value,
+        position_code: this.formRcaAgent.get('isNewPositionCode').value ? this.current_position_code : this.formRcaAgent.get('position'),
         password: this.formRcaAgent.get('password').value,
         status: "active"
       }

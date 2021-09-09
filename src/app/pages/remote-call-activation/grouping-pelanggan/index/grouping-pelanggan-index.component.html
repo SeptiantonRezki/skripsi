@@ -41,8 +41,8 @@
                 </div>
               </div>
 
-              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
-                fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+              <div fxLayout="row wrap" fxLayoutAlign="start" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
+                fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="National" formControlName="national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -76,7 +76,7 @@
                       item.code}}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
                       ===
@@ -106,7 +106,7 @@
                       :
                       item.code}}</mat-option>
                   </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
               </div>
             </form>
             <div class="p-0">
@@ -126,13 +126,13 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Customer Name" prop="owner"></ngx-datatable-column>
                 <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="Territory Code" prop="territory_code" [sortable]="false">
+                <ngx-datatable-column name="Territory Code" prop="division_code" [sortable]="false">
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
                 </ngx-datatable-column>
-                <ngx-datatable-column name="City" prop="division_code" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="City" prop="area_code" [sortable]="false"></ngx-datatable-column>
                 <ngx-datatable-column name="District" prop="district_code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="Village" prop="village" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="Village" prop="teritory_code" [sortable]="false"></ngx-datatable-column>
               </ngx-datatable>
             </div>
           </div>
@@ -149,8 +149,8 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let summary of summaries">
-                    <td>Dom</td>
-                    <td>6000</td>
+                    <td>{{ summary.position_code }}</td>
+                    <td>{{ summary.retailer_name }}</td>
                   </tr>
                   <tr class="active-row" *ngIf="summaries.length === 0">
                     <td colspan="2" style="text-align: center;">No Data to Display ...</td>

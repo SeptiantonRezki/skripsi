@@ -36,7 +36,7 @@ export class RcaAgentEditComponent implements OnInit {
   isDetail: boolean = false;
 
   detailRcaAgent: any;
-
+  detailAreaSelected: any[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -90,31 +90,64 @@ export class RcaAgentEditComponent implements OnInit {
     });
 
     this.getDetail();
-
-    this.initArea();
   }
 
   getDetail() {
     this.rcaAgentService.getDetail({ agent_id: this.detailRcaAgent.id }).subscribe(res => {
-      this.formRcaAgent.get('name').setValue(res.fullname);
-      this.formRcaAgent.get('email').setValue(res.email);
-      this.formRcaAgent.get('username').setValue(res.username);
-      this.formRcaAgent.get('position').setValue(res.position);
+      this.fieldforceService.getParentByCode({ parent: res.area_code && res.area_code.length > 0 ? res.area_code[0] : null }).subscribe(resArea => {
+        this.detailAreaSelected = resArea.data;
+        this.initArea();
+        if (this.detailAreaSelected) {
+          this.detailAreaSelected.map(item => {
+            let level_desc = '';
+            switch (item.level_desc.trim()) {
+              case 'national':
+                level_desc = 'zone';
+                break
+              case 'division':
+                level_desc = 'region';
+                break;
+              case 'region':
+                level_desc = 'area';
+                break;
+              case 'area':
+                level_desc = 'salespoint';
+                break;
+              case 'salespoint':
+                level_desc = 'district';
+                break;
+              case 'district':
+                level_desc = 'territory';
+                break;
+            }
+            this.getAudienceArea(level_desc, item.id, item.name);
+          });
+        }
+        this.formRcaAgent.get('name').setValue(res.fullname);
+        this.formRcaAgent.get('email').setValue(res.email);
+        this.formRcaAgent.get('username').setValue(res.username);
+        this.formRcaAgent.get('position').setValue(res.position);
+        this.formRcaAgent.get('position').disable();
+        this.formRcaAgent.get('national').setValue(this.getArea('national'));
+        this.formRcaAgent.get('national').disable();
+        this.formRcaAgent.get('zone').setValue(this.getArea('division'));
+        this.formRcaAgent.get('zone').disable();
+        this.formRcaAgent.get('region').setValue(this.getArea('region'));
+        this.formRcaAgent.get('region').disable();
+        this.formRcaAgent.get('area').setValue(this.getArea('area'));
+        this.formRcaAgent.get('area').disable();
 
-      this.fieldforceService.getParentByCode({ parent: res.area_id && res.area_id.length > 0 ? res.area_id[0] : null }).subscribe(resArea => {
-
-        // national: [this.getArea(response, 'national'), Validators.required],
-        //   zone: [this.getArea(response, 'division'), Validators.required],
-        //   region: [this.getArea(response, 'region'), Validators.required],
-        //   area: [this.getArea(response, 'area'), Validators.required],
-        //   salespoint: [this.getArea(response, 'salespoint'), Validators.required],
-        //   district: [this.getArea(response, 'district'), Validators.required],
-        //   territory: [this.getArea(response, 'teritory'), Validators.required],
-
-        // this.initArea(index);
       })
       if (this.isDetail) this.formRcaAgent.disable();
     })
+  }
+
+  getArea(selection, optional?) {
+    if (this.detailAreaSelected) {
+      let areas = this.detailAreaSelected.filter(item => item.level_desc === selection).map(item => item.id);
+      return areas && areas[0] ? areas[0] : '';
+    }
+    return '';
   }
 
   initArea() {
@@ -123,46 +156,47 @@ export class RcaAgentEditComponent implements OnInit {
       switch (item.type.trim()) {
         case 'national':
           level_desc = 'zone';
-          this.formRcaAgent.get('national').setValue(item.id);
+          // this.formRcaAgent.get('national').setValue(item.id);
           this.formRcaAgent.get('national').disable();
           break
         case 'division':
           level_desc = 'region';
-          this.formRcaAgent.get('zone').setValue(item.id);
+          // this.formRcaAgent.get('zone').setValue(item.id);
           this.formRcaAgent.get('zone').disable();
           break;
         case 'region':
           level_desc = 'area';
-          this.formRcaAgent.get('region').setValue(item.id);
+          // this.formRcaAgent.get('region').setValue(item.id);
           this.formRcaAgent.get('region').disable();
           break;
         case 'area':
           level_desc = 'salespoint';
-          this.formRcaAgent.get('area').setValue(item.id);
+          // this.formRcaAgent.get('area').setValue(item.id);
           this.formRcaAgent.get('area').disable();
           break;
         case 'salespoint':
           level_desc = 'district';
-          this.formRcaAgent.get('salespoint').setValue(item.id);
+          // this.formRcaAgent.get('salespoint').setValue(item.id);
           this.formRcaAgent.get('salespoint').disable();
           break;
         case 'district':
           level_desc = 'territory';
-          this.formRcaAgent.get('district').setValue(item.id);
+          // this.formRcaAgent.get('district').setValue(item.id);
           this.formRcaAgent.get('district').disable();
           break;
         case 'territory':
-          this.formRcaAgent.get('territory').setValue(item.id);
+          // this.formRcaAgent.get('territory').setValue(item.id);
           this.formRcaAgent.get('territory').disable();
           break;
       }
       console.log("kesini gak sih bangke!")
-      this.getAudienceArea(level_desc, item.id);
+      // this.getAudienceArea(level_desc, item.id);
     });
   }
 
-  getAudienceArea(selection, id) {
+  getAudienceArea(selection, id, code?) {
     let item: any;
+    if (selection === 'salespoint') this.getPositionCode(code);
     switch (selection) {
       case 'zone':
         this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
@@ -267,9 +301,9 @@ export class RcaAgentEditComponent implements OnInit {
     }
   }
 
-  getPositionCode(id = 1) {
-    this.rcaAgentService.getPositionCode({ area_id: id }).subscribe(res => {
-      console.log("res", res);
+  getPositionCode(id = null) {
+    this.rcaAgentService.getRPPositionCode({ area_code: id }).subscribe(res => {
+      console.log("res rpcode", res);
       this.listExistingPositionCodes = res.data;
     })
   }
@@ -317,7 +351,7 @@ export class RcaAgentEditComponent implements OnInit {
         area_id: area_id,
         username: this.formRcaAgent.get('username').value,
         position_code: this.formRcaAgent.get('isNewPositionCode').value ? position_code : this.formRcaAgent.get('position').value,
-        password: this.formRcaAgent.get('password').value,
+        // password: this.formRcaAgent.get('password').value,
         status: "active"
       }
 

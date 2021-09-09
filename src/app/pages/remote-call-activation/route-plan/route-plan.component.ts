@@ -249,6 +249,7 @@ export class RoutePlanComponent implements OnInit {
     dialogReg.afterClosed().subscribe(res => {
       if (res) {
         this.getListRoutePlan();
+        this.getRPSummary();
       }
     })
   }

@@ -146,10 +146,10 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
-    this.getListGroupingPelanggan();
+    this.getListGroupingPelanggan(search);
   }
 
-  getListGroupingPelanggan() {
+  getListGroupingPelanggan(search?) {
     this.dataService.showLoading(true);
     this.pagination.page = 1;
     this.pagination.sort = 'name';
@@ -227,7 +227,8 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     this.loadingIndicator = true;
-    if (this.formSearch.value) this.pagination['search'] = this.formSearch.value;
+    if (this.formSearch.value) this.pagination['search'] = search;
+    else delete this.pagination['search'];
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
@@ -619,6 +620,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
     dialogReg.afterClosed().subscribe(res => {
       if (res) {
         this.getListGroupingPelanggan();
+        this.getSummary();
       }
     })
   }
