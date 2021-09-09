@@ -1,12 +1,15 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { RoutePlanDaysDialogComponent } from '../route-plan-days-dialog/route-plan-days-dialog.component';
 
 @Component({
   selector: 'app-route-plan',
@@ -58,12 +61,18 @@ export class RoutePlanComponent implements OnInit {
 
   @ViewChild('activeCell') activeCellTemp: TemplateRef<any>;
   @ViewChild('table') table: DatatableComponent;
+
+  public filterPosition: FormControl = new FormControl('');
+  public filteredPosition: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  private _onDestroy = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
-    private rcaAgentService: RcaAgentService
+    private rcaAgentService: RcaAgentService,
+    private matDialog: MatDialog
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -111,7 +120,41 @@ export class RoutePlanComponent implements OnInit {
     this.getListRoutePlan();
     this.getRPPositionCodes();
     this.getRPSummary();
+
+    this.filterPosition.valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringPosition();
+      });
   }
+
+  filteringPosition() {
+    if (!this.positionCodesList) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterPosition.value;
+    let pagination = {}
+    pagination['per_page'] = 30;
+    pagination['search'] = search;
+
+    this.rcaAgentService.getRPPositionCode(pagination).subscribe(
+      (res) => {
+        console.log("res missions", res.data);
+        this.positionCodesList = res.data;
+        this.filteredPosition.next(this.positionCodesList.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the banks
+    this.filteredPosition.next(
+      this.positionCodesList.filter(item => item.code ? item.code.toLowerCase().indexOf(search) > -1 : item.code.indexOf(search))
+    );
+  }
+
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
 
@@ -119,10 +162,16 @@ export class RoutePlanComponent implements OnInit {
   }
 
   getRPPositionCodes() {
-    this.rcaAgentService.getRPPositionCode({ perPage: 15 }).subscribe(res => {
-      console.log("resss", res);
-      this.positionCodesList = res.data;
-    })
+    this.rcaAgentService.getRPPositionCode({ per_page: 5 }).subscribe(
+      (res) => {
+        console.log("res missions", res.data);
+        this.positionCodesList = res.data;
+        this.filteredPosition.next(this.positionCodesList.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
   }
 
   getRPSummary() {
@@ -185,6 +234,23 @@ export class RoutePlanComponent implements OnInit {
     }, err => {
       this.dataService.showLoading(false);
     });
+  }
+
+  openDialogRoutePlanDay(row) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true;
+    dialogConfig.width = "350px";
+    dialogConfig.panelClass = "popup-notif";
+    dialogConfig.data = row;
+
+    let dialogReg = this.matDialog.open(RoutePlanDaysDialogComponent, dialogConfig);
+    dialogReg.afterClosed().subscribe(res => {
+      if (res) {
+        this.getListRoutePlan();
+      }
+    })
   }
 
   submit() {

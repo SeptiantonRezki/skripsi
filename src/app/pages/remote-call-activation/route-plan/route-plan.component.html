@@ -1,11 +1,6 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Rute Kunjungan'">
-    <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-        SIMPAN
-      </button>
-    </div>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -34,8 +29,14 @@
 
               <div fxLayout="row" fxFlex="20" class="p-24">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select placeholder="Position Code" [formControl]="positionCode">
-                    <mat-option *ngFor="let item of positionCodesList" [value]="item.id">{{item.code}}</mat-option>
+                  <mat-select placeholder="Position Code" [formControl]="positionCode" #singleSelect>
+                    <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
+                      [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
+                    </ngx-mat-select-search>
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
+                      {{item.code}}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -79,11 +80,14 @@
                 [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
                 [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
                 <ngx-datatable-column name="Hari Kunjungan" prop="kunjungan">
-                  <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                    <span style="text-transform: capitalize;">{{row.kunjungan}}</span>
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <a class="direct-edit" (click)="openDialogRoutePlanDay(row)">{{ row.kunjungan ?
+                      row.kunjungan.toUpperCase() :
+                      'Kosong, Klik untuk merubah' }}</a>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Position Code" prop="position_code" [sortable]="false">
+
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Customer Name" prop="owner"></ngx-datatable-column>
                 <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>

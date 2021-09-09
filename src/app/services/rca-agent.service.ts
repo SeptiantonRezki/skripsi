@@ -65,4 +65,9 @@ export class RcaAgentService extends BaseService {
     const url = this.getUrl("route_plan", "position_codes");
     return this.getApi(url, queryParams)
   }
+
+  setRPMappingPosition(body?): Observable<any> {
+    const url = this.getUrl("route_plan", "mapping_position");
+    return this.postApi(url, body);
+  }
 }

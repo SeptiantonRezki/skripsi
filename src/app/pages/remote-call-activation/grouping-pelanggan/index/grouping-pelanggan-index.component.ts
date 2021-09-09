@@ -615,7 +615,12 @@ export class GroupingPelangganIndexComponent implements OnInit {
     dialogConfig.panelClass = "popup-notif";
     dialogConfig.data = row;
 
-    this.matDialog.open(PositionCodeDialogComponent, dialogConfig);
+    let dialogReg = this.matDialog.open(PositionCodeDialogComponent, dialogConfig);
+    dialogReg.afterClosed().subscribe(res => {
+      if (res) {
+        this.getListGroupingPelanggan();
+      }
+    })
   }
 
   submit() {
