@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
@@ -7,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, Subject } from 'rxjs';
+import { PositionCodeDialogComponent } from '../../position-code-dialog/position-code-dialog.component';
 
 @Component({
   selector: 'app-grouping-pelanggan-index',
@@ -40,12 +42,14 @@ export class GroupingPelangganIndexComponent implements OnInit {
   formSearch: FormControl = new FormControl('');
 
   summaries: any[] = [];
+  listPositionCodes: any[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
-    private rcaAgentService: RcaAgentService
+    private rcaAgentService: RcaAgentService,
+    private matDialog: MatDialog
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -142,7 +146,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
-
+    console.log("kena kah")
     this.getListGroupingPelanggan();
   }
 
@@ -601,6 +605,18 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     return newLastSelfArea;
+  }
+
+  openDialogPositionCode(row) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true;
+    dialogConfig.width = "350px";
+    dialogConfig.panelClass = "popup-notif";
+    dialogConfig.data = row;
+
+    this.matDialog.open(PositionCodeDialogComponent, dialogConfig);
   }
 
   submit() {

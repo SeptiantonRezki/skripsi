@@ -13,6 +13,7 @@ import { RoutePlanComponent } from './route-plan/route-plan.component';
 import { RcaAgentComponent } from '../user-management/rca-agent/rca-agent.component';
 import { RcaAgentCreateComponent } from '../user-management/rca-agent/create/rca-agent-create.component';
 import { RcaAgentEditComponent } from '../user-management/rca-agent/edit/rca-agent-edit.component';
+import { PositionCodeDialogComponent } from './position-code-dialog/position-code-dialog.component';
 
 const routes: Routes = [
   {
@@ -93,6 +94,8 @@ const routes: Routes = [
     MatChipsModule,
     MatSlideToggleModule
   ],
-  declarations: [GroupingPelangganIndexComponent, RoutePlanComponent, RcaAgentComponent, RcaAgentCreateComponent, RcaAgentEditComponent]
+  declarations: [GroupingPelangganIndexComponent, RoutePlanComponent, RcaAgentComponent, RcaAgentCreateComponent, RcaAgentEditComponent, PositionCodeDialogComponent],
+  exports: [PositionCodeDialogComponent],
+  entryComponents: [PositionCodeDialogComponent]
 })
 export class RemoteCallActivationModule { }

@@ -44,6 +44,11 @@ export class RcaAgentService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  setMappingPosition(body?): Observable<any> {
+    const url = this.getUrl("grouping_pelanggan", "mapping_position");
+    return this.postApi(url, body);
+  }
+
 
   // Route Plan
   getRoutePlan(queryParams?): Observable<any> {

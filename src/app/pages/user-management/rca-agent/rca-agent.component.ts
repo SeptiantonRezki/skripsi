@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -56,6 +56,7 @@ export class RcaAgentComponent implements OnInit {
   clasification: FormControl = new FormControl('');
   listClasification: any[] = [{ name: 'All Classifications', value: '' }, { name: 'WEE', value: 'WEE' }, { name: 'REE', value: 'REE' }];
   listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
