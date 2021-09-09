@@ -823,11 +823,11 @@ export class RcaAgentComponent implements OnInit {
     });
   }
 
-  deleteFf(id): void {
+  deleteAgent(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Field Force",
-      captionDialog: "Apakah anda yakin untuk menghapus Field Force ini ?",
+      titleDialog: "Hapus RCA Agent",
+      captionDialog: "Apakah anda yakin untuk menghapus RCA Agent ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -835,7 +835,7 @@ export class RcaAgentComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.fieldForceService.delete({ fieldforce_id: this.id }).subscribe(
+    this.rcaAgentService.delete({ agent_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
