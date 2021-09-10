@@ -287,7 +287,7 @@ export class RcaAgentCreateComponent implements OnInit {
         email: this.formRcaAgent.get('email').value,
         area_id: area_id,
         username: this.formRcaAgent.get('username').value,
-        position_code: this.formRcaAgent.get('isNewPositionCode').value ? this.current_position_code : this.formRcaAgent.get('position'),
+        position_code: this.formRcaAgent.get('isNewPositionCode').value ? this.current_position_code : this.formRcaAgent.get('position').value,
         password: this.formRcaAgent.get('password').value,
         status: "active"
       }
