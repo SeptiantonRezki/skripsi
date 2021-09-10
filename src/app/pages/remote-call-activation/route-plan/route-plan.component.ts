@@ -208,7 +208,10 @@ export class RoutePlanComponent implements OnInit {
     }
 
     if (this.classification.value) this.pagination['classification'] = this.classification.value;
-    else delete this.pagination['classification']
+    else delete this.pagination['classification'];
+
+    if (this.formFilter.get('plannedDay').value) this.pagination['kunjungan'] = this.formFilter.get('plannedDay').value;
+    else delete this.pagination['kunjungan'];
 
     this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
