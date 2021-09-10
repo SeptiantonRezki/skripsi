@@ -15,6 +15,7 @@ import { RcaAgentCreateComponent } from '../user-management/rca-agent/create/rca
 import { RcaAgentEditComponent } from '../user-management/rca-agent/edit/rca-agent-edit.component';
 import { PositionCodeDialogComponent } from './position-code-dialog/position-code-dialog.component';
 import { RoutePlanDaysDialogComponent } from './route-plan-days-dialog/route-plan-days-dialog.component';
+import { GroupingPelangganImportDialogComponent } from './grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
 
 const routes: Routes = [
   {
@@ -95,8 +96,8 @@ const routes: Routes = [
     MatChipsModule,
     MatSlideToggleModule
   ],
-  declarations: [GroupingPelangganIndexComponent, RoutePlanComponent, RcaAgentComponent, RcaAgentCreateComponent, RcaAgentEditComponent, PositionCodeDialogComponent, RoutePlanDaysDialogComponent],
-  exports: [PositionCodeDialogComponent, RoutePlanDaysDialogComponent],
-  entryComponents: [PositionCodeDialogComponent, RoutePlanDaysDialogComponent]
+  declarations: [GroupingPelangganIndexComponent, RoutePlanComponent, RcaAgentComponent, RcaAgentCreateComponent, RcaAgentEditComponent, PositionCodeDialogComponent, RoutePlanDaysDialogComponent, GroupingPelangganImportDialogComponent],
+  exports: [PositionCodeDialogComponent, RoutePlanDaysDialogComponent, GroupingPelangganImportDialogComponent],
+  entryComponents: [PositionCodeDialogComponent, RoutePlanDaysDialogComponent, GroupingPelangganImportDialogComponent]
 })
 export class RemoteCallActivationModule { }

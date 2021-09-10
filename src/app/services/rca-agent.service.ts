@@ -69,6 +69,10 @@ export class RcaAgentService extends BaseService {
     return this.postBlobAsJsonApi(url, body);
   }
 
+  importGrouping(body?): Observable<any> {
+    const url = this.getUrl("grouping_pelanggan", "import");
+    return this.postApi(url, body);
+  }
 
   // Route Plan
   getRoutePlan(queryParams?): Observable<any> {
@@ -94,5 +98,10 @@ export class RcaAgentService extends BaseService {
   exportRoutePlan(body?): Observable<any> {
     const url = this.getUrl("route_plan", "export");
     return this.postBlobAsJsonApi(url, body);
+  }
+
+  importRoutePlan(body?): Observable<any> {
+    const url = this.getUrl("route_plan", "import");
+    return this.postApi(url, body);
   }
 }

@@ -150,7 +150,7 @@
                 <tbody>
                   <tr *ngFor="let summary of summaries">
                     <td>{{ summary.position_code }}</td>
-                    <td>{{ summary.retailer_name }}</td>
+                    <td>{{ summary.total }}</td>
                   </tr>
                   <tr class="active-row" *ngIf="summaries.length === 0">
                     <td colspan="2" style="text-align: center;">No Data to Display ...</td>

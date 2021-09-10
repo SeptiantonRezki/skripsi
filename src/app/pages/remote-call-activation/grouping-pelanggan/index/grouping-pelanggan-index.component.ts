@@ -8,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, Subject } from 'rxjs';
+import { GroupingPelangganImportDialogComponent } from '../../grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
 import { PositionCodeDialogComponent } from '../../position-code-dialog/position-code-dialog.component';
 
 @Component({
@@ -639,7 +640,20 @@ export class GroupingPelangganIndexComponent implements OnInit {
   }
 
   importGrouping() {
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { catalog: 'grouping_pelanggan' };
+
+    let dialogRef = this.matDialog.open(GroupingPelangganImportDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
   }
 
 }

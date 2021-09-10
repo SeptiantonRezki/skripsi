@@ -9,6 +9,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { GroupingPelangganImportDialogComponent } from '../grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
 import { RoutePlanDaysDialogComponent } from '../route-plan-days-dialog/route-plan-days-dialog.component';
 
 @Component({
@@ -272,7 +273,20 @@ export class RoutePlanComponent implements OnInit {
   }
 
   importGrouping() {
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = { catalog: 'route_plan' };
+
+    let dialogRef = this.matDialog.open(GroupingPelangganImportDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      }
+    });
   }
 
   submit() {
