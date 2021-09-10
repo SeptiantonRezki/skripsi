@@ -67,6 +67,17 @@ export class RoutePlanComponent implements OnInit {
   public filteredPosition: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   private _onDestroy = new Subject<void>();
 
+  classification: FormControl = new FormControl('');
+  listClasification: any[] = [{ name: 'All Classifications', value: '' },
+  { name: 'RCA', value: 'RCA' },
+  { name: 'SRC', value: 'SRC' },
+  { name: 'NON-SRC', value: 'NON-SRC' },
+  { name: 'IMO', value: 'IMO' },
+  { name: 'LAMP/HOP', value: 'LAMP/HOP' },
+  { name: 'GT', value: 'GT' },
+  { name: 'KA', value: 'KA' }
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -195,6 +206,9 @@ export class RoutePlanComponent implements OnInit {
         this.pagination['position'] = this.positionCode.value;
       }
     }
+
+    if (this.classification.value) this.pagination['classification'] = this.classification.value;
+    else delete this.pagination['classification']
 
     this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);

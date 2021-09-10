@@ -78,6 +78,11 @@
                       }}</mat-option>
                   </mat-select>
                 </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Clasification" [formControl]="classification">
+                    <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
             </form>
             <div class="p-0">
