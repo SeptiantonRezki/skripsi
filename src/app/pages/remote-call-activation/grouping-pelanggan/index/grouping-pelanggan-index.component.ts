@@ -7,7 +7,8 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { GroupingPelangganImportDialogComponent } from '../../grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
 import { PositionCodeDialogComponent } from '../../position-code-dialog/position-code-dialog.component';
 
@@ -37,6 +38,16 @@ export class GroupingPelangganIndexComponent implements OnInit {
   offsetPagination: Number = null;
 
   keyUp = new Subject<string>();
+  classification: FormControl = new FormControl('');
+  listClasification: any[] = [{ name: 'All Classifications', value: '' },
+  { name: 'RCA', value: 'RCA' },
+  { name: 'SRC', value: 'SRC' },
+  { name: 'NON-SRC', value: 'NON-SRC' },
+  { name: 'IMO', value: 'IMO' },
+  { name: 'LAMP/HOP', value: 'LAMP/HOP' },
+  { name: 'GT', value: 'GT' },
+  { name: 'KA', value: 'KA' }
+  ];
 
   @ViewChild('activeCell') activeCellTemp: TemplateRef<any>;
   @ViewChild('table') table: DatatableComponent;
@@ -44,6 +55,13 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   summaries: any[] = [];
   listPositionCodes: any[] = [];
+
+  positionCode: FormControl = new FormControl('');
+  positionCodesList: any[] = [];
+
+  public filterPosition: FormControl = new FormControl('');
+  public filteredPosition: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  private _onDestroy = new Subject<void>();
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -83,6 +101,40 @@ export class GroupingPelangganIndexComponent implements OnInit {
         this.formSearch.setValue(data);
         // this.loadFormFilter(data);
       });
+
+
+    this.filterPosition.valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringPosition();
+      });
+  }
+
+  filteringPosition() {
+    if (!this.positionCodesList) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterPosition.value;
+    let pagination = {}
+    pagination['per_page'] = 30;
+    pagination['search'] = search;
+
+    this.rcaAgentService.getRPPositionCode(pagination).subscribe(
+      (res) => {
+        console.log("res missions", res.data);
+        this.positionCodesList = res.data;
+        this.filteredPosition.next(this.positionCodesList.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the banks
+    this.filteredPosition.next(
+      this.positionCodesList.filter(item => item.code ? item.code.toLowerCase().indexOf(search) > -1 : item.code.indexOf(search))
+    );
   }
 
   ngOnInit() {
@@ -228,8 +280,18 @@ export class GroupingPelangganIndexComponent implements OnInit {
       }
     }
     this.loadingIndicator = true;
-    if (this.formSearch.value) this.pagination['search'] = search;
+    if (search) this.pagination['search'] = search;
     else delete this.pagination['search'];
+    if (this.positionCode.value) {
+      let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
+      if (position) {
+        this.pagination['area'] = position['area_id'];
+        this.pagination['position'] = this.positionCode.value;
+      }
+    }
+
+    if (this.classification.value) this.pagination['classification'] = this.classification.value;
+    else delete this.pagination['classification']
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
