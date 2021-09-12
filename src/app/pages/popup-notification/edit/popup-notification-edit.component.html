@@ -185,6 +185,20 @@
               </div>
             </div>
 
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="subscription" placeholder="Status Berlangganan">
+                    <mat-option *ngFor="let item of listSubscription" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['subscription'].hasError('required') && formPopupGroup.controls['subscription'].touched">
+                    Status berlangganan harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
             <div class="pb-16 px-24">
               <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
                 <strong class="font-size-16">Batasan Umur</strong>

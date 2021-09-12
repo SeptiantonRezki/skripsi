@@ -54,6 +54,7 @@ export class BannerEditComponent {
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
@@ -218,7 +219,8 @@ export class BannerEditComponent {
       ]],
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
-      ]]
+      ]],
+      subscription:["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -1298,6 +1300,7 @@ export class BannerEditComponent {
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
+        fd.append('subscription', this.formBannerGroup.get('subscription').value);
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
