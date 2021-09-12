@@ -87,6 +87,10 @@ export class BannerEditComponent {
 
   audienceSelected: any[] = [];
 
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
@@ -205,6 +209,7 @@ export class BannerEditComponent {
       promo: ["yes", Validators.required],
       transfer_token: ["yes", Validators.required],
       is_target_audience: [false],
+      is_target_area: [false],
       banner_selected: this.formBuilder.group({
         "id": [""],
         "name": [""],
@@ -1308,37 +1313,52 @@ export class BannerEditComponent {
         fd.append('banner_customer_body', null);
       }
 
-      let _areas = [];
-      let areas = [];
-      let value = this.formBannerGroup.getRawValue();
-
-      value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-        for (const val of this.typeArea) {
-          const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
-          if (filteredValue.length > 0) _areas.push(...filteredValue)
-        }
-
-        areas.push(_.last(_areas));
-        _areas = [];
-      })
-
-      let same = this.findDuplicate(areas.map(item => item.value));
-      if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
-      }
-
-      areas.map(item => {
-        if (body.user_group === 'retailer') {
-          if (this.formBannerGroup.controls['group_type'].value === 'src') {
-            fd.append("areas[src][]", item.value);
+      if (this.formBannerGroup.get('is_target_area').value) {
+        if (body.user_group === "customer") {
+          let ids = [];
+          if (this.selectedAll) {
+            ids = this.selectedAllId;
           } else {
-            fd.append("areas[ws_downline][]", item.value);
+            ids = this.selectedArea.map((item) => item.id);
           }
-        } else {
-          fd.append("areas[]", item.value);
+          console.log(ids);
+          ids.forEach((item) => {
+            fd.append("areas[]", item);
+          });
         }
-      })
+      } else {
+        let _areas = [];
+        let areas = [];
+        let value = this.formBannerGroup.getRawValue();
+
+        value.areas.map(item => {
+          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+          for (const val of this.typeArea) {
+            const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+            if (filteredValue.length > 0) _areas.push(...filteredValue)
+          }
+
+          areas.push(_.last(_areas));
+          _areas = [];
+        })
+
+        let same = this.findDuplicate(areas.map(item => item.value));
+        if (same.length > 0) {
+          return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+        }
+
+        areas.map(item => {
+          if (body.user_group === 'retailer') {
+            if (this.formBannerGroup.controls['group_type'].value === 'src') {
+              fd.append("areas[src][]", item.value);
+            } else {
+              fd.append("areas[ws_downline][]", item.value);
+            }
+          } else {
+            fd.append("areas[]", item.value);
+          }
+        })
+      }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
@@ -1698,7 +1718,16 @@ export class BannerEditComponent {
   }
 
   isTargetAudience(event) {
-    if (event.checked) this.getAudience();
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_area').setValue(false);
+      this.getAudience();
+    }
+  }
+
+  isTargetArea(event) {
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_audience').setValue(false);
+    }
   }
 
   async export() {
@@ -1784,6 +1813,18 @@ export class BannerEditComponent {
         }
       }
     });
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 
 }

@@ -74,6 +74,10 @@ export class PopupNotificationCreateComponent {
   formPopupErrors: any;
   audienceSelected: any[] = [];
 
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+
   public options: Object = Config.FROALA_CONFIG;
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
@@ -188,6 +192,7 @@ export class PopupNotificationCreateComponent {
       type: ["limit"],
       transfer_token: ["yes", Validators.required],
       is_target_audience: [false],
+      is_target_area: [false],
       is_mission_builder: this.is_mission_builder,
       product: [""]
     })
@@ -1377,7 +1382,14 @@ export class PopupNotificationCreateComponent {
           body['area_id_downline'] = areas.map(item => item.value);
         }
       } else {
-        body['area_id'] = areas.map(item => item.value);
+        if (!this.formPopupGroup.get("is_target_area").value) body['area_id'] = areas.map(item => item.value);
+      }
+      if (body.type === 'customer' && this.formPopupGroup.get("is_target_area").value) {
+        if (this.selectedAll) {
+          body['area_id'] = this.selectedAllId;
+        } else {
+          body['area_id'] = this.selectedArea.map((item) => item.id);
+        }
       }
       if (this.formPopupGroup.get("is_target_audience").value) {
         body['target_audience'] = 1;
@@ -1389,6 +1401,8 @@ export class PopupNotificationCreateComponent {
       if (body.action === 'new-product') {
         body['action_data'] = this.formPopupGroup.get('product').value;
       }
+
+      console.log(body);
 
       this.notificationService.createPopup(body).subscribe(
         res => {
@@ -1860,7 +1874,16 @@ export class PopupNotificationCreateComponent {
   }
 
   isTargetAudience(event) {
-    if (event.checked) this.getAudience();
+    if (event.checked) {
+      this.formPopupGroup.get('is_target_area').setValue(false);
+      this.getAudience();
+    }
+  }
+
+  isTargetArea(event) {
+    if (event.checked) {
+      this.formPopupGroup.get('is_target_audience').setValue(false);
+    }
   }
 
   async export() {
@@ -1946,5 +1969,17 @@ export class PopupNotificationCreateComponent {
         }
       }
     });
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 }

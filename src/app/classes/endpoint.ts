@@ -59,7 +59,10 @@ export class Endpoint {
         encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`
       },
       area: {
-        child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
+        child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`,
+        get: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/content/area`,
+        export: `${AYO_API}/api/principal/area/export`,
+        import: `${AYO_API}/api/principal/area/import`,
       },
       callObjective: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective`,
