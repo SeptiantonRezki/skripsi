@@ -142,11 +142,17 @@ export class BannerEditComponent {
       { name: "SRC Katalog", value: "src_katalog" },
       { name: "Pojok Bayar", value: "pojok_bayar" }];
     } else {
-      this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-      { name: "Pesan Antar", value: "pesan_antar" },
-      { name: "Tantangan", value: "tantangan" },
-      { name: "Peluang", value: "peluang" },
-      { name: "Main Bareng", value: "main_bareng" }
+      this.listLandingPage = [
+        { name: "Pesan Antar", value: "pesan_antar" },
+        { name: "Terdekat", value: "terdekat" },
+        { name: "Main Bareng", value: "main_bareng" },
+        { name: "Tantangan", value: "tantangan" },
+        { name: "Peluang", value: "peluang" },
+        { name: "Pojok Modal", value: "pojok_modal" },
+        { name: "Profil Saya", value: "profil_saya" },
+        { name: "Bantuan", value: "bantuan" },
+        { name: "Kupon", value: "kupon" },
+        { name: "Voucher", value: "voucher_kupon" },
       ];
     }
 
