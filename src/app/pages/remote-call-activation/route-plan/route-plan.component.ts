@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
+import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GroupingPelangganImportDialogComponent } from '../grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
@@ -84,7 +85,8 @@ export class RoutePlanComponent implements OnInit {
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
     private rcaAgentService: RcaAgentService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private pengajuanSrcService: PengajuanSrcService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -119,6 +121,46 @@ export class RoutePlanComponent implements OnInit {
       });
   }
 
+  getProvinces() {
+    this.pengajuanSrcService.getProvinces()
+      .subscribe(res => {
+        console.log('res provinces', res);
+        this.territoryCodes = res.data;
+      }, err => {
+        console.log('err get provinces', err);
+      })
+  }
+
+  getCities(province_id) {
+    this.pengajuanSrcService.getCities({ province_id })
+      .subscribe(res => {
+        console.log('res cities', res);
+        this.cities = res.data;
+      }, err => {
+        console.log('err get cities', err);
+      })
+  }
+
+  getDistricts(city_id) {
+    this.pengajuanSrcService.getDistricts({ city_id })
+      .subscribe(res => {
+        console.log('res districts', res);
+        this.districts = res.data;
+      }, err => {
+        console.log('err get districts', err);
+      })
+  }
+
+  getVillages(district_id) {
+    this.pengajuanSrcService.getSubDistricts({ district_id })
+      .subscribe(res => {
+        console.log('res villages', res);
+        this.villages = res.data;
+      }, err => {
+        console.log('err get villages', err);
+      })
+  }
+
   ngOnInit() {
     this.formFilter = this.formBuilder.group({
       plannedDay: [''],
@@ -132,6 +174,7 @@ export class RoutePlanComponent implements OnInit {
     this.getListRoutePlan();
     this.getRPPositionCodes();
     this.getRPSummary();
+    this.getProvinces();
 
     this.filterPosition.valueChanges
       .debounceTime(500)
@@ -139,6 +182,47 @@ export class RoutePlanComponent implements OnInit {
       .subscribe(() => {
         this.filteringPosition();
       });
+
+    this.formFilter
+      .get('territoryCode')
+      .valueChanges
+      .subscribe(res => {
+        console.log('on change province', res);
+        if (res) {
+          this.cities = [];
+          this.districts = [];
+          this.villages = [];
+          this.formFilter.get('city').setValue("");
+          this.formFilter.get('district').setValue("");
+          this.formFilter.get('village').setValue("");
+          // this.getPengajuanSRC(res === -1 ? null : 'province_id');
+          if (res && !res['value']) this.getCities(res && res['value'] ? res['value'] : res);
+        }
+      })
+    this.formFilter
+      .get('city')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.districts = [];
+          this.villages = [];
+          this.formFilter.get('district').setValue("");
+          this.formFilter.get('village').setValue("");
+          // this.getPengajuanSRC('city_id');
+          if (res && !res['value']) this.getDistricts(res);
+        }
+      })
+
+    this.formFilter
+      .get('district')
+      .valueChanges
+      .subscribe(res => {
+        if (res) {
+          this.formFilter.get('village').setValue("");
+          // this.getPengajuanSRC('district_id');
+          // if (res && !res['value']) this.getVillages(res);
+        }
+      })
   }
 
   filteringPosition() {

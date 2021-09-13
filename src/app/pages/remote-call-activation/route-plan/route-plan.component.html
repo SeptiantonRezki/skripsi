@@ -59,21 +59,32 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Territory Code" formControlName="territoryCode">
+                    <mat-option [value]="-1">Semua Territory Code</mat-option>
                     <mat-option *ngFor="let item of territoryCodes" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="City" formControlName="city">
+                    <mat-option *ngIf="cities.length > 0"
+                      [value]="{value: formFilter.get('territoryCode').value, key: 'territoryCode'}">Semua Kota
+                    </mat-option>
                     <mat-option *ngFor="let item of cities" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="District" formControlName="district">
+                    <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('city').value, key: 'city'}">
+                      Semua District
+                    </mat-option>
                     <mat-option *ngFor="let item of districts" [value]="item.id">{{item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Village" formControlName="village">
+                    <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('district').value, key: 'district'}">Semua Village
+                    </mat-option>
                     <mat-option *ngFor="let item of villages" [value]="item.id">{{item.name
                       }}</mat-option>
                   </mat-select>

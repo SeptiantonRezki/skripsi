@@ -70,8 +70,8 @@ export class RcaAgentComponent implements OnInit {
     this.onLoad = true;
     this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.fieldforce');
-    console.log(this.permission);
+    this.permission = this.roles.getRoles('principal.rca_agent_pengguna');
+    console.log('rca', this.permission);
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
