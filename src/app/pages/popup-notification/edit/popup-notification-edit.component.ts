@@ -83,6 +83,7 @@ export class PopupNotificationEditComponent {
   selectedArea: any[] = [];
   selectedAll: boolean = false;
   selectedAllId: any[] = [];
+  targetAreaIds: any[] = [];
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
@@ -331,10 +332,10 @@ export class PopupNotificationEditComponent {
     // this.formPopupGroup.controls['user_group'].setValue('wholesaler');
 
     this.formPopupGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
-      if (!this.onLoad) {
-        this.formPopupGroup.controls['age_consumer_from'].setValue('');
-        this.formPopupGroup.controls['age_consumer_to'].setValue('');
-      }
+      // if (!this.onLoad) {
+      //   this.formPopupGroup.controls['age_consumer_from'].setValue('');
+      //   this.formPopupGroup.controls['age_consumer_to'].setValue('');
+      // }
 
       if (res === 'yes') {
         this.formPopupGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
@@ -1041,6 +1042,11 @@ export class PopupNotificationEditComponent {
         if (smoker_type !== 'yes') {
           this.formPopupGroup.get('verification').setValue(response.verification || 'all');
         }
+
+        if (!response.target_audience && response.areas.length) {
+          this.formPopupGroup.get('is_target_area').setValue(true);
+          this.targetAreaIds = response.areas;
+        }
       }
 
       if (response.action === 'static-page') {
@@ -1543,7 +1549,7 @@ export class PopupNotificationEditComponent {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {
-          body['area_id'] = this.selectedArea.map((item) => item.id);
+          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
         }
       }
 

@@ -363,7 +363,7 @@
                 formControlName="is_target_area">Target Area</mat-checkbox>
             </div>
             <ng-container *ngIf="formPopupGroup.get('is_target_area').value === true">
-              <target-area (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)" (selectedAllId)="getSelectedAllId($event)"></target-area>
+              <target-area (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)" (selectedAllId)="getSelectedAllId($event)" [areas]="targetAreaIds"></target-area>
             </ng-container>
             <div [formGroup]="formFilter" *ngIf="formPopupGroup.controls['is_target_audience'].value === true">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="px-24"

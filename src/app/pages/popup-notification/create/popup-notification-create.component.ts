@@ -1388,7 +1388,7 @@ export class PopupNotificationCreateComponent {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {
-          body['area_id'] = this.selectedArea.map((item) => item.id);
+          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
         }
       }
       if (this.formPopupGroup.get("is_target_audience").value) {

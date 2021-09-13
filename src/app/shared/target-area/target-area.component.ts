@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   TemplateRef,
@@ -27,6 +28,7 @@ export class TargetAreaComponent implements OnInit {
   @Output() selectedArea: EventEmitter<any[]> = new EventEmitter();
   @Output() selectedAll: EventEmitter<boolean> = new EventEmitter();
   @Output() selectedAllId: EventEmitter<any[]> = new EventEmitter();
+  @Input() areas: any[] = [];
 
   geoLevel: string[] = ["national", "division", "region", "area"];
   geoList: Object = {
@@ -66,8 +68,8 @@ export class TargetAreaComponent implements OnInit {
     private geoService: GeotreeService,
     private areaService: AreaService,
     private dataService: DataService,
-    private dialogService: DialogService,
-    private dialog: MatDialog
+    public dialogService: DialogService,
+    public dialog: MatDialog
   ) {
     this.keyUp
       .debounceTime(500)
@@ -83,8 +85,23 @@ export class TargetAreaComponent implements OnInit {
   ngOnInit() {
     this.createForm();
 
+    // reset pagination
+    this.dataService.setToStorage("page", "");
+    this.dataService.setToStorage("sort", "");
+    this.dataService.setToStorage("sort_type", "");
+    this.dataService.setToStorage("search", "");
+
     this.dataService.showLoading(true);
     this.getLevel("national");
+  }
+
+  ngOnChanges(data) {
+    if (!data) return;
+
+    const areas = data.areas.currentValue;
+    if (areas.length) {
+      this.onSelect({ selected: areas });
+    }
   }
 
   createForm() {
@@ -99,8 +116,8 @@ export class TargetAreaComponent implements OnInit {
   getArea() {
     const area = this.formGeo.get("area").value;
     const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
+    const sort_type = this.dataService.getFromStorage("sort_type");
     const search = this.dataService.getFromStorage("search");
 
     this.pagination.page = page;
