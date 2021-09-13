@@ -311,6 +311,51 @@ export const brConfig = {
       }
     ]
   },
+  rca_agent: {
+    index: [
+      {
+        type: "current",
+        url: "/rca/agent-pengguna",
+        name: "Daftar RCA Agent"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat RCA Agent"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit RCA Agent"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail RCA Agent"
+      }
+    ]
+  },
   paguyuban: {
     index: [
       {
@@ -3010,6 +3055,22 @@ export const brConfig = {
         type: "current",
         url: "/device-management/recovery",
         name: "Perangkat dipulihkan dan Pengaturan"
+      }
+    ],
+  },
+  remote_call_activation: {
+    grouping_pelanggan: [
+      {
+        type: "current",
+        url: "/rca/grouping-pelanggan",
+        name: "Grouping Pelanggan"
+      }
+    ],
+    route_plan: [
+      {
+        type: "current",
+        url: "/rca/rute-kunjungan",
+        name: "Rute Kunjungan"
       }
     ],
   }
