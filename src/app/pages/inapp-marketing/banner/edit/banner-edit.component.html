@@ -168,6 +168,18 @@
                 </mat-radio-group>
               </div>
             </div>
+            <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'customer'">
+              <div class="pb-16 px-24">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">Tipe Spanduk</strong>
+                </div>
+                <mat-radio-group formControlName="type_banner" class="radio-group">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listTypeBannerConsumer" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
           </div>
 
 
@@ -378,6 +390,19 @@
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
+            </div>
+          </div>
+
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'profil_saya'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="profile" placeholder="Halaman Profil Saya">
+                  <mat-option *ngFor="let item of listProfile" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="formBannerGroup.controls['profile'].hasError('required') && formBannerGroup.controls['profile'].touched">
+                Halaman profil harus dipilih
+              </mat-error>
             </div>
           </div>
 
