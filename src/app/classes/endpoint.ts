@@ -985,7 +985,7 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan`,
         mapping_position: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/position`,
         summary: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/summary`,
-        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/rca/position/export`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/export`,
         import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/import`
       },
       route_plan: {
@@ -993,7 +993,7 @@ export class Endpoint {
         mapping_position: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan/visit`,
         summary: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan/summary`,
         position_codes: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code`,
-        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/rca/position/export`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/export`,
         import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/kunjungan/import`
       }
     };
