@@ -658,6 +658,7 @@ export class Endpoint {
         releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
         submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
         exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
+        exportTrueTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/export`
       },
       CoinAdjustmentApproval: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/list-approval`,
