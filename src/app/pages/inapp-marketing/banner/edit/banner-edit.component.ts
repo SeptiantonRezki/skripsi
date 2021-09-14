@@ -809,13 +809,14 @@ export class BannerEditComponent {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
+
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
-      setTimeout(() => {
-        this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
-      }, 50);
+      this.formBannerGroup.get('type_banner').setValue(this.detailBanner.type_banner);
+      this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+      this.formBannerGroup.get('profile').setValue(this.detailBanner.target_page.menu);
       this.formBannerGroup.updateValueAndValidity();
     }
 
