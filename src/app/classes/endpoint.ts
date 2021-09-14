@@ -342,6 +342,7 @@ export class Endpoint {
         getListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-categories`,
         getListUser: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-user`,
         getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        getCountry: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/countries`,
       },
       coin: {
         // retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/${type_api}/coin?type=retailer`,
@@ -412,7 +413,8 @@ export class Endpoint {
         listbank: `${AYO_API}/api/v2/general/listbank`,
         app_versions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/version`,
         // cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
-        cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`
+        cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`,
+        country: `${AYO_API_SERVICE(SERVER.user)}/geolocation/get-address-from-ip`,
       },
       user_onboarding: {
         register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,
@@ -656,7 +658,6 @@ export class Endpoint {
         releaseCoinTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/release-coin`,
         submissionTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/submission`,
         exportTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
-        exportTrueTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/export`
       },
       CoinAdjustmentApproval: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/list-approval`,
