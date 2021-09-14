@@ -115,8 +115,11 @@ export class B2BVoucherCreateComponent implements OnInit {
     placeholder: '0',
     rightAlign: false
   });
-  currencyFC = new FormControl('', Validators.required);
   comaRegex = /\,/g;
+
+  hasTouched: Object = {
+    currency: false,
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -547,7 +550,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     else return false;
   }
 
-  handleDecimal(event){
+  handleDecimal(event, param){
+    if (!this.hasTouched[param]) this.hasTouched[param] = true;
     let curnum = Number(event.target.value.replace(this.comaRegex, ''));
     this.formDetilVoucher.get('currency').setValue(curnum);
   }
@@ -582,7 +586,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       opsiVoucher: ['b2b', Validators.required],
       name: ["", Validators.required],
       coin: [0, Validators.required],
-      currency: [0, Validators.required],
+      currency: [0, [Validators.required, Validators.minLength(1)]],
       voucher: [0, Validators.required],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],

@@ -52,13 +52,18 @@
                 </mat-form-field>
 
                 <div fxLayout="row" fxFlex="60" fxLayoutGap="20px">
-                  <mat-form-field fxFlex="20" class="is-light">
-                    <input matInput type="number" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency" *ngIf="user_country !== 'KH'">
-                    <input matInput [inputMask]="currencyInputMask" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency" (blur)="handleDecimal($event)" *ngIf="user_country === 'KH'">
-                    <mat-error>
+                  <div fxFlex="20">
+                    <mat-form-field class="is-light">
+                      <input matInput type="number" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency" *ngIf="user_country !== 'KH'">
+                      <input matInput [inputMask]="currencyInputMask" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency" (blur)="handleDecimal($event, 'currency')" *ngIf="user_country === 'KH'">
+                      <mat-error>
+                        Nilai Penukaran untuk 1 Koin harus diisi.
+                      </mat-error>
+                    </mat-form-field>
+                    <div class="mat-error mat-error--custom" *ngIf="hasTouched.currency && !formDetilVoucher.controls.currency.value">
                       Nilai Penukaran untuk 1 Koin harus diisi.
-                    </mat-error>
-                  </mat-form-field>
+                    </div>
+                  </div>
                   <mat-form-field fxFlex="20" class="is-light">
                     <input matInput type="number" placeholder="Jumlah Koin" formControlName="coin">
                     <mat-error

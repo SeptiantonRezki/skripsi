@@ -26,3 +26,8 @@
   background-color: #eee;
   font-weight: 600;
 }
+
+:host /deep/ .mat-error--custom{
+  font-size: 12px;
+  margin-top: -14px;
+}
