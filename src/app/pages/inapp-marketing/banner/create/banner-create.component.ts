@@ -57,6 +57,8 @@ export class BannerCreateComponent {
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
+  listTypeBannerConsumer: any[] = [{name:"In App Banner",value:"in-app-banner"},{name:"Toko Terdekat",value:"toko-terdekat"},{name:"Info SRC",value:"info-src"},{name:"Flying Button",value:"flying-button"}];
+  listProfile: any[] = [];
   listCustomerBanners: any[] = [];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
 
@@ -189,6 +191,7 @@ export class BannerCreateComponent {
       button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
+      profile: [""],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       verification: ["all"],
@@ -242,11 +245,23 @@ export class BannerCreateComponent {
         console.log('HERE');
       } else {
         this.listLandingPage = [
-          { name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
           { name: "Pesan Antar", value: "pesan_antar" },
+          { name: "Terdekat", value: "terdekat" },
+          { name: "Main Bareng", value: "main_bareng" },
           { name: "Tantangan", value: "tantangan" },
           { name: "Peluang", value: "peluang" },
-          { name: "Main Bareng", value: "main_bareng" }
+          { name: "Pojok Modal", value: "pojok_modal" },
+          { name: "Profil Saya", value: "profil_saya" },
+          { name: "Bantuan", value: "bantuan" },
+          { name: "Kupon", value: "kupon" },
+          { name: "Voucher", value: "voucher_kupon" },
+        ];
+        this.listProfile = [
+          { name: "Ubah Profil", value: "ubah_profil" },
+          { name: "Toko Langganan", value: "toko_langganan" },
+          { name: "Lokasi Tersimpan", value: "lokasi_tersimpan" },
+          { name: "Bantuan", value: "bantuan" },
+          { name: "Pengaturan Privasi", value: "pengaturan_privasi" },
         ];
         this.formBannerGroup.controls['age_consumer_from'].enable();
         this.formBannerGroup.controls['age_consumer_to'].enable();
@@ -254,7 +269,7 @@ export class BannerCreateComponent {
           { name: "E-Wallet", value: "e_wallet" },
           { name: "Link to Web Browser", value: "link_web" }
         );
-        this.formBannerGroup.controls['type_banner'].setValue('');
+        this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       }
       if (this.formBannerGroup.get("is_target_audience").value === true) {
         this.getAudience();
@@ -309,6 +324,14 @@ export class BannerCreateComponent {
         this.audienceSelected = [];
       }
     })
+
+    this.formBannerGroup.get("landing_page").valueChanges.debounceTime(50).subscribe((res) => {
+      if (res === "profil_saya") {
+        this.formBannerGroup.get("profile").setValidators([Validators.required]);
+      } else {
+        this.formBannerGroup.get("profile").setValidators([]);
+      }
+    });
 
     this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
@@ -1123,9 +1146,12 @@ export class BannerCreateComponent {
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('employee', this.formBannerGroup.get('employee').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
-        fd.append('type_banner', null);
+        fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
+        }
+        if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
+          fd.append("profile", this.formBannerGroup.get("profile").value);
         }
       }
 
@@ -1144,7 +1170,7 @@ export class BannerCreateComponent {
           if (this.selectedAll) {
             ids = this.selectedAllId;
           } else {
-            ids = this.selectedArea.map((item) => item.id);
+            ids = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
           }
           ids.forEach((item) => {
             fd.append("areas[]", item);
@@ -1210,6 +1236,8 @@ export class BannerCreateComponent {
       } else {
         fd.append('target_audience', "0");
       }
+
+      fd.append("subscription", "yes");
 
       this.bannerService.create(fd).subscribe(
         res => {
