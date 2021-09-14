@@ -31,7 +31,7 @@ export class TargetAreaComponent implements OnInit {
   @Input() areas: any[] = [];
 
   geoLevel: string[] = ["national", "division", "region", "area"];
-  geoList: Object = {
+  geoList: any = {
     national: [
       {
         id: 1,
