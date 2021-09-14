@@ -117,7 +117,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   });
   comaRegex = /\,/g;
 
-  hasTouched: Object = {
+  hasTouched: any = {
     currency: false,
   }
 
