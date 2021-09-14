@@ -18,6 +18,7 @@ import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-d
 import { startWith, map } from "rxjs/operators";
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { NullAstVisitor } from '@angular/compiler';
+import { createMask } from '@ngneat/input-mask';
 
 @Component({
   selector: 'app-b2-b-voucher-create',
@@ -104,6 +105,18 @@ export class B2BVoucherCreateComponent implements OnInit {
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
+  user_country: any;
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: '',
+    placeholder: '0',
+    rightAlign: false
+  });
+  currencyFC = new FormControl('', Validators.required);
+  comaRegex = /\,/g;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -117,6 +130,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog
   ) {
+    this.user_country = this.dataService.getFromStorage('user_country');
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isCreate = params[0].path === 'create' ? true : false;
@@ -533,6 +547,11 @@ export class B2BVoucherCreateComponent implements OnInit {
     else return false;
   }
 
+  handleDecimal(event){
+    let curnum = Number(event.target.value.replace(this.comaRegex, ''));
+    this.formDetilVoucher.get('currency').setValue(curnum);
+  }
+
   ngOnInit() {
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -618,13 +637,25 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.filterProductList();
       });
 
-    this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('coin').value);
-    })
+    if (this.user_country === 'KH') {
+      this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
+        let resNumber = String(res).replace(this.comaRegex,'');
+        this.formDetilVoucher.get('voucher').setValue(Number(resNumber) * this.formDetilVoucher.get('coin').value);
+      });  
+      this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
+        this.formDetilVoucher.get('voucher').setValue(res * Number(this.formDetilVoucher.get('currency').value));
+      })
+    }
+    else if (this.user_country !== 'KH') {
+      this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
+        this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('coin').value);
+      })
+  
+      this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
+        this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
+      })
+    }
 
-    this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
-    })
 
     this.isB2CVoucher.valueChanges.debounceTime(1000).subscribe(res => {
       if (res) {

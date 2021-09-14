@@ -68,7 +68,7 @@
 
         <ngx-datatable-column name="Nilai Voucher" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.nominal | rupiahFormater }}
+            <span>{{row.nominal_format_currency}}</span>
           </ng-template>
         </ngx-datatable-column>
 

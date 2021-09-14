@@ -45,6 +45,8 @@ export class RetailerCreateComponent {
     { name: "KA", value: "KA"},
     { name: "Official Store", value: "Official Store"}
   ];
+  user_country: any;
+  country_phone: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,6 +56,8 @@ export class RetailerCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService
   ) {
+    this.user_country = this.dataService.getFromStorage('user_country');
+    this.country_phone = this.user_country === 'KH' ? "+855" : "+62";
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 

@@ -10,6 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 import { Emitter } from 'app/helper/emitter.helper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { GeneralService } from "app/services/general.service";
 
 @Component({
     selector: 'fuse-main',
@@ -43,7 +44,9 @@ export class FuseMainComponent implements OnDestroy {
         @Inject(DOCUMENT) private document: any,
         private emitter: Emitter,
         private sanitizer: DomSanitizer,
+        private generalService: GeneralService,
     ) {
+        this.getCountry();
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
                 .subscribe(
@@ -79,6 +82,17 @@ export class FuseMainComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.onConfigChanged.unsubscribe();
+    }
+
+    getCountry(){
+      this.generalService.getCountry().subscribe(
+        res => {
+        console.log('res', res.data.country_code);
+        const {country_code} = res.data;
+        this.dataService.setToStorage('user_country', country_code);
+      }, err => {
+        console.error(err);
+      })
     }
 
     addClass(className: string) {

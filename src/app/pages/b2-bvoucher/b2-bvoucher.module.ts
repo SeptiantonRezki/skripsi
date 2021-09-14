@@ -41,6 +41,7 @@ import { RedeemListComponent } from './redeem-list/redeem-list.component';
 import { PanelMitraVoucherComponent } from './panel-mitra-voucher/panel-mitra-voucher.component';
 import { ImportPanelDialogComponent } from './import-panel-dialog/import-panel-dialog.component';
 import { ImportRedeemDialogComponent } from './redeem-list/import-redeem-dialog/import-redeem-dialog.component';
+import { InputMaskModule } from '@ngneat/input-mask';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -130,7 +131,8 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    InputMaskModule
   ],
   declarations: [
     B2BVoucherComponent,

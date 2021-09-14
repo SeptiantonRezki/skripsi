@@ -39,6 +39,17 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="country" placeholder="Negara">
+                <mat-option *ngFor="let item of countryList" [value]="item.code" style="text-transform: capitalize;">
+                  {{item.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formTnc.controls['country'].hasError('required') && formTnc.controls['country'].touched">
+                Negara harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
           <div fxLayout="row" *ngIf="formTnc.get('user').value === 'paylater-src' || formTnc.get('user').value === 'paylater-mitra'">
             <mat-form-field fxFlex="50" class="is-light form-primary">
               <mat-select formControlName="group_id" placeholder="Pilih Perusahaan">

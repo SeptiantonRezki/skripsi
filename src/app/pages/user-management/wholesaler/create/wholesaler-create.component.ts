@@ -31,6 +31,8 @@ export class WholesalerCreateComponent {
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   roles: any[] = [];
   areaFromLogin;
+  user_country: any;
+  country_phone: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,6 +42,8 @@ export class WholesalerCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService
   ) {
+    this.user_country = this.dataService.getFromStorage('user_country');
+    this.country_phone = this.user_country === 'KH' ? "+855" : "+62";
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
@@ -328,7 +332,7 @@ export class WholesalerCreateComponent {
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: '+62' + this.verticalStepperStep2.get("phone").value,
+        phone: this.country_phone + this.verticalStepperStep2.get("phone").value,
         // areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
         areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.id),
         type: "wholesaler",
