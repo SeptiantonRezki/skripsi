@@ -273,7 +273,7 @@ export class PopupNotificationCreateComponent {
 
       if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: " pesan_antar"}, {name: "Tantangan", value: " tantangan"}, {name: "Peluang", value: " peluang"}, {name: "Main Bareng", value: " main_bareng"}];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
