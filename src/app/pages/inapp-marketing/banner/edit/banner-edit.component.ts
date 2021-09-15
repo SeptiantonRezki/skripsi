@@ -54,11 +54,20 @@ export class BannerEditComponent {
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
   
   listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
+  listTypeBannerConsumer: any[] = [{name:"In App Banner",value:"in-app-banner"},{name:"Toko Terdekat",value:"toko-terdekat"},{name:"Info SRC",value:"info-src"},{name:"Flying Button",value:"flying-button"}];
+  listProfile = [
+    { name: "Ubah Profil", value: "ubah_profil" },
+    { name: "Toko Langganan", value: "toko_langganan" },
+    { name: "Lokasi Tersimpan", value: "lokasi_tersimpan" },
+    { name: "Bantuan", value: "bantuan" },
+    { name: "Pengaturan Privasi", value: "pengaturan_privasi" },
+  ];
   listCustomerBanners: any[] = [];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
 
@@ -86,6 +95,11 @@ export class BannerEditComponent {
   public options: Object = Config.FROALA_CONFIG;
 
   audienceSelected: any[] = [];
+
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+  targetAreaIds: any[] = [];
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
@@ -134,11 +148,17 @@ export class BannerEditComponent {
       { name: "SRC Katalog", value: "src_katalog" },
       { name: "Pojok Bayar", value: "pojok_bayar" }];
     } else {
-      this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-      { name: "Pesan Antar", value: "pesan_antar" },
-      { name: "Tantangan", value: "tantangan" },
-      { name: "Peluang", value: "peluang" },
-      { name: "Main Bareng", value: "main_bareng" }
+      this.listLandingPage = [
+        { name: "Pesan Antar", value: "pesan_antar" },
+        { name: "Terdekat", value: "terdekat" },
+        { name: "Main Bareng", value: "main_bareng" },
+        { name: "Tantangan", value: "tantangan" },
+        { name: "Peluang", value: "peluang" },
+        { name: "Pojok Modal", value: "pojok_modal" },
+        { name: "Profil Saya", value: "profil_saya" },
+        { name: "Bantuan", value: "bantuan" },
+        { name: "Kupon", value: "kupon" },
+        { name: "Voucher", value: "voucher_kupon" },
       ];
     }
 
@@ -194,6 +214,7 @@ export class BannerEditComponent {
       button_text: ["", [Validators.maxLength(30)]],
       group_type: ["src"],
       landing_page: ["belanja"],
+      profile: [""],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
       verification: ["all"],
@@ -205,6 +226,7 @@ export class BannerEditComponent {
       promo: ["yes", Validators.required],
       transfer_token: ["yes", Validators.required],
       is_target_audience: [false],
+      is_target_area: [false],
       banner_selected: this.formBuilder.group({
         "id": [""],
         "name": [""],
@@ -218,7 +240,8 @@ export class BannerEditComponent {
       ]],
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
-      ]]
+      ]],
+      subscription:["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -251,18 +274,24 @@ export class BannerEditComponent {
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       } else {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-        { name: "Pesan Antar", value: "pesan_antar" },
-        { name: "Tantangan", value: "tantangan" },
-        { name: "Peluang", value: "peluang" },
-        { name: "Main Bareng", value: "main_bareng" }
+        this.listLandingPage = [
+          { name: "Pesan Antar", value: "pesan_antar" },
+          { name: "Terdekat", value: "terdekat" },
+          { name: "Main Bareng", value: "main_bareng" },
+          { name: "Tantangan", value: "tantangan" },
+          { name: "Peluang", value: "peluang" },
+          { name: "Pojok Modal", value: "pojok_modal" },
+          { name: "Profil Saya", value: "profil_saya" },
+          { name: "Bantuan", value: "bantuan" },
+          { name: "Kupon", value: "kupon" },
+          { name: "Voucher", value: "voucher_kupon" },
         ];
         this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();
           this.formBannerGroup.controls['age_consumer_to'].enable();
         }
-        this.formBannerGroup.controls['type_banner'].setValue('');
+        // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       }
 
       if (this.formBannerGroup.controls["is_target_audience"].value === true) this.getAudience();
@@ -320,6 +349,14 @@ export class BannerEditComponent {
         this.audienceSelected = [];
       }
     })
+
+    this.formBannerGroup.get("landing_page").valueChanges.debounceTime(50).subscribe((res) => {
+      if (res === "profil_saya") {
+        this.formBannerGroup.get("profile").setValidators([Validators.required]);
+      } else {
+        this.formBannerGroup.get("profile").setValidators([]);
+      }
+    });
 
     this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
@@ -780,12 +817,23 @@ export class BannerEditComponent {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
+      this.formBannerGroup.get('subscription').setValue(this.detailBanner.subscription);
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
-      this.formBannerGroup.get('type_banner').setValue('');
+      this.formBannerGroup.get('type_banner').setValue(this.detailBanner.type_banner);
+      this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+      this.formBannerGroup.get('profile').setValue(this.detailBanner.target_page.menu);
+      setTimeout(() => {
+        this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
+      }, 50);
       this.formBannerGroup.updateValueAndValidity();
+
+      if (!this.detailBanner.target_audience && this.detailBanner.areas.length) {
+        this.formBannerGroup.get('is_target_area').setValue(true);
+        this.targetAreaIds = this.detailBanner.area_id.map((item) => ({ id: item }));
+      }
     }
 
     if (this.detailBanner.target_page.type === 'static_page') {
@@ -1294,10 +1342,14 @@ export class BannerEditComponent {
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('employee', this.formBannerGroup.get('employee').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
-        fd.append('type_banner', '');
+        fd.append("type_banner", this.formBannerGroup.get("type_banner").value);
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
+        if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
+          fd.append("profile", this.formBannerGroup.get("profile").value);
+        }
+        fd.append('subscription', this.formBannerGroup.get('subscription').value);
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
@@ -1308,37 +1360,52 @@ export class BannerEditComponent {
         fd.append('banner_customer_body', null);
       }
 
-      let _areas = [];
-      let areas = [];
-      let value = this.formBannerGroup.getRawValue();
-
-      value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-        for (const val of this.typeArea) {
-          const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
-          if (filteredValue.length > 0) _areas.push(...filteredValue)
-        }
-
-        areas.push(_.last(_areas));
-        _areas = [];
-      })
-
-      let same = this.findDuplicate(areas.map(item => item.value));
-      if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
-      }
-
-      areas.map(item => {
-        if (body.user_group === 'retailer') {
-          if (this.formBannerGroup.controls['group_type'].value === 'src') {
-            fd.append("areas[src][]", item.value);
+      if (this.formBannerGroup.get('is_target_area').value) {
+        if (body.user_group === "customer") {
+          let ids = [];
+          if (this.selectedAll) {
+            ids = this.selectedAllId;
           } else {
-            fd.append("areas[ws_downline][]", item.value);
+            ids = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
           }
-        } else {
-          fd.append("areas[]", item.value);
+          console.log(ids);
+          ids.forEach((item) => {
+            fd.append("areas[]", item);
+          });
         }
-      })
+      } else {
+        let _areas = [];
+        let areas = [];
+        let value = this.formBannerGroup.getRawValue();
+
+        value.areas.map(item => {
+          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+          for (const val of this.typeArea) {
+            const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+            if (filteredValue.length > 0) _areas.push(...filteredValue)
+          }
+
+          areas.push(_.last(_areas));
+          _areas = [];
+        })
+
+        let same = this.findDuplicate(areas.map(item => item.value));
+        if (same.length > 0) {
+          return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+        }
+
+        areas.map(item => {
+          if (body.user_group === 'retailer') {
+            if (this.formBannerGroup.controls['group_type'].value === 'src') {
+              fd.append("areas[src][]", item.value);
+            } else {
+              fd.append("areas[ws_downline][]", item.value);
+            }
+          } else {
+            fd.append("areas[]", item.value);
+          }
+        })
+      }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
@@ -1698,7 +1765,16 @@ export class BannerEditComponent {
   }
 
   isTargetAudience(event) {
-    if (event.checked) this.getAudience();
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_area').setValue(false);
+      this.getAudience();
+    }
+  }
+
+  isTargetArea(event) {
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_audience').setValue(false);
+    }
   }
 
   async export() {
@@ -1784,6 +1860,18 @@ export class BannerEditComponent {
         }
       }
     });
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 
 }
