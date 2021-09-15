@@ -117,6 +117,7 @@ import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification
 import { CoinDisburstmentService } from "./services/dte/coin-disburstment.service";
 import { PayLaterDistributionListService } from "./services/pay-later/pay-later-distribution-list.service";
 import { ProductSubmissionService } from "./services/sku-management/product-submission.service";
+import { AreaService } from "./services/area.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -247,6 +248,7 @@ const config = {
     MedalBadgeService,
     CoinAdjustmentApprovalService,
     CoinDisburstmentService,
+    AreaService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,
