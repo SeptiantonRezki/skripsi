@@ -18,11 +18,17 @@ export class BannerIndexComponent {
   TYPE_BANNER = {
     DEFAULT: '',
     INFO_TERKINI: 'info-terkini',
-    AKTIVASI_KONSUMEN: 'aktivasi-konsumen'
+    AKTIVASI_KONSUMEN: 'aktivasi-konsumen',
+    TERDEKAT: 'toko-terdekat',
+    INFO_SRC: 'info-src',
+    FBTN: 'flying-button',
   };
 
   rows: any[];
   infoTerkiniRows: any[];
+  terdekatRows: any[];
+  infoSRCRows: any[];
+  fbtnRows: any[];
   aktivasiKonsumenRows: any[];
   selected: any[];
   id: any;
@@ -31,6 +37,9 @@ export class BannerIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   infoTerkiniPagination: Page = new Page();
+  terdekatPagination: Page = new Page();
+  infoSRCPagination: Page = new Page();
+  fbtnPagination: Page = new Page();
   aktivasiKonsumenPagination: Page = new Page();
 
   onLoad: boolean;
@@ -52,6 +61,21 @@ export class BannerIndexComponent {
   infoTerkiniLoadingIndicator = true;
   infoTerkiniOnLoad: boolean;
   infoTerkiniOffsetPagination: any;
+
+  // TOKO TERDEKAT
+  terdekatLoadingIndicator = true;
+  terdekatOnLoad: boolean;
+  terdekatOffsetPagination: any;
+
+  // INFO SRC
+  infoSRCLoadingIndicator = true;
+  infoSRCOnLoad: boolean;
+  infoSRCOffsetPagination: any;
+
+  // FLYING BUTTON
+  fbtnLoadingIndicator = true;
+  fbtnOnLoad: boolean;
+  fbtnOffsetPagination: any;
 
   // AKTIVASI KONSUMEN
   aktivasiKonsumenLoadingIndicator = true;
@@ -91,6 +115,9 @@ export class BannerIndexComponent {
   ngOnInit() {
     this.getBanner();
     this.getInfoTerkini();
+    this.getTerdekat();
+    this.getInfoSRC();
+    this.getFbtn();
     this.getAktivasiKonsumen();
   }
 
@@ -140,6 +167,81 @@ export class BannerIndexComponent {
       },
       err => {
         this.infoTerkiniOnLoad = false;
+      }
+    );
+  }
+  getTerdekat() {
+    const page = this.dataService.getFromStorage("banner_terdekat_page");
+    const sort_type = this.dataService.getFromStorage("banner_terdekat_sort_type");
+    const sort = this.dataService.getFromStorage("banner_terdekat_sort");
+
+    this.terdekatPagination.page = page;
+    this.terdekatPagination.sort_type = sort_type;
+    this.terdekatPagination.sort = sort;
+    this.terdekatPagination.type_banner = this.TYPE_BANNER.TERDEKAT;
+    this.terdekatPagination.per_page = 5;
+
+    this.terdekatOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.terdekatPagination).subscribe(
+      res => {
+        Page.renderPagination(this.terdekatPagination, res);
+        this.terdekatRows = res.data;
+        this.terdekatOnLoad = false;
+        this.terdekatLoadingIndicator = false;
+      },
+      err => {
+        this.terdekatOnLoad = false;
+      }
+    );
+  }
+  getInfoSRC() {
+    const page = this.dataService.getFromStorage("banner_info_src_page");
+    const sort_type = this.dataService.getFromStorage("banner_info_src_sort_type");
+    const sort = this.dataService.getFromStorage("banner_info_src_sort");
+
+    this.infoSRCPagination.page = page;
+    this.infoSRCPagination.sort_type = sort_type;
+    this.infoSRCPagination.sort = sort;
+    this.infoSRCPagination.type_banner = this.TYPE_BANNER.INFO_SRC;
+    this.infoSRCPagination.per_page = 5;
+
+    this.infoSRCOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.infoSRCPagination).subscribe(
+      res => {
+        Page.renderPagination(this.infoSRCPagination, res);
+        this.infoSRCRows = res.data;
+        this.infoSRCOnLoad = false;
+        this.infoSRCLoadingIndicator = false;
+      },
+      err => {
+        this.infoSRCOnLoad = false;
+      }
+    );
+  }
+  getFbtn() {
+    const page = this.dataService.getFromStorage("banner_fbtn_page");
+    const sort_type = this.dataService.getFromStorage("banner_fbtn_sort_type");
+    const sort = this.dataService.getFromStorage("banner_fbtn_sort");
+
+    this.fbtnPagination.page = page;
+    this.fbtnPagination.sort_type = sort_type;
+    this.fbtnPagination.sort = sort;
+    this.fbtnPagination.type_banner = this.TYPE_BANNER.FBTN;
+    this.fbtnPagination.per_page = 5;
+
+    this.fbtnOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.fbtnPagination).subscribe(
+      res => {
+        Page.renderPagination(this.fbtnPagination, res);
+        this.fbtnRows = res.data;
+        this.fbtnOnLoad = false;
+        this.fbtnLoadingIndicator = false;
+      },
+      err => {
+        this.fbtnOnLoad = false;
       }
     );
   }
@@ -212,6 +314,61 @@ export class BannerIndexComponent {
     });
   }
 
+  setPageTerdekat(pageInfo) {
+    this.terdekatOffsetPagination = pageInfo.offset;      
+    this.terdekatLoadingIndicator = true;
+
+    if (this.terdekatPagination['search']) {
+      this.terdekatPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_terdekat_page", pageInfo.offset + 1);
+      this.terdekatPagination.page = this.dataService.getFromStorage("banner_terdekat_page");
+    }
+
+    this.bannerService.get(this.terdekatPagination).subscribe(res => {
+      Page.renderPagination(this.terdekatPagination, res);
+      this.terdekatRows = res.data;
+
+      this.terdekatLoadingIndicator = false;
+    });
+  }
+  setPageInfoSRC(pageInfo) {
+    this.infoSRCOffsetPagination = pageInfo.offset;      
+    this.infoSRCLoadingIndicator = true;
+
+    if (this.infoSRCPagination['search']) {
+      this.infoSRCPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_info_src_page", pageInfo.offset + 1);
+      this.infoSRCPagination.page = this.dataService.getFromStorage("banner_info_src_page");
+    }
+
+    this.bannerService.get(this.infoSRCPagination).subscribe(res => {
+      Page.renderPagination(this.infoSRCPagination, res);
+      this.infoSRCRows = res.data;
+
+      this.infoSRCLoadingIndicator = false;
+    });
+  }
+  setPageFbtn(pageInfo) {
+    this.fbtnOffsetPagination = pageInfo.offset;      
+    this.fbtnLoadingIndicator = true;
+
+    if (this.fbtnPagination['search']) {
+      this.fbtnPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_fbtn_page", pageInfo.offset + 1);
+      this.fbtnPagination.page = this.dataService.getFromStorage("banner_fbtn_page");
+    }
+
+    this.bannerService.get(this.fbtnPagination).subscribe(res => {
+      Page.renderPagination(this.fbtnPagination, res);
+      this.fbtnRows = res.data;
+
+      this.fbtnLoadingIndicator = false;
+    });
+  }
+
   setPageAktivasiKonsumen(pageInfo) {
     this.aktivasiKonsumenOffsetPagination = pageInfo.offset;      
     this.aktivasiKonsumenLoadingIndicator = true;
@@ -263,6 +420,57 @@ export class BannerIndexComponent {
       this.infoTerkiniRows = res.data;
 
       this.infoTerkiniLoadingIndicator = false;
+    });
+  }
+  onSortTerdekat(event) {
+    this.terdekatPagination.sort = event.column.prop;
+    this.terdekatPagination.sort_type = event.newValue;
+    this.terdekatPagination.page = 1;
+    this.terdekatLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_terdekat_page", this.terdekatPagination.page);
+    this.dataService.setToStorage("banner_terdekat_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_terdekat_sort", event.newValue);
+
+    this.bannerService.get(this.terdekatPagination).subscribe(res => {
+      Page.renderPagination(this.terdekatPagination, res);
+      this.terdekatRows = res.data;
+
+      this.terdekatLoadingIndicator = false;
+    });
+  }
+  onSortInfoSRC(event) {
+    this.infoSRCPagination.sort = event.column.prop;
+    this.infoSRCPagination.sort_type = event.newValue;
+    this.infoSRCPagination.page = 1;
+    this.infoSRCLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_info_src_page", this.infoSRCPagination.page);
+    this.dataService.setToStorage("banner_info_src_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_info_src_sort", event.newValue);
+
+    this.bannerService.get(this.infoSRCPagination).subscribe(res => {
+      Page.renderPagination(this.infoSRCPagination, res);
+      this.infoSRCRows = res.data;
+
+      this.infoSRCLoadingIndicator = false;
+    });
+  }
+  onSortFbtn(event) {
+    this.fbtnPagination.sort = event.column.prop;
+    this.fbtnPagination.sort_type = event.newValue;
+    this.fbtnPagination.page = 1;
+    this.fbtnLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_fbtn_page", this.fbtnPagination.page);
+    this.dataService.setToStorage("banner_fbtn_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_fbtn_sort", event.newValue);
+
+    this.bannerService.get(this.fbtnPagination).subscribe(res => {
+      Page.renderPagination(this.fbtnPagination, res);
+      this.fbtnRows = res.data;
+
+      this.fbtnLoadingIndicator = false;
     });
   }
   onSortAktivasiKonsumen(event) {
@@ -360,6 +568,69 @@ export class BannerIndexComponent {
     });
 
   }
+  updateFilterTerdekat(keyword) {
+
+    this.terdekatLoadingIndicator = true;
+    this.terdekatPagination.search = keyword;
+
+    if (keyword) {
+      this.terdekatPagination.page = 1;
+      this.terdekatOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.terdekatPagination.page = page;
+      this.terdekatOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.terdekatPagination).subscribe(res => {
+      Page.renderPagination(this.terdekatPagination, res);
+      this.terdekatRows = res.data;
+      this.terdekatLoadingIndicator = false;
+    });
+
+  }
+  updateFilterInfoSRC(keyword) {
+
+    this.infoSRCLoadingIndicator = true;
+    this.infoSRCPagination.search = keyword;
+
+    if (keyword) {
+      this.infoSRCPagination.page = 1;
+      this.infoSRCOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.infoSRCPagination.page = page;
+      this.infoSRCOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.infoSRCPagination).subscribe(res => {
+      Page.renderPagination(this.infoSRCPagination, res);
+      this.infoSRCRows = res.data;
+      this.infoSRCLoadingIndicator = false;
+    });
+
+  }
+  updateFilterFbtn(keyword) {
+
+    this.fbtnLoadingIndicator = true;
+    this.fbtnPagination.search = keyword;
+
+    if (keyword) {
+      this.fbtnPagination.page = 1;
+      this.fbtnOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.fbtnPagination.page = page;
+      this.fbtnOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.fbtnPagination).subscribe(res => {
+      Page.renderPagination(this.fbtnPagination, res);
+      this.fbtnRows = res.data;
+      this.fbtnLoadingIndicator = false;
+    });
+
+  }
   updateFilterAktivasiKonsumen(keyword) {
 
     this.aktivasiKonsumenLoadingIndicator = true;
@@ -385,6 +656,9 @@ export class BannerIndexComponent {
     switch (searchType) {
       case this.TYPE_BANNER.INFO_TERKINI: this.updateFilterInfoTerkini(keyword); break;
       case this.TYPE_BANNER.AKTIVASI_KONSUMEN: this.updateFilterAktivasiKonsumen(keyword); break;
+      case this.TYPE_BANNER.TERDEKAT: this.updateFilterTerdekat(keyword); break;
+      case this.TYPE_BANNER.INFO_SRC: this.updateFilterInfoSRC(keyword); break;
+      case this.TYPE_BANNER.FBTN: this.updateFilterFbtn(keyword); break;
     }
   }
 }
