@@ -277,7 +277,7 @@ export class PopupNotificationEditComponent {
 
       if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: " pesan_antar"}, {name: "Tantangan", value: " tantangan"}, {name: "Peluang", value: " peluang"}, {name: "Main Bareng", value: " main_bareng"}];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
@@ -1035,6 +1035,7 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('employee').setValue(response.employee);
         this.formPopupGroup.get('is_smoker').setValue(smoker_type);
+        this.formPopupGroup.get('subscription').setValue(response.subscription);
         if (smoker_type !== 'yes') {
           this.formPopupGroup.get('verification').setValue(response.verification || 'all');
         }

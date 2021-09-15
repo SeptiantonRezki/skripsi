@@ -782,6 +782,7 @@ export class BannerEditComponent {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
+      this.formBannerGroup.get('subscription').setValue(this.detailBanner.subscription);
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
