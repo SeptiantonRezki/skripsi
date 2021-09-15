@@ -1501,6 +1501,8 @@ export class PopupNotificationEditComponent {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
       } else if (body.action === 'iframe') {
         body['action_data'] = this.formPopupGroup.get('url_iframe').value;
+      } else {
+        body['action_data'] = "true";
       }
 
       if (body.action === 'iframe') {
