@@ -104,4 +104,9 @@ export class RcaAgentService extends BaseService {
     const url = this.getUrl("route_plan", "import");
     return this.postApi(url, body);
   }
+
+  getFilterArea(queryParams?): Observable<any> {
+    const url = this.getUrl("grouping_pelanggan", "area_filter");
+    return this.getApi(url, queryParams);
+  }
 }
