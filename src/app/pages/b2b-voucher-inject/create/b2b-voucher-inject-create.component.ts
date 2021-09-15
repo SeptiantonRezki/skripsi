@@ -89,6 +89,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     { name: 'B2B Only', value: 'b2b' },
     { name: 'Katalog SRC Only', value: 'src-catalogue' },
     { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+  suppliers = [
+    { id: 1, name: 'PT HM SAMPOERNA' }
   ];
   keyUpProductSRCC = new Subject<string>();
   inputChipListSRCC = [];
@@ -437,6 +441,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_only_srcc: res.data.limit_only_src_catalogue,
         product_srcc: res.data.limit_by_src_catalogue === 'product' ? res.data.limit_only_src_catalogue : '',
         category_srcc: res.data.limit_by_src_catalogue === 'category' ? res.data.limit_only_src_catalogue.map(dt => Number(dt)) : '',
+        supplier: res.data.suppler ? res.data.supplier : 1,
       });
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
@@ -513,6 +518,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       limit_only_srcc: [''],
       product_srcc: [''],
       category_srcc: [''],
+      supplier: [],
     });
 
     if (this.isCreate) {
@@ -591,6 +597,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+    this.formDetilVoucher.get('opsiVoucher').valueChanges.subscribe(val => {
+      
+      if (val !== 'private-label') {
+        this.formDetilVoucher.get('supplier').setValue(null);
+      }
+
+    })
   }
 
   initEditDetail() {
@@ -1095,7 +1108,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
           this.formDetilVoucher.get('limit_by_category').value ? 'category' : null,
         limit_by_src_catalogue: this.formDetilVoucher.get('limit_by_product_srcc').value ? 'product' :
-          this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null
+          this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null,
+        supplier: this.formDetilVoucher.get('supplier').value,
       };
       // console.log('paskdjsakl', this.productList);
       if (body['limit_by'] !== null) {

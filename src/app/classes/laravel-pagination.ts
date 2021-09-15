@@ -47,4 +47,7 @@ export class Page {
   public setType(type) {
     this.type = type;
   }
+  public renderFilters(pagination, filters) {
+    Object.keys(filters).map(keyFilter => { pagination[keyFilter] = filters[keyFilter] })
+  }
 }

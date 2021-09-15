@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-b2-b-voucher',
@@ -35,13 +36,22 @@ export class B2BVoucherComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+  formFilter: FormGroup = new FormGroup({penggunaan: new FormControl('')});
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private b2bVoucherService: BtoBVoucherService
+    private b2bVoucherService: BtoBVoucherService,
+    private formBuilder: FormBuilder,
   ) {
     this.onLoad = true;
     // this.selected = [];
@@ -57,10 +67,17 @@ export class B2BVoucherComponent implements OnInit {
       .subscribe(data => {
         this.updateFilter(data);
       });
+    this.formFilter = this.formBuilder.group({ penggunaan: [''] });
   }
 
   ngOnInit() {
     this.getVoucherList();
+
+    this.formFilter.get('penggunaan').valueChanges.subscribe(value => {
+      console.log({value});
+      this.onFilterChange();
+    });
+
   }
 
   getVoucherList() {
@@ -140,6 +157,20 @@ export class B2BVoucherComponent implements OnInit {
     this.b2bVoucherService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  onFilterChange() {
+    this.loadingIndicator = true;
+    this.pagination.renderFilters(this.pagination, this.formFilter.getRawValue());
+    this.pagination.page = 1;
+    this.offsetPagination = 0;
+    this.b2bVoucherService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    }, err => {
       this.loadingIndicator = false;
     });
   }

@@ -35,6 +35,14 @@
                   </mat-form-field>
                 </div>
 
+                <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center" *ngIf="(formDetilVoucher.get('opsiVoucher').value === 'private-label')">
+                  <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Nama Supplier" formControlName="supplier">
+                      <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <mat-form-field fxFlex="50" class="is-light">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
                   <mat-error
@@ -79,7 +87,7 @@
                 </div>
 
                 <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
-                  <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'b2b' || formDetilVoucher.get('opsiVoucher').value == 'both'">
+                  <div fxFlex="50" fxLayout="column" *ngIf="['b2b','private-label'].includes(formDetilVoucher.get('opsiVoucher').value) || formDetilVoucher.get('opsiVoucher').value == 'both'">
                     <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                       <span class="opsi-type">Produk B2B</span>
                       <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
