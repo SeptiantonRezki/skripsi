@@ -121,44 +121,18 @@ export class RoutePlanComponent implements OnInit {
       });
   }
 
-  getProvinces() {
-    this.pengajuanSrcService.getProvinces()
-      .subscribe(res => {
-        console.log('res provinces', res);
-        this.territoryCodes = res.data;
-      }, err => {
-        console.log('err get provinces', err);
-      })
-  }
-
-  getCities(province_id) {
-    this.pengajuanSrcService.getCities({ province_id })
-      .subscribe(res => {
-        console.log('res cities', res);
-        this.cities = res.data;
-      }, err => {
-        console.log('err get cities', err);
-      })
-  }
-
-  getDistricts(city_id) {
-    this.pengajuanSrcService.getDistricts({ city_id })
-      .subscribe(res => {
-        console.log('res districts', res);
-        this.districts = res.data;
-      }, err => {
-        console.log('err get districts', err);
-      })
-  }
-
-  getVillages(district_id) {
-    this.pengajuanSrcService.getSubDistricts({ district_id })
-      .subscribe(res => {
-        console.log('res villages', res);
-        this.villages = res.data;
-      }, err => {
-        console.log('err get villages', err);
-      })
+  getFilterArea(category?) {
+    let params = {};
+    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    params['self_area'] = this.pagination['area'];
+    params['last_self_area'] = this.pagination['area'];
+    params['after_level'] = true;
+    params['return'] = category;
+    this.rcaAgentService.getFilterArea(params).subscribe(res => {
+      if (category === 'city') this.cities = res;
+      if (category === 'district') this.districts = res;
+      if (category === 'village') this.villages = res;
+    })
   }
 
   ngOnInit() {
@@ -174,7 +148,10 @@ export class RoutePlanComponent implements OnInit {
     this.getListRoutePlan();
     this.getRPPositionCodes();
     this.getRPSummary();
-    this.getProvinces();
+
+    this.getFilterArea('city');
+    this.getFilterArea('district');
+    this.getFilterArea('village');
 
     this.filterPosition.valueChanges
       .debounceTime(500)
@@ -183,46 +160,46 @@ export class RoutePlanComponent implements OnInit {
         this.filteringPosition();
       });
 
-    this.formFilter
-      .get('territoryCode')
-      .valueChanges
-      .subscribe(res => {
-        console.log('on change province', res);
-        if (res) {
-          this.cities = [];
-          this.districts = [];
-          this.villages = [];
-          this.formFilter.get('city').setValue("");
-          this.formFilter.get('district').setValue("");
-          this.formFilter.get('village').setValue("");
-          // this.getPengajuanSRC(res === -1 ? null : 'province_id');
-          if (res && !res['value']) this.getCities(res && res['value'] ? res['value'] : res);
-        }
-      })
-    this.formFilter
-      .get('city')
-      .valueChanges
-      .subscribe(res => {
-        if (res) {
-          this.districts = [];
-          this.villages = [];
-          this.formFilter.get('district').setValue("");
-          this.formFilter.get('village').setValue("");
-          // this.getPengajuanSRC('city_id');
-          if (res && !res['value']) this.getDistricts(res);
-        }
-      })
+    // this.formFilter
+    //   .get('territoryCode')
+    //   .valueChanges
+    //   .subscribe(res => {
+    //     console.log('on change province', res);
+    //     if (res) {
+    //       this.cities = [];
+    //       this.districts = [];
+    //       this.villages = [];
+    //       this.formFilter.get('city').setValue("");
+    //       this.formFilter.get('district').setValue("");
+    //       this.formFilter.get('village').setValue("");
+    //       // this.getPengajuanSRC(res === -1 ? null : 'province_id');
+    //       if (res && !res['value']) this.getCities(res && res['value'] ? res['value'] : res);
+    //     }
+    //   })
+    // this.formFilter
+    //   .get('city')
+    //   .valueChanges
+    //   .subscribe(res => {
+    //     if (res) {
+    //       this.districts = [];
+    //       this.villages = [];
+    //       this.formFilter.get('district').setValue("");
+    //       this.formFilter.get('village').setValue("");
+    //       // this.getPengajuanSRC('city_id');
+    //       if (res && !res['value']) this.getDistricts(res);
+    //     }
+    //   })
 
-    this.formFilter
-      .get('district')
-      .valueChanges
-      .subscribe(res => {
-        if (res) {
-          this.formFilter.get('village').setValue("");
-          // this.getPengajuanSRC('district_id');
-          // if (res && !res['value']) this.getVillages(res);
-        }
-      })
+    // this.formFilter
+    //   .get('district')
+    //   .valueChanges
+    //   .subscribe(res => {
+    //     if (res) {
+    //       this.formFilter.get('village').setValue("");
+    //       // this.getPengajuanSRC('district_id');
+    //       // if (res && !res['value']) this.getVillages(res);
+    //     }
+    //   })
   }
 
   filteringPosition() {
@@ -297,6 +274,10 @@ export class RoutePlanComponent implements OnInit {
     if (this.formFilter.get('plannedDay').value) this.pagination['kunjungan'] = this.formFilter.get('plannedDay').value;
     else delete this.pagination['kunjungan'];
 
+    if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
+    if (this.formFilter.get('district').value) this.pagination['district'] = this.formFilter.get('district').value;
+    if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
+
     this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
@@ -365,7 +346,9 @@ export class RoutePlanComponent implements OnInit {
         this.pagination['position'] = this.positionCode.value;
       }
     }
-    this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'] }).subscribe(res => {
+    let params = {};
+    if (this.classification.value) params['classification'] = this.classification.value;
+    this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
       this.dataService.showLoading(false);
     }, err => {

@@ -923,7 +923,8 @@ export class Endpoint {
         mapping_position: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/position`,
         summary: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/summary`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/export`,
-        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/import`
+        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/import`,
+        area_filter: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca/geotree`
       },
       route_plan: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan`,
