@@ -535,7 +535,7 @@
               </ngx-datatable>
             </div>
 
-            <div *ngIf="formPopupGroup.get('is_target_audience').value === false && formPopupGroup.get('is_target_area').value === false">
+            <div *ngIf="!formPopupGroup.get('is_target_audience').value && !formPopupGroup.get('is_target_area').value">
               <div class="pt-16" formArrayName="areas"
                 *ngFor="let wil of formPopupGroup.get('areas')['controls']; let i = index;">
                 <div [formGroupName]="i">
