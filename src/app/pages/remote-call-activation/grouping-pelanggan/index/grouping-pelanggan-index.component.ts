@@ -401,7 +401,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
-    if (this.formFilter.get('district').value) this.pagination['district'] = this.formFilter.get('district').value;
+    if (this.formFilter.get('district_code').value) this.pagination['district'] = this.formFilter.get('district_code').value;
     if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
@@ -813,6 +813,10 @@ export class GroupingPelangganIndexComponent implements OnInit {
     }
     let params = {};
     if (this.classification.value) params['classification'] = this.classification.value;
+    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
+    if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
+    if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
     this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
       this.dataService.showLoading(false);
