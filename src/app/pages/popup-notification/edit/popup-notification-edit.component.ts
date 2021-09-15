@@ -45,6 +45,7 @@ export class PopupNotificationEditComponent {
   lvl: any[];
   minDate: any;
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
@@ -193,7 +194,8 @@ export class PopupNotificationEditComponent {
       is_target_audience: [false],
       transfer_token: ["yes", Validators.required],
       is_mission_builder: this.is_mission_builder,
-      product: [""]
+      product: [""],
+      subscription: ["all"],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -274,8 +276,8 @@ export class PopupNotificationEditComponent {
       }
 
       if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
@@ -1033,6 +1035,7 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('employee').setValue(response.employee);
         this.formPopupGroup.get('is_smoker').setValue(smoker_type);
+        this.formPopupGroup.get('subscription').setValue(response.subscription);
         if (smoker_type !== 'yes') {
           this.formPopupGroup.get('verification').setValue(response.verification || 'all');
         }
@@ -1498,6 +1501,8 @@ export class PopupNotificationEditComponent {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
       } else if (body.action === 'iframe') {
         body['action_data'] = this.formPopupGroup.get('url_iframe').value;
+      } else {
+        body['action_data'] = "true";
       }
 
       if (body.action === 'iframe') {
@@ -1544,6 +1549,10 @@ export class PopupNotificationEditComponent {
 
       if (body.action === 'new-product') {
         body['action_data'] = this.formPopupGroup.get('product').value;
+      }
+
+      if (body.type === 'customer') {
+        body['subscription'] = this.formPopupGroup.get('subscription').value;
       }
 
       console.log('body', body);

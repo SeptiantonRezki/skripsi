@@ -54,6 +54,7 @@ export class BannerEditComponent {
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
@@ -233,7 +234,8 @@ export class BannerEditComponent {
       ]],
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
-      ]]
+      ]],
+      subscription:["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -809,7 +811,7 @@ export class BannerEditComponent {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
-
+      this.formBannerGroup.get('subscription').setValue(this.detailBanner.subscription);
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
@@ -1333,6 +1335,7 @@ export class BannerEditComponent {
         if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
           fd.append("profile", this.formBannerGroup.get("profile").value);
         }
+        fd.append('subscription', this.formBannerGroup.get('subscription').value);
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
