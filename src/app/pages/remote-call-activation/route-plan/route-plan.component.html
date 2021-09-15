@@ -57,35 +57,35 @@
                     <mat-option *ngFor="let item of plannedDays" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <!-- <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Territory Code" formControlName="territoryCode">
                     <mat-option [value]="-1">Semua Territory Code</mat-option>
                     <mat-option *ngFor="let item of territoryCodes" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="City" formControlName="city">
-                    <mat-option *ngIf="cities.length > 0"
+                    <!-- <mat-option *ngIf="cities.length > 0"
                       [value]="{value: formFilter.get('territoryCode').value, key: 'territoryCode'}">Semua Kota
-                    </mat-option>
-                    <mat-option *ngFor="let item of cities" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-option> -->
+                    <mat-option *ngFor="let item of cities" [value]="item.city">{{item.city}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district">
-                    <mat-option *ngIf="districts.length > 0"
+                  <mat-select placeholder="District" formControlName="district_code">
+                    <!-- <mat-option *ngIf="districts.length > 0"
                       [value]="{value: formFilter.get('city').value, key: 'city'}">
                       Semua District
-                    </mat-option>
-                    <mat-option *ngFor="let item of districts" [value]="item.id">{{item.name }}</mat-option>
+                    </mat-option> -->
+                    <mat-option *ngFor="let item of districts" [value]="item.district">{{item.district }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Village" formControlName="village">
-                    <mat-option *ngIf="districts.length > 0"
+                    <!-- <mat-option *ngIf="districts.length > 0"
                       [value]="{value: formFilter.get('district').value, key: 'district'}">Semua Village
-                    </mat-option>
-                    <mat-option *ngFor="let item of villages" [value]="item.id">{{item.name
+                    </mat-option> -->
+                    <mat-option *ngFor="let item of villages" [value]="item.village">{{item.village
                       }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -116,12 +116,12 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Customer Name" prop="owner"></ngx-datatable-column>
                 <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="Territory Code" prop="territory_code" [sortable]="false">
+                <ngx-datatable-column name="Territory Code" prop="teritory_code" [sortable]="false">
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
                 </ngx-datatable-column>
-                <ngx-datatable-column name="City" prop="division_code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="District" prop="district_code" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="City" prop="city" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="District" prop="district" [sortable]="false"></ngx-datatable-column>
                 <ngx-datatable-column name="Village" prop="village" [sortable]="false"></ngx-datatable-column>
               </ngx-datatable>
             </div>
