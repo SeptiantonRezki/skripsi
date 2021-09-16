@@ -113,8 +113,7 @@ export class TargetAreaComponent implements OnInit {
     });
   }
 
-  getArea() {
-    const area = this.formGeo.get("area").value;
+  getArea(levelIds?: any) {
     const page = this.dataService.getFromStorage("page");
     const sort = this.dataService.getFromStorage("sort");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -130,7 +129,7 @@ export class TargetAreaComponent implements OnInit {
     this.areaService
       .get({
         ...this.pagination,
-        area_ids: area.length ? area.join() : "",
+        area_ids: levelIds.length ? levelIds.join() : "",
       })
       .subscribe((res) => {
         this.dataService.showLoading(false);
@@ -168,7 +167,7 @@ export class TargetAreaComponent implements OnInit {
       });
     }
 
-    this.getArea();
+    this.getArea(level);
     if (this.isSelectedAll) this.getAllId();
   }
 
