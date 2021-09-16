@@ -54,6 +54,7 @@
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Hari Kunjungan" formControlName="plannedDay">
+                    <mat-option>None</mat-option>
                     <mat-option *ngFor="let item of plannedDays" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
