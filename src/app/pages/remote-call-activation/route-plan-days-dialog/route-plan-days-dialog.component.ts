@@ -18,8 +18,6 @@ export class RoutePlanDaysDialogComponent implements OnInit {
     { id: 'rabu', name: 'Rabu' },
     { id: 'kamis', name: 'Kamis' },
     { id: 'jumat', name: `Jumat` },
-    { id: 'sabtu', name: 'Sabtu' },
-    { id: 'minggu', name: 'Minggu' },
   ];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

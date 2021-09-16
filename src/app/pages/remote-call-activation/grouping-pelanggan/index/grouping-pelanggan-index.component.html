@@ -148,6 +148,7 @@
                     [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
                   </ngx-mat-select-search>
                   <mat-option>None</mat-option>
+                  <mat-option value="blank">Belum di Set</mat-option>
                   <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
                     {{item.code}}
                   </mat-option>
@@ -155,7 +156,7 @@
               </mat-form-field>
               <div flex="1"></div>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Clasification" [formControl]="classification">
+                <mat-select placeholder="Classification" [formControl]="classification">
                   <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>

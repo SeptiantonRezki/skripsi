@@ -1,4 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { e } from '@angular/core/src/render3';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -35,13 +37,12 @@ export class RoutePlanComponent implements OnInit {
   summaries: any[] = [];
   positionCodes: any[] = [];
   plannedDays: any[] = [
+    { id: 'blank', name: "Belum Di Set" },
     { id: 'senin', name: 'Senin' },
     { id: 'selasa', name: 'Selasa' },
     { id: 'rabu', name: 'Rabu' },
     { id: 'kamis', name: 'Kamis' },
     { id: 'jumat', name: `Jumat` },
-    { id: 'sabtu', name: 'Sabtu' },
-    { id: 'minggu', name: 'Minggu' },
   ];
   territoryCodes: any[] = [];
   cities: any[] = [];
@@ -50,6 +51,8 @@ export class RoutePlanComponent implements OnInit {
 
   positionCode: FormControl = new FormControl('');
   positionCodesList: any[] = [];
+  positionCodeSummary: FormControl = new FormControl('');
+  positionCodesListSummary: any[] = [];
 
   selected: any[];
   id: any;
@@ -66,6 +69,8 @@ export class RoutePlanComponent implements OnInit {
 
   public filterPosition: FormControl = new FormControl('');
   public filteredPosition: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterPositionSummary: FormControl = new FormControl('');
+  public filteredPositionSummary: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   private _onDestroy = new Subject<void>();
 
   classification: FormControl = new FormControl('');
@@ -119,6 +124,18 @@ export class RoutePlanComponent implements OnInit {
         this.formSearch.setValue(data);
         this.loadFormFilter(data);
       });
+  }
+
+  selectChangePositionCode(e: any) {
+    console.log('asdkjasdas', e);
+    if (e.value) {
+      let params = {
+        position: e.value
+      }
+      this.getRPSummary(params);
+    } else {
+      this.getRPSummary()
+    }
   }
 
   getFilterArea(category?) {
@@ -229,6 +246,12 @@ export class RoutePlanComponent implements OnInit {
       .subscribe(() => {
         this.filteringPosition();
       });
+    this.filterPositionSummary.valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringPositionSummary();
+      });
 
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.getListAudience(this.trade_audience_group_id);
@@ -316,6 +339,32 @@ export class RoutePlanComponent implements OnInit {
     );
   }
 
+  filteringPositionSummary() {
+    if (!this.positionCodesListSummary) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterPositionSummary.value;
+    let pagination = {}
+    pagination['per_page'] = 30;
+    pagination['search'] = search;
+
+    this.rcaAgentService.getRPPositionCode(pagination).subscribe(
+      (res) => {
+        console.log("res missions", res.data);
+        this.positionCodesListSummary = res.data;
+        this.filteredPositionSummary.next(this.positionCodesListSummary.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the banks
+    this.filteredPositionSummary.next(
+      this.positionCodesListSummary.filter(item => item.code ? item.code.toLowerCase().indexOf(search) > -1 : item.code.indexOf(search))
+    );
+  }
+
   loadFormFilter(search?: string) {
     if (!search && this.formSearch.value) search = this.formSearch.value;
 
@@ -328,6 +377,8 @@ export class RoutePlanComponent implements OnInit {
         console.log("res missions", res.data);
         this.positionCodesList = res.data;
         this.filteredPosition.next(this.positionCodesList.slice());
+        this.positionCodesListSummary = res.data;
+        this.filteredPositionSummary.next(this.positionCodesListSummary.slice());
       },
       (err) => {
         console.log("err ", err);
@@ -335,9 +386,13 @@ export class RoutePlanComponent implements OnInit {
     );
   }
 
-  getRPSummary() {
-    this.rcaAgentService.getRPSummary({}).subscribe(res => {
+  getRPSummary(params = {}) {
+    this.dataService.showLoading(true);
+    this.rcaAgentService.getRPSummary(params).subscribe(res => {
       this.summaries = res;
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
     })
   }
 
@@ -838,10 +893,51 @@ export class RoutePlanComponent implements OnInit {
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
     this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
+      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_RoutePlan_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
     })
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    // console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
   importGrouping() {
