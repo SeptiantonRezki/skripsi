@@ -43,6 +43,7 @@
                       [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
                     </ngx-mat-select-search>
                     <mat-option>None</mat-option>
+                    <mat-option value="blank">Belum Di Set</mat-option>
                     <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
                       {{item.code}}
                     </mat-option>
@@ -194,6 +195,22 @@
         </mat-tab>
         <mat-tab label="Summary">
           <div class="ayo-middle" fxLayout="column">
+            <div fxLayout="row" fxFlex="20" class="p-24">
+              <mat-form-field fxFlex="20" class="is-light form-primary">
+                <mat-select placeholder="Position Code" [formControl]="positionCodeSummary"
+                  (selectionChange)="selectChangePositionCode($event)" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterPositionSummary"
+                    [placeholderLabel]="'Cari Position Code...'"
+                    [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
+                  </ngx-mat-select-search>
+                  <mat-option>None</mat-option>
+                  <mat-option value="blank">Belum Di Set</mat-option>
+                  <mat-option *ngFor="let item of filteredPositionSummary | async" [value]="item.id">
+                    {{item.code}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
             <div class="p-24" fxLayout="row" fxFlex="30">
               <table class="styled-table">
                 <thead>
