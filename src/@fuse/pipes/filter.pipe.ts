@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { FuseUtils } from "@fuse/utils";
-import * as moment from "moment";
+import moment from 'moment';
 
 @Pipe({ name: "filter" })
 export class FilterPipe implements PipeTransform {

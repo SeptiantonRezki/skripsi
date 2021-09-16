@@ -5,7 +5,7 @@ import { MatSelect, DateAdapter, MatDialog, MatDialogConfig } from '@angular/mat
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { takeUntil } from 'rxjs/operators';
 import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';

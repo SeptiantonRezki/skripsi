@@ -8,7 +8,7 @@ import { NotificationService } from 'app/services/notification.service';
 import { QiscusService } from 'app/services/qiscus.service';
 import { SupportService } from 'app/services/settings/support.service';
 import { Observable, Subject } from 'rxjs';
-import * as moment from "moment";
+import moment from 'moment';
 import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogue.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { DialogService } from '../../../../services/dialog.service';
 import { TradeProgramService } from '../../../../services/dte/trade-program.service';

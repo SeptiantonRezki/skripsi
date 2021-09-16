@@ -11,7 +11,7 @@ import { DialogPopUpNotifEditComponent } from "./dialog-pop-up-notif-edit/dialog
 import { DialogPushNotifEditComponent } from "./dialog-push-notif-edit/dialog-push-notif-edit.component";
 import { DialogWaktuTungguEditComponent } from "./dialog-waktu-tunggu-edit/dialog-waktu-tunggu-edit.component";
 import { DialogYesNoEditComponent } from "./dialog-yes-no-edit/dialog-yes-no-edit.component";
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogCoinEditComponent } from "./dialog-coin-edit/dialog-coin-edit.component";
 
 

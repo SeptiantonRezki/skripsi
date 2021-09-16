@@ -10,7 +10,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { NotificationService } from 'app/services/notification.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import * as _ from "lodash";
-import * as moment from "moment";
+import moment from 'moment';
 import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 

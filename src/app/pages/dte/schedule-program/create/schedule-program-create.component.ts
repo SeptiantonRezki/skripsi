@@ -7,7 +7,7 @@ import { commonFormValidator } from '../../../../classes/commonFormValidator';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { startWith, map, takeUntil } from 'rxjs/operators';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-schedule-program-create',

@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, TemplateRef } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
