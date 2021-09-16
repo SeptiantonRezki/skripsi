@@ -59,7 +59,10 @@ export class Endpoint {
         encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`
       },
       area: {
-        child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`
+        child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`,
+        get: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/content/area`,
+        export: `${AYO_API}/api/principal/area/export`,
+        import: `${AYO_API}/api/principal/area/import`,
       },
       callObjective: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective`,
@@ -232,6 +235,21 @@ export class Endpoint {
         import: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/import`,
         preview_import: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/preview-import`,
       },
+      product_submission: {
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product`,
+        get_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}`,
+        put_approve: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}/approve`,
+        put_disapprove: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}/disapprove`,
+        get_db: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product`,
+        get_db_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}`,
+        put_approve_1: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/approve-1`,
+        put_disapprove_1: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/disapprove-1`,
+        put_approve_db_product: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/approve-produk-db`,
+        put_disapprove_db_product: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/disapprove-produk-db`,
+        get_user: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/submissions/db-product/approval-setting/users`,
+        put_user: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/submissions/db-product/approval-setting/save`,
+        get_barcode: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/generate-barcode`,
+      },
       template_task: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
@@ -284,7 +302,9 @@ export class Endpoint {
         list_other_children: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/children/${context.parent_id}`,
         import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/import-audience`,
         show_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/dte/show-import-audience`,
-        export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`
+        // export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/${type_api}/dte/audience/request-export`,
+
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -714,8 +734,11 @@ export class Endpoint {
         update_status: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/sequencing/update-status/${context.sequencing_id}`,
         // download_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/download`,
         download_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-export-coin`,
-        preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
-        import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        // preview_adjustment: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm_adjustment/coin/preview`,
+        preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-preview-import-coin`,
+        get_import_preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/preview-import-coin`,
+        // import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
+        import_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/dte/tsm/request-import-coin`,
         adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer` //ini yang di coin mangement
       },
       pengaturan_attribute_misi: {
@@ -950,6 +973,28 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
         autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
+      },
+      rca_agent: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna`,
+        detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/${context.agent_id}`,
+        position_code: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code/${context.area_id}`,
+        current_position_code: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/current-position-code/${context.area_id}`
+      },
+      grouping_pelanggan: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan`,
+        mapping_position: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/position`,
+        summary: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-group-pelanggan/summary`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/rca/position/export`,
+        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/position/import`
+      },
+      route_plan: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan`,
+        mapping_position: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan/visit`,
+        summary: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/rca-rute-kunjungan/summary`,
+        position_codes: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/rca/position/export`,
+        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/principal/rca/kunjungan/import`
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

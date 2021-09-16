@@ -1,0 +1,244 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header
+    contentTitle="Pengajuan Produk Databank"
+  ></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">Informasi Produk</h2>
+      </div>
+      <form [formGroup]="product" class="py-24">
+        <div fxLayout="column" fxLayoutGap="16px">
+          <div fxLayout="row" fxLayoutGap="30px">
+            <div
+              fxLayout="column"
+              fxLayoutAlign="start stretch"
+              fxFlex="50"
+              fxLayoutGap="16px"
+            >
+              <mat-form-field class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Nama Produk"
+                  formControlName="name"
+                />
+                <mat-error *ngIf="hasError('name')">
+                  Nama Produk harus diisi
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="is-light form-primary">
+                <mat-select
+                  formControlName="brand"
+                  placeholder="Perusahaan"
+                  #singleSelect
+                >
+                  <ngx-mat-select-search
+                    [formControl]="filterBrands"
+                    [placeholderLabel]="'Cari Perusahaan...'"
+                    [noEntriesFoundLabel]="
+                      'Tidak ada perusahaan yang ditemukan'
+                    "
+                  ></ngx-mat-select-search>
+                  <mat-option
+                    *ngFor="let item of filteredBrands | async"
+                    [value]="item.id"
+                  >
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('brand')">
+                  Perusahaan harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div
+              fxLayout="column"
+              fxLayoutAlign="start stretch"
+              fxFlex="50"
+              fxLayoutGap="16px"
+            >
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center stretch"
+                fxLayoutGap="30px"
+              >
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Barcode"
+                    formControlName="barcode"
+                  />
+                  <mat-error *ngIf="hasError('barcode')">
+                    Barcode harus diisi
+                  </mat-error>
+                </mat-form-field>
+                <button
+                  *ngIf="!hasBarcode"
+                  mat-raised-button
+                  style="height: 45px"
+                  (click)="getBarcode()"
+                  [disabled]="
+                    gettingBarcode || product.controls.barcode.value?.length > 0
+                  "
+                >
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="center center"
+                    fxLayoutGap="8px"
+                    class="px-12"
+                  >
+                    <div>Generate</div>
+                    <div *ngIf="gettingBarcode">
+                      <mat-progress-spinner
+                        mode="indeterminate"
+                        diameter="24"
+                        style="margin: 0 auto"
+                      ></mat-progress-spinner>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <mat-form-field class="is-light form-primary">
+                <mat-select
+                  formControlName="category"
+                  placeholder="Kategori"
+                  #singleSelect
+                >
+                  <ngx-mat-select-search
+                    [formControl]="filterCategories"
+                    [placeholderLabel]="'Cari Kategori...'"
+                    [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"
+                  ></ngx-mat-select-search>
+                  <mat-option
+                    *ngFor="let item of filteredCategories | async"
+                    [value]="item.id"
+                  >
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('category')">
+                  Kategori harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="30px">
+            <div fxLayout="column" fxFlex="25">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="SRC yang mengajukan"
+                  formControlName="businessName"
+                />
+                <mat-error *ngIf="hasError('businessName')">
+                  SRC harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="25">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Zone"
+                  formControlName="businessZone"
+                />
+                <mat-error *ngIf="hasError('businessZone')">
+                  Zone harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="25">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Regional"
+                  formControlName="businessRegional"
+                />
+                <mat-error *ngIf="hasError('businessRegional')">
+                  Regional harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="25">
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Area"
+                  formControlName="businessArea"
+                />
+                <mat-error *ngIf="hasError('businessArea')">
+                  Area harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="30px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="mat-custom-label">Foto Produk</div>
+              <div fxLayout="row" class="preview-container">
+                <div
+                  fxFlex="100"
+                  class="rectangle-16 p-12"
+                  (click)="previewImage()"
+                >
+                  <img
+                    [src]="imageUrl"
+                    style="
+                      display: block;
+                      max-height: 100%;
+                      max-width: 100%;
+                      margin: auto;
+                    "
+                  />
+                </div>
+                <div class="preview-float p-12" fxLayout="column">
+                  <button
+                    mat-mini-fab
+                    (click)="uploadImage()"
+                    matTooltip="Unggah Foto Produk"
+                    matTooltipPosition="after"
+                    style="background: #333; color: #fff"
+                  >
+                    <mat-icon>insert_photo</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="filesError" class="mat-custom-error">
+                Foto Produk harus diisi
+              </div>
+            </div>
+            <div fxLayout="column" fxFlex="50"></div>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px" class="pt-36">
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button mat-green-800-bg"
+            (click)="submit('approve')"
+          >
+            Setuju Untuk Masuk ke DB
+          </button>
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit('disapprove')"
+          >
+            Ditolak
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
