@@ -1,10 +1,10 @@
 {
   "global": {
     "app_name": "AYO SRC SAMPOERNA",
-    "status": "Status",
-    "active": "Aktif",
-    "inactive": "Tidak Aktif",
-    "search": "Cari",
+    "country_calling_code": "+62",
+    "currency": "Rp",
+    "currency_name": "Rupiah",
+    "currency_code": "IDR",
     "menu": {
       "help": "Bantuan",
       "admin": "Daftar Admin",
@@ -46,7 +46,12 @@
       "longitude": "Longitude",
       "description": "Deskripsi",
       "created_at": "Tanggal Dibuat",
-      "updated_at": "Tanggal Diubah"
+      "updated_at": "Tanggal Diubah",
+      "status": "Status",
+      "active": "Aktif",
+      "inactive": "Tidak Aktif",
+      "search": "Cari",
+      "today": "Hari ini"
     },
     "button": {
       "save": "Simpan",

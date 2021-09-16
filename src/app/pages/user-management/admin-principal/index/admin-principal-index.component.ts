@@ -10,6 +10,7 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import { PagesName } from "app/classes/pages-name";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-admin-principal-index",
@@ -42,7 +43,8 @@ export class AdminPrincipalIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private adminPrincipalService: AdminPrincipalService
+    private adminPrincipalService: AdminPrincipalService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

@@ -71,7 +71,6 @@ export class LoginComponent implements OnInit {
     this.rememberMe.setValue(false);
 
     this.environment = environment;
-    console.log('locale', this.ls.locale);
   }
 
   ngOnInit() {

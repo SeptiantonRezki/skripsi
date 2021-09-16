@@ -1,11 +1,11 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Spanduk Online'">
+  <page-content-header [contentTitle]="ls.locale.iklan_dalam_aplikasi.spanduk_online.text1">
     <button [routerLink]="['/advertisement','banner', 'sorting']" mat-raised-button type="button">
-      <mat-icon>sort</mat-icon> PENGATURAN URUTAN
+      <mat-icon>sort</mat-icon> {{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text2 }}
     </button>
     <button style="width: 170px" [routerLink]="['/advertisement','banner', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> BUAT
+      <mat-icon>add</mat-icon> {{ ls.locale.bantuan.text14 }}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -13,11 +13,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Spanduk Online</h2>
+        <h2 class="pl-8">{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text1 }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -55,28 +55,28 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text3 }}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text4 }}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text5 }}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{ ls.locale.global.label.status }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -86,7 +86,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
@@ -154,28 +154,28 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.labek.name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text3 }}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text4 }}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text5 }}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{ ls.locale.global.label.status }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -185,7 +185,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
@@ -216,7 +216,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="_onSearch.next({keyword: $event.target.value, searchType: TYPE_BANNER.AKTIVASI_KONSUMEN})" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="_onSearch.next({keyword: $event.target.value, searchType: TYPE_BANNER.AKTIVASI_KONSUMEN})" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -254,28 +254,28 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text3 }}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text4 }}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text5 }}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{ ls.locale.global.label.status }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -285,7 +285,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
