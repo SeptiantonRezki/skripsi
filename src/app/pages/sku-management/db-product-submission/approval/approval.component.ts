@@ -59,7 +59,9 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
   }
 
   getUsers() {
+    this.dataService.showLoading(true);
     this.submissionService.getUser().subscribe((res) => {
+      this.dataService.showLoading(false);
       const listUser = res.data.map((item: any) => {
         if (item.approver_type === "approver-1")
           this.approval.get("user1").setValue(item.id);
