@@ -70,8 +70,7 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="20" class="is-light">
-                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher" readonly *ngIf="user_country !== 'KH'">
-                    <input matInput [inputMask]="currencyInputMask" placeholder="Nilai Voucher" formControlName="voucher" readonly *ngIf="user_country === 'KH'">
+                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher" readonly>
                     <mat-error
                       *ngIf="formDetilVoucher.controls['voucher'].hasError('required') && formDetilVoucher.controls['voucher'].touched ">
                       Nilai Voucher harus diisi.
