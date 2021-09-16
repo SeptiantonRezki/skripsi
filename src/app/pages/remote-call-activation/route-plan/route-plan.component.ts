@@ -35,13 +35,12 @@ export class RoutePlanComponent implements OnInit {
   summaries: any[] = [];
   positionCodes: any[] = [];
   plannedDays: any[] = [
+    { id: 'blank', name: "Belum Di Set" },
     { id: 'senin', name: 'Senin' },
     { id: 'selasa', name: 'Selasa' },
     { id: 'rabu', name: 'Rabu' },
     { id: 'kamis', name: 'Kamis' },
     { id: 'jumat', name: `Jumat` },
-    { id: 'sabtu', name: 'Sabtu' },
-    { id: 'minggu', name: 'Minggu' },
   ];
   territoryCodes: any[] = [];
   cities: any[] = [];
