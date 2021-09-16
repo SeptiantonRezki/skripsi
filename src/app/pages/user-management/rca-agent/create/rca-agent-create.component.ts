@@ -264,9 +264,7 @@ export class RcaAgentCreateComponent implements OnInit {
   }
 
   async submit() {
-    if (this.formRcaAgent.get('isNewPositionCode').value) {
-      this.getCurrentPositionCode();
-    }
+
     let formRcaAgent = this.formRcaAgent.getRawValue();
     let formArea = {
       national: formRcaAgent['national'],
@@ -282,24 +280,49 @@ export class RcaAgentCreateComponent implements OnInit {
 
     if (this.formRcaAgent.valid) {
       this.dataService.showLoading(true);
-      let body = {
-        name: this.formRcaAgent.get('name').value,
-        email: this.formRcaAgent.get('email').value,
-        area_id: area_id,
-        username: this.formRcaAgent.get('username').value,
-        position_code: this.formRcaAgent.get('isNewPositionCode').value ? this.current_position_code : this.formRcaAgent.get('position').value,
-        // password: this.formRcaAgent.get('password').value,
-        status: "active"
-      }
+      if (this.formRcaAgent.get('isNewPositionCode').value) {
+        // this.getCurrentPositionCode();
+        this.rcaAgentService.getCurrentPositionCode({ area_id }).subscribe(res => {
+          this.current_position_code = res;
+          let body = {
+            name: this.formRcaAgent.get('name').value,
+            email: this.formRcaAgent.get('email').value,
+            area_id: area_id,
+            username: this.formRcaAgent.get('username').value,
+            position_code: res,
+            // password: this.formRcaAgent.get('password').value,
+            status: "active"
+          }
 
-      this.rcaAgentService.create(body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
-        this.rotuer.navigate(['rca', 'agent-pengguna']);
-      }, err => {
-        console.log('err', err);
-        this.dataService.showLoading(false);
-      })
+          this.rcaAgentService.create(body).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+            this.rotuer.navigate(['rca', 'agent-pengguna']);
+          }, err => {
+            console.log('err', err);
+            this.dataService.showLoading(false);
+          });
+        });
+      } else {
+        let body = {
+          name: this.formRcaAgent.get('name').value,
+          email: this.formRcaAgent.get('email').value,
+          area_id: area_id,
+          username: this.formRcaAgent.get('username').value,
+          position_code: this.formRcaAgent.get('position').value,
+          // password: this.formRcaAgent.get('password').value,
+          status: "active"
+        }
+
+        this.rcaAgentService.create(body).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+          this.rotuer.navigate(['rca', 'agent-pengguna']);
+        }, err => {
+          console.log('err', err);
+          this.dataService.showLoading(false);
+        })
+      }
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
