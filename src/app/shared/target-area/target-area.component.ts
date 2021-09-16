@@ -225,13 +225,18 @@ export class TargetAreaComponent implements OnInit {
   }
 
   getAllId() {
+    let levelId = this.getSelectedAllId();
+    this.selectedAllId.emit(levelId);
+  }
+
+  getSelectedAllId() {
     let levelId = [];
     this.geoLevel.forEach((item) => {
       let lastLevel = this.formGeo.get(item).value;
       if (!lastLevel.length) return false;
       levelId = lastLevel;
     });
-    this.selectedAllId.emit(levelId);
+    return levelId;
   }
 
   onSelect({ selected }) {
@@ -267,7 +272,11 @@ export class TargetAreaComponent implements OnInit {
     }
     try {
       const fd = new FormData();
-      this.selected.forEach((item) => {
+      const ids = this.isSelectedAll
+        ? this.getSelectedAllId().map((item) => ({ id: item }))
+        : this.selected;
+
+      ids.forEach((item) => {
         fd.append("selected[]", item.id);
       });
 
