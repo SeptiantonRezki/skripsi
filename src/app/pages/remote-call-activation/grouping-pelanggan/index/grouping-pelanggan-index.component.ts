@@ -58,6 +58,9 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   positionCode: FormControl = new FormControl('');
   positionCodesList: any[] = [];
+  cities: any[] = [];
+  districts: any[] = [];
+  villages: any[] = [];
 
   public filterPosition: FormControl = new FormControl('');
   public filteredPosition: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -137,6 +140,83 @@ export class GroupingPelangganIndexComponent implements OnInit {
     );
   }
 
+  getFilterArea(category?) {
+    let params = {};
+    const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) =>
+      ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+    const area_id = areaSelected[areaSelected.length - 1].value;
+    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+    this.pagination.area = area_id;
+
+    console.log('area_selected on ff list', areaSelected, this.list);
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
+      this.pagination['after_level'] = true;
+    } else {
+      const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+
+      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      let last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+
+      if (this.areaFromLogin[1]) {
+        const second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+      if (this.pagination['after_level']) { delete this.pagination['after_level']; }
+      this.pagination['self_area'] = self_area;
+      this.pagination['last_self_area'] = last_self_area;
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        const oneAreaSelected = lastSelectedArea.value[0];
+        const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) {
+            this.pagination['last_self_area'] = [last_self_area[1]];
+          } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
+        } else {
+          // console.log('its hitted [other level]');
+          this.pagination['after_level'] = true;
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        this.pagination['after_level'] = true;
+        if (newLastSelfArea.length > 0) {
+          this.pagination['last_self_area'] = newLastSelfArea;
+        }
+      }
+    }
+    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
+    if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
+    if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
+    params['return'] = category;
+    this.rcaAgentService.getFilterArea(params).subscribe(res => {
+      if (category === 'city') this.cities = res;
+      if (category === 'district') this.districts = res;
+      if (category === 'village') this.villages = res;
+    })
+  }
+
   ngOnInit() {
     this.formFilter = this.formBuilder.group({
       national: [''],
@@ -146,41 +226,67 @@ export class GroupingPelangganIndexComponent implements OnInit {
       salespoint: [''],
       district: [''],
       territory: [''],
-      status: ['']
+      status: [''],
+      city: [''],
+      district_code: [''],
+      village: [''],
     });
-
     this.formFilter.valueChanges.debounceTime(1000).subscribe(res => {
       // this.getListAudience(this.trade_audience_group_id);
     });
 
+    this.formFilter.get('national').valueChanges.subscribe(res => {
+      console.log('zone', res);
+      if (res) {
+        // this.getAudienceAreaV2('region', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
+      }
+    });
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
       console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
       console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
       console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
       console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
+        this.getFilterArea('city')
+        this.getFilterArea('district')
+        this.getFilterArea('village')
       }
     });
 
@@ -294,11 +400,16 @@ export class GroupingPelangganIndexComponent implements OnInit {
     else delete this.pagination['classification']
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
+    if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
+    if (this.formFilter.get('district_code').value) this.pagination['district'] = this.formFilter.get('district_code').value;
+    if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
+
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
+      // this.getFilterArea('city');
     }, err => {
       this.dataService.showLoading(false);
     });
@@ -693,7 +804,20 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   exportGrouping() {
     this.dataService.showLoading(true);
-    this.rcaAgentService.exportGrouping({ area: this.pagination['area'] }).subscribe(res => {
+    if (this.positionCode.value) {
+      let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
+      if (position) {
+        this.pagination['area'] = position['area_id'];
+        this.pagination['position'] = this.positionCode.value;
+      }
+    }
+    let params = {};
+    if (this.classification.value) params['classification'] = this.classification.value;
+    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
+    if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
+    if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
+    this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
       this.dataService.showLoading(false);
     }, err => {

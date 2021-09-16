@@ -58,23 +58,98 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Territory Code" formControlName="territoryCode">
-                    <mat-option *ngFor="let item of territoryCodes" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-select placeholder="National" formControlName="national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
+                      'all'
+                      ? 'Semua
+                      Zona' :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Regional'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
+                      'all'
+                      ? 'Semua
+                      Area'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ?
+                      'Semua
+                      Salespoint'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ? 'Semua
+                      District'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ? 'Semua
+                      Territori'
+                      :
+                      item.code}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="City" formControlName="city">
-                    <mat-option *ngFor="let item of cities" [value]="item.id">{{item.name}}</mat-option>
+                    <!-- <mat-option *ngIf="cities.length > 0"
+                      [value]="{value: formFilter.get('territoryCode').value, key: 'territoryCode'}">Semua Kota
+                    </mat-option> -->
+                    <mat-option *ngIf="cities.length === 0">No City Available</mat-option>
+                    <mat-option *ngIf="cities.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of cities" [value]="item.city">{{item.city}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district">
-                    <mat-option *ngFor="let item of districts" [value]="item.id">{{item.name }}</mat-option>
+                  <mat-select placeholder="District" formControlName="district_code">
+                    <!-- <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('city').value, key: 'city'}">
+                      Semua District
+                    </mat-option> -->
+                    <mat-option *ngIf="districts.length === 0">No District Available</mat-option>
+                    <mat-option *ngIf="districts.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of districts" [value]="item.district">{{item.district }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Village" formControlName="village">
-                    <mat-option *ngFor="let item of villages" [value]="item.id">{{item.name
+                    <!-- <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('district').value, key: 'district'}">Semua Village
+                    </mat-option> -->
+                    <mat-option *ngIf="villages.length === 0">No Village Available</mat-option>
+                    <mat-option *ngIf="villages.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of villages" [value]="item.village">{{item.village
                       }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -105,12 +180,12 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Customer Name" prop="owner"></ngx-datatable-column>
                 <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="Territory Code" prop="territory_code" [sortable]="false">
+                <ngx-datatable-column name="Territory Code" prop="teritory_code" [sortable]="false">
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
                 </ngx-datatable-column>
-                <ngx-datatable-column name="City" prop="division_code" [sortable]="false"></ngx-datatable-column>
-                <ngx-datatable-column name="District" prop="district_code" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="City" prop="city" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="District" prop="district" [sortable]="false"></ngx-datatable-column>
                 <ngx-datatable-column name="Village" prop="village" [sortable]="false"></ngx-datatable-column>
               </ngx-datatable>
             </div>

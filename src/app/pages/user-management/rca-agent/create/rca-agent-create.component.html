@@ -32,6 +32,10 @@
                 Email RCA Agent harus diisi
               </mat-error>
             </mat-form-field>
+            <div>
+              <i style="font-size: 14px;">Pastikan Email dan username sesuai dengan Akun SSO
+                anda.</i>
+            </div>
           </div>
         </div>
 
@@ -94,7 +98,7 @@
           </mat-form-field>
         </div>
 
-        <div fxLayout="row" fxFlex="30">
+        <!-- <div fxLayout="row" fxFlex="30">
           <mat-form-field fxFlex="100" class="is-light form-primary">
             <input matInput type="password" formControlName="password" placeholder="Password">
             <mat-error
@@ -116,7 +120,7 @@
           <mat-error *ngIf="formRcaAgent.hasError('notSame')">
             Password yang kamu masukan tidak sama!.
           </mat-error>
-        </div>
+        </div> -->
 
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
