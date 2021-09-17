@@ -471,7 +471,17 @@ export class RoutePlanComponent implements OnInit {
       if (position) {
         this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
+      } else {
+        this.pagination['position'] = this.positionCode.value;
       }
+    }
+
+    let isAdminHaveNational = this.area_id_list.filter(ar => ar === 1);
+    if (areaSelected.length === 1 && isAdminHaveNational.length === 0) {
+      this.dataService.showLoading(false);
+      this.loadingIndicator = false;
+      this.dialogService.openSnackBar({ message: "Kamu Tidak Bisa Melihat Area National karena tidak Memiliki Akses Geotree National" });
+      return;
     }
 
     if (this.classification.value) this.pagination['classification'] = this.classification.value;
@@ -952,6 +962,7 @@ export class RoutePlanComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
+        this.getListRoutePlan();
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });

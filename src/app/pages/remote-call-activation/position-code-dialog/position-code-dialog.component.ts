@@ -29,7 +29,7 @@ export class PositionCodeDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.rcaAgentService.getRPPositionCode({ perPage: 5 }).subscribe(
+    this.rcaAgentService.getRPPositionCode({ perPage: 30, area_code: this.data.area_code }).subscribe(
       (res) => {
         console.log("res missions", res.data);
         this.listPositionCodes = res.data;
@@ -57,6 +57,7 @@ export class PositionCodeDialogComponent implements OnInit {
     let pagination = {}
     pagination['per_page'] = 30;
     pagination['search'] = search;
+    pagination['area_code'] = this.data.area_code
 
     this.rcaAgentService.getRPPositionCode(pagination).subscribe(
       (res) => {
