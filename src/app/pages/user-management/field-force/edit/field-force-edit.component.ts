@@ -26,6 +26,16 @@ export class FieldForceEditComponent {
     { name: "Status Non Aktif", value: "inactive" }
   ];
 
+  listClassification: any = [
+    {
+      id: 1,
+      name : "REE"
+    },
+    {
+      id: 2,
+      name : "WEE"
+    }
+  ];
   listLevelArea: any[];
   list: any;
 
@@ -141,7 +151,7 @@ export class FieldForceEditComponent {
       }
     }
     this.formFF.controls['version'].disable();
-    this.formFF.controls['classification'].disable();
+    // this.formFF.controls['classification'].disable();
 
   }
 
@@ -389,7 +399,8 @@ export class FieldForceEditComponent {
         username: this.formFF.get("username").value,
         name: this.formFF.get("fullname").value,
         areas: wilayah.value.map(item => item.territory),
-        status: this.formFF.get("status").value
+        status: this.formFF.get("status").value,
+        classification: this.formFF.get("classification").value
       };
 
       if (this.formFF.get("password").value)
