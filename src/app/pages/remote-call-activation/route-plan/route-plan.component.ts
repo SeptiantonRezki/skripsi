@@ -476,6 +476,14 @@ export class RoutePlanComponent implements OnInit {
       }
     }
 
+    let isAdminHaveNational = this.area_id_list.filter(ar => ar === 1);
+    if (areaSelected.length === 1 && isAdminHaveNational.length === 0) {
+      this.dataService.showLoading(false);
+      this.loadingIndicator = false;
+      this.dialogService.openSnackBar({ message: "Kamu Tidak Bisa Melihat Area National karena tidak Memiliki Akses Geotree National" });
+      return;
+    }
+
     if (this.classification.value) this.pagination['classification'] = this.classification.value;
     else delete this.pagination['classification']
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
