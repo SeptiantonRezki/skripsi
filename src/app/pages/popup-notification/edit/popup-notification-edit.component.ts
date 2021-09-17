@@ -22,6 +22,7 @@ import { ProductService } from 'app/services/sku-management/product.service';
 import { takeUntil } from 'rxjs/operators';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { PagesName } from 'app/classes/pages-name';
+import { BannerService } from 'app/services/inapp-marketing/banner.service';
 
 @Component({
   selector: 'app-popup-notification-edit',
@@ -68,6 +69,10 @@ export class PopupNotificationEditComponent {
   image: any;
   validComboDrag: boolean;
 
+  validDragContentImage: boolean;
+  fileContentImage: File;
+  convertedContentImage: any;
+
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
@@ -107,6 +112,8 @@ export class PopupNotificationEditComponent {
   area_id_list: any = [];
   lastLevel: any;
 
+  listContentWallet: any[] = [];
+
   is_mission_builder: FormControl = new FormControl(false);
   private _onDestroy = new Subject<void>();
   permission: any;
@@ -124,7 +131,8 @@ export class PopupNotificationEditComponent {
     private dialog: MatDialog,
     private retailerService: RetailerService,
     private geotreeService: GeotreeService,
-    private b2bInjectVoucherService: B2BVoucherInjectService
+    private b2bInjectVoucherService: B2BVoucherInjectService,
+    private bannerService: BannerService,
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -190,6 +198,10 @@ export class PopupNotificationEditComponent {
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      url_web: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      button_text: ["", [Validators.required, Validators.maxLength(30)]],
+      content_wallet: ["", Validators.required],
+      body_wallet: ["", Validators.required],
       verification: ["all"],
       employee: ["all"],
       is_smoker: ["both"],
@@ -214,6 +226,10 @@ export class PopupNotificationEditComponent {
       territory: [""]
     })
 
+    this.bannerService.getListWallet().subscribe(res => {
+      this.listContentWallet = res.data;
+    });
+
     if (this.formPopupGroup.value.is_mission_builder === true) {
       this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       this.formPopupGroup.controls['user_group'].setValue('tsm');
@@ -222,7 +238,11 @@ export class PopupNotificationEditComponent {
     }
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      // console.log('is selected cukkkkk ini kebaca lgi');
+      this.formPopupGroup.get("url_web").disable();
+      this.formPopupGroup.get("content_wallet").disable();
+      this.formPopupGroup.get("body_wallet").disable();
+      this.formPopupGroup.get("button_text").disable();
+
       if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
         this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
         this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
@@ -282,8 +302,26 @@ export class PopupNotificationEditComponent {
       }
 
       if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
+        this.listContentType = [
+          { name: "Static Page", value: "static-page" },
+          { name: "Landing Page", value: "landing-page" },
+          { name: "Iframe", value: "iframe" },
+          { name: "Image",value:"image" },
+          { name: "Unlinked", value: "unlinked" },
+          { name: "E-Wallet", value: "e_wallet" },
+          { name: "Link to Web browser", value: "link_to_web_browser" }
+        ];
+        this.listLandingPage = [
+          { name: "Kupon", value: "kupon" },
+          { name: "Terdekat", value: "terdekat" },
+          { name: "Profil Saya", value: "profil_saya" },
+          { name: "Bantuan", value: "bantuan" },
+          { name: "Pesan Antar", value: "pesan_antar" },
+          { name: "Tantangan", value: "tantangan" },
+          { name: "Peluang", value: "peluang" },
+          { name: "Main Bareng", value: "main_bareng" }
+        ];
+
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
@@ -298,6 +336,16 @@ export class PopupNotificationEditComponent {
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === "link_to_web_browser") {
+          this.formPopupGroup.get("url_web").enable();
+        }
+  
+        if (this.formPopupGroup.controls['content_type'].value === "e_wallet") {
+          this.formPopupGroup.get("content_wallet").enable();
+          this.formPopupGroup.get("body_wallet").enable();
+          this.formPopupGroup.get("button_text").enable();
         }
       }
 
@@ -329,6 +377,8 @@ export class PopupNotificationEditComponent {
       }
 
       if (this.formPopupGroup.controls["is_target_audience"].value === true) this.getAudience();
+
+      this.formPopupGroup.updateValueAndValidity();
     });
 
     // this.formPopupGroup.controls['user_group'].setValue('wholesaler');
@@ -455,14 +505,28 @@ export class PopupNotificationEditComponent {
     });
 
     this.formPopupGroup.get('content_type').valueChanges.subscribe(value => {
-      if (value && value === 'new-product') {
-        console.log("its New Product Selected!")
+      this.formPopupGroup.get("product").setValidators(null);
+      this.formPopupGroup.get("url_web").disable();
+      this.formPopupGroup.get("content_wallet").disable();
+      this.formPopupGroup.get("body_wallet").disable();
+      this.formPopupGroup.get("button_text").disable();
+
+      if (value === "new-product") {
         this.formPopupGroup.get("product").setValidators([Validators.required])
-      } else {
-        this.formPopupGroup.get("product").setValidators(null)
       }
-      this.formPopupGroup.get("product").updateValueAndValidity();
-    })
+
+      if (value === "link_to_web_browser") {
+        this.formPopupGroup.get("url_web").enable();
+      }
+
+      if (value === "e_wallet") {
+        this.formPopupGroup.get("content_wallet").enable();
+        this.formPopupGroup.get("body_wallet").enable();
+        this.formPopupGroup.get("button_text").enable();
+      }
+
+      this.formPopupGroup.updateValueAndValidity();
+    });
 
     this.filterProduct
       .valueChanges
@@ -998,6 +1062,7 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['title'].setValue(response.title);
       this.formPopupGroup.controls['user_group'].setValue(response.type);
       this.formPopupGroup.controls['content_type'].setValue(response.action);
+
       if (this.detailPopup.target_audience && this.detailPopup.target_audience === 1) {
         this.formPopupGroup.controls["is_target_audience"].setValue(true);
         this.audienceSelected = this.detailPopup.audience.map(id => ({ id: id.audience_id }));
@@ -1065,6 +1130,21 @@ export class PopupNotificationEditComponent {
       if (response.action === 'iframe') {
         this.formPopupGroup.get('url_iframe').setValue(response.action_data);
         this.formPopupGroup.get('transfer_token').setValue(response.transfer_token);
+      }
+
+      if (response.action === 'image') {
+        this.convertedContentImage = response.action_data;
+      }
+
+      if (response.action === 'link_to_web_browser') {
+        this.formPopupGroup.get('url_web').setValue(response.action_data);
+      }
+
+      if (response.action === 'e_wallet') {
+        const e_wallet = JSON.parse(response.action_data) || {};
+        this.formPopupGroup.get('content_wallet').setValue(parseInt(e_wallet.wallet_id));
+        this.formPopupGroup.get('body_wallet').setValue(e_wallet.body);
+        this.formPopupGroup.get('button_text').setValue(e_wallet.button_text);
       }
 
       if (response.action === 'new-product') {
@@ -1413,6 +1493,15 @@ export class PopupNotificationEditComponent {
     myReader.readAsDataURL(file);
   }
 
+  fileChangeContentImage(value: any): void {
+    var image: File = value;
+    var file: FileReader = new FileReader();
+    file.onloadend = () => {
+      this.convertedContentImage = file.result;
+    }
+    file.readAsDataURL(image);
+  }
+
   contentType(value) {
     if (value === 'static-page') {
       this.formPopupGroup.controls['body'].enable();
@@ -1501,23 +1590,42 @@ export class PopupNotificationEditComponent {
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
         body['employee'] = this.formPopupGroup.get('employee').value;
+        body['subscription'] = this.formPopupGroup.get('subscription').value;
+
         if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
           body['verification'] = this.formPopupGroup.get('verification').value;
         }
       }
 
+      if (body.action === 'new-product') {
+        body['action_data'] = this.formPopupGroup.get('product').value;
+      }
+
       if (body.action === 'static-page') {
         body['action_data'] = this.formPopupGroup.get('body').value;
-      } else if (body.action === 'landing-page') {
+      }
+
+      if (body.action === 'landing-page') {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
-      } else if (body.action === 'iframe') {
-        body['action_data'] = this.formPopupGroup.get('url_iframe').value;
-      } else {
-        body['action_data'] = "true";
       }
 
       if (body.action === 'iframe') {
+        body['action_data'] = this.formPopupGroup.get('url_iframe').value;
         body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
+      }
+
+      if (body.type === "customer") {
+        if (body.action === 'image') {
+          body['action_data'] = this.convertedContentImage;
+        }
+        if (body.action === 'link_to_web_browser') {
+          body['action_data'] = this.formPopupGroup.get('url_web').value;
+        }
+        if (body.action === 'e_wallet') {
+          body['wallet_id'] = this.formPopupGroup.get('content_wallet').value;
+          body['body'] = this.formPopupGroup.get('body_wallet').value;
+          body['button_text'] = this.formPopupGroup.get('button_text').value;
+        }
       }
 
       let _areas = [];
@@ -1554,7 +1662,14 @@ export class PopupNotificationEditComponent {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {
-          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
+          let area_id = this.selectedArea.filter((item) => (item.id && item.id.toString() !== "1")).map((item) => item.id);
+          if (area_id.length) {
+            body['area_id'] = area_id;
+          } else {
+            this.dataService.showLoading(false);
+            this.formPopupGroup.get('is_mission_builder').patchValue(false);
+            return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+          }
         }
       }
 
@@ -1565,15 +1680,6 @@ export class PopupNotificationEditComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
-      if (body.action === 'new-product') {
-        body['action_data'] = this.formPopupGroup.get('product').value;
-      }
-
-      if (body.type === 'customer') {
-        body['subscription'] = this.formPopupGroup.get('subscription').value;
-      }
-
-      console.log('body', body);
       this.notificationService.updatePopup(body, { popup_notif_id: this.idPopup }).subscribe(
         res => {
           this.dataService.showLoading(false);

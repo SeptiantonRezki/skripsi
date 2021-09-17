@@ -113,8 +113,7 @@ export class TargetAreaComponent implements OnInit {
     });
   }
 
-  getArea() {
-    const area = this.formGeo.get("area").value;
+  getArea(levelIds?: any) {
     const page = this.dataService.getFromStorage("page");
     const sort = this.dataService.getFromStorage("sort");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -130,7 +129,7 @@ export class TargetAreaComponent implements OnInit {
     this.areaService
       .get({
         ...this.pagination,
-        area_ids: area.length ? area.join() : "",
+        area_ids: levelIds.length ? levelIds.join() : "",
       })
       .subscribe((res) => {
         this.dataService.showLoading(false);
@@ -168,7 +167,7 @@ export class TargetAreaComponent implements OnInit {
       });
     }
 
-    this.getArea();
+    this.getArea(level);
     if (this.isSelectedAll) this.getAllId();
   }
 
@@ -226,13 +225,18 @@ export class TargetAreaComponent implements OnInit {
   }
 
   getAllId() {
+    let levelId = this.getSelectedAllId();
+    this.selectedAllId.emit(levelId);
+  }
+
+  getSelectedAllId() {
     let levelId = [];
     this.geoLevel.forEach((item) => {
       let lastLevel = this.formGeo.get(item).value;
       if (!lastLevel.length) return false;
       levelId = lastLevel;
     });
-    this.selectedAllId.emit(levelId);
+    return levelId;
   }
 
   onSelect({ selected }) {
@@ -268,7 +272,11 @@ export class TargetAreaComponent implements OnInit {
     }
     try {
       const fd = new FormData();
-      this.selected.forEach((item) => {
+      const ids = this.isSelectedAll
+        ? this.getSelectedAllId().map((item) => ({ id: item }))
+        : this.selected;
+
+      ids.forEach((item) => {
         fd.append("selected[]", item.id);
       });
 

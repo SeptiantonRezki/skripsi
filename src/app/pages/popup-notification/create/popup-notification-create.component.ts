@@ -23,6 +23,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ProductService } from 'app/services/sku-management/product.service';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { PagesName } from 'app/classes/pages-name';
+import { BannerService } from 'app/services/inapp-marketing/banner.service';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -69,6 +70,10 @@ export class PopupNotificationCreateComponent {
   image: any;
   validComboDrag: boolean;
 
+  validDragContentImage: boolean;
+  fileContentImage: File;
+  convertedContentImage: any;
+
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
@@ -103,6 +108,8 @@ export class PopupNotificationCreateComponent {
   area_id_list: any = [];
   lastLevel: any;
 
+  listContentWallet: any[] = [];
+
   is_mission_builder: FormControl = new FormControl(false);
   private _onDestroy = new Subject<void>();
   permission: any;
@@ -122,7 +129,8 @@ export class PopupNotificationCreateComponent {
     private customerService: CustomerService,
     private wholesalerService: WholesalerService,
     private geotreeService: GeotreeService,
-    private b2bVoucherInjectService: B2BVoucherInjectService
+    private b2bVoucherInjectService: B2BVoucherInjectService,
+    private bannerService: BannerService,
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -184,6 +192,10 @@ export class PopupNotificationCreateComponent {
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      url_web: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      button_text: ["", [Validators.required, Validators.maxLength(30)]],
+      content_wallet: ["", Validators.required],
+      body_wallet: ["", Validators.required],
       verification: ["all"],
       employee: ["all"],
       is_smoker: ["both"],
@@ -209,6 +221,10 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
+    this.bannerService.getListWallet().subscribe(res => {
+      this.listContentWallet = res.data;
+    });
+
     if (this.formPopupGroup.value.is_mission_builder === true) {
       this.listUserGroup = [{ name: "TSM", value: "tsm" }];
       setTimeout(() => {
@@ -219,6 +235,11 @@ export class PopupNotificationCreateComponent {
     }
 
     this.formPopupGroup.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
+      this.formPopupGroup.get("url_web").disable();
+      this.formPopupGroup.get("content_wallet").disable();
+      this.formPopupGroup.get("body_wallet").disable();
+      this.formPopupGroup.get("button_text").disable();
+
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
 
@@ -277,8 +298,25 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
+        this.listContentType = [
+          { name: "Static Page", value: "static-page" },
+          { name: "Landing Page", value: "landing-page" },
+          { name: "Iframe", value: "iframe" },
+          { name: "Image",value:"image" },
+          { name: "Unlinked", value: "unlinked" },
+          { name: "E-Wallet", value: "e_wallet" },
+          { name: "Link to Web browser", value: "link_to_web_browser" }
+        ];
+        this.listLandingPage = [
+          { name: "Kupon", value: "kupon" },
+          { name: "Terdekat", value: "terdekat" },
+          { name: "Profil Saya", value: "profil_saya" },
+          { name: "Bantuan", value: "bantuan" },
+          { name: "Pesan Antar", value: "pesan_antar" },
+          { name: "Tantangan", value: "tantangan" },
+          { name: "Peluang", value: "peluang" },
+          { name: "Main Bareng", value: "main_bareng" }
+        ];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
@@ -293,6 +331,16 @@ export class PopupNotificationCreateComponent {
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === "link_to_web_browser") {
+          this.formPopupGroup.get("url_web").enable();
+        }
+  
+        if (this.formPopupGroup.controls['content_type'].value === "e_wallet") {
+          this.formPopupGroup.get("content_wallet").enable();
+          this.formPopupGroup.get("body_wallet").enable();
+          this.formPopupGroup.get("button_text").enable();
         }
       }
 
@@ -323,6 +371,8 @@ export class PopupNotificationCreateComponent {
       };
 
       this.formPopupGroup.controls['landing_page'].setValue('');
+
+      this.formPopupGroup.updateValueAndValidity();
     });
 
     this.formPopupGroup.controls['user_group'].setValue('wholesaler');
@@ -427,15 +477,31 @@ export class PopupNotificationCreateComponent {
       }
     });
     // if(this.formPopupGroup.get("is_target_audience").value === true) this.getAudience();
+
     this.formPopupGroup.get('content_type').valueChanges.subscribe(value => {
-      if (value && value === 'new-product') {
-        console.log("its New Product Selected!")
+      this.formPopupGroup.get("product").setValidators(null);
+      this.formPopupGroup.get("url_web").disable();
+      this.formPopupGroup.get("content_wallet").disable();
+      this.formPopupGroup.get("body_wallet").disable();
+      this.formPopupGroup.get("button_text").disable();
+
+      if (value === "new-product") {
         this.formPopupGroup.get("product").setValidators([Validators.required])
-      } else {
-        this.formPopupGroup.get("product").setValidators(null)
       }
-      this.formPopupGroup.get("product").updateValueAndValidity();
-    })
+
+      if (value === "link_to_web_browser") {
+        this.formPopupGroup.get("url_web").enable();
+      }
+
+      if (value === "e_wallet") {
+        this.formPopupGroup.get("content_wallet").enable();
+        this.formPopupGroup.get("body_wallet").enable();
+        this.formPopupGroup.get("button_text").enable();
+      }
+
+      this.formPopupGroup.updateValueAndValidity();
+    });
+
     this.filterProduct
       .valueChanges
       .debounceTime(500)
@@ -1243,6 +1309,15 @@ export class PopupNotificationCreateComponent {
     myReader.readAsDataURL(file);
   }
 
+  fileChangeContentImage(value: any): void {
+    var image: File = value;
+    var file: FileReader = new FileReader();
+    file.onloadend = () => {
+      this.convertedContentImage = file.result;
+    }
+    file.readAsDataURL(image);
+  }
+
   contentType(value) {
     if (value === 'static-page') {
       this.formPopupGroup.controls['body'].enable();
@@ -1338,22 +1413,42 @@ export class PopupNotificationCreateComponent {
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
         body['employee'] = this.formPopupGroup.get('employee').value;
+        body['subscription'] = this.formPopupGroup.get('subscription').value;
 
         if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
           body['verification'] = this.formPopupGroup.get('verification').value;
         }
       }
 
+      if (body.action === 'new-product') {
+        body['action_data'] = this.formPopupGroup.get('product').value;
+      }
+
       if (body.action === 'static-page') {
         body['action_data'] = this.formPopupGroup.get('body').value;
-      } else if (body.action === 'landing-page') {
+      }
+
+      if (body.action === 'landing-page') {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
-      } else if (body.action === 'iframe') {
-        body['action_data'] = this.formPopupGroup.get('url_iframe').value;
       }
 
       if (body.action === 'iframe') {
+        body['action_data'] = this.formPopupGroup.get('url_iframe').value;
         body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
+      }
+
+      if (body.type === "customer") {
+        if (body.action === 'image') {
+          body['action_data'] = this.convertedContentImage;
+        }
+        if (body.action === 'link_to_web_browser') {
+          body['action_data'] = this.formPopupGroup.get('url_web').value;
+        }
+        if (body.action === 'e_wallet') {
+          body['wallet_id'] = this.formPopupGroup.get('content_wallet').value;
+          body['body'] = this.formPopupGroup.get('body_wallet').value;
+          body['button_text'] = this.formPopupGroup.get('button_text').value;
+        }
       }
 
       let _areas = [];
@@ -1390,7 +1485,14 @@ export class PopupNotificationCreateComponent {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {
-          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
+          let area_id = this.selectedArea.filter((item) => (item.id && item.id.toString() !== "1")).map((item) => item.id);
+          if (area_id.length) {
+            body['area_id'] = area_id;
+          } else {
+            this.dataService.showLoading(false);
+            this.formPopupGroup.get('is_mission_builder').patchValue(false);
+            return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+          }
         }
       }
       if (this.formPopupGroup.get("is_target_audience").value) {
@@ -1398,14 +1500,6 @@ export class PopupNotificationCreateComponent {
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
       } else {
         if (body['target_audience']) delete body['target_audience'];
-      }
-
-      if (body.action === 'new-product') {
-        body['action_data'] = this.formPopupGroup.get('product').value;
-      }
-
-      if (body.type === 'customer') {
-        body['subscription'] = this.formPopupGroup.get('subscription').value;
       }
 
       this.notificationService.createPopup(body).subscribe(
@@ -1473,11 +1567,11 @@ export class PopupNotificationCreateComponent {
     return result;
   }
 
-  previewImage() {
+  previewImage(image) {
     let album = {
-      src: this.imageConverted,
+      src: image,
       caption: '',
-      thumb: this.imageConverted
+      thumb: image
     };
 
     this._lightbox.open([album], 0);

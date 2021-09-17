@@ -55,7 +55,7 @@ export class DialogImportComponent implements OnInit {
       (res) => {
         this.rows = res.data;
         this.rowsLength = res.data.length;
-        this.isValid = true;
+        this.isValid = res.is_valid;
         this.dataService.showLoading(false);
       },
       (err) => {
