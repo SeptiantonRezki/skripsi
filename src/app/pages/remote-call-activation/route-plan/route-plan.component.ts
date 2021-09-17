@@ -471,6 +471,8 @@ export class RoutePlanComponent implements OnInit {
       if (position) {
         this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
+      } else {
+        this.pagination['position'] = this.positionCode.value;
       }
     }
 
