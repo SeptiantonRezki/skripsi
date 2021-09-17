@@ -48,7 +48,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of rows" [ngClass]="{ error: !item.is_valid }">
+            <tr *ngFor="let item of rows" [ngClass]="{ 'error': item.is_valid < 0 }">
               <td nowrap>
                 {{ item.area_code }}
               </td>
@@ -59,7 +59,7 @@
                 {{ item.zone || "-" }}
               </td>
               <td nowrap>
-                {{ item.type || "-" }}
+                {{ item.is_valid === 0 ? '-' : 'Area'}}
               </td>
             </tr>
           </tbody>

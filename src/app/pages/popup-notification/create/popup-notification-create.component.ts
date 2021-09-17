@@ -1485,7 +1485,14 @@ export class PopupNotificationCreateComponent {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {
-          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
+          let area_id = this.selectedArea.filter((item) => (item.id && item.id.toString() !== "1")).map((item) => item.id);
+          if (area_id.length) {
+            body['area_id'] = area_id;
+          } else {
+            this.dataService.showLoading(false);
+            this.formPopupGroup.get('is_mission_builder').patchValue(false);
+            return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+          }
         }
       }
       if (this.formPopupGroup.get("is_target_audience").value) {
