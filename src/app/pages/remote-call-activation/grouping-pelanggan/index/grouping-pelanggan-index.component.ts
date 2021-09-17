@@ -881,6 +881,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
+        this.getListGroupingPelanggan();
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });

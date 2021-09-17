@@ -954,6 +954,7 @@ export class RoutePlanComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
+        this.getListRoutePlan();
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });
