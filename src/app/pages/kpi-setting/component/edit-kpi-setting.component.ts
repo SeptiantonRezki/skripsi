@@ -80,7 +80,7 @@ export class EditKPISettingComponent implements OnInit {
 
   existingAreas = [];
 
-  enableEdit: Boolean = true;
+  // enableEdit: Boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -229,7 +229,7 @@ export class EditKPISettingComponent implements OnInit {
 
     if(this.KPIGroup.status == 'active') {
       this.formKPI.controls['status'].setValue(true);
-      this.enableEdit = false;
+      // this.enableEdit = false;
     }
   }
 

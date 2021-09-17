@@ -44,10 +44,10 @@ export class CashierIndexComponent implements OnInit {
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
     this.keyUp
-      .debounceTime(500)
+      .debounceTime(300)
       .distinctUntilChanged()
       .flatMap((search) => {
-        return Observable.of(search).delay(500);
+        return Observable.of(search).delay(300);
       })
       .subscribe((data) => {
         this.updateFilter(data);
@@ -55,6 +55,7 @@ export class CashierIndexComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resetPagination();
     this.getProducts();
   }
 
@@ -94,6 +95,12 @@ export class CashierIndexComponent implements OnInit {
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
     });
+  }
+
+  resetPagination() {
+    this.dataService.setToStorage("page", 1);
+    this.dataService.setToStorage("sort", "");
+    this.dataService.setToStorage("sort_type", "");
   }
 
   onSort(event) {

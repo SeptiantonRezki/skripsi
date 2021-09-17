@@ -38,18 +38,17 @@
     </button>
     <a #downloadLink></a>
   </page-content-header>
-  <div
-    *ngIf="onLoad"
-    fxLayout="row"
-    fxLayoutAlign="center center"
-    class="pt-48"
-  >
-    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
-  </div>
-  <div class="content p-24" *ngIf="!onLoad">
-    <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="p-20">
-        <h2 style="margin: unset">Daftar Produk Kasir</h2>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
+        <a
+          *ngIf="permission.pengajuan_produk"
+          mat-tab-link
+          [routerLink]="['/sku-management', 'product-cashier', 'submission']"
+          class="tab-link"
+          >Produk Diajukan</a
+        >
         <div class="search-field">
           <input
             matInput
@@ -59,119 +58,133 @@
           />
           <mat-icon style="font-size: 20px">search</mat-icon>
         </div>
-      </div>
-      <ngx-datatable
-        class="material"
-        [rows]="rows"
-        [loadingIndicator]="loadingIndicator"
-        [columnMode]="'force'"
-        [offset]="offsetPagination"
-        [headerHeight]="48"
-        [footerHeight]="56"
-        [rowHeight]="'auto'"
-        [scrollbarH]="true"
-        [reorderable]="reorderable"
-        [count]="pagination.total"
-        [limit]="pagination.per_page"
-        [externalPaging]="true"
-        [externalSorting]="true"
-        (page)="setPage($event)"
-        (sort)="onSort($event)"
-        (select)="onSelect($event)"
+      </nav>
+      <div
+        *ngIf="onLoad"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="py-48"
       >
-        <ngx-datatable-column name="Nama Produk" prop="name">
-          <ng-template
-            ngx-datatable-cell-template
-            let-row="row"
-            let-value="value"
-          >
-            <span
-              class="row-name"
-              [routerLink]="[
-                '/sku-management',
-                'product-cashier',
-                'detail',
-                row.id
-              ]"
-              >{{ row.name }}</span
-            >
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column
-          name="Barcode"
-          prop="barcode"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Perusahaan"
-          prop="brand"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          [width]="88"
-          name="Kategori"
-          prop="category"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Harga Beli"
-          prop="purchase_price.formatted"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          name="Harga Jual"
-          prop="selling_price.formatted"
-        ></ngx-datatable-column>
-        <ngx-datatable-column
-          [width]="100"
-          name="Tindakan"
-          headerClass="textright"
-          [sortable]="false"
+        <mat-spinner
+          [strokeWidth]="6"
+          [diameter]="50"
+          color="accent"
+        ></mat-spinner>
+      </div>
+      <div *ngIf="!onLoad">
+        <ngx-datatable
+          class="material"
+          [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
+          [columnMode]="'force'"
+          [offset]="offsetPagination"
+          [headerHeight]="48"
+          [footerHeight]="56"
+          [rowHeight]="'auto'"
+          [scrollbarH]="true"
+          [reorderable]="reorderable"
+          [count]="pagination.total"
+          [limit]="pagination.per_page"
+          [externalPaging]="true"
+          [externalSorting]="true"
+          (page)="setPage($event)"
+          (sort)="onSort($event)"
+          (select)="onSelect($event)"
         >
-          <ng-template
-            ngx-datatable-cell-template
-            let-row="row"
-            let-value="value"
-          >
-            <div class="button-row" style="white-space: nowrap">
-              <button
-                mat-icon-button
-                *ngIf="!permission?.ubah"
-                color=""
-                matTooltip="Detail Produk"
+          <ngx-datatable-column name="Nama Produk" prop="name">
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span
+                class="row-name"
                 [routerLink]="[
                   '/sku-management',
                   'product-cashier',
                   'detail',
                   row.id
                 ]"
+                >{{ row.name }}</span
               >
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                *ngIf="permission?.ubah"
-                color=""
-                matTooltip="Ubah Produk"
-                [routerLink]="[
-                  '/sku-management',
-                  'product-cashier',
-                  'edit',
-                  row.id
-                ]"
-              >
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                color="primary"
-                matTooltip="Hapus Produk"
-                (click)="deleteProduct(row.id)"
-                [ngStyle]="{ cursor: !permission?.hapus ? 'no-drop' : '' }"
-                [disabled]="!permission?.hapus"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            name="Barcode"
+            prop="barcode"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Perusahaan"
+            prop="brand"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="88"
+            name="Kategori"
+            prop="category"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Harga Beli"
+            prop="purchase_price.formatted"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Harga Jual"
+            prop="selling_price.formatted"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="100"
+            name="Tindakan"
+            headerClass="textright"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div class="button-row" style="white-space: nowrap">
+                <button
+                  mat-icon-button
+                  *ngIf="!permission?.ubah"
+                  color=""
+                  matTooltip="Detail Produk"
+                  [routerLink]="[
+                    '/sku-management',
+                    'product-cashier',
+                    'detail',
+                    row.id
+                  ]"
+                >
+                  <mat-icon class="secondary-text">assignment</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  *ngIf="permission?.ubah"
+                  color=""
+                  matTooltip="Ubah Produk"
+                  [routerLink]="[
+                    '/sku-management',
+                    'product-cashier',
+                    'edit',
+                    row.id
+                  ]"
+                >
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Hapus Produk"
+                  (click)="deleteProduct(row.id)"
+                  [ngStyle]="{ cursor: !permission?.hapus ? 'no-drop' : '' }"
+                  [disabled]="!permission?.hapus"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
     </div>
   </div>
 </div>

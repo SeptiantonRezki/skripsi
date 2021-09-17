@@ -39,28 +39,37 @@ export class BannerEditComponent {
   detailBanner: any;
   indexDelete: any;
 
-  typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
+  typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
   areaFromLogin;
 
   lvl: any[];
   minDate: any;
   listStatus: any[] = [{ name: 'Status Aktif', value: 'publish' }, { name: 'Status Non Aktif', value: 'draft' }];
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
-  listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "ws_downline" }];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" },
-  { name: "Link to Web Browser", value: "link_web" }
+  listUserGroup: any[] = [{ name: 'Retailer', value: 'retailer' }, { name: 'Customer', value: 'customer' }];
+  listUserGroupType: any[] = [{ name: 'SRC', value: 'src' }, { name: 'WS Downline', value: 'ws_downline' }];
+  listContentType: any[] = [{ name: 'Static Page', value: 'static_page' }, { name: 'Landing Page', value: 'landing_page' }, { name: 'Iframe', value: 'iframe' }, { name: 'Image', value: 'image' }, { name: 'Unlinked', value: 'unlinked' }, { name: 'E-Wallet', value: 'e_wallet' },
+  { name: 'Link to Web Browser', value: 'link_web' }
   ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
-  listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
-  listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
+  listJenisKonsumen: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Terverifikasi', value: 'verified' }];
+  listSubscription: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'yes' }, { name: 'Tidak Berlangganan', value: 'no' }];
+  listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
+  listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
+  listAge: any[] = [{ name: '18+', value: '18+' }, { name: '< 18', value: '18-' }];
   
-  listTypeBanner: any[] = [{ name: "In-App Banner", value: "in-app-banner" }, { name: "Info Terkini", value: "info-terkini" }, { name: "Aktivasi Konsumen", value: "aktivasi-konsumen" }];
+  listTypeBanner: any[] = [{ name: 'In-App Banner', value: 'in-app-banner' }, { name: 'Info Terkini', value: 'info-terkini' }, { name: 'Aktivasi Konsumen', value: 'aktivasi-konsumen' }];
+  listTypeBannerConsumer: any[] = [{name:'In App Banner',value:'in-app-banner'},{name:'Toko Terdekat',value:'toko-terdekat'},{name:'Info SRC',value:'info-src'},{name:'Flying Button',value:'flying-button'}];
+  listProfile = [
+    { name: 'Ubah Profil', value: 'ubah_profil' },
+    { name: 'Toko Langganan', value: 'toko_langganan' },
+    { name: 'Lokasi Tersimpan', value: 'lokasi_tersimpan' },
+    { name: 'Bantuan', value: 'bantuan' },
+    { name: 'Pengaturan Privasi', value: 'pengaturan_privasi' },
+  ];
   listCustomerBanners: any[] = [];
-  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listEmployee: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Employee Only', value: 'yes' }];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -87,8 +96,13 @@ export class BannerEditComponent {
 
   audienceSelected: any[] = [];
 
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+  targetAreaIds: any[] = [];
+
   @ViewChild('downloadLink') downloadLink: ElementRef;
-  @ViewChild("activeCell")
+  @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
@@ -130,24 +144,26 @@ export class BannerEditComponent {
 
     if (this.detailBanner.user_group === 'retailer') {
       this.listLandingPage = [
-        { name: "Belanja", value: "belanja" },
-        { name: "Misi", value: "misi" },
-        { name: "Pelanggan", value: "pelanggan" },
-        { name: "Bantuan", value: "bantuan" },
-        { name: "Profil Saya", value: "profil_saya" },
-        { name: "Pojok Modal", value: "pojok_modal" },
-        { name: "SRC Katalog", value: "src_katalog" },
-        { name: "Pojok Bayar", value: "pojok_bayar" }];
+        { name: 'Belanja', value: 'belanja' },
+        { name: 'Misi', value: 'misi' },
+        { name: 'Pelanggan', value: 'pelanggan' },
+        { name: 'Bantuan', value: 'bantuan' },
+        { name: 'Profil Saya', value: 'profil_saya' },
+        { name: 'Pojok Modal', value: 'pojok_modal' },
+        { name: 'SRC Katalog', value: 'src_katalog' },
+        { name: 'Pojok Bayar', value: 'pojok_bayar' }];
     } else {
       this.listLandingPage = [
-        { name: "Kupon", value: "kupon" },
-        { name: "Terdekat", value: "terdekat" },
-        { name: "Profil Saya", value: "profil_saya" },
-        { name: "Bantuan", value: "bantuan" },
-        { name: "Pesan Antar", value: "pesan_antar" },
-        { name: "Tantangan", value: "tantangan" },
-        { name: "Peluang", value: "peluang" },
-        { name: "Main Bareng", value: "main_bareng" }
+        { name: 'Pesan Antar', value: 'pesan_antar' },
+        { name: 'Terdekat', value: 'terdekat' },
+        { name: 'Main Bareng', value: 'main_bareng' },
+        { name: 'Tantangan', value: 'tantangan' },
+        { name: 'Peluang', value: 'peluang' },
+        { name: 'Pojok Modal', value: 'pojok_modal' },
+        { name: 'Profil Saya', value: 'profil_saya' },
+        { name: 'Bantuan', value: 'bantuan' },
+        { name: 'Kupon', value: 'kupon' },
+        { name: 'Voucher', value: 'voucher_kupon' },
       ];
     }
 
@@ -165,10 +181,10 @@ export class BannerEditComponent {
 
     this.listLevelArea = [
       {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
+        'id': 1,
+        'parent_id': null,
+        'code': 'SLSNTL      ',
+        'name': 'SLSNTL'
       }
     ];
 
@@ -188,38 +204,40 @@ export class BannerEditComponent {
     var urlvalidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
 
     this.formBannerGroup = this.formBuilder.group({
-      name: ["", Validators.required],
+      name: ['', Validators.required],
       from: [moment(), Validators.required],
-      to: ["", Validators.required],
+      to: ['', Validators.required],
       enable: [1, Validators.required],
-      title: ["", Validators.required],
-      body: ["", Validators.required],
-      status: ["", Validators.required],
-      user_group: ["retailer", Validators.required],
-      age: ["18+"],
+      title: ['', Validators.required],
+      body: ['', Validators.required],
+      status: ['', Validators.required],
+      user_group: ['retailer', Validators.required],
+      age: ['18+'],
       areas: this.formBuilder.array([]),
-      content_type: ["static_page", Validators.required],
-      content_wallet: ["ovo", Validators.required],
-      button_text: ["", [Validators.maxLength(30)]],
-      group_type: ["src"],
-      landing_page: ["belanja"],
-      url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      content_type: ['static_page', Validators.required],
+      content_wallet: ['ovo', Validators.required],
+      button_text: ['', [Validators.maxLength(30)]],
+      group_type: ['src'],
+      landing_page: ['belanja'],
+      profile: [''],
+      url_iframe: ['', [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
-      verification: ["all"],
-      employee: ["all"],
-      is_smoker: ["both"],
-      gender: ["both"],
-      age_consumer_from: [""],
-      age_consumer_to: [""],
-      promo: ["yes", Validators.required],
-      transfer_token: ["yes", Validators.required],
+      verification: ['all'],
+      employee: ['all'],
+      is_smoker: ['both'],
+      gender: ['both'],
+      age_consumer_from: [''],
+      age_consumer_to: [''],
+      promo: ['yes', Validators.required],
+      transfer_token: ['yes', Validators.required],
       is_target_audience: [false],
+      is_target_area: [false],
       banner_selected: this.formBuilder.group({
-        "id": [""],
-        "name": [""],
-        "image": [""],
-        "title": [""],
-        "class": [""],
+        'id': [''],
+        'name': [''],
+        'image': [''],
+        'title': [''],
+        'class': [''],
       }),
       type_banner: '',
       banner_customer_id: [null, [
@@ -227,17 +245,18 @@ export class BannerEditComponent {
       ]],
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
-      ]]
+      ]],
+      subscription:['all'],
     })
 
     this.formFilter = this.formBuilder.group({
-      national: [""],
-      zone: [""],
-      region: [""],
-      area: [""],
-      salespoint: [""],
-      district: [""],
-      territory: [""]
+      national: [''],
+      zone: [''],
+      region: [''],
+      area: [''],
+      salespoint: [''],
+      district: [''],
+      territory: ['']
     })
 
     this.formBannerGroup.valueChanges.subscribe(() => {
@@ -251,30 +270,36 @@ export class BannerEditComponent {
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
       if (res === 'retailer') {
-        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" },
-        { name: "Pojok Modal", value: "pojok_modal" },
-        { name: "SRC Katalog", value: "src_katalog" },
-        { name: "Pojok Bayar", value: "pojok_bayar" }];
+        this.listLandingPage = [{ name: 'Belanja', value: 'belanja' }, { name: 'Misi', value: 'misi' }, { name: 'Pelanggan', value: 'pelanggan' }, { name: 'Bantuan', value: 'bantuan' }, { name: 'Profil Saya', value: 'profil_saya' },
+        { name: 'Pojok Modal', value: 'pojok_modal' },
+        { name: 'SRC Katalog', value: 'src_katalog' },
+        { name: 'Pojok Bayar', value: 'pojok_bayar' }];
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       } else {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" },
-        { name: "Pesan Antar", value: "pesan_antar" },
-        { name: "Tantangan", value: "tantangan" },
-        { name: "Peluang", value: "peluang" },
-        { name: "Main Bareng", value: "main_bareng" }
+        this.listLandingPage = [
+          { name: 'Pesan Antar', value: 'pesan_antar' },
+          { name: 'Terdekat', value: 'terdekat' },
+          { name: 'Main Bareng', value: 'main_bareng' },
+          { name: 'Tantangan', value: 'tantangan' },
+          { name: 'Peluang', value: 'peluang' },
+          { name: 'Pojok Modal', value: 'pojok_modal' },
+          { name: 'Profil Saya', value: 'profil_saya' },
+          { name: 'Bantuan', value: 'bantuan' },
+          { name: 'Kupon', value: 'kupon' },
+          { name: 'Voucher', value: 'voucher_kupon' },
         ];
-        this.listContentType.push({ name: "E-Wallet", value: "e_wallet" });
+        this.listContentType.push({ name: 'E-Wallet', value: 'e_wallet' });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();
           this.formBannerGroup.controls['age_consumer_to'].enable();
         }
-        this.formBannerGroup.controls['type_banner'].setValue('');
+        // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       }
 
-      if (this.formBannerGroup.controls["is_target_audience"].value === true) this.getAudience();
+      if (this.formBannerGroup.controls['is_target_audience'].value === true) this.getAudience();
 
       this.formBannerGroup.controls['landing_page'].setValue('');
     });
@@ -323,17 +348,25 @@ export class BannerEditComponent {
         }
       }
 
-      if (this.formBannerGroup.get("is_target_audience").value === true) {
+      if (this.formBannerGroup.get('is_target_audience').value === true) {
         this.getAudience();
         this.selected.splice(0, this.selected.length);
         this.audienceSelected = [];
       }
     })
 
+    this.formBannerGroup.get('landing_page').valueChanges.debounceTime(50).subscribe((res) => {
+      if (res === 'profil_saya') {
+        this.formBannerGroup.get('profile').setValidators([Validators.required]);
+      } else {
+        this.formBannerGroup.get('profile').setValidators([]);
+      }
+    });
+
     this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
       this.formBannerGroup.updateValueAndValidity();
-      if (this.formBannerGroup.get("is_target_audience").value === true) {
+      if (this.formBannerGroup.get('is_target_audience').value === true) {
         this.getAudience();
         this.selected.splice(0, this.selected.length);
         this.audienceSelected = [];
@@ -356,7 +389,7 @@ export class BannerEditComponent {
     }
 
     this.formBannerGroup.controls['group_type'].valueChanges.debounceTime(50).subscribe(res => {
-      if (this.formBannerGroup.get("is_target_audience").value === true) {
+      if (this.formBannerGroup.get('is_target_audience').value === true) {
         this.getAudience();
         this.selected.splice(0, this.selected.length);
         this.audienceSelected = [];
@@ -440,7 +473,7 @@ export class BannerEditComponent {
     let areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let levelAreas = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
 
     if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
@@ -515,7 +548,7 @@ export class BannerEditComponent {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
+      if (areaSelected[0].value !== '') {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
@@ -540,7 +573,7 @@ export class BannerEditComponent {
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
+        if (areaSelected[0].value !== '') {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           })
@@ -757,7 +790,7 @@ export class BannerEditComponent {
     this.formBannerGroup.get('content_type').setValue(this.detailBanner.target_page.type);
     this.formBannerGroup.get('is_target_audience').setValue(this.detailBanner.target_audience === 0 ? false : true);
     if (this.detailBanner.target_audience && this.detailBanner.target_audience === 1) {
-      this.formBannerGroup.controls["is_target_audience"].setValue(true);
+      this.formBannerGroup.controls['is_target_audience'].setValue(true);
       this.audienceSelected = this.detailBanner.targeted_audiences.map(aud => ({ id: aud.audience_id }));
       this.onSelect({ selected: this.audienceSelected });
       console.log('this auddd', this.audienceSelected);
@@ -789,12 +822,23 @@ export class BannerEditComponent {
           this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
         } catch (ex) { console.log(ex) }
       }
+      this.formBannerGroup.get('subscription').setValue(this.detailBanner.subscription);
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
       this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
       this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
       this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
-      this.formBannerGroup.get('type_banner').setValue('');
+      this.formBannerGroup.get('type_banner').setValue(this.detailBanner.type_banner);
+      this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+      this.formBannerGroup.get('profile').setValue(this.detailBanner.target_page.menu);
+      setTimeout(() => {
+        this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
+      }, 50);
       this.formBannerGroup.updateValueAndValidity();
+
+      if (!this.detailBanner.target_audience && this.detailBanner.areas.length) {
+        this.formBannerGroup.get('is_target_area').setValue(true);
+        this.targetAreaIds = this.detailBanner.area_id.map((item) => ({ id: item }));
+      }
     }
 
     if (this.detailBanner.target_page.type === 'static_page') {
@@ -865,7 +909,7 @@ export class BannerEditComponent {
 
     setTimeout(() => {
       this.onLoad = false;
-      if (this.formBannerGroup.controls["is_target_audience"].value === true) this.getAudience();
+      if (this.formBannerGroup.controls['is_target_audience'].value === true) this.getAudience();
 
     }, 500);
     if (this.detailBanner.type_banner === 'aktivasi-konsumen') {
@@ -926,12 +970,12 @@ export class BannerEditComponent {
   createArea(): FormGroup {
     return this.formBuilder.group({
       national: [1, Validators.required],
-      zone: [""],
-      salespoint: [""],
-      region: [""],
-      area: [""],
-      district: [""],
-      territory: [""],
+      zone: [''],
+      salespoint: [''],
+      region: [''],
+      area: [''],
+      district: [''],
+      territory: [''],
       list_national: this.formBuilder.array(this.listLevelArea),
       list_zone: this.formBuilder.array([]),
       list_region: this.formBuilder.array([]),
@@ -953,10 +997,10 @@ export class BannerEditComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: "Hapus Geotree",
+      titleDialog: 'Hapus Geotree',
       captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ['Hapus', 'Batal']
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1203,8 +1247,8 @@ export class BannerEditComponent {
   }
 
   setMinDate(): void {
-    this.formBannerGroup.get("to").setValue("");
-    this.minDate = this.formBannerGroup.get("from").value;
+    this.formBannerGroup.get('to').setValue('');
+    this.minDate = this.formBannerGroup.get('from').value;
   }
 
   compareObjects(o1: any, o2: any): boolean {
@@ -1239,7 +1283,7 @@ export class BannerEditComponent {
 
       if (this.bannerSelected) {
         this.dataService.showLoading(true);
-        await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
+        await html2canvas(document.querySelector('#banner'), { scale: 3 }).then(canvas => {
           this.imageConverted = this.convertCanvasToImage(canvas);
           this.dataService.showLoading(false);
         });
@@ -1278,7 +1322,7 @@ export class BannerEditComponent {
           if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
         } else {
           if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
-          else return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
+          else return this.dialogService.openSnackBar({ message: 'Konten image belum dipilih' });
         }
       } else if (body.content_type === 'e_wallet') {
         fd.append('body', this.formBannerGroup.get('body').value);
@@ -1303,10 +1347,14 @@ export class BannerEditComponent {
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
         fd.append('employee', this.formBannerGroup.get('employee').value);
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
-        fd.append('type_banner', '');
+        fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
         }
+        if (this.formBannerGroup.get('content_type').value === 'landing_page' && this.formBannerGroup.get('landing_page').value === 'profil_saya') {
+          fd.append('profile', this.formBannerGroup.get('profile').value);
+        }
+        fd.append('subscription', this.formBannerGroup.get('subscription').value);
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
@@ -1317,37 +1365,52 @@ export class BannerEditComponent {
         fd.append('banner_customer_body', null);
       }
 
-      let _areas = [];
-      let areas = [];
-      let value = this.formBannerGroup.getRawValue();
-
-      value.areas.map(item => {
-        let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-        for (const val of this.typeArea) {
-          const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
-          if (filteredValue.length > 0) _areas.push(...filteredValue)
-        }
-
-        areas.push(_.last(_areas));
-        _areas = [];
-      })
-
-      let same = this.findDuplicate(areas.map(item => item.value));
-      if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
-      }
-
-      areas.map(item => {
-        if (body.user_group === 'retailer') {
-          if (this.formBannerGroup.controls['group_type'].value === 'src') {
-            fd.append("areas[src][]", item.value);
+      if (this.formBannerGroup.get('is_target_area').value) {
+        if (body.user_group === 'customer') {
+          let ids = [];
+          if (this.selectedAll) {
+            ids = this.selectedAllId;
           } else {
-            fd.append("areas[ws_downline][]", item.value);
+            ids = this.selectedArea.filter((item) => item.id.toString() !== '1').map((item) => item.id);
           }
-        } else {
-          fd.append("areas[]", item.value);
+          console.log(ids);
+          ids.forEach((item) => {
+            fd.append('areas[]', item);
+          });
         }
-      })
+      } else {
+        let _areas = [];
+        let areas = [];
+        let value = this.formBannerGroup.getRawValue();
+
+        value.areas.map(item => {
+          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+          for (const val of this.typeArea) {
+            const filteredValue = obj.filter(xyz => val === xyz.key && xyz.value);
+            if (filteredValue.length > 0) _areas.push(...filteredValue)
+          }
+
+          areas.push(_.last(_areas));
+          _areas = [];
+        })
+
+        let same = this.findDuplicate(areas.map(item => item.value));
+        if (same.length > 0) {
+          return this.dialogService.openSnackBar({ message: 'Terdapat duplikat sales tree, mohon periksa kembali data anda!' });
+        }
+
+        areas.map(item => {
+          if (body.user_group === 'retailer') {
+            if (this.formBannerGroup.controls['group_type'].value === 'src') {
+              fd.append('areas[src][]', item.value);
+            } else {
+              fd.append('areas[ws_downline][]', item.value);
+            }
+          } else {
+            fd.append('areas[]', item.value);
+          }
+        })
+      }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
@@ -1364,23 +1427,23 @@ export class BannerEditComponent {
       // })
 
       if (body.user_group === 'retailer') {
-        fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
+        fd.append('business_type', this.formBannerGroup.controls['group_type'].value);
       }
 
-      if (this.formBannerGroup.get("is_target_audience").value) {
-        fd.append('target_audience', "1");
+      if (this.formBannerGroup.get('is_target_audience').value) {
+        fd.append('target_audience', '1');
         this.audienceSelected.map(aud => {
           fd.append('target_audiences[]', aud.id)
         });
       } else {
-        fd.append('target_audience', "0");
+        fd.append('target_audience', '0');
       }
 
       this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
         res => {
           this.loadingIndicator = false;
-          this.router.navigate(["advertisement", "banner"]);
-          this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
+          this.router.navigate(['advertisement', 'banner']);
+          this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' });
         },
         err => {
           // this.dialogService.openSnackBar({ message: err.error.message });
@@ -1391,11 +1454,11 @@ export class BannerEditComponent {
     } else {
       let msg;
       if (this.formBannerGroup.invalid) {
-        msg = "Silakan lengkapi data terlebih dahulu!";
+        msg = 'Silakan lengkapi data terlebih dahulu!';
       } else if (!this.bannerSelected) {
-        msg = "Gambar spanduk belum dipilih!";
+        msg = 'Gambar spanduk belum dipilih!';
       } else {
-        msg = "Silakan lengkapi data terlebih dahulu!";
+        msg = 'Silakan lengkapi data terlebih dahulu!';
       }
 
       this.dialogService.openSnackBar({ message: msg });
@@ -1405,7 +1468,7 @@ export class BannerEditComponent {
 
   convertCanvasToImage(canvas) {
     let image = new Image();
-    image.src = canvas.toDataURL("image/jpeg");
+    image.src = canvas.toDataURL('image/jpeg');
 
     return image.src;
   }
@@ -1459,7 +1522,7 @@ export class BannerEditComponent {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -1505,7 +1568,7 @@ export class BannerEditComponent {
 
   checkAreaLocation(area, lastSelfArea) {
     let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
     let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
     let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
     let indexAreaSelected = areaList.indexOf(area.key);
@@ -1533,9 +1596,9 @@ export class BannerEditComponent {
   getAudience() {
     let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
     this.dataService.showLoading(true);
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
 
     // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
@@ -1598,33 +1661,33 @@ export class BannerEditComponent {
       }
     }
 
-    this.pagination['audience'] = this.formBannerGroup.get("user_group").value;
+    this.pagination['audience'] = this.formBannerGroup.get('user_group').value;
     if (this.formBannerGroup.controls['user_group'].value === 'retailer') {
-      this.pagination["type"] = this.formBannerGroup.controls['group_type'].value;
+      this.pagination['type'] = this.formBannerGroup.controls['group_type'].value;
     } else {
-      if (this.pagination["type"]) delete this.pagination["type"];
+      if (this.pagination['type']) delete this.pagination['type'];
     }
 
-    if (this.formBannerGroup.get("user_group").value === 'retailer') {
+    if (this.formBannerGroup.get('user_group').value === 'retailer') {
       // this.pagination['retailer_type'] = this.formBannerGroup.get("group_type").value;
       delete this.pagination['customer_smoking'];
       delete this.pagination['customer_gender'];
       delete this.pagination['customer_age_from'];
       delete this.pagination['customer_age_to'];
     }
-    if (this.formBannerGroup.get("user_group").value === 'customer') {
+    if (this.formBannerGroup.get('user_group').value === 'customer') {
       delete this.pagination['customer_smoking'];
       delete this.pagination['customer_gender'];
       delete this.pagination['customer_age_from'];
       delete this.pagination['customer_age_to'];
       delete this.pagination['retailer_type'];
     }
-    if (this.formBannerGroup.get("user_group").value === 'customer') {
+    if (this.formBannerGroup.get('user_group').value === 'customer') {
       delete this.pagination['type'];
-      this.pagination['customer_smoking'] = this.formBannerGroup.get("is_smoker").value;
-      this.pagination['customer_gender'] = this.formBannerGroup.get("gender").value;
-      this.pagination['customer_age_from'] = this.formBannerGroup.get("age_consumer_from").value;
-      this.pagination['customer_age_to'] = this.formBannerGroup.get("age_consumer_to").value;
+      this.pagination['customer_smoking'] = this.formBannerGroup.get('is_smoker').value;
+      this.pagination['customer_gender'] = this.formBannerGroup.get('gender').value;
+      this.pagination['customer_age_from'] = this.formBannerGroup.get('age_consumer_from').value;
+      this.pagination['customer_age_to'] = this.formBannerGroup.get('age_consumer_to').value;
     }
 
     this.bannerService[keyAudience](this.pagination).subscribe(res => {
@@ -1707,7 +1770,16 @@ export class BannerEditComponent {
   }
 
   isTargetAudience(event) {
-    if (event.checked) this.getAudience();
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_area').setValue(false);
+      this.getAudience();
+    }
+  }
+
+  isTargetArea(event) {
+    if (event.checked) {
+      this.formBannerGroup.get('is_target_audience').setValue(false);
+    }
   }
 
   async export() {
@@ -1720,8 +1792,8 @@ export class BannerEditComponent {
     let body = this.audienceSelected.map(aud => aud.id);
     // this.exportPopUpNotif = true;
     try {
-      const response = await this.bannerService[keyAudience]({ selected: body, audience: this.formBannerGroup.get("user_group").value }).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Banner_${this.formBannerGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      const response = await this.bannerService[keyAudience]({ selected: body, audience: this.formBannerGroup.get('user_group').value }).toPromise();
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Banner_${this.formBannerGroup.get('user_group').value}_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       // this.exportPopUpNotif = false;
@@ -1780,7 +1852,7 @@ export class BannerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get("user_group").value };
+    dialogConfig.data = { audience: this.formBannerGroup.get('user_group').value };
 
     this.dialogRef = this.dialog.open(ImportAudienceBannerDialogComponent, dialogConfig);
 
@@ -1793,6 +1865,18 @@ export class BannerEditComponent {
         }
       }
     });
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 
 }
