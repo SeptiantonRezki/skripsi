@@ -294,12 +294,11 @@ export class GroupingPelangganIndexComponent implements OnInit {
     this.initAreaV2();
 
     this.getListGroupingPelanggan();
-    this.getSummary();
   }
 
 
   getSummary() {
-    this.rcaAgentService.getGPSummary({}).subscribe(res => {
+    this.rcaAgentService.getGPSummary(this.pagination).subscribe(res => {
       this.summaries = res || [];
     });
   }
@@ -406,6 +405,8 @@ export class GroupingPelangganIndexComponent implements OnInit {
     if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
     if (this.formFilter.get('district_code').value) this.pagination['district'] = this.formFilter.get('district_code').value;
     if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
+
+    this.getSummary();
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
