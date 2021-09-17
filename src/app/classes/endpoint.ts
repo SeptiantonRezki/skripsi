@@ -518,7 +518,8 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
         updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}?type=status`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
-        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll ? '&all=true' : ''}`
+        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll ? '&all=true' : ''}`,
+        getListProductByCompany: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label`
       },
       PLSupplierUser: {
         getList: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,

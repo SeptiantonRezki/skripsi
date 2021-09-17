@@ -37,8 +37,13 @@
 
                 <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center" *ngIf="(formDetilVoucher.get('opsiVoucher').value === 'private-label')">
                   <mat-form-field fxFlex="100">
-                    <mat-select placeholder="Nama Supplier" formControlName="supplier">
-                      <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</mat-option>
+                    <mat-select placeholder="Nama Supplier" formControlName="supplier_company_id">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="filterSupplier" placeholderLabel="Cari Supplier..."></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of filteredSupplier | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -218,7 +223,7 @@
             [permissions]="permission">
           </app-panel-mitra-voucher>
         </mat-tab>
-        <mat-tab label="Panel Retailer" *ngIf="isDetail || isEdit">
+        <mat-tab label="Panel Retailer" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'private-label'">
           <div class="ayo-middle p-24" fxLayout="column">
             <div>
               <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
