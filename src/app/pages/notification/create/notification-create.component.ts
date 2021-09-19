@@ -1366,9 +1366,7 @@ export class NotificationCreateComponent {
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
-      if(body.send_sfmc == '0') {
-        body['employee_filter'] = this.formNotification.get('employee_filter').value;
-      }
+      body['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
 
     if(this.typeOfRecurrence == 'Bday18') {
@@ -1457,9 +1455,9 @@ export class NotificationCreateComponent {
               }
             }
 
+            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             if(this.formNotification.get('send_ayo').value) {
               bodyVideo.append('send_sfmc', '0');
-              bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             } else {
               bodyVideo.append('send_sfmc', '1');
             }
@@ -1517,9 +1515,9 @@ export class NotificationCreateComponent {
             }
           }
 
+          bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           if(this.formNotification.get('send_ayo').value) {
             bodyVideo.append('send_sfmc', '0');
-            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           } else {
             bodyVideo.append('send_sfmc', '1');
           }
