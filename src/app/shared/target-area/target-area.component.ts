@@ -125,12 +125,15 @@ export class TargetAreaComponent implements OnInit {
     this.pagination.search = search;
     this.offsetPagination = page ? page - 1 : 0;
 
+    const body = { ...this.pagination };
+
+    if (levelIds) {
+      body['area_ids'] = levelIds.length ? levelIds.join() : "";
+    }
+
     this.loadingIndicator = true;
     this.areaService
-      .get({
-        ...this.pagination,
-        area_ids: levelIds.length ? levelIds.join() : "",
-      })
+      .get(body)
       .subscribe((res) => {
         this.dataService.showLoading(false);
         this.loadingIndicator = false;
@@ -186,29 +189,33 @@ export class TargetAreaComponent implements OnInit {
   }
 
   updateFilter(value) {
+    const levelIds = this.getSelectedAllId();
+
     this.dataService.setToStorage("page", 1);
     this.dataService.setToStorage("search", value);
 
-    this.getArea();
+    this.getArea(levelIds);
   }
 
   setPage(pageInfo) {
+    const levelIds = this.getSelectedAllId();
     this.offsetPagination = pageInfo.offset;
 
     if (!this.pagination["search"]) {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
     }
 
-    this.getArea();
+    this.getArea(levelIds);
   }
 
   onSort(event: any) {
+    const levelIds = this.getSelectedAllId();
     const sortName = event.column.prop.split(".")[0];
 
     this.dataService.setToStorage("sort", sortName);
     this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
 
-    this.getArea();
+    this.getArea(levelIds);
   }
 
   getRowId(row: any) {
