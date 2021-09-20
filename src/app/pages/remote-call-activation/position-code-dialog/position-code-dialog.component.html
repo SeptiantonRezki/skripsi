@@ -9,6 +9,7 @@
           <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
             [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
           </ngx-mat-select-search>
+          <mat-option *ngIf="listPositionCodes.length === 0">None</mat-option>
           <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
             {{item.code}}
           </mat-option>

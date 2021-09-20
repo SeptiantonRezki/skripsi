@@ -294,12 +294,11 @@ export class GroupingPelangganIndexComponent implements OnInit {
     this.initAreaV2();
 
     this.getListGroupingPelanggan();
-    this.getSummary();
   }
 
 
   getSummary() {
-    this.rcaAgentService.getGPSummary({}).subscribe(res => {
+    this.rcaAgentService.getGPSummary(this.pagination).subscribe(res => {
       this.summaries = res || [];
     });
   }
@@ -394,6 +393,8 @@ export class GroupingPelangganIndexComponent implements OnInit {
       if (position) {
         this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
+      } else {
+        this.pagination['position'] = this.positionCode.value;
       }
     }
 
@@ -404,6 +405,16 @@ export class GroupingPelangganIndexComponent implements OnInit {
     if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
     if (this.formFilter.get('district_code').value) this.pagination['district'] = this.formFilter.get('district_code').value;
     if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
+
+    let isAdminHaveNational = this.area_id_list.filter(ar => ar === 1);
+    if (areaSelected.length === 1 && isAdminHaveNational.length === 0) {
+      this.dataService.showLoading(false);
+      this.loadingIndicator = false;
+      this.dialogService.openSnackBar({ message: "Kamu Tidak Bisa Melihat Area National karena tidak Memiliki Akses Geotree National" });
+      return;
+    }
+
+    this.getSummary();
 
     this.rcaAgentService.getGroupingPelanggan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
@@ -879,6 +890,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
+        this.getListGroupingPelanggan();
         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
     });
