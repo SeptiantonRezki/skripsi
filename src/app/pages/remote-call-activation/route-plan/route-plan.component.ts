@@ -489,8 +489,16 @@ export class RoutePlanComponent implements OnInit {
     // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
     if (this.formFilter.get('city').value) this.pagination['city'] = this.formFilter.get('city').value;
+    else delete this.pagination['city'];
+
     if (this.formFilter.get('district_code').value) this.pagination['district'] = this.formFilter.get('district_code').value;
+    else delete this.pagination['district'];
+
     if (this.formFilter.get('village').value) this.pagination['village'] = this.formFilter.get('village').value;
+    else delete this.pagination['village'];
+
+    if (this.formFilter.get('plannedDay').value) this.pagination['kunjungan'] = this.formFilter.get('plannedDay').value
+    else delete this.pagination['kunjungan'];
 
     this.rcaAgentService.getRoutePlan(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
