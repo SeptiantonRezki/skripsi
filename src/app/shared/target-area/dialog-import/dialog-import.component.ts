@@ -53,8 +53,8 @@ export class DialogImportComponent implements OnInit {
     this.dataService.showLoading(true);
     this.areaService.import(fd).subscribe(
       (res) => {
-        this.rows = res.data;
-        this.rowsLength = res.data.length;
+        this.rows = res.data.filter(item => item.is_valid !== 0);
+        this.rowsLength = this.rows.length;
         this.isValid = res.is_valid;
         this.dataService.showLoading(false);
       },
