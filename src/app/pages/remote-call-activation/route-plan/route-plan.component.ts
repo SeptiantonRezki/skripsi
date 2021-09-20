@@ -83,6 +83,8 @@ export class RoutePlanComponent implements OnInit {
   { name: 'GT', value: 'GT' },
   { name: 'KA', value: 'KA' }
   ];
+  queryParamsPositionCodes: any;
+  all_areas: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -95,6 +97,7 @@ export class RoutePlanComponent implements OnInit {
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    this.all_areas = this.dataService.getDecryptedProfile()['areas'];
     this.listLevelArea = [
       {
         'id': 1,
@@ -319,7 +322,7 @@ export class RoutePlanComponent implements OnInit {
     }
     // get the search keyword
     let search = this.filterPosition.value;
-    let pagination = {}
+    let pagination = { ...this.queryParamsPositionCodes };
     pagination['per_page'] = 30;
     pagination['search'] = search;
 
@@ -345,7 +348,7 @@ export class RoutePlanComponent implements OnInit {
     }
     // get the search keyword
     let search = this.filterPositionSummary.value;
-    let pagination = {}
+    let pagination = { ...this.queryParamsPositionCodes }
     pagination['per_page'] = 30;
     pagination['search'] = search;
 
@@ -372,9 +375,88 @@ export class RoutePlanComponent implements OnInit {
   }
 
   getRPPositionCodes() {
-    this.rcaAgentService.getRPPositionCode({ per_page: 5 }).subscribe(
+    let zone_areas = this.all_areas.map(area => {
+      let zone = area.find(zn => zn.level_desc === 'division')
+      if (zone) {
+        return zone;
+      } else {
+        return -1;
+      }
+    });
+
+    let params = {};
+    if (zone_areas.length > 0 && zone_areas[0] && zone_areas[0] !== -1) {
+      const areaSelected = [
+        { key: 'national', value: 1 },
+        { key: 'zone', value: zone_areas.map(zn => zn.id) }
+      ]
+      const area_id = areaSelected[areaSelected.length - 1].value;
+      const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+      params['area'] = area_id;
+
+      console.log('area_selected on ff list', areaSelected, this.list);
+      if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && params['area'] !== 1) {
+        params['after_level'] = true;
+      } else {
+        const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+        const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+        const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+        let is_area_2 = false;
+
+        let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+        let last_self_area = [];
+        if (self_area.length > 0) {
+          last_self_area.push(self_area[self_area.length - 1]);
+        }
+
+        if (this.areaFromLogin[1]) {
+          const second_areas = this.areaFromLogin[1];
+          last_self_area = [
+            ...last_self_area,
+            second_areas[second_areas.length - 1].id
+          ];
+          self_area = [
+            ...self_area,
+            ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+          ];
+        }
+
+        const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+        if (params['after_level']) { delete params['after_level']; }
+        params['self_area'] = self_area;
+        params['last_self_area'] = last_self_area;
+        let levelCovered = [];
+        if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
+        if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+          const oneAreaSelected = lastSelectedArea.value[0];
+          const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+          if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
+          if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+            // console.log('its hitted [levelCovered > -1]');
+            if (is_area_2) {
+              params['last_self_area'] = [last_self_area[1]];
+            } else { params['last_self_area'] = [last_self_area[0]]; }
+          } else {
+            // console.log('its hitted [other level]');
+            params['after_level'] = true;
+            params['last_self_area'] = newLastSelfArea;
+          }
+        } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+          // console.log('its hitted [other level other]');
+          params['after_level'] = true;
+          if (newLastSelfArea.length > 0) {
+            params['last_self_area'] = newLastSelfArea;
+          }
+        }
+      }
+
+      this.queryParamsPositionCodes = params;
+    }
+
+    this.rcaAgentService.getRPPositionCode({ per_page: 30, ...params }).subscribe(
       (res) => {
-        console.log("res missions", res.data);
         this.positionCodesList = res.data;
         this.filteredPosition.next(this.positionCodesList.slice());
         this.positionCodesListSummary = res.data;

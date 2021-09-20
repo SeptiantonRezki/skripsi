@@ -40,8 +40,42 @@
         </div>
 
         <div class="py-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-          fxLayoutAlign="space-between stretch">
+          fxLayoutAlign="space-between stretch" [formGroup]="formFilter">
           <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="National" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Zone" formControlName="zone" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id"
+                [disabled]="disableCheckboxArea(item, 'zone')">{{item.name === 'all' ?
+                'Semua
+                Zona' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Regional" formControlName="region" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id"
+                [disabled]="disableCheckboxArea(item, 'region')">{{item.name === 'all'
+                ? 'Semua
+                Regional'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="31%" class="is-light form-primary">
+            <mat-select placeholder="Area" formControlName="area" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id"
+                [disabled]="disableCheckboxArea(item, 'area')">{{item.name === 'all' ?
+                'Semua
+                Area'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select placeholder="National" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
@@ -62,23 +96,6 @@
             <mat-select placeholder="Area" formControlName="area"
               (selectionChange)="getAudienceArea('salespoint', formRcaAgent.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <!-- <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint"
-              (selectionChange)="getAudienceArea('district', formRcaAgent.get('salespoint').value)">
-              <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district"
-              (selectionChange)="getAudienceArea('territory', formRcaAgent.get('district').value)">
-              <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
-              <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field> -->
         </div>
