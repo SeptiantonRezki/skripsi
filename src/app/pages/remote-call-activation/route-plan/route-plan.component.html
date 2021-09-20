@@ -42,7 +42,7 @@
                     <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
                       [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
                     </ngx-mat-select-search>
-                    <mat-option>None</mat-option>
+                    <mat-option value="">None</mat-option>
                     <mat-option value="blank">Belum Di Set</mat-option>
                     <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
                       {{item.code}}
@@ -55,7 +55,7 @@
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="Hari Kunjungan" formControlName="plannedDay">
-                    <mat-option>None</mat-option>
+                    <mat-option value="">None</mat-option>
                     <mat-option *ngFor="let item of plannedDays" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -129,7 +129,7 @@
                       [value]="{value: formFilter.get('territoryCode').value, key: 'territoryCode'}">Semua Kota
                     </mat-option> -->
                     <mat-option *ngIf="cities.length === 0">No City Available</mat-option>
-                    <mat-option *ngIf="cities.length > 0">None</mat-option>
+                    <mat-option *ngIf="cities.length > 0" value="">None</mat-option>
                     <mat-option *ngFor="let item of cities" [value]="item.city">{{item.city}}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -140,7 +140,7 @@
                       Semua District
                     </mat-option> -->
                     <mat-option *ngIf="districts.length === 0">No District Available</mat-option>
-                    <mat-option *ngIf="districts.length > 0">None</mat-option>
+                    <mat-option *ngIf="districts.length > 0" value="">None</mat-option>
                     <mat-option *ngFor="let item of districts" [value]="item.district">{{item.district }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -150,7 +150,7 @@
                       [value]="{value: formFilter.get('district').value, key: 'district'}">Semua Village
                     </mat-option> -->
                     <mat-option *ngIf="villages.length === 0">No Village Available</mat-option>
-                    <mat-option *ngIf="villages.length > 0">None</mat-option>
+                    <mat-option *ngIf="villages.length > 0" value="">None</mat-option>
                     <mat-option *ngFor="let item of villages" [value]="item.village">{{item.village
                       }}</mat-option>
                   </mat-select>
