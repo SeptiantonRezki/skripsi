@@ -30,74 +30,63 @@
       </div>
     </div>
     <br>
-    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
-      <div fxFlex>
-        <span for="" style="font-weight: bolder;">Requesting Preview</span>
-        <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
-      </div>
+    <div class="">
+      <small>Total Row : {{rows ? rows.length : '-'}}</small>
     </div>
-
-    <!-- DATATABLE -->
-    <ngx-datatable *ngIf="!requestingPreview" #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-      [selectionType]="'checkbox'" [count]="previewPagination.total" [limit]="previewPagination.per_page"
-      [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
-      <ngx-datatable-column name="Nama Group Trade Program" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.group_trade_program_name}}
-        </ng-template>
-      </ngx-datatable-column>
-      
-      <ngx-datatable-column name="Nama Program" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.trade_program_name}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Nama Audience" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.audience_name}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Nama Retailer" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.name}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Status Retailer" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.status}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Current Coin (Total)" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.current_coin}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Current Coin (Group Trade Program)" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.current_coin_group_trade_program}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Coin Adjusted" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.preview.coin}}
-        </ng-template>
-      </ngx-datatable-column>
-
-      <ngx-datatable-column name="Alasan" prop="trade_creator_name">
-        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{row.flag_reason}}
-        </ng-template>
-      </ngx-datatable-column>
-
-    </ngx-datatable>
-  <!--/ DATATABLE -->
+    <div class="responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th nowrap>Nama Group Trade Program</th>
+            <th nowrap>Nama Program</th>
+            <th nowrap>Nama Audience</th>
+            <th nowrap>Nama Retailer</th>
+            <th nowrap>Status Retailer</th>
+            <th nowrap>Current Coin (Total)</th>
+            <th nowrap>Current Coin (Group Trade Program)</th>
+            <th nowrap>Coin Adjusted</th>
+            <th nowrap>Alasan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr [id]="'row-'+(idx+1)" *ngFor="let item of rows; let idx = index;"
+            [ngStyle]="{ 'background-color': setRedIfDuplicate(item), color: item.flag === 'duplicate' ? 'white' : 'black' }">
+            <td [id]="'row-'+(idx+1)+'-1'" nowrap>
+              {{ item.group_trade_program_name }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-2'" nowrap>
+              {{ item.trade_program_name }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-3'" nowrap>
+              {{ item.audience_name }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-4'" nowrap>
+              {{ item.name }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-5'" nowrap>
+              {{ item.status }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-6'" nowrap>
+              {{ item.current_coin }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-7'" nowrap>
+              {{ item.current_coin_group_trade_program }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-8'" nowrap>
+              {{ item.coin }}
+            </td>
+            <td [id]="'row-'+(idx+1)+'-9'" nowrap>
+              {{ item.flag_reason }}
+            </td>
+          </tr>
+          <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="6">
+              Tidak ada file yang dipilih
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="border-top">
@@ -130,7 +119,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button id="btn-submit-import" type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0 || !isValid || requestingPreview || loadingIndicator || importing || requestingImport">Kirim</button>
+          [disabled]="!files || rows.length === 0 || !isValid">Kirim</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>
