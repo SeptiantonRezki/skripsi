@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatDialogModule, MatSnackBarModule, MatRadioModule } from '@angular/material';
 import 'hammerjs';
 
@@ -137,6 +138,10 @@ const config = {
   appId: '1:651041534914:web:be573accf451ec608e1c5b'
 };
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, '../assets/languages/', '.json');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -150,7 +155,13 @@ const config = {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     // Fuse Main and Shared modules
     FuseModule.forRoot(fuseConfig),
     FuseSharedModule,
@@ -174,6 +185,8 @@ const config = {
     QiscusService,
     Emitter,
     StorageHelper,
+    LanguagesService,
+    TranslateService,
 
     AuthenticationService,
     DataService,

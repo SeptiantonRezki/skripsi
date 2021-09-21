@@ -50,7 +50,7 @@ export class FuseMainComponent implements OnDestroy {
         private translate: TranslateService,
         private ls: LanguagesService
     ) {
-        this.getCountry();
+        // this.getCountry();
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
                 .subscribe(
@@ -95,16 +95,16 @@ export class FuseMainComponent implements OnDestroy {
         this.listenOnLangChange.unsubscribe();
     }
 
-    getCountry(){
-      this.generalService.getCountry().subscribe(
-        res => {
-        console.log('res', res.data.country_code);
-        const {country_code} = res.data;
-        localStorage.setItem('user_country', country_code.toLowerCase());
-      }, err => {
-        console.error(err);
-      })
-    }
+    // getCountry(){
+    //   this.generalService.getCountry().subscribe(
+    //     res => {
+    //     console.log('res', res.data.country_code);
+    //     const {country_code} = res.data;
+    //     localStorage.setItem('user_country', country_code.toLowerCase());
+    //   }, err => {
+    //     console.error(err);
+    //   })
+    // }
 
     addClass(className: string) {
         this._renderer.addClass(this._elementRef.nativeElement, className);
