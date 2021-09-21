@@ -10,6 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 import { Emitter } from 'app/helper/emitter.helper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { GeneralService } from "app/services/general.service";
 import { TranslateService } from '@ngx-translate/core';
 import { LanguagesService } from 'app/services/languages/languages.service';
 
@@ -45,9 +46,11 @@ export class FuseMainComponent implements OnDestroy {
         @Inject(DOCUMENT) private document: any,
         private emitter: Emitter,
         private sanitizer: DomSanitizer,
+        private generalService: GeneralService,
         private translate: TranslateService,
         private ls: LanguagesService
     ) {
+        this.getCountry();
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
                 .subscribe(
@@ -90,6 +93,17 @@ export class FuseMainComponent implements OnDestroy {
     ngOnDestroy() {
         this.onConfigChanged.unsubscribe();
         this.listenOnLangChange.unsubscribe();
+    }
+
+    getCountry(){
+      this.generalService.getCountry().subscribe(
+        res => {
+        console.log('res', res.data.country_code);
+        const {country_code} = res.data;
+        localStorage.setItem('user_country', country_code.toLowerCase());
+      }, err => {
+        console.error(err);
+      })
     }
 
     addClass(className: string) {

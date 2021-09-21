@@ -5,6 +5,8 @@
     "currency": "Rp",
     "currency_name": "Rupiah",
     "currency_code": "IDR",
+    "input_mask": "separator.0",
+    "input_separator": ".",
     "menu": {
       "help": "Bantuan",
       "admin": "Daftar Admin",

@@ -17,7 +17,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="{{ ls.locale.glboal.label.search }}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -68,7 +68,7 @@
 
         <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}r" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.nominal | rupiahFormater }}
+            <span>{{row.nominal_format_currency}}</span>
           </ng-template>
         </ngx-datatable-column>
 

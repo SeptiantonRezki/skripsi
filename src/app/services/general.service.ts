@@ -13,6 +13,11 @@ export class GeneralService extends BaseService {
     super(http);
   }
 
+  getCountry(): Observable<any> {
+    const url = this.generateUrl(this.namespace, "country");
+    return this.getApi(url);
+  }
+
   getSupport(): Observable<any> {
     const url = this.generateUrl(this.namespace, "support");
     return this.getApi(url);

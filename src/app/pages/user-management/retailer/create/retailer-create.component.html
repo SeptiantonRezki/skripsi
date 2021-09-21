@@ -68,7 +68,7 @@
                 <div class="label">Nomor Ponsel</div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                   <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
-                    <input matInput value="+62" readonly>
+                    <input matInput [value]="country_phone" readonly>
                   </mat-form-field>
                   <mat-form-field fxFlex="93" fxFlex.xs="70" class="form-primary">
                     <input matInput formControlName="phone" type="tel" min="0">
