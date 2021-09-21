@@ -13,15 +13,10 @@
         <!-- <label style="margin: 0px 0 0 15px;">Download File</label> -->
       </div>
       <a #downloadLink></a>
-      <div fxLayout="column">
-        <button id="btn-import-coin" mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail"
-        [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value)">
-          <mat-icon>arrow_downward</mat-icon>
-          IMPORT COIN
-        </button>
-        <label
-          *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value) && taskSequenceForm.get('import_coin_status_type').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Requesting {{taskSequenceForm.get('import_coin_status_type').value.toUpperCase()}}</label>
-      </div>
+      <button id="btn-import-coin" mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail">
+        <mat-icon>arrow_downward</mat-icon>
+        IMPORT COIN
+      </button>
     </div>
   </page-content-header>
   <!-- / HEADER -->
