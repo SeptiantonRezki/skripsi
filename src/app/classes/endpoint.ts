@@ -68,6 +68,26 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective/${context}`,
         get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective/${context}`
       },
+      notesRetailer: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer/${context.objective_id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer/${context}`,
+        get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/notes-retailer/${context}`
+      },
+      kpiSetting: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        get_kps: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/kps`,
+        get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`,
+        post: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`
+      },
+      masterKPI: {
+        brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
+        brand_parameters: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brand_parameters`,
+        trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives`,
+      },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
         detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal/${context.principal_id}`,
@@ -354,7 +374,13 @@ export class Endpoint {
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
         get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
         export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
-        import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`
+        import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`,
+        get_custom: `${AYO_API}/api/principal/customized-notification/target-detail`,
+        preview_import: `${AYO_API}/api/principal/customized-notification/target-detail/preview`,
+        export_custom: `${AYO_API}/api/principal/customized-notification/target-detail/export`,
+        create_custom: `${AYO_API}/api/principal/customized-notification`,
+        show_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
+        delete_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
       },
       notif: {
         list_notif: `${AYO_API}/api/general/user_notif`,
@@ -900,6 +926,8 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,
         audience: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/audience/${context.coin_id}`,
         export_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export`,
+        export_detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export-detail`,
+        download: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/download`,
         preview_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/preview`,
         import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`
       },
@@ -911,6 +939,12 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
 
+      },
+      distribution_list: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
+        autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

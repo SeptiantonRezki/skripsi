@@ -1,0 +1,140 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Customized Push Notification'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <form autocomplete="off" [formGroup]="formNotification">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h2 class="">Buat Customized Push Notification</h2>
+        </div>
+        <div class="ayo-middle" fxLayout="column">
+          <div class="pb-16">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">
+                <strong>Grup Pengguna</strong>
+              </h3>
+            </div>
+            <mat-radio-group formControlName="user_group" class="radio-group" (change)="selectChange($event)">
+              <mat-radio-button class="radio-button" *ngFor="let item of listUserGroup" [value]="item.value">
+                {{item.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <mat-select formControlName="content_type" placeholder="Tipe Konten">
+                  <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
+                  Tipe Konten harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div fxLayout="row" fxLayoutGap="20px">
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+                  formControlName="recurrence_start_date" [min]="minStartDate">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+                <mat-error
+                  *ngIf="formNotification.controls['recurrence_start_date'].hasError('required') && formNotification.controls['recurrence_start_date'].touched">
+                  Tanggal mulai harus diisi.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="30" class="is-light form-primary">
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #time></ngx-material-timepicker>
+                <mat-error
+                  *ngIf="formNotification.controls['recurrence_time'].hasError('required') && formNotification.controls['recurrence_time'].touched">
+                  Waktu terbit harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center" class="p-16 export">
+          <button mat-raised-button type="button" class="is-danger" (click)="export()">
+            <mat-icon>arrow_upward</mat-icon> Export template
+          </button>
+          <button mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
+            <mat-icon>arrow_downward</mat-icon> Import template
+          </button>
+        </div>
+
+        <ngx-datatable
+          class="material"
+          style="border-top: 1px solid #e3e3e3"
+          [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
+          [columnMode]="'force'"
+          [headerHeight]="48"
+          [footerHeight]="56"
+          [rowHeight]="48"
+          [scrollbarH]="true"
+          [reorderable]="reorderable"
+          [count]="pagination.total"
+          [limit]="pagination.per_page"
+          [externalPaging]="true"
+          [externalSorting]="true"
+          (page)="setPage($event)"
+          (sort)="onSort($event)"
+        >
+
+          <ngx-datatable-column [width]="100" name="ID" prop="id">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.id}}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Target User" prop="target_user">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.target_user}}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Header Notification" prop="header_notification">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.header_notification}}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Content Notification" prop="content_notification">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.content_notification}}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Nama Halaman" prop="static_page_title">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.static_page_title}}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Isi Halaman" prop="static_page_body">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              {{row.static_page_body}}
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+        
+        <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled]="actionType == 'detail-custom'">
+            SIMPAN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <a #downloadLink></a>
+</div>

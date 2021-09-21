@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -29,6 +29,7 @@ export class CoinDisburstmentComponent implements OnInit {
   pagination: Page = new Page();
   offsetPagination: any;
   id: any;
+  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   constructor(
     private dialogService: DialogService,
@@ -164,6 +165,28 @@ export class CoinDisburstmentComponent implements OnInit {
   directEdit(row: any) {
     this.dataService.setToStorage("detail_coin_disburstment", row);
     this.router.navigate(["dte", "coin-disbursement", "edit"]);
+  }
+
+  download(row_id: any) {
+    this.dataService.showLoading({ show: true });
+    const params = {
+      coin_disbursement_id: row_id
+    }
+
+    try {
+      this.coinDisburstmentService.download(params).subscribe(res => {
+        this.downloadLink.nativeElement.href = res.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      }, err => {
+        console.warn('err', err);
+        alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+        this.dataService.showLoading(false);
+      })
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
   }
 
 }

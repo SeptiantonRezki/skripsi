@@ -36,6 +36,9 @@ import { BaseInterceptor } from "./services/interceptor.module";
 import { AuthenticationService } from "./services/authentication.service";
 import { DataService } from "./services/data.service";
 import { CallObjectiveSerive } from './services/call-objective/call-objective.service';
+import { NotesRetailerService } from './services/notes-retailer/notes-retailer.service';
+import { KPISettingService } from './services/kpi-setting/kpi-setting.service';
+import { MasterKPIService } from './services/kpi-setting/master-kpi.service';
 import { DialogService } from "./services/dialog.service";
 import { AdminPrincipalService } from "./services/user-management/admin-principal.service";
 import { VendorsService } from "./services/src-catalogue/vendors.service";
@@ -112,6 +115,7 @@ import { StorageHelper } from "./helper/storage.helper";
 import { CoinAdjustmentApprovalService } from "./services/dte/coin-adjustment-approval.service";
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
 import { CoinDisburstmentService } from "./services/dte/coin-disburstment.service";
+import { PayLaterDistributionListService } from "./services/pay-later/pay-later-distribution-list.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -190,6 +194,9 @@ const config = {
     CoinService,
     TemplateTaskService,
     CallObjectiveSerive,
+    NotesRetailerService,
+    KPISettingService,
+    MasterKPIService,
     TradeProgramService,
     ScheduleTradeProgramService,
     AudienceService,
@@ -230,6 +237,7 @@ const config = {
     PayLaterCompanyService,
     PayLaterPanelService,
     PayLaterDeactivateService,
+    PayLaterDistributionListService,
     VirtualAccountCompanyService,
     VirtualAccountBinService,
     VirtualAccountPanelService,

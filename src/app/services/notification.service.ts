@@ -43,6 +43,11 @@ export class NotificationService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getCustom(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_custom');
+    return this.getApi(url, queryParams);
+  }
+
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
@@ -138,6 +143,26 @@ export class NotificationService extends BaseService {
     return this.postApi(url, body);
   }
 
+  previewImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "preview_import");
+    return this.postApi(url, body);
+  }
+  exportCustom(body?): Observable<any> {    
+    const url = this.getUrl(this.namespace, "export_custom");
+    return this.postBlobApi(url, body);
+  }  
+  createCustom(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'create_custom');
+    return this.postApi(url, body);
+  }
+  showCustom(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show_custom', context);
+    return this.getApi(url);
+  }
+  deleteCustom(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete_custom', context);
+    return this.deleteApi(url);
+  }
   /**
    * update token in firebase database
    * 
