@@ -125,7 +125,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         export_coin_status: this.data.export_coin_status,
         export_coin_result: this.data.export_coin_result,
         import_coin_status: this.data.import_coin_status,
-        import_coin_status_type: this.data.import_coin_status_type,
+        import_coin_status_type: (this.data.import_coin_status_type) ? this.data.import_coin_status_type : '',
       });
       this.actions = res.data.actions;
       this.getTradePrograms(this.data.trade_creator_name);
