@@ -22,6 +22,7 @@ export class DialogImportComponent implements OnInit {
   isInvalid: Boolean;
   payload: any;
   isValid: boolean = false;
+  isUploaded: boolean = false;
   rowsLength: number;
 
   constructor(
@@ -45,6 +46,7 @@ export class DialogImportComponent implements OnInit {
     this.files = undefined;
     this.files = event;
     this.isValid = false;
+    this.isUploaded = false;
     this.rowsLength = 0;
 
     let fd = new FormData();
@@ -53,9 +55,10 @@ export class DialogImportComponent implements OnInit {
     this.dataService.showLoading(true);
     this.areaService.import(fd).subscribe(
       (res) => {
-        this.rows = res.data.filter(item => item.is_valid !== 0);
+        this.rows = res.data.filter((item) => item.is_valid !== 0);
         this.rowsLength = this.rows.length;
         this.isValid = res.is_valid;
+        this.isUploaded = true;
         this.dataService.showLoading(false);
       },
       (err) => {
