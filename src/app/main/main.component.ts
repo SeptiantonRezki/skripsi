@@ -100,7 +100,7 @@ export class FuseMainComponent implements OnDestroy {
         res => {
         console.log('res', res.data.country_code);
         const {country_code} = res.data;
-        this.dataService.setToStorage('user_country', country_code);
+        localStorage.setItem('user_country', country_code.toLowerCase());
       }, err => {
         console.error(err);
       })

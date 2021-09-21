@@ -13,6 +13,7 @@ import { GeneralService } from "app/services/general.service";
 import { PagesName } from "app/classes/pages-name";
 import { DokumenDialogComponent } from "../dokumen-dialog/dokumen-dialog.component";
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -63,7 +64,6 @@ export class WholesalerEditComponent {
   formDoc: FormGroup;
   branchType: any[];
   wsRoles: any[] = [];
-  user_country: any;
   country_phone: string;
 
   constructor(
@@ -75,10 +75,10 @@ export class WholesalerEditComponent {
     private wholesalerService: WholesalerService,
     private generalService: GeneralService,
     private dialog: MatDialog,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
-    this.user_country = this.dataService.getFromStorage('user_country');
-    this.country_phone = this.user_country === 'KH' ? "+855" : "+62";
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
       name: {},

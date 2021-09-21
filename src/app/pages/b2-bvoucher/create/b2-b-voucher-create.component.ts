@@ -18,7 +18,7 @@ import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-d
 import { startWith, map } from "rxjs/operators";
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { NullAstVisitor } from '@angular/compiler';
-// import { TranslationService } from 'app/services/translation.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2-b-voucher-create',
@@ -105,8 +105,6 @@ export class B2BVoucherCreateComponent implements OnInit {
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
-  user_country: any;
-  // translation: any = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -119,9 +117,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    // private translationService: TranslationService,
+    private ls: LanguagesService
   ) {
-    this.user_country = this.dataService.getFromStorage('user_country');
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isCreate = params[0].path === 'create' ? true : false;
@@ -538,16 +535,6 @@ export class B2BVoucherCreateComponent implements OnInit {
     else return false;
   }
 
-  // async getTranslation(){
-  //   let code = this.user_country.toLowerCase();
-  //   if (code === 'KH') {
-  //     code = 'km';
-  //   }
-
-  //   let response = await this.translationService.get(code);
-  //   this.translation = await response['input'];
-  // }
-
   ngOnInit() {
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -568,7 +555,6 @@ export class B2BVoucherCreateComponent implements OnInit {
       });
 
     // this.getProducts();
-    // this.getTranslation();
     this.getCategories();
     this.getVendorCategories();
     this.getGroupTradeProgram();

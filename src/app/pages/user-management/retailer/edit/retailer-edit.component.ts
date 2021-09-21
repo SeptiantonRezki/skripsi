@@ -11,6 +11,7 @@ import { GeneralService } from 'app/services/general.service';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { PagesName } from 'app/classes/pages-name';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -101,7 +102,6 @@ export class RetailerEditComponent {
     { name: 'ON', value: 1 }
   ]
   countryList: any[] = [];
-  user_country: any;
   country_phone: string;
 
   formRefferalCode: FormGroup;
@@ -117,9 +117,9 @@ export class RetailerEditComponent {
     private retailerService: RetailerService,
     private generalService: GeneralService,
     private helpService: HelpService,
+    private ls: LanguagesService
   ) {
-    this.user_country = this.dataService.getFromStorage('user_country');
-    this.country_phone = this.user_country === 'KH' ? "+855" : "+62";
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
     this.formdataErrors = {

@@ -5,6 +5,7 @@ import { WholesalerService } from "../../../../services/user-management/wholesal
 import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "../../../../services/data.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-wholesaler-create',
@@ -31,7 +32,6 @@ export class WholesalerCreateComponent {
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   roles: any[] = [];
   areaFromLogin;
-  user_country: any;
   country_phone: string;
 
   constructor(
@@ -40,10 +40,10 @@ export class WholesalerCreateComponent {
     private dialogService: DialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
-    this.user_country = this.dataService.getFromStorage('user_country');
-    this.country_phone = this.user_country === 'KH' ? "+855" : "+62";
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
