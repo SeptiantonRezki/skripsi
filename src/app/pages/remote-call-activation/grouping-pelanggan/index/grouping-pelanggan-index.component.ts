@@ -927,7 +927,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
     this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
-      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_GroupingPelangganRCA_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_GroupingPelangganRCA_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
