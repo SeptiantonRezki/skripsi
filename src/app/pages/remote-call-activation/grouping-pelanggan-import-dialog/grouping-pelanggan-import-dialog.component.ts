@@ -51,7 +51,7 @@ export class GroupingPelangganImportDialogComponent implements OnInit {
           this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
       })
     } else {
-      this.rcaAgentService.importGrouping(fd).subscribe(res => {
+      this.rcaAgentService.importRoutePlan(fd).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogRef.close(res);
       }, err => {
