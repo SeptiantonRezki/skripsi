@@ -131,14 +131,13 @@ export class RoutePlanComponent implements OnInit {
 
   selectChangePositionCode(e: any) {
     console.log('asdkjasdas', e);
+    let params = {
+      ...this.pagination
+    };
     if (e.value) {
-      let params = {
-        position: e.value
-      }
-      this.getRPSummary(params);
-    } else {
-      this.getRPSummary()
+      params['position'] = e.value
     }
+    this.getRPSummary(params);
   }
 
   getFilterArea(category?) {
@@ -237,7 +236,6 @@ export class RoutePlanComponent implements OnInit {
     this.initAreaV2();
     this.getListRoutePlan();
     this.getRPPositionCodes();
-    this.getRPSummary();
 
     this.getFilterArea('city');
     this.getFilterArea('district');
@@ -314,6 +312,8 @@ export class RoutePlanComponent implements OnInit {
         this.getFilterArea('village')
       }
     });
+
+    this.getRPSummary(this.pagination);
   }
 
   filteringPosition() {
