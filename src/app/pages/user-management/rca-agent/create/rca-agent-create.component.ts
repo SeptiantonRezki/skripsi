@@ -42,8 +42,10 @@ export class RcaAgentCreateComponent implements OnInit {
     private rcaAgentService: RcaAgentService,
     private rotuer: Router,
     private wholesalerService: WholesalerService,
+    private geotreeService: GeotreeService
   ) {
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
+    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.listLevelArea = [
       {
         "id": 1,
@@ -84,158 +86,360 @@ export class RcaAgentCreateComponent implements OnInit {
       validator: this.checkPasswords
     });
 
-    this.initArea();
-  }
+    this.formFilter = this.formBuilder.group({
+      national: [""],
+      zone: [""],
+      region: [""],
+      area: [""],
+      salespoint: [""],
+      district: [""],
+      territory: [""]
+    })
 
-  initArea() {
-    this.areaFromLogin.map(item => {
-      let level_desc = '';
-      switch (item.type.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          this.formRcaAgent.get('national').setValue(item.id);
-          this.formRcaAgent.get('national').disable();
-          break
-        case 'division':
-          level_desc = 'region';
-          this.formRcaAgent.get('zone').setValue(item.id);
-          this.formRcaAgent.get('zone').disable();
-          break;
-        case 'region':
-          level_desc = 'area';
-          this.formRcaAgent.get('region').setValue(item.id);
-          this.formRcaAgent.get('region').disable();
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          this.formRcaAgent.get('area').setValue(item.id);
-          this.formRcaAgent.get('area').disable();
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          this.formRcaAgent.get('salespoint').setValue(item.id);
-          this.formRcaAgent.get('salespoint').disable();
-          break;
-        case 'district':
-          level_desc = 'territory';
-          this.formRcaAgent.get('district').setValue(item.id);
-          this.formRcaAgent.get('district').disable();
-          break;
-        case 'territory':
-          this.formRcaAgent.get('territory').setValue(item.id);
-          this.formRcaAgent.get('territory').disable();
-          break;
+    // this.initArea();
+    this.initAreaV2();
+
+    this.formFilter.get('zone').valueChanges.subscribe(res => {
+      console.log('zone changes', res, this.formFilter.value['zone']);
+      if (res) {
+        this.getAudienceAreaV2('region', res);
       }
-      console.log("kesini gak sih bangke!")
-      this.getAudienceArea(level_desc, item.id);
+    });
+    this.formFilter.get('region').valueChanges.subscribe(res => {
+      console.log('region changes', res, this.formFilter.value['region']);
+      if (res) {
+        this.getAudienceAreaV2('area', res);
+      }
+    });
+    this.formFilter.get('area').valueChanges.subscribe(res => {
+      console.log('area changes', res, this.formFilter.value['area']);
+      if (res) {
+        this.getAudienceAreaV2('salespoint', res);
+      }
     });
   }
 
-  getAudienceArea(selection, id) {
+  disableCheckboxArea(item, areaName) {
+    if (this.formFilter.get(areaName).value) {
+      let isNotSelected = this.formFilter.get(areaName).value.filter(area => area !== item.id)
+      return isNotSelected.length > 0;
+    }
+
+    return false;
+  }
+
+  initAreaV2() {
+    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+    this.geotreeService.getFilter2Geotree(areas);
+    let sameArea = this.geotreeService.diffLevelStarted;
+    let areasDisabled = this.geotreeService.disableArea(sameArea);
+    this.lastLevel = areasDisabled;
+    let lastLevelDisabled = null;
+    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+
+    if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
+      this.formFilter.get('national').setValue(1);
+      this.formFilter.get('national').disable();
+      lastLevelDisabled = 'national';
+    }
+    areas.map((area, index) => {
+      area.map((level, i) => {
+        let level_desc = level.level_desc;
+        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
+        if (lastDiffLevelIndex > levelIndex - 2) {
+          if (!this.list[level.type]) this.list[level.type] = [];
+          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
+            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
+            console.log('ff value', this.formFilter.value);
+            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
+            if (sameArea.level_desc === level.type) {
+              lastLevelDisabled = level.type;
+
+              this.formFilter.get(this.parseArea(level.type)).disable();
+            }
+
+            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
+            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
+            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+          }
+
+          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
+          level['area_type'] = `area_${index + 1}`;
+          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
+            ...this.list[this.parseArea(level.type)],
+            level
+          ];
+          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+
+          if (i === area.length - 1) {
+            this.endArea = this.parseArea(level.type);
+            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+          }
+        }
+      });
+    });
+
+    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
+    // mutableAreas.areas.map((ar, i) => {
+    //   this.list[ar].splice(1, 1);
+    // });
+  }
+
+  parseArea(type) {
+    // return type === 'division' ? 'zone' : type;
+    switch (type) {
+      case 'division':
+        return 'zone';
+      case 'teritory':
+      case 'territory':
+        return 'territory';
+      default:
+        return type;
+    }
+  }
+
+  getAudienceAreaV2(selection, id, event?) {
     let item: any;
-    this.getPositionCode(id);
-    switch (selection) {
+    let fd = new FormData();
+    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
+    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
+    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
+    if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+      fd.append('area_id[]', areaSelected[0].value);
+    } else if (areaSelected.length > 0) {
+      console.log('area_selected', areaSelected)
+      if (areaSelected[0].value !== "") {
+        areaSelected[0].value.map(ar => {
+          fd.append('area_id[]', ar);
+        })
+        // fd.append('area_id[]', areaSelected[0].value);
+        if (areaSelected[0].value.length === 0) {
+          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          console.log('the selection', this.parseArea(selection), newAreaSelected);
+          if (newAreaSelected[0].key !== 'national') {
+            newAreaSelected[0].value.map(ar => {
+              fd.append('area_id[]', ar);
+            })
+          } else {
+            fd.append('area_id[]', newAreaSelected[0].value);
+          }
+        }
+      }
+    } else {
+      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
+      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
+      // console.log('new', beforeLastLevel, areaSelected);
+      if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
+        fd.append('area_id[]', areaSelected[0].value);
+      } else if (areaSelected.length > 0) {
+        if (areaSelected[0].value !== "") {
+          areaSelected[0].value.map(ar => {
+            fd.append('area_id[]', ar);
+          })
+          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          if (areaSelected[0].value.length === 0) {
+            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
+            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            console.log('the selection', this.parseArea(selection), newAreaSelected);
+            if (newAreaSelected[0].key !== 'national') {
+              newAreaSelected[0].value.map(ar => {
+                fd.append('area_id[]', ar);
+              })
+            } else {
+              fd.append('area_id[]', newAreaSelected[0].value);
+            }
+          }
+        }
+      }
+    }
+
+    fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
+    let thisAreaOnSet = [];
+    let areaNumber = 0;
+    let expectedArea = [];
+    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
+      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
+      if (this.areaFromLogin[1]) thisAreaOnSet = [
+        ...thisAreaOnSet,
+        ...this.areaFromLogin[1]
+      ];
+
+      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
+      if (id && id.length > 1) {
+        areaNumber = 1;
+      }
+
+      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      // console.log('on set', thisAreaOnSet, selection, id);
+    }
+
+
+    switch (this.parseArea(selection)) {
       case 'zone':
-        this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-          this.list[selection] = res.filter(item => item.name !== 'all');
+        // area = this.formFilter.get(selection).value;
+        this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+          // this.list[this.parseArea(selection)] = res.data;
+          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
+          // fd = null
         });
 
-        this.formRcaAgent.get('region').setValue('');
-        this.formRcaAgent.get('area').setValue('');
-        this.formRcaAgent.get('salespoint').setValue('');
-        this.formRcaAgent.get('district').setValue('');
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
         this.list['region'] = [];
         this.list['area'] = [];
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
+        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
-        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
-          });
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['region'] = [];
         }
-
-        this.formRcaAgent.get('region').setValue('');
-        this.formRcaAgent.get('area').setValue('');
-        this.formRcaAgent.get('salespoint').setValue('');
-        this.formRcaAgent.get('district').setValue('');
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('region').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
         this.list['area'] = [];
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
         break;
       case 'area':
-        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
-          });
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('area hitted', selection, item, this.list['region']);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['area'] = [];
         }
 
-        this.formRcaAgent.get('area').setValue('');
-        this.formRcaAgent.get('salespoint').setValue('');
-        this.formRcaAgent.get('district').setValue('');
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('area').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
         break;
       case 'salespoint':
-        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
-          });
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          console.log('item', item);
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['salespoint'] = [];
         }
 
-        this.formRcaAgent.get('salespoint').setValue('');
-        this.formRcaAgent.get('district').setValue('');
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('salespoint').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
         this.list['district'] = [];
         this.list['territory'] = [];
         break;
       case 'district':
-        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
-          });
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['district'] = [];
         }
 
-        this.formRcaAgent.get('district').setValue('');
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('district').setValue('');
+        this.formFilter.get('territory').setValue('');
         this.list['territory'] = [];
         break;
       case 'territory':
-        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.wholesalerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res.filter(item => item.name !== 'all');
-          });
-          console.log('list', this.list);
+        // area = this.formFilter.get(selection).value;
+        if (id && id.length !== 0) {
+          item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
+            return id && id.length > 0 ? id[0] : id;
+          })[0] : {};
+          if (item && item.name && item.name !== 'all') {
+            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = res.data;
+              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+
+              // fd = null
+            });
+          } else {
+            this.list[selection] = []
+          }
         } else {
-          this.list[selection] = []
+          this.list['territory'] = [];
         }
 
-        this.formRcaAgent.get('territory').setValue('');
+        this.formFilter.get('territory').setValue('');
         break;
 
       default:
         break;
     }
+  }
+
+  filteringGeotree(areaList) {
+    return areaList;
   }
 
   getPositionCode(id = 1) {
@@ -246,15 +450,15 @@ export class RcaAgentCreateComponent implements OnInit {
   }
 
   getCurrentPositionCode() {
-    let formRcaAgent = this.formRcaAgent.getRawValue();
+    let formFilter = this.formFilter.getRawValue();
     let formArea = {
-      national: formRcaAgent['national'],
-      zone: formRcaAgent['zone'],
-      region: formRcaAgent['region'],
-      area: formRcaAgent['area'],
-      salespoint: formRcaAgent['salespoint'],
-      district: formRcaAgent['district'],
-      territory: formRcaAgent['territory'],
+      national: formFilter['national'],
+      zone: formFilter['zone'],
+      region: formFilter['region'],
+      area: formFilter['area'],
+      salespoint: formFilter['salespoint'],
+      district: formFilter['district'],
+      territory: formFilter['territory'],
     }
     let areaSelected = Object.entries(formArea).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area_id = areaSelected[areaSelected.length - 1].value;
@@ -265,15 +469,15 @@ export class RcaAgentCreateComponent implements OnInit {
 
   async submit() {
 
-    let formRcaAgent = this.formRcaAgent.getRawValue();
+    let formFilter = this.formFilter.getRawValue();
     let formArea = {
-      national: formRcaAgent['national'],
-      zone: formRcaAgent['zone'],
-      region: formRcaAgent['region'],
-      area: formRcaAgent['area'],
-      salespoint: formRcaAgent['salespoint'],
-      district: formRcaAgent['district'],
-      territory: formRcaAgent['territory'],
+      national: formFilter['national'],
+      zone: formFilter['zone'],
+      region: formFilter['region'],
+      area: formFilter['area'],
+      salespoint: formFilter['salespoint'],
+      district: formFilter['district'],
+      territory: formFilter['territory'],
     }
     let areaSelected = Object.entries(formArea).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
     let area_id = areaSelected[areaSelected.length - 1].value;
@@ -287,7 +491,7 @@ export class RcaAgentCreateComponent implements OnInit {
           let body = {
             name: this.formRcaAgent.get('name').value,
             email: this.formRcaAgent.get('email').value,
-            area_id: area_id,
+            area_id: area_id && area_id[0] ? area_id[0] : area_id,
             username: this.formRcaAgent.get('username').value,
             position_code: res,
             // password: this.formRcaAgent.get('password').value,
