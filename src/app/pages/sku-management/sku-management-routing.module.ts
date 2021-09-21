@@ -143,8 +143,7 @@ const routes: Routes = [
     },
     resolve: {
       listBrand: ListBrandResolver,
-      listCategory: ListCategoryResolver,
-      listPackaging: ListPackagingResolver
+      listCategory: ListCategoryResolver
     },
     canActivate: [PageGuard]
   },
