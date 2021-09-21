@@ -22,7 +22,7 @@ import { environment } from "environments/environment";
 import { IdbService } from "app/services/idb.service";
 import {KPIGroupModel} from 'app/pages/kpi-setting/kpi-setting.model';
 import { commonFormValidator } from "app/classes/commonFormValidator";
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogService } from "app/services/dialog.service";
 import { MasterKPIService } from '../../../services/kpi-setting/master-kpi.service';
 import { KPISettingService } from "app/services/kpi-setting/kpi-setting.service";
@@ -80,7 +80,7 @@ export class EditKPISettingComponent implements OnInit {
 
   existingAreas = [];
 
-  enableEdit: Boolean = true;
+  // enableEdit: Boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -229,7 +229,7 @@ export class EditKPISettingComponent implements OnInit {
 
     if(this.KPIGroup.status == 'active') {
       this.formKPI.controls['status'].setValue(true);
-      this.enableEdit = false;
+      // this.enableEdit = false;
     }
   }
 

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2b-voucher-inject',
@@ -43,7 +44,8 @@ export class B2BVoucherInjectComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private b2bVoucherInjectService: B2BVoucherInjectService
+    private b2bVoucherInjectService: B2BVoucherInjectService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     // this.selected = [];

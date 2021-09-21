@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { DialogService } from '../../../../services/dialog.service';
 import { TradeProgramService } from '../../../../services/dte/trade-program.service';
@@ -102,6 +102,17 @@ export class TradeCreateComponent {
       .subscribe(() => {
         this.filteringGTP();
       });
+    
+    setTimeout(() => {
+      document.getElementById("trade-create").getElementsByTagName("input")[0].id = "upload-file-trade";
+    }, 500);
+  }
+
+  selectStatusTrade(){
+    for (let index = 0; index < this.statusTP.length; index++) {
+      let id = 'mat-option-'+index;
+      document.getElementById(id).getElementsByClassName("mat-option-text")[0].id = "status-"+index;
+    }
   }
 
   filteringGTP() {

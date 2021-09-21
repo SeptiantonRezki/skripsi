@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ListAudienceDialogComponent } from '../../schedule-program/dialog/list-audience-dialog.component';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../../schedule-program/import-coin/import-coin.component';

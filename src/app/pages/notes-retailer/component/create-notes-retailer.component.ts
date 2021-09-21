@@ -31,7 +31,7 @@ import { IdbService } from "app/services/idb.service";
 import {NotesRetailerModel} from 'app/pages/notes-retailer/notes-retailer.model';
 import { NotesRetailerService } from '../../../services/notes-retailer/notes-retailer.service';
 import { ImportNotesDialogComponent } from '../import-component/import-notes-dialog.component';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-notes-retailer.component',

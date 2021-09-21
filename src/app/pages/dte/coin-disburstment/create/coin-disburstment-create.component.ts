@@ -10,7 +10,7 @@ import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.serv
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
-import * as moment from "moment";
+import moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ImportAudienceDialogComponent } from '../../audience/import/import-audience-dialog.component';
 import { IdbService } from 'app/services/idb.service';

@@ -11,7 +11,7 @@ import { DiaglogWaktuTungguComponent } from "./diaglog-waktu-tunggu/diaglog-wakt
 import * as shape from 'd3-shape';
 import { DialogYesNoComponent } from "./dialog-yes-no/dialog-yes-no.component";
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogCoinComponent } from "./dialog-coin/dialog-coin.component";
 
 @Component({

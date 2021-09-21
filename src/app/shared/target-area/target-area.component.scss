@@ -1,0 +1,23 @@
+.toolbar {
+  background-color: #3a3a3a;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  padding-bottom: 4px;
+
+  .mat-input-element {
+      padding: 6px 32px 6px 0;
+      border-bottom: 1px solid #ccc;
+      transition: border-color .3s;
+
+      &:focus {
+          border-color: #333;
+      }
+  }
+
+  .mat-icon {
+      margin-left: -24px;
+  }
+}

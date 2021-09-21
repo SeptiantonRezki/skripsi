@@ -5,7 +5,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { Lightbox } from 'ngx-lightbox';
-import * as moment from 'moment';
+import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 import { Config } from 'app/classes/config';
@@ -46,6 +46,7 @@ export class PopupNotificationCreateComponent {
   lvl: any[];
   minDate: any;
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: "SRC", value: "src" }, { name: "WS Downline", value: "downline" }];
@@ -73,6 +74,10 @@ export class PopupNotificationCreateComponent {
   formPopupGroup: FormGroup;
   formPopupErrors: any;
   audienceSelected: any[] = [];
+
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
 
   public options: Object = Config.FROALA_CONFIG;
 
@@ -188,8 +193,10 @@ export class PopupNotificationCreateComponent {
       type: ["limit"],
       transfer_token: ["yes", Validators.required],
       is_target_audience: [false],
+      is_target_area: [false],
       is_mission_builder: this.is_mission_builder,
-      product: [""]
+      product: [""],
+      subscription: ["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -270,8 +277,8 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name: "Image",value:"image"}, {name: "Unlinked", value: "unlinked"}, {name: "E-Wallet", value: "e_wallet"}, {name: "Link to Web browser", value: "link_to_web_browser"}];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, {name: "Pesan Antar", value: "pesan_antar"}, {name: "Tantangan", value: "tantangan"}, {name: "Peluang", value: "peluang"}, {name: "Main Bareng", value: "main_bareng"}];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
         this.formPopupGroup.controls['date_ws_downline'].disable();
@@ -1377,7 +1384,14 @@ export class PopupNotificationCreateComponent {
           body['area_id_downline'] = areas.map(item => item.value);
         }
       } else {
-        body['area_id'] = areas.map(item => item.value);
+        if (!this.formPopupGroup.get("is_target_area").value) body['area_id'] = areas.map(item => item.value);
+      }
+      if (body.type === 'customer' && this.formPopupGroup.get("is_target_area").value) {
+        if (this.selectedAll) {
+          body['area_id'] = this.selectedAllId;
+        } else {
+          body['area_id'] = this.selectedArea.filter((item) => item.id.toString() !== "1").map((item) => item.id);
+        }
       }
       if (this.formPopupGroup.get("is_target_audience").value) {
         body['target_audience'] = 1;
@@ -1388,6 +1402,10 @@ export class PopupNotificationCreateComponent {
 
       if (body.action === 'new-product') {
         body['action_data'] = this.formPopupGroup.get('product').value;
+      }
+
+      if (body.type === 'customer') {
+        body['subscription'] = this.formPopupGroup.get('subscription').value;
       }
 
       this.notificationService.createPopup(body).subscribe(
@@ -1860,7 +1878,16 @@ export class PopupNotificationCreateComponent {
   }
 
   isTargetAudience(event) {
-    if (event.checked) this.getAudience();
+    if (event.checked) {
+      this.formPopupGroup.get('is_target_area').setValue(false);
+      this.getAudience();
+    }
+  }
+
+  isTargetArea(event) {
+    if (event.checked) {
+      this.formPopupGroup.get('is_target_audience').setValue(false);
+    }
   }
 
   async export() {
@@ -1946,5 +1973,17 @@ export class PopupNotificationCreateComponent {
         }
       }
     });
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 }

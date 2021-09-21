@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Daftar Group Trade Program'">
-    <button style="width: 170px" [routerLink]="['/dte','group-trade-program', 'create']" mat-raised-button
+    <button id="btn-create-group_trade" style="width: 170px" [routerLink]="['/dte','group-trade-program', 'create']" mat-raised-button
       type="button">
       <mat-icon>add</mat-icon> BUAT
     </button>
@@ -36,7 +36,7 @@
 
         <ngx-datatable-column name="Nama" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+            <span id="name" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Non-HMS" prop="type">
@@ -52,7 +52,7 @@
         <ngx-datatable-column name="Status" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p class="status text-truncate h6 p-4 status-order"
+              <p id="status" class="status text-truncate h6 p-4 status-order"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
                 {{ row.status && row.status === 'active' ? 'AKTIF' : 'TIDAK AKTIF' }}
               </p>
@@ -62,10 +62,10 @@
         <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)">
+              <button id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)"
+              <button id="btn-delete" mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)"
                 [disabled]="row.status === 'active'">
                 <mat-icon>delete</mat-icon>
               </button>

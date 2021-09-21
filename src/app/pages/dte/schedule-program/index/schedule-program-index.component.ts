@@ -6,7 +6,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import { DateAdapter } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';

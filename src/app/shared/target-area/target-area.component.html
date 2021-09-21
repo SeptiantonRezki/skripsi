@@ -1,0 +1,182 @@
+<div [formGroup]="formGeo" fxLayout="row" fxLayoutGap="24px" class="px-24">
+  <mat-form-field fxFlex="20%" class="is-light form-primary">
+    <mat-select placeholder="National" formControlName="national" multiple>
+      <mat-option *ngFor="let item of geoList.national" [value]="item.id">{{
+        item.code
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFlex="20%" class="is-light form-primary">
+    <mat-select
+      placeholder="Zone"
+      formControlName="division"
+      (selectionChange)="getLevel('division')"
+      multiple
+    >
+      <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+        item.code
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFlex="20%" class="is-light form-primary">
+    <mat-select
+      placeholder="Region"
+      formControlName="region"
+      (selectionChange)="getLevel('region')"
+      multiple
+    >
+      <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
+        item.code
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFlex="20%" class="is-light form-primary">
+    <mat-select
+      placeholder="Area"
+      formControlName="area"
+      multiple
+      (selectionChange)="getLevel('area')"
+    >
+      <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
+        item.code
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div fxFlex="20%" class="search-field">
+    <input
+      matInput
+      placeholder="Cari"
+      (keyup)="keyUp.next($event.target.value)"
+      autocomplete="off"
+    />
+    <mat-icon style="font-size: 20px">search</mat-icon>
+  </div>
+</div>
+<div>
+  <div
+    fxLayout="row wrap"
+    fxLayout.lt-md="column"
+    fxLayoutGap="20px"
+    fxLayoutGap.lt-md="10px"
+    fxLayoutAlign="end center"
+    class="toolbar p-16"
+  >
+    <button
+      mat-raised-button
+      type="button"
+      class="is-danger"
+      (click)="import()"
+    >
+      <mat-icon>arrow_downward</mat-icon> Import XLS
+    </button>
+    <button
+      mat-raised-button
+      type="button"
+      class="is-danger"
+      (click)="export()"
+    >
+      <mat-icon>arrow_upward</mat-icon> Export XLS
+    </button>
+    <a #downloadLink></a>
+  </div>
+  <ngx-datatable
+    class="material"
+    [rows]="rows"
+    [loadingIndicator]="loadingIndicator"
+    [columnMode]="'force'"
+    [offset]="offsetPagination"
+    [headerHeight]="48"
+    [footerHeight]="56"
+    [rowHeight]="'auto'"
+    [scrollbarH]="true"
+    [reorderable]="true"
+    [count]="pagination.total"
+    [limit]="pagination.per_page"
+    [externalPaging]="true"
+    [externalSorting]="true"
+    [selected]="selected"
+    [selectionType]="'checkbox'"
+    [selectAllRowsOnPage]="false"
+    [rowIdentity]="getRowId"
+    (page)="setPage($event)"
+    (sort)="onSort($event)"
+    (select)="onSelect($event)"
+  >
+    <ngx-datatable-column
+      [width]="30"
+      [sortable]="false"
+      [canAutoResize]="false"
+      [draggable]="false"
+      [resizeable]="false"
+      [sortable]="false"
+    >
+      <ng-template
+        ngx-datatable-header-template
+        let-value="value"
+        let-allRowsSelected="allRowsSelected"
+        let-selectFn="selectFn"
+      >
+        <mat-checkbox
+          [checked]="setAllSelected(allRowsSelected)"
+          (change)="selectFn(!allRowsSelected)"
+        ></mat-checkbox>
+      </ng-template>
+      <ng-template
+        ngx-datatable-cell-template
+        let-row="row"
+        let-value="value"
+        let-isSelected="isSelected"
+        let-onCheckboxChangeFn="onCheckboxChangeFn"
+      >
+        <mat-checkbox
+          [checked]="isSelected"
+          (change)="onCheckboxChangeFn($event)"
+        ></mat-checkbox>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column
+      name="Code"
+      prop="code"
+      [sortable]="false"
+    ></ngx-datatable-column>
+    <ngx-datatable-column name="Region" prop="region" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{ row.region ? row.region : "-" }}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Zone" prop="zone" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{ row.zone ? row.zone : "-" }}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column
+      name="Tipe"
+      prop="type"
+      [sortable]="false"
+    ></ngx-datatable-column>
+    <ngx-datatable-footer>
+      <ng-template
+        ngx-datatable-footer-template
+        let-rowCount="rowCount"
+        let-pageSize="pageSize"
+        let-selectedCount="selectedCount"
+        let-curPage="curPage"
+        let-offset="offset"
+      >
+        <div>{{ isSelectedAll ? rowCount : selectedCount }} selected / {{ rowCount }} total</div>
+        <datatable-pager
+          [pagerLeftArrowIcon]="'datatable-icon-left'"
+          [pagerRightArrowIcon]="'datatable-icon-right'"
+          [pagerPreviousIcon]="'datatable-icon-prev'"
+          [pagerNextIcon]="'datatable-icon-skip'"
+          [page]="curPage"
+          [size]="pageSize"
+          [count]="rowCount"
+          [hidden]="!(rowCount / pageSize > 1)"
+          (change)="table.onFooterPage($event)"
+        >
+        </datatable-pager>
+      </ng-template>
+    </ngx-datatable-footer>
+  </ngx-datatable>
+</div>

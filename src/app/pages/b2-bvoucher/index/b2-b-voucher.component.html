@@ -1,10 +1,10 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'B2B Voucher'">
+  <page-content-header [contentTitle]="ls.locale.cn_reward.b2b_voucher.text1">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/b2b-voucher','create']">
-        <mat-icon>add</mat-icon>TAMBAH
+        <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
       </button>
     </div>
   </page-content-header>
@@ -13,11 +13,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">B2B Voucher</h2>
+        <h2 class="pl-8">{{ ls.locale.cn_reward.b2b_voucher.text1 }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.glboal.label.search }}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -26,58 +26,58 @@
         [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Voucher" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text2 }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text3 }}" prop="panel_retailer_count">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.panel_retailer_count}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Panel WS" prop="panel_wholesaler_count">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text4 }}" prop="panel_wholesaler_count">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.panel_wholesaler_count}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Toko Menukarkan Koin" prop="retailer_redeem_coin_count">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text5 }}" prop="retailer_redeem_coin_count">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.retailer_redeem_coin_count}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Toko Menukarkan Voucher" prop="retailer_redeem_voucher_count">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text6 }}" prop="retailer_redeem_voucher_count">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.retailer_redeem_voucher_count}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Awal Penukaran" prop="start_date">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text7 }}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.start_date | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Akhir Penukaran" prop="end_date">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text8 }}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.end_date | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nilai Voucher" prop="nominal">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}r" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{row.nominal_format_currency}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Expiry" prop="expired_at">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text10 }}" prop="expired_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.expired_at | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status_indo">
+        <ngx-datatable-column name="{{ ls.locale.global.label.status }}" prop="status_indo">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <p class="status text-truncate h6 p-4 status-order" [ngClass]="getStatusColor(row.status)">
               {{ row.status_indo ? row.status_indo.toUpperCase() : row.status_indo }}
@@ -85,7 +85,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

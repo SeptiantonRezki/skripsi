@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
       "@fuse" : ["@fuse/"] 
@@ -19,6 +20,9 @@
       "es2017",
       "dom"
     ],
-    "skipLibCheck": true
-  }
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
 }

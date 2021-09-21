@@ -13,7 +13,7 @@ import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEve
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from "moment";
+import moment from 'moment';
 import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-dialog/import-panel-dialog.component';
 import { startWith, map } from "rxjs/operators";
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';

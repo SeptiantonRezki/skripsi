@@ -12,7 +12,7 @@ import { AudienceService } from 'app/services/dte/audience.service';
 import { ImportAudienceDialogComponent } from 'app/pages/dte/audience/import/import-audience-dialog.component';
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import * as moment from "moment";
+import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 
 @Component({

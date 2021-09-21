@@ -12,7 +12,7 @@ import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEve
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
+import moment from 'moment';
 import { startWith, map } from 'rxjs/operators';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
@@ -153,6 +153,7 @@ export class B2CVoucherCreateComponent implements OnInit {
 
     this.formDetailVoucher = this.formBuilder.group({
       name: ['', Validators.required],
+      alias: ['', Validators.required],
       voucherValue: [0, [Validators.required, Validators.min(1)]],
       jumlahVoucherPerConsumer: [0, [Validators.required, Validators.min(1)]],
       startDate: [null, Validators.required],
@@ -474,6 +475,7 @@ export class B2CVoucherCreateComponent implements OnInit {
     if (this.formDetailVoucher.valid) {
       const body = {
         name: this.formDetailVoucher.get('name').value,
+        alias: this.formDetailVoucher.get('alias').value,
         nominal: this.formDetailVoucher.get('voucherValue').value,
         limit_per_user: this.formDetailVoucher.get('jumlahVoucherPerConsumer').value,
         start_date: moment(this.formDetailVoucher.get('startDate').value).format('YYYY-MM-DD'),

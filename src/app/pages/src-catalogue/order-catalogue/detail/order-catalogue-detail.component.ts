@@ -12,7 +12,7 @@ import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogu
 import { EstShippingDialogComponent } from '../est-shipping-dialog/est-shipping-dialog';
 import { QiscusService } from 'app/services/qiscus.service';
 import { Emitter } from 'app/helper/emitter.helper';
-import * as moment from "moment";
+import moment from 'moment';
 
 @Component({
   selector: 'app-order-catalogue-detail',

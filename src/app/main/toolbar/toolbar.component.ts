@@ -12,6 +12,7 @@ import { environment } from "environments/environment";
 import { NotificationService } from "app/services/notification.service";
 import { Emitter } from "app/helper/emitter.helper";
 import { QiscusService } from "app/services/qiscus.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "fuse-toolbar",
@@ -40,7 +41,8 @@ export class FuseToolbarComponent implements OnInit {
     private authService: AuthenticationService,
     private notificationService: NotificationService,
     private emitter: Emitter,
-    private qs: QiscusService
+    private qs: QiscusService,
+    private ls: LanguagesService
   ) {
     this.userStatusOptions = [
       {
