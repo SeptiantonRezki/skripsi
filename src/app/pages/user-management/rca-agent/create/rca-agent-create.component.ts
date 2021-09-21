@@ -203,6 +203,7 @@ export class RcaAgentCreateComponent implements OnInit {
   getAudienceAreaV2(selection, id, event?) {
     let item: any;
     let fd = new FormData();
+    this.getPositionCode(id);
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
