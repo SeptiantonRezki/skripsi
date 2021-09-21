@@ -19,6 +19,7 @@ export class LanguagesService {
     } else {
       // DEFAULT LANGUAGES
       this.setLanguage('id');
+      localStorage.setItem('user_country', 'id');
     }
   }
 

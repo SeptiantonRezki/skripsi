@@ -92,4 +92,9 @@ export class GeneralService extends BaseService {
     const url = this.getUrl(this.namespace, "cities");
     return this.getApi(url, queryParams)
   }
+
+  setLocale(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'locale');
+    return this.postApi(url, body);
+  }
 }

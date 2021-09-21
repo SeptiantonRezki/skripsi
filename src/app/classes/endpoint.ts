@@ -56,7 +56,7 @@ export class Endpoint {
         get_syarat_ketentuan: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=terms-conditions&user=principal`,
         check_user_status: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/user-status`,
         get_user_cognito_ad: `${AYO_API_SERVICE(SERVER.user)}/oauth/cognito/get-user`,
-        encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`
+        encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`,
       },
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`,
@@ -432,7 +432,8 @@ export class Endpoint {
         listbank: `${AYO_API}/api/v2/general/listbank`,
         app_versions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/version`,
         // cities: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/cities`
-        cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`
+        cities: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/city/get-city`,
+        locale: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/update-locale`
       },
       user_onboarding: {
         register_user: `${AYO_API}/api/${type_api}/analytics/register-user`,

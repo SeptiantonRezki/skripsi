@@ -13,12 +13,18 @@ import { Observable } from "rxjs/Rx";
 import { Router } from "@angular/router";
 import { DialogService } from "./dialog.service";
 import { MatDialog } from "@angular/material";
+import { LanguagesService } from "./languages/languages.service";
 
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
   private authenticationService: AuthenticationService;
   private refreshTokenObserver: Observable<any>;
-  constructor(private injector: Injector, private router: Router, private matDialog: MatDialog) {
+  constructor(
+    private injector: Injector,
+    private router: Router,
+    private matDialog: MatDialog,
+    private ls: LanguagesService
+  ) {
     // this.refreshTokenObserver = Observable.defer(() => {
     //   return this.injector.get(AuthenticationService).postRefreshToken();
     // }).share();
@@ -39,7 +45,7 @@ export class BaseInterceptor implements HttpInterceptor {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
     if (token) {
       const duplicate = request.clone({
-        headers: request.headers.set("Authorization", "Bearer " + token)
+        headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', this.ls.selectedLanguages)
       });
       return duplicate;
     }
