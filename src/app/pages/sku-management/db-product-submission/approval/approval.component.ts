@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import { DialogService } from "app/services/dialog.service";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
@@ -33,7 +34,8 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private submissionService: ProductSubmissionService
+    private submissionService: ProductSubmissionService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -122,10 +124,9 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
     this.dataService.showLoading(true);
     this.submissionService.putUser(body).subscribe(
       (res) => {
+        this.router.navigate(["sku-management", "db-product-submission"]);
+        this.dialogService.openSnackBar({ message: "Data berhasil diubah" });
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
-        });
       },
       (err) => {
         console.log(err);
