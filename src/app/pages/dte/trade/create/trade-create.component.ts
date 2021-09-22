@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-trade-create',
@@ -60,7 +61,8 @@ export class TradeCreateComponent {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private tradeProgramService: TradeProgramService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();

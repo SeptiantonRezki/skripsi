@@ -15,6 +15,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ImportAudienceDialogComponent } from '../../audience/import/import-audience-dialog.component';
 import { IdbService } from 'app/services/idb.service';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-coin-disburstment-create',
@@ -102,7 +103,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isEdit = params[1].path === 'edit' ? true : false;

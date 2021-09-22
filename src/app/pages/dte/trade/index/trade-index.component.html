@@ -110,7 +110,7 @@
 
         <ngx-datatable-column name="Dana" prop="budget">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.budget | rupiahFormater}}
+            {{row.budget_format_currency}}
           </ng-template>
         </ngx-datatable-column>
 

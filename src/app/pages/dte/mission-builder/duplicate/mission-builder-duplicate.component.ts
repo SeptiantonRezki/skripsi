@@ -12,6 +12,7 @@ import { DialogMisiDuplicateComponent } from "./dialog-misi-duplicate/dialog-mis
 import { DialogPopUpNotifDuplicateComponent } from "./dialog-pop-up-notif-duplicate/dialog-pop-up-notif-duplicate.component";
 import { DialogPushNotifDuplicateComponent } from "./dialog-push-notif-duplicate/dialog-push-notif-duplicate.component";
 import { DialogWaktuTungguDuplicateComponent } from "./dialog-waktu-tunggu-duplicate/dialog-waktu-tunggu-duplicate.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-mission-builder-duplicate',
@@ -57,6 +58,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
+    private ls: LanguagesService,
   ) {
     // this.actions = [];
     this.hierarchialGraph = {

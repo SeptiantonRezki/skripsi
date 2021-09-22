@@ -146,6 +146,7 @@ import { CoinDisburstmentEditComponent } from './coin-disburstment/edit/coin-dis
 import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exchange/coin-disburstment-exchange.component';
 import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-exchange-coin/import-exchange-coin.component';
 import { BackgroundMisiComponent } from './template/dialog/background-misi/background-misi.component';
+import { NgxMaskModule } from "ngx-mask";
 
 
 export const customCurrencyMaskConfig = {
@@ -213,6 +214,7 @@ export const MY_FORMATS = {
     LightboxModule,
     NgxGraphModule,
     PipesModule,
+    NgxMaskModule.forRoot(),
   ],
   declarations: [
     TemplateIndexComponent,

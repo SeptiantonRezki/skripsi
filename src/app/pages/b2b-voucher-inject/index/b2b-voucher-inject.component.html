@@ -57,7 +57,7 @@
 
         <ngx-datatable-column name="{{ ls.locale.cn_reward.inject_b2b_voucher.text6 }}" prop="nominal">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.total_value | rupiahFormater}}
+            {{ row.total_value_format_curency }}
           </ng-template>
         </ngx-datatable-column>
 
