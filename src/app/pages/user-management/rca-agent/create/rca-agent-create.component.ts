@@ -512,7 +512,7 @@ export class RcaAgentCreateComponent implements OnInit {
         let body = {
           name: this.formRcaAgent.get('name').value,
           email: this.formRcaAgent.get('email').value,
-          area_id: area_id,
+          area_id: area_id && area_id[0] ? area_id[0] : area_id,
           username: this.formRcaAgent.get('username').value,
           position_code: this.formRcaAgent.get('position').value,
           // password: this.formRcaAgent.get('password').value,
