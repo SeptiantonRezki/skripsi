@@ -51,7 +51,16 @@
       "active": "Aktif",
       "inactive": "Tidak Aktif",
       "search": "Cari",
-      "today": "Hari ini"
+      "today": "Hari ini",
+      "all": "Semua",
+      "delete_retailer": "Hapus Retailer",
+      "delete_wholesaler": "Hapus Wholesaler",
+      "delete_voucher": "Hapus Voucher",
+      "order_id_payment": "Order ID Pembayaran",
+      "date_redeem": "Tanggal Penukaran",
+      "invoice_redeem": "Invoice Penukaran",
+      "edit_status_voucher": "Ubah Status Voucher",
+      "delete_salestree": "Hapus Salestree"
     },
     "button": {
       "save": "Simpan",
@@ -83,7 +92,36 @@
       "file_browse_label": "Tarik File kesini atau Pilih File",
       "file_unselected_warn": "Tidak ada File yang dipilih",
       "mandatory_text": "Harus diisi",
-      "data_not_found": "Data tidak ditemukan"
+      "data_not_found": "Data tidak ditemukan",
+      "text1": "Data berhasil dihapus",
+      "text2": "Data berhasil diubah",
+      "text3": "Non-aktifkan Admin Principal",
+      "text4": "Apakah anda yakin untuk menon-aktifkan data yang telah dipilih?",
+      "text5": "Nonaktifkan",
+      "text6": "Tidak ada admin principal yang dipilih",
+      "text7": "Apakah anda yakin untuk menghapus Retailer ini?",
+      "text8": "File berhasil diimport",
+      "text9": "Apakah anda yakin untuk menghapus Wholesaler ini?",
+      "text10": "Apakah anda yakin untuk menghapus voucher ini?",
+      "text11": "Terjadi Kesalahan Pencarian",
+      "text12": "Jumlah mitra yang dipilih tidak boleh kosong",
+      "text13": "Anda Tidak Memiliki Hak Akses untuk hal ini!",
+      "text14": "Terjadi kesalahan saat Export File",
+      "text15": "Terjadi kesalahan saat Import File",
+      "text16": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.",
+      "text17": "Semua row tidak valid",
+      "text18": "Ekstensi File wajib XLS!",
+      "text19": "Anda Tidak Memilik Hak Akses untuk Approval!",
+      "text20": "Apakah anda yakin untuk merubah status voucher ini menjadi {{ status }}",
+      "text21": "Voucher sedang direview",
+      "text22": "Inject Voucher sedang direview",
+      "text23": "Batasan Pembelian Minimum berdasarkan Produk harus diisi",
+      "text24": "Apakah anda yakin untuk melakukan {{ status }} B2C Voucher berikut?",
+      "text25": "{{ status }} berhasil",
+      "text26": "Lengkapi bagian yang harus diisi!",
+      "text27": "Pilih audience untuk di export!",
+      "text28": "Terdapat duplikat sales tree, mohon periksa kembali data anda!",
+      "text29": "Apakah anda yakin untuk menghapus Salestree {{ index }}?"
     }
   },
   "login": {
@@ -97,7 +135,8 @@
     "text8": "Buat dan bagikan misi kepada SRC sesuai trade program berjalan",
     "text9": "Sebarkan spanduk online dan notifikasi kepada retailer maupun konsumen",
     "text10": "Ingat Saya",
-    "text11": "Lupa kata sandi?"
+    "text11": "Lupa kata sandi?",
+    "text12": "Akun Anda tidak Aktif! Harap hubungi Admin!"
   },
   "dashboard": {
     "dashboard1": "Welcome to Dashboard"
