@@ -53,7 +53,16 @@
       "active": "Active",
       "inactive": "Inactive",
       "search": "Search",
-      "today": "Today"
+      "today": "Today",
+      "all": "Semua",
+      "delete_retailer": "Delete Retailer",
+      "delete_wholesaler": "Delete Wholesaler",
+      "delete_voucher": "Delete Voucher",
+      "order_id_payment": "Payment Order ID",
+      "date_redeem": "Redemption Date",
+      "invoice_redeem": "Redemption Invoice",
+      "edit_status_voucher": "Change Voucher Status",
+      "delete_salestree": "Delete Sales tree"
     },
     "button": {
       "save": "Save",
@@ -85,7 +94,36 @@
       "file_browse_label": "Drag a File Here or Select a File",
       "file_unselected_warn": "No File Selected",
       "mandatory_text": "Required Field",
-      "data_not_found": "Data not found"
+      "data_not_found": "Data not found",
+      "text1": "Data deleted successfully",
+      "text2": "Data changed successfully",
+      "text3": "Disabled Main Admin",
+      "text4": "Are you sure to disable the selected data?",
+      "text5": "Disable",
+      "text6": "No main admin selected",
+      "text7": "Are you sure you want to delete this Retailer?",
+      "text8": "File imported successfully",
+      "text9": "Are you sure you want to delete this Wholesaler?",
+      "text10": "Are you sure to delete this voucher?",
+      "text11": "Search Error Occurred",
+      "text12": "The number of selected partners cannot be empty",
+      "text13": "You Do Not Have Access to this Right!",
+      "text14": "An error occurred while exporting the file",
+      "text15": "An error occurred while Importing File",
+      "text16": "Failed to upload, the uploaded file did not match. Please check again your files.",
+      "text17": "All rows are invalid",
+      "text18": "Required XLS File Extension!",
+      "text19": "You Do Not Have Access to Approval Right!",
+      "text20": "Are you sure to change the status of this voucher to {{ status }}",
+      "text21": "Vouchers are being reviewed",
+      "text22": "Inject Voucher is being reviewed",
+      "text23": "Minimum Purchase Limit by Product is required",
+      "text24": "Are you sure to do the following {{ status }} B2C Voucher?",
+      "text25": "{{ status }} successful",
+      "text26": "Complete the required fields!",
+      "text27": "Select the audience to export!",
+      "text28": "There is a duplicate sales tree, please check again your data!",
+      "text29": "Are you sure you want to delete Sales tree {{ index }}?"
     }
   },
   "login": {
@@ -99,7 +137,8 @@
     "text8": " Create and share missions to SRC conform to the running trade program",
     "text9": "Share online banners and notifications to retailers and consumers",
     "text10": "Remember Me",
-    "text11": "Forgot Password?"
+    "text11": "Forgot Password?",
+    "text12": "Your account is disabled! Please contact Admin!"
   },
   "dashboard": {
     "dashboard1": "Welcome to Dashboard"
