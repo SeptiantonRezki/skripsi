@@ -363,32 +363,32 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+                <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name" [sortable]="true">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.manajamen_barang_sku.manaajemen-koin.text7 }}" prop="code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="true">
+                <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner" [sortable]="true">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.owner || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.classification || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Kode WS" prop="ws_code" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="ws_code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nama WS" prop="ws_name" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="ws_name" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_name || '-'}}</span>
                   </ng-template>
@@ -413,13 +413,13 @@
                 *ngIf="isDetail && detailVoucher.status !== 'need-approval' && !permission.b2b_approval">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSavePanelRetailer()">
-                  SIMPAN
+                  {{ ls.locale.global.button.save }}
                 </button>
               </div>
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Penukaran & Pembayaran" *ngIf="isDetail">
+        <mat-tab label="{{ ls.locale.cn_reward.b2b_voucher.text14 }}" *ngIf="isDetail">
           <app-redeem-list></app-redeem-list>
         </mat-tab>
       </mat-tab-group>

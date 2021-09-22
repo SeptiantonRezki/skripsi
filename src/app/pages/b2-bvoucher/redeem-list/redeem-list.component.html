@@ -82,25 +82,25 @@
     [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
     [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-    <ngx-datatable-column name="Nama Toko" prop="name">
+    <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Kode Agen" prop="code">
+    <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.label }}" prop="code">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{row.code}}
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Nama Pemilik" prop="owner">
+    <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{row.owner}}
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Klasifikasi" prop="classification">
+    <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{row.classification}}
       </ng-template>
@@ -112,26 +112,26 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Nama WS" prop="wholesaler_name">
+    <ngx-datatable-column name="{{ ls.locale.global.menu.wholasaler }}" prop="wholesaler_name">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name }}</ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Nilai Voucher" prop="nominal">
+    <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}" prop="nominal">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{row.nominal | rupiahFormater }}
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Tanggal Penukaran" prop="available_at">
+    <ngx-datatable-column name="{{ ls.locale.global.label.date_redeem }}" prop="available_at">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.available_at | date: 'dd/MM/yyyy
         HH:mm:ss'}}</ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Invoice Penukaran" prop="available_at">
+    <ngx-datatable-column name="{{ ls.locale.global.label.invoice_redeem }}" prop="available_at">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.invoice}}</ng-template>
     </ngx-datatable-column>
     
-    <ngx-datatable-column name="Order ID Pembayaran" prop="order_id">
+    <ngx-datatable-column name="{{ ls.locale.global.label.order_id_payment }}" prop="order_id">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_id}}</ng-template>
     </ngx-datatable-column>
 

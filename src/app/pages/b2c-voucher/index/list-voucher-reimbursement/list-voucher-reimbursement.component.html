@@ -95,7 +95,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Voucher B2C" prop="voucher_name">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text2 }} B2C" prop="voucher_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit">{{row.voucher_name}} </a>
           </ng-template>
@@ -113,25 +113,25 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Area" prop="area">
+        <ngx-datatable-column name="{{ ls.locale.global.area.area }}" prop="area">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.area}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Regional" prop="region">
+        <ngx-datatable-column name="{{ ls.locale.global.area.regional }}" prop="region">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.region}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Opsi Penukaran" prop="type_name">
+        <ngx-datatable-column name="{{ ls.locale.dte.coin_disbursement.text14 }}" prop="type_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.type_name}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Voucher B2B" prop="business_voucher_name">
+        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text2 }} B2B" prop="business_voucher_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a>{{row.business_voucher_name}} </a>
           </ng-template>
@@ -149,7 +149,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Request" prop="request_date">
+        <ngx-datatable-column name="{{ ls.locale.dte.approval_coin_adjustment.text6 }}" prop="request_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.request_date | date: 'dd/MM/yyyy'}}
           </ng-template>

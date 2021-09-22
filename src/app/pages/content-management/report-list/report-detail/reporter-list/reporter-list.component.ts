@@ -10,6 +10,7 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { PagesName } from "app/classes/pages-name";
 import { ReportListService } from "app/services/content-management/report-list.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-reporter-list',
@@ -43,7 +44,8 @@ export class ReporterListComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private reportListService: ReportListService
+    private reportListService: ReportListService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
