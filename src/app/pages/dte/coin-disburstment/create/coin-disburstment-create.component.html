@@ -24,8 +24,7 @@
               </div>
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="number" placeholder="Coin Valuation, 1 Coin = " formControlName="coin_valuation"
-                    name="coin_valuation">
+                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="Coin Valuation, 1 Coin = " formControlName="coin_valuation" name="coin_valuation">
                   <mat-error
                     *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
                     Coin Valuation harus diisi

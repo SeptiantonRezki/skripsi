@@ -146,7 +146,9 @@
     <!-- Butuh Konfirmasi Om Harry -->
     <ngx-datatable-column [width]="200" name="Nominal Penukaran" prop="coin_valuation">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        <span class="row-name">{{(row.coin * row.coin_valuation) | rupiahFormaterWithoutRp}}</span>
+        <span class="row-name">
+          {{ (row.nominal_exchange_format_currency).replace(ls.locale.global.currency,'') }}
+        </span>
       </ng-template>
     </ngx-datatable-column>
 
@@ -177,7 +179,7 @@
 
     <ngx-datatable-column [width]="200" name="Nominal Pembayaran" prop="nominal_pembayaran">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        <span class="row-name">{{row.nominal_pembayaran | rupiahFormater}}</span>
+        <span class="row-name">{{row.nominal_pembayaran_format_currency}}</span>
       </ng-template>
     </ngx-datatable-column>
 

@@ -60,7 +60,7 @@
 
         <ngx-datatable-column name="Total Budget Used" prop="budget" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.budget}}
+            {{row.budget_format_currency}}
           </ng-template>
         </ngx-datatable-column>
 
