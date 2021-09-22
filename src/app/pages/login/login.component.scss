@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .select-lang {
+    .mat-select-value {
+      color: #fff !important;
+    }
+    .mat-form-field-underline {
+      background-color: #fff !important;
+    }
+    .mat-select-arrow {
+      color: #fff !important;
+    }
+  }
+}
