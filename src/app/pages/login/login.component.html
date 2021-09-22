@@ -107,6 +107,23 @@
           </div>
         </div>
       </div>
+      
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <mat-form-field class="w-100-p select-lang">
+          <mat-select class="p-0" [(ngModel)]="language" (selectionChange)="changeSelectedLanguage($event)">
+              <!-- <mat-option value="en">
+                  <div>English</div>
+              </mat-option> -->
+              <mat-option value="id">
+                <div>Bahasa Indonesia</div>
+              </mat-option>
+              <mat-option value="kh">
+                <div>Khmer</div>
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
+    
   </div>
 </div>
