@@ -41,37 +41,37 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Objective" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text5 }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" >{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Description Objective" prop="description">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text6 }}" prop="description">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-description" >{{row.description}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="start_date">
+        <ngx-datatable-column [width]="90" name="{{ ls.locale.global.label.created_at }}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="90" name="Tanggal Berakhir" prop="end_date">
+        <ngx-datatable-column [width]="90" name="{{ ls.locale.call_objective.text4 }}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status Objective" prop="status">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text7 }}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span *ngIf="row.status === 'Not Active'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
             <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
           </ng-template>
         </ngx-datatable-column> 
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

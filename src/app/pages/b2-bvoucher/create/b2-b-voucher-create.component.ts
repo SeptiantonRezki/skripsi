@@ -18,6 +18,7 @@ import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-d
 import { startWith, map } from "rxjs/operators";
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { NullAstVisitor } from '@angular/compiler';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2-b-voucher-create',
@@ -115,7 +116,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;

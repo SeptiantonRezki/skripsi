@@ -14,6 +14,7 @@ import moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportRedeemDialogComponent } from './import-redeem-dialog/import-redeem-dialog.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-redeem-list',
@@ -69,6 +70,7 @@ export class RedeemListComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;

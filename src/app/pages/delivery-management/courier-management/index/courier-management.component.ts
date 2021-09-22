@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { CourierService } from 'app/services/delivery-management/courier.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-courier-management',
@@ -41,7 +42,8 @@ export class CourierManagementComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private courierManagementService: CourierService
+    private courierManagementService: CourierService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     // this.selected = [];

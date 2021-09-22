@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-list-detail-voucher',
@@ -67,7 +68,8 @@ export class ListDetailVoucherComponent implements OnInit {
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];

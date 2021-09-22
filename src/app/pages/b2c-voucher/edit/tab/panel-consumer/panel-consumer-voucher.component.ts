@@ -18,6 +18,7 @@ import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-consumer-voucher',
@@ -166,6 +167,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     private dialog: MatDialog,
     private bannerService: BannerService,
     private adapter: DateAdapter<any>,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;

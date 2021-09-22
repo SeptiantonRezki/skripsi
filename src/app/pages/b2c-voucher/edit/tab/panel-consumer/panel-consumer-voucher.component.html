@@ -394,13 +394,13 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.code ? row.code : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Owner" prop="owner">
+            <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.owner ? row.owner : '-'}}
               </ng-template>
@@ -419,7 +419,7 @@
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_panel_customer">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onSave()">
-        SIMPAN
+        {{ ls.locale.global.button.save }}
       </button>
     </div>
 
