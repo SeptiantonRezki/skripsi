@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import id from '../../../assets/languages/id.json';
-import kh from '../../../assets/languages/kh.json';
+import km from '../../../assets/languages/km.json';
 import en from '../../../assets/languages/en.json';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -34,7 +34,7 @@ export class LanguagesService {
       return;
       case 'en': this.locale = en;
       return;
-      case 'kh': this.locale = kh;
+      case 'km': this.locale = km;
       return;
     }
   }

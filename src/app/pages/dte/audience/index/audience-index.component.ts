@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from '../../../../services/dte/audience.service';
 import { DataService } from '../../../../services/data.service';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-audience-index',
@@ -41,7 +42,8 @@ export class AudienceIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

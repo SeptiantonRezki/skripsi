@@ -62,7 +62,8 @@
       "date_redeem": "Tanggal Penukaran",
       "invoice_redeem": "Invoice Penukaran",
       "edit_status_voucher": "Ubah Status Voucher",
-      "delete_salestree": "Hapus Salestree"
+      "delete_salestree": "Hapus Salestree",
+      "all_status": "Semua Status"
     },
     "button": {
       "save": "Simpan",
@@ -207,13 +208,13 @@
       "text1": "Tergabung dalam Paguyuban",
       "text2": "Nama Paguyuban",
       "text3": "Internal Classification",
-      "tittle4": "Order Online",
-      "tittle5": "Daftar Consumer",
-      "tittle6": "Referral Code yang diinput",
-      "tittle7": "Customer Code",
-      "tittle8": "Customer Name",
-      "tittle9": "Customer Type",
-      "tittle10": "Tanggal Input Referral Code"
+      "text4": "Order Online",
+      "text5": "Daftar Consumer",
+      "text6": "Referral Code yang diinput",
+      "text7": "Customer Code",
+      "text8": "Customer Name",
+      "text9": "Customer Type",
+      "text10": "Tanggal Input Referral Code"
     },
     "medal_badge": {
       "text1": "Medal",
@@ -244,7 +245,7 @@
   "principal_partnership": {
     "text1": "Principal Partnership",
     "text2": "Daftar Undian YBKS",
-    "tex3t": "Nama Grup"
+    "text3": "Nama Grup"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -574,8 +575,8 @@
       "text12": "Audience/Group",
       "text13": "Lihat",
       "text14": "Request File",
-      "text15": "Detail Pengaturn Jadwal Trade Program",
-      "text16": "Nama Pengatur Jadwal Program Dagang",
+      "text15": "Detail Pengaturan Jadwal Trade Program",
+      "text16": "Nama Pengatur Jadwal Trade Program",
       "text17": "Estimasi Budget",
       "text18": "Permintaan Dana",
       "text19": "Nilai Koin Tugas Terkirim",

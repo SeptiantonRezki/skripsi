@@ -14,6 +14,7 @@ import { ImportAccessCashierDialogComponent } from '../import-access-cashier-dia
 import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-index',
@@ -65,10 +66,10 @@ export class RetailerIndexComponent {
   chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
 
-  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
   listStatusChatBot: any[] = [
-    { name: 'Semua Status', value: '-1' },
+    { name: this.ls.locale.global.label.all_status, value: '-1' },
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
@@ -84,13 +85,13 @@ export class RetailerIndexComponent {
 
   gsr: FormControl = new FormControl('');
   listGSR: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'OFF', value: '0' },
     { name: 'ON', value: '1' }
   ];
   gsm_pl: FormControl = new FormControl('');
   listGSM: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'OFF', value: '0' },
     { name: 'ON', value: '1' }
   ];
@@ -103,7 +104,8 @@ export class RetailerIndexComponent {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

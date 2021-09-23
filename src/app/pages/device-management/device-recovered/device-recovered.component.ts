@@ -11,6 +11,7 @@ import { isArray } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-device-recovered',
@@ -46,7 +47,8 @@ export class DeviceRecoveredComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private customerCareService: CustomerCareService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

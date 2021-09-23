@@ -22,11 +22,11 @@
         <div class="p-24" fxLayout="column">
           <div fxLayout="row">
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
-              <input matInput type="text" placeholder="Nama Supplier" formControlName="namasupplier" autocomplete="off" #namasupplier *ngIf="!isDetail">
-              <input matInput type="text" placeholder="Nama Supplier" formControlName="namasupplier" autocomplete="off" readonly *ngIf="isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.produk_prinsipal.text4 }}" formControlName="namasupplier" autocomplete="off" #namasupplier *ngIf="!isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.produk_prinsipal.text4 }}" formControlName="namasupplier" autocomplete="off" readonly *ngIf="isDetail">
               <mat-error
                 *ngIf="createForm.controls['namasupplier'].hasError('required') && createForm.controls['namasupplier'].touched ">
-                Nama Supplier harus diisi.
+                {{ ls.locale.produk_prinsipal.text4 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -38,46 +38,46 @@
                   {{product.name}}
                   <mat-icon matChipRemove *ngIf="productRemovable">cancel</mat-icon>
                 </mat-chip>
-                <input matInput placeholder="Produk yang dijual" [matChipInputFor]="chipList"
+                <input matInput placeholder="{{ ls.locale.produk_prinsipal.text5 }}" [matChipInputFor]="chipList"
                   [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
                   (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" *ngIf="!isDetail">
-                  <input matInput placeholder="Produk yang dijual" [matChipInputFor]="chipList"
+                  <input matInput placeholder="{{ ls.locale.produk_prinsipal.text5 }}" [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
                     (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" readonly *ngIf="isDetail">
               </mat-chip-list>
               <mat-error *ngIf="products.length == 0">
-                Produk yang dijual harus diisi.
+                {{ ls.locale.produk_prinsipal.text5 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of productOptions | async" [value]="option.name"
                 (click)="addProductChip(option)" [disabled]="option.disabled">
                 <span *ngIf="isProductFound">{{option.name}}</span>
-                <span *ngIf="!isProductFound" title="{{option.text}}">HASIL PENCARIAN untuk
-                  <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan, Mohon hubungi tim
-                  Digital Care untuk pertanyaan ini.</span>
+                <span *ngIf="!isProductFound" title="{{option.text}}">{{ ls.locale.bantuan.text7 }}
+                  <span style="font-weight: 800;">"{{option.value}}"</span> {{ ls.locale.produk_prinsipal.text7a }}
+                  {{ ls.locale.produk_prinsipal.text7b }}</span>
               </mat-option>
             </mat-autocomplete>
           </div>
           <div fxLayout="column" class="mb-8">
-            <label class="field-label" *ngIf="createForm.controls['alamat'].value">Alamat</label>
+            <label class="field-label" *ngIf="createForm.controls['alamat'].value">{{ ls.locale.global.label.address }}</label>
             <div fxLayout="row" >
               <div class="body-layout" fxFlex="100" fxFlex.gt-sm="50">
-                <textarea matInput class="body-text" placeholder="Alamat" formControlName="alamat" wrap="soft" #alamat *ngIf="!isDetail"></textarea>
-                <textarea matInput class="body-text" placeholder="Alamat" formControlName="alamat" wrap="soft" readonly *ngIf="isDetail"></textarea>
+                <textarea matInput class="body-text" placeholder="{{ ls.locale.global.label.address }}" formControlName="alamat" wrap="soft" #alamat *ngIf="!isDetail"></textarea>
+                <textarea matInput class="body-text" placeholder="{{ ls.locale.global.label.address }}" formControlName="alamat" wrap="soft" readonly *ngIf="isDetail"></textarea>
               </div>
             </div>
             <mat-error *ngIf="createForm.controls['alamat'].hasError('required') && createForm.controls['alamat'].touched">
-              Alamat harus diisi.
+              {{ ls.locale.global.label.address }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light">
-              <input matInput type="text" placeholder="Nomor Telepon" formControlName="telepon" minlength="6" #telepon *ngIf="!isDetail">
-              <input matInput type="text" placeholder="Nomor Telepon" formControlName="telepon" minlength="6" readonly *ngIf="isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="telepon" minlength="6" #telepon *ngIf="!isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="telepon" minlength="6" readonly *ngIf="isDetail">
               <mat-error
                 *ngIf="createForm.controls['telepon'].hasError('required') && createForm.controls['telepon'].touched">
-                Nomor Telepon harus diisi.
+                {{ ls.locale.global.label.phone_number }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <mat-error
                 *ngIf="createForm.get('telepon').errors?.minlength && createForm.controls['telepon'].touched">
@@ -87,11 +87,11 @@
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light">
-              <input matInput type="text" placeholder="Nomor Ponsel" formControlName="ponsel" minlength="10" #ponsel *ngIf="!isDetail">
-              <input matInput type="text" placeholder="Nomor Ponsel" formControlName="ponsel" minlength="10" readonly *ngIf="isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="ponsel" minlength="10" #ponsel *ngIf="!isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="ponsel" minlength="10" readonly *ngIf="isDetail">
               <mat-error
                 *ngIf="createForm.controls['ponsel'].hasError('required') && createForm.controls['ponsel'].touched">
-                Nomor Ponsel harus diisi.
+                {{ ls.locale.global.label.phone_number }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <mat-error
                 *ngIf="createForm.get('ponsel').errors?.minlength && createForm.controls['ponsel'].touched">
@@ -100,17 +100,17 @@
             </mat-form-field>
           </div>
           <div fxLayout="column">
-            <label class="field-label" *ngIf="catatanControl.value">Catatan</label>
+            <label class="field-label" *ngIf="catatanControl.value">{{ ls.locale.global.label.note }}</label>
             <div fxLayout="row" >
               <div class="body-layout" fxFlex="100" fxFlex.gt-sm="50">
-                <textarea matInput class="body-text" placeholder="Catatan" [formControl]="catatanControl" wrap="soft" *ngIf="!isDetail"></textarea>
-                <textarea matInput class="body-text" placeholder="Catatan" [formControl]="catatanControl" wrap="soft" readonly *ngIf="isDetail"></textarea>
+                <textarea matInput class="body-text" placeholder="{{ ls.locale.global.label.note }}" [formControl]="catatanControl" wrap="soft" *ngIf="!isDetail"></textarea>
+                <textarea matInput class="body-text" placeholder="{{ ls.locale.global.label.note }}" [formControl]="catatanControl" wrap="soft" readonly *ngIf="isDetail"></textarea>
               </div>
             </div>
           </div>
           <div class="confirm pt-8 pb-24" fxLayout="row" *ngIf="!isDetail">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
-              SIMPAN
+              {{ ls.locale.global.button.save }}
             </button>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
 import { IdleService } from 'app/services/idle.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import moment from 'moment';
 import { forkJoin, Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -68,7 +69,8 @@ export class CoinAdjustmentApprovalComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private userIdle: IdleService,
     private dialog: MatDialog,
-    private coinAdjustmentApprovalService: CoinAdjustmentApprovalService
+    private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
