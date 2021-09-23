@@ -33,10 +33,10 @@ export class ListVoucherReimbursementComponent implements OnInit {
 
   keyUp = new Subject<string>();
   statusList: any[] = [
-    { name: 'Semua', value: '' },
-    { name: 'Transfer Bank', value: 'transfer-bank' },
+    { name: this.ls.locale.global.label.all, value: '' },
+    { name: this.ls.locale.dte.coin_disbursement.text15, value: 'transfer-bank' },
     { name: 'Pojok Bayar', value: 'pojok-bayar' },
-    { name: 'B2B Voucher', value: 'b2b-voucher' },
+    { name: this.ls.locale.cn_reward.b2b_voucher, value: 'b2b-voucher' },
     { name: 'Coin', value: 'coin' },
   ];
 

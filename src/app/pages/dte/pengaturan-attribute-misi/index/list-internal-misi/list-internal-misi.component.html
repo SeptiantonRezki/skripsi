@@ -5,15 +5,15 @@
     type="button"
     (click)="openDialogInternalMisi()"
   >
-    <mat-icon>add</mat-icon> BUAT
+    <mat-icon>add</mat-icon> {{ ls.locale.dte.pengaturan_attribute_misi.text7 }}
   </button>
   <div class="table-wrapper">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-      <h2 class="pl-8">Internal Kategori</h2>
+      <h2 class="pl-8">{{ ls.locale.dte.pengaturan_attribute_misi.text4 }}</h2>
       <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
-          <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
         </mat-form-field>
       </div>
     </div>
@@ -23,7 +23,7 @@
       [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
       (sort)="onSort($event)" (select)="onSelect($event)">
 
-      <ngx-datatable-column name="Nama" prop="fullname">
+      <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="fullname">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <!-- <a class="direct-edit" (click)="directDetail(row)"> -->
             {{row.name}}
@@ -31,7 +31,7 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [width]="100" name="Status" prop="status">
+      <ngx-datatable-column [width]="100" name="{{ ls.locale.global.label.status }}" prop="status">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <div class="name-container">
             <p class="status text-truncate h6 p-4"
@@ -43,7 +43,7 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [width]="130" name="Tindakan" headerClass="textright" [sortable]="false">
+      <ngx-datatable-column [width]="130" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
           style="justify-content: center !important">
           <div class="button-row" style="margin-left: -10px">

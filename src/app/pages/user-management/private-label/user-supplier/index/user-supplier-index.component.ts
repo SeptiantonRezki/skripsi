@@ -9,6 +9,7 @@ import { PagesName } from 'app/classes/pages-name';
 
 import { Endpoint } from '../../../../../classes/endpoint';
 import { UserSupplierService } from 'app/services/user-management/private-label/user-supplier.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-supplier-index',
@@ -48,6 +49,7 @@ export class UserSupplierIndexComponent implements OnInit {
     private userSupplierService: UserSupplierService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
     this.selected = [];

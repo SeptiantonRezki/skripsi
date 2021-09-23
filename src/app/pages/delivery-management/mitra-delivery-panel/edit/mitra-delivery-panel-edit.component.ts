@@ -12,6 +12,7 @@ import { ImportPanelMitraDialogComponent } from '../import-panel-mitra-dialog/im
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-mitra-delivery-panel-edit',
@@ -66,7 +67,8 @@ export class MitraDeliveryPanelEditComponent implements OnInit {
     private mitraPanelService: MitraPanelService,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];

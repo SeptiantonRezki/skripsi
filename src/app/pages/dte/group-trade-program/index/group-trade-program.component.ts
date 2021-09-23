@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-group-trade-program',
@@ -39,7 +40,8 @@ export class GroupTradeProgramComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.permission = this.roles.getRoles('principal.dtegrouptradeprogram')
