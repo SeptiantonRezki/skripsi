@@ -139,6 +139,32 @@
     "text11": "Lupa kata sandi?",
     "text12": "Akun Anda tidak Aktif! Harap hubungi Admin!"
   },
+  "reset_password": {
+    "text1": "Atur Ulang Kata Sandi",
+    "text2": "Kata Sandi Baru",
+    "text3": "Kata sandi baru harus diisi",
+    "text4": "Konfirmasi Kata Sandi Baru",
+    "text5": "Konfirmasi Kata Sandi Baru harus diisi",
+    "text6": "Aplikasi ini sudah menggunakan Single Sign On. Anda dapat melakukan reset password di Password Manager.",
+    "text7": "Atur ulang kata sandi berhasil, silakan login kembali",
+    "text8": "Kata sandi dengan konfirmasi kata sandi tidak sesuai"
+  },
+  "forgot_password": {
+    "text1": "Lupa Kata Sandi",
+    "text2": "Kembali ke",
+    "text3": "Login",
+    "text4": "Email harus diisi"
+  },
+  "device_authentication": {
+    "text1": "Verifikasi Akun",
+    "text2": "Masukan 6 Digit Kode Verifikasi yang dikirim melalui",
+    "text3": "Sisa Waktu Penggunaan Kode Verifikasi",
+    "text4": "Verifikasi Perangkat",
+    "text5": "Mengirim...",
+    "text6": "Kirim Ulang Kode Verifikasi",
+    "text7": "Akun Anda tidak Aktif! Harap hubungi Admin!",
+    "text8": "Gagal mengotorisasi OTP silahkan coba lagi"
+  },
   "dashboard": {
     "dashboard1": "Welcome to Dashboard"
   },
@@ -1081,5 +1107,4 @@
       "text3": "Data Berhasil Disimpan"
     }
   }
-
 }

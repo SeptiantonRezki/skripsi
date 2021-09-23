@@ -11,6 +11,7 @@ import {
   Params
 } from "../../../../node_modules/@angular/router";
 import { environment } from "environments/environment";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-forgot-password",
@@ -28,7 +29,8 @@ export class ForgotPasswordComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private dialogService: DialogService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private ls: LanguagesService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -85,7 +87,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.dialogService.openSnackBar({ message: res.status });
       });
     } else {
-      this.dialogService.openSnackBar({ message: "Email harus diisi" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.forgot_password.text4 });
     }
   }
 }
