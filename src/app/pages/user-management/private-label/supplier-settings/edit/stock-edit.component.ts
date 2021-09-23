@@ -180,12 +180,14 @@ export class StockEditComponent implements OnInit, OnDestroy {
   loadChecklistGeotree() {
       this.pagination.search = '';
       this.dataService.showLoading(true);
-      this.stockService.check({ product_id: this.stockId }).subscribe(res => {
-        console.log('res', res);
-        this.checkedDataIds = (res.data || []).map(item => item.area_id);
-        this.refineSelectedRow();
-        this.dataService.showLoading(false);
-    });
+      if (this.stockData) {
+        this.stockService.check({ product_id: this.stockData.product_id }).subscribe(res => {
+          console.log('res data checked', res);
+          this.checkedDataIds = (res.data || []).map(item => item.area_id);
+          this.refineSelectedRow();
+        });
+      }
+      this.dataService.showLoading(false);
   }
 
   getZoneList() {
@@ -342,7 +344,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
 
       this.dataService.showLoading(true);
       let body = {
-        product_id: this.stockId,
+        product_id: this.stockData.product_id,
         area_id: this.selected.map(item => { return item.id; })
       };
 
