@@ -44,8 +44,9 @@ export class BaseInterceptor implements HttpInterceptor {
   authenticateRequest(request: HttpRequest<any>) {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
     if (token) {
+      const country_code = localStorage.getItem('user_country');
       const duplicate = request.clone({
-        headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', this.ls.selectedLanguages)
+        headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', country_code)
       });
       return duplicate;
     }
@@ -70,18 +71,22 @@ export class BaseInterceptor implements HttpInterceptor {
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
+        const country_code = localStorage.getItem('user_country');
+
         if (req.method == "POST") {
           this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
         }
 
         if (err.error === "Tidak ada otorisasi") {
           window.localStorage.clear();
+          localStorage.setItem('user_country', country_code);
           this.router.navigate(["login"]);
           this.matDialog.closeAll();
           this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
         }
 
         window.localStorage.clear();
+        localStorage.setItem('user_country', country_code);
         this.router.navigate(["login"]);
         this.matDialog.closeAll();
         this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error.message}` });

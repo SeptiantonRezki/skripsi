@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -268,6 +268,12 @@ export function HttpLoaderFactory(http: HttpClient) {
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initLanguage,
+      multi: true,
+      deps: [LanguagesService]
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -279,4 +285,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 })
 export class AppModule {
   constructor(protected _googleAnalyticsService: GoogleAnalyticsService) { }
+}
+
+export function initLanguage(lang: LanguagesService) {
+  return (): Promise<any> => {
+    return lang.initLang();
+  };
 }
