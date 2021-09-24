@@ -946,6 +946,12 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
         autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
+      },
+      voucher_private_label: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier`,
+        detail_used: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/used`,
+        detail_notused: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/notused`,
+        redeem_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/redeem`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
