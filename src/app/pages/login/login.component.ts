@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCountry();
     let authCode = this.route.snapshot.queryParamMap.get('code');
     if(authCode) {
       this.internalSigningIn = true;
@@ -134,16 +133,6 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('user_country', event.value);
       this.translate.use(event.value);
     }
-  }
-
-  getCountry(){
-    this.generalService.getCountry().subscribe(
-      res => {
-      const code = res.data.country_code.toLowerCase();
-      localStorage.setItem('user_country', code);
-    }, err => {
-      console.error(err);
-    })
   }
 
   async qiscusLoginOrRegister(profile: any) {
