@@ -31,7 +31,7 @@ import { IdbService } from "app/services/idb.service";
 import {CallObjModel} from 'app/pages/call-objective/call-objective.model';
 import { CallObjectiveSerive } from '../../../services/call-objective/call-objective.service';
 import { ImportObjectiveDialogComponent } from '../import-component/import-objective-dialog.component';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-call-objective.component',

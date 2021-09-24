@@ -100,7 +100,7 @@
             </ngx-datatable>
           </div>
         </mat-tab>
-        <mat-tab label="Pengaturan">
+        <mat-tab label="{{ ls.locale.pengaturan.text }}">
           <div class="table-wrapper p-24">
             <form>
               <div class="" fxLayout="row">
@@ -112,21 +112,21 @@
               <div class="confirm" fxLayout="row" fxLayoutGap="20px">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
                   (click)="submit('setting')">
-                  SIMPAN
+                  {{ ls.locale.global.button.save }}
                 </button>
               </div>
               <div class="pt-16" fxLayout="column">
                 <h2>Pemulihan semua Perangkat</h2>
                 <div class="" fxLayout="row">
                   <mat-form-field fxFlex="50" class="is-light">
-                    <input matInput placeholder="Alasan" type="text" [formControl]="reasonRecovery">
+                    <input matInput placeholder="{{ ls.locale.dte.template_tugas.text35 }}" type="text" [formControl]="reasonRecovery">
                   </mat-form-field>
                 </div>
               </div>
               <div class="confirm" fxLayout="row" fxLayoutGap="20px">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
                   (click)="submit('recovery')">
-                  SIMPAN
+                  {{ ls.locale.global.button.save }}
                 </button>
               </div>
             </form>

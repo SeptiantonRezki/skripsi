@@ -26,17 +26,17 @@
         [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="Email" prop="email" summary-template="activeCell">
+        <ngx-datatable-column [width]="200" name="{{ ls.locale.global.label.email }}" prop="email" summary-template="activeCell">
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="200" name="Phone" prop="phone" summary-template="activeCell">
+        <ngx-datatable-column [width]="200" name="{{ ls.locale.global.label.phone }}" prop="phone" summary-template="activeCell">
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="200" name="Jumlah Layanan" prop="services_count" summary-template="activeCell">
+        <ngx-datatable-column [width]="200" name="{{ ls.locale.delivery_management.daftar_kurir.text2 }}" prop="services_count" summary-template="activeCell">
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="100" name="Status" prop="status">
@@ -48,8 +48,8 @@
                 {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
               </p>
               <mat-menu #appMenu="matMenu">
-                <button mat-menu-item (click)="updateStatus(row, 'active')">Aktif</button>
-                <button mat-menu-item (click)="updateStatus(row, 'inactive')">Tidak Aktif</button>
+                <button mat-menu-item (click)="updateStatus(row, 'active')">{{ ls.locale.global.label.active }}</button>
+                <button mat-menu-item (click)="updateStatus(row, 'inactive')">{{ ls.locale.global.label.inactive }}</button>
               </mat-menu>
               <!-- <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"

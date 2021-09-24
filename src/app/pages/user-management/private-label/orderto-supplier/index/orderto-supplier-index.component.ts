@@ -7,7 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { FormGroup, FormBuilder } from "@angular/forms";
-import * as moment from "moment";
+import moment from 'moment';
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 import { GeneratePO } from "app/classes/generate-po";
 import { HttpErrorResponse } from '@angular/common/http';

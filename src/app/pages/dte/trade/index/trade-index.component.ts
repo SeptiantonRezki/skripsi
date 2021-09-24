@@ -8,7 +8,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { Endpoint } from 'app/classes/endpoint';
 
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormGroup, FormBuilder } from '../../../../../../node_modules/@angular/forms';
 import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';

@@ -12,6 +12,7 @@ import {
 } from "../../../../node_modules/@angular/router";
 import { environment } from "environments/environment";
 import { DataService } from "app/services/data.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-reset-password",
@@ -37,7 +38,8 @@ export class ResetPasswordComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -107,12 +109,12 @@ export class ResetPasswordComponent implements OnInit {
     if (this.forgotPasswordForm.valid) {
       let email = this.email.toLowerCase()
       let internal = email.match(/.+@pmintl\.net/) || email.match(/.+@sampoerna\.com/) || email.match(/.+@contracted\.sampoerna\.com/);
-      
-      if(internal) {
-        this.dialogService.openSnackBar({ message: 'Aplikasi ini sudah menggunakan Single Sign On. Anda dapat melakukan reset password di Password Manager.' });
+
+      if (internal) {
+        this.dialogService.openSnackBar({ message: this.ls.locale.reset_password.text6 });
         return;
       }
-      
+
       const password = this.forgotPasswordForm.get("password").value;
       const password_confirmation = this.forgotPasswordForm.get("password_confirmation").value;
 
@@ -126,7 +128,7 @@ export class ResetPasswordComponent implements OnInit {
 
         this.authenticationService.resetPassword(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Atur ulang kata sandi berhasil, silakan login kembali' });
+            this.dialogService.openSnackBar({ message: this.ls.locale.reset_password.text7 });
             this.router.navigate(['login']);
           },
           err => {
@@ -134,7 +136,7 @@ export class ResetPasswordComponent implements OnInit {
           }
         )
       } else {
-        this.dialogService.openSnackBar({ message: 'Kata sandi dengan konfirmasi kata sandi tidak sesuai' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.reset_password.text8 });
       }
     }
   }

@@ -8,7 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { Lightbox } from 'ngx-lightbox';
 
 import * as _ from 'underscore';
-import * as moment from "moment";
+import moment from 'moment';
 import { Config } from 'app/classes/config';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';

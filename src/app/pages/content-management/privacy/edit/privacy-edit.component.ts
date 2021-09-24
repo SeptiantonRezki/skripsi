@@ -26,6 +26,7 @@ export class PrivacyEditComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  countryList: any[] = [];
 
   files: File;
   public options: Object = Config.FROALA_CONFIG;
@@ -41,7 +42,8 @@ export class PrivacyEditComponent {
     this.formPrivacyError = {
       title: {},
       body: {},
-      user: {}
+      user: {},
+      country: {}
     };
 
     this.detailPrivacy = this.dataService.getFromStorage('detail_privacy');
@@ -52,10 +54,12 @@ export class PrivacyEditComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
-      is_notif: [false]
+      is_notif: [false],
+      country: ["", Validators.required],
     });
 
     this.getUserGroups();
+    this.getCountryList();
 
     this.formPrivacy.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formPrivacy, this.formPrivacyError);
@@ -65,7 +69,8 @@ export class PrivacyEditComponent {
       title: this.detailPrivacy.title,
       user: this.detailPrivacy.user,
       body: this.detailPrivacy.body,
-      is_notif: false
+      is_notif: false,
+      country: this.detailPrivacy.country_code
     })
   }
 
@@ -86,6 +91,18 @@ export class PrivacyEditComponent {
     );
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
   removeImage(): void {
     this.files = undefined;
   }
@@ -99,6 +116,7 @@ export class PrivacyEditComponent {
         user: this.formPrivacy.get("user").value,
         type: "privacy-policy",
         is_notif: this.formPrivacy.get('is_notif').value === true ? 1 : 0,
+        country: this.formPrivacy.get("country").value,
       };
 
       this.privacyService.put(body, { content_id: this.detailPrivacy.id }).subscribe(

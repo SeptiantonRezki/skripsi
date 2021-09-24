@@ -6,7 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { Subject, Observable } from 'rxjs';
 import { NewsService } from '../../../../services/newsfeed-management/news.service';
 import { DateAdapter } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ActivatedRoute, Router } from '../../../../../../node_modules/@angular/router';
 import { DataService } from '../../../../services/data.service';
 

@@ -9,8 +9,9 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { isArray } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import * as moment from "moment";
+import moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-device-recovered',
@@ -30,7 +31,7 @@ export class DeviceRecoveredComponent implements OnInit {
 
   keyUp = new Subject<string>();
 
-  @ViewChild("activeCell")
+  @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
@@ -46,7 +47,8 @@ export class DeviceRecoveredComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private customerCareService: CustomerCareService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -66,8 +68,8 @@ export class DeviceRecoveredComponent implements OnInit {
 
   ngOnInit() {
     this.formFilter = this.formBuilder.group({
-      start_date: [""],
-      end_date: [""],
+      start_date: [''],
+      end_date: [''],
     })
     this.getDeviceRecoveredList();
     this.getDeviceRecoverySettings();
@@ -122,7 +124,7 @@ export class DeviceRecoveredComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    console.log('check pagination', this.pagination);
 
     this.customerCareService.getDeviceRecovered(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -168,12 +170,12 @@ export class DeviceRecoveredComponent implements OnInit {
     `
 
     if (submitType === 'setting' && !this.max_retailer.valid) {
-      this.dialogService.openSnackBar({ message: "Periksa Data Pengaturan kembali karena data tidak valid!" });
+      this.dialogService.openSnackBar({ message: 'Periksa Data Pengaturan kembali karena data tidak valid!' });
       return;
     }
 
     if (submitType === 'recovery' && !this.reasonRecovery.valid) {
-      this.dialogService.openSnackBar({ message: "Alasan Harus Diisi, periksa kembali!" });
+      this.dialogService.openSnackBar({ message: 'Alasan Harus Diisi, periksa kembali!' });
       return;
     }
 
@@ -182,7 +184,7 @@ export class DeviceRecoveredComponent implements OnInit {
       captionDialog: caption,
       htmlContent: true.valueOf,
       confirmCallback: () => this.confirmSubmit(submitType),
-      buttonText: ["Ya, Lanjutkan", "Batal"]
+      buttonText: ['Ya, Lanjutkan', 'Batal']
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -196,7 +198,7 @@ export class DeviceRecoveredComponent implements OnInit {
     this.customerCareService.updateDeviceRecoverySettings(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
       if (submitType === 'setting') this.getDeviceRecoverySettings();
       if (submitType === 'recovery') {
         this.selectedTab = 0;

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { Subject, ReplaySubject } from "rxjs";
-import * as moment from 'moment';
+import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
 import { MAT_DIALOG_DATA } from '@angular/material';

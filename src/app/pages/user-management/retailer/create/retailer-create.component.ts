@@ -5,6 +5,7 @@ import { RetailerService } from "../../../../services/user-management/retailer.s
 import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-create',
@@ -45,6 +46,7 @@ export class RetailerCreateComponent {
     { name: "KA", value: "KA"},
     { name: "Official Store", value: "Official Store"}
   ];
+  country_phone: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,8 +54,10 @@ export class RetailerCreateComponent {
     private dialogService: DialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
@@ -366,7 +370,7 @@ export class RetailerCreateComponent {
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: '+62' + this.verticalStepperStep2.get("phone").value,
+        phone: this.country_phone + this.verticalStepperStep2.get("phone").value,
         areas: [this.verticalStepperStep3.get("territory").value],
         latitude: this.verticalStepperStep3.get("latitude").value ? this.verticalStepperStep3.get("latitude").value : null,
         longitude: this.verticalStepperStep3.get("longitude").value ? this.verticalStepperStep3.get("longitude").value : null,

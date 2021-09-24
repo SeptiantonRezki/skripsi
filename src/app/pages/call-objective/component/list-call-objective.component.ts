@@ -28,6 +28,7 @@ import {
   import {CallObjModel} from 'app/pages/call-objective/call-objective.model';
   import { CallObjectiveSerive } from '../../../services/call-objective/call-objective.service';
   import { AudienceService } from '../../../services/dte/audience.service';
+import { LanguagesService } from "app/services/languages/languages.service";
 
   @Component({
     selector: 'app-list-call-objective.component',
@@ -49,6 +50,7 @@ import {
         private audienceService: AudienceService,
         private dialogService: DialogService,
         private router: Router,
+        private ls: LanguagesService
     ) {
         this.callOjbMdl = new CallObjModel();
 

@@ -6,10 +6,11 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TradeProgramService } from 'app/services/dte/trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-trade-edit',
@@ -65,7 +66,8 @@ export class TradeEditComponent {
     private dataService: DataService,
     private tradeProgramService: TradeProgramService,
     private activatedRoute: ActivatedRoute,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();

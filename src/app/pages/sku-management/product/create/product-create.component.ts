@@ -9,7 +9,7 @@ import { ProductService } from "../../../../services/sku-management/product.serv
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
-import * as moment from "moment";
+import moment from 'moment';
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "./dialog/scan-barcode-dialog.component";
 import html2canvas from 'html2canvas';

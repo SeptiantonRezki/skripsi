@@ -1,19 +1,19 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'User Perusahaan'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text6">
     <button style="width: 170px" [routerLink]="['/user-management', 'supplier-user','create']" mat-raised-button
       type="button">
-      <mat-icon>add</mat-icon> TAMBAH
+      <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
     </button>
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar User Perusahaan</h2>
+        <h2 class="pl-8">{{ ls.locale.produk_prinsipal.text7 }}n</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -22,33 +22,33 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Supplier" prop="suppliername">
+        <ngx-datatable-column name="{{ ls.locale.produk_prinsipal.text4 }}" prop="suppliername">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.supplier_company_name || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama User" prop="fullname">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.pengguna.text3 }}" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.fullname || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Email" prop="email">
+        <ngx-datatable-column name="{{ ls.locale.global.label.email }}" prop="email">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.email || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Terakhir Masuk" prop="lastlogin">
+        <ngx-datatable-column name="{{ ls.locale.global.label.last_login}}" prop="lastlogin">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.last_login | date:'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Terakhir Diubah" prop="lastupdated">
+        <ngx-datatable-column name="{{ ls.locale.global.label.last_modified }}" prop="lastupdated">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.updated_at | date:'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status">
+        <ngx-datatable-column name="{{ ls.locale.global.label.status }}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span [class]="row.status == 'active'? 'dropdown-active' : 'dropdown-inactive'" *ngIf="!permission?.ubah">{{row.status}}
             </span>
@@ -59,7 +59,7 @@
             </mat-form-field>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="80" name="{{ ls.locale.global.label.status }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">

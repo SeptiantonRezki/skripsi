@@ -46,4 +46,9 @@ export class HelpService extends BaseService {
     const url = this.getUrl(this.namespace, "getShow", context);
     return this.getApi(url, queryParams);
   }
+
+  getCountry(): Observable<any> {
+    const url = this.getUrl(this.namespace, "getCountry");
+    return this.getApi(url);
+  }
 }

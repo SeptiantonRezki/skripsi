@@ -154,13 +154,13 @@
               </ng-template> -->
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.phone ? row.phone : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Tipe" prop="classification" [sortable]="false">
+            <ngx-datatable-column name="{{ ls.locale.call_objective.text9 }}" prop="classification" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.classification ? row.classification : '-'}}
               </ng-template>
@@ -175,7 +175,7 @@
                 {{row.region ? row.region : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Area" prop="area" [sortable]="false">
+            <ngx-datatable-column name="{{ ls.locale.global.area.area }}" prop="area" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.area ? row.area : '-'}}
               </ng-template>
@@ -185,7 +185,7 @@
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" *ngIf="loaded">
           <button *ngIf="!isDetail" mat-raised-button type="button" class="confirmation-button" fxFlex="20"
             (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>
