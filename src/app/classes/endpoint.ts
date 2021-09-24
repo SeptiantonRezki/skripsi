@@ -630,8 +630,8 @@ export class Endpoint {
       PLStock: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock`,
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock/${context.id}`,
-        get_table: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/geotree/product`,
-        check: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/geotree/product/check`,
+        get_table: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock/geotree/list`,
+        check: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock/geotree/check`,
         update_geotree: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/geotree/product`,
       },
       TaskVerification: {

@@ -95,6 +95,8 @@ export class StockEditComponent implements OnInit, OnDestroy {
     .subscribe(async(data: any) => {
       if (data.ubah && this.formStock) {
         this.stockData = data.data;
+        this.getGeotreeTableList(true, true);
+        console.log('stock data >>>', this.stockData);
         if (this.stockData.settings && this.stockData.settings.length > 0) {
           const listStock = this.formStock.controls['listStock'] as FormArray;
           while (listStock.length > 0) {
@@ -137,7 +139,6 @@ export class StockEditComponent implements OnInit, OnDestroy {
     this.formFilter.controls["national"].setValue(this.listLevelArea[0].id);
     this.formFilter.controls["national"].disable();
     this.getZoneList();
-    this.getGeotreeTableList(true, true);
 
     this.formFilter.controls["zone"].valueChanges.debounceTime(1000).subscribe(() => {
       this.getRegionList();
@@ -394,6 +395,14 @@ export class StockEditComponent implements OnInit, OnDestroy {
   }
 
   async onSave() {
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: "Area geotree yang dipilih tidak boleh kosong!"
+      });
+      return;
+    }
+    let area_id = this.selected.map(item => { return item.id; });
+
     const body = new FormData();
     const fpm = this.formStock.getRawValue();
     await fpm.listStock.forEach((item: any, index: number) => {
@@ -404,6 +413,10 @@ export class StockEditComponent implements OnInit, OnDestroy {
         body.append(`settings[${index}][value]`, item.value ? item.value : 0 );
       }
     });
+    body.append(`product_id`, this.stockData.product_id);
+    await area_id.forEach((item: any, index: number) => {
+    body.append(`area_id[${index}]`, item);
+    })
 
     this.dataService.showLoading(true);
     this.stockService.update(body, { id: this.stockId }).subscribe(res => {
