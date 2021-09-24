@@ -152,7 +152,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
     this.formCoin = this.formBuilder.group({
       name: ["", Validators.required],
-      coin_valuation: [0, [Validators.required, Validators.min(1)]],
+      coin_valuation: [0, [Validators.required, Validators.min(0)]],
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
       group_trade_id: ["", Validators.required],
