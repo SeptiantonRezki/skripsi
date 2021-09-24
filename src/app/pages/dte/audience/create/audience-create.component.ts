@@ -1733,6 +1733,7 @@ export class AudienceCreateComponent {
   }
 
   async exportAudience() {
+    this.dataService.showLoading(true);
     this.exportTemplate = true;
     const body = {
       retailer_id:
@@ -1743,9 +1744,13 @@ export class AudienceCreateComponent {
       const response = await this.audienceService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
-      this.exportTemplate = false;
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+        this.exportTemplate = false;
+      }, 3000);
     } catch (error) {
       console.log("err", error);
+      this.dataService.showLoading(false);
       this.exportTemplate = false;
       throw error;
     }

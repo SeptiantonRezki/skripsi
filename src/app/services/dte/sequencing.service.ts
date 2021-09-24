@@ -95,5 +95,10 @@ export class SequencingService extends BaseService {
     return this.postApi(url, body);
   }
 
+  getImportPreviewAdjustmentCoin(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_import_preview_adjustment');
+    return this.postApi(url, body);
+  }
+
 
 }
