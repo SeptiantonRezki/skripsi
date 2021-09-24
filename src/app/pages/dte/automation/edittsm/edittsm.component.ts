@@ -8,7 +8,7 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
 import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-edittsm',

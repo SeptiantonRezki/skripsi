@@ -102,19 +102,19 @@
         fusePerfectScrollbar
       >
         <ngx-datatable-column 
-          name="ID Voucher" 
+          name="{{ ls.locale.cn_reward.b2c_voucher.text68 }}" 
           prop="voucher_id">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.code}}
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column
-          name="No HP Consumer"
+          name="{{ ls.locale.global.label.phone }} {{ ls.locale.customer.text1 }}"
           prop="phone"
           [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column 
-          name="Nama Consumer" 
+          name="{{ ls.locale.customer.text2 }}" 
           prop="name">
         </ngx-datatable-column>
         <ngx-datatable-column
@@ -126,11 +126,11 @@
           prop="retailer_name"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="Area"
+          name="{{ ls.locale.global.area.area }}"
           prop="area"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="Regional"
+          name="{{ ls.locale.global.area.regional }}"
           prop="region"
         ></ngx-datatable-column>
         <ngx-datatable-column
@@ -139,7 +139,7 @@
           [sortable]="false"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="Via"
+          name="{{ ls.locale.cn_reward.b2c_voucher.text70 }}"
           prop="from"
           [sortable]="false"
         >
@@ -148,13 +148,13 @@
         </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column
-          name="Total Transaksi"
+          name="{{ ls.locale.paylater_management.pengajuan_deaktivasi.text7 }}"
           prop="total_transaction_rupiah"
           [sortable]="false"
         >
         </ngx-datatable-column>
         <ngx-datatable-column
-          name="Detail Transaksi"
+          name="{{ ls.locale.cn_reward.b2c_voucher.text69 }}"
           [sortable]="false"
           [frozenRight]="true"
         >

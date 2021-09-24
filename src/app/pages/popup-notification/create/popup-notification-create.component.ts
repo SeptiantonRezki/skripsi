@@ -5,7 +5,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { Lightbox } from 'ngx-lightbox';
-import * as moment from 'moment';
+import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 import { Config } from 'app/classes/config';

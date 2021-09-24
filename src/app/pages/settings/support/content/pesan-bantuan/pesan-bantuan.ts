@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Emitter } from "app/helper/emitter.helper";
 import { QiscusService } from "app/services/qiscus.service";
-import * as moment from "moment";
+import moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, startWith, debounceTime, distinctUntilChanged, switchMap, finalize, tap } from 'rxjs/operators';
 

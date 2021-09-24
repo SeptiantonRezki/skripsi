@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-list-voucher-reimbursement',
@@ -32,10 +33,10 @@ export class ListVoucherReimbursementComponent implements OnInit {
 
   keyUp = new Subject<string>();
   statusList: any[] = [
-    { name: 'Semua', value: '' },
-    { name: 'Transfer Bank', value: 'transfer-bank' },
+    { name: this.ls.locale.global.label.all, value: '' },
+    { name: this.ls.locale.dte.coin_disbursement.text15, value: 'transfer-bank' },
     { name: 'Pojok Bayar', value: 'pojok-bayar' },
-    { name: 'B2B Voucher', value: 'b2b-voucher' },
+    { name: this.ls.locale.cn_reward.b2b_voucher, value: 'b2b-voucher' },
     { name: 'Coin', value: 'coin' },
   ];
 
@@ -54,7 +55,8 @@ export class ListVoucherReimbursementComponent implements OnInit {
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];

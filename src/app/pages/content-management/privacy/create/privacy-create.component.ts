@@ -24,6 +24,7 @@ export class PrivacyCreateComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  countryList: any[] = [];
 
   files: File;
   public options: Object = Config.FROALA_CONFIG;
@@ -38,7 +39,8 @@ export class PrivacyCreateComponent {
     this.formPrivacyError = {
       title: {},
       body: {},
-      user: {}
+      user: {},
+      country: {}
     };
   }
 
@@ -47,10 +49,12 @@ export class PrivacyCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
+      country: ["", Validators.required],
       is_notif: [false]
     });
 
     this.getUserGroups();
+    this.getCountryList();
 
     this.formPrivacy.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formPrivacy, this.formPrivacyError);
@@ -78,6 +82,18 @@ export class PrivacyCreateComponent {
     );
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
   submit(): void {
     if (this.formPrivacy.valid) {
       let body: Object = {
@@ -86,6 +102,7 @@ export class PrivacyCreateComponent {
         user: this.formPrivacy.get("user").value,
         type: "privacy-policy",
         is_notif: this.formPrivacy.get('is_notif').value === true ? 1 : 0,
+        country: this.formPrivacy.get("country").value,
       };
 
       this.privacyService.create(body).subscribe(

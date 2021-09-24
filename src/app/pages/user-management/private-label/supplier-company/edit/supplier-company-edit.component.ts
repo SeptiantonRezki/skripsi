@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from "../../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
 import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-supplier-company-edit',
@@ -54,6 +55,7 @@ export class SupplierCompanyEditComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.isLoadingProduct = false;

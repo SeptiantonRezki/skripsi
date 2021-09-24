@@ -12,7 +12,7 @@ import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEve
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
+import moment from 'moment';
 import { startWith, map } from 'rxjs/operators';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { commonFormValidator } from 'app/classes/commonFormValidator';

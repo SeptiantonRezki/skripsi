@@ -10,6 +10,9 @@ import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 import { Emitter } from 'app/helper/emitter.helper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { GeneralService } from "app/services/general.service";
+import { TranslateService } from '@ngx-translate/core';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
     selector: 'fuse-main',
@@ -25,7 +28,7 @@ export class FuseMainComponent implements OnDestroy {
     showProgress: Boolean;
     environment: any;
     chatIsOpen: boolean;
-
+    listenOnLangChange: any;
 
     progress: any;
     isShowGTM: Boolean;
@@ -43,6 +46,9 @@ export class FuseMainComponent implements OnDestroy {
         @Inject(DOCUMENT) private document: any,
         private emitter: Emitter,
         private sanitizer: DomSanitizer,
+        private generalService: GeneralService,
+        private translate: TranslateService,
+        private ls: LanguagesService
     ) {
         this.onConfigChanged =
             this.fuseConfig.onConfigChanged
@@ -75,10 +81,17 @@ export class FuseMainComponent implements OnDestroy {
 
             // console.log(this.progress);
         });
+
+        this.listenOnLangChange = this.translate.onLangChange.subscribe((res: any) => {
+            if (res && res.translations ) {
+                this.ls.locale = res.translations;
+            }
+        });
     }
 
     ngOnDestroy() {
         this.onConfigChanged.unsubscribe();
+        this.listenOnLangChange.unsubscribe();
     }
 
     addClass(className: string) {

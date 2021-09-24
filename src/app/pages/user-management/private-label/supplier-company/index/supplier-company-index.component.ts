@@ -9,6 +9,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
 
 import { Endpoint } from '../../../../../classes/endpoint';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-supplier-company-index',
@@ -50,6 +51,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
     private supplierCompanyService: SupplierCompanyService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
     this.selected = [];

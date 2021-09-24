@@ -11,8 +11,9 @@ import { DiaglogWaktuTungguComponent } from "./diaglog-waktu-tunggu/diaglog-wakt
 import * as shape from 'd3-shape';
 import { DialogYesNoComponent } from "./dialog-yes-no/dialog-yes-no.component";
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogCoinComponent } from "./dialog-coin/dialog-coin.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-mission-builder-create',
@@ -60,6 +61,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
+    private ls: LanguagesService,
   ) {
     this.hierarchialGraph = {
       links: [],

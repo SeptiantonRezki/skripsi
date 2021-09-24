@@ -10,10 +10,11 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { GeotreeService } from 'app/services/geotree.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportRedeemDialogComponent } from './import-redeem-dialog/import-redeem-dialog.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-redeem-list',
@@ -69,6 +70,7 @@ export class RedeemListComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;

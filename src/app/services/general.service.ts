@@ -13,6 +13,11 @@ export class GeneralService extends BaseService {
     super(http);
   }
 
+  getCountry(): Observable<any> {
+    const url = this.generateUrl(this.namespace, "country");
+    return this.getApi(url);
+  }
+
   getSupport(): Observable<any> {
     const url = this.generateUrl(this.namespace, "support");
     return this.getApi(url);
@@ -91,5 +96,10 @@ export class GeneralService extends BaseService {
   getCities(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "cities");
     return this.getApi(url, queryParams)
+  }
+
+  setLocale(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'locale');
+    return this.postApi(url, body);
   }
 }

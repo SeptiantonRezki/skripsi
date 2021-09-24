@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoinService } from 'app/services/sku-management/coin.service';
 import { DataService } from 'app/services/data.service';
 import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-detail-trade-program',
