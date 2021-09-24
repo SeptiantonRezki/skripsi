@@ -1630,6 +1630,7 @@ export class AudienceEditComponent {
   }
 
   async exportAudience() {
+    this.dataService.showLoading(true);
     this.exportTemplate = true;
     const body = {
       retailer_id: this.selected.length > 0 ? this.selected.map(item => item.id) : []
@@ -1639,10 +1640,14 @@ export class AudienceEditComponent {
       const response = await this.audienceService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
-      this.exportTemplate = false;
+      setTimeout(() => {
+        this.exportTemplate = false;
+        this.dataService.showLoading(false);
+      }, 3000);
 
     } catch (error) {
       this.exportTemplate = false;
+      this.dataService.showLoading(false);
       throw error;
     }
   }
