@@ -25,7 +25,7 @@
                   </button>
                 </div>
               </div>
-              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-16" style="margin-left: 25px;">
 
                 <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
                   <mat-form-field fxFlex="100">
@@ -334,12 +334,12 @@
                     <span class="row-address">{{row.classification || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="{{ ls.locale.wholasaler.text2 }}" prop="ws_code" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="ws_code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="{{ ls.locale.global.menu.wholasaler }}" prop="ws_name" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="ws_name" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_name || '-'}}</span>
                   </ng-template>
