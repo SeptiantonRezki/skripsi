@@ -284,6 +284,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination['coin_disbursement_id'] = this.detailCoin.id;
 
     if (this.formFilterExchange.get("group_trade_program").value) {
       this.pagination['group'] = this.formFilterExchange.get("group_trade_program").value;
