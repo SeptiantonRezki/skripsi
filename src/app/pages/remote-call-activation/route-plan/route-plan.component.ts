@@ -551,11 +551,13 @@ export class RoutePlanComponent implements OnInit {
     if (this.positionCode.value) {
       let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
       if (position) {
-        this.pagination['area'] = position['area_id'];
+        // this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
       } else {
         this.pagination['position'] = this.positionCode.value;
       }
+    } else {
+      delete this.pagination['position'];
     }
 
     let isAdminHaveNational = this.area_id_list.filter(ar => ar === 1);
@@ -987,17 +989,23 @@ export class RoutePlanComponent implements OnInit {
     if (this.positionCode.value) {
       let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
       if (position) {
-        this.pagination['area'] = position['area_id'];
+        // this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
       }
     }
     let params = {};
     if (this.classification.value) params['classification'] = this.classification.value;
-    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    if (this.pagination['area']) {
+      if (!Array.isArray(this.pagination['area'])) {
+        this.pagination['area'] = [this.pagination['area']];
+      }
+      params['area'] = this.pagination['area'];
+    }
     if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
     if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
-    this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'], ...params, position_code: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
+
+    this.rcaAgentService.exportRoutePlan({ area: this.pagination['area'], ...params, position: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
       this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_RoutePlan_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
