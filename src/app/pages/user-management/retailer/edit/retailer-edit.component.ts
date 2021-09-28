@@ -423,7 +423,16 @@ export class RetailerEditComponent {
 
     }
     console.log(this.detailRetailer.phone);
-    this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
+    if (this.detailRetailer.country) {
+      this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
+    } else {
+      if ((this.detailRetailer.phone).includes('+62')) {
+        this.country_phone = "+62";
+      } else if ((this.detailRetailer.phone).includes('+855')) {
+        this.country_phone = "+855";
+      }
+    }
+    
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
