@@ -921,7 +921,12 @@ export class GroupingPelangganIndexComponent implements OnInit {
     }
     let params = {};
     if (this.classification.value) params['classification'] = this.classification.value;
-    if (this.pagination['area']) params['area'] = this.pagination['area'];
+    if (this.pagination['area']) {
+      if (!Array.isArray(this.pagination['area'])) {
+        this.pagination['area'] = [this.pagination['area']];
+      }
+      params['area'] = this.pagination['area'];
+    }
     if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
     if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
