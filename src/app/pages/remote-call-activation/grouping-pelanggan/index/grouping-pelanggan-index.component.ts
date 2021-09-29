@@ -912,14 +912,15 @@ export class GroupingPelangganIndexComponent implements OnInit {
 
   exportGrouping() {
     this.dataService.showLoading(true);
+    let params = {};
     if (this.positionCode.value) {
       let position = this.positionCodesList.find(pos => pos.id === this.positionCode.value);
       if (position) {
         this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
+        params['position'] = this.pagination['area']
       }
     }
-    let params = {};
     if (this.classification.value) params['classification'] = this.classification.value;
     if (this.pagination['area']) {
       if (!Array.isArray(this.pagination['area'])) {
@@ -931,11 +932,11 @@ export class GroupingPelangganIndexComponent implements OnInit {
     if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
 
-    if (this.pagination['area'] === null) {
-      delete params['area']
-      delete this.pagination['area'];
+    if (this.pagination['position'] === null) {
+      delete params['position']
+      delete this.pagination['position'];
     }
-    this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params, position: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
+    this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params }).subscribe(res => {
       console.log('res', res);
       this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_GroupingPelangganRCA_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
