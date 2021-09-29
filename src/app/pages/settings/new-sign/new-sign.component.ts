@@ -67,7 +67,7 @@ export class NewSignComponent implements OnInit {
     private geotreeService: GeotreeService,
     private notificationService: NotificationService,
     private retailerService: RetailerService,
-    private router: Router
+    private router: Router,
     private ls: LanguagesService
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];

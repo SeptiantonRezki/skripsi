@@ -27,7 +27,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private virtualAccountBinService: VirtualAccountBinService,
     private virtualAccountCompanyService: VirtualAccountCompanyService,
-    private Ls: LanguagesService
+    private ls: LanguagesService
   ) {
 
   }
@@ -81,7 +81,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
       })
     } else {
       this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi pengisian data!"
+        message: this.ls.locale.global.messages.text7
       })
       commonFormValidator.validateAllFields(this.formBin);
     }
