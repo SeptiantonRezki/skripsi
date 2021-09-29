@@ -8,6 +8,7 @@ import {
 import { Router } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import { DialogService } from "app/services/dialog.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -36,6 +37,7 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
     private dialogService: DialogService,
     private submissionService: ProductSubmissionService,
     private router: Router
+    private ls: LanguagesService
   ) {}
 
   ngOnInit() {

@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OTPSettingService } from 'app/services/otpsetting.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-otpsettings',
@@ -21,7 +22,8 @@ export class OTPSettingsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private otpSettingService: OTPSettingService
+    private otpSettingService: OTPSettingService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
   }
@@ -68,7 +70,7 @@ export class OTPSettingsComponent implements OnInit {
     this.otpSettingService.update(body).subscribe(
       res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.onLoad = true;
         this.getOtpSettings();
       },

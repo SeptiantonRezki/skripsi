@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { StoreTemplateLayoutService } from 'app/services/src-catalogue/store-template-layout.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-store-layout-template-edit',
@@ -42,7 +43,8 @@ export class StoreLayoutTemplateEditComponent implements OnInit {
     private dialogService: DialogService,
     private storeTemplateLayoutService: StoreTemplateLayoutService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage("detail_store_layout")
 
@@ -139,7 +141,7 @@ export class StoreLayoutTemplateEditComponent implements OnInit {
       this.storeTemplateLayoutService.update({ layout_id: this.detailStoreLayout.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['/src-catalogue', 'store-layout-template']);
       }, err => {

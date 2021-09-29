@@ -14,6 +14,7 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-eorder-edit',
@@ -117,6 +118,7 @@ export class EOrderEditComponent implements OnInit {
     private dialog: MatDialog,
     private audienceService: AudienceService,
     private audienceTradeProgramService: AudienceTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -487,7 +489,7 @@ export class EOrderEditComponent implements OnInit {
       this.audienceTradeProgramService.put(body, { automation_id: this.detailAutomation.id }).subscribe(res => {
         this.submitting = false;
         if (res && res.status) {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           // this._resetForm();
           this.router.navigate(['dte', 'automation']);
         }

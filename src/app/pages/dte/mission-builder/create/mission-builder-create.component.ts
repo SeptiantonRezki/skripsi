@@ -181,7 +181,7 @@ export class MissionBuilderCreateComponent implements OnInit {
         this.dataService.showLoading(false);
 
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['dte', 'task-sequencing']);
       }, err => {

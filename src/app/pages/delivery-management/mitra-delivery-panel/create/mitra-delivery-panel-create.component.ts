@@ -548,7 +548,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       this.mitraPanelService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['delivery', 'panel-mitra']);
       }, err => {

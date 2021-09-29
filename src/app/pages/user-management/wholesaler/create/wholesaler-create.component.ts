@@ -342,7 +342,7 @@ export class WholesalerCreateComponent {
       this.wholesalerService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.router.navigate(["user-management", "wholesaler"]);
         },

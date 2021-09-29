@@ -8,6 +8,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { HelpService } from 'app/services/content-management/help.service';
 import { DataService } from '../../../../services/data.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-help-edit',
@@ -54,6 +55,7 @@ export class HelpEditComponent {
     private dialogService: DialogService,
     private helpService: HelpService,
     private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.formHelpError = {
       title: {},
@@ -258,7 +260,7 @@ export class HelpEditComponent {
           res => {
             // this.loadingIndicator = false;
             this.router.navigate(["content-management", "help"]);
-            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             window.localStorage.removeItem('detail_help');
           },
           err => {

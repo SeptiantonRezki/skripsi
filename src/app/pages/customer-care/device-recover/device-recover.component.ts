@@ -4,6 +4,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { CustomerCareService } from 'app/services/customer-care.service';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { isArray } from 'lodash';
 
 export interface StaffList {
@@ -34,7 +35,8 @@ export class DeviceRecoverComponent implements OnInit {
     private customerCareService: CustomerCareService,
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private ls: LanguagesService
   ) {
 
   }
@@ -134,7 +136,7 @@ export class DeviceRecoverComponent implements OnInit {
     this.customerCareService.setRecoveryDevice({ business_id: this.business_id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan!" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.cancelRecovery();
       this.getRecoveryInfo();
     }, err => {

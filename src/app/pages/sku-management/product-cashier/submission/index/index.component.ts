@@ -13,6 +13,7 @@ import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "cashier-submission",
@@ -44,7 +45,8 @@ export class CashierSubmissionComponent implements OnInit {
     private dataService: DataService,
     private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
     this.keyUp
@@ -160,7 +162,7 @@ export class CashierSubmissionComponent implements OnInit {
       .putApprove(body, { product_id: item.id })
       .subscribe((res) => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.getProducts();
       });
   }

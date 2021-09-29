@@ -510,7 +510,7 @@ export class B2CVoucherCreateComponent implements OnInit {
         this.dataService.setToStorage('detail_voucher_b2c', null);
         this.dataService.setToStorage('isb2ccrt', true);
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['b2c-voucher', 'edit', res.data.id]);
       }, err => {
         this.dataService.showLoading(false);

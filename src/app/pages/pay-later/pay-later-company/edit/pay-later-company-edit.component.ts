@@ -5,6 +5,7 @@ import { PayLaterCompanyService } from 'app/services/pay-later/pay-later-company
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-company-edit',
@@ -25,7 +26,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private paylaterCompanyService: PayLaterCompanyService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_paylater_company');
     this.activatedRoute.url.subscribe(params => {
@@ -109,7 +111,7 @@ export class PayLaterCompanyEditComponent implements OnInit {
       this.paylaterCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['paylater', 'companies']);
       }, err => {

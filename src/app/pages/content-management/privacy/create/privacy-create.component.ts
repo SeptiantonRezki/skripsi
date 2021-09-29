@@ -6,6 +6,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PrivacyService } from 'app/services/content-management/privacy.service';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-privacy-create',
@@ -34,7 +35,8 @@ export class PrivacyCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private privacyService: PrivacyService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formPrivacyError = {
       title: {},
@@ -110,7 +112,7 @@ export class PrivacyCreateComponent {
           // this.loadingIndicator = false;
           this.router.navigate(["content-management", "privacy"]);
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         },
         err => {

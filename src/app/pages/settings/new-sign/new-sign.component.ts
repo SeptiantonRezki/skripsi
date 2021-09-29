@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import moment from 'moment';
 import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-new-sign',
@@ -67,6 +68,7 @@ export class NewSignComponent implements OnInit {
     private notificationService: NotificationService,
     private retailerService: RetailerService,
     private router: Router
+    private ls: LanguagesService
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -234,7 +236,7 @@ export class NewSignComponent implements OnInit {
       this.dataService.showLoading(true);
       this.newSignService.create(body).subscribe(res => {
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.dataService.showLoading(false);
         window.location.reload();

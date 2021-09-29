@@ -183,7 +183,7 @@ export class TradeCreateComponent {
 
       this.tradeProgramService.create(fd).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['dte', 'trade-program']);
         },
         err => {

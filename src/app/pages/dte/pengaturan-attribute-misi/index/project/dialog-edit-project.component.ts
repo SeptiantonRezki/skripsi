@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { Page } from 'app/classes/laravel-pagination';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 
 @Component({
@@ -36,7 +37,8 @@ export class DialogEditProjectComponent implements OnInit {
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA) data,
+    private ls: LanguagesService
   ) {
     this.condition = false;
     this.name = data.name;
@@ -97,7 +99,7 @@ export class DialogEditProjectComponent implements OnInit {
         this.dataService.showLoading(false);
         if (res.success) {
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan!"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         } else {
           this.dialogService.openSnackBar({

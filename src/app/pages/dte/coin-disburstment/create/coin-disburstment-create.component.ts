@@ -1197,7 +1197,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
       if (this.isEdit) {
         this.coinDisburstmentService.update({ coin_id: this.detailCoin.id }, fd).subscribe(res => {
-          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.dataService.showLoading(false);
           this.router.navigate(['dte', 'coin-disbursement']);
         }, err => {
@@ -1205,7 +1205,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         });
       } else {
         this.coinDisburstmentService.create(fd).subscribe(res => {
-          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.dataService.showLoading(false);
           this.dataService.setToStorage("detail_coin_disburstment", { id: res.id });
           this.dataService.setToStorage("coin_disburstment_selected_tab", "1");
