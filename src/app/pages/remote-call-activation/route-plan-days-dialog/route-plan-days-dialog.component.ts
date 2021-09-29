@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class RoutePlanDaysDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<RoutePlanDaysDialogComponent>,
     private dataService: DataService,
     private dialogService: DialogService,
-    private rcaAgentService: RcaAgentService
+    private rcaAgentService: RcaAgentService,
+    private ls: LanguagesService
   ) { }
 
   ngOnInit() {
@@ -37,7 +39,7 @@ export class RoutePlanDaysDialogComponent implements OnInit {
       this.dataService.showLoading(true);
       this.rcaAgentService.setRPMappingPosition({ position_id: this.data.business_rca_position_id, kunjungan: this.planDay.value }).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil Disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dialogRef.close(true);
       })
     } else {

@@ -25,7 +25,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService,
+    private virtualAccountCompanyService: VirtualAccountCompanyService,
     private activatedRoute: ActivatedRoute
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_company');
@@ -61,7 +61,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
 
   getDetail() {
     this.dataService.showLoading(true);
-    this.VirtualAccountCompanyService.show({ company_id: this.shortDetail.id }).subscribe(res => {
+    this.virtualAccountCompanyService.show({ company_id: this.shortDetail.id }).subscribe(res => {
       this.detailCompany = res;
 
       this.formCompany.setValue({
@@ -83,7 +83,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
   }
 
   getBanks() {
-    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+    this.virtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBanks = res.data;
       this.listBanks.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
@@ -115,10 +115,10 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         service_cost: this.formCompany.get('service_cost').value,
       }
     console.log(body)
-      this.VirtualAccountCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
+      this.virtualAccountCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'companies']);
       }, err => {

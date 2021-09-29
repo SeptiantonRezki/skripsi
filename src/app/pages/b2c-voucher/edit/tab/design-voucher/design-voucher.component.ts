@@ -14,6 +14,7 @@ import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import html2canvas from 'html2canvas';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-design-voucher',
@@ -65,7 +66,8 @@ export class DesignVoucherComponent implements OnInit {
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -149,7 +151,7 @@ export class DesignVoucherComponent implements OnInit {
         this.b2cVoucherService.updateDesign({ voucher_id: this.detailVoucher.id }, bodyForm).subscribe((res) => {
           // this.router.navigate(['b2c-voucher']);
           this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.onRefresh.emit();
           this.setSelectedTab.emit(5);
         }, err => {

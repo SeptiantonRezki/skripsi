@@ -380,7 +380,7 @@ export class RetailerCreateComponent {
 
       this.retailerService.create(body).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(["user-management", "retailer"]);
         },
         err => {

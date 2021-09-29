@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import { DataService } from "app/services/data.service";
 import { DialogService } from "app/services/dialog.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -33,7 +34,8 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private submissionService: ProductSubmissionService
+    private submissionService: ProductSubmissionService,
+    private ls: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -122,7 +124,7 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
       (res) => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
       },
       (err) => {

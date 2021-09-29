@@ -700,7 +700,7 @@ export class PanelMitraVoucherComponent implements OnInit {
 
     this.b2bVoucherInjectService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       if (!this.isDetail && !this.isEdit) {
         this.router.navigate(['inject-b2b-voucher', 'detail']);
       } else {

@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 import { ImportTsmCoinComponent } from '../import-coin/import-tsm-coin.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-sequencing-edit',
@@ -52,7 +53,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService
   ) {
 
     activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
@@ -306,7 +308,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.setValue();
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       }
     })
   }

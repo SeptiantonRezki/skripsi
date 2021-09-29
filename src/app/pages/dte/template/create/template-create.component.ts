@@ -18,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Page } from "app/classes/laravel-pagination";
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-template-create",
@@ -169,7 +170,8 @@ export class TemplateCreateComponent {
     private taskTemplateService: TemplateTaskService,
     private dataService: DataService,
     private productService: ProductService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
@@ -1282,7 +1284,7 @@ export class TemplateCreateComponent {
                   this.taskTemplateService.create(body).subscribe(
                     res => {
                       this.dataService.showLoading(false);
-                      this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                       this.router.navigate(['dte', 'template-task']);
                     }, err => {
                       console.log(err.error)
@@ -1294,7 +1296,7 @@ export class TemplateCreateComponent {
                 this.taskTemplateService.create(body).subscribe(
                   res => {
                     this.dataService.showLoading(false);
-                    this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                    this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                     this.router.navigate(['dte', 'template-task']);
                   },
                   err => {
@@ -1334,7 +1336,7 @@ export class TemplateCreateComponent {
               this.taskTemplateService.create(body).subscribe(
                 res => {
                   this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                  this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                   this.router.navigate(['dte', 'template-task']);
                 }, err => {
                   console.log(err.error);
@@ -1346,7 +1348,7 @@ export class TemplateCreateComponent {
             this.taskTemplateService.create(body).subscribe(
               res => {
                 this.dataService.showLoading(false);
-                this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                 this.router.navigate(['dte', 'template-task']);
               },
               err => {
@@ -1361,7 +1363,7 @@ export class TemplateCreateComponent {
         this.taskTemplateService.create(body).subscribe(
           res => {
             this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             this.router.navigate(['dte', 'template-task']);
           },
           err => {

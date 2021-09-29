@@ -22,6 +22,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
 import { InappMarketingValidator } from '../../InappMarketing.validator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-banner-create',
@@ -129,7 +130,8 @@ export class BannerCreateComponent {
     private retailerService: RetailerService,
     private customerService: CustomerService,
     private wholesalerService: WholesalerService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -1243,7 +1245,7 @@ export class BannerCreateComponent {
         res => {
           this.loadingIndicator = false;
           this.router.navigate(["advertisement", "banner"]);
-          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         }
       );
 

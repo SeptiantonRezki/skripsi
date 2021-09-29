@@ -5,6 +5,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
@@ -42,6 +43,7 @@ export class RcaAgentCreateComponent implements OnInit {
     private rcaAgentService: RcaAgentService,
     private rotuer: Router,
     private wholesalerService: WholesalerService,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [
@@ -294,7 +296,7 @@ export class RcaAgentCreateComponent implements OnInit {
 
       this.rcaAgentService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.rotuer.navigate(['rca', 'agent-pengguna']);
       }, err => {
         console.log('err', err);

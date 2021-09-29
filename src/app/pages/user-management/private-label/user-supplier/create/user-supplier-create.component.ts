@@ -6,6 +6,7 @@ import { SupplierCompanyService } from 'app/services/user-management/private-lab
 import { UserSupplierService } from 'app/services/user-management/private-label/user-supplier.service';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-supplier-create',
@@ -31,6 +32,7 @@ export class UserSupplierCreateComponent implements OnInit {
     private userSupplierService: UserSupplierService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.isLoadingSave = false;
@@ -99,7 +101,7 @@ export class UserSupplierCreateComponent implements OnInit {
         };
         this.userSupplierService.create(body).subscribe(res => {
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.verticalStepperStep1.reset();
           this.verticalStepperStep2.reset();

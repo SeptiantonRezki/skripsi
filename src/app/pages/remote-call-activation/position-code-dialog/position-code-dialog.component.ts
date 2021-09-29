@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +26,8 @@ export class PositionCodeDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<PositionCodeDialogComponent>,
     private rcaAgentService: RcaAgentService,
     private dataService: DataService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private ls: LanguagesService
   ) { }
 
   ngOnInit() {
@@ -79,7 +81,7 @@ export class PositionCodeDialogComponent implements OnInit {
       this.dataService.showLoading(true);
       this.rcaAgentService.setMappingPosition({ business_id: this.data.id, position_id: this.positionCode.value }).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dialogRef.close(true);
       }, err => {
         this.dataService.showLoading(false);

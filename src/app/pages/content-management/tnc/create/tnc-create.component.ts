@@ -6,6 +6,7 @@ import { TncService } from '../../../../services/content-management/tnc.service'
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-tnc-create',
@@ -35,7 +36,8 @@ export class TncCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private tncService: TncService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formTncError = {
       title: {},
@@ -121,7 +123,7 @@ export class TncCreateComponent {
           // this.loadingIndicator = false;
           this.router.navigate(["content-management", "terms-and-condition"]);
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         },
         err => {

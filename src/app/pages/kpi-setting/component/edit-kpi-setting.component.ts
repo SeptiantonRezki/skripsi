@@ -27,6 +27,7 @@ import { DialogService } from "app/services/dialog.service";
 import { MasterKPIService } from '../../../services/kpi-setting/master-kpi.service';
 import { KPISettingService } from "app/services/kpi-setting/kpi-setting.service";
 import { GeotreeService } from "app/services/geotree.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-edit-kpi-setting.component',
@@ -92,6 +93,7 @@ export class EditKPISettingComponent implements OnInit {
     private masterKPIService: MasterKPIService,
     private route: ActivatedRoute,
     private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
 
     this.formdataErrors = {
@@ -768,7 +770,7 @@ export class EditKPISettingComponent implements OnInit {
       }
 
       if(res.status == 'success') {
-        this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(["kpisetting", "kpi-groups-list"]);
         window.localStorage.removeItem("kps");
       }

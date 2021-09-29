@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-company-create',
@@ -22,7 +23,8 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService
+    private virtualAccountCompanyService: VirtualAccountCompanyService,
+    private ls: LanguagesService
   ) {
 
   }
@@ -59,7 +61,7 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
   }
 
   getBanks() {
-    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+    this.virtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBanks = res.data;
       this.listBanks.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
@@ -84,10 +86,10 @@ export class VirtualAccountCompanyCreateComponent implements OnInit {
       }
       console.log(body)
 
-      this.VirtualAccountCompanyService.create(body).subscribe(res => {
+      this.virtualAccountCompanyService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'companies']);
       }, err => {

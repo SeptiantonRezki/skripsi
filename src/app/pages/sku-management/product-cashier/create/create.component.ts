@@ -7,6 +7,7 @@ import { ScanBarcodeDialogComponent } from "app/pages/sku-management/product/cre
 import { DialogService } from "app/services/dialog.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { Router } from "@angular/router";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-cashier-create",
@@ -25,7 +26,8 @@ export class CashierCreateComponent implements OnInit {
     private productCashierService: ProductCashierService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -97,7 +99,7 @@ export class CashierCreateComponent implements OnInit {
       (res) => {
         this.onLoad = false;
         this.router.navigate(["sku-management", "product-cashier"]);
-        this.dialogService.openSnackBar({ message: "Produk berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
       },
       (err) => {

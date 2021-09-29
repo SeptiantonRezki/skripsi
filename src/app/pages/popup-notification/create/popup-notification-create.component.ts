@@ -23,6 +23,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ProductService } from 'app/services/sku-management/product.service';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -122,7 +123,8 @@ export class PopupNotificationCreateComponent {
     private customerService: CustomerService,
     private wholesalerService: WholesalerService,
     private geotreeService: GeotreeService,
-    private b2bVoucherInjectService: B2BVoucherInjectService
+    private b2bVoucherInjectService: B2BVoucherInjectService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -1412,7 +1414,7 @@ export class PopupNotificationCreateComponent {
         res => {
           this.dataService.showLoading(false);
           this.router.navigate(["notifications", "popup-notification"]);
-          this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         },
         err => {
           this.dataService.showLoading(false);

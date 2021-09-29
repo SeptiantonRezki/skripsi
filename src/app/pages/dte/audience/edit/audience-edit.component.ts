@@ -15,6 +15,7 @@ import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.
 import { environment } from 'environments/environment';
 import { GeotreeService } from 'app/services/geotree.service';
 import { IdbService } from 'app/services/idb.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-audience-edit',
@@ -116,7 +117,8 @@ export class AudienceEditComponent {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1222,7 +1224,7 @@ export class AudienceEditComponent {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
+              message: this.ls.locale.notification.popup_notifikasi.text22,
             });
             this.router.navigate(["dte", "audience"]);
           },
@@ -1297,7 +1299,7 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
               this.loadingIndicator = false;
               this.dialogService.openSnackBar({
-                message: "Data Berhasil Disimpan",
+                message: this.ls.locale.notification.popup_notifikasi.text22,
               });
               this.router.navigate(["dte", "audience"]);
             },
@@ -1354,7 +1356,7 @@ export class AudienceEditComponent {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
+              message: this.ls.locale.notification.popup_notifikasi.text22,
             });
             this.router.navigate(["dte", "audience"]);
           },
