@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { PrincipalPartnershipService } from 'app/services/principal-partnership/principal-partnership.service';
 import { MatDialog } from '@angular/material';
 import { commonFormValidator } from "app/classes/commonFormValidator";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-partnership-create',
@@ -38,7 +39,8 @@ export class PartnershipCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private principalPartnershipService: PrincipalPartnershipService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.saveData = false;
     this.formPrincipalError = {
@@ -65,7 +67,7 @@ export class PartnershipCreateComponent implements OnInit {
       this.saveData = true;
       this.principalPartnershipService.create(body).subscribe(res => {
         console.log('res creating!', res);
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' })
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 })
         this.router.navigate(['user-management', 'principal-partnership']);
       }, err => console.log('err creating!', err.error.message));
     } else {

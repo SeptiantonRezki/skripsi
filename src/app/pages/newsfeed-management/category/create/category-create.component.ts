@@ -8,6 +8,7 @@ import { CategoryService } from '../../../../services/newsfeed-management/catego
 import { DateAdapter } from '@angular/material';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-category-create',
@@ -29,9 +30,10 @@ export class CategoryCreateComponent{
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private CategoryService: CategoryService,
+    private categoryService: CategoryService,
     private adapter: DateAdapter<any>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) { 
     this.adapter.setLocale('id');
     
@@ -110,12 +112,12 @@ export class CategoryCreateComponent{
         status: 'active'
       };
 
-      this.CategoryService
+      this.categoryService
         .create(body)
         .subscribe(
           res => {
             this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan"
+              message: this.ls.locale.notification.popup_notifikasi.text22
             });
             this.router.navigate(["newsfeed-management", "category"]);
           },

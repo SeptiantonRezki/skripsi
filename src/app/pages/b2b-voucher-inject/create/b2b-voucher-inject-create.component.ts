@@ -1119,7 +1119,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       if (this.isEdit) {
         this.b2bVoucherInjectService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
           this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           // if (!this.isEdit) this.router.navigate(['b2b-voucher', 'detail']);
           // else {
           this.getDetail();
@@ -1131,7 +1131,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       } else {
         this.b2bVoucherInjectService.create(body).subscribe(res => {
           this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['inject-b2b-voucher']);
         }, err => {
           this.dataService.showLoading(false);
@@ -1161,7 +1161,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
     this.b2bVoucherInjectService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       if (!this.isDetail && !this.isEdit) {
         this.router.navigate(['inject-b2b-voucher', 'detail']);
       } else {

@@ -8,6 +8,7 @@ import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { startWith, map, takeUntil } from 'rxjs/operators';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-schedule-program-create',
@@ -76,7 +77,8 @@ export class ScheduleProgramCreateComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private scheduleTradeProgramService: ScheduleTradeProgramService
+    private scheduleTradeProgramService: ScheduleTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.saveData = false;
     this.adapter.setLocale("id");
@@ -478,7 +480,7 @@ export class ScheduleProgramCreateComponent {
       if (!foundUndefined) {
         this.scheduleTradeProgramService.create(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             this.router.navigate(['dte', 'schedule-trade-program']);
           },
           err => {

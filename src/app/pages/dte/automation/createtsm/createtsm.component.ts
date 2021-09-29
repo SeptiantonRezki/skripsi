@@ -9,6 +9,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-createtsm',
@@ -66,7 +67,8 @@ export class CreatetsmComponent implements OnInit {
     private formBuilder: FormBuilder,
     private audienceTradeProgramService: AudienceTradeProgramService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.selectedTab = 0;
    }
@@ -282,7 +284,7 @@ export class CreatetsmComponent implements OnInit {
         this.submitting = false;
         // console.log('ressadas', res);
         if (res && res.status) {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           // this._resetForm();
           this.router.navigate(['dte', 'automation']);
         }

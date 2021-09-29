@@ -165,7 +165,9 @@ export class FuseToolbarComponent implements OnInit {
     this.authService.doLogout({}).subscribe(async res => {
       if (res.status) {
         await this.qs.qiscus.disconnect();
+        const country_code = localStorage.getItem('user_country');
         window.localStorage.clear();
+        localStorage.setItem('user_country', country_code);
         this.router.navigate(["/login"]);
       }
     });

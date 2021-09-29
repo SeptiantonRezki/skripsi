@@ -7,6 +7,7 @@ import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { AdminPrincipalService } from 'app/services/user-management/admin-principal.service';
 import * as _ from "lodash";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-vendors-create',
@@ -49,7 +50,8 @@ export class VendorsCreateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private vendorsService: VendorsService,
-    private adminPrincipalService: AdminPrincipalService
+    private adminPrincipalService: AdminPrincipalService,
+    private ls: LanguagesService
   ) {
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -500,7 +502,7 @@ export class VendorsCreateComponent implements OnInit {
       this.vendorsService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.router.navigate(["src-catalogue", "vendors"]);
         },

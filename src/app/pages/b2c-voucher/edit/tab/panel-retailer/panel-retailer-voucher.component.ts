@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-audience-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-retailer-voucher',
@@ -117,6 +118,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     private dialog: MatDialog,
     private adapter: DateAdapter<any>,
     private bannerService: BannerService,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -824,7 +826,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
 
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.onRefresh.emit();
       this.setSelectedTab.emit(2);
       setTimeout(() => {

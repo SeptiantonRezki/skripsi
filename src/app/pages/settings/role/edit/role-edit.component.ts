@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { RetailerService } from '../../../../services/user-management/retailer.service';
 
 import * as _ from 'underscore';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-role-edit',
@@ -38,6 +39,7 @@ export class RoleEditComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private retailerService: RetailerService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.roles = this.activatedRoute.snapshot.data['menu'];
@@ -315,7 +317,7 @@ export class RoleEditComponent {
 
       this.accessService.put(body, { role_id: this.roleId }).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['settings', 'access']);
           if (this.dataService.getDecryptedProfile().role_id == this.roleId) {
             this.dataService.setEncryptedPermissions(body.permissions);
