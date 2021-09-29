@@ -930,6 +930,11 @@ export class GroupingPelangganIndexComponent implements OnInit {
     if (this.pagination['self_area']) params['self_area'] = this.pagination['self_area'];
     if (this.pagination['last_self_area']) params['last_self_area'] = this.pagination['last_self_area'];
     if (this.pagination['after_level']) params['after_level'] = this.pagination['after_level'];
+
+    if (this.pagination['area'] === null) {
+      delete params['area']
+      delete this.pagination['area'];
+    }
     this.rcaAgentService.exportGrouping({ area: this.pagination['area'], ...params, position: this.pagination['position'] ? this.pagination['position'] : null }).subscribe(res => {
       console.log('res', res);
       this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_GroupingPelangganRCA_${new Date().toLocaleString()}.xlsx`);
