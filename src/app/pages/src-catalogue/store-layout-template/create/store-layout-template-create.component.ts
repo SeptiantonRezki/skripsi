@@ -6,6 +6,7 @@ import { StoreTemplateLayoutService } from 'app/services/src-catalogue/store-tem
 import { Config } from 'app/classes/config';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-store-layout-template-create',
@@ -38,7 +39,8 @@ export class StoreLayoutTemplateCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private storeTemplateLayoutService: StoreTemplateLayoutService,
-    private rotuer: Router
+    private rotuer: Router,
+    private ls: LanguagesService
   ) { }
 
   ngOnInit() {
@@ -97,7 +99,7 @@ export class StoreLayoutTemplateCreateComponent implements OnInit {
       this.storeTemplateLayoutService.create(fd).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.rotuer.navigate(['/src-catalogue', 'store-layout-template']);
       }, err => {

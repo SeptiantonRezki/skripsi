@@ -20,6 +20,7 @@ import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/impor
 import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-notification-create',
@@ -204,6 +205,7 @@ export class NotificationCreateComponent {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -1475,7 +1477,7 @@ export class NotificationCreateComponent {
             this.notificationService.create(bodyVideo).subscribe(
               res => {
                 this.router.navigate(["notifications"]);
-                this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                 this.dataService.showLoading(false);
                 resolve(res);
               },
@@ -1537,7 +1539,7 @@ export class NotificationCreateComponent {
           this.notificationService.create(bodyVideo).subscribe(
             res => {
               this.router.navigate(["notifications"]);
-              this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+              this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
               this.dataService.showLoading(false);
               resolve(res);
             },
@@ -1564,7 +1566,7 @@ export class NotificationCreateComponent {
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
       },
       err => {

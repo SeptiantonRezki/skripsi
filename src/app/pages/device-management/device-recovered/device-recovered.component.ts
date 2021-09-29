@@ -198,7 +198,7 @@ export class DeviceRecoveredComponent implements OnInit {
     this.customerCareService.updateDeviceRecoverySettings(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       if (submitType === 'setting') this.getDeviceRecoverySettings();
       if (submitType === 'recovery') {
         this.selectedTab = 0;

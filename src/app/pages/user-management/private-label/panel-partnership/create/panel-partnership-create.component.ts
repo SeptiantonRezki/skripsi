@@ -22,6 +22,7 @@ import { IdbService } from "app/services/idb.service";
 import { AudienceService } from "../../../../../services/dte/audience.service";
 import { PanelPartnershipService } from 'app/services/user-management/private-label/panel-partnership.service';
 import { ImportAudienceDialogComponent } from "../import/import-audience-dialog.component";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-partnership-create',
@@ -108,7 +109,8 @@ export class PanelPartnershipCreateComponent {
     private panelPartnershipService: PanelPartnershipService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService
   ) {
 
     this.rows = [];
@@ -1126,7 +1128,7 @@ export class PanelPartnershipCreateComponent {
     this.panelPartnershipService.create(body).subscribe(
       (res) => {
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(["user-management", "panel-partnership"]);
       },

@@ -5,6 +5,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { FieldForceService } from 'app/services/user-management/field-force.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
@@ -45,7 +46,8 @@ export class RcaAgentEditComponent implements OnInit {
     private rotuer: Router,
     private wholesalerService: WholesalerService,
     private activatedRoute: ActivatedRoute,
-    private fieldforceService: FieldForceService
+    private fieldforceService: FieldForceService,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
@@ -357,7 +359,7 @@ export class RcaAgentEditComponent implements OnInit {
 
       this.rcaAgentService.put({ agent_id: this.detailRcaAgent.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.rotuer.navigate(['rca', 'agent-pengguna']);
       }, err => {
         console.log('err', err);

@@ -7,6 +7,7 @@ import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { BannerService } from "app/services/inapp-marketing/banner.service";
 import { PagesName } from "app/classes/pages-name";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-banner-index",
@@ -88,7 +89,8 @@ export class BannerIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private bannerService: BannerService
+    private bannerService: BannerService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.infoTerkiniOnLoad = true;

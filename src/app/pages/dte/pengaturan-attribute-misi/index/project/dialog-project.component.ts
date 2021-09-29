@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { Page } from 'app/classes/laravel-pagination';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 
 @Component({
@@ -31,6 +32,7 @@ export class DialogProjectComponent implements OnInit {
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private ls: LanguagesService
   ) {
     this.condition = false;
   }
@@ -72,7 +74,7 @@ export class DialogProjectComponent implements OnInit {
     this.pengaturanAttributeMisiService.createProjectMisi(form.value).subscribe(
       (res) => {
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(["dte", "pengaturan-attribute-misi"]);
       },

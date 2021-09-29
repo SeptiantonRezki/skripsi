@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CourierService } from 'app/services/delivery-management/courier.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-courier-edit-management',
@@ -39,7 +40,8 @@ export class CourierEditManagementComponent implements OnInit {
     private dialogService: DialogService,
     private courierManagementService: CourierService,
     private _ngZone: NgZone,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.courierID = params[2].path;
@@ -216,7 +218,7 @@ export class CourierEditManagementComponent implements OnInit {
       this.courierManagementService.update(body, { courier_id: this.courierID }).subscribe(res => {
         this.dataService.showLoading(false);
         console.log('res', res);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['delivery', 'courier']);
       }, err => {
         console.log('err create courier', err);

@@ -12,6 +12,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../import-coin/import-coin.component';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-schedule-program-detail',
@@ -64,7 +65,8 @@ export class ScheduleProgramDetailComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.permission = this.roles.getRoles('principal.importcoin');
     console.log(this.permission);
@@ -248,7 +250,7 @@ export class ScheduleProgramDetailComponent {
       if (!foundUndefined) {
         this.scheduleTradeProgramService.create(body).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             this.router.navigate(['dte', 'schedule-trade-program']);
           },
           err => {
@@ -341,7 +343,7 @@ export class ScheduleProgramDetailComponent {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       }
     })
   }

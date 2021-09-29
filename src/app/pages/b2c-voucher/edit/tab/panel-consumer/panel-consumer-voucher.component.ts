@@ -1148,7 +1148,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body ? body : bodyArea).subscribe(res => {
       // this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.onRefresh.emit();
       this.setSelectedTab.emit(3);
       setTimeout(() => {

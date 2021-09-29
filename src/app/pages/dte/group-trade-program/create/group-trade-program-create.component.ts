@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { Router } from '@angular/router';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-group-trade-program-create',
@@ -28,7 +29,8 @@ export class GroupTradeProgramCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private dialogService: DialogService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.formGroupTradeProgramError = {
       name: {}
@@ -66,7 +68,7 @@ export class GroupTradeProgramCreateComponent implements OnInit {
       this.groupTradeProgramService.create(fd).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['dte', 'group-trade-program']);
       }, err => {

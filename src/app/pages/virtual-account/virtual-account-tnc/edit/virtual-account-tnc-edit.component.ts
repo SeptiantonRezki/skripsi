@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HelpService } from 'app/services/content-management/help.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-tnc-edit',
@@ -29,7 +30,8 @@ export class VirtualAccountTncEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private VirtualAccountTncService: VirtualAccountTncService,
     private activatedRoute: ActivatedRoute,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_tnc');
     this.activatedRoute.url.subscribe(params => {
@@ -115,7 +117,7 @@ export class VirtualAccountTncEditComponent implements OnInit {
       this.VirtualAccountTncService.put(body, { tnc_id: this.detailTnc.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'terms-and-condition']);
       }, err => {

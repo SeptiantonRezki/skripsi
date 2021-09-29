@@ -7,6 +7,7 @@ import { VirtualAccountTncService } from 'app/services/virtual-account/virtual-a
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { HelpService } from 'app/services/content-management/help.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-tnc-create',
@@ -27,7 +28,8 @@ export class VirtualAccountTncCreateComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private VirtualAccountTncService: VirtualAccountTncService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
 
   }
@@ -79,7 +81,7 @@ export class VirtualAccountTncCreateComponent implements OnInit {
       this.VirtualAccountTncService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'terms-and-condition']);
       }, err => {

@@ -8,6 +8,7 @@ import { DialogService } from "../../../../../services/dialog.service";
 import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-dialog-kategori-misi-edit',
@@ -39,7 +40,8 @@ export class DialogKategoriMisiEditComponent implements OnInit {
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA) data,
+    private ls: LanguagesService
   ) {
     this.name = data.name;
     this.id = data.id;
@@ -82,7 +84,7 @@ export class DialogKategoriMisiEditComponent implements OnInit {
       this.dataService.showLoading(false);
       if (res.success) {
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
       } else {
         this.dialogService.openSnackBar({

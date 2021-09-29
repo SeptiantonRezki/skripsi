@@ -8,6 +8,7 @@ import { DialogService } from "../../../../../services/dialog.service";
 import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-dialog-kategori-misi",
@@ -25,6 +26,7 @@ export class DialogKategoriMisiComponent implements OnInit {
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private ls: LanguagesService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class DialogKategoriMisiComponent implements OnInit {
     this.pengaturanAttributeMisiService.createKategoriMisi(form.value).subscribe(
       (res) => {
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(["dte", "pengaturan-attribute-misi"]);
       },
