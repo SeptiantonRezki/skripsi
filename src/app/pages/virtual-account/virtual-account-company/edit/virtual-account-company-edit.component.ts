@@ -5,6 +5,7 @@ import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtu
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-company-edit',
@@ -26,7 +27,8 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private virtualAccountCompanyService: VirtualAccountCompanyService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_company');
     this.activatedRoute.url.subscribe(params => {
@@ -104,7 +106,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
   submit() {
     if (this.formCompany.valid) {
       this.dataService.showLoading(true);
-      let body = {
+      const body = {
         code_bank: this.formCompany.get('name').value,
         name: this.listBankMap[this.formCompany.get('name').value],
         contact: '+62' + this.formCompany.get('contact').value,
@@ -113,21 +115,20 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         status: this.formCompany.get('status').value,
         // minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
-      }
-    console.log(body)
+      };
       this.virtualAccountCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
-        })
+        });
         this.router.navigate(['virtual-account', 'companies']);
       }, err => {
         this.dataService.showLoading(false);
-      })
+      });
     } else {
       this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi pengisian data!"
-      })
+        message: this.ls.locale.global.messages.text7
+      });
       commonFormValidator.validateAllFields(this.formCompany);
     }
   }
