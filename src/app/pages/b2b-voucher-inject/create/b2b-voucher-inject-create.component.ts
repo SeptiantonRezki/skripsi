@@ -1370,7 +1370,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer' };
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer', type_voucher: this.detailVoucher.type };
 
     this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
 
