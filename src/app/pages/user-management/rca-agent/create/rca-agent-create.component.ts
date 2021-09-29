@@ -521,14 +521,15 @@ export class RcaAgentCreateComponent implements OnInit {
           status: "active"
         }
 
-      this.rcaAgentService.create(body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.rotuer.navigate(['rca', 'agent-pengguna']);
-      }, err => {
-        console.log('err', err);
-        this.dataService.showLoading(false);
-      })
+        this.rcaAgentService.create(body).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          this.rotuer.navigate(['rca', 'agent-pengguna']);
+        }, err => {
+          console.log('err', err);
+          this.dataService.showLoading(false);
+        })
+      }
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
