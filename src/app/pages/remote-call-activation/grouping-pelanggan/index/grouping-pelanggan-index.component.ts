@@ -918,7 +918,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
       if (position) {
         this.pagination['area'] = position['area_id'];
         this.pagination['position'] = this.positionCode.value;
-        params['position'] = this.pagination['area']
+        params['position'] = this.pagination['position']
       }
     }
     if (this.classification.value) params['classification'] = this.classification.value;
