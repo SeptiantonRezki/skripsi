@@ -246,6 +246,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
 
     this.offsetPagination = this.dataService.getFromStorage("page_stock") ? (this.dataService.getFromStorage("page_stock") - 1) : 0;
     this.refineFilters();
+    this.pagination.area = this.formFilter.controls['region'].value && this.formFilter.controls['region'].value.length ? this.formFilter.controls['region'].value : [1];
     let queryParams = {
       ...this.pagination, 
       area: this.formFilter.controls['region'].value && this.formFilter.controls['region'].value.length ? this.formFilter.controls['region'].value : [1]
@@ -285,7 +286,9 @@ export class StockEditComponent implements OnInit, OnDestroy {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.pagination.total = res.data.total;
+      if (!this.allRowsSelected) {
       this.refineSelectedRow();
+      }
       this.dataService.showLoading(false);
       this.loadingIndicator = false;
     }, err => {
@@ -330,7 +333,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
     if (!allRowsSelected) {
       this.selected = [];
     } else {
-      this.selected = this.rows;
+      this.selected.length = this.pagination.total;
       console.log('selected ALL data >>> ', this.selected);
     }
   }
@@ -414,9 +417,17 @@ export class StockEditComponent implements OnInit, OnDestroy {
       }
     });
     body.append(`product_id`, this.stockData.product_id);
-    await area_id.forEach((item: any, index: number) => {
-    body.append(`area_id[${index}]`, item);
-    })
+    
+    if (this.allRowsSelected) {
+      body.append(`all`, '1');
+      // body.append(`area`, this.pagination.area);
+    } else {
+      body.append(`all`, '0');
+      // body.append(`area`, '[1]');
+      await area_id.forEach((item: any, index: number) => {
+        body.append(`area_id[${index}]`, item);
+        })
+    }
 
     this.dataService.showLoading(true);
     this.stockService.update(body, { id: this.stockId }).subscribe(res => {
