@@ -81,7 +81,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
       })
     } else {
       this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi pengisian data!"
+        message: this.ls.locale.global.messages.text7
       })
       commonFormValidator.validateAllFields(this.formBin);
     }
