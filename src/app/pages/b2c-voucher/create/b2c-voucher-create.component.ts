@@ -17,6 +17,7 @@ import { startWith, map } from 'rxjs/operators';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportAudienceDialogComponent } from '../edit/tab/import-audience-dialog/import-audience-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2c-voucher-create',
@@ -86,8 +87,8 @@ export class B2CVoucherCreateComponent implements OnInit {
   useVoucher: any = new Date();
   usedVoucher: any = new Date();
   usage: any[] = [
-    {label: 'Pesan Antar', value: 'coo'},
-    {label: 'Langsung ke Toko', value: 'offline'}
+    { label: 'Pesan Antar', value: 'coo' },
+    { label: 'Langsung ke Toko', value: 'offline' }
   ];
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
@@ -102,7 +103,8 @@ export class B2CVoucherCreateComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : params[0].path === 'edit' ? true : false;

@@ -43,7 +43,7 @@ export class RcaAgentCreateComponent implements OnInit {
     private rcaAgentService: RcaAgentService,
     private rotuer: Router,
     private wholesalerService: WholesalerService,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
     private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];

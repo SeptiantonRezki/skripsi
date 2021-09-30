@@ -5,6 +5,7 @@ import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtu
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-company-edit',
@@ -26,7 +27,8 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private virtualAccountCompanyService: VirtualAccountCompanyService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_company');
     this.activatedRoute.url.subscribe(params => {
@@ -88,8 +90,8 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       this.listBanks.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
       });
-    }, err=> {
-      
+    }, err => {
+
     })
   }
 
@@ -114,7 +116,7 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
         // minimum_transaction: this.formCompany.get('minimum_transaction').value,
         service_cost: this.formCompany.get('service_cost').value,
       }
-    console.log(body)
+      console.log(body)
       this.virtualAccountCompanyService.put(body, { company_id: this.detailCompany.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
