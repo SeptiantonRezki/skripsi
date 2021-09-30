@@ -109,9 +109,9 @@ export class TradeCreateComponent {
   }
 
   selectStatusTrade(){
+    const matOption = document.querySelectorAll('mat-option');
     for (let index = 0; index < this.statusTP.length; index++) {
-      let id = 'mat-option-'+index;
-      document.getElementById(id).getElementsByClassName("mat-option-text")[0].id = "status-"+index;
+      matOption[index].querySelector('span').id = "options";
     }
   }
 
