@@ -90,8 +90,8 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
       this.listBanks.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
       });
-    }, err=> {
-      
+    }, err => {
+
     })
   }
 

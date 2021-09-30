@@ -87,8 +87,8 @@ export class B2CVoucherCreateComponent implements OnInit {
   useVoucher: any = new Date();
   usedVoucher: any = new Date();
   usage: any[] = [
-    {label: 'Pesan Antar', value: 'coo'},
-    {label: 'Langsung ke Toko', value: 'offline'}
+    { label: 'Pesan Antar', value: 'coo' },
+    { label: 'Langsung ke Toko', value: 'offline' }
   ];
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;

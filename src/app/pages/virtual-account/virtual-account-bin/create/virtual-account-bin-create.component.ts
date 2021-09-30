@@ -39,7 +39,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
         this.listBankMap[bank.code] = bank.name;
       });
       console.log(res.data);
-    }, err=> {
+    }, err => {
 
     })
   }
@@ -48,7 +48,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
     this.virtualAccountBinService.list({}).subscribe(res => {
       this.listCompany = res.data.data
       console.log(res.data.data)
-    }, err=> {
+    }, err => {
 
     })
   }

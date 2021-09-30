@@ -36,9 +36,9 @@ export class DbProductSubmissionApprovalComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private submissionService: ProductSubmissionService,
-    private router: Router
+    private router: Router,
     private ls: LanguagesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
