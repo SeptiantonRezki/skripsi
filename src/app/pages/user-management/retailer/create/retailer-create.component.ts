@@ -43,7 +43,8 @@ export class RetailerCreateComponent {
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "KA", value: "KA"},
-    { name: "Official Store", value: "Official Store"}
+    { name: "Official Store", value: "Official Store"},
+    { name: "RRP", value: "RRP"}
   ];
 
   constructor(
