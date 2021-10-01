@@ -347,10 +347,12 @@ export class WholesalerEditComponent {
     if (this.detailWholesaler.country) {
       this.country_phone = this.detailWholesaler.country === 'KH' ? "+855" : "+62";
     } else {
-      if ((this.detailWholesaler.phone).includes('+62')) {
-        this.country_phone = "+62";
-      } else if ((this.detailWholesaler.phone).includes('+855')) {
-        this.country_phone = "+855";
+      if (this.detailWholesaler.phone) {
+        if ((this.detailWholesaler.phone).includes('+62')) {
+          this.country_phone = "+62";
+        } else if ((this.detailWholesaler.phone).includes('+855')) {
+          this.country_phone = "+855";
+        }
       }
     }
 

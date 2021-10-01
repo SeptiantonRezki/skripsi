@@ -426,10 +426,12 @@ export class RetailerEditComponent {
     if (this.detailRetailer.country) {
       this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
     } else {
-      if ((this.detailRetailer.phone).includes('+62')) {
-        this.country_phone = "+62";
-      } else if ((this.detailRetailer.phone).includes('+855')) {
-        this.country_phone = "+855";
+      if (this.detailRetailer.phone) {
+        if ((this.detailRetailer.phone).includes('+62')) {
+          this.country_phone = "+62";
+        } else if ((this.detailRetailer.phone).includes('+855')) {
+          this.country_phone = "+855";
+        }
       }
     }
     
@@ -439,7 +441,7 @@ export class RetailerEditComponent {
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
       country: this.detailRetailer.country || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split(this.country_phone)[1]) : '',
+      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1])) : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
