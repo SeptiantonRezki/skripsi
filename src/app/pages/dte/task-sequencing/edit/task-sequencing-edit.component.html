@@ -50,7 +50,7 @@
               </mat-error>
             </mat-form-field>-->
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama" formControlName="name"
+              <input id="input-nama" matInput type="text" placeholder="Nama" formControlName="name"
                 [readonly]="data?.is_editable === 0">
               <mat-error
                 *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
@@ -101,7 +101,7 @@
             <h3 class="h3"><strong>Masa Berlaku Task Sequence</strong></h3>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
+              <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
                 placeholder="Pilih Tanggal Mulai" formControlName="start_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
@@ -113,7 +113,7 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
+              <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
                 placeholder="Pilih Tanggal Berakhir" formControlName="end_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
