@@ -144,6 +144,16 @@
               <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Pojok Bayar" [formControl]="pojok_bayar_validation">
+              <mat-option *ngFor="let item of listPojokBayar" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Bank Account" [formControl]="bank_final_validation">
+              <mat-option *ngFor="let item of listBankFinalValidation" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
