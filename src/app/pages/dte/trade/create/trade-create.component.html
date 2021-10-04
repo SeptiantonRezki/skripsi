@@ -11,7 +11,7 @@
           <div>
             <mat-form-field
               [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
-              <mat-select formControlName="status" (click)="selectStatusTrade()" id="sini-broh">
+              <mat-select formControlName="status" (click)="selectStatusTrade()">
                 <mat-option *ngFor="let item of statusTP" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>

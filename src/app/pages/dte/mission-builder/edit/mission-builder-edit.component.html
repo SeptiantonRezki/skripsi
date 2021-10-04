@@ -200,7 +200,7 @@
           </mat-card>
         </div>
         <div fxFlex="12">
-          <button mat-raised-button type="button" style="width:100%; background-color:#007EE5"
+          <button id="btn-save-as-draft" mat-raised-button type="button" style="width:100%; background-color:#007EE5"
             [disabled]="task?.is_editable === 0" class="confirmation-button" (click)="submit('unpublish')"
             *ngIf="!isDetail">Save As Draft</button>
         </div>
