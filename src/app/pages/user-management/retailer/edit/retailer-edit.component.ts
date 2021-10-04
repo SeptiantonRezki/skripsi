@@ -157,7 +157,13 @@ export class RetailerEditComponent {
         'parent_id': null,
         'code': 'SLSNTL      ',
         'name': 'SLSNTL'
-      }
+      },
+      {
+        'id': 6944,
+        'parent_id': null,
+        'code': 'SLSNTNL      ',
+        'name': 'SLSNTNL'
+      },
     ];
 
     this.list = {
@@ -180,7 +186,7 @@ export class RetailerEditComponent {
       address: ['', Validators.required],
       business_code: ['', Validators.required],
       owner: ['', Validators.required],
-      phone: [''],
+      phone: ['', Validators.required],
       status: ['', Validators.required],
       status_user: ['', Validators.required],
       national: ['', Validators.required],
