@@ -649,6 +649,8 @@ export class RetailerEditComponent {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
       const icValue = this.formRetailer.get('InternalClassification').value;
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+
       let body = {
         _method: 'PUT',
         name: this.formRetailer.get('name').value,
@@ -660,8 +662,8 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
         longitude: this.formRetailer.get('longitude').value ? this.formRetailer.get('longitude').value : null,
-        type: (icValue === 'SRC' || icValue === 'NON-SRC' || icValue === 'Official Store') ? "General Trade" : icValue,
-        InternalClassification: this.formRetailer.get('InternalClassification').value,
+        type: generalTrade.indexOf(icValue) >= 0 ? "General Trade" : icValue,
+        InternalClassification: icValue,
         gsr_flag: this.formRetailer.get('gsr').value,
         gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,

@@ -362,6 +362,8 @@ export class RetailerCreateComponent {
 
       let icValue = this.verticalStepperStep4.get("InternalClassification").value;
 
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+
       let body = {
         name: this.verticalStepperStep1.get("name").value,
         address: this.verticalStepperStep1.get("address").value,
@@ -371,8 +373,8 @@ export class RetailerCreateComponent {
         areas: [this.verticalStepperStep3.get("territory").value],
         latitude: this.verticalStepperStep3.get("latitude").value ? this.verticalStepperStep3.get("latitude").value : null,
         longitude: this.verticalStepperStep3.get("longitude").value ? this.verticalStepperStep3.get("longitude").value : null,
-        type: (icValue === 'SRC' || icValue === 'NON-SRC' || icValue === 'Official Store') ? "General Trade" : icValue,
-        InternalClassification: this.verticalStepperStep4.get("InternalClassification").value
+        type: generalTrade.indexOf(icValue) >= 0 ? "General Trade" : icValue,
+        InternalClassification: icValue
       };
 
       this.retailerService.create(body).subscribe(
