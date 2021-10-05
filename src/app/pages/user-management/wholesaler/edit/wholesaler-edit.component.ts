@@ -131,12 +131,6 @@ export class WholesalerEditComponent {
         "code": "SLSNTL      ",
         "name": "SLSNTL"
       },
-      {
-        'id': 6944,
-        'parent_id': null,
-        'code': 'SLSNTNL      ',
-        'name': 'SLSNTNL'
-      },
     ];
 
     this.list = {
