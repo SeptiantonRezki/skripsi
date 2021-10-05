@@ -350,6 +350,7 @@ export class DiaglogMisiComponent implements OnInit {
       this.form.get('coin_verification').patchValue(0);
     } else if (e.source.name === 'non_coin_reward' && e.checked === false) {
       this.form.get('reward_description').patchValue("");
+      this.isRewardError = false;
     }
   }
 
