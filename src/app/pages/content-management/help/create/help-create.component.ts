@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { HelpService } from 'app/services/content-management/help.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-help-create',
@@ -50,7 +51,8 @@ export class HelpCreateComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private dialogService: DialogService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formHelpError = {
       title: {},
@@ -218,7 +220,7 @@ export class HelpCreateComponent {
           res => {
             // this.loadingIndicator = false;
             this.router.navigate(["content-management", "help"]);
-            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           },
           err => {
             this.dialogService.openSnackBar({ message: err.error.message });

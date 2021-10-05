@@ -12,11 +12,12 @@ import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEve
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
+import moment from 'moment';
 import { startWith, map } from 'rxjs/operators';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportAudienceDialogComponent } from '../edit/tab/import-audience-dialog/import-audience-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2c-voucher-create',
@@ -86,8 +87,8 @@ export class B2CVoucherCreateComponent implements OnInit {
   useVoucher: any = new Date();
   usedVoucher: any = new Date();
   usage: any[] = [
-    {label: 'Pesan Antar', value: 'coo'},
-    {label: 'Langsung ke Toko', value: 'offline'}
+    { label: 'Pesan Antar', value: 'coo' },
+    { label: 'Langsung ke Toko', value: 'offline' }
   ];
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
@@ -102,7 +103,8 @@ export class B2CVoucherCreateComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : params[0].path === 'edit' ? true : false;
@@ -153,6 +155,7 @@ export class B2CVoucherCreateComponent implements OnInit {
 
     this.formDetailVoucher = this.formBuilder.group({
       name: ['', Validators.required],
+      alias: ['', Validators.required],
       voucherValue: [0, [Validators.required, Validators.min(1)]],
       jumlahVoucherPerConsumer: [0, [Validators.required, Validators.min(1)]],
       startDate: [null, Validators.required],
@@ -474,6 +477,7 @@ export class B2CVoucherCreateComponent implements OnInit {
     if (this.formDetailVoucher.valid) {
       const body = {
         name: this.formDetailVoucher.get('name').value,
+        alias: this.formDetailVoucher.get('alias').value,
         nominal: this.formDetailVoucher.get('voucherValue').value,
         limit_per_user: this.formDetailVoucher.get('jumlahVoucherPerConsumer').value,
         start_date: moment(this.formDetailVoucher.get('startDate').value).format('YYYY-MM-DD'),
@@ -508,7 +512,7 @@ export class B2CVoucherCreateComponent implements OnInit {
         this.dataService.setToStorage('detail_voucher_b2c', null);
         this.dataService.setToStorage('isb2ccrt', true);
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['b2c-voucher', 'edit', res.data.id]);
       }, err => {
         this.dataService.showLoading(false);

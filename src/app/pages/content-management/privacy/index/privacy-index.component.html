@@ -28,7 +28,8 @@
             <span class="row-name" (click)="directEdit(row)">{{row.title}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="400" name="Grup Pengguna" prop="user"></ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Grup Pengguna" prop="user"></ngx-datatable-column>
+        <ngx-datatable-column [width]="200" name="Negara" prop="country"></ngx-datatable-column>
         <!-- <ngx-datatable-column name="Halaman Tujuan" prop="slug"></ngx-datatable-column> -->
 
         <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">

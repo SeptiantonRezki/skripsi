@@ -17,6 +17,8 @@ import { forkJoin } from "rxjs";
 import { QiscusService } from "app/services/qiscus.service";
 import { ActivatedRoute } from '@angular/router';
 import { Config } from "app/classes/config";
+import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "login",
@@ -38,6 +40,7 @@ export class LoginComponent implements OnInit {
   showPassword = false;
   showExternalUserFields = false;
   internalSigningIn = false;
+  language: string;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -50,7 +53,9 @@ export class LoginComponent implements OnInit {
     private userIdle: IdleService,
     private generalService: GeneralService,
     private qs: QiscusService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     this.fuseConfig.setConfig({
       layout: {
@@ -75,7 +80,7 @@ export class LoginComponent implements OnInit {
     let authCode = this.route.snapshot.queryParamMap.get('code');
     if(authCode) {
       this.internalSigningIn = true;
-      
+
       this.authenticationService.getUserCognitoAD(authCode).subscribe(res => {
         this.authorize(res)
         this.internalSigningIn = false;
@@ -113,6 +118,21 @@ export class LoginComponent implements OnInit {
         this.loginFormErrors
       );
     });
+
+    this.getInitLocale();
+  }
+
+  async getInitLocale() {
+    const lang = await localStorage.getItem('user_country');
+    this.language = lang || this.ls.selectedLanguages || 'id';
+  }
+
+  changeSelectedLanguage(event: any) {
+    if (event) {
+      this.ls.selectedLanguages = event.value;
+      localStorage.setItem('user_country', event.value);
+      this.translate.use(event.value);
+    }
   }
 
   async qiscusLoginOrRegister(profile: any) {

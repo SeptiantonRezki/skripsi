@@ -311,6 +311,51 @@ export const brConfig = {
       }
     ]
   },
+  rca_agent: {
+    index: [
+      {
+        type: "current",
+        url: "/rca/agent-pengguna",
+        name: "Daftar RCA Agent"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat RCA Agent"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit RCA Agent"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail RCA Agent"
+      }
+    ]
+  },
   paguyuban: {
     index: [
       {
@@ -1085,6 +1130,63 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Produk"
+        }
+      ],
+      submission: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Produk Diajukan"
+        }
+      ],
+      submissionDetail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/submission",
+          name: "Produk Diajukan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
+        }
+      ],
+    },
+    dbSubmission: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pengajuan Produk DB",
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk Diajukan"
+        }
+      ],
+      approval: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan Approval"
         }
       ],
     },
@@ -2945,6 +3047,31 @@ export const brConfig = {
         name: "Detail Pertanyaan Verifikasi Agent"
       },
 
-    ]
+    ],
+  },
+  device_management: {
+    index: [
+      {
+        type: "current",
+        url: "/device-management/recovery",
+        name: "Perangkat dipulihkan dan Pengaturan"
+      }
+    ],
+  },
+  remote_call_activation: {
+    grouping_pelanggan: [
+      {
+        type: "current",
+        url: "/rca/grouping-pelanggan",
+        name: "Grouping Pelanggan"
+      }
+    ],
+    route_plan: [
+      {
+        type: "current",
+        url: "/rca/rute-kunjungan",
+        name: "Rute Kunjungan"
+      }
+    ],
   }
 };

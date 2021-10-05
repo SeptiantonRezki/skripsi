@@ -11,7 +11,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-penukaran-voucher',
@@ -54,6 +55,7 @@ export class PenukaranVoucherComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -194,7 +196,7 @@ export class PenukaranVoucherComponent implements OnInit {
         this.b2cVoucherService.updatePenukaranVoucher({ voucher_id: this.detailVoucher.id }, body).subscribe((res) => {
           // this.router.navigate(["b2c-voucher"]);
           this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.onRefresh.emit();
           this.setSelectedTab.emit(4);
         }, (err) => {

@@ -16,6 +16,7 @@ import { CookieService } from "ngx-cookie-service";
 import { IdleService } from "app/services/idle.service";
 import { QiscusService } from "app/services/qiscus.service";
 import * as CryptoJS from 'crypto-js';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 
 @Component({
@@ -51,6 +52,7 @@ export class DeviceAuthenticationComponent implements OnInit, OnDestroy {
     private cookieService: CookieService,
     private userIdle: IdleService,
     private qs: QiscusService,
+    private ls: LanguagesService
   ) {
     this.environment = environment;
     this.fuseConfig.setConfig({
@@ -189,13 +191,13 @@ export class DeviceAuthenticationComponent implements OnInit, OnDestroy {
               }
             } else {
               this.dataService.unSetAuthorization();
-              this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
+              this.dialogService.openSnackBar({ message: this.ls.locale.device_authentication.text7 });
             }
           });
         } else this.router.navigate(['reset-password/' + this.dataService.getFromStorage('token_reset_password')], { queryParams: { email: this.username } });
       } else {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: 'Gagal mengautorisasi OTP silahkan coba lagi' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.device_authentication.text8 });
       }
     }, err => {
       this.dataService.showLoading(false);

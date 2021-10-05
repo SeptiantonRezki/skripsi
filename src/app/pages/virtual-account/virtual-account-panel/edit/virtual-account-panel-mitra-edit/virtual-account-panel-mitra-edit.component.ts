@@ -12,6 +12,7 @@ import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VirtualAccountPanelImportDialogComponent } from '../../virtual-account-panel-import-dialog/virtual-account-panel-import-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-panel-mitra-edit',
@@ -71,7 +72,8 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
     private mitraPanelService: VirtualAccountPanelService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -591,7 +593,7 @@ export class VirtualAccountPanelMitraEditComponent implements OnInit, OnDestroy 
       this.mitraPanelService.store(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['virtual-account', 'panel']);
 

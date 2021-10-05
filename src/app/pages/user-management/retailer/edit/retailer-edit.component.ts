@@ -10,6 +10,8 @@ import { MatSelect } from '@angular/material';
 import { GeneralService } from 'app/services/general.service';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { PagesName } from 'app/classes/pages-name';
+import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -99,6 +101,8 @@ export class RetailerEditComponent {
     { name: 'OFF', value: 0 },
     { name: 'ON', value: 1 }
   ]
+  countryList: any[] = [];
+  country_phone: string;
 
   formRefferalCode: FormGroup;
   
@@ -111,8 +115,11 @@ export class RetailerEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private retailerService: RetailerService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
     this.formdataErrors = {
@@ -126,7 +133,8 @@ export class RetailerEditComponent {
       latitude: {},
       longitude: {},
       // type: {},
-      InternalClassification: {}
+      InternalClassification: {},
+      country: {}
     };
 
     this.formBankAccountError = {
@@ -164,6 +172,7 @@ export class RetailerEditComponent {
 
   async ngOnInit() {
     this.getBanks();
+    this.getCountryList();
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -191,7 +200,8 @@ export class RetailerEditComponent {
       gsr: [0],
       gsm_pl: [0],
       version_retailer: [''],
-      version_cashier: ['']
+      version_cashier: [''],
+      country: [""],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -313,6 +323,21 @@ export class RetailerEditComponent {
         this.filteredBanks.next(this.listBanks.slice());
       }, err => console.log('err', err));
   }
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
+  handleCountryPhone(event){
+    this.country_phone = event.value === 'KH' ? "+855" : "+62";
+  }
 
   filteringBanks() {
     if (!this.listBanks) {
@@ -398,12 +423,23 @@ export class RetailerEditComponent {
 
     }
     console.log(this.detailRetailer.phone);
+    if (this.detailRetailer.country) {
+      this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
+    } else {
+      if ((this.detailRetailer.phone).includes('+62')) {
+        this.country_phone = "+62";
+      } else if ((this.detailRetailer.phone).includes('+855')) {
+        this.country_phone = "+855";
+      }
+    }
+    
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split('+62')[1]) : '',
+      country: this.detailRetailer.country || '',
+      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split(this.country_phone)[1]) : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
@@ -652,7 +688,8 @@ export class RetailerEditComponent {
         address: this.formRetailer.get('address').value,
         business_code: this.formRetailer.get('business_code').value,
         owner: this.formRetailer.get('owner').value,
-        phone: this.formRetailer.getRawValue()['phone'] ? `+62${this.formRetailer.getRawValue()['phone']}` : '',
+        country: this.formRetailer.get('country').value,
+        phone: this.formRetailer.getRawValue()['phone'] ? this.country_phone + this.formRetailer.getRawValue()['phone'] : '',
         status: this.formRetailer.get('status').value,
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
@@ -766,6 +803,11 @@ export class RetailerEditComponent {
     console.log('SEE', this.seePhone);
 
     // const fRtl = this.formRetailer;
+
+    if (!this.isCan(['ubah', 'country'])) {
+      const fields = ['country'];
+      this.disableFields(fields);
+    }
 
     if (!this.isCan(['ubah', 'profile_toko'])) {
 

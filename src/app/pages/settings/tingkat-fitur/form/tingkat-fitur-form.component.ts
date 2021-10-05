@@ -7,6 +7,7 @@ import { FeatureLevelService } from 'app/services/settings/feature-level.service
 import { TingkatFiturTreeData, TingkatFiturNode } from '../tree/tingkat-fitur-tree-data.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
+import { LanguagesService } from 'app/services/languages/languages.service';
 @Component({
   selector: 'app-tingkat-fitur-form',
   templateUrl: './tingkat-fitur-form.component.html',
@@ -29,7 +30,8 @@ export class TingkatFiturFormComponent implements OnInit {
     private dataService: DataService,
     private tingkatFiturTreeData: TingkatFiturTreeData,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
 
     this.onLoad = true;
@@ -140,7 +142,7 @@ export class TingkatFiturFormComponent implements OnInit {
 
       handlerAction.subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['settings', 'feature-level']);
 
       }, err => {

@@ -26,6 +26,7 @@ export class TncEditComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  countryList: any[] = [];
   companyList: any[] = [];
 
   files: File;
@@ -43,7 +44,8 @@ export class TncEditComponent {
       title: {},
       body: {},
       user: {},
-      group_id: {}
+      group_id: {},
+      country: {},
     };
 
     this.detailTnc = this.dataService.getFromStorage('detail_tnc');
@@ -55,10 +57,12 @@ export class TncEditComponent {
       body: ["", Validators.required],
       user: ["", Validators.required],
       is_notif: [false],
-      group_id: [""]
+      group_id: [""],
+      country: ["", Validators.required],
     });
 
     this.getUserGroups();
+    this.getCountryList();
     this.getCompanyList();
 
     this.formTnc.valueChanges.subscribe(() => {
@@ -70,7 +74,8 @@ export class TncEditComponent {
       user: this.detailTnc.user,
       body: this.detailTnc.body,
       is_notif: false,
-      group_id: this.detailTnc.group_id || ""
+      group_id: this.detailTnc.group_id || "",
+      country: this.detailTnc.country_code
     })
   }
 
@@ -95,6 +100,18 @@ export class TncEditComponent {
     );
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
   getCompanyList() {
     this.tncService.getCompanyList().subscribe(res => {
       this.companyList = res.data;
@@ -111,6 +128,7 @@ export class TncEditComponent {
         type: "terms-conditions",
         is_notif: this.formTnc.get('is_notif').value === true ? 1 : 0,
         group_id: this.formTnc.get("group_id").value,
+        country: this.formTnc.get("country").value,
       };
 
       this.tncService.put(body, { content_id: this.detailTnc.id }).subscribe(

@@ -7,6 +7,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from 'app/services/data.service';
 
 import * as _ from 'underscore';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-role-create',
@@ -31,7 +32,8 @@ export class RoleCreateComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.roles = this.activatedRoute.snapshot.data['menu'];
     // this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -258,7 +260,7 @@ export class RoleCreateComponent {
 
       this.accessService.create(body).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['settings', 'access']);
         },
         err => {

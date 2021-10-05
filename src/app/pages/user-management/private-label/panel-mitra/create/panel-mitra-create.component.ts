@@ -12,7 +12,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-mitra-dialog.component';
 

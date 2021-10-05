@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
 import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-bin-create',
@@ -24,29 +25,30 @@ export class VirtualAccountBinCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountBinService: VirtualAccountBinService,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService
+    private virtualAccountBinService: VirtualAccountBinService,
+    private virtualAccountCompanyService: VirtualAccountCompanyService,
+    private ls: LanguagesService
   ) {
 
   }
 
   getBanks() {
-    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+    this.virtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBank = res.data;
       this.listBank.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
       });
       console.log(res.data);
-    }, err=> {
+    }, err => {
 
     })
   }
 
   getCompanies() {
-    this.VirtualAccountBinService.list({}).subscribe(res => {
+    this.virtualAccountBinService.list({}).subscribe(res => {
       this.listCompany = res.data.data
       console.log(res.data.data)
-    }, err=> {
+    }, err => {
 
     })
   }
@@ -68,10 +70,10 @@ export class VirtualAccountBinCreateComponent implements OnInit {
         bin: this.formBin.get('bin').value,
       }
 
-      this.VirtualAccountBinService.create(body).subscribe(res => {
+      this.virtualAccountBinService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'companies']);
       }, err => {
@@ -79,7 +81,7 @@ export class VirtualAccountBinCreateComponent implements OnInit {
       })
     } else {
       this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi pengisian data!"
+        message: this.ls.locale.global.messages.text7
       })
       commonFormValidator.validateAllFields(this.formBin);
     }

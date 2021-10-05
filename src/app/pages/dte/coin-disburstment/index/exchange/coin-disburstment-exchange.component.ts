@@ -13,6 +13,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { IdbService } from 'app/services/idb.service';
 import { Observable, Subject } from 'rxjs';
 import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-coin-disburstment-exchange',
@@ -77,6 +78,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     private groupTradeProgramService: GroupTradeProgramService,
     private idbService: IdbService,
     private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.detailCoin = this.dataService.getFromStorage("detail_coin_disburstment");
 
@@ -282,6 +284,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination['coin_disbursement_id'] = this.detailCoin.id;
 
     if (this.formFilterExchange.get("group_trade_program").value) {
       this.pagination['group'] = this.formFilterExchange.get("group_trade_program").value;

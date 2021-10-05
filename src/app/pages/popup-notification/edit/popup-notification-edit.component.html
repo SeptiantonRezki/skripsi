@@ -185,6 +185,20 @@
               </div>
             </div>
 
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="subscription" placeholder="Status Berlangganan">
+                    <mat-option *ngFor="let item of listSubscription" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formPopupGroup.controls['subscription'].hasError('required') && formPopupGroup.controls['subscription'].touched">
+                    Status berlangganan harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
             <div class="pb-16 px-24">
               <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
                 <strong class="font-size-16">Batasan Umur</strong>
@@ -316,6 +330,82 @@
             </mat-radio-group>
           </div>
 
+          <!-- Image -->
+          <div class="px-24 pb-16" *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'image'">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+              <div ngfDrop selectable="1" [(validDrag)]="validDragContentImage" [(file)]="fileContentImage" accept="image/*"
+                class="well my-drop-zone" [class.invalid-drag]="validDragContentImage === false"
+                [class.valid-drag]="validDragContentImage" (fileChange)="fileChangeContentImage($event)">
+                Tarik gambar kesini atau <strong>pilih file</strong>
+              </div>
+              <mat-chip-list *ngIf="fileContentImage">
+                <mat-chip style="position:unset;margin:0;" (click)="previewImage(convertedContentImage)" [removable]="true" (removed)="fileContentImage=undefined">
+                  <span>Lihat Gambar</span>
+                  <mat-icon style="padding:0;" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+              <mat-chip-list *ngIf="!fileContentImage && convertedContentImage">
+                <mat-chip style="position:unset;margin:0;" (click)="previewImage(convertedContentImage)">
+                  <span>Lihat Gambar</span>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
+
+          <!-- link to web browser -->
+          <div class="px-24" *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'link_to_web_browser'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <input matInput type="url" formControlName="url_web" placeholder="URL Link">
+                <mat-error
+                  *ngIf="formPopupGroup.controls['url_web'].hasError('required') && formPopupGroup.controls['url_web'].touched">
+                  URL harus diisi
+                </mat-error>
+                <mat-error
+                  *ngIf="formPopupGroup.controls['url_web'].hasError('pattern') && formPopupGroup.get('url_web').value !== ''">
+                  URL tidak valid
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- E-Wallet -->
+          <div class="pb-24 px-24" *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'e_wallet'">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="content_wallet" placeholder="Tipe Wallet">
+                  <mat-option *ngFor="let item of listContentWallet" [value]="item.id">{{item.app_name}}</mat-option>
+                </mat-select>
+                <mat-error
+                *ngIf="formPopupGroup.get('content_wallet').hasError('required') && formPopupGroup.get('content_wallet').touched">
+                  Tipe Wallet harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <input matInput type="text" formControlName="button_text" placeholder="Teks Button">
+                <mat-error
+                  *ngIf="formPopupGroup.get('button_text').hasError('required') && formPopupGroup.get('button_text').touched">
+                  Teks Button harus diisi
+                </mat-error>
+                <mat-error
+                  *ngIf="formPopupGroup.get('button_text').hasError('maxlength') && formPopupGroup.get('button_text').touched">
+                  Teks Button Maksimal 30 karakter
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">Isi Halaman</h3>
+            </div>
+            <textarea [froalaEditor]="options" formControlName="body_wallet" class="pb-4"
+              fxFlex="100"></textarea>
+            <mat-error style="padding-top: 6px !important; font-size: .86em;"
+              *ngIf="formPopupGroup.get('body_wallet').hasError('required') && formPopupGroup.get('body_wallet').touched">
+              Isi Halaman harus diisi
+            </mat-error>
+          </div>
+
           <!-- Retailer -->
           <div *ngIf="formPopupGroup.get('user_group').value === 'retailer'">
             <div class="pb-16 px-24">
@@ -356,13 +446,18 @@
             </div>
           </div>
           <div *ngIf="formPopupGroup.value.is_mission_builder === false">
-            <div fxLayout="row" class="pb-24 px-24">
+            <div fxLayout="row" fxLayoutGap="24px" class="pb-24 px-24">
               <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
                 formControlName="is_target_audience">Target Audience</mat-checkbox>
+              <mat-checkbox *ngIf="formPopupGroup.get('user_group').value === 'customer'" class="mt-4 ml-4 mb-8" (change)="isTargetArea($event)"
+                formControlName="is_target_area">Target Area</mat-checkbox>
             </div>
+            <ng-container *ngIf="formPopupGroup.get('is_target_area').value === true">
+              <target-area (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)" (selectedAllId)="getSelectedAllId($event)" [areas]="targetAreaIds"></target-area>
+            </ng-container>
             <div [formGroup]="formFilter" *ngIf="formPopupGroup.controls['is_target_audience'].value === true">
-              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
-                fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="px-24"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
                   <mat-select placeholder="National" formControlName="national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -538,7 +633,7 @@
               </ngx-datatable>
             </div>
 
-            <div *ngIf="formPopupGroup.controls['is_target_audience'].value === false">
+            <div *ngIf="!formPopupGroup.get('is_target_audience').value && !formPopupGroup.get('is_target_area').value">
               <div class="pt-16" formArrayName="areas"
                 *ngFor="let wil of formPopupGroup.get('areas')['controls']; let i = index;">
                 <div [formGroupName]="i">

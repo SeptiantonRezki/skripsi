@@ -9,8 +9,10 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./pertanyaan-verifikasi-agent-detail.component.scss']
 })
 export class PertanyaanVerifikasiAgentDetailComponent implements OnInit {
-  
+
   formVerifikasiDinamis: FormGroup;
+  business_id: any;
+  retailer_data: any;
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
@@ -26,7 +28,9 @@ export class PertanyaanVerifikasiAgentDetailComponent implements OnInit {
       detil_sku,
       shipping_type,
       total_sku,
-      total_transaksi
+      total_transaksi,
+      id: business_id,
+      code: ws_code
     } = this.dataService.getFromStorage('customer_care_verif_detail');
     this.formVerifikasiDinamis = this.formBuilder.group({
       tanggal_transaksi: [formatDate(tanggal_transaksi, 'dd/MM/yyyy HH:MM', this.locale)],
@@ -38,11 +42,16 @@ export class PertanyaanVerifikasiAgentDetailComponent implements OnInit {
       total_transaksi: [this.rpPipe.transform(total_transaksi)],
     });
     this.formVerifikasiDinamis.disable();
+    this.business_id = business_id;
+    this.retailer_data = {
+      code: ws_code,
+      name: wholesaler_name,
+    }
   }
   renderDetailSku(): Array<any> {
     const skus = this.formVerifikasiDinamis.get('detil_sku').value as Array<any>;
     let printout = [];
-    
+
     if (skus && skus.length) skus.map(sku => { printout.push(`${sku.name} - ${sku.amount} ${sku.packaging}`) });
 
     return printout;

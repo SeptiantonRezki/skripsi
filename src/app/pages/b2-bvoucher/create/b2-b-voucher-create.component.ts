@@ -13,11 +13,12 @@ import { MatSelect, MatDialogConfig, MatDialog, MatAutocomplete, MatChipInputEve
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from "moment";
+import moment from 'moment';
 import { ImportPanelDialogComponent } from 'app/pages/b2-bvoucher/import-panel-dialog/import-panel-dialog.component';
 import { startWith, map } from "rxjs/operators";
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { NullAstVisitor } from '@angular/compiler';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2-b-voucher-create',
@@ -115,7 +116,8 @@ export class B2BVoucherCreateComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -563,7 +565,7 @@ export class B2BVoucherCreateComponent implements OnInit {
       opsiVoucher: ['b2b', Validators.required],
       name: ["", Validators.required],
       coin: [0, Validators.required],
-      currency: [0, Validators.required],
+      currency: [0, [Validators.required, Validators.minLength(1)]],
       voucher: [0, Validators.required],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
@@ -625,6 +627,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
       this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
     })
+
 
     this.isB2CVoucher.valueChanges.debounceTime(1000).subscribe(res => {
       if (res) {
@@ -1202,7 +1205,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     if (this.isDetail) {
       this.b2bVoucherService.update({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
         else {
           this.getDetail();
@@ -1214,7 +1217,7 @@ export class B2BVoucherCreateComponent implements OnInit {
     } else {
       this.b2bVoucherService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['b2b-voucher']);
       }, err => {
         this.dataService.showLoading(false);
@@ -1236,7 +1239,7 @@ export class B2BVoucherCreateComponent implements OnInit {
 
     this.b2bVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: "Data berhasil disimpan!" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       if (!this.isDetail) this.router.navigate(['b2b-voucher', 'detail']);
       else {
         this.getDetail();

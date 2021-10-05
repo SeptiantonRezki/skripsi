@@ -8,7 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { Lightbox } from 'ngx-lightbox';
 
 import * as _ from 'underscore';
-import * as moment from "moment";
+import moment from 'moment';
 import { Config } from 'app/classes/config';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -21,6 +21,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { ImportCustomNotificationComponent } from './import/import-custom-notification.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-custom-notification-create',
@@ -101,6 +102,7 @@ export class CustomNotificationCreateComponent implements OnInit {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -257,7 +259,7 @@ export class CustomNotificationCreateComponent implements OnInit {
     this.notificationService.createCustom(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
       },
       err => {

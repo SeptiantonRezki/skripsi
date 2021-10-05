@@ -6,6 +6,7 @@ import { TncService } from '../../../../services/content-management/tnc.service'
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-tnc-create',
@@ -24,6 +25,7 @@ export class TncCreateComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  countryList: any[] = [];
   companyList: any[] = [];
 
   files: File;
@@ -34,13 +36,15 @@ export class TncCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private tncService: TncService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formTncError = {
       title: {},
       body: {},
       user: {},
-      group_id: {}
+      group_id: {},
+      country: {},
     };
   }
 
@@ -50,10 +54,12 @@ export class TncCreateComponent {
       body: ["", Validators.required],
       user: ["", Validators.required],
       is_notif: [false],
-      group_id: [""]
+      group_id: [""],
+      country: ["", Validators.required]
     });
 
     this.getUserGroups();
+    this.getCountryList();
     this.getCompanyList();
 
     this.formTnc.valueChanges.subscribe(() => {
@@ -82,6 +88,18 @@ export class TncCreateComponent {
     );
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
   getCompanyList() {
     this.tncService.getCompanyList().subscribe(res => {
       this.companyList = res.data;
@@ -97,6 +115,7 @@ export class TncCreateComponent {
         type: "terms-conditions",
         is_notif: this.formTnc.get('is_notif').value === true ? 1 : 0,
         group_id: this.formTnc.get("group_id").value,
+        country: this.formTnc.get("country").value,
       };
 
       this.tncService.create(body).subscribe(
@@ -104,7 +123,7 @@ export class TncCreateComponent {
           // this.loadingIndicator = false;
           this.router.navigate(["content-management", "terms-and-condition"]);
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         },
         err => {

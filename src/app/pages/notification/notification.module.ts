@@ -25,7 +25,8 @@ import {
   MatRadioModule,
   MatDialogModule,
   MatToolbarModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatChipsModule
 } from "@angular/material";
 
 import {
@@ -75,6 +76,7 @@ export const MY_FORMATS = {
     MatProgressSpinnerModule,
     MatRadioModule,
     MatTooltipModule,
+    MatChipsModule,
     ngfModule,
     LightboxModule,
     FroalaEditorModule.forRoot(),

@@ -1,0 +1,218 @@
+<div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Grouping Pelanggan'">
+    <!-- <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+        SIMPAN
+      </button>
+    </div> -->
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="end center" class="p-16 export">
+      <button mat-raised-button type="button" class="is-danger" (click)="importGrouping()">
+        <mat-icon>arrow_downward</mat-icon> Import XLS
+      </button>
+      <button mat-raised-button type="button" class="is-danger" (click)="exportGrouping()">
+        <mat-icon>arrow_upward</mat-icon> Export XLS
+      </button>
+    </div>
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-tab-group>
+        <mat-tab label="Pelanggan">
+          <div class="ayo-middle" fxLayout="column">
+            <form [formGroup]="formFilter" autoComplete="off">
+              <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="p-16 px-24"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()"
+                  fxFlex="20">
+                  Load Data
+                </button>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+                <h2 class="p-24">Grouping Pelanggan</h2>
+                <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
+                  <mat-icon>search</mat-icon>
+                  <mat-form-field class="is-light tab-search">
+                    <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div fxLayout="row wrap" fxLayoutAlign="start" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
+                fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
+                      'all'
+                      ? 'Semua
+                      Zona' :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Regional" formControlName="region" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Regional'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
+                      'all'
+                      ? 'Semua
+                      Area'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ?
+                      'Semua
+                      Salespoint'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ? 'Semua
+                      District'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Territory" formControlName="territory" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name
+                      ===
+                      'all' ? 'Semua
+                      Territori'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="City" formControlName="city">
+                    <!-- <mat-option *ngIf="cities.length > 0"
+                      [value]="{value: formFilter.get('territoryCode').value, key: 'territoryCode'}">Semua Kota
+                    </mat-option> -->
+                    <mat-option *ngIf="cities.length === 0">No City Available</mat-option>
+                    <mat-option *ngIf="cities.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of cities" [value]="item.city">{{item.city}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="District" formControlName="district_code">
+                    <!-- <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('city').value, key: 'city'}">
+                      Semua District
+                    </mat-option> -->
+                    <mat-option *ngIf="districts.length === 0">No District Available</mat-option>
+                    <mat-option *ngIf="districts.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of districts" [value]="item.district">{{item.district }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Village" formControlName="village">
+                    <!-- <mat-option *ngIf="districts.length > 0"
+                      [value]="{value: formFilter.get('district').value, key: 'district'}">Semua Village
+                    </mat-option> -->
+                    <mat-option *ngIf="villages.length === 0">No Village Available</mat-option>
+                    <mat-option *ngIf="villages.length > 0">None</mat-option>
+                    <mat-option *ngFor="let item of villages" [value]="item.village">{{item.village
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+            <div fxLayout="row" fxFlex="20" class="p-24">
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Position Code" [formControl]="positionCode" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
+                    [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
+                  </ngx-mat-select-search>
+                  <mat-option>None</mat-option>
+                  <mat-option value="blank">Belum di Set</mat-option>
+                  <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
+                    {{item.code}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div flex="1"></div>
+              <mat-form-field fxFlex="12%" class="is-light form-primary">
+                <mat-select placeholder="Classification" [formControl]="classification">
+                  <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="p-0">
+              <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator">
+              </mat-progress-bar>
+              <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+                [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+                [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+                [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+                [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+                <ngx-datatable-column name="Position Code" prop="position_code" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <a class="direct-edit" (click)="openDialogPositionCode(row)">{{ row.position_code ?
+                      row.position_code :
+                      'Kosong, Klik untuk merubah' }}</a>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Customer Name" prop="name"></ngx-datatable-column>
+                <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="Territory Code" prop="teritory_code" [sortable]="false">
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
+                </ngx-datatable-column>
+                <ngx-datatable-column name="City" prop="city" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="District" prop="district" [sortable]="false"></ngx-datatable-column>
+                <ngx-datatable-column name="Village" prop="village" [sortable]="false"></ngx-datatable-column>
+              </ngx-datatable>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Summary">
+          <div class="ayo-middle" fxLayout="column">
+            <div class="p-24" fxLayout="row" fxFlex="30">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Position Code</th>
+                    <th>#Customer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let summary of summaries">
+                    <td>{{ summary.position_code }}</td>
+                    <td>{{ summary.total }}</td>
+                  </tr>
+                  <tr class="active-row" *ngIf="summaries.length === 0">
+                    <td colspan="2" style="text-align: center;">No Data to Display ...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

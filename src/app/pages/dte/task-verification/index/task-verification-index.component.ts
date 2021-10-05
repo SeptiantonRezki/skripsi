@@ -5,7 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
@@ -158,12 +158,14 @@ export class TaskVerificationIndexComponent implements OnInit {
 
     let rows = table.querySelectorAll("datatable-row-wrapper");
     for (let index = 0; index < rows.length; index++) {
-      let numberRow = index + 1;
-      rows[index].id = 'data-row-'+String(numberRow);
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row';
+      // rows[index].id = 'data-row-'+String(numberRow);
 
       let cells = rows[index].querySelectorAll("datatable-body-cell");
       for (let indexCell = 0; indexCell < cells.length; indexCell++) {
-        cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+        cells[indexCell].id = 'data-cell';
+        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
       }
     }
   }

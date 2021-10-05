@@ -8,7 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { Lightbox } from 'ngx-lightbox';
 
 import * as _ from 'underscore';
-import * as moment from "moment";
+import moment from 'moment';
 import { Config } from 'app/classes/config';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -20,6 +20,7 @@ import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/impor
 import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-notification-create',
@@ -60,7 +61,7 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: 'Semua', value:'all'}];
   listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
@@ -204,6 +205,7 @@ export class NotificationCreateComponent {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -372,6 +374,12 @@ export class NotificationCreateComponent {
     this.formNotification.controls['user_group'].setValue('retailer');
     this.formNotification.controls['url_iframe'].disable();
 
+    this.formNotification.controls['landing_page_value'].valueChanges.subscribe(res => {
+      if (res) {
+        this.getAudience();
+      }
+    });
+
     this.formNotification.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formNotification, this.formNotificationError);
     });
@@ -412,7 +420,6 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
-    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
@@ -1227,8 +1234,6 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }
-    console.log(this.formNotification.value.user_group);
-    this.toggleSendAyo(this.formNotification.controls.send_ayo.value);
   }
 
   async submit() {
@@ -1366,9 +1371,7 @@ export class NotificationCreateComponent {
     if (body.type === 'customer') {
       body['verification'] = this.formNotification.get('verification').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
-      if(body.send_sfmc == '0') {
-        body['employee_filter'] = this.formNotification.get('employee_filter').value;
-      }
+      body['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
 
     if(this.typeOfRecurrence == 'Bday18') {
@@ -1457,9 +1460,9 @@ export class NotificationCreateComponent {
               }
             }
 
+            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             if(this.formNotification.get('send_ayo').value) {
               bodyVideo.append('send_sfmc', '0');
-              bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
             } else {
               bodyVideo.append('send_sfmc', '1');
             }
@@ -1474,7 +1477,7 @@ export class NotificationCreateComponent {
             this.notificationService.create(bodyVideo).subscribe(
               res => {
                 this.router.navigate(["notifications"]);
-                this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                 this.dataService.showLoading(false);
                 resolve(res);
               },
@@ -1517,9 +1520,9 @@ export class NotificationCreateComponent {
             }
           }
 
+          bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           if(this.formNotification.get('send_ayo').value) {
             bodyVideo.append('send_sfmc', '0');
-            bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
           } else {
             bodyVideo.append('send_sfmc', '1');
           }
@@ -1536,7 +1539,7 @@ export class NotificationCreateComponent {
           this.notificationService.create(bodyVideo).subscribe(
             res => {
               this.router.navigate(["notifications"]);
-              this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+              this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
               this.dataService.showLoading(false);
               resolve(res);
             },
@@ -1563,7 +1566,7 @@ export class NotificationCreateComponent {
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
       },
       err => {
@@ -1837,22 +1840,15 @@ export class NotificationCreateComponent {
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value;
-      if(this.formNotification.get('send_ayo').value) {
-        if(age === '18+') age = '18plus';
-        else if(age === '18-') age = '18min';
-        else age = 'all';
-      } else {
-        if(age === '18+') age = '18plus';
-        else age = '18min';
-      }
+      if(age === '18+') age = '18plus';
+      else if(age === '18-') age = '18min';
+      else age = 'all';
       
 
       this.pagination['age'] = age;
       this.pagination['verification'] = this.formNotification.get('verification').value;
       this.pagination['subscription_status'] = this.formNotification.get('subscription_status').value;
-      if(this.formNotification.get('send_ayo').value) {
-        this.pagination['employee_filter'] = this.formNotification.get('employee_filter').value;
-      }
+      this.pagination['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
     else {
       if (this.pagination['age']) delete this.pagination['age'];
@@ -1861,7 +1857,7 @@ export class NotificationCreateComponent {
       if (this.pagination['employee_filter']) delete this.pagination['employee_filter'];
     }
 
-    if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page_value").value === 'pojok-modal') {
+    if (this.formNotification.get("user_group").value === 'retailer' && this.formNotification.get("landing_page_value").value === 'pojok_modal') {
       this.pagination['type'] = 'pojok-modal'
     } else {
       delete this.pagination['type'];
@@ -2089,17 +2085,7 @@ export class NotificationCreateComponent {
     if (event.checked) this.getAudience();
   }
   sendAYOChange(event) {
-    this.toggleSendAyo(event.checked);
-  }
-
-  toggleSendAyo(val){
-    if(val) {
-      if(!this.listAge.find(option => option.value == 'all')) {
-        this.listAge.push({ name: "Semua", value: "all" });
-      }
-    } else {
-      this.listAge = this.listAge.filter(option => option.value !== 'all');
-    }
+    
   }
 
   async export() {
@@ -2112,14 +2098,9 @@ export class NotificationCreateComponent {
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') {
       age = this.formNotification.get("age").value;
-      if(this.formNotification.get('send_ayo').value) {
-        if(age === '18+') age = '18plus';
-        else if(age === '18-') age = '18min';
-        else age = 'all';
-      } else {
-        if(age === '18+') age = '18plus';
-        else age = '18min';
-      }
+      if(age === '18+') age = '18plus';
+      else if(age === '18-') age = '18min';
+      else age = 'all';
     }
     else {
       if (age) age = null;

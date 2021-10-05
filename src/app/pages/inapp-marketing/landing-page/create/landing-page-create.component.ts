@@ -5,6 +5,7 @@ import { DialogService } from "app/services/dialog.service";
 import { LandingPageService } from "app/services/inapp-marketing/landing-page.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { Config } from 'app/classes/config';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-landing-page-create",
@@ -27,7 +28,8 @@ export class LandingPageCreateComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private dialogService: DialogService,
-    private landingPageService: LandingPageService
+    private landingPageService: LandingPageService,
+    private ls: LanguagesService
   ) {
     this.formPageError = {
       title: "",
@@ -67,7 +69,7 @@ export class LandingPageCreateComponent {
           // this.loadingIndicator = false;
           this.router.navigate(["advertisement", "landing-page"]);
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         },
         err => {

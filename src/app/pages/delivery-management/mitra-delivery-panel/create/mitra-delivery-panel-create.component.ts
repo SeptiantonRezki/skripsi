@@ -12,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ImportPanelMitraDialogComponent } from '../import-panel-mitra-dialog/import-panel-mitra-dialog.component';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-mitra-delivery-panel-create',
@@ -63,7 +64,8 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
     private router: Router,
     private mitraPanelService: MitraPanelService,
     private dialog: MatDialog,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -546,7 +548,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
       this.mitraPanelService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['delivery', 'panel-mitra']);
       }, err => {

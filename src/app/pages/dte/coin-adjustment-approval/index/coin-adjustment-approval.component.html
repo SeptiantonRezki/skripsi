@@ -100,7 +100,7 @@
             [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
             (page)="setPage($event)" (sort)="onSort($event)">
 
-            <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Pengatur Jadwal Program"
+            <ngx-datatable-column [width]="220" [sortable]="false" name="{{ ls.locale.dte.pengatur_jadwal_program.text16 }}"
               prop="nama_pengatur_jadwal_program" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row">
@@ -109,38 +109,38 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Trade Program" prop="nama_trade_program" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{ ls.locale.dte.trade_program.text1 }}" prop="nama_trade_program" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program"
+            <ngx-datatable-column [width]="195" [sortable]="false" name="{{ ls.locale.dte.group_trade_program.text6 }}"
               prop="nama_grup_trade_program" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="Jumlah SRC" prop="jumlah_src" [flexGrow]="3">
+            <ngx-datatable-column [width]="190" [sortable]="false" name="{{ ls.locale.dte.approval_coin_adjustment.text4 }}" prop="jumlah_src" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="Total Coin yang Terkirim" prop="total_coin"
+            <ngx-datatable-column [width]="190" [sortable]="false" name="{{ ls.locale.dte.approval_coin_adjustment.text5 }}" prop="total_coin"
               [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Request" prop="requested_at"
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{ ls.locale.dte.approval_coin_adjustment.text6 }}" prop="requested_at"
               [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.requested_at | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Approver" prop="approver" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{ ls.locale.dte.approval_coin_adjustment.text3 }}" prop="approver" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Approval" prop="responded_at"
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{ ls.locale.dte.approval_coin_adjustment.text7 }}" prop="responded_at"
               [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.responded_at | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status" [flexGrow]="3">
+            <ngx-datatable-column [width]="165" [sortable]="false" name="{{ ls.locale.global.label.status }}" prop="status" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="name-container">
                   <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
@@ -159,7 +159,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ngx-datatable-column [width]="250" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px" *ngIf="permissionCoinAdjustment?.lihat">
                   <button type="button" mat-icon-button color="" matTooltip="Lihat"

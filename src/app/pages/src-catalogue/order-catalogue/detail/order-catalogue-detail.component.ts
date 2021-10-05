@@ -12,7 +12,8 @@ import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogu
 import { EstShippingDialogComponent } from '../est-shipping-dialog/est-shipping-dialog';
 import { QiscusService } from 'app/services/qiscus.service';
 import { Emitter } from 'app/helper/emitter.helper';
-import * as moment from "moment";
+import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-order-catalogue-detail',
@@ -76,7 +77,8 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private productService: ProductCatalogueService,
     private qs: QiscusService,
-    private emitter: Emitter
+    private emitter: Emitter,
+    private ls: LanguagesService
   ) {
 
     // const observable = this.keyUp.debounceTime(1000)
@@ -362,7 +364,7 @@ export class OrderCatalogueDetailComponent implements OnInit, OnDestroy {
           res => {
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: "Data berhasil disimpan"
+              message: this.ls.locale.notification.popup_notifikasi.text22
             });
 
             this.getDetailOrder();

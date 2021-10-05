@@ -8,9 +8,10 @@ import * as _ from 'underscore';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
 import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 import { ImportTsmCoinComponent } from '../import-coin/import-tsm-coin.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-sequencing-edit',
@@ -52,7 +53,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService
   ) {
 
     activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
@@ -81,6 +83,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       status: ["", Validators.required],
       export_coin_status: [""],
       export_coin_result: [""],
+      import_coin_status: [""],
+      import_coin_status_type: [""],
     })
 
     this.filterGTP.valueChanges
@@ -122,6 +126,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         status: this.data.status,
         export_coin_status: this.data.export_coin_status,
         export_coin_result: this.data.export_coin_result,
+        import_coin_status: this.data.import_coin_status,
+        import_coin_status_type: (this.data.import_coin_status_type) ? this.data.import_coin_status_type : '',
       });
       this.actions = res.data.actions;
       this.getTradePrograms(this.data.trade_creator_name);
@@ -277,7 +283,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({
           message: `Request file berhasil.`,
         });
-        this.refreshRequestingFileStatus();
+        // this.refreshRequestingFileStatus();
         // this.downloadLink.nativeElement.href = res.data;
         // this.downloadLink.nativeElement.click();
       }, err => {
@@ -301,7 +307,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.setValue();
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       }
     })
   }

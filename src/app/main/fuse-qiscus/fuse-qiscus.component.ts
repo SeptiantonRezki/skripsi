@@ -11,7 +11,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
-import * as moment from 'moment';
+import moment from 'moment';
 import {
   Emitter
 } from 'app/helper/emitter.helper';

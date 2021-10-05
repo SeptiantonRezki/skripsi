@@ -1,0 +1,18 @@
+.search-field {
+  display: flex;
+  align-items: center;
+
+  .mat-input-element {
+      padding: 10px 32px 10px 0;
+      border-bottom: 1px solid #ccc;
+      transition: border-color .3s;
+
+      &:focus {
+          border-color: #333;
+      }
+  }
+
+  .mat-icon {
+      margin-left: -24px;
+  }
+}

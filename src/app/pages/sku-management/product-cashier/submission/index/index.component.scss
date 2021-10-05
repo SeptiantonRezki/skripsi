@@ -1,0 +1,73 @@
+.ayo-main-wrapper {
+  position: relative;
+
+  .material {
+      box-shadow: none;
+  }
+}
+
+.tab-link {
+  &, &:hover {
+      text-decoration: none!important;
+  }
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+
+  .mat-input-element {
+      padding: 5px 32px 5px 0;
+      border-bottom: 1px solid #ccc;
+      transition: border-color .3s;
+
+      &:focus {
+          border-color: #333;
+      }
+  }
+
+  .mat-icon {
+      margin-left: -24px;
+  }
+}
+
+.table-btn-label {
+  text-align: center;
+  font-size: .9em;
+  border-radius: 3px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  min-width: 80px;
+  box-sizing: border-box;
+  background-color: #333;
+  color: #fff;
+
+  &.label-green {
+    background-color: #2e7d32;
+  }
+
+  &.label-red {
+    background-color: #b71c1c;
+  }
+}
+
+.table-align-center {
+  justify-content: center;
+}
+
+.table-label {
+  display: flex;
+  align-items: center;
+
+  &-tooltip {
+    cursor: pointer;
+  }
+
+  &-icon {
+    margin: 0 8px;
+  }
+}

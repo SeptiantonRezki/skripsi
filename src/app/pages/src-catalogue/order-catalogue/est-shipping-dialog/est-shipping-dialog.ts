@@ -4,6 +4,7 @@ import { FormControl, Validators } from "@angular/forms";
 import { DialogService } from "app/services/dialog.service";
 import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogue.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
 	selector: 'app-est-shipping-dialog',
@@ -19,7 +20,8 @@ export class EstShippingDialogComponent implements OnInit {
 		public dialog: MatDialog,
 		private dialogService: DialogService,
 		private orderCatalogueService: OrderCatalogueService,
-		private dataService: DataService
+		private dataService: DataService,
+		private ls: LanguagesService
 	) { }
 
 	ngOnInit() {
@@ -48,7 +50,7 @@ export class EstShippingDialogComponent implements OnInit {
 
 				this.orderCatalogueService.updateStatus({ order_id: this.data.order_id }, body).subscribe(res => {
 					this.dialogService.openSnackBar({
-						message: "Data berhasil disimpan!"
+						message: this.ls.locale.notification.popup_notifikasi.text22
 					});
 					this.dialogRef.close(res);
 				})
@@ -67,7 +69,7 @@ export class EstShippingDialogComponent implements OnInit {
 
 			this.orderCatalogueService.updateStatus({ order_id: this.data.order_id }, body).subscribe(res => {
 				this.dialogService.openSnackBar({
-					message: "Data berhasil disimpan!"
+					message: this.ls.locale.notification.popup_notifikasi.text22
 				});
 				this.dialogRef.close(res);
 			})

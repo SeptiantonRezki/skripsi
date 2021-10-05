@@ -156,6 +156,18 @@
                 </mat-radio-group>
               </div>
             </div>
+            <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'customer'">
+              <div class="pb-16 px-24">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">Tipe Spanduk</strong>
+                </div>
+                <mat-radio-group formControlName="type_banner" class="radio-group">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listTypeBannerConsumer" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
           </div>
 
           <!-- Consumer --> 
@@ -207,6 +219,20 @@
                   <mat-error
                     *ngIf="formBannerGroup.controls['verification'].hasError('required') && formBannerGroup.controls['verification'].touched">
                     Jenis Konsumen harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="subscription" placeholder="Status Berlangganan">
+                    <mat-option *ngFor="let item of listSubscription" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['subscription'].hasError('required') && formBannerGroup.controls['subscription'].touched">
+                    Status berlangganan harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -368,6 +394,19 @@
             </div>
           </div>
 
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'profil_saya'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="profile" placeholder="Halaman Profil Saya">
+                  <mat-option *ngFor="let item of listProfile" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="formBannerGroup.controls['profile'].hasError('required') && formBannerGroup.controls['profile'].touched">
+                Halaman profil harus dipilih
+              </mat-error>
+            </div>
+          </div>
+
           <!-- iframe -->
           <div class="px-24"
             *ngIf="formBannerGroup.get('content_type').value === 'iframe' || formBannerGroup.get('content_type').value === 'link_web'">
@@ -451,13 +490,18 @@
               <mat-radio-button class="radio-button" value="no">Tidak</mat-radio-button>
             </mat-radio-group>
           </div>
-          <div fxLayout="row" class="pb-24 px-24">
+          <div fxLayout="row" fxLayoutGap="24px" class="pb-24 px-24">
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">Target Audience</mat-checkbox>
+            <mat-checkbox *ngIf="formBannerGroup.get('user_group').value === 'customer'" class="mt-4 ml-4 mb-8" (change)="isTargetArea($event)"
+              formControlName="is_target_area">Target Area</mat-checkbox>
           </div>
+          <ng-container *ngIf="formBannerGroup.get('is_target_area').value === true">
+            <target-area (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)" (selectedAllId)="getSelectedAllId($event)"></target-area>
+          </ng-container>
           <div [formGroup]="formFilter" *ngIf="formBannerGroup.get('is_target_audience').value === true">
-            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
-              fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="px-24"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="National" formControlName="national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -564,7 +608,7 @@
             </ngx-datatable>
           </div>
 
-          <div *ngIf="formBannerGroup.get('is_target_audience').value === false">
+          <div *ngIf="formBannerGroup.get('is_target_audience').value === false && formBannerGroup.get('is_target_area').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formBannerGroup.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">

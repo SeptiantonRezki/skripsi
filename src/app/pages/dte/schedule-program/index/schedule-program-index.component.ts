@@ -6,10 +6,11 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import { DateAdapter } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-schedule-program-index',
@@ -28,15 +29,15 @@ export class ScheduleProgramIndexComponent {
   pagination: Page = new Page();
   onLoad: boolean;
   statusFilter: any[] = [
-    { name: 'Urutkan Perhari', value: 'day' },
-    { name: 'Urutkan Perbulan', value: 'mounth' },
-    { name: 'Urutkan Pertahun', value: 'year' }
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text2, value: 'day' },
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text3, value: 'mounth' },
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text4, value: 'year' }
   ]
   listStatuses: any[] = [
-    { name: 'Semua Status', value: "" },
-    { name: 'Publish', value: 'publish' },
-    { name: 'Unpublish', value: 'unpublish' },
-    { name: 'Draft', value: 'draft' }
+    { name: this.ls.locale.global.label.all_status, value: "" },
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text8, value: 'publish' },
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text9, value: 'unpublish' },
+    { name: this.ls.locale.dte.pengatur_jadwal_program.text10, value: 'draft' }
   ];
 
   formFilter: FormGroup;
@@ -57,7 +58,8 @@ export class ScheduleProgramIndexComponent {
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private userIdle: IdleService
+    private userIdle: IdleService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale("id");
     this.rows = [];

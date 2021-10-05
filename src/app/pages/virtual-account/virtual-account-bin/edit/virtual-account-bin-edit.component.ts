@@ -6,6 +6,7 @@ import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtu
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-bin-edit',
@@ -27,9 +28,10 @@ export class VirtualAccountBinEditComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private VirtualAccountBinService: VirtualAccountBinService,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService,
-    private activatedRoute: ActivatedRoute
+    private virtualAccountBinService: VirtualAccountBinService,
+    private virtualAccountCompanyService: VirtualAccountCompanyService,
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_virtual_account_bin');
     this.activatedRoute.url.subscribe(params => {
@@ -38,7 +40,7 @@ export class VirtualAccountBinEditComponent implements OnInit {
   }
 
   getBanks() {
-    this.VirtualAccountCompanyService.bankList({}).subscribe(res => {
+    this.virtualAccountCompanyService.bankList({}).subscribe(res => {
       this.listBank = res.data;
       this.listBank.forEach(bank => {
         this.listBankMap[bank.code] = bank.name;
@@ -50,8 +52,8 @@ export class VirtualAccountBinEditComponent implements OnInit {
   }
 
   getCompanies() {
-    this.VirtualAccountBinService.list({}).subscribe(res => {
-      this.listCompany = res.data.data
+    this.virtualAccountBinService.list({}).subscribe(res => {
+      this.listCompany = res.data.data;
     }, err=> {
 
     })
@@ -67,10 +69,10 @@ export class VirtualAccountBinEditComponent implements OnInit {
     this.getCompanies();
     this.getBanks();
   }
-    
+
   getDetail() {
     this.dataService.showLoading(true);
-    this.VirtualAccountBinService.show({ bin_id: this.shortDetail.id }).subscribe(res => {
+    this.virtualAccountBinService.show({ bin_id: this.shortDetail.id }).subscribe(res => {
       this.detailBin = res;
 
       this.formBin.setValue({
@@ -94,10 +96,10 @@ export class VirtualAccountBinEditComponent implements OnInit {
         bin: this.formBin.get('bin').value
       }
 
-      this.VirtualAccountBinService.put(body, { bin_id: this.detailBin.id }).subscribe(res => {
+      this.virtualAccountBinService.put(body, { bin_id: this.detailBin.id }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['virtual-account', 'companies']);
       }, err => {

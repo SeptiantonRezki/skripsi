@@ -5,6 +5,7 @@ import { WholesalerService } from "../../../../services/user-management/wholesal
 import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "../../../../services/data.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-wholesaler-create',
@@ -31,6 +32,7 @@ export class WholesalerCreateComponent {
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   roles: any[] = [];
   areaFromLogin;
+  country_phone: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,8 +40,10 @@ export class WholesalerCreateComponent {
     private dialogService: DialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
@@ -328,7 +332,7 @@ export class WholesalerCreateComponent {
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: '+62' + this.verticalStepperStep2.get("phone").value,
+        phone: this.country_phone + this.verticalStepperStep2.get("phone").value,
         // areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
         areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.id),
         type: "wholesaler",
@@ -338,7 +342,7 @@ export class WholesalerCreateComponent {
       this.wholesalerService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.router.navigate(["user-management", "wholesaler"]);
         },
