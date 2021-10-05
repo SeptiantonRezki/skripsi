@@ -949,6 +949,15 @@ export const brConfig = {
         }
       ],
     },
+    supplierVouchers: {
+      index: [
+        {
+          type: "current",
+          url: "/user-management/supplier-vouchers",
+          name: "Voucher Private Label"
+        }
+      ],
+    }
   },
   inappMarketing: {
     banner: {

@@ -35,6 +35,19 @@
                   </mat-form-field>
                 </div>
 
+                <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center" *ngIf="(formDetilVoucher.get('opsiVoucher').value === 'private-label')">
+                  <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Nama Supplier" formControlName="supplier_company_id">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="filterSupplier" placeholderLabel="Cari Supplier..."></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of filteredSupplier | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <mat-form-field fxFlex="50" class="is-light">
                   <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
                   <mat-error
@@ -79,7 +92,7 @@
                 </div>
 
                 <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
-                  <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'b2b' || formDetilVoucher.get('opsiVoucher').value == 'both'">
+                  <div fxFlex="50" fxLayout="column" *ngIf="['b2b','private-label'].includes(formDetilVoucher.get('opsiVoucher').value) || formDetilVoucher.get('opsiVoucher').value == 'both'">
                     <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                       <span class="opsi-type">Produk B2B</span>
                       <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -210,7 +223,7 @@
             [permissions]="permission">
           </app-panel-mitra-voucher>
         </mat-tab>
-        <mat-tab label="Panel Retailer" *ngIf="isDetail || isEdit">
+        <mat-tab label="Panel Retailer" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'private-label'">
           <div class="ayo-middle p-24" fxLayout="column">
             <div>
               <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">

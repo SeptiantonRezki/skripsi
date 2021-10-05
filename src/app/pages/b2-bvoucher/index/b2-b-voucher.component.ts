@@ -36,6 +36,13 @@ export class B2BVoucherComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
@@ -63,6 +70,7 @@ export class B2BVoucherComponent implements OnInit {
 
   ngOnInit() {
     this.getVoucherList();
+
   }
 
   getVoucherList() {

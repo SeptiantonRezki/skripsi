@@ -45,7 +45,7 @@ import { VendorsService } from './services/src-catalogue/vendors.service';
 import { FieldForceService } from './services/user-management/field-force.service';
 import { PaguyubanService } from './services/user-management/paguyuban.service';
 import { WholesalerService } from './services/user-management/wholesaler.service';
-import {WholesalerSpecialPriceService} from './services/sku-management/wholesaler-special-price.service';
+import { WholesalerSpecialPriceService } from './services/sku-management/wholesaler-special-price.service';
 import { RetailerService } from './services/user-management/retailer.service';
 import { BannerService } from './services/inapp-marketing/banner.service';
 import { LandingPageService } from './services/inapp-marketing/landing-page.service';
@@ -118,6 +118,8 @@ import { PayLaterDistributionListService } from './services/pay-later/pay-later-
 import { ProductSubmissionService } from './services/sku-management/product-submission.service';
 import { AreaService } from './services/area.service';
 import { LanguagesService } from './services/languages/languages.service';
+import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
+import { VoucherPrivateLabelService } from "./services/voucher-private-label.service";
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -262,6 +264,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CoinDisburstmentService,
     AreaService,
     LanguagesService,
+    VoucherPrivateLabelService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

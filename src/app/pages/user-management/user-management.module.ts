@@ -119,6 +119,7 @@ import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesal
 import { RcaAgentComponent } from './rca-agent/rca-agent.component';
 import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
 import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
+import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -265,6 +266,7 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
+    SupplierVouchersComponent,
 
   ],
   entryComponents: [

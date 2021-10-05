@@ -55,6 +55,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   stateUpdated: Boolean;
   productsNota: any[] = [];
   total: any;
+  totalDiscount: number;
   static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
   document: FormControl = new FormControl('');
   permission: any;
@@ -162,6 +163,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
           this.productsNota = products;
           this.total = 0;
+          this.totalDiscount = 0;
           if (this.detailOrder.document) {
             this.document.setValue(this.detailOrder.document);
           }
@@ -215,6 +217,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
               })
             );
           });
+
+          if (res && res.discounts && res.discounts.length) {
+            res.discounts.map((val) => {
+              console.log({ val });
+              this.totalDiscount += (val.amount) ? val.amount : 0;
+            });
+          }
           this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
             this.edited = true;
             this.editable = true;
@@ -224,8 +233,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
               // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
               // if (dayLimit < 30) {
-                // this.initDataQiscus(res);
-                this.qiscusCheck(this.detailOrder); // check login qiscus
+              // this.initDataQiscus(res);
+              this.qiscusCheck(this.detailOrder); // check login qiscus
               // } else {
               //   this.emitter.emitChatIsOpen(false); // for open chat
               // }
@@ -645,7 +654,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             console.log('q_error_013bb', qiscusError);
           });
         } else {
-          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!'});
+          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!' });
         }
       });
     }

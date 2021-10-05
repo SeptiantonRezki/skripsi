@@ -27,42 +27,48 @@
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Zone" formControlName="zone" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ?
+              'Semua
               Zona' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Regional" formControlName="region" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ?
+              'Semua
               Regional' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Area" formControlName="area" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ?
+              'Semua
               Area' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name ===
+              'all' ? 'Semua
               Salespoint' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="District" formControlName="district" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all'
+              ? 'Semua
               District' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
           <mat-select placeholder="Territory" formControlName="territory" multiple>
-            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all'
+              ? 'Semua
               Territory' :
               item.code}}</mat-option>
           </mat-select>
@@ -122,21 +128,22 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="{{ ls.locale.global.label.date_redeem }}" prop="available_at">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.available_at | date: 'dd/MM/yyyy
+    <ngx-datatable-column name="Tanggal Penukaran" prop="order_date">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_date | date: 'dd/MM/yyyy
         HH:mm:ss'}}</ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="{{ ls.locale.global.label.invoice_redeem }}" prop="available_at">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.invoice}}</ng-template>
+    <ngx-datatable-column name="Invoice Penukaran" prop="invoice_number">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.invoice_number}}</ng-template>
     </ngx-datatable-column>
-    
-    <ngx-datatable-column name="{{ ls.locale.global.label.order_id_payment }}" prop="order_id">
+
+    <ngx-datatable-column name="Order ID Pembayaran" prop="order_id">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_id}}</ng-template>
     </ngx-datatable-column>
 
     <ngx-datatable-column name="Tanggal" prop="payment_date">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.payment_date | date: 'dd-MM-yyyy'}}</ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.payment_date | date: 'dd-MM-yyyy'}}
+      </ng-template>
     </ngx-datatable-column>
 
   </ngx-datatable>
