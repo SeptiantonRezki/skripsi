@@ -10,6 +10,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-b2b-voucher-inject',
@@ -38,6 +39,14 @@ export class B2BVoucherInjectComponent implements OnInit {
   roles: PagesName = new PagesName();
   permission: any;
 
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+  formFilter: FormGroup = new FormGroup({ type: new FormControl('') });
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
@@ -65,6 +74,9 @@ export class B2BVoucherInjectComponent implements OnInit {
 
   ngOnInit() {
     this.getList();
+    this.formFilter.get('type').valueChanges.subscribe(value => {
+      this.onFilterChange();
+    });
   }
 
   getList() {
@@ -193,6 +205,19 @@ export class B2BVoucherInjectComponent implements OnInit {
       default:
         return "mat-red-800-bg";
     }
+  }
+  onFilterChange() {
+    this.loadingIndicator = true;
+    this.pagination.renderFilters(this.pagination, this.formFilter.getRawValue());
+    this.pagination.page = 1;
+    this.offsetPagination = 0;
+    this.b2bVoucherInjectService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    }, err => {
+      this.loadingIndicator = false;
+    });
   }
 
 }

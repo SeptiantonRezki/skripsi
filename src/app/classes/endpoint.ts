@@ -306,7 +306,7 @@ export class Endpoint {
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-import`,
         // export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/request-export`,
-        
+
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -543,7 +543,8 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
         updateStatus: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}?type=status`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company/${context.supplierId}`,
-        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll ? '&all=true' : ''}`
+        search: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label?search=${context.param}${context.isAll ? '&all=true' : ''}`,
+        getListProductByCompany: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-private-label`
       },
       PLSupplierUser: {
         getList: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/supplier`,
@@ -1001,6 +1002,12 @@ export class Endpoint {
         position_codes: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna/position-code`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/rca/kunjungan/export`,
         import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/rca/kunjungan/import`
+      },
+      voucher_private_label: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier`,
+        detail_used: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/used`,
+        detail_notused: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/notused`,
+        redeem_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/redeem`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

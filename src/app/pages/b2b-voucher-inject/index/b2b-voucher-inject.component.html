@@ -13,7 +13,22 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{ ls.locale.cn_reward.inject_b2b_voucher.text1 }}</h2>
+        <div fxLayout="row" fxFlex="60">
+          <h2 class="pl-8">{{ ls.locale.cn_reward.inject_b2b_voucher.text1 }}</h2>
+
+          <div class="pl-16" fxFlex="60" fxLayoutAlign="start center" [formGroup]="formFilter">
+
+            <mat-form-field fxFlex="100">
+              <mat-select placeholder="Penggunaan Voucher" formControlName="type">
+                <mat-option *ngFor="let ops of opsiVoucherList" [value]="ops.value"><strong>{{ ops.name }}</strong>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -32,7 +47,14 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text3 }}" prop="panel_retailer_count">
+        <ngx-datatable-column name="Penggunaan Voucher" prop="type_indo">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <!-- <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a> -->
+            {{row.type_indo}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.panel_retailer_count}}
           </ng-template>
@@ -74,8 +96,8 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false"
-          [frozenRight]="true">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+          [sortable]="false" [frozenRight]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
