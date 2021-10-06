@@ -1130,7 +1130,8 @@ export class ProductEditComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
-          // convertion: this.formProductGroup.get("convertion").value
+          // convertion: this.formProductGroup.get("convertion").value,
+          cashier: this.detailProduct.cashier,
         };
 
         let fd = new FormData();
@@ -1181,6 +1182,7 @@ export class ProductEditComponent {
         fd.append("status", body.status);
         fd.append("is_promo_src", body.is_promo_src);
         fd.append("is_paylater", body.is_paylater);
+        fd.append("cashier", body.cashier);
 
         if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
           fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
