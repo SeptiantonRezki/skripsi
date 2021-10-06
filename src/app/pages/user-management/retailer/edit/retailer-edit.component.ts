@@ -48,7 +48,9 @@ export class RetailerEditComponent {
     { name: 'GT', value: 'GT' },
     { name: 'IMO', value: 'IMO' },
     { name: 'LAMP/HOP', value: 'LAMP/HOP' },
-    { name: 'KA', value: 'KA' }
+    { name: 'KA', value: 'KA' },
+    { name: "Official Store", value: "Official Store"},
+    { name: "RRP", value: "RRP"}
   ];
 
   listGSR: any[] = [
@@ -684,6 +686,9 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
+      const icValue = this.formRetailer.get('InternalClassification').value;
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+
       let body = {
         _method: 'PUT',
         name: this.formRetailer.get('name').value,
@@ -696,8 +701,8 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
         longitude: this.formRetailer.get('longitude').value ? this.formRetailer.get('longitude').value : null,
-        type: (this.formRetailer.get('InternalClassification').value === 'SRC' || this.formRetailer.get('InternalClassification').value === 'NON-SRC') ? 'General Trade' : this.formRetailer.get('InternalClassification').value,
-        InternalClassification: this.formRetailer.get('InternalClassification').value,
+        type: generalTrade.indexOf(icValue) >= 0 ? "General Trade" : icValue,
+        InternalClassification: icValue,
         gsr_flag: this.formRetailer.get('gsr').value,
         gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,
