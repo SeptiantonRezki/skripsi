@@ -65,8 +65,8 @@ export class RetailerEditComponent {
   ];
 
   listBankFinalValidation: any[] = [
-    { name: 'OFF', value: 0 },
-    { name: 'ON', value: 1 }
+    { name: 'FALSE', value: 0 },
+    { name: 'TRUE', value: 1 }
   ];
 
   listLevelArea: any[];

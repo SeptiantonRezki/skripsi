@@ -98,15 +98,15 @@ export class RetailerIndexComponent {
   pojok_bayar_validation: FormControl = new FormControl('');
   listPojokBayar: any[] = [
     { name: 'Semua Status', value: 'all' },
-    { name: 'OFF', value: '0' },
-    { name: 'ON', value: '1' }
+    { name: 'FALSE', value: '0' },
+    { name: 'TRUE', value: '1' }
   ];
 
   bank_final_validation: FormControl = new FormControl('');
   listBankFinalValidation: any[] = [
     { name: 'Semua Status', value: 'all' },
-    { name: 'OFF', value: '0' },
-    { name: 'ON', value: '1' }
+    { name: 'FALSE', value: '0' },
+    { name: 'TRUE', value: '1' }
   ];
 
   constructor(
