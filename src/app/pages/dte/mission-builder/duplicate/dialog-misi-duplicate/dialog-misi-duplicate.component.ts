@@ -335,11 +335,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       this.form.get('is_push_to_ff').patchValue(0);
     }
 
-    if (e.source.name === 'non_coin_reward' && e.checked) {
-      this.form.get('coin_submission').patchValue(0);
-      this.form.get('coin_verification').patchValue(0);
-    } else if (e.source.name === 'non_coin_reward' && e.checked === false) {
+    if (e.source.name === 'non_coin_reward' && e.checked === false) {
       this.form.get('reward_description').patchValue("");
+      this.isRewardError = false;
     }
   }
 
