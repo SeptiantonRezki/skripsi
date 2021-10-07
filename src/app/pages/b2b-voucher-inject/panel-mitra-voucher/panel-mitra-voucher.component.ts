@@ -57,6 +57,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   @Output() refreshDetail = new EventEmitter();
   @Input() statusVoucher: string;
   @Input() permissions: any;
+  @Input() voucherId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -526,7 +527,7 @@ export class PanelMitraVoucherComponent implements OnInit {
       this.loadingIndicator = true;
       this.pagination['sort'] = this.dataService.getFromStorage('sort');
       this.pagination['sort_type'] = this.dataService.getFromStorage('sort_type');
-      this.b2bVoucherInjectService.getMitra(this.pagination, { business_id: this.selected.map(item => item.id) }).subscribe(res => {
+      this.b2bVoucherInjectService.getMitra(this.pagination, { business_id: this.selected.map(item => item.id), voucher_id: this.voucherId }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;

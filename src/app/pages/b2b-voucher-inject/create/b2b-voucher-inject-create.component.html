@@ -220,7 +220,7 @@
         </mat-tab>
         <mat-tab label="Panel Mitra" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'src-catalogue'">
           <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()" [statusVoucher]="detailVoucher.status"
-            [permissions]="permission">
+            [permissions]="permission" [voucherId]="detailVoucher.id">
           </app-panel-mitra-voucher>
         </mat-tab>
         <mat-tab label="Panel Retailer" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'private-label'">
