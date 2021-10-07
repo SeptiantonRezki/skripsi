@@ -1,0 +1,108 @@
+<div class="dialog-content-wrapper" style="width: 800px">
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah File XLS</span>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close Dialog"
+      [disabled]="uploading"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="pt-24" fusePerfectScrollbar>
+    <div
+      ngfDrop
+      selectable="1"
+      class="rectangle-16"
+      [(validDrag)]="validComboDrag"
+      [(file)]="files"
+      accept=".xlsx, .xls"
+      [class.invalid-drag]="validComboDrag === false"
+      [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)"
+    >
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+        <br />
+        <span matPrefix
+          >Tarik File Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isUploaded && !isValid" class="notif notif-error mt-24">
+      Silahkan cek kembali produk yang anda upload!
+    </div>
+    <div *ngIf="rows.length > 0" class="preview">
+      <div class="preview-container">
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th nowrap>Kode Area</th>
+              <th nowrap>Region</th>
+              <th nowrap>Zone</th>
+              <th nowrap>Tipe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of rows"
+              [ngClass]="{ error: item.is_valid < 0 }"
+            >
+              <td nowrap>
+                {{ item.area_code }}
+              </td>
+              <td nowrap>
+                {{ item.region || "-" }}
+              </td>
+              <td nowrap>
+                {{ item.zone || "-" }}
+              </td>
+              <td nowrap>
+                {{ item.is_valid === 0 ? "-" : "Area" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="preview-total">{{ rowsLength }} Area</div>
+    </div>
+    <div class="border-top mt-16">
+      <div class="pt-16">
+        <div
+          fxFlexLayout="row"
+          fxLayoutAlign="start center"
+          fxLayout.lt-md="row"
+          fxLayoutGap="20px"
+          fxLayoutGap.lt-md="10px"
+          fxFlex="1 0 auto"
+        >
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="submit()"
+            [disabled]="!isValid"
+          >
+            Kirim
+          </button>
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="dialogRef.close()"
+            [disabled]="uploading"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

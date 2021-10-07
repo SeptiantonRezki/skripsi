@@ -1,0 +1,87 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header
+    contentTitle="Detail Pengajuan Produk"
+  ></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">Informasi Produk</h2>
+      </div>
+      <form [formGroup]="product" class="py-24">
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxLayoutAlign="start stretch"
+          fxLayoutGap="16px"
+        >
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              type="text"
+              placeholder="Nama Produk"
+              formControlName="name"
+            />
+            <mat-error *ngIf="hasError('name')">
+              Nama Produk harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              type="text"
+              placeholder="Barcode"
+              formControlName="barcode"
+            />
+            <mat-error *ngIf="hasError('barcode')">
+              Barcode harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              type="text"
+              placeholder="Harga Beli"
+              formControlName="purchase_price"
+            />
+            <mat-error *ngIf="hasError('purchase_price')">
+              Harga Beli harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              type="text"
+              placeholder="Harga Jual"
+              formControlName="selling_price"
+            />
+            <mat-error *ngIf="hasError('selling_price')">
+              Harga Jual harus diisi
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="30px" class="pt-36">
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button mat-green-800-bg"
+            (click)="submit('approve')"
+          >
+            Setuju
+          </button>
+          <button
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit('disapprove')"
+          >
+            Tolak
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

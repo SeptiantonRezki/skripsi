@@ -117,6 +117,9 @@ import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { DokumenDialogComponent } from './wholesaler/dokumen-dialog/dokumen-dialog.component';
 import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesaler/import-list-wholesaler.component';
 import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
+import { RcaAgentComponent } from './rca-agent/rca-agent.component';
+import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
+import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -160,6 +163,7 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
+    MatSlideToggleModule
   ],
   exports: [
     FieldForceIndexComponent,

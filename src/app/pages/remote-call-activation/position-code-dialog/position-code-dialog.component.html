@@ -1,0 +1,24 @@
+<div>
+  <!-- <div class="close-btn">
+    <img (click)="dialogRef.close();" src="assets/images/ayo/close-btn.png" class="close-img-btn">
+  </div> -->
+  <div>
+    <div fxLayout="row">
+      <mat-form-field fxFlex="100%" class="is-light form-primary">
+        <mat-select placeholder="Position Code" [formControl]="positionCode" #singleSelect>
+          <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
+            [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
+          </ngx-mat-select-search>
+          <mat-option *ngIf="listPositionCodes.length === 0">None</mat-option>
+          <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
+            {{item.code}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button" fxLayout="row">
+    <div (click)="submit()" fxFlex="50" class="positif-button">Simpan</div>
+    <div (click)="close()" fxFlex="50" class="negatif-button">Batal</div>
+  </div>
+</div>

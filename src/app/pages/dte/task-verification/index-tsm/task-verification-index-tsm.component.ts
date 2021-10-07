@@ -134,6 +134,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
     this.taskVerificationService.getTsm(this.pagination).subscribe(
       res => {
+        console.log('1');
         if (res.total < res.per_page && page !== 1) {
           this.dataService.setToStorage('page', 1);
           this.getListTaskVerification();
@@ -146,7 +147,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
         setTimeout(() => {
           this.addObjectToTable();
-        }, 1500);
+        }, 2000);
       }, err => {
         console.error(err);
         this.onLoad = false;
@@ -161,12 +162,14 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     
     let rows = tableTSM.querySelectorAll("datatable-row-wrapper");
     for (let index = 0; index < rows.length; index++) {
-      let numberRow = index + 1;
-      rows[index].id = 'data-row-tsm-'+String(numberRow);
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row-tsm';
+      // rows[index].id = 'data-row-tsm-'+String(numberRow);
 
       let cells = rows[index].querySelectorAll("datatable-body-cell");
       for (let indexCell = 0; indexCell < cells.length; indexCell++) {
-        cells[indexCell].id = 'data-cell-tsm-'+String(numberRow)+'-'+String(indexCell+1);          
+        cells[indexCell].id = 'data-cell-tsm';
+        // cells[indexCell].id = 'data-cell-tsm-'+String(numberRow)+'-'+String(indexCell+1);          
       }
     }
   }
