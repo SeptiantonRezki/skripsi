@@ -62,7 +62,7 @@
 
   <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
+      <span class="row-name">{{row.invoice_number}}</span>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Customer Code Mitra" prop="customer_code" [sortable]="false">
