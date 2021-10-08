@@ -93,7 +93,7 @@ export class DeviceRecoverComponent implements OnInit {
       retailer_name: this.retailer_data.name,
       blocked_time: item.attempt_at,
       last_recover: item.recovery_at,
-      total_recovery_device: this.setting_info.values || 0
+      total_recovery_device: item.whitelists_count || 0
     });
 
     this.formRecovery.get('retailer_code').disable();
