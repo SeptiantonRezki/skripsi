@@ -29,11 +29,20 @@ export class TemplateEditComponent {
   detailTask: any;
   frmIsBranching: FormControl = new FormControl(false);
   listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
+  listIRType: any[] = [
+    { value: 'full-ir', name: 'Full IR' },
+    { value: 'ir-for-comply', name: 'IR for Comply' },
+    { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
+    { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
+  ];
+  isIRTypeError: boolean = false;
+
   listKategoriToolbox: any[];
   listTipeMisi: any[];
   listTingkatinternalMisi: any[];
   listKategoriMisi: any[];
   listProjectMisi: any[];
+  listReason: any[];
   private _onDestroy = new Subject<void>();
   public filterLKT: FormControl = new FormControl();
   public filteredLKT: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -45,6 +54,8 @@ export class TemplateEditComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterProject: FormControl = new FormControl();
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterReason: FormControl = new FormControl();
+  public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = Config.FROALA_CONFIG;
 
 
@@ -204,6 +215,7 @@ export class TemplateEditComponent {
     this.getListTingkatInternalMisi();
     this.getListKategoriMisi();
     this.getListKategoriProject();
+    this.getListReason();
 
     this.listChoose = this.listChooseOriginal.slice();
     this.filterLKT.valueChanges
@@ -231,6 +243,9 @@ export class TemplateEditComponent {
       });
     this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filteringProject();
+    });
+    this.filterReason.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+      this.filteringReason();
     });
 
     this.keyUp.debounceTime(300)
@@ -260,6 +275,7 @@ export class TemplateEditComponent {
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([], Validators.required),
       image_description: this.formBuilder.array([]),
+      ir_type: [""],
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -419,6 +435,36 @@ export class TemplateEditComponent {
         this.listProjectMisi = res.data.data;
         this.filteredProject.next(this.listProjectMisi.slice());
         // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
+      }
+    );
+  }
+
+  filteringReason() {
+    if (!this.listReason) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterReason.value;
+    if (!search) {
+      this.filteredReason.next(this.listReason.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredReason.next(
+      this.listReason.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListReason() {
+    this.pengaturanAttributeMisiService.getVerificationRemark({ status: 'active' }).subscribe(
+      (res) => {
+        this.listReason = res.data;
+        this.filteredReason.next(this.listReason.slice());
       },
       (err) => {
         console.log("err List Kategori Misi", err);
@@ -811,6 +857,7 @@ export class TemplateEditComponent {
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }));
     });
+    this.templateTaskForm.get('ir_type').setValue(this.detailTask.ir_type);
 
     if (this.isDetail) this.templateTaskForm.disable();
   }
@@ -926,6 +973,9 @@ export class TemplateEditComponent {
       this.listAnswerKeys = [];
     }
     else {
+      this.templateTaskForm.get('ir_type').setValue('');
+      this.isIRTypeError = false;
+
       if (this.frmQuiz.value === 'quiz') {
         this.listChoose = [...this.listChooseQuiz];
       } else {
@@ -1113,7 +1163,7 @@ export class TemplateEditComponent {
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: ['', Validators.required] }))
   }
 
   createAdditional(): FormGroup {
@@ -1373,13 +1423,25 @@ export class TemplateEditComponent {
           // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason),
-        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0
+        rejected_reason_ids: rejected_reason.map(item => 
+          (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
+        ),
+        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
+        ir_type: this.templateTaskForm.get('ir_type').value,
       }
+
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
+
+      if (this.isIRTemplate.value && !body.ir_type) {
+        this.isIRTypeError = true;
+        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu IR Type" });
+        return;
+      }
+
       console.log('this body', body);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
@@ -1520,6 +1582,8 @@ export class TemplateEditComponent {
 
       if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+      else
+        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
   }
 

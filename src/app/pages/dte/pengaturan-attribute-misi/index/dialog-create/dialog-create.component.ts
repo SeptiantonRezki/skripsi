@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
+import { Component, OnInit, Inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
@@ -12,11 +12,11 @@ import { Page } from 'app/classes/laravel-pagination';
 
 
 @Component({
-  selector: "app-dialog-internal-misi",
-  templateUrl: "./dialog-internal-misi.component.html",
-  styleUrls: ["./dialog-internal-misi.component.scss"],
+  selector: "app-dialog-create",
+  templateUrl: "./dialog-create.component.html",
+  styleUrls: ["./dialog-create.component.scss"],
 })
-export class DialogInternalMisiComponent implements OnInit {
+export class DialogCreateComponent implements OnInit {
   form: FormGroup;
   pagination: Page = new Page();
   offsetPagination: Number = null;
@@ -27,11 +27,12 @@ export class DialogInternalMisiComponent implements OnInit {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<DialogInternalMisiComponent>,
+    public dialogRef: MatDialogRef<DialogCreateComponent>,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    @Inject(MAT_DIALOG_DATA) public dataProps: {title: string, methodGet: string, methodCreate: string},
   ) {
     this.condition = false;
   }
@@ -50,7 +51,7 @@ export class DialogInternalMisiComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService[this.dataProps.methodGet](this.pagination).subscribe(
       res => {
         this.data = res.data.data;
         console.log('ini data', this.data);
@@ -62,33 +63,36 @@ export class DialogInternalMisiComponent implements OnInit {
     this.dataService.showLoading(true);
     this.loadingIndicator = true;
     this.condition = false;
+
     if ( this.data !== undefined) {
-    this.data.forEach((each) => {
-      if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
-        this.condition = true;
-        this.dataService.showLoading(false);
-        this.loadingIndicator = false;
-      }
-    });
+      this.data.forEach((each) => {
+        if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
+          this.condition = true;
+          this.dataService.showLoading(false);
+          this.loadingIndicator = false;
+        }
+      });
     }
+
     if (this.condition === false) {
-    this.dialogRef.close(`${form.value.name}`);
-    this.pengaturanAttributeMisiService.createInternalMisi(form.value).subscribe(
-      (res) => {
-        this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan",
-        });
-        this.dataService.showLoading(false);
-        this.loadingIndicator = false;
-        this.router.navigate(["dte", "pengaturan-attribute-misi"]);
-      },
-      (err) => {
-        this.dialogService.openSnackBar({ message: err.error.message })
-        console.log(err.error.message);
-        this.dataService.showLoading(false);
-        this.loadingIndicator = false;
-      }
-    );
+      this.dialogRef.close(`${form.value.name}`);
+
+      this.pengaturanAttributeMisiService[this.dataProps.methodCreate](form.value).subscribe(
+        (res) => {
+          this.dialogService.openSnackBar({
+            message: "Data Berhasil Disimpan",
+          });
+          this.dataService.showLoading(false);
+          this.loadingIndicator = false;
+          this.router.navigate(["dte", "pengaturan-attribute-misi"]);
+        },
+        (err) => {
+          this.dialogService.openSnackBar({ message: err.error.message })
+          console.log(err.error.message);
+          this.dataService.showLoading(false);
+          this.loadingIndicator = false;
+        }
+      );
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
 import { MatDialog, MatDialogRef, VERSION } from "@angular/material";
-import { DialogInternalMisiComponent } from "../dialog-internal-misi/dialog-internal-misi.component";
+import { DialogCreateComponent } from "../dialog-create/dialog-create.component";
 import { filter } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { DataService } from "../../../../../services/data.service";
@@ -14,7 +14,7 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
-import { DialogInternalMisiEditComponent } from '../dialog-internal-misi-edit/dialog-internal-misi-edit.component';
+import { DialogEditComponent } from '../dialog-edit/dialog-edit.component';
 
 @Component({
   selector: 'app-list-internal-misi',
@@ -23,8 +23,8 @@ import { DialogInternalMisiEditComponent } from '../dialog-internal-misi-edit/di
 })
 export class ListInternalMisiComponent implements OnInit {
 
-  dialogInternalMisiDialogRef: MatDialogRef<DialogInternalMisiComponent>;
-  dialogInternalMisiEditDialogRef: MatDialogRef<DialogInternalMisiEditComponent>;
+  dialogCreateRef: MatDialogRef<DialogCreateComponent>;
+  dialogEditDialogRef: MatDialogRef<DialogEditComponent>;
 
   rows: any[];
   selected: any[];
@@ -76,14 +76,17 @@ export class ListInternalMisiComponent implements OnInit {
   kategori = [];
 
   openDialogInternalMisi() {
-    this.dialogInternalMisiDialogRef = this.Dialog.open(
-      DialogInternalMisiComponent,
-      {
-        width: "300px",
-      }
-    );
+    const dataProps = {
+      data: {
+        title:'Internal Kategori',
+        methodGet: 'getInternalMisi',
+        methodCreate: 'createInternalMisi',
+     },
+     width: "300px"
+    }
+    this.dialogCreateRef = this.Dialog.open(DialogCreateComponent, dataProps);
 
-    this.dialogInternalMisiDialogRef
+    this.dialogCreateRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
@@ -92,13 +95,22 @@ export class ListInternalMisiComponent implements OnInit {
   }
 
   openDialogInternalMisiEdit(id,name, status) {
+    const dataProps = {
+      data: {
+        title:'Internal Kategori',
+        methodPut: 'putInternalMisi',
+        paramsId: 'internal_misi_id',
+        id: id,
+        name: name,
+        status: status
+     },
+     width: "300px"
+    }
+    
     console.log(id + ", " + name);
-    this.dialogInternalMisiEditDialogRef = this.Dialog.open(DialogInternalMisiEditComponent, {
-      width: "300px",
-      data: {id: id, name: name, status: status}
-    });
+    this.dialogEditDialogRef = this.Dialog.open(DialogEditComponent, dataProps);
 
-    this.dialogInternalMisiDialogRef
+    this.dialogEditDialogRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {

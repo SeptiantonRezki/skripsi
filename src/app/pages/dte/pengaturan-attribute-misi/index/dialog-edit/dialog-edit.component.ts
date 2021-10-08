@@ -11,11 +11,11 @@ import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attr
 
 
 @Component({
-  selector: 'app-dialog-internal-misi-edit',
-  templateUrl: './dialog-internal-misi-edit.component.html',
-  styleUrls: ['./dialog-internal-misi-edit.component.scss']
+  selector: 'app-dialog-edit',
+  templateUrl: './dialog-edit.component.html',
+  styleUrls: ['./dialog-edit.component.scss']
 })
-export class DialogInternalMisiEditComponent implements OnInit {
+export class DialogEditComponent implements OnInit {
 
   form: FormGroup;
   loadingIndicator: Boolean;
@@ -35,12 +35,12 @@ export class DialogInternalMisiEditComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    public dialogRef: MatDialogRef<DialogInternalMisiEditComponent>,
+    public dialogRef: MatDialogRef<DialogEditComponent>,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA) public data
   ) {
     this.name = data.name;
     this.id = data.id;
@@ -49,8 +49,6 @@ export class DialogInternalMisiEditComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      // id: "",
-      // name: ""
       name: this.name,
       id: this.id,
       status: this.status
@@ -77,9 +75,9 @@ export class DialogInternalMisiEditComponent implements OnInit {
       this.form.removeControl('name');
     }
     this.dialogRef.close(`${form.value}`);
-    // console.log(`${form.value.name}`);
     console.log(form.value);
-    this.pengaturanAttributeMisiService.putInternalMisi(form.value, { internal_misi_id: this.id }).subscribe(res => {
+    
+    this.pengaturanAttributeMisiService[this.data.methodPut](form.value, { [this.data.paramsId]: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
       if (res.success) {
         this.dialogService.openSnackBar({
