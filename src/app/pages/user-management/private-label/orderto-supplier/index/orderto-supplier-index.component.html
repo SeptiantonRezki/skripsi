@@ -75,7 +75,7 @@
 
             <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
+                <span class="row-name">{{row.invoice_number}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Nama Mitra" prop="wholesaler_name" [sortable]="false">
@@ -100,7 +100,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span class="row-address">{{row.total_price}}</span>
+                <span class="row-address">{{row.total_price | rupiahFormaterWithoutRp}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">

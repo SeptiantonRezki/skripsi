@@ -65,29 +65,29 @@
       <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Customer Code Mitra" prop="wholesaler_name" [sortable]="false">
+  <ngx-datatable-column name="Customer Code Mitra" prop="customer_code" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-address">{{row.wholesaler_name}}</span>
+      <span class="row-address">{{row.customer_code}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Nama Mitra" prop="wholesaler_name" [sortable]="false">
+  <ngx-datatable-column name="Nama Mitra" prop="customer_name" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-address">{{row.wholesaler_name}}</span>
+      <span class="row-address">{{row.customer_name}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Customer Code Mitra Hub" prop="address" [sortable]="true">
+  <ngx-datatable-column name="Customer Code Mitra Hub" prop="customer_hub_code" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-address">{{row.address}}</span>
+      <span class="row-address">{{row.customer_hub_code}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Nama Mitra Hub" prop="phone" [sortable]="false">
+  <ngx-datatable-column name="Nama Mitra Hub" prop="customer_hub_name" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-address">{{row.phone}}</span>
+      <span class="row-address">{{row.customer_hub_name}}</span>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span class="row-address">{{row.total_price}}</span>
+      <span class="row-address">{{row.total_price | rupiahFormaterWithoutRp}}</span>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">
