@@ -119,6 +119,7 @@ import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesal
 import { RcaAgentComponent } from './rca-agent/rca-agent.component';
 import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
 import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
+import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/order-to-mitra-hub.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -204,6 +205,7 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
 
     MedalBadgeComponent,
+    OrderToMitraHubComponent
 
   ],
   declarations: [
@@ -265,6 +267,7 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
+    OrderToMitraHubComponent,
 
   ],
   entryComponents: [

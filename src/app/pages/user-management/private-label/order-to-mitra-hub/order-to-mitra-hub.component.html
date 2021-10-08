@@ -1,0 +1,118 @@
+<div fxLayout="column" class="top-table pt-8 mb-8 pr-16 bb">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center">
+    <h2 class="pl-16">Daftar Pesanan</h2>
+    <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="is-light tab-search">
+        <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="40px">
+    <form [formGroup]="formFilter" autoComplete="off">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8"
+        fxLayoutAlign="center center">
+        <mat-form-field class="orders dropdown">
+          <mat-select formControlName="status">
+            <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="orders datepicker is-light">
+          <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+            formControlName="from" (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
+          <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
+            (click)="formFilter.get('from').setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-datepicker-toggle matSuffix [for]="dari">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #dari></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="orders datepicker is-light">
+          <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="Sampai Tanggal"
+            formControlName="to" readonly>
+          <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
+            (click)="formFilter.get('to').setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-datepicker-toggle matSuffix [for]="sampai">
+            <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #sampai></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </form>
+
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+      <div class="button-row">
+        <button mat-raised-button style="width: 100px" color="primary" (click)="updateFilter()">FILTER</button>
+      </div>
+      <div class="button-row">
+        <button mat-stroked-button style="width: 110px" color="primary" (click)="exportXLS()">EXPORT
+          XLS</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+  [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+  [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+  [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+  <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Customer Code Mitra" prop="wholesaler_name" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.wholesaler_name}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Nama Mitra" prop="wholesaler_name" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.wholesaler_name}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Customer Code Mitra Hub" prop="address" [sortable]="true">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.address}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Nama Mitra Hub" prop="phone" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.phone}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.total_price}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-address">{{row.created_at | date:'dd/MM/yyyy'}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Status" prop="status" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
+        {{row.status_indo ? row.status_indo.replace('-', ' ').toUpperCase() : row.status}}
+      </p>
+    </ng-template>
+  </ngx-datatable-column>
+  <!-- <ngx-datatable-column name="Action" headerClass="textright" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <div class="button-row" style="margin-left: -10px; padding-top: 5px; padding-bottom: 5px;">
+        <a #downloadLink></a>
+        <button mat-stroked-button color="" (click)="getDetailOrder(row.id)">
+          CETAK PO
+        </button>
+        <button mat-stroked-button color="" (click)="getDokumen(row)" style="margin-top: 2px;">
+          DOKUMEN
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable-column> -->
+</ngx-datatable>

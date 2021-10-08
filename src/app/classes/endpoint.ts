@@ -306,7 +306,7 @@ export class Endpoint {
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-import`,
         // export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/request-export`,
-        
+
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -576,7 +576,17 @@ export class Endpoint {
         statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
         exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
         updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}`,
-        dokumen_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/wholesaler/supplier/document`
+        dokumen_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/wholesaler/supplier/document`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/order/mitra-supplier/request-export`
+      },
+      PLOrdertoMitraHub: {
+        getList: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/list-pesanan-mitra-hub`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/order/mitra-hub/request-export`
+        // showListPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/show-pesanan/${context.orderId}`,
+        // statusPesanan: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/status-pesanan/${context.orderId}`,
+        // exportPO: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/export`,
+        // updateQty: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/update/${context.orderId}`,
+        // dokumen_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/wholesaler/supplier/document`
       },
       courier: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/delivery/courier`,
