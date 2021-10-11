@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Page } from 'app/classes/laravel-pagination';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 import { DialogService } from 'app/services/dialog.service';
 import { Emitter } from 'app/helper/emitter.helper';
@@ -61,6 +62,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private stockService: PLStockService,
     private dialogService: DialogService,
+    private translate: TranslateService,
     private router: Router,
     private emitter: Emitter,
     private dataService: DataService,
@@ -400,7 +402,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
   async onSave() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
-        message: "Area geotree yang dipilih tidak boleh kosong!"
+        message: this.translate.instant('produk_prinsipal.text45')
       });
       return;
     }
@@ -432,7 +434,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
     this.dataService.showLoading(true);
     this.stockService.update(body, { id: this.stockId }).subscribe(res => {
       this.dialogService.openSnackBar({
-        message: 'Berhasil Menyimpan Data'
+        message: this.translate.instant('produk_prinsipal.text44')
       });
       this.router.navigate(['user-management', 'supplier-settings']);
       this.dataService.showLoading(false);

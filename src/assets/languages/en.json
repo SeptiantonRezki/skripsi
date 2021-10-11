@@ -308,7 +308,9 @@
     "text40": "Credit/White Note",
     "text41": "Deposit Slip",
     "text42": "Cash Transfer",
-    "text43": "Cash"
+    "text43": "Cash",
+    "text44": "Data Saved Successfully",
+    "text45": "The selected geotree area cannot be empty"
   },
   "strategic_partnership": {
     "text1": "Strategic Partnerships",

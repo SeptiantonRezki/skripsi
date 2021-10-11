@@ -28,7 +28,7 @@
             <input matInput placeholder="Apps Version" formControlName="version">
           </mat-form-field>
           <mat-form-field fxFlex="50" class="is-light px-24">
-            <mat-select placeholder="Classification" formControlName="classification">
+            <mat-select placeholder="{{ 'global.label.classification' | translate}}" formControlName="classification">
               <mat-option [value]="classification.name" *ngFor="let classification of listClassification">{{classification.name}}</mat-option>
             </mat-select>
           </mat-form-field>
