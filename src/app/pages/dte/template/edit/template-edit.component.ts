@@ -1437,6 +1437,7 @@ export class TemplateEditComponent {
       }
 
       if (this.isIRTemplate.value && !body.ir_type) {
+        this.dataService.showLoading(false);
         this.isIRTypeError = true;
         this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu IR Type" });
         return;

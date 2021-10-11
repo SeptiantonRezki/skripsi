@@ -39,7 +39,7 @@ export class DialogCreateComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      name: "",
+      name: ["", Validators.required],
     });
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -60,39 +60,41 @@ export class DialogCreateComponent implements OnInit {
   }
 
   submit(form) {
-    this.dataService.showLoading(true);
-    this.loadingIndicator = true;
-    this.condition = false;
+    if(form.valid){
+      this.dataService.showLoading(true);
+      this.loadingIndicator = true;
+      this.condition = false;
 
-    if ( this.data !== undefined) {
-      this.data.forEach((each) => {
-        if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
-          this.condition = true;
-          this.dataService.showLoading(false);
-          this.loadingIndicator = false;
-        }
-      });
-    }
+      if ( this.data !== undefined) {
+        this.data.forEach((each) => {
+          if (each.name.toUpperCase() === form.value.name.toUpperCase()) {
+            this.condition = true;
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+          }
+        });
+      }
 
-    if (this.condition === false) {
-      this.dialogRef.close(`${form.value.name}`);
+      if (this.condition === false) {
+        this.dialogRef.close(`${form.value.name}`);
 
-      this.pengaturanAttributeMisiService[this.dataProps.methodCreate](form.value).subscribe(
-        (res) => {
-          this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan",
-          });
-          this.dataService.showLoading(false);
-          this.loadingIndicator = false;
-          this.router.navigate(["dte", "pengaturan-attribute-misi"]);
-        },
-        (err) => {
-          this.dialogService.openSnackBar({ message: err.error.message })
-          console.log(err.error.message);
-          this.dataService.showLoading(false);
-          this.loadingIndicator = false;
-        }
-      );
+        this.pengaturanAttributeMisiService[this.dataProps.methodCreate](form.value).subscribe(
+          (res) => {
+            this.dialogService.openSnackBar({
+              message: "Data Berhasil Disimpan",
+            });
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+            this.router.navigate(["dte", "pengaturan-attribute-misi"]);
+          },
+          (err) => {
+            this.dialogService.openSnackBar({ message: err.error.message })
+            console.log(err.error.message);
+            this.dataService.showLoading(false);
+            this.loadingIndicator = false;
+          }
+        );
+      }
     }
   }
 }

@@ -8,6 +8,9 @@
         placeholder="Nama {{ dataProps.title }}"
         required
       />
+      <mat-error *ngIf="form.invalid">
+        Nama harus diisi
+      </mat-error>
     </mat-form-field>
     <div *ngIf="condition === true">
       <small class="form-text text-danger" *ngIf="condition === true">
