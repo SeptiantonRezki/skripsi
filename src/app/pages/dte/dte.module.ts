@@ -16,8 +16,6 @@ import { AudienceIndexComponent } from "./audience/index/audience-index.componen
 import { AudienceCreateComponent } from "./audience/create/audience-create.component";
 import { AudienceEditComponent } from "./audience/edit/audience-edit.component";
 import { ProjectListComponent } from "./pengaturan-attribute-misi/index/project/project-list.component";
-import { DialogProjectComponent } from "./pengaturan-attribute-misi/index/project/dialog-project.component";
-import { DialogEditProjectComponent } from "./pengaturan-attribute-misi/index/project/dialog-edit-project.component";
 import {
   MatFormFieldModule,
   MatInputModule,
@@ -97,7 +95,7 @@ import { TaskSequencingCreateComponent } from './task-sequencing/create/task-seq
 import { TaskSequencingDuplicateComponent } from './task-sequencing/duplicate/task-sequencing-duplicate.component';
 import { DialogToolboxComponent } from "./pengaturan-attribute-misi/index/dialog-toolbox/dialog-toolbox.component";
 import { DialogTipeMisiComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi/dialog-tipe-misi.component";
-import { DialogInternalMisiComponent } from "./pengaturan-attribute-misi/index/dialog-internal-misi/dialog-internal-misi.component";
+import { DialogCreateComponent } from "./pengaturan-attribute-misi/index/dialog-create/dialog-create.component";
 import { DialogKategoriMisiComponent } from "./pengaturan-attribute-misi/index/dialog-kategori-misi/dialog-kategori-misi.component";
 import { TaskSequencingEditComponent } from "./task-sequencing/edit/task-sequencing-edit.component"
 import { DialogToolboxEditComponent } from "./pengaturan-attribute-misi/index/dialog-toolbox-edit/dialog-toolbox-edit.component";
@@ -106,7 +104,7 @@ import { ListTipeMisiComponent } from "./pengaturan-attribute-misi/index/list-ti
 import { ListInternalMisiComponent } from "./pengaturan-attribute-misi/index/list-internal-misi/list-internal-misi.component";
 import { ListKategoriMisiComponent } from "./pengaturan-attribute-misi/index/list-kategori-misi/list-kategori-misi.component";
 import { DialogKategoriMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-kategori-misi-edit/dialog-kategori-misi-edit.component";
-import { DialogInternalMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-internal-misi-edit/dialog-internal-misi-edit.component";
+import { DialogEditComponent } from "./pengaturan-attribute-misi/index/dialog-edit/dialog-edit.component";
 import { DialogTipeMisiEditComponent } from "./pengaturan-attribute-misi/index/dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
 import { PengaturanAttributeMisiCreateComponent } from "./pengaturan-attribute-misi/create/pengaturan-attribute-misi-create.component";
 import { LightboxModule } from 'ngx-lightbox';
@@ -147,6 +145,7 @@ import { CoinDisburstmentExchangeComponent } from './coin-disburstment/index/exc
 import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-exchange-coin/import-exchange-coin.component';
 import { BackgroundMisiComponent } from './template/dialog/background-misi/background-misi.component';
 import { NgxMaskModule } from "ngx-mask";
+import { VerificationRemarkComponent } from './pengaturan-attribute-misi/index/verification-remark/verification-remark.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -231,8 +230,6 @@ export const MY_FORMATS = {
     AudienceCreateComponent,
     AudienceEditComponent,
     ProjectListComponent,
-    DialogProjectComponent,
-    DialogEditProjectComponent,
     UploadImageComponent,
     ListAudienceDialogComponent,
     ImportAudienceDialogComponent,
@@ -259,7 +256,7 @@ export const MY_FORMATS = {
     TaskSequencingDuplicateComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
-    DialogInternalMisiComponent,
+    DialogCreateComponent,
     DialogKategoriMisiComponent,
     TaskSequencingEditComponent,
     DialogToolboxEditComponent,
@@ -268,7 +265,7 @@ export const MY_FORMATS = {
     ListInternalMisiComponent,
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
-    DialogInternalMisiEditComponent,
+    DialogEditComponent,
     DialogTipeMisiEditComponent,
     MissionBuilderCreateComponent,
     MissionBuilderEditComponent,
@@ -310,6 +307,7 @@ export const MY_FORMATS = {
     CoinDisburstmentExchangeComponent,
     ImportExchangeCoinComponent,
     BackgroundMisiComponent,
+    VerificationRemarkComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -326,8 +324,6 @@ export const MY_FORMATS = {
     AudienceCreateComponent,
     AudienceEditComponent,
     ProjectListComponent,
-    DialogProjectComponent,
-    DialogEditProjectComponent,
     TaskVerificationIndexComponent,
     TaskVerificationDetailComponent,
     TaskVerificationIndexTsmComponent,
@@ -343,7 +339,7 @@ export const MY_FORMATS = {
     ListInternalMisiComponent,
     ListKategoriMisiComponent,
     DialogKategoriMisiEditComponent,
-    DialogInternalMisiEditComponent,
+    DialogEditComponent,
     DialogTipeMisiEditComponent,
     MissionBuilderCreateComponent,
     MissionBuilderEditComponent,
@@ -391,13 +387,11 @@ export const MY_FORMATS = {
     ConfirmDialogTsmComponent,
     DialogToolboxComponent,
     DialogTipeMisiComponent,
-    DialogInternalMisiEditComponent,
-    DialogProjectComponent,
-    DialogEditProjectComponent,
+    DialogEditComponent,
     DialogKategoriMisiComponent,
     DialogToolboxEditComponent,
     DialogKategoriMisiEditComponent,
-    DialogInternalMisiComponent,
+    DialogCreateComponent,
     DialogTipeMisiEditComponent,
     DiaglogMisiComponent,
     DiaglogPopUpNotifComponent,

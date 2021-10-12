@@ -110,4 +110,22 @@ export class PengaturanAttributeMisiService extends BaseService {
     return this.deleteApi(url);
   }
 
+  // Verification Remark
+  getVerificationRemark(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_verification_remark');
+    return this.getApi(url, queryParams);
+  }
+  createVerificationRemark(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_verification_remark');
+    return this.postApi(url, body);
+  }
+  putVerificationRemark(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_verification_remark', context);
+    return this.putApi(url, body);
+  }
+  deleteVerificationRemark(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_verification_remark', context);
+    return this.deleteApi(url);
+  }
+
 }
