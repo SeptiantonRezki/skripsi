@@ -70,7 +70,7 @@
     <!--Verifikasi IR
     <mat-slide-toggle [formControl]="verifikasiIR" name="verifikasi-ir" (change)="selectChange($event)"></mat-slide-toggle>-->
     <br><br>
-    <div *ngIf="!form.value.non_coin_reward && form.value.pushFF === false">
+    <div *ngIf="form.value.pushFF === false">
       <mat-form-field style="width: 100%">
         <input matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission"
           placeholder="Coin Submission" />
