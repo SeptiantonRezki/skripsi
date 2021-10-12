@@ -1,18 +1,20 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h1 mat-dialog-title>Buat Internal Kategori</h1>
+  <h1 mat-dialog-title>Buat {{ dataProps.title }}</h1>
   <mat-dialog-content>
     <mat-form-field>
       <input
         matInput
         formControlName="name"
-        placeholder="Nama Internal Kategori"
+        placeholder="Nama {{ dataProps.title }}"
         required
       />
+      <mat-error *ngIf="form.invalid">
+        Nama harus diisi
+      </mat-error>
     </mat-form-field>
     <div *ngIf="condition === true">
-      <small class="form-text text-danger"
-                  *ngIf="condition === true">
-                   <p style="color:red"> Nama Kategori sudah ada, silahkan input nama lain</p>
+      <small class="form-text text-danger" *ngIf="condition === true">
+        <p style="color:red"> Nama {{ dataProps.title }} sudah ada, silahkan input nama lain</p>
       </small>
     </div>
   </mat-dialog-content>

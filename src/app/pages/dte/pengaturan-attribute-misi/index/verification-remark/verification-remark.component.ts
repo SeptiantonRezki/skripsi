@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef, Input } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
 import { MatDialog, MatDialogRef, VERSION } from "@angular/material";
 import { DialogTipeMisiComponent } from "../dialog-tipe-misi/dialog-tipe-misi.component";
@@ -14,18 +14,17 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
-import {DialogCreateComponent} from '../dialog-create/dialog-create.component';
-import {DialogEditComponent} from '../dialog-edit/dialog-edit.component';
-
+import { DialogCreateComponent } from '../dialog-create/dialog-create.component';
+import { DialogEditComponent } from '../dialog-edit/dialog-edit.component';
 
 @Component({
-  selector: "app-project-list",
-  templateUrl: "./project-list.component.html"
+  selector: 'app-verification-remark',
+  templateUrl: './verification-remark.component.html',
+  styleUrls: ['./verification-remark.component.scss']
 })
-export class ProjectListComponent implements OnInit {
+export class VerificationRemarkComponent implements OnInit {
   dialogCreateRef: MatDialogRef<DialogCreateComponent>;
   dialogEditRef: MatDialogRef<DialogEditComponent>;
-
 
   rows: any[];
   selected: any[];
@@ -39,8 +38,6 @@ export class ProjectListComponent implements OnInit {
 
   offsetPagination: Number = null;
   keyUp = new Subject<string>();
-
-
   permission: any;
   roles: PagesName = new PagesName();
 
@@ -64,7 +61,7 @@ export class ProjectListComponent implements OnInit {
       .flatMap(search => {
         return Observable.of(search).delay(500);
       })
-        .subscribe(data => {
+      .subscribe(data => {
         this.updateFilter(data);
       });
    }
@@ -74,37 +71,36 @@ export class ProjectListComponent implements OnInit {
    internal = [];
    kategori = [];
 
-   openDialogProjectMisi() {
+  openDialog() {     
     const dataProps = {
       data: {
-        title:'Project Misi',
-        methodGet: 'getProject',
-        methodCreate: 'createProjectMisi',
-     },
-     width: "300px"
+        title:'Verification Remark',
+        methodGet: 'getVerificationRemark',
+        methodCreate: 'createVerificationRemark',
+      },
+      width: "300px"
     }
-
     this.dialogCreateRef = this.Dialog.open(DialogCreateComponent, dataProps);
 
     this.dialogCreateRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
-        // this.types.push({ name });
         this.ngOnInit();
       });
   }
-  openDialogProjectMisiEdit(id, name, status) {
+
+  openDialogEdit(id, name, status) {
     const dataProps = {
       data: {
-        title:'Project Misi',
-        methodPut: 'putProjectMisi',
-        paramsId: 'project_misi_id',
+        title:'Verification Remark',
+        methodPut: 'putVerificationRemark',
+        paramsId: 'id',
         id: id,
         name: name,
         status: status
-     },
-     width: "300px"
+      },
+      width: "300px"
     }
 
     this.dialogEditRef = this.Dialog.open(DialogEditComponent, dataProps);
@@ -113,7 +109,6 @@ export class ProjectListComponent implements OnInit {
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
-        // this.files.push({ name });
         this.ngOnInit();
       });
   }
@@ -121,7 +116,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    const sort = this.dataService.getFromStorage("sort") === 'fullname' ? 'name' : this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
@@ -129,21 +124,18 @@ export class ProjectListComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data.data;
-        // this.rows = this.dataDummy.data.data;
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
-        console.log(this.rows);
       },
       err => {
         this.onLoad = false;
       }
     );
   }
-
 
   onSelect({ selected }) {
     console.log(arguments);
@@ -162,10 +154,10 @@ export class ProjectListComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data.data;
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -181,13 +173,13 @@ export class ProjectListComponent implements OnInit {
     this.loadingIndicator = true;
 
     this.dataService.setToStorage("page", this.pagination.page);
-    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort", event.column.prop === 'name' ? 'fullname' : event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data.data;
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -210,10 +202,10 @@ export class ProjectListComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data.data;
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -223,24 +215,23 @@ export class ProjectListComponent implements OnInit {
     );
   }
 
-  deleteProjectMisi(id) {
+  delete(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Project Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Project Misi ini ?",
-      confirmCallback: this.confirmDeleteProjectMisi.bind(this),
+      titleDialog: "Hapus Verification Remark",
+      captionDialog: "Apakah anda yakin untuk menghapus Verification Remark ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDeleteProjectMisi() {
-    this.pengaturanAttributeMisiService.deleteProjectMisi({ tipe_project_id: this.id }).subscribe(res => {
+  confirmDelete() {
+    this.pengaturanAttributeMisiService.deleteVerificationRemark({ id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
       this.ngOnInit();
 
       this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
     });
   }
-
 }
