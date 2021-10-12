@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Voucher Principal'">
+  <page-content-header [contentTitle]="'Voucher Private Label'">
   </page-content-header>
   <!-- / HEADER -->
 
@@ -31,8 +31,7 @@
 
         <ngx-datatable-column name="Nama Voucher" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <!-- <span class="row-name" (click)="directDetail(row)">{{row.name}}</span> -->
-            <span class="row-name">{{row.name}}</span>
+            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 

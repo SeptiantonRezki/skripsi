@@ -58,6 +58,7 @@ import { PanelPartnershipIndexComponent } from "./private-label/panel-partnershi
 import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
 import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
+import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 
 
 const routes: Routes = [
@@ -563,6 +564,14 @@ const routes: Routes = [
   {
     path: "supplier-vouchers",
     component: SupplierVouchersComponent,
+    data: {
+      breadcrumbs: brConfig.privatelabel.supplierVouchers.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "supplier-vouchers/detail",
+    component: VoucherPrincipalDetailTabComponent,
     data: {
       breadcrumbs: brConfig.privatelabel.supplierVouchers.index
     },

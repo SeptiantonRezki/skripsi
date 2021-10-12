@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
@@ -8,15 +8,18 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { MatDialog } from '@angular/material';
 import { VoucherPrivateLabelService } from 'app/services/voucher-private-label.service';
-// import { voucherPrivateLabelService } from 'app/services/voucher-principal.service';
-// import { GoogleTagManagerService } from 'app/services/gtm.service';
+import { _getComponentHostLElementNode } from '@angular/core/src/render3/instructions';
+// import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
-  selector: 'app-supplier-vouchers',
-  templateUrl: './supplier-vouchers.component.html',
-  styleUrls: ['./supplier-vouchers.component.scss']
+  selector: 'app-voucher-principal-detail',
+  templateUrl: './voucher-principal-detail.component.html',
+  styleUrls: ['./voucher-principal-detail.component.scss']
 })
-export class SupplierVouchersComponent implements OnInit {
+export class VoucherPrincipalDetailComponent implements OnInit {
+  @Input() activeCol: string[];
+  @Input() dataType: string;
+
   rows: any[];
   selected: any[];
   id: any[];
@@ -41,18 +44,23 @@ export class SupplierVouchersComponent implements OnInit {
 
   dialogRef: any;
   audienceSelected: any[] = []
+  voucherID: any;
+  
   constructor(
-    private router: Router,
-    private dialogService: DialogService,
-    private dataService: DataService,
-    private voucherPrivateLabelService: VoucherPrivateLabelService,
-    private dialog: MatDialog,
+    public router: Router,
+    public dialogService: DialogService,
+    public dataService: DataService,
+    // public voucherPrincipalService: VoucherPrincipalService,
+    public voucherPrivateLabelService: VoucherPrivateLabelService,
+    public dialog: MatDialog,
+    // public ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];
 
     this.permission = this.roles.getRoles('wholesaler.karyawan');
     console.log(this.permission);
+    this.voucherID = this.dataService.getFromStorage("detail_voucher_principal");
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -60,30 +68,32 @@ export class SupplierVouchersComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe(data => {
-        this.updateFilter(data);
+        this.updateFilter(data, true);
       });
   }
 
   ngOnInit() {
-    const profile = this.dataService.getDecryptedProfile();
-    this.getVoucherPrincipal();
+    this.getVoucherPrincipal(true);
   }
 
-  getVoucherPrincipal() {
-    const page = this.dataService.getFromStorage("page_supplier_vouchers");
-    const sort_type = this.dataService.getFromStorage("sort_type_supplier_vouchers");
-    const sort = this.dataService.getFromStorage("sort_supplier_vouchers");
+  getVoucherPrincipal(resetPage?) {
+    console.log('voucherID', this.voucherID);
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = page;
+    this.pagination.page = resetPage ? 1 : page;
+    this.pagination.per_page = 5;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 
-    this.offsetPagination = page ? (page - 1) : 0;
+    this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
 
-    this.voucherPrivateLabelService.get(this.pagination).subscribe(
+    this.voucherPrivateLabelService.getDetail({ voucher_id: this.voucherID['id'] }, this.pagination, this.dataType).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
+        console.log(res);
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -107,11 +117,11 @@ export class SupplierVouchersComponent implements OnInit {
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
     } else {
-      this.dataService.setToStorage("page_supplier_vouchers", pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage("page_supplier_vouchers");
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.voucherPrivateLabelService.get(this.pagination).subscribe(res => {
+    this.voucherPrivateLabelService.getDetail({ voucher_id: this.voucherID['id'] }, this.pagination, this.dataType).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -124,18 +134,18 @@ export class SupplierVouchersComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    this.dataService.setToStorage("page_supplier_vouchers", this.pagination.page);
-    this.dataService.setToStorage("sort_supplier_vouchers", event.column.prop);
-    this.dataService.setToStorage("sort_type_supplier_vouchers", event.newValue);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.voucherPrivateLabelService.get(this.pagination).subscribe(res => {
+    this.voucherPrivateLabelService.getDetail({ voucher_id: this.voucherID['id'] }, this.pagination, this.dataType).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
-  updateFilter(string) {
+  updateFilter(string, resetPage?) {
     this.loadingIndicator = true;
     this.pagination.search = string;
 
@@ -143,21 +153,16 @@ export class SupplierVouchersComponent implements OnInit {
       this.pagination.page = 1;
       this.offsetPagination = 0;
     } else {
-      const page = this.dataService.getFromStorage("page_supplier_vouchers");
-      this.pagination.page = page;
-      this.offsetPagination = page ? (page - 1) : 0;
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = resetPage ? 1 : page;
+      this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
     }
 
-    this.voucherPrivateLabelService.get(this.pagination).subscribe(res => {
+    this.voucherPrivateLabelService.getDetail({ voucher_id: this.voucherID['id'] }, this.pagination, this.dataType).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
-  }
-
-  directDetail(row?: any) {
-    this.dataService.setToStorage('detail_voucher_principal', row);
-    this.router.navigate(['user-management/supplier-vouchers', 'detail']);
   }
 
 }

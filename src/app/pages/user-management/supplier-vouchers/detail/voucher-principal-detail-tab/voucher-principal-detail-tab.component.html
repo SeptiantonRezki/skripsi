@@ -1,0 +1,24 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Detil Voucher Private Label'">
+  </page-content-header>
+  <!-- / HEADER -->
+<div class="content p-24" *ngIf="!onLoad">
+  <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+    <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+    <mat-tab-group [selectedIndex]="selectedTab"
+    (selectedIndexChange)="selectedTabChange($event)">
+      <mat-tab label="Belum Terpakai">
+        <div class="ayo-middle p-8" fxLayout="column" fusePerfectScrollbar>
+          <app-voucher-principal-detail [activeCol]="belum_terpakai" [dataType]="'belumTerpakai'"></app-voucher-principal-detail>
+        </div>
+      </mat-tab>
+      <mat-tab label="Terpakai">
+        <div class="ayo-middle p-8" fxLayout="column" fusePerfectScrollbar>
+          <app-voucher-principal-detail [activeCol]="terpakai" [dataType]="'terpakai'"></app-voucher-principal-detail>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+</div>

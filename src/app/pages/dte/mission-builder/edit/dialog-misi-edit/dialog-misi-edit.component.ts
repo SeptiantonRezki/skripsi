@@ -21,6 +21,8 @@ export class DialogMisiEditComponent implements OnInit {
   verifikasi: FormControl = new FormControl(false);
   verifikasiFF: FormControl = new FormControl(false);
   status_pin_up: FormControl = new FormControl(false);
+  non_coin_reward: FormControl = new FormControl(false);
+  isRewardError: boolean = false;
 
   missions: any[];
   minDate: any;
@@ -57,7 +59,9 @@ export class DialogMisiEditComponent implements OnInit {
       coin_submission: "",
       coin_verification: "",
       is_ir_template: null,
-      status_pin_up: this.status_pin_up
+      status_pin_up: this.status_pin_up,
+      non_coin_reward: this.non_coin_reward,
+      reward_description: [""]
     });
 
     this.filterMission.valueChanges
@@ -85,7 +89,9 @@ export class DialogMisiEditComponent implements OnInit {
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
         is_push_to_ff: parseInt(this.data.data.attribute.is_push_to_ff),
         is_ir_template: parseInt(this.data.data.attribute.is_ir_template),
-        status_pin_up: this.data.data.attribute.status_pin_up
+        status_pin_up: this.data.data.attribute.status_pin_up,
+        non_coin_reward: this.data.data.attribute.non_coin_reward,
+        reward_description: this.data.data.attribute.reward_description,
       });
       this.minDate = this.data.data.min_date;
       this.maxDate = this.data.data.max_date;
@@ -118,6 +124,12 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('status_pin_up').patchValue(false);
       } else if (parseInt(this.data.data.attribute.status_pin_up) === 1) {
         this.form.get('status_pin_up').patchValue(true);
+      }
+
+      if (parseInt(this.data.data.attribute.non_coin_reward) === 0) {
+        this.form.get('non_coin_reward').patchValue(false);
+      } else if (parseInt(this.data.data.attribute.non_coin_reward) === 1) {
+        this.form.get('non_coin_reward').patchValue(true);
       }
 
       if (this.data.isDetail) {
@@ -366,6 +378,11 @@ export class DialogMisiEditComponent implements OnInit {
     } else if (e.source.name === 'push-to-ff' && e.checked === false) {
       this.form.get('is_push_to_ff').patchValue(0);
     }
+
+    if (e.source.name === 'non_coin_reward' && e.checked === false) {
+      this.form.get('reward_description').patchValue("");
+      this.isRewardError = false;
+    }
   }
 
   numberOnly(event): boolean {
@@ -383,7 +400,17 @@ export class DialogMisiEditComponent implements OnInit {
     return date;
   }
 
+  changeRewardDesc(event){
+    this.isRewardError = event.target.value.length ? false : true;
+  }
+
   submit(form: any) {
+    if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
+      this.isRewardError = true;
+      this.dialogService.openSnackBar({ message: 'Keterangan Reward harus diisi' });
+      return;
+    }
+    
     this.form.get('coin_verification').enable();
     form.get('start_date').patchValue(this.formatDate(form.value.start_date));
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
@@ -398,6 +425,9 @@ export class DialogMisiEditComponent implements OnInit {
     );
     form.get('status_pin_up').patchValue(
       (form.value.status_pin_up === true) ? 1 : 0
+    );
+    form.get('non_coin_reward').patchValue(
+      (form.value.non_coin_reward === true) ? 1 : 0
     );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);

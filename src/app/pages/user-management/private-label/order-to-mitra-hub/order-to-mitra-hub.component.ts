@@ -12,16 +12,16 @@ import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 import { GeneratePO } from "app/classes/generate-po";
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Endpoint } from '../../../../../classes/endpoint';
 import { DateAdapter } from '@angular/material';
-import { OrdertoSupplierService } from 'app/services/user-management/private-label/orderto-supplier.service';
+import { Endpoint } from 'app/classes/endpoint';
+import { OrderToMitraHubService } from 'app/services/user-management/private-label/order-to-mitra-hub.service';
 
 @Component({
-  selector: 'app-orderto-supplier-index',
-  templateUrl: './orderto-supplier-index.component.html',
-  styleUrls: ['./orderto-supplier-index.component.scss']
+  selector: 'app-order-to-mitra-hub',
+  templateUrl: './order-to-mitra-hub.component.html',
+  styleUrls: ['./order-to-mitra-hub.component.scss']
 })
-export class OrdertoSupplierIndexComponent implements OnInit {
+export class OrderToMitraHubComponent implements OnInit {
   onLoad: boolean;
   formFilter: FormGroup;
   statusFilter: any[] = [
@@ -63,7 +63,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     private dataService: DataService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private ordertoSupplierService: OrdertoSupplierService,
+    private orderToMitraHubService: OrderToMitraHubService,
     private dialogService: DialogService,
     private router: Router,
     private convertRp: RupiahFormaterWithoutRpPipe,
@@ -134,7 +134,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.ordertoSupplierService.getList(this.pagination).subscribe(
+    this.orderToMitraHubService.getList(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
           if (res.data.total < res.data.per_page && page !== 1) {
@@ -189,7 +189,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       delete this.pagination.end_date;
     }
 
-    this.ordertoSupplierService.getList(this.pagination).subscribe(async res => {
+    this.orderToMitraHubService.getList(this.pagination).subscribe(async res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
@@ -208,7 +208,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.ordertoSupplierService.getList(this.pagination).subscribe(async res => {
+    this.orderToMitraHubService.getList(this.pagination).subscribe(async res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
@@ -226,47 +226,11 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.ordertoSupplierService.getList(this.pagination).subscribe(res => {
+    this.orderToMitraHubService.getList(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
     });
-  }
-
-  async exportPO(string, value) {
-    // this.loadingIndicator = true;
-    this.dataService.showLoading(true);
-    this.pagination.search = string;
-
-    delete this.pagination.page;
-    this.offsetPagination = 0;
-    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
-
-    if (this.formFilter.get("status").value) {
-      this.pagination.status = this.formFilter.get("status").value;
-    } else {
-      delete this.pagination.status;
-    }
-    if (this.formFilter.get("from").value && this.formFilter.get("to").value) {
-      this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
-      this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
-      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xls`;
-    } else {
-      delete this.pagination.start_date;
-      delete this.pagination.end_date;
-    }
-    try {
-      const response = await this.ordertoSupplierService.exportPO(this.pagination).toPromise();
-      // console.log('he', response.headers);
-      this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-      // throw error;
-    }
   }
 
   async exportXLS() {
@@ -276,7 +240,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
 
     delete this.pagination.page;
     this.offsetPagination = 0;
-    let fileName = `Export_Order_To_Supplier_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let fileName = `Export_Order_To_MitraHub_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
 
     if (this.formFilter.get("status").value) {
       this.pagination.status = this.formFilter.get("status").value;
@@ -292,7 +256,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       delete this.pagination.end_date;
     }
     try {
-      const response = await this.ordertoSupplierService.export(this.pagination).toPromise();
+      const response = await this.orderToMitraHubService.export(this.pagination).toPromise();
       // console.log('he', response.headers);
       this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
       // this.downloadLink.nativeElement.href = response;
@@ -353,65 +317,65 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     return "";
   }
 
-  directDetail(item?: any): void {
-    this.router.navigate(["user-management", "supplier-order", "detail", item.id]);
-  }
+  // directDetail(item?: any): void {
+  //   this.router.navigate(["user-management", "supplier-order", "detail", item.id]);
+  // }
 
-  getDetailOrder(orderId: any): void {
-    this.loadingIndicator = true;
-    // this.onLoad = false;
-    this.ordertoSupplierService.showListPesanan({ orderId: orderId }).subscribe(
-      async res => {
-        if (res.status == "success") {
-          res = res.data;
-          this.detailOrder = res;
-          let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
-          this.detailOrder.total = 0;
+  // getDetailOrder(orderId: any): void {
+  //   this.loadingIndicator = true;
+  //   // this.onLoad = false;
+  //   this.orderToMitraHubService.showListPesanan({ orderId: orderId }).subscribe(
+  //     async res => {
+  //       if (res.status == "success") {
+  //         res = res.data;
+  //         this.detailOrder = res;
+  //         let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
+  //         this.detailOrder.total = 0;
 
-          this.loadingIndicator = false;
-          this.onLoad = false;
+  //         this.loadingIndicator = false;
+  //         this.onLoad = false;
 
-          await res.order_products.map((item: any, idx: number) => {
-            this.detailOrder.total = parseInt(this.detailOrder.total) + parseInt(item.total_price);
-          });
-          this.print();
-        }
-      }, err => {
-        console.log('err', err);
-        this.loadingIndicator = false;
-      }
-    )
-  }
+  //         await res.order_products.map((item: any, idx: number) => {
+  //           this.detailOrder.total = parseInt(this.detailOrder.total) + parseInt(item.total_price);
+  //         });
+  //         this.print();
+  //       }
+  //     }, err => {
+  //       console.log('err', err);
+  //       this.loadingIndicator = false;
+  //     }
+  //   )
+  // }
 
-  async print() {
-    let bodyHtml = {
-      ...this.detailOrder,
-      created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
-      products: this.detailOrder.order_products.map(obj => {
-        return {
-          ...obj,
-          price_str: this.convertRp.transform(obj.price),
-          total_price_str: this.convertRp.transform(obj.total_price),
-        };
-      }),
-      total_str: this.convertRp.transform(this.detailOrder.total)
-    };
+  // async print() {
+  //   let bodyHtml = {
+  //     ...this.detailOrder,
+  //     created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
+  //     products: this.detailOrder.order_products.map(obj => {
+  //       return {
+  //         ...obj,
+  //         price_str: this.convertRp.transform(obj.price),
+  //         total_price_str: this.convertRp.transform(obj.total_price),
+  //       };
+  //     }),
+  //     total_str: this.convertRp.transform(this.detailOrder.total)
+  //   };
 
-    let popupWin;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin.document.open();
-    popupWin.document.write(this.generatePO.html(bodyHtml));
-    popupWin.document.close();
-  }
+  //   let popupWin;
+  //   popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+  //   popupWin.document.open();
+  //   popupWin.document.write(this.generatePO.html(bodyHtml));
+  //   popupWin.document.close();
+  // }
 
-  getDokumen(row) {
-    // console.log("row", row);
-    if (row.document) {
-      this.downloadLink.nativeElement.href = row.document_image_url;
-      this.downloadLink.nativeElement.click();
-    } else {
-      this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
-    }
-  }
+  // getDokumen(row) {
+  //   // console.log("row", row);
+  //   if (row.document) {
+  //     this.downloadLink.nativeElement.href = row.document_image_url;
+  //     this.downloadLink.nativeElement.click();
+  //   } else {
+  //     this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
+  //   }
+  // }
 
 }
