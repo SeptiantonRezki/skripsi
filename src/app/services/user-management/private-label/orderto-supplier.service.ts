@@ -76,4 +76,9 @@ export class OrdertoSupplierService extends BaseService {
     return this.postApi(url, body);
   }
 
+  export(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postBlobAsJsonApi(url, queryParams);
+  }
+
 }

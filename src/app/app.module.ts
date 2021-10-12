@@ -120,6 +120,7 @@ import { AreaService } from './services/area.service';
 import { LanguagesService } from './services/languages/languages.service';
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
 import { VoucherPrivateLabelService } from "./services/voucher-private-label.service";
+import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -265,6 +266,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AreaService,
     LanguagesService,
     VoucherPrivateLabelService,
+    OrderToMitraHubService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,
