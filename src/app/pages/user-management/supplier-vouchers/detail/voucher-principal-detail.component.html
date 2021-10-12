@@ -1,0 +1,106 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <!-- <h2 class="pl-8">Detil Voucher Principal</h2> -->
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-left: auto !important;">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selected]="selected"
+        [selectAllRowsOnPage]="false" (select)="onSelect($event)">
+
+        <ngx-datatable-column name="Nama" prop="name" [width]="113" [sortable]="true" *ngIf="activeCol.indexOf('name') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.name || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama pemilik" prop="owner" [width]="127" [sortable]="true" *ngIf="activeCol.indexOf('owner') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.owner || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nomor Handphone" prop="phone" [width]="129" [sortable]="true" *ngIf="activeCol.indexOf('phone') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.phone || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Klasifikasi" prop="classification" [width]="138" [sortable]="true" *ngIf="activeCol.indexOf('classification') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.classification || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="status pelanggan" prop="status_pelanggan" [sortable]="true" *ngIf="activeCol.indexOf('status_pelanggan') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.status_pelanggan?.toUpperCase() || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tier" prop="tier" [width]="75" [sortable]="true" *ngIf="activeCol.indexOf('tier') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.tier || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total Nilai Voucher" prop="voucher_total" [sortable]="true" *ngIf="activeCol.indexOf('voucher_total') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">
+              {{row.voucher_total_format_currency}}
+            </span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Voucher redeem" prop="voucher_redeem" [width]="125" [sortable]="true" *ngIf="activeCol.indexOf('voucher_redeem') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">
+              {{row.voucher_redeem_format_currency}}
+            </span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total nilai voucher" prop="voucher_remaining" [sortable]="true" *ngIf="activeCol.indexOf('voucher_remaining') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.voucher_remaining}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status pesanan" prop="status_pesanan" [width]="155" [sortable]="true" *ngIf="activeCol.indexOf('status_pesanan') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">
+              <span [class]="'status text-truncate h6 p-4 status-order mat-' + (row.status_pesanan ? row.status_pesanan : 'diproses') + '-color'">{{row.status_pesanan?.toUpperCase() || '-'}}</span>
+            </span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Pesanan" prop="order_date" [width]="159" [sortable]="true" *ngIf="activeCol.indexOf('order_date') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.order_date | date: 'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="No. Invouce" prop="invoice_number" [width]="155" [sortable]="true" *ngIf="activeCol.indexOf('invoice_number') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.invoice_number}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Pembayatan" prop="payment_date" [width]="170" [sortable]="true" *ngIf="activeCol.indexOf('invoice_number') !== -1">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address" style="cursor: pointer;" [routerLink]="['/orders', 'detail', row.id]">{{row.payment_date | date: 'dd/MM/yyyy'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

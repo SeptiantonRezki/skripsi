@@ -120,6 +120,8 @@ import { RcaAgentComponent } from './rca-agent/rca-agent.component';
 import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
 import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
 import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
+import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
+import { VoucherPrincipalDetailComponent } from "./supplier-vouchers/detail/voucher-principal-detail.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -267,6 +269,8 @@ export const MY_FORMATS = {
     ImportListWholesalerComponent,
     DokumenDialogComponent,
     SupplierVouchersComponent,
+    VoucherPrincipalDetailTabComponent,
+    VoucherPrincipalDetailComponent,
 
   ],
   entryComponents: [
