@@ -15,6 +15,7 @@ import { startWith, map, takeUntil } from 'rxjs/operators';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
+import { Page } from "app/classes/laravel-pagination";
 
 @Component({
   selector: 'app-template-edit',
@@ -153,6 +154,7 @@ export class TemplateEditComponent {
   ]
 
   listAnswerKeys: any[] = [];
+  pagination: Page = new Page();
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -311,7 +313,9 @@ export class TemplateEditComponent {
   }
 
   getListKategoriToolbox() {
-    this.pengaturanAttributeMisiService.getToolbox({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getToolbox(this.pagination).subscribe(
       (res) => {
         // console.log("res trade listKategoriToolbox", res);
         this.listKategoriToolbox = res.data.data;
@@ -367,7 +371,9 @@ export class TemplateEditComponent {
   }
 
   getListTipeMisi() {
-    this.pengaturanAttributeMisiService.getTipeMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getTipeMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
@@ -399,7 +405,9 @@ export class TemplateEditComponent {
   }
 
   getListTingkatInternalMisi() {
-    this.pengaturanAttributeMisiService.getInternalMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       (res) => {
         this.listTingkatinternalMisi = res.data.data;
         this.filteredLTKM.next(this.listTingkatinternalMisi.slice());
@@ -429,7 +437,9 @@ export class TemplateEditComponent {
   }
 
   getListKategoriProject() {
-    this.pengaturanAttributeMisiService.getProject({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listProjectMisi = res.data.data;
@@ -461,7 +471,9 @@ export class TemplateEditComponent {
   }
 
   getListReason() {
-    this.pengaturanAttributeMisiService.getVerificationRemark({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
       (res) => {
         this.listReason = res.data;
         this.filteredReason.next(this.listReason.slice());
@@ -544,7 +556,9 @@ export class TemplateEditComponent {
   }
 
   getListKategoriMisi() {
-    this.pengaturanAttributeMisiService.getKategoriMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
