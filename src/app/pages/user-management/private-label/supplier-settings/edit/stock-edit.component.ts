@@ -108,7 +108,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
           setTimeout(async() => {
             let i = 0;
             await this.stockData.settings.forEach((element: any, index: any) => {
-              if (index < 7) {
+              if (index < 8) {
                 listStock.push(this.formBuilder.group({ name: element.name, value: element.value }));
                 if (!this.packsConvertion(element.name)) {
                   if (element.value) {
