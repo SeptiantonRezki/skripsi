@@ -68,6 +68,11 @@ export class RetailerEditComponent {
     { name: 'TIDAK', value: 0 }
   ];
 
+  listBankFinalValidation: any[] = [
+    { name: 'FALSE', value: 0 },
+    { name: 'TRUE', value: 1 }
+  ];
+
   listLevelArea: any[];
   list: any;
 
@@ -142,6 +147,7 @@ export class RetailerEditComponent {
     this.formBankAccountError = {
       account_number: {},
       account_name: {},
+      bank_final_validation: {},
       bank_name: {},
       branch: {}
     };
@@ -209,6 +215,7 @@ export class RetailerEditComponent {
     this.formBankAccount = this.formBuilder.group({
       account_number: [''],
       account_name: [''],
+      bank_final_validation: [0],
       bank_name: [''],
       branch: ['']
     });
@@ -469,6 +476,7 @@ export class RetailerEditComponent {
     this.formBankAccount.setValue({
       account_number: this.detailRetailer.bank_account_number || '',
       account_name: this.detailRetailer.bank_account_name || '',
+      bank_final_validation: this.detailRetailer.bank_final_validation ? 1 : 0,
       bank_name: this.detailRetailer.bank_name || '',
       branch: this.detailRetailer.branch || '',
     });
@@ -660,6 +668,8 @@ export class RetailerEditComponent {
       this.formBankAccount.get('account_number').updateValueAndValidity();
       this.formBankAccount.get('account_name').setValidators(Validators.required);
       this.formBankAccount.get('account_name').updateValueAndValidity();
+      this.formBankAccount.get('bank_final_validation').setValidators(Validators.required);
+      this.formBankAccount.get('bank_final_validation').updateValueAndValidity();
       this.formBankAccount.get('bank_name').setValidators(Validators.required);
       this.formBankAccount.get('bank_name').updateValueAndValidity();
       this.formBankAccount.get('branch').setValidators(Validators.required);
@@ -670,6 +680,8 @@ export class RetailerEditComponent {
       this.formBankAccount.get('account_number').updateValueAndValidity();
       this.formBankAccount.get('account_name').setValidators([]);
       this.formBankAccount.get('account_name').updateValueAndValidity();
+      this.formBankAccount.get('bank_final_validation').setValidators([]);
+      this.formBankAccount.get('bank_final_validation').updateValueAndValidity();
       this.formBankAccount.get('bank_name').setValidators([]);
       this.formBankAccount.get('bank_name').updateValueAndValidity();
       this.formBankAccount.get('branch').setValidators([]);
@@ -707,6 +719,7 @@ export class RetailerEditComponent {
         gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get('account_name').value === '' ? null : this.formBankAccount.get('account_name').value,
+        bank_final_validation: this.formBankAccount.get('bank_final_validation').value,
         bank_account_number: this.formBankAccount.get('account_number').value === '' ? null : this.formBankAccount.get('account_number').value,
         bank_name: this.formBankAccount.get('bank_name').value === '' ? null : this.formBankAccount.get('bank_name').value,
         branch: this.formBankAccount.get('branch').value === '' ? null : this.formBankAccount.get('branch').value,
@@ -846,7 +859,7 @@ export class RetailerEditComponent {
 
     if (!this.isCan(['ubah', 'rekening_toko'])) {
 
-      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch', 'bank_final_validation'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
       this.npwp.disable();
