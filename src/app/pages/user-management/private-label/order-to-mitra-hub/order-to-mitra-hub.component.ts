@@ -237,26 +237,33 @@ export class OrderToMitraHubComponent implements OnInit {
     // this.loadingIndicator = true;
     this.dataService.showLoading(true);
     // this.pagination.search = string;
+    let params = {};
 
     delete this.pagination.page;
     this.offsetPagination = 0;
-    let fileName = `Export_Order_To_MitraHub_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
 
     if (this.formFilter.get("status").value) {
       this.pagination.status = this.formFilter.get("status").value;
+      params['status'] = this.pagination.status
     } else {
       delete this.pagination.status;
+      delete params['status'];
     }
     if (this.formFilter.get("from").value && this.formFilter.get("to").value) {
       this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
       this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
       fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xls`;
+      params['start_date'] = this.pagination.start_date;
+      params['end_date'] = this.pagination.end_date;
     } else {
       delete this.pagination.start_date;
       delete this.pagination.end_date;
+      delete params['start_date'];
+      delete params['end_date'];
     }
     try {
-      const response = await this.orderToMitraHubService.export(this.pagination).toPromise();
+      const response = await this.orderToMitraHubService.export(params).toPromise();
       // console.log('he', response.headers);
       this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
       // this.downloadLink.nativeElement.href = response;
