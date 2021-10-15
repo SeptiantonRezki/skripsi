@@ -58,6 +58,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  profileType: string = '';
+  HIDE_FOR = ['supplier'];
 
   constructor(
     private dataService: DataService,
@@ -84,6 +86,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       .subscribe(data => {
         this.updateFilter(data);
       });
+    const profile = this.dataService.getDecryptedProfile() || {};
+    this.profileType = profile.type || '';
   }
 
   initFilter() {
