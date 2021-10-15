@@ -88,7 +88,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="No. Invouce" prop="invoice_number" [width]="155" [sortable]="true" *ngIf="activeCol.indexOf('invoice_number') !== -1">
+        <ngx-datatable-column name="No. Invoice" prop="invoice_number" [width]="155" [sortable]="true" *ngIf="activeCol.indexOf('invoice_number') !== -1">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address" style="cursor: pointer;">{{row.invoice_number}}</span>
           </ng-template>
