@@ -130,7 +130,7 @@
             </ngx-datatable-column>
           </ngx-datatable>
         </mat-tab>
-        <mat-tab label="Order ke Mitra Hub">
+        <mat-tab label="Order ke Mitra Hub" *ngIf="!HIDE_FOR.includes(profileType)">
           <app-order-to-mitra-hub></app-order-to-mitra-hub>
         </mat-tab>
       </mat-tab-group>
