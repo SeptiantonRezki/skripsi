@@ -57,6 +57,7 @@ import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-componen
 import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
 import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
+import { PembayaranBenefitProgramComponent } from "./private-label/pembayaran-benefit-program/pembayaran-benefit-program.component";
 
 
 const routes: Routes = [
@@ -558,6 +559,10 @@ const routes: Routes = [
       breadcrumbs: brConfig.privatelabel.panelpartnership.edit
     },
     // canActivate: [PageGuard]
+  },
+  {
+    path: "partnership-benefit",
+    component: PembayaranBenefitProgramComponent,
   },
 ];
 
