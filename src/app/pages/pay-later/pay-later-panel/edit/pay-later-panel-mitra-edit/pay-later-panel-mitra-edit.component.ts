@@ -527,8 +527,20 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
     // alert('Open console to see the error')
   }
 
+  popUpConfirm(): void {
+    let data = {
+      titleDialog: "PERINGATAN",
+      captionDialog: "Unwhitelist Mitra akan berdampak ke SRC yang menjadi downline. Pastikan melakukan unwhitelist SRC Downline dari mitra tersebut terlebih dahulu sebelum melakukan unwhitelist Mitra",
+      confirmCallback: this.submit.bind(this),
+      buttonText: ["Lanjutkan", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
   submit() {
     if (this.formPanelMitra.valid) {
+      this.dialogService.brodcastCloseConfirmation();
+      
       if (this.selected.length === 0) {
 
         this.dialogService.openSnackBar({
