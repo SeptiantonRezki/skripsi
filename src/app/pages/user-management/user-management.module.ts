@@ -123,6 +123,7 @@ import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 import { VoucherPrincipalDetailComponent } from "./supplier-vouchers/detail/voucher-principal-detail.component";
 import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/order-to-mitra-hub.component';
+import { PembayaranBenefitProgramComponent } from './private-label/pembayaran-benefit-program/pembayaran-benefit-program.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -274,6 +275,7 @@ export const MY_FORMATS = {
     VoucherPrincipalDetailTabComponent,
     VoucherPrincipalDetailComponent,
     OrderToMitraHubComponent,
+    PembayaranBenefitProgramComponent,
 
   ],
   entryComponents: [

@@ -59,6 +59,7 @@ import { PanelPartnershipCreateComponent } from "./private-label/panel-partnersh
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
 import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
+import { PembayaranBenefitProgramComponent } from "./private-label/pembayaran-benefit-program/pembayaran-benefit-program.component";
 
 
 const routes: Routes = [
@@ -577,6 +578,10 @@ const routes: Routes = [
     },
     // canActivate: [PageGuard]
   },
+  {
+    path: "partnership-benefit",
+    component: PembayaranBenefitProgramComponent,
+  }
 ];
 
 @NgModule({
