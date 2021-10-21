@@ -1026,6 +1026,8 @@ export class ProductEditComponent {
   }
 
   selectionChange(): void {
+    this.formProductGroup.get("subCategory").setValue("");
+
     let category_id = this.formProductGroup.get("category").value
     this.productService.getListCategory(category_id).subscribe(
       res => {

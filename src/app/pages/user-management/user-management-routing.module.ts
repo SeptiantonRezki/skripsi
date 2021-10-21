@@ -57,9 +57,9 @@ import { MedalBadgeComponent } from "./retailer/medal-badge/medal-badge-componen
 import { PanelPartnershipIndexComponent } from "./private-label/panel-partnership/index/panel-partnership-index.component";
 import { PanelPartnershipCreateComponent } from "./private-label/panel-partnership/create/panel-partnership-create.component";
 import { PanelPartnershipEditComponent } from "./private-label/panel-partnership/edit/panel-partnership-edit.component";
-import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 import { PembayaranBenefitProgramComponent } from "./private-label/pembayaran-benefit-program/pembayaran-benefit-program.component";
+import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
 
 
 const routes: Routes = [
@@ -561,6 +561,10 @@ const routes: Routes = [
       breadcrumbs: brConfig.privatelabel.panelpartnership.edit
     },
     // canActivate: [PageGuard]
+  },
+  {
+    path: "partnership-benefit",
+    component: PembayaranBenefitProgramComponent,
   },
   {
     path: "supplier-vouchers",
