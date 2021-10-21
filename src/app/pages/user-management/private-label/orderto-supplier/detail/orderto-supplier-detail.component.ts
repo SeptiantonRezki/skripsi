@@ -19,7 +19,7 @@ import { Observable } from "rxjs/Observable";
 import { OrdertoSupplierService } from "app/services/user-management/private-label/orderto-supplier.service";
 import { QiscusService } from "app/services/qiscus.service";
 import { PagesName } from "app/classes/pages-name";
-
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-orderto-supplier-detail',
@@ -219,10 +219,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           });
 
           if (res && res.discounts && res.discounts.length) {
-            res.discounts.map((val) => {
-              console.log({ val });
-              this.totalDiscount += (val.amount) ? val.amount : 0;
-            });
+            // CALC TOTAL DISCOUNT
+            this.calcVoucherDiscount(res.discounts, res.order_products, res.limit_by, res.limit_only);
           }
           this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
             this.edited = true;
@@ -555,6 +553,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           // discount_nota: this.convertRp.transform(obj.discount_nota)
         };
       }),
+      grand_total: this.convertRp.transform(this.total),
       total_str: this.convertRp.transform(this.total)
       // summary: 'TOTAL NILAI PO ' + this.total
       // this.detailOrder.summary.map(obj => {
@@ -565,6 +564,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       //   };
       // })
     };
+    if (this.totalDiscount) {
+      bodyHtml = {
+        ...bodyHtml,
+        grand_total: this.convertRp.transform(this.total - this.totalDiscount),
+        total_discount_str: this.convertRp.transform(this.totalDiscount),
+      }
+    }
 
     let popupWin;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -671,6 +677,44 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       this.initLoginQiscus();
       // this.emitter.emitChatIsOpen(true);
     }
+  }
+
+  calcVoucherDiscount(discounts, order_products, limit_by, limit_only) {
+    
+    if(discounts && discounts.length) {
+
+      const voucherDiscount = _.findWhere(discounts, {source: 'voucher'});
+      let includeBy = null;
+      let subTotalEligible = 0;
+
+      if(!voucherDiscount.amount) {
+        this.totalDiscount = 0;
+        return;
+      }
+
+      if(!limit_by) { subTotalEligible = this.total; }
+      else if(limit_by === 'product') includeBy = 'sku_id';
+      else if(limit_by === 'category') includeBy = 'category_id';
+
+      if(includeBy) {
+        
+        order_products.map(product => {
+          product.category_id = `${product.category_id}`;
+          if(limit_only.includes(product[includeBy])) {
+            subTotalEligible += product.total_price;
+          }
+        })
+
+      }
+
+      if(subTotalEligible > voucherDiscount.amount) this.totalDiscount = voucherDiscount.amount;
+      else this.totalDiscount = subTotalEligible;
+    }
+
+    else this.totalDiscount = 0;
+
+    console.log({discounts, order_products, limit_by, limit_only, totalDiscount: this.totalDiscount});
+
   }
 
 }
