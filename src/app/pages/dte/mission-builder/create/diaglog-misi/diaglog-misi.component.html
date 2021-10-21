@@ -2,12 +2,23 @@
   <h2 id="header-card-mission" class="">Pengaturan Misi</h2>
 
   <mat-dialog-content>
-    <div class="pt-8 pb-16">
+    <div class="pb-16" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
       <mat-checkbox id="pin-up" [formControl]="status_pin_up" name="status_pin_up">Pin Up Misi</mat-checkbox>
+      <mat-checkbox id="nonCoinReward" [formControl]="non_coin_reward" name="non_coin_reward" (change)="selectChange($event)">
+        Reward Hadiah (Non Coin)
+      </mat-checkbox>
+      <div>
+        <mat-form-field style="width: 100%" *ngIf="form.value.non_coin_reward">
+          <input id="rewardDescription" matInput type="text" maxlength="20" formControlName="reward_description" placeholder="Keterangan Reward" (change)="changeRewardDesc($event)" />
+        </mat-form-field>
+        <div class="mat-error" style="font-size: 14px; margin-top: -10px;" *ngIf="isRewardError">
+          Keterangan harus diisi
+        </div>
+      </div>
     </div>
 
     <mat-form-field style="width: 100%">
-      <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task_template_id" (click)="selectForm('template')"
+      <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task-template-id" (click)="selectForm('template')"
         (selectionChange)="selectChangeMisi($event)" #singleSelect>
         <ngx-mat-select-search id="select-search-template" [formControl]="filterMission" [placeholderLabel]="'Cari Template Misi...'"
           [noEntriesFoundLabel]="'Tidak ada Template Misi yang ditemukan'" [clearSearchInput]="false">
@@ -20,8 +31,8 @@
 
     <mat-form-field style="width: 100%">
       <mat-select formControlName="task_template_other_name_id" placeholder="Pilih Nama Lain Misi"
-        id="task_template_other_name_id" (click)="selectForm('nama_lain')" (selectionChange)="selectChangeMisiOtherName($event)" #singleSelect>
-        <ngx-mat-select-search id="select-search-nama_lain" [formControl]="filterMissionOther" [placeholderLabel]="'Cari Nama Lain Misi...'"
+        id="task-template-other-name-id" (click)="selectForm('namaLain')" (selectionChange)="selectChangeMisiOtherName($event)" #singleSelect>
+        <ngx-mat-select-search id="select-search-namaLain" [formControl]="filterMissionOther" [placeholderLabel]="'Cari Nama Lain Misi...'"
           [noEntriesFoundLabel]="'Tidak ada Nama Lain Misi yang ditemukan'" [clearSearchInput]="false">
         </ngx-mat-select-search>
         <mat-option *ngFor="let item of filteredMissionOther | async" [value]="item.id">
@@ -45,15 +56,15 @@
     </mat-form-field>
 
     Push To FF
-    <mat-slide-toggle id="toggle-push_to_ff" style="margin-right: 20px" [formControl]="pushFF" name="push-to-ff"
+    <mat-slide-toggle id="toggle-pushToFF" style="margin-right: 20px" [formControl]="pushFF" name="push-to-ff"
       (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     Verifikasi FF
-    <mat-slide-toggle id="toggle-verifikasi_ff" style="margin-right: 20px" [formControl]="verifikasiFF" name="verifikasi-ff"
+    <mat-slide-toggle id="toggle-verifikasiFF" style="margin-right: 20px" [formControl]="verifikasiFF" name="verifikasi-ff"
       (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     Verifikasi Manual
-    <mat-slide-toggle id="toggle-verifikasi_manual" style="margin-right: 20px" [formControl]="verifikasi" name="verifikasi"
+    <mat-slide-toggle id="toggle-verifikasiManual" style="margin-right: 20px" [formControl]="verifikasi" name="verifikasi"
       (change)="selectChange($event)" [disabled]="form.value.is_ir_template === 1"></mat-slide-toggle>
 
     <!--Verifikasi IR
@@ -61,13 +72,11 @@
     <br><br>
     <div *ngIf="form.value.pushFF === false">
       <mat-form-field style="width: 100%">
-        <input id="coin_submission" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission"
-          placeholder="Coin Submission" />
+        <input id="coinSubmission" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission" placeholder="Coin Submission" />
       </mat-form-field>
 
       <mat-form-field style="width: 100%">
-        <input id="coin_verification" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification"
-          placeholder="Coin Verification" />
+        <input id="coinVerification" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification" placeholder="Coin Verification" />
       </mat-form-field>
     </div>
 

@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="isDetail ? 'Detail Tugas' : 'Ubah Tugas'">
-    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+    <button id="btn-simpan-tugas" *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
       type="button">SIMPAN</button>
   </page-content-header>
   <!-- / HEADER -->
@@ -20,38 +20,49 @@
 
       <form class="form" [ngClass]="{'form--edit': !isDetail}" [formGroup]="templateTaskForm" name="form" (keydown.enter)="$event.preventDefault();">
         <div class="form__content mat-elevation-z4 mb-24" fxLayout="column" fxLayoutAlign="start">
-          <div class="px-24 border-bottom" fxLayout="row wrap" fxLayoutAlign="space-between center"
-            style="margin-top: 5px;">
-
+          <div class="px-24 border-bottom" fxLayout="row wrap" fxLayoutAlign="space-between center" style="margin-top: 5px;">
             <div fxFlex class="p-16 h3">Pertanyaan</div>
             <div fxFlex="80" fxLayoutAlign="flex-end flex-end">
               <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-                <mat-checkbox [formControl]="isIRTemplate" [disabled]="this.frmQuiz.value === 'quiz'">Template IR
+                <mat-checkbox id="template-ir" [formControl]="isIRTemplate" [disabled]="this.frmQuiz.value === 'quiz'">Template IR
                 </mat-checkbox>
               </div>
               <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-                <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
+                <mat-checkbox id="shareable-link" [formControl]="shareable">Shareable Link</mat-checkbox>
               </div>
               <mat-form-field fxFlex="20" class="is-light form-primary" style="margin-right: 5px;">
-                <mat-select [formControl]="frmQuiz" placeholder="Quiz">
+                <mat-select id="selectQuiz" [formControl]="frmQuiz" placeholder="Quiz" (click)="selectForm()">
                   <mat-option *ngFor="let item of listQuiz" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select [formControl]="frmIsBranching" placeholder="Reponse Type">
+                <mat-select id="selectResponseType" [formControl]="frmIsBranching" placeholder="Reponse Type" (click)="selectForm()">
                   <mat-option *ngFor="let item of listCategoryResponse" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
           </div>
 
-          <div class="p-24">
+          <div class="pt-16 pr-24" fxLayout="column" fxLayoutAlign="start end" *ngIf="isIRTemplate.value">
+            <mat-form-field class="is-light form-primary" style="width: 25%;">
+              <mat-select id="selectIRType" formControlName="ir_type" placeholder="IR Type" (selectionChange)="isIRTypeError = false" (click)="selectForm()">
+                <mat-option *ngFor="let item of listIRType" [value]="item.value">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="mat-error" role="alert" style="font-size: 12px; margin-top: -12px;" *ngIf="isIRTypeError">
+              Pilih salah satu IR Type
+            </div>
+          </div>
+
+          <div class="px-24 pb-24">
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="100" class="titleInput exportTextarea title-template" floatLabel="never">
                 <!-- <textarea matInput aria-label="Judul Tugas" (focus)="$event.target.select()" (change)="defaultValue($event, 'name', 'Judul Tugas')"
                       formControlName="name" style="font-size: 34px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                       class="titletextareaInput"></textarea> -->
-                <textarea matInput placeholder="Judul Tugas" formControlName="name" style="font-size: 34px;"
+                <textarea id="judul-tugas" matInput placeholder="Judul Tugas" formControlName="name" style="font-size: 34px;"
                   cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
@@ -62,7 +73,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 5px;">
               <mat-form-field fxFlex="100" class="question is-light secondary-text">
-                <input matInput style="font-size: 13px;" formControlName="other_name" placeholder="Nama Lain Misi">
+                <input id="nama-lain-misi" matInput style="font-size: 13px;" formControlName="other_name" placeholder="Nama Lain Misi">
               </mat-form-field>
             </div>
 
@@ -70,8 +81,7 @@
               <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
                 <!-- <textarea matInput formControlName="description" (focus)="$event.target.select()" (change)="defaultValue($event, 'description', 'Deskripsi Tugas')"
                       style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea> -->
-                <textarea matInput formControlName="description" [froalaEditor]="options" placeholder="Deskripsi Tugas"
-                  style="font-size: 13px;"></textarea>
+                <textarea matInput formControlName="description" [froalaEditor]="options" placeholder="Deskripsi Tugas" style="font-size: 13px;" data-froala-id="froala-tugas"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
                   Deskripsi Tugas harus diisi
@@ -81,7 +91,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <section class="required-section secondary-text">
-                <mat-checkbox formControlName="material" (change)="changeValue('material', 'material_description')">
+                <mat-checkbox id="tambah-material" formControlName="material" (change)="changeValue('material', 'material_description')">
                   Tambahkan
                   Material?</mat-checkbox>
               </section>
@@ -92,7 +102,7 @@
                 <!-- <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
                       style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                       [disabled]="!templateTaskForm.get('material').value"></textarea> -->
-                <textarea matInput formControlName="material_description" placeholder="Jenis Material"
+                <textarea id="jenis-material" matInput formControlName="material_description" placeholder="Jenis Material"
                   style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                   [disabled]="!templateTaskForm.get('material').value"></textarea>
                 <mat-error
@@ -104,9 +114,8 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="kategori_toolbox" placeholder="Pilih Kategori Toolbox" id="kategori_toolbox"
-                  #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterLKT" [placeholderLabel]="'Cari Kategori Toolbox...'"
+                <mat-select formControlName="kategori_toolbox" placeholder="Pilih Kategori Toolbox" id="kategori-toolbox" (click)="selectForm('kategori-toolbox')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-kategori-toolbox" [formControl]="filterLKT" [placeholderLabel]="'Cari Kategori Toolbox...'"
                     [noEntriesFoundLabel]="'Tidak ada kategori toolbox yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLKT | async" [value]="item.id">
                     {{item.name}}
@@ -121,8 +130,8 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="tipe_misi" placeholder="Pilih Tipe Misi" id="tipe_misi" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterLTM" [placeholderLabel]="'Cari Tipe Misi...'"
+                <mat-select formControlName="tipe_misi" placeholder="Pilih Tipe Misi" id="tipe-misi" (click)="selectForm('tipe-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-tipe-misi" [formControl]="filterLTM" [placeholderLabel]="'Cari Tipe Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada tipe misi yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLTM | async" [value]="item.id">
                     {{item.name}}
@@ -137,9 +146,8 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="tingkat_internal_misi" placeholder="Pilih Internal Kategori Misi"
-                  id="tingkat_internal_misi" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterLTKM" [placeholderLabel]="'Cari Internal Kategori Misi...'"
+                <mat-select formControlName="tingkat_internal_misi" placeholder="Pilih Internal Kategori Misi" id="tingkat-internal-misi" (click)="selectForm('internal-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-internal-misi" [formControl]="filterLTKM" [placeholderLabel]="'Cari Internal Kategori Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada tingkat Internal Kategori yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLTKM | async" [value]="item.id">
                     {{item.name}}
@@ -154,9 +162,8 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="kategori_misi" placeholder="Pilih Kategori Misi" id="kategori_misi"
-                  #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterLKM" [placeholderLabel]="'Cari Kategori Misi...'"
+                <mat-select formControlName="kategori_misi" placeholder="Pilih Kategori Misi" id="kategori-misi" (click)="selectForm('kategori-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-kategori-misi" [formControl]="filterLKM" [placeholderLabel]="'Cari Kategori Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada kategori misi yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLKM | async" [value]="item.id">
                     {{item.name}}
@@ -171,9 +178,8 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="project_misi" placeholder="Pilih Project Misi" id="project_misi"
-                  #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterProject" [placeholderLabel]="'Cari Project Misi...'"
+                <mat-select formControlName="project_misi" placeholder="Pilih Project Misi" id="project-misi" (click)="selectForm('project-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-project-misi" [formControl]="filterProject" [placeholderLabel]="'Cari Project Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada Project misi yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredProject | async" [value]="item.id">
                     {{item.name}}
@@ -324,8 +330,7 @@
 
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
-                    <input matInput [formControl]="listProductSelected[i].product"
-                      (input)="keyUp.next($event.target.value)">
+                    <input id="namaProduk" matInput [formControl]="listProductSelected[i].product" (input)="keyUp.next($event.target.value)">
                     <!-- <input matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
                       [formControl]="listProductSelected[i].product" [matAutocomplete]="auto"> -->
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
@@ -350,7 +355,7 @@
                   </div>
 
                   <mat-form-field class="chooice is-light" fxFlex="30">
-                    <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
+                    <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
                       <mat-select-trigger>
                         <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
                           <div fxFlex="10">
@@ -371,9 +376,7 @@
                   <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                   <mat-form-field fxFlex="100" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
-                    <textarea matInput [froalaEditor]="options" formControlName="question"
-                      (focus)="$event.target.select()"
-                      (change)="defaultValue($event, 'questions', 'Pertanyaan', i)"></textarea>
+                    <textarea matInput [froalaEditor]="options" formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', 'Pertanyaan', i)" [attr.data-froala-id]="'question-'+(i+1)"></textarea>
                   </mat-form-field>
                 </div>
                 <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
@@ -510,16 +513,16 @@
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
                     <mat-form-field fxFlex="60" class="question is-light">
-                      <input matInput value="Teks jawaban singkat" disabled>
+                      <input id="jawabanSingkat" matInput value="Teks jawaban singkat" disabled>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'textarea'">
                     <mat-form-field fxFlex="80" class="question is-light">
-                      <input matInput value="Teks jawaban panjang" disabled>
+                      <input id="jawabanPanjang" matInput value="Teks jawaban panjang" disabled>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'image'">
-                    <div fxLayout="row wrap" fxLayoutAlign="center center">
+                    <div id="btnUploadBuktiFoto" fxLayout="row wrap" fxLayoutAlign="center center">
                       <div class="button">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                           <mat-icon class="secondary-text">photo_camera</mat-icon>
@@ -530,13 +533,13 @@
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'date'">
                     <mat-form-field fxFlex="40" class="question is-light">
-                      <input matInput type="text" value="Pilihan Tanggal" disabled>
+                      <input id="inputDate" matInput type="text" value="Pilihan Tanggal" disabled>
                       <mat-icon matSuffix>date_range</mat-icon>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'numeric'">
                     <mat-form-field fxFlex="40" class="question is-light">
-                      <input matInput type="text" value="Angka" disabled>
+                      <input id="inputAngka" matInput type="text" value="Angka" disabled>
                       <mat-icon matSuffix>dialpad</mat-icon>
                     </mat-form-field>
                   </ng-container>
@@ -548,7 +551,7 @@
                           *ngFor="let additional of item.get('additional')['controls']; let j=index;">
                           <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
                             fxFlex="1 0 auto" [formGroupName]="j">
-                            <mat-icon class="secondary-text" fxFlex="5">
+                            <mat-icon id="btnOpsi" class="secondary-text" fxFlex="5">
                               {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                               'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                             <mat-form-field
@@ -590,7 +593,7 @@
                               </mat-icon>
                             </div>
                             <div fxFlex="6"></div>
-                            <button
+                            <button id="btnRemoveOpsi"
                               *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value) && !isDetail"
                               (click)="deleteAdditional(i, j, item.get('typeSelection').value['value'])" mat-icon-button
                               fxFlex="5" matTooltip="Hapus" matTooltipPosition="below" class="secondary-text">
@@ -608,7 +611,7 @@
                             {{stockOption}}
                           </mat-radio-button>
                         </mat-radio-group> -->
-                        <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
+                        <mat-icon id="checkboxDirectToBelanja" class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
                           listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
                           style="margin-top: 5px;margin-left: 3px;">Direct
                           to
@@ -634,10 +637,10 @@
                       <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
                         fxFlex="1 0 auto"
                         *ngIf="!isDetail && item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
-                        <mat-icon class="secondary-text" fxFlex="5">
+                        <mat-icon id="btnAddOpsi" class="secondary-text" fxFlex="5">
                           {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
-                        <div class="more-option">
+                        <div id="more-option" class="more-option">
                           <span class="add-option" (click)="addAdditional(i)">Tambahkan opsi </span>
                           <!-- &nbsp;{{
                             item.get('others').value ?
@@ -706,7 +709,7 @@
                     <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                   </section>
                   <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div> -->
-                  <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)"
+                  <button id="btnDeleteQuestion" mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)"
                     matTooltipPosition="below" *ngIf="!isDetail" class="secondary-text">
                     <mat-icon class="secondary-text">delete</mat-icon>
                   </button>
@@ -719,9 +722,17 @@
                 *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
                 <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start"
                   fxFlex="1 0 auto">
-                  <mat-form-field fxFlex="50" class="question is-light secondary-text">
-                    <input matInput style="font-size: 13px;" formControlName="reason" (focus)="$event.target.select()"
-                      (change)="defaultValue($event, 'rejected_reason_choices', 'Alasan ', k)">
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="reason" [placeholder]="'Pilih Alasan '+ (k+1)" id="reason" (click)="selectForm('reason')" #singleSelect>
+                      <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" [placeholderLabel]="'Cari Alasan...'"
+                        [noEntriesFoundLabel]="'Tidak ada Alasan yang ditemukan'"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredReason | async" [value]="item.name">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error>
+                      Pilih salah satu Alasan
+                    </mat-error>
                   </mat-form-field>
 
                   <button mat-icon-button fxFlex="5"
@@ -734,7 +745,7 @@
               <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
                 *ngIf="!isDetail">
                 <div class="more-option">
-                  <span class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
+                  <span id="add-option" class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
                 </div>
               </div>
             </div>
@@ -743,7 +754,7 @@
         </div>
 
         <div class="background-misi" fxLayout="column">
-          <mat-checkbox
+          <mat-checkbox id="background-misi"
             [formControl]="isBackgroundMisi"
             (change)="onChangeBgMisi()"
             [disabled]="isDetail"
@@ -763,19 +774,19 @@
       <!-- </div> -->
 
       <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column" *ngIf="!isDetail">
-        <button mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
+        <button id="add-question" mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
           (click)="addQuestion()">
           <mat-icon>add_circle</mat-icon>
         </button>
         <!-- <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
           <mat-icon>text_fields</mat-icon>
         </button> -->
-        <button mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text"
+        <button id="add-image" mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text"
           (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
         </button>
 
-        <button mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text"
+        <button id="add-video" mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text"
           (click)="uploadVideo('master', null)">
           <mat-icon class="secondary-text">videocam</mat-icon>
         </button>

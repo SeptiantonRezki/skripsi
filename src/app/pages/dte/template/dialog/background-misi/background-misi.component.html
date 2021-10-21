@@ -5,7 +5,7 @@
       <div id="bg-misi" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
         [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="onSelectFile($event)" *ngIf="!isDetail">
         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-          <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+          <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
           <br>
           <span matPrefix>Tarik Gambar Kesini atau
             <strong>Pilih File</strong>

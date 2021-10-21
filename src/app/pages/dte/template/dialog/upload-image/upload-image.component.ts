@@ -36,6 +36,13 @@ export class UploadImageComponent {
     this.dataImage = this.formBuilder.group({
       image: [""]
     })
+
+    setTimeout(() => {
+      document.getElementById("upload-image").getElementsByTagName("input")[0].id = "inputUploadImage";
+    }, 500);
+    setTimeout(() => {
+      document.getElementById("upload-video").getElementsByTagName("input")[0].id = "inputUploadVideo";
+    }, 500);
   }
 
   ngOnDestroy() {
