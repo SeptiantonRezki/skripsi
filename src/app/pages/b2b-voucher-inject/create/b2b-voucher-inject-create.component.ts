@@ -20,6 +20,8 @@ import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { NullAstVisitor } from '@angular/compiler';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
+import { PanelMitraService } from 'app/services/user-management/private-label/panel-mitra.service';
 
 @Component({
   selector: 'app-b2b-voucher-inject-create',
@@ -90,6 +92,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     { name: 'B2B Only', value: 'b2b' },
     { name: 'Katalog SRC Only', value: 'src-catalogue' },
     { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+  suppliers = [
+    { id: 1, name: 'PT HM SAMPOERNA' }
   ];
   keyUpProductSRCC = new Subject<string>();
   inputChipListSRCC = [];
@@ -105,6 +111,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   listStatuses: any[] = [];
+  filterSupplier: FormControl = new FormControl();
+  public filteredSupplier: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
 
   constructor(
@@ -118,7 +126,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private supplierCompanyService: SupplierCompanyService,
+    private panelMitraService: PanelMitraService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -156,6 +166,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     };
     this.area = dataService.getDecryptedProfile()['area_type'];
 
+    this.getListProduct = this.getListProduct.bind(this);
+
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -168,6 +180,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     this.filteredSkuOptions = this.product.valueChanges.pipe(
       startWith(null),
       map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
+
+    this.filterSupplier.valueChanges.debounceTime(300).subscribe(keyword => {
+      this.searchSupplier(keyword);
+    })
   }
 
   _filterSku(value): any[] {
@@ -237,10 +253,25 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       });
     }
     if (param.length >= 3) {
-      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBank = res.data ? res.data : [];
-        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-      });
+
+      if (this.formDetilVoucher.get('opsiVoucher').value === 'private-label') {
+
+        const params = { page: 'all', search: param, supplier_company_id: this.formDetilVoucher.get('supplier_company_id').value }
+        this.supplierCompanyService.getProductList(params).subscribe(res => {
+          this.listProductSkuBank = res.data ? res.data : [];
+          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+        });
+
+      } else {
+
+        this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
+          this.listProductSkuBank = res.data ? res.data : [];
+          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+        });
+
+      }
+
+      // this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
     } else {
       this.listProductSkuBank = [];
       this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
@@ -259,9 +290,16 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   }
 
   getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
-      this.listCategories = res.data ? res.data.data : [];
-    });
+
+    if (this.formDetilVoucher.get('opsiVoucher').value === 'private-label') {
+      this.panelMitraService.getListCategory({ supplier_company_id: this.formDetilVoucher.get('supplier_company_id').value }).subscribe(res => {
+        this.listCategories = res.data ? res.data : [];
+      })
+    } else {
+      this.productService.getListCategory(null).subscribe(res => {
+        this.listCategories = res.data ? res.data.data : [];
+      });
+    }
   }
 
   getVendorCategories() {
@@ -439,7 +477,10 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_only_srcc: res.data.limit_only_src_catalogue,
         product_srcc: res.data.limit_by_src_catalogue === 'product' ? res.data.limit_only_src_catalogue : '',
         category_srcc: res.data.limit_by_src_catalogue === 'category' ? res.data.limit_only_src_catalogue.map(dt => Number(dt)) : '',
+        supplier_company_id: res.data.supplier_company_id ? res.data.supplier_company_id : 0,
       });
+
+      this.filterSupplier.setValue(res.data.supplier_company_name);
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
         ([value, name]) => ({ value, name })
@@ -462,7 +503,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       }
       if (res.data.limit_by_src_catalogue === 'product') {
         this.productListSRCC = res && res.data && res.data.limit_only_data_src_catalogue ?
-        res.data.limit_only_data_src_catalogue : [];
+          res.data.limit_only_data_src_catalogue : [];
       }
     });
   }
@@ -494,7 +535,6 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       });
 
     // this.getProducts();
-    this.getCategories();
     this.getVendorCategories();
     this.getGroupTradeProgram();
 
@@ -515,7 +555,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       limit_only_srcc: [''],
       product_srcc: [''],
       category_srcc: [''],
+      supplier_company_id: [],
     });
+    this.getCategories();
 
     if (this.isCreate) {
       this.formDetilVoucher.get('category').disable();
@@ -593,6 +635,16 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+    this.formDetilVoucher.get('opsiVoucher').valueChanges.subscribe(val => {
+
+      if (val !== 'private-label') {
+        this.formDetilVoucher.get('supplier_company_id').setValue(null);
+      }
+
+    })
+    this.formDetilVoucher.get('supplier_company_id').valueChanges.subscribe(supplier_company_id => {
+      this.getCategories();
+    })
   }
 
   initEditDetail() {
@@ -686,10 +738,11 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     let expectedArea = [];
     if (!this.formFilter.get(this.parseArea(selection)).disabled) {
       thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) { thisAreaOnSet = [
-        ...thisAreaOnSet,
-        ...this.areaFromLogin[1]
-      ];
+      if (this.areaFromLogin[1]) {
+        thisAreaOnSet = [
+          ...thisAreaOnSet,
+          ...this.areaFromLogin[1]
+        ];
       }
 
       thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
@@ -1097,7 +1150,8 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         limit_by: this.formDetilVoucher.get('limit_by_product').value ? 'product' :
           this.formDetilVoucher.get('limit_by_category').value ? 'category' : null,
         limit_by_src_catalogue: this.formDetilVoucher.get('limit_by_product_srcc').value ? 'product' :
-          this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null
+          this.formDetilVoucher.get('limit_by_category_srcc').value ? 'category' : null,
+        supplier_company_id: this.formDetilVoucher.get('supplier_company_id').value,
       };
       // console.log('paskdjsakl', this.productList);
       if (body['limit_by'] !== null) {
@@ -1300,7 +1354,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
-    console.log({error});
+    console.log({ error });
     try {
       alert(error ? error.error ? error.error.message : 'Terjadi Kesalahan Export' : 'Terjadi Kesalahan Export');
     } catch (x) {
@@ -1319,7 +1373,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer' };
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer', type_voucher: this.detailVoucher.type };
 
     this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
 
@@ -1520,6 +1574,13 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       this.productInputSRCC.nativeElement.value = '';
     }
     this.productSRCC.setValue(null);
+  }
+
+  searchSupplier(keyword) {
+    if (!keyword) return;
+    this.supplierCompanyService.getList({ search: keyword }).subscribe(({ data }) => {
+      this.filteredSupplier.next(data.data)
+    })
   }
 
 }

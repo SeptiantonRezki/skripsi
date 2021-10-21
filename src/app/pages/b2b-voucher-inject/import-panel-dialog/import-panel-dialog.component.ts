@@ -52,6 +52,7 @@ export class ImportPanelDialogComponent implements OnInit {
     fd.append('file', this.files);
     fd.append('voucher_id', this.dialogData.voucher_id);
     fd.append('type', this.dialogData.type);
+    fd.append('type_voucher', this.dialogData.type_voucher);
 
     this.dataService.showLoading(true);
     this.b2bVoucherInjectService.importFile(fd).subscribe(

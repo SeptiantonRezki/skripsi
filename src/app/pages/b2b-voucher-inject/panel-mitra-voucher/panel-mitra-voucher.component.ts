@@ -692,8 +692,8 @@ export class PanelMitraVoucherComponent implements OnInit {
       body['business_id'] = this.selected.map(bsn => bsn.id);
       body['panels'] = this.selected.map(bsn => ({
         business_id: bsn.id,
-        // nominal: bsn.nominal,
-        // amount: bsn.amount
+        nominal: bsn.nominal,
+        amount: bsn.amount
       }));
     }
     this.dataService.showLoading(true);
@@ -724,7 +724,8 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.dataService.showLoading(true);
     let fd = {
       business_id: this.selected.map(item => item.id),
-      type: 'wholesaler'
+      type: 'wholesaler',
+      type_voucher: this.detailVoucher.type,
     }
     try {
       const response = await this.b2bVoucherInjectService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
@@ -792,7 +793,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler' };
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler', type_voucher: this.detailVoucher.type };
 
     this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
 

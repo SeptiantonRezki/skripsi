@@ -67,3 +67,17 @@
   color: white;
   padding: 0 24px;
 }
+
+.info-label {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 20px;
+  border-radius: 100px;
+  background: #eee;
+  
+  .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}

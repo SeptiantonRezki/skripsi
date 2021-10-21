@@ -1026,6 +1026,8 @@ export class ProductEditComponent {
   }
 
   selectionChange(): void {
+    this.formProductGroup.get("subCategory").setValue("");
+
     let category_id = this.formProductGroup.get("category").value
     this.productService.getListCategory(category_id).subscribe(
       res => {
@@ -1130,7 +1132,7 @@ export class ProductEditComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
-          // convertion: this.formProductGroup.get("convertion").value
+          // convertion: this.formProductGroup.get("convertion").value,
         };
 
         let fd = new FormData();

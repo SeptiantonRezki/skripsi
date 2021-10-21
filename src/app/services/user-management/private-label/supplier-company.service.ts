@@ -50,4 +50,8 @@ export class SupplierCompanyService extends BaseService {
     const url = this.getUrl(this.namespace, "search", context);
     return this.getApi(url);
   }
+  getProductList(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "getListProductByCompany");
+    return this.getApi(url, queryParams);
+  }
 }

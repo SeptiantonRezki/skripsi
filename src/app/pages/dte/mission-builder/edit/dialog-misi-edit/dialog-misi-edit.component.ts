@@ -151,6 +151,21 @@ export class DialogMisiEditComponent implements OnInit {
     }
   }
 
+  selectForm(form: any){
+    const selectSearch = document.getElementById('select-search-'+form);
+    let inputTag = selectSearch.querySelectorAll('input');
+    for (let index = 0; index < inputTag.length; index++) {
+      inputTag[index].id = "search-"+form;
+    }
+    
+    let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+    if (matOption) {
+      for (let index = 0; index < matOption.length; index++) {
+        matOption[index].querySelector('span').id = 'options';
+      }
+    }
+  }
+
   copyMessage(linkMisi: any) {
     document.addEventListener('copy', (e: ClipboardEvent) => {
       e.clipboardData.setData('text/plain', (linkMisi));

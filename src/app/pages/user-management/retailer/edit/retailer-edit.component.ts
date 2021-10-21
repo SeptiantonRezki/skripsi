@@ -48,7 +48,9 @@ export class RetailerEditComponent {
     { name: 'GT', value: 'GT' },
     { name: 'IMO', value: 'IMO' },
     { name: 'LAMP/HOP', value: 'LAMP/HOP' },
-    { name: 'KA', value: 'KA' }
+    { name: 'KA', value: 'KA' },
+    { name: "Official Store", value: "Official Store"},
+    { name: "RRP", value: "RRP"}
   ];
 
   listGSR: any[] = [
@@ -163,7 +165,7 @@ export class RetailerEditComponent {
         'parent_id': null,
         'code': 'SLSNTL      ',
         'name': 'SLSNTL'
-      }
+      },
     ];
 
     this.list = {
@@ -186,7 +188,7 @@ export class RetailerEditComponent {
       address: ['', Validators.required],
       business_code: ['', Validators.required],
       owner: ['', Validators.required],
-      phone: [''],
+      phone: ['', Validators.required],
       status: ['', Validators.required],
       status_user: ['', Validators.required],
       national: ['', Validators.required],
@@ -433,10 +435,12 @@ export class RetailerEditComponent {
     if (this.detailRetailer.country) {
       this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
     } else {
-      if ((this.detailRetailer.phone).includes('+62')) {
-        this.country_phone = "+62";
-      } else if ((this.detailRetailer.phone).includes('+855')) {
-        this.country_phone = "+855";
+      if (this.detailRetailer.phone) {
+        if ((this.detailRetailer.phone).includes('+62')) {
+          this.country_phone = "+62";
+        } else if ((this.detailRetailer.phone).includes('+855')) {
+          this.country_phone = "+855";
+        }
       }
     }
     
@@ -446,7 +450,7 @@ export class RetailerEditComponent {
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
       country: this.detailRetailer.country || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split(this.country_phone)[1]) : '',
+      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1])) : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
@@ -694,6 +698,9 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
+      const icValue = this.formRetailer.get('InternalClassification').value;
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+
       let body = {
         _method: 'PUT',
         name: this.formRetailer.get('name').value,
@@ -706,8 +713,8 @@ export class RetailerEditComponent {
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
         longitude: this.formRetailer.get('longitude').value ? this.formRetailer.get('longitude').value : null,
-        type: (this.formRetailer.get('InternalClassification').value === 'SRC' || this.formRetailer.get('InternalClassification').value === 'NON-SRC') ? 'General Trade' : this.formRetailer.get('InternalClassification').value,
-        InternalClassification: this.formRetailer.get('InternalClassification').value,
+        type: generalTrade.indexOf(icValue) >= 0 ? "General Trade" : icValue,
+        InternalClassification: icValue,
         gsr_flag: this.formRetailer.get('gsr').value,
         gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,

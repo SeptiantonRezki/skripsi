@@ -29,7 +29,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field class="is-light form-primary">
-                <input matInput type="email" placeholder="{{ ls.locale.login.text2 }}" formControlName="username">
+                <input id="input-email" matInput type="email" placeholder="{{ ls.locale.login.text2 }}" formControlName="username">
                 <mat-error *ngIf="loginForm.controls['username'].hasError('required') && loginForm.controls['username'].touched ">
                   {{ ls.locale.login.text2 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
@@ -38,8 +38,7 @@
 
             <div *ngIf="showExternalUserFields" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field class="is-light form-primary">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="{{ ls.locale.login.text3 }}">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="{{ ls.locale.login.text3 }}">
+                <input id="input-password" matInput type="{{ showPassword ? 'text' : 'password' }}" formControlName="password" placeholder="{{ ls.locale.login.text3 }}">
                 <button type="button" mat-button matSuffix mat-icon-button (click)="showPassword = !showPassword">
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
