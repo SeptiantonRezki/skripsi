@@ -182,7 +182,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
 
     this.filterSupplier.valueChanges.debounceTime(300).subscribe(keyword => {
-      this.searchSupplier(keyword);
+      this.searchSupplier(keyword || '');
     })
   }
 
@@ -480,7 +480,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         supplier_company_id: res.data.supplier_company_id ? res.data.supplier_company_id : 0,
       });
 
-      this.filterSupplier.setValue(res.data.supplier_company_name);
+      this.filterSupplier.setValue(res.data.supplier_company_name || '');
 
       this.listStatuses = res.data.available_status_update ? Object.entries(res.data.available_status_update).map(
         ([value, name]) => ({ value, name })
@@ -640,6 +640,9 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       if (val !== 'private-label') {
         this.formDetilVoucher.get('supplier_company_id').setValue(null);
       }
+      let updatedDetailVoucher = this.dataService.getFromStorage('detail_voucher_b2b_inject') || {};
+      updatedDetailVoucher = {...updatedDetailVoucher, type: val};
+      this.dataService.setToStorage('detail_voucher_b2b_inject', updatedDetailVoucher);
 
     })
     this.formDetilVoucher.get('supplier_company_id').valueChanges.subscribe(supplier_company_id => {
@@ -1373,7 +1376,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer', type_voucher: this.detailVoucher.type };
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'retailer', type_voucher: this.formDetilVoucher.get('opsiVoucher').value };
 
     this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
 
