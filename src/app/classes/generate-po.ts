@@ -10,7 +10,10 @@ export class GeneratePO {
         }
         html += `<hr style="border-top: solid 1px;" />`;
   
-        html += `<div style="text-align: right; font-size:16px"> Total Nilai Pemesanan/Preorder <span style="font-size: 16px; font-weight: 600;">Rp${detailOrder.total_str}</span> </div>`;
+        if (detailOrder.total_discount_str) {
+          html += `<div style="text-align: right; font-size:16px"> Voucher Belanja <span style="font-size: 16px; font-weight: 600;">Rp${detailOrder.total_discount_str}</span> </div>`;
+        }
+        html += `<div style="text-align: right; font-size:16px"> Total Nilai Pemesanan/Preorder <span style="font-size: 16px; font-weight: 600;">${(detailOrder.grand_total) ? "Rp"+detailOrder.grand_total : detailOrder.total_str}</span> </div>`;
   
         html += `<br><div class="text-center"> <div style="text-align: left;">${detailOrder.created_at}</div><br><div style="font-size: 14px; text-align: center;">Terima kasih telah</div><div style="font-size: 14px; text-align: center;">menggunakan aplikasi AYO SRC</div></div></body></html>`;
         html += `<script>function load() { setTimeout(function(){ window.focus();window.print();window.close(); }, 200); }</script>`;
