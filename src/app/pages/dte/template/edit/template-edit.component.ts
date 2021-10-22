@@ -294,6 +294,40 @@ export class TemplateEditComponent {
     })
   }
 
+  selectForm(form?: any){
+    if (form) {
+      if (form === 'tipeQuestion') {
+        const listID = ['JawabanSingkat','QuestionParagraf','QuestionPilGan','QuestionPilGanAngka','QuestionPilGanJwbnSingkat','QuestionPilGanParagraf','QuestionCheckbox','QuestionUploadImage','QuestionAngka','QuestionSelectDate','QuestionStockCheck'];
+
+        let matOption = document.querySelectorAll('mat-option');
+        if (matOption) {
+          for (let index = 0; index < matOption.length; index++) {
+            matOption[index].id = 'tipe'+listID[index];
+          }
+        }
+      }
+      else {    // untuk option yang ada search
+        const selectSearch = document.getElementById('select-search-'+form);
+        let inputTag = selectSearch.querySelectorAll('input');
+        for (let index = 0; index < inputTag.length; index++) {
+          inputTag[index].id = "search-"+form;
+        }
+        
+        let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+        if (matOption) {
+          for (let index = 0; index < matOption.length; index++) {
+            matOption[index].id = 'options';
+          }
+        }
+      }      
+    } else {    // untuk option saja
+      const matOption = document.querySelectorAll('mat-option');
+      for (let index = 0; index < matOption.length; index++) {
+        matOption[index].id = "options";
+      }
+    }
+  }
+
   filteringLKT() {
     if (!this.listKategoriToolbox) {
       return;

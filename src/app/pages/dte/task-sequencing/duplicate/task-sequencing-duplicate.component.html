@@ -46,7 +46,7 @@
               <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" id="trade_creator_id" (click)="selectForm('trade')" (selectionChange)="selectChange($event)" #singleSelect>
+              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)" #singleSelect>
                 <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
@@ -63,7 +63,7 @@
               <!-- <mat-select placeholder="Pilih Group Audience" formControlName="group_audience" id="group_audience">
                 <mat-option *ngFor="let item of audiences" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="trade_audience_group_id" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
+              <mat-select formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
                 <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
                   [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTA | async" [value]="item.id">
@@ -99,7 +99,7 @@
                 Tanggal berakhir harus diisi.
               </mat-error>
             </mat-form-field>
-            <button id="btn-submit" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [routerLink]="['/dte','mission-builder','duplicate']"
+            <button id="btnSubmitTaskSequencing" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [routerLink]="['/dte','mission-builder','duplicate']"
               [disabled]="taskSequenceForm.controls['name'].invalid || taskSequenceForm.controls['trade_creator_id'].invalid || taskSequenceForm.controls['trade_audience_group_id'].invalid || taskSequenceForm.controls['start_date'].invalid || taskSequenceForm.controls['end_date'].invalid" [routerLink]="['/dte','mission-builder','edit']">
               SUBMIT
             </button>
