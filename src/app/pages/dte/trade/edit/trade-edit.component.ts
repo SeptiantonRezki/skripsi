@@ -110,7 +110,7 @@ export class TradeEditComponent {
       name: this.detailFormTrade.name,
       start_date: this.detailFormTrade.start_date,
       end_date: this.detailFormTrade.end_date,
-      budget: this.detailFormTrade.budget,
+      budget: Number(this.detailFormTrade.budget),
       coin_expiry_date: this.detailFormTrade.coin_expiry_date,
       status: this.detailFormTrade.status_publish,
       group_trade_program_id: this.detailFormTrade.trade_creator_group_id ? this.detailFormTrade.trade_creator_group_id : ''
