@@ -207,9 +207,9 @@
                   </mat-checkbox>
                 </div>
               </div>
-              
+
               <mat-tab-group (selectedTabChange)="onTabChanged($event);">
-                
+
                 <!-- GEOTREE TAB -->
                 <mat-tab label="Geotree">
                   <div class="" formArrayName="areas"
@@ -462,31 +462,35 @@
                       </div>
                     </div>
                   </div>
-                  
-                </mat-tab><!--/ EOC GEOTREE TAB -->
 
-                <mat-tab label="Special Rate" formGroupName="special_rate" *ngIf="SPECIAL_RATE_TAB">
-                  <div class="" style="margin-bottom: 20px;" *ngIf="!formProductGroup.get('special_rate')['controls']['rates']['controls'].length && formProductGroup.get('is_private_label').value && !isDetail">
+                </mat-tab>
+                <!--/ EOC GEOTREE TAB -->
+
+                <mat-tab label="Special Rate" formGroupName="special_rate">
+                  <div class="" style="margin-bottom: 20px;"
+                    *ngIf="!formProductGroup.get('special_rate')['controls']['rates']['controls'].length && formProductGroup.get('is_private_label').value && !isDetail">
                     <div>
-                      
+
                       <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                         <div fxFlex="50">
                           <!-- <h3 class="">Rate {{i+1}}</h3> -->
                         </div>
-                        <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            
-                            <button mat-raised-button type="button" (click)="addRates(i)">
-                              <mat-icon>add</mat-icon>
-                            </button>
+                        <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
+                          fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+
+                          <button mat-raised-button type="button" (click)="addRates(i)">
+                            <mat-icon>add</mat-icon>
+                          </button>
 
                         </div>
                       </div>
 
                     </div>
                   </div>
-                  
-                  <div class="" style="margin-bottom: 20px;" formArrayName="rates" *ngFor="let rate of formProductGroup.get('special_rate')['controls']['rates']['controls']; let i = index;">
-                    
+
+                  <div class="" style="margin-bottom: 20px;" formArrayName="rates"
+                    *ngFor="let rate of formProductGroup.get('special_rate')['controls']['rates']['controls']; let i = index;">
+
                     <div [formGroupName]="i">
                       <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                         <div fxFlex="50">
@@ -498,8 +502,7 @@
                           <button mat-raised-button type="button" (click)="addRates(i)">
                             <mat-icon>add</mat-icon>
                           </button>
-                          <button mat-raised-button
-                            color="primary" type="button" (click)="removeRates(i)"
+                          <button mat-raised-button color="primary" type="button" (click)="removeRates(i)"
                             [disabled]="isDetail">
                             <mat-icon>delete</mat-icon>
                           </button>
@@ -510,7 +513,8 @@
                       <div *ngIf="formProductGroup.get('is_private_label').value">
                         <div class="pl-8 mb-16" fxLayout="row">
                           <div fxFlex="30">
-                            <label for="">Kemasan Terkecil: <strong>{{formProductGroup.get('special_rate')['controls']['smallest_package'].value}}</strong></label>
+                            <label for="">Kemasan Terkecil:
+                              <strong>{{formProductGroup.get('special_rate')['controls']['smallest_package'].value}}</strong></label>
                           </div>
                           <div fxFlex="30">
                             <mat-form-field fxFlex="100%" class="is-light form-primary special-rate-tipe">
@@ -521,10 +525,12 @@
                             </mat-form-field>
                           </div>
                           <div fxFlex="30">
-                            <label for="">Jumlah Mitra Terpilih: <strong>{{rate.get('panels_count').value}}</strong></label>
+                            <label for="">Jumlah Mitra Terpilih:
+                              <strong>{{rate.get('panels_count').value}}</strong></label>
                           </div>
                           <div fxFlex="30">
-                            <button mat-button color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Pilih Mitra</button>
+                            <button mat-button color="primary"
+                              (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Pilih Mitra</button>
                           </div>
                         </div>
                         <div>
@@ -607,10 +613,9 @@
                                       </mat-form-field>
                                     </div>
                                     <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-between center">
-                                      
+
                                       <button type="button" mat-icon-button color="primary"
-                                        (click)="addSpecialRatePrices(item, j, i)"
-                                        [disabled]="isDetail">
+                                        (click)="addSpecialRatePrices(item, j, i)" [disabled]="isDetail">
                                         <mat-icon>add</mat-icon>
                                       </button>
 
@@ -632,32 +637,30 @@
                           </mat-list>
                         </div>
                         <!-- <mat-accordion> -->
-                          <mat-expansion-panel (opened)="onOpenListMitra($event, i)"
+                        <mat-expansion-panel (opened)="onOpenListMitra($event, i)"
                           [expanded]="rate.get('expanded_mitra').value">
-                          
 
-                            <mat-expansion-panel-header style="background-color:#3a3a3a; ">
-                              <mat-panel-title style="color: white;">
-                                Mitra
-                              </mat-panel-title>
-                              <!-- <mat-panel-description>
+
+                          <mat-expansion-panel-header style="background-color:#3a3a3a; ">
+                            <mat-panel-title style="color: white;">
+                              Mitra
+                            </mat-panel-title>
+                            <!-- <mat-panel-description>
                                 This is a summary of the content
                               </mat-panel-description> -->
-                            </mat-expansion-panel-header>
+                          </mat-expansion-panel-header>
 
-                              <app-wholesaler-special-price
-                              *ngIf="rate.get('expanded_mitra').value"
-                              (onSelectWholesaler)="onSelectedWs(i, $event)"
-                              [productId]="detailProduct.id"
-                              [exceptId]="selectedWs | excludeArray: rate.get('panels').value"
-                              [businessId]="rate.get('panels').value"
-                              >
-                              <div *specialPriceSaveMitra>
-                                  <button mat-raised-button type="button" color="primary" (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Simpan</button>
-                              </div>
-                            </app-wholesaler-special-price>
-                          
-                          </mat-expansion-panel>
+                          <app-wholesaler-special-price *ngIf="rate.get('expanded_mitra').value"
+                            (onSelectWholesaler)="onSelectedWs(i, $event)" [productId]="detailProduct.id"
+                            [exceptId]="selectedWs | excludeArray: rate.get('panels').value"
+                            [businessId]="rate.get('panels').value">
+                            <div *specialPriceSaveMitra>
+                              <button mat-raised-button type="button" color="primary"
+                                (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Simpan</button>
+                            </div>
+                          </app-wholesaler-special-price>
+
+                        </mat-expansion-panel>
 
                         <!-- </mat-accordion> -->
                       </div>
@@ -665,11 +668,11 @@
 
 
                     </div>
-                    
+
                   </div>
 
                 </mat-tab>
-                
+
               </mat-tab-group>
 
             </div>
