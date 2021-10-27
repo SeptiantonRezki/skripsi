@@ -621,11 +621,13 @@ export class B2BVoucherCreateComponent implements OnInit {
       });
 
     this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('coin').value);
+      const calculate = res * this.formDetilVoucher.get('coin').value;
+      this.formDetilVoucher.get('voucher').setValue(this.decimalMax2(calculate));
     })
 
     this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
+      const calculate = res * this.formDetilVoucher.get('currency').value;
+      this.formDetilVoucher.get('voucher').setValue(this.decimalMax2(calculate));
     })
 
 
@@ -670,6 +672,10 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  decimalMax2(calculate){
+    return +parseFloat(String(calculate)).toFixed(2);
   }
 
   isChangeB2BVoucher(event) {
