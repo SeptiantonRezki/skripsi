@@ -426,7 +426,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         opsiVoucher: res.data.type,
         name: res.data.name,
         coin: res.data.coin,
-        currency: res.data.currency,
+        currency: Number(res.data.currency),
         voucher: res.data.nominal,
         startDate: res.data.start_date,
         endDate: res.data.end_date,
