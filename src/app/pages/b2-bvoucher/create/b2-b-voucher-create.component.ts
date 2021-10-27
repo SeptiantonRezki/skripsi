@@ -675,7 +675,7 @@ export class B2BVoucherCreateComponent implements OnInit {
   }
 
   decimalMax2(calculate){
-    return +parseFloat(String(calculate)).toFixed(2);
+    return Math.round((calculate + Number.EPSILON) * 100) / 100;
   }
 
   isChangeB2BVoucher(event) {
