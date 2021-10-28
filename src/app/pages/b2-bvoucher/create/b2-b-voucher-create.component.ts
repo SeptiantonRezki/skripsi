@@ -426,7 +426,7 @@ export class B2BVoucherCreateComponent implements OnInit {
         opsiVoucher: res.data.type,
         name: res.data.name,
         coin: res.data.coin,
-        currency: res.data.currency,
+        currency: Number(res.data.currency),
         voucher: res.data.nominal,
         startDate: res.data.start_date,
         endDate: res.data.end_date,
@@ -621,11 +621,13 @@ export class B2BVoucherCreateComponent implements OnInit {
       });
 
     this.formDetilVoucher.get('currency').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('coin').value);
+      const calculate = res * this.formDetilVoucher.get('coin').value;
+      this.formDetilVoucher.get('voucher').setValue(this.decimalMax2(calculate));
     })
 
     this.formDetilVoucher.get('coin').valueChanges.subscribe(res => {
-      this.formDetilVoucher.get('voucher').setValue(res * this.formDetilVoucher.get('currency').value);
+      const calculate = res * this.formDetilVoucher.get('currency').value;
+      this.formDetilVoucher.get('voucher').setValue(this.decimalMax2(calculate));
     })
 
 
@@ -670,6 +672,10 @@ export class B2BVoucherCreateComponent implements OnInit {
         this.getAudienceAreaV2('territory', res);
       }
     });
+  }
+
+  decimalMax2(calculate){
+    return Math.round((calculate + Number.EPSILON) * 100) / 100;
   }
 
   isChangeB2BVoucher(event) {
