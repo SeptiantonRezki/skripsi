@@ -6,6 +6,7 @@
     "currency_name": "Rupiah",
     "currency_code": "IDR",
     "input_mask": "separator.0",
+    "input_mask_b2b": "separator.0",
     "input_separator": ".",
     "menu": {
       "help": "Bantuan",
