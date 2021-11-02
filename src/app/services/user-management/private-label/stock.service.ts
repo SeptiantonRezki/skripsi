@@ -20,4 +20,19 @@ export class PLStockService extends BaseService {
     const url = this.getUrl(this.namespace, 'update', context);
     return this.postApi(url, body);
   }
+
+  check(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "check");
+    return this.getApi(url, body);
+  }
+
+  getDataTable(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_table");
+    return this.getApi(url, queryParams);
+  }
+
+  updateGeotree(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_geotree");
+    return this.postApi(url, body);
+  }
 }
