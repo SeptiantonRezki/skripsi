@@ -44,6 +44,7 @@ import { CoinAdjustmentApprovalDetailComponent } from "./coin-adjustment-approva
 import { CoinDisburstmentComponent } from "./coin-disburstment/index/coin-disburstment.component";
 import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin-disburstment-create.component";
 import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
+import { DynamicPricingComponent } from "./dynamic-pricing/dynamic-pricing.component";
 
 const routes: Routes = [
   {
@@ -468,6 +469,10 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.coin_disburstment.detail
     },
+  },
+  {
+    path: 'dynamic-pricing',
+    component: DynamicPricingComponent,
   },
 ];
 
