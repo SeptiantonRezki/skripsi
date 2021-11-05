@@ -473,6 +473,7 @@ const routes: Routes = [
   {
     path: 'dynamic-pricing',
     component: DynamicPricingComponent,
+    canActivate: [PageGuard]
   },
 ];
 
