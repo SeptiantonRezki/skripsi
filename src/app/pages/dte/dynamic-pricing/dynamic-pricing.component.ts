@@ -32,7 +32,7 @@ export class DynamicPricingComponent implements OnInit {
       const baseurl = environment.STREAMLIT;
 
       const encodedToken = encodeURI(res.data);
-      const httpParams = new HttpParams().set('dceauth', encodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
+      const httpParams = new HttpParams().set('token', encodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
       const fullUrl = `${baseurl}?${httpParams.toString()}`;
       // console.log({fullUrl});
 

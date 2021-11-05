@@ -12,7 +12,7 @@ export const environment = {
   cognito_login_url: 'https://ayo-principal-qa.auth.ap-southeast-1.amazoncognito.com/oauth2/authorize?identity_provider=ayo-principal-qa&redirect_uri=https://hms.qa.src.id/login&response_type=CODE&client_id=3h4042k701id4jimgf4or1jd14&scope=aws.cognito.signin.user.admin email openid phone profile',
   show_gtm: true,
   SRC_KATALOG_KOIN_BASE_IFRAME_URL: 'https://hms-react.qa.src.id',
-  STREAMLIT: 'http://172.18.104.148:8501',
+  STREAMLIT: 'https://dynamicpricing.api.qa.src.id',
 };
 
 export const serviceServer = (server) => {
