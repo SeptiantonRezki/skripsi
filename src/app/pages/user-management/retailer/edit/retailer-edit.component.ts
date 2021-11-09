@@ -12,6 +12,7 @@ import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { PagesName } from 'app/classes/pages-name';
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { Utils } from 'app/classes/utils';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -345,7 +346,7 @@ export class RetailerEditComponent {
   }
 
   handleCountryPhone(event){
-    this.country_phone = event.value === 'KH' ? "+855" : "+62";
+    this.country_phone = Utils.getPhoneCode(event.value);
   }
 
   filteringBanks() {
@@ -432,15 +433,12 @@ export class RetailerEditComponent {
 
     }
     console.log(this.detailRetailer.phone);
+    
     if (this.detailRetailer.country) {
-      this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
+      this.country_phone = Utils.getPhoneCode(this.detailRetailer.country);
     } else {
       if (this.detailRetailer.phone) {
-        if ((this.detailRetailer.phone).includes('+62')) {
-          this.country_phone = "+62";
-        } else if ((this.detailRetailer.phone).includes('+855')) {
-          this.country_phone = "+855";
-        }
+        this.country_phone = Utils.getPhoneCode("", this.detailRetailer.phone);
       }
     }
     
