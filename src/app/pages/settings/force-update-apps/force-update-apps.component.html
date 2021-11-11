@@ -37,7 +37,7 @@
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Minimum Operasi Sistem" formControlName="os">
+              <mat-select placeholder="Minimum Operasi Sistem" formControlName="osVersion">
                 <mat-option *ngFor="let item of listDeviceOS" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
@@ -62,7 +62,7 @@
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Region" formControlName="os">
+              <mat-select placeholder="Region" formControlName="region">
                 <mat-option *ngFor="let item of region" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
