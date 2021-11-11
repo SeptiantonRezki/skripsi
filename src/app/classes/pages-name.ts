@@ -106,6 +106,7 @@ export class PagesName {
       "/dte/automation/create": "principal.dteautomation.buat",
       "/dte/automation/edit": "principal.dteautomation.ubah",
       "/dte/automation/detail": "principal.dteautomation.lihat",
+      "/dte/dynamic-pricing": "principal.dtedynamicpricing.lihat",
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",

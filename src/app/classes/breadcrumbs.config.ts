@@ -662,7 +662,7 @@ export const brConfig = {
       index: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
@@ -674,12 +674,12 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
-          name: "Produk Prinsipall"
+          url: "/user-management/private-label",
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {
@@ -691,12 +691,12 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {
@@ -708,12 +708,12 @@ export const brConfig = {
       detail: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {

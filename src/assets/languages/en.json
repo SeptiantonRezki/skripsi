@@ -6,6 +6,7 @@
     "currency_name": "US Dollar",
     "currency_code": "USD",
     "input_mask": "separator.2",
+    "input_mask_b2b": "separator.5",
     "input_separator": ",",
     "menu": {
       "help": "Help",
@@ -308,7 +309,10 @@
     "text40": "Credit/White Note",
     "text41": "Deposit Slip",
     "text42": "Cash Transfer",
-    "text43": "Cash"
+    "text43": "Cash",
+    "text44": "Data Saved Successfully",
+    "text45": "The selected geotree area cannot be empty",
+    "text46": "Order GSR"
   },
   "strategic_partnership": {
     "text1": "Strategic Partnerships",

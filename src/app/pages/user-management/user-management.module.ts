@@ -9,6 +9,8 @@ import { UserManagementRoutingModule } from "./user-management-routing.module";
 import { AdminPrincipalIndexComponent } from "./admin-principal/index/admin-principal-index.component";
 import { AdminPrincipalCreateComponent } from "./admin-principal/create/admin-principal-create.component";
 import { FieldForceIndexComponent } from "./field-force/index/field-force-index.component";
+import { TranslateModule } from "@ngx-translate/core";
+
 // import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 
 import {
@@ -165,6 +167,7 @@ export const MY_FORMATS = {
     MatDividerModule,
     MatListModule,
     MatSlideToggleModule,
+    TranslateModule.forChild(),
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,

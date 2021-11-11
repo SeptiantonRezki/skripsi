@@ -146,6 +146,7 @@ import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-ex
 import { BackgroundMisiComponent } from './template/dialog/background-misi/background-misi.component';
 import { NgxMaskModule } from "ngx-mask";
 import { VerificationRemarkComponent } from './pengaturan-attribute-misi/index/verification-remark/verification-remark.component';
+import { DynamicPricingComponent } from './dynamic-pricing/dynamic-pricing.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -308,6 +309,7 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     BackgroundMisiComponent,
     VerificationRemarkComponent,
+    DynamicPricingComponent,
   ],
   exports: [
     TemplateIndexComponent,
