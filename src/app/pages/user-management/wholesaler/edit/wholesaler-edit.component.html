@@ -158,7 +158,7 @@
               </mat-form-field>
               <div fxFlex="2"><a #downloadLink></a></div>
               <div class="confirm btn-confirm py-16" fxLayout="row" fxFlex="50">
-                <a [href]="detailWholesaler.ktp_image_url" mat-raised-button type="button" class="confirmation-button"
+                <a (click)="openKtp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
                   Lihat Dokumen
                 </a>
@@ -175,7 +175,7 @@
               </mat-form-field>
               <div fxFlex="2"></div>
               <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
-                <a [href]="detailWholesaler.npwp_image_url" mat-raised-button type="button" class="confirmation-button"
+                <a (click)="openNpwp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
                   Lihat Dokumen
                 </a>

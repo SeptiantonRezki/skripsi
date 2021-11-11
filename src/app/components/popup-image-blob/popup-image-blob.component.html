@@ -1,0 +1,16 @@
+<div fxFlex>
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon style="color: #9F9F9F;">close</mat-icon>
+    </button>
+  </div>
+
+  <div fxFlex class="p-12 pt-0">
+    <ng-container>
+      <!-- {{url}} -->
+      <img class="attachment-img" id="image3" [src]='url' #screenImg3 />
+    </ng-container>
+  </div>
+
+</div>

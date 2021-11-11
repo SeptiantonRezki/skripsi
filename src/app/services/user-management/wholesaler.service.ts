@@ -88,5 +88,20 @@ export class WholesalerService extends BaseService {
     return this.getApi(url);
   }
 
+  showKtp(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_ktp");
+    return this.postBlobAsJsonApi(url, body);
+  }
+
+  showNpwp(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_npwp");
+    return this.postBlobAsJsonApi(url, body);
+  }
+
+  showDocumentOrder(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_document_order");
+    return this.postBlobAsJsonApi(url, body);
+  }
+
 
 }

@@ -14,6 +14,7 @@ import { PagesName } from "app/classes/pages-name";
 import { DokumenDialogComponent } from "../dokumen-dialog/dokumen-dialog.component";
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { PopUpImageBlobComponent } from "../../../../components/popup-image-blob/popup-image-blob.component";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -832,6 +833,52 @@ export class WholesalerEditComponent {
       this.disableSubmit = true;
     }
 
+  }
+
+  openKtp() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      uuid: this.detailWholesaler.uuid
+    };
+    this.wholesalerService.showKtp(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+  openNpwp() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      uuid: this.detailWholesaler.uuid
+    };
+    this.wholesalerService.showNpwp(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }
