@@ -248,7 +248,7 @@ export class WholesalerEditComponent {
   }
 
   handleCountryPhone(event){
-    this.country_phone = event.value === 'KH' ? "+855" : "+62";
+    this.country_phone = Utils.getPhoneCode(event.value);
   }
 
   initArea() {
@@ -346,14 +346,10 @@ export class WholesalerEditComponent {
     }
     const detailws = this.detailWholesaler;
     if (this.detailWholesaler.country) {
-      this.country_phone = this.detailWholesaler.country === 'KH' ? "+855" : "+62";
+      this.country_phone = Utils.getPhoneCode(this.detailWholesaler.country);
     } else {
       if (this.detailWholesaler.phone) {
-        if ((this.detailWholesaler.phone).includes('+62')) {
-          this.country_phone = "+62";
-        } else if ((this.detailWholesaler.phone).includes('+855')) {
-          this.country_phone = "+855";
-        }
+        this.country_phone = Utils.getPhoneCode("", this.detailWholesaler.phone);
       }
     }
 

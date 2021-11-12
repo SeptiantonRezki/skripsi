@@ -8,8 +8,7 @@
           EXPORT COIN
         </button>
         <label *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)" style="margin: 0px 0 0 15px;">Requesting File</label>
-        <a *ngIf="taskSequenceForm.get('export_coin_status').value === 'done' && taskSequenceForm.get('export_coin_result').value"
-          [href]="taskSequenceForm.get('export_coin_result').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Download File</a>
+        <a id="btnDownloadFile" *ngIf="taskSequenceForm.get('export_coin_status').value === 'done' && taskSequenceForm.get('export_coin_result').value" [href]="taskSequenceForm.get('export_coin_result').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Download File</a>
         <!-- <label style="margin: 0px 0 0 15px;">Download File</label> -->
       </div>
       <a #downloadLink></a>
@@ -68,9 +67,9 @@
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
               <mat-select [disabled]="data?.is_editable === 0" formControlName="trade_creator_id"
-                placeholder="Pilih Trade Program" id="trade_creator_id" (selectionChange)="selectChange($event)"
+                placeholder="Pilih Trade Program" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)"
                 #singleSelect>
-                <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
+                <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false">
                 </ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
@@ -87,10 +86,8 @@
               <!-- <mat-select placeholder="Pilih Group Audience" formControlName="group_audience" id="group_audience">
                 <mat-option *ngFor="let item of audiences" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select [disabled]="data?.is_editable === 0" formControlName="trade_audience_group_id"
-                placeholder="Pilih Group Audience" id="trade_audience_group_id"
-                (selectionChange)="selectChangeAudince($event)" #singleSelect>
-                <ngx-mat-select-search [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
+              <mat-select [disabled]="data?.is_editable === 0"  formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
+                <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
                   [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'" [clearSearchInput]="false">
                 </ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTA | async" [value]="item.id">

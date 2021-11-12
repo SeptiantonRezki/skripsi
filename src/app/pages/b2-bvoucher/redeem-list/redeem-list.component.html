@@ -118,7 +118,7 @@
 
     <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}" prop="nominal">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        {{row.nominal | rupiahFormater }}
+        {{row.nominal_format_currency }}
       </ng-template>
     </ngx-datatable-column>
 

@@ -76,8 +76,7 @@ export class TaskSequencingCreateComponent implements OnInit {
       inputTag[index].id = "search-"+form;
     }
     
-    // Perbaiki lagi
-    let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+    let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
         matOption[index].querySelector('span').id = 'options';

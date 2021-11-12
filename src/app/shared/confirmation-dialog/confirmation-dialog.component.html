@@ -1,5 +1,5 @@
 <div class="dialog-container">
-  <h1 *ngIf="data.titleDialog" mat-dialog-title>{{data.titleDialog}}</h1>
+  <h1 id="headerPopupConfirmImport" *ngIf="data.titleDialog" mat-dialog-title>{{data.titleDialog}}</h1>
   <div *ngIf="!data.htmlContent && data.captionDialog" mat-dialog-content>{{data.captionDialog}}</div>
   <div *ngIf="data.htmlContent && data.captionDialog" mat-dialog-content [innerHTML]="data.captionDialog"></div>
   <div *ngIf="data.isDisagree" fxLayout="row" fxLayoutAlign="center center" class="radio-layout">
