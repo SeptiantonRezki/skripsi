@@ -44,6 +44,7 @@ export class HelpCreateComponent {
 
   files: File;
   validComboDrag: Boolean;
+  countryList: any[] = [];
 
   public options: Object = Config.FROALA_CONFIG;
 
@@ -59,7 +60,8 @@ export class HelpCreateComponent {
       body: {},
       user: {},
       category: {},
-      otherkeyword: {}
+      otherkeyword: {},
+      country: {}
     };
     this.isValidFile = true;
   }
@@ -72,7 +74,8 @@ export class HelpCreateComponent {
       video_url: [""],
       type: ["", Validators.required],
       category: ["", Validators.required],
-      otherkeyword: ["", Validators.required]
+      otherkeyword: ["", Validators.required],
+      country: ["", Validators.required]
     });
 
     this.formHelp.valueChanges.subscribe((k) => {
@@ -88,6 +91,7 @@ export class HelpCreateComponent {
     })
     // this.getListCategory();
     this.getListUser();
+    this.getCountryList();
   }
 
   add(event: MatChipInputEvent): void {
@@ -209,6 +213,7 @@ export class HelpCreateComponent {
         body.append('user', this.formHelp.get("user").value);
         body.append('content_category_id', this.formHelp.get("category").value);
         body.append('type', this.formHelp.get('type').value);
+        body.append('country', this.formHelp.get('country').value);
         // body.append('keyword', this.formHelp.get("otherkeyword").value);
         body.append('keyword', JSON.stringify(this.keywords));
         body.append('is_notif', '0');
@@ -238,6 +243,18 @@ export class HelpCreateComponent {
         commonFormValidator.validateAllFields(this.formHelp);
       }
     }
+  }
+
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
   }
 
 }

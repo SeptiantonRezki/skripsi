@@ -87,6 +87,18 @@
               </div>
               <!-- GRUP PENGGUNA -->
 
+              <div fxLayout="row">
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-select formControlName="country" placeholder="Negara">
+                    <mat-option *ngFor="let item of countryList" [value]="item.code" style="text-transform: capitalize;">
+                      {{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formHelp.controls['country'].hasError('required') && formHelp.controls['country'].touched">
+                    Negara harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
               <!-- JENIS -->
               <div fxLayout="row">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
