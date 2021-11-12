@@ -204,6 +204,7 @@ export class ImportTsmCoinComponent {
       res => {
         this.requestingPreview = true;
         this.dataService.showLoading(false);
+        this.addObjectToTable();
       },
       err => {
         this.requestingPreview = false;
@@ -273,4 +274,35 @@ export class ImportTsmCoinComponent {
     if (item.flag) return '#C62728';
   }
 
+  selectForm(form?: any){
+    setTimeout(() => {
+      const selectSearch = document.getElementById('selectSearch'+form);
+      let inputTag = selectSearch.querySelectorAll('input');
+      for (let index = 0; index < inputTag.length; index++) {
+        inputTag[index].id = "search"+form;
+      }
+      
+      let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+      if (matOption) {
+        for (let index = 0; index < matOption.length; index++) {
+          matOption[index].id = 'listUserPenerima';
+        }
+      }
+    }, 500);
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    const namaKolom = ['GTP','NamaProgram','NamaAudience','NamaRetailer','StatusRetailer','CurrentCoinTotal'];
+    
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      rows[index].id = 'data-row';
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell'+(namaKolom[indexCell] ? '-'+namaKolom[indexCell] : '');
+      }
+    }
+  }
 }

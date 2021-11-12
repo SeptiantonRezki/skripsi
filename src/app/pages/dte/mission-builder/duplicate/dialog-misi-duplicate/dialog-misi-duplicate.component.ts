@@ -139,10 +139,10 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       inputTag[index].id = "search-"+form;
     }
     
-    let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+    let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
-        matOption[index].querySelector('span').id = 'options';
+        matOption[index].id = 'options';
       }
     }
   }

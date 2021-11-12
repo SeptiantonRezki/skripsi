@@ -26,6 +26,16 @@ export class PageContentComponent {
   }
 
   ngOnInit() {
-    this.newContentTitle = this.contentTitle.toLowerCase().split(" ").join("_");
+    let lowerTitle = this.contentTitle.toLowerCase();
+    const excludes = ['buat', 'ubah', 'detail', 'detil', 'daftar'];
+    excludes.forEach(item => {
+      if (lowerTitle.includes(item)) {
+        lowerTitle = lowerTitle.replace(item, '').trim();
+      }
+    });
+    this.newContentTitle = lowerTitle.split(" ").map(word =>
+      word[0].toUpperCase() + word.substring(1)
+    ).join("");
+    // this.newContentTitle = this.contentTitle.toLowerCase().split(" ").join("_");
   }
 }
