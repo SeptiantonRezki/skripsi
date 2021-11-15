@@ -133,6 +133,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('user_country', event.value);
       this.translate.use(event.value);
       this.ls.setLangHTML(event.value);
+      location.reload();
     }
   }
 
