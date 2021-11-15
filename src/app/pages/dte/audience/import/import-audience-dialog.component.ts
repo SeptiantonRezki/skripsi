@@ -64,6 +64,7 @@ export class ImportAudienceDialogComponent {
   requestingPreview:boolean = false;
   requestingImport: boolean = false;
   importing: boolean = false;
+  createData = null;
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -172,6 +173,8 @@ export class ImportAudienceDialogComponent {
     this.files = event;
 
     const {trade_audience_group_id} = this.detailData;
+    const {formAudience, pagination} = this.detailData;
+    console.log({formAudience, pagination});
     
     if (this.requestingPreview) {
       this.dialogService.openSnackBar({ message: "Proses Request Preview Masih Berjalan!" });
@@ -181,10 +184,38 @@ export class ImportAudienceDialogComponent {
     let fd = new FormData();
     this.idbService.reset();
     fd.append('file', this.files);
-    fd.append('trade_audience_group_id', trade_audience_group_id);
+    
+    if(trade_audience_group_id) {
+
+      fd.append('trade_audience_group_id', trade_audience_group_id);
+
+    }
+
+    if(this.detailData.IMPORT_FROM_METHOD) {
+      
+      for(let key in formAudience) {
+        if(!['business_checkbox', 'geotree_checkbox'].includes(key)) {
+          fd.append(`create_data[${key}]`, formAudience[key]);
+        }
+      }
+      fd.append('is_create', 'yes');
+      
+    }
+
+
+    console.log({fd});
     this.dataService.showLoading(true);
     
     this.audienceService.requestPreviewImportExcel(fd).subscribe((res) => {
+
+      if(this.detailData.IMPORT_FROM_METHOD && this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
+
+        this.dataService.setToStorage('create_audience_import_status', {
+          import_audience_status: "running",
+          import_audience_status_type: "preview"
+        });
+
+      }
       
       this.setRequesting('preview');
       this.dataService.showLoading(false);
@@ -317,7 +348,9 @@ export class ImportAudienceDialogComponent {
   }
 
   submit() {
-    const {IMPORT_TYPE, min, max, trade_scheduler_id, type, audience_type} = this.detailData;
+    let {IMPORT_TYPE, min, max, trade_scheduler_id, type, audience_type} = this.detailData;
+    const {trade_creator_id} = this.previewData;
+    let is_create = (this.detailData.IMPORT_FROM_METHOD === 'CREATE') ? 'yes' : 'no';
     if(IMPORT_TYPE === 'AUDIENCE') {
       const {is_valid, preview_id, preview_task_id} = this.previewData;
 
@@ -327,11 +360,15 @@ export class ImportAudienceDialogComponent {
           preview_id,
           preview_task_id,
           min, max,
-          trade_scheduler_id, type,
-          audience_type
+          trade_scheduler_id: (trade_scheduler_id) ? trade_scheduler_id : this.previewData.trade_scheduler_id,
+          type,
+          audience_type,
+          trade_creator_id,
+          is_create
         }).subscribe(res => {
 
           this.setRequesting('import')
+          
           this.dialogRef.close({...this.previewData});
 
         })
@@ -381,6 +418,13 @@ export class ImportAudienceDialogComponent {
       preview_task_id: data.preview_task_id,
       total_selected: data.data.total,
     }
+    if(this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
+      this.previewData = {
+        ...this.previewData,
+        trade_creator_id: data.create_data.trade_creator_id,
+        trade_scheduler_id: data.create_data.trade_scheduler_id,
+      }
+    }
     // this.p_pagination = { page: this.p_page, per_page: 15, last_page: this.lastPage, total: this.totalData };
     Page.renderPagination(this.pagination, data.data);
     this.dataService.showLoading(false);
@@ -402,6 +446,16 @@ export class ImportAudienceDialogComponent {
       this.requestingPreview = true;
 
     }
+    
+    if(this.detailData.IMPORT_FROM_METHOD && this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
+
+      this.dataService.setToStorage('create_audience_import_status', {
+        import_audience_status: "running",
+        import_audience_status_type: reqType,
+      });
+
+    }
+
     const newDetailAudience = {
       ...this.dataService.getFromStorage('detail_audience'),
       ...newStatus
