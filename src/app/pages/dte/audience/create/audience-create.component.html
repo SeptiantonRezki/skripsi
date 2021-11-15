@@ -408,14 +408,23 @@
         fxLayoutAlign="end center"
         class="p-16 export"
       >
-        <button
-          mat-raised-button
-          type="button"
-          class="is-danger"
-          (click)="importAudience()"
-        >
-          <mat-icon>arrow_downward</mat-icon> Import XLS
-        </button>
+        <div fxLayout="column">
+
+          <button
+            mat-raised-button
+            type="button"
+            class="is-danger"
+            (click)="importAudience()"
+          >
+            <mat-icon>arrow_downward</mat-icon> Import XLS
+          </button>
+          <label 
+            *ngIf="!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type"
+            style="font-weight: bolder; color: white;">
+            Requesting {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
+          </label>
+          
+        </div>
         <div fxLayout="column">
           <button
             mat-raised-button
@@ -585,16 +594,26 @@
     </div>
 
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button
+      <div>
+
+        <button
         id="btn-simpan"
         mat-raised-button
         type="button"
         class="confirmation-button"
         (click)="submit()"
         fxFlex="20"
+        [disabled]="(!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type)"
       >
         SIMPAN
       </button>
+      <label 
+        *ngIf="!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type"
+        style="font-weight: bolder; color: gray; font-style: italic;">
+        Requesting {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
+      </label>
+
+      </div>
     </div>
     <a #downloadLink></a>
   </div>

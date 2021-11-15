@@ -111,4 +111,9 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "list_scheduler");
     return this.getApi(url, queryParams);
   }
+
+  showStatusImport(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_status");
+    return this.getApi(url, queryParams);
+  }
 }

@@ -7,6 +7,7 @@ import { UserSupplierService } from 'app/services/user-management/private-label/
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { Page } from 'app/classes/laravel-pagination';
 
 @Component({
   selector: 'app-user-supplier-create',
@@ -24,6 +25,7 @@ export class UserSupplierCreateComponent implements OnInit {
 
   listRole: Array<any>;
   supplierCompanyList: Array<any>;
+  page = new Page();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,6 +41,7 @@ export class UserSupplierCreateComponent implements OnInit {
 
     this.listRole = this.activatedRoute.snapshot.data["listRole"].data;
     // console.log('listROLE', this.listRole);
+    this.page.per_page = 1000;
   }
 
   ngOnInit() {
@@ -63,7 +66,7 @@ export class UserSupplierCreateComponent implements OnInit {
   }
 
   getSupplierCompanyList() {
-    this.supplierCompanyService.getList().subscribe(
+    this.supplierCompanyService.getList(this.page).subscribe(
       res => {
         if (res.status == 'success') {
           this.supplierCompanyList = res.data.data
