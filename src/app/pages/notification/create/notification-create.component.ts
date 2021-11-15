@@ -160,6 +160,11 @@ export class NotificationCreateComponent {
   _typeOfRecurrence: string;
   _recurrenceType: string;
 
+  isActiveInactiveShow: boolean;
+  recType: any;
+  isHideSaveButton: boolean = true;
+  isCreateOrEditNotification: any;
+
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
   }
@@ -287,6 +292,16 @@ export class NotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    this.isCreateOrEditNotification = this.router.url;
+    if (this.isCreateOrEditNotification !== '/notifications/push-notification/create') {
+      this.recType = this.dataService.getFromStorage("detail_notif");
+      if (this.recType.type_of_recurrence.toLowerCase() === 'onetime') {
+        this.isHideSaveButton = false;
+      } else {
+        this.isActiveInactiveShow = true;
+      }
+    }
 
     this.formDailyRecurrence = this.formBuilder.group({
       recurrence_time: ["", Validators.required]
@@ -2296,6 +2311,14 @@ export class NotificationCreateComponent {
       console.log({ error });
       this.dataService.showLoading(false);
 
+    }
+  }
+
+  checkOnetimeFrequency(typeOfRecurrence: string) {
+    if (typeOfRecurrence === 'OneTime') {
+      this.isActiveInactiveShow = false;
+    } else {
+      this.isActiveInactiveShow = true;
     }
   }
 }
