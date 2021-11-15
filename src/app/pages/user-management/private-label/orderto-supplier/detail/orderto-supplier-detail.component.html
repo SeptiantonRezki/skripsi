@@ -266,7 +266,7 @@
         </mat-tab>
         <mat-tab label="Dokumen">
           <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
-            <img class="attachment-img" id="image4" [src]="detailOrder?.document_image_url" />
+            <img class="attachment-img" id="image4" [src]="documentOrderUrl" />
           </div>
           <div fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
             <mat-form-field fxFlex="30">

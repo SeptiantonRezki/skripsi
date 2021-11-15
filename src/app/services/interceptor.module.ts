@@ -63,6 +63,16 @@ export class BaseInterceptor implements HttpInterceptor {
       if (err.status == 404) {
         if (err.error.status == false) {
           this.injector.get(DialogService).openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
+        } else if (err.error instanceof Blob) { 
+          // handle 404 Error response from postBlobAsJsonApi
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.injector.get(DialogService).openSnackBar({ message: Object.values(JSON.parse(reader.result).errors)[0][0] });
+          }, false);
+
+          if (err.error) {
+            reader.readAsText(err.error);
+          }
         }
         return Observable.throw(err);
       } else if (err.status == 400) {
