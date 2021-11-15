@@ -46,6 +46,7 @@ export class HelpEditComponent {
 
   files: File;
   validComboDrag: Boolean;
+  countryList: any[] = [];
 
   public options: Object = Config.FROALA_CONFIG;
 
@@ -63,6 +64,7 @@ export class HelpEditComponent {
       user: {},
       category: {},
       otherkeyword: {},
+      country: {},
     };
     this.isValidFile = true;
     this.isPreview = true;
@@ -86,7 +88,8 @@ export class HelpEditComponent {
       video_url: [""],
       type: ["", Validators.required],
       category: ["", Validators.required],
-      otherkeyword: ["", Validators.required]
+      otherkeyword: ["", Validators.required],
+      country: ["", Validators.required],
     });
 
     this.formHelp.valueChanges.subscribe(() => {
@@ -96,6 +99,7 @@ export class HelpEditComponent {
     this.getShow();
     // this.getListCategory();
     this.getListUser();
+    this.getCountryList();
 
     this.formHelp.get('otherkeyword').statusChanges.subscribe(
       status => {
@@ -183,6 +187,7 @@ export class HelpEditComponent {
           video_url: res.data.video_url,
           otherkeyword: res.data.keyword ? (JSON.parse(res.data.keyword).length > 0 ? res.data.keyword : "") : "",
           body: res.data.body,
+          country: res.data.country_code
         });
 
         this.keywords = res.data.keyword ? JSON.parse(res.data.keyword) : [];
@@ -249,6 +254,7 @@ export class HelpEditComponent {
         body.append('user', this.formHelp.get("user").value);
         body.append('content_category_id', this.formHelp.get("category").value);
         body.append('type', this.formHelp.get('type').value);
+        body.append('country', this.formHelp.get('country').value);
         // body.append('keyword', this.formHelp.get("otherkeyword").value);
         body.append('keyword', JSON.stringify(this.keywords));
         // body.append('type', 'help');
@@ -281,4 +287,15 @@ export class HelpEditComponent {
     }
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
 }

@@ -13,8 +13,10 @@ import { GeneratePO } from "app/classes/generate-po";
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Endpoint } from '../../../../../classes/endpoint';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { OrdertoSupplierService } from 'app/services/user-management/private-label/orderto-supplier.service';
+import { WholesalerService } from 'app/services/user-management/wholesaler.service';
+import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
 
 @Component({
   selector: 'app-orderto-supplier-index',
@@ -61,6 +63,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   profileType: string = '';
   HIDE_FOR = ['supplier'];
 
+  dialogRef: any;
+
   constructor(
     private dataService: DataService,
     private adapter: DateAdapter<any>,
@@ -69,6 +73,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private convertRp: RupiahFormaterWithoutRpPipe,
+    private wholesalerService: WholesalerService,
+    private dialog: MatDialog,
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");
@@ -423,6 +429,29 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     } else {
       this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
     }
+  }
+
+  openDocumentOrder(row) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      invoice_number: row.invoice_number
+    };
+    this.wholesalerService.showDocumentOrder(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }

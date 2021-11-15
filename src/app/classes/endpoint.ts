@@ -120,7 +120,10 @@ export class Endpoint {
         import_preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/preview`,
         store_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/list`,
         // roles: `http://demo6191696.mockable.io/api/v1/business/principal/wholesaler/tingkat-fitur`,
-        roles: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/wholesaler/list`
+        roles: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/wholesaler/list`,
+        show_ktp: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/show-ktp`,
+        show_npwp: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/show-npwp`,
+        show_document_order: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/show-document-order`,
       },
       wholesaler_special_price: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/product/special-price/list-mitra`,
@@ -309,7 +312,8 @@ export class Endpoint {
         request_preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/request-preview`,
         show_preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/show-preview`,
         request_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/request-import`,
-
+        show_status: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-status`,
+        
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,

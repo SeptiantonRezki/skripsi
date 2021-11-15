@@ -93,6 +93,19 @@ export class AudienceCreateComponent {
   exportTemplate: Boolean;
   allRowsSelected: boolean;
 
+  ENABLE_IMPORT_IF = ['done', 'failed'];
+  importAudienceResult = {
+    is_valid: 0,
+    preview_id: null,
+    preview_task_id: null,
+    total_selected: 0,
+  }
+  importingDataStatus = {
+    import_audience_status: null,
+    import_audience_status_type: null
+  }
+  allSaved = false;
+
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterTradeProgram: FormControl = new FormControl();
@@ -352,6 +365,37 @@ export class AudienceCreateComponent {
         delete this.pagination['classification'];
       }
     });
+    this.audienceService.showPreviewImport().subscribe(res => {
+      const {create_data} = res.data;
+      console.log({create_data});
+      for(let key in create_data) {
+        
+        const field = this.formAudience.get(key);
+        if(field) field.setValue(create_data[key]);
+
+      }
+      // this.formAudience.patchValue({...create_data});
+    }, err => {
+      console.log({err});
+    })
+    this.audienceService.showStatusImport().subscribe(res => {
+      
+      const {import_audience_status, import_audience_status_type} = res.data;
+      this.importingDataStatus = { import_audience_status, import_audience_status_type };
+      this.dataService.setToStorage('create_audience_import_status', this.importingDataStatus);
+
+      if(!this.ENABLE_IMPORT_IF.includes(import_audience_status)) {
+        this.formAudience.disable();
+      } else {
+        this.formAudience.enable();
+      }
+    }, err => {
+      console.log({err});
+    });
+    this.clearImportStatus();
+  }
+  clearImportStatus() {
+    this.dataService.setToStorage('create_audience_import_status', null);
   }
 
   loadFormFilter() {
@@ -1706,31 +1750,75 @@ export class AudienceCreateComponent {
   }
 
   importAudience() {
+    // const dialogConfig = new MatDialogConfig();
+
+    // dialogConfig.disableClose = true;
+    // dialogConfig.autoFocus = true;
+    // dialogConfig.panelClass = "scrumboard-card-dialog";
+    // dialogConfig.data = { password: "P@ssw0rd" };
+
+    // this.dialogRef = this.dialog.open(
+    //   ImportAudienceDialogComponent,
+    //   dialogConfig
+    // );
+
+    // this.dialogRef.afterClosed().subscribe((response) => {
+    //   if (response) {
+    //     let rows = this.rows.map((row) => row.id);
+    //     this.idbService
+    //       .getAll((dt) => dt.is_valid)
+    //       .then((result) => {
+    //         console.log("result", result);
+    //         this.onSelect({ selected: result });
+    //         this.dialogService.openSnackBar({
+    //           message: "File berhasil diimport",
+    //         });
+    //       });
+    //   }
+    // });
     const dialogConfig = new MatDialogConfig();
+    // const {
+      // id: trade_audience_group_id,
+      // import_audience_status,
+      // import_audience_status_type,
+    // } = this.detailAudience;
+    
+    // only get body to submit file
+    const formAudience = this.formAudience.getRawValue();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {
+      password: 'P@ssw0rd',
+      // trade_audience_group_id,
+      // import_audience_status,
+      // import_audience_status_type,
+      IMPORT_TYPE: 'AUDIENCE',
+      IMPORT_FROM_METHOD: 'CREATE',
+      min: this.formAudience.get('min').value,
+      max: this.formAudience.get('max').value,
+      audience_type: this.formAudience.get('audience_type').value,
+      type: this.formAudience.get('type').value,
+      formAudience,
+      pagination: this.pagination,
+    };
 
-    this.dialogRef = this.dialog.open(
-      ImportAudienceDialogComponent,
-      dialogConfig
-    );
+    this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe((response) => {
+    this.dialogRef.afterClosed().subscribe(response => {
+
+      const newImportStatus = this.dataService.getFromStorage('create_audience_import_status');
+      if(newImportStatus) this.importingDataStatus = newImportStatus;
       if (response) {
-        let rows = this.rows.map((row) => row.id);
-        this.idbService
-          .getAll((dt) => dt.is_valid)
-          .then((result) => {
-            console.log("result", result);
-            this.onSelect({ selected: result });
-            this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
-            });
-          });
+        
+        // this.importAudienceResult = {...response};
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.router.navigate(["dte", "audience"]);
+        // this.selected = response;
+        // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
+      // this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });
   }
 

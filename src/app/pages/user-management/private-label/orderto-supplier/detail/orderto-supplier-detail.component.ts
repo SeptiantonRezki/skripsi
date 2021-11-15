@@ -20,6 +20,7 @@ import { OrdertoSupplierService } from "app/services/user-management/private-lab
 import { QiscusService } from "app/services/qiscus.service";
 import { PagesName } from "app/classes/pages-name";
 import * as _ from 'underscore';
+import { WholesalerService } from "app/services/user-management/wholesaler.service";
 
 @Component({
   selector: 'app-orderto-supplier-detail',
@@ -61,6 +62,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   permission: any;
   roles: PagesName = new PagesName();
 
+  documentOrderUrl: string;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -84,6 +86,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
     private emitter: Emitter,
     private ordertoSupplierService: OrdertoSupplierService,
     private qs: QiscusService,
+    private wholesalerService: WholesalerService,
   ) {
     this.permission = this.roles.getRoles('principal.supplierorder');
     // console.log('roles',this.permission);
@@ -167,6 +170,22 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           if (this.detailOrder.document) {
             this.document.setValue(this.detailOrder.document);
           }
+
+          const body = {
+            invoice_number: res.invoice_number
+          }
+          this.wholesalerService.showDocumentOrder(body).subscribe(res => {
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+              this.documentOrderUrl = reader.result;
+            }, false);
+
+            if (res) {
+              reader.readAsDataURL(res);
+            }
+          }, err => {
+            console.log("Gagal load foto");
+          });
 
           this.editable = false;
 

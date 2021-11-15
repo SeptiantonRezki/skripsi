@@ -103,7 +103,7 @@
   <div class="border-top">
     <div fxLayout="row" style="margin-left: 16px;margin-top: 5px;">
       <mat-form-field fxFlex="50" class="is-light form-primary">
-        <textarea matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
+        <textarea id="alasanAdjustmentCoin" matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="50"
@@ -111,9 +111,8 @@
       <span class="opsi-type">Notifikasi</span>
       <form [formGroup]="formNotifikasi">
         <mat-form-field fxLayout="column" fxFlex="100">
-          <mat-select formControlName="name" placeholder="Nama User Penerima" id="name"
-            (selectionChange)="selectChangeReceiver($event)" #singleSelect>
-            <ngx-mat-select-search [formControl]="filterUserNames" [placeholderLabel]="'Cari Nama User ...'"
+          <mat-select formControlName="name" placeholder="Nama User Penerima" id="name" (click)="selectForm('UserPenerima')" (selectionChange)="selectChangeReceiver($event)" #singleSelect>
+            <ngx-mat-select-search id="selectSearchUserPenerima" [formControl]="filterUserNames" [placeholderLabel]="'Cari Nama User ...'"
               [noEntriesFoundLabel]="'User Tidak ditemukan!'" [clearSearchInput]="false">
             </ngx-mat-select-search>
             <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id">
@@ -122,7 +121,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="column" fxFlex="100">
-          <input matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
+          <input id="emailPenerima" matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
         </mat-form-field>
       </form>
     </div>
@@ -131,7 +130,7 @@
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button id="btn-submit-import" type="button" mat-raised-button color="primary" (click)="submit()"
           [disabled]="rows.length === 0 || !isValid || requestingPreview || loadingIndicator || importing || requestingImport">Kirim</button>
-        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+        <button id="btnBatalImportCoin" type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>
     </div>
