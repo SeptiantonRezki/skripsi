@@ -51,6 +51,7 @@ export class LanguagesService {
       this.selectedLanguages = v;
       this.translate.setDefaultLang(v);
       this.translate.use(v);
+      this.setLangHTML(v);
     }
     switch (this.selectedLanguages) {
       case 'id': this.locale = id;
@@ -70,6 +71,14 @@ export class LanguagesService {
         reject('');
       });
     });
+  }
+  setLangHTML(val) {
+    try {
+      const elm = document.getElementsByTagName('html');
+      elm[0].setAttribute('lang', val);
+    } catch (error) {
+      console.log({error});
+    }
   }
 
 }
