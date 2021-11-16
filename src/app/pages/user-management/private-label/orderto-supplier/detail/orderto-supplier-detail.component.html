@@ -235,15 +235,37 @@
                         </div>
                       </div>
                     </div>
-                    <div style="text-align: right; font-size:18px">
+                    <!-- <div style="text-align: right; font-size:18px">
                       Voucher Belanja
                       <span style="font-size: 18px; font-weight: 600;">Rp {{totalDiscount |
                         rupiahFormaterWithoutRp}}</span>
+                    </div> -->
+                    <div class="detail-order3">
+                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+                        <span fxFlex="50" class="text-left" style="font-weight: 600;">Total Pesanan</span>
+                        <span fxFlex="50" class="text-right">Rp {{total |
+                          rupiahFormaterWithoutRp}}</span>
+                      </div>
+                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+                        <span fxFlex="50" class="text-left" style="font-weight: 600;">Biaya Pengiriman</span>
+                        <span fxFlex="50" class="text-right">Rp {{delivery_cost |
+                          rupiahFormaterWithoutRp}}</span>
+                      </div>
+                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+                        <span fxFlex="50" class="text-left" style="font-weight: 600;">Voucher Belanja</span>
+                        <span fxFlex="50" class="text-right" style="color: red;">-Rp {{totalDiscount |
+                          rupiahFormaterWithoutRp}}</span>
+                      </div>
                     </div>
-                    <div style="text-align: right; font-size:18px">
-                      Total Nilai Pemesanan/Preorder
-                      <span style="font-size: 18px; font-weight: 600;">{{total -
-                        totalDiscount | rupiahFormaterWithoutRp}}</span>
+                    <hr>
+                    <div style="font-size:18px">
+                      <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+                        <span fxFlex="50" class="text-left" style="font-weight: 600;">Total Nilai
+                          Pemesanan/Preorder</span>
+                        <span fxFlex="50" class="text-right" style="font-size: 18px; font-weight: 600;">Rp {{total -
+                          totalDiscount + delivery_cost |
+                          rupiahFormaterWithoutRp}}</span>
+                      </div>
                     </div>
                     <!-- <div style="text-align: right; font-size:18px">
                       Total Nilai Pemesanan/Preorder

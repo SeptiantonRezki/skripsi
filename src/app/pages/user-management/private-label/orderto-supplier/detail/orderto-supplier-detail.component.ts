@@ -63,6 +63,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   roles: PagesName = new PagesName();
 
   documentOrderUrl: string;
+  delivery_cost: number = 0;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -216,6 +217,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           // console.log('allproductlevels get detail', this.allProductLevels);
           res.order_products.map((item: any, idx: number) => {
             this.total = parseInt(this.total) + parseInt(item.total_price);
+            this.delivery_cost += parseInt(item.delivery_cost);
             listProducts.push(
               this.formBuilder.group({
                 id: item.id,
@@ -572,8 +574,9 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           // discount_nota: this.convertRp.transform(obj.discount_nota)
         };
       }),
-      grand_total: this.convertRp.transform(this.total),
-      total_str: this.convertRp.transform(this.total)
+      grand_total: this.convertRp.transform(this.total + this.delivery_cost),
+      total_str: this.convertRp.transform(this.total),
+      delivery_cost: this.delivery_cost
       // summary: 'TOTAL NILAI PO ' + this.total
       // this.detailOrder.summary.map(obj => {
       //   return {
@@ -586,7 +589,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
     if (this.totalDiscount) {
       bodyHtml = {
         ...bodyHtml,
-        grand_total: this.convertRp.transform(this.total - this.totalDiscount),
+        grand_total: this.convertRp.transform(this.total - this.totalDiscount + this.delivery_cost),
         total_discount_str: this.convertRp.transform(this.totalDiscount),
       }
     }
@@ -699,40 +702,40 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   }
 
   calcVoucherDiscount(discounts, order_products, limit_by, limit_only) {
-    
-    if(discounts && discounts.length) {
 
-      const voucherDiscount = _.findWhere(discounts, {source: 'voucher'});
+    if (discounts && discounts.length) {
+
+      const voucherDiscount = _.findWhere(discounts, { source: 'voucher' });
       let includeBy = null;
       let subTotalEligible = 0;
 
-      if(!voucherDiscount.amount) {
+      if (!voucherDiscount.amount) {
         this.totalDiscount = 0;
         return;
       }
 
-      if(!limit_by) { subTotalEligible = this.total; }
-      else if(limit_by === 'product') includeBy = 'sku_id';
-      else if(limit_by === 'category') includeBy = 'category_id';
+      if (!limit_by) { subTotalEligible = this.total; }
+      else if (limit_by === 'product') includeBy = 'sku_id';
+      else if (limit_by === 'category') includeBy = 'category_id';
 
-      if(includeBy) {
-        
+      if (includeBy) {
+
         order_products.map(product => {
           product.category_id = `${product.category_id}`;
-          if(limit_only.includes(product[includeBy])) {
+          if (limit_only.includes(product[includeBy])) {
             subTotalEligible += product.total_price;
           }
         })
 
       }
 
-      if(subTotalEligible > voucherDiscount.amount) this.totalDiscount = voucherDiscount.amount;
+      if (subTotalEligible > voucherDiscount.amount) this.totalDiscount = voucherDiscount.amount;
       else this.totalDiscount = subTotalEligible;
     }
 
     else this.totalDiscount = 0;
 
-    console.log({discounts, order_products, limit_by, limit_only, totalDiscount: this.totalDiscount});
+    console.log({ discounts, order_products, limit_by, limit_only, totalDiscount: this.totalDiscount });
 
   }
 
