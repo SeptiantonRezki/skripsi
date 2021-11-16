@@ -56,6 +56,11 @@ export class PagesName {
       "/sku-management/product-cashier/create": "principal.produk_kasir.buat",
       "/sku-management/product-cashier/edit/": "principal.produk_kasir.ubah",
       "/sku-management/product-cashier/detail/": "principal.produk_kasir.lihat",
+      "/sku-management/product-cashier/submission": "principal.produk_kasir.pengajuan_produk",
+      "/sku-management/product-cashier/submission/detail/": "principal.produk_kasir.pengajuan_produk",
+      "/sku-management/db-product-submission": "principal.pengajuan_produk_db.pengajuan_produk",
+      "/sku-management/db-product-submission/detail/": "principal.pengajuan_produk_db.pengajuan_produk",
+      "/sku-management/db-product-submission/approval": "principal.pengajuan_produk_db.pengaturan_approval",
       "/sku-management/reward": "principal.hadiah.lihat",
       "/sku-management/reward/create": "principal.hadiah.buat",
       "/sku-management/reward/edit": "principal.hadiah.ubah",
@@ -101,6 +106,7 @@ export class PagesName {
       "/dte/automation/create": "principal.dteautomation.buat",
       "/dte/automation/edit": "principal.dteautomation.ubah",
       "/dte/automation/detail": "principal.dteautomation.lihat",
+      "/dte/dynamic-pricing": "principal.dtedynamicpricing.lihat",
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
@@ -122,6 +128,7 @@ export class PagesName {
       "/settings/feature-level/create": "principal.feature_level.buat",
       "/settings/feature-level/edit": "principal.feature_level.ubah",
       "/settings/feature-level/detail": "principal.feature_level.lihat",
+      "/paylater/distribution": "principal.paylater_distribution.lihat",
     }
     return PAGES[name];
   }
@@ -141,6 +148,16 @@ export class PagesName {
       "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
+
+    if (name.indexOf("produk_kasir") >= 0) {
+      roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
+    }
+
+    if (name.indexOf("pengajuan_produk_db") >= 0) {
+      roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
+      roles["pengaturan_approval"] = filterPermission.filter((item) => item.indexOf("pengaturan_approval") >= 0)[0];
+    }
+
     if (name.indexOf("b2b_voucher") > -1) {
       roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }
@@ -151,6 +168,9 @@ export class PagesName {
 
     if (name.indexOf('supplierorder') > -1) {
       roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
+    }
+    if (name.indexOf("src_katalog_coin") > -1) {
+      roles['approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {
@@ -174,5 +194,18 @@ export class PagesName {
     }
 
     return roles
+  }
+
+  getArrayRoles(name) {
+    let localPerm = window.localStorage.getItem('_prmdxtrn');
+    let perm = SJCL.decrypt("dxtr-asia.sampoerna", JSON.parse(localPerm)) || '{}';
+    const permission = JSON.parse(perm);
+    // console.log("all permission", permission.filter(prm => prm.indexOf("principal.popupnotification.new_product") > -1));
+    if (!permission) return;
+
+    let query = name.toLowerCase();
+    let filterPermission = permission.filter(item => item !== null).filter(item => item.indexOf(query) >= 0);
+
+    return filterPermission
   }
 }

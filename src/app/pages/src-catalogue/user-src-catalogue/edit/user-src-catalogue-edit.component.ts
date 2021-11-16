@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { UserCatalogueService } from 'app/services/src-catalogue/user-catalogue.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-src-catalogue-edit',
@@ -27,7 +28,8 @@ export class UserSrcCatalogueEditComponent implements OnInit {
     private dialogService: DialogService,
     private userCatalogueService: UserCatalogueService,
     private formBuilder: FormBuilder,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage("detail_user_catalogue");
     activatedRoute.url.subscribe(params => {
@@ -85,7 +87,7 @@ export class UserSrcCatalogueEditComponent implements OnInit {
       this.userCatalogueService.update({ user_catalogue_id: this.shortDetail.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(["src-catalogue", "users"]);
       }, err => {

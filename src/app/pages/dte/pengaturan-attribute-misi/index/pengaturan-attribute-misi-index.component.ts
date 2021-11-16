@@ -3,7 +3,7 @@ import { MatTableDataSource } from "@angular/material";
 import { MatDialog, MatDialogRef, VERSION } from "@angular/material";
 import { DialogToolboxComponent } from "./dialog-toolbox/dialog-toolbox.component";
 import { DialogTipeMisiComponent } from "./dialog-tipe-misi/dialog-tipe-misi.component";
-import { DialogInternalMisiComponent } from "./dialog-internal-misi/dialog-internal-misi.component";
+import { DialogCreateComponent } from "./dialog-create/dialog-create.component";
 import { DialogKategoriMisiComponent } from "./dialog-kategori-misi/dialog-kategori-misi.component";
 import { filter } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
@@ -28,7 +28,7 @@ export class PengaturanAttributeMisiIndexComponent implements OnInit {
 
   dialogToolboxDialogRef: MatDialogRef<DialogToolboxComponent>;
   dialogTipeMisiDialogRef: MatDialogRef<DialogTipeMisiComponent>;
-  dialogInternalMisiDialogRef: MatDialogRef<DialogInternalMisiComponent>;
+  dialogCreateRef: MatDialogRef<DialogCreateComponent>;
   dialogKategoriMisiDialogRef: MatDialogRef<DialogKategoriMisiComponent>;
   dialogToolboxEditDialogRef: MatDialogRef<DialogToolboxEditComponent>;
 

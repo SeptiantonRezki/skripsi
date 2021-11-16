@@ -130,7 +130,7 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   declarations: [
     B2BVoucherComponent,

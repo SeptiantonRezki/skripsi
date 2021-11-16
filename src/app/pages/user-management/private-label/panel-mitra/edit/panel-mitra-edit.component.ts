@@ -11,7 +11,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { GeotreeService } from 'app/services/geotree.service';
 import { takeUntil } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as moment from 'moment';
+import moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 
 import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-mitra-dialog.component';

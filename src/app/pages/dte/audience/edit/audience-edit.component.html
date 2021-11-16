@@ -267,12 +267,19 @@
     <div class="p-0">
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxLayoutAlign="end center" class="p-16 export">
-        <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
-          <mat-icon>arrow_downward</mat-icon> Import XLS
-        </button>
-        <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
-          <mat-icon>arrow_upward</mat-icon> Export Template
-        </button>
+        <div fxLayout="column">
+          <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
+            <mat-icon>arrow_downward</mat-icon> Import XLS
+          </button>
+          <label
+          *ngIf="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status) && detailAudience.import_audience_status_type" style="font-weight: bolder; color: white;">Requesting {{(detailAudience.import_audience_status_type || '').toUpperCase()}}</label>
+        </div>
+        <div fxLayout="column">
+          <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
+            <mat-icon>arrow_upward</mat-icon> Export Template
+          </button>
+          <label style="color: white;">{{(exportTemplate) ? 'Downloading Template' : ' '}}</label>
+        </div>
       </div>
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <ngx-datatable class="material" [rows]="rows" [selected]="selected" [columnMode]="'force'" [headerHeight]="48"
@@ -357,11 +364,11 @@
 
     <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button"
-        (click)="submit()" fxFlex="20">
+        (click)="submit()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
         SIMPAN
       </button>
       <button mat-raised-button *ngIf="formAudience.disabled" type="button" class="confirmation-button"
-        (click)="updateAudience()" fxFlex="20">
+        (click)="updateAudience()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
         SIMPAN
       </button>
     </div>

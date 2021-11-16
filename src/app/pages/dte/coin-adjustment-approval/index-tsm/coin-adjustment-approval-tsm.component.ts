@@ -9,7 +9,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
 import { IdleService } from 'app/services/idle.service';
 import { forkJoin, Observable, ReplaySubject, Subject } from 'rxjs';
-import * as moment from "moment";
+import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

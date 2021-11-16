@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { DialogService } from '../../../../services/dialog.service';
 import { TradeProgramService } from '../../../../services/dte/trade-program.service';
@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-trade-create',
@@ -60,7 +61,8 @@ export class TradeCreateComponent {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private tradeProgramService: TradeProgramService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -102,6 +104,17 @@ export class TradeCreateComponent {
       .subscribe(() => {
         this.filteringGTP();
       });
+    
+    setTimeout(() => {
+      document.getElementById("trade-create").getElementsByTagName("input")[0].id = "upload-file-trade";
+    }, 500);
+  }
+
+  selectStatusTrade(){
+    const matOption = document.querySelectorAll('mat-option');
+    for (let index = 0; index < this.statusTP.length; index++) {
+      matOption[index].querySelector('span').id = "options";
+    }
   }
 
   filteringGTP() {
@@ -170,7 +183,7 @@ export class TradeCreateComponent {
 
       this.tradeProgramService.create(fd).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['dte', 'trade-program']);
         },
         err => {

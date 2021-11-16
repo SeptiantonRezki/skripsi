@@ -1,0 +1,130 @@
+<div class="content p-24" *ngIf="business_id">
+  <div fxLayout="column" fxFlex="80" *ngIf="!onRecoverDevice">
+    <h2>Daftar Staff</h2>
+    <div fxLayout="column" class="preview-table">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Nomor Ponsel</th>
+            <th>Type</th>
+            <th>Tanggal Lahir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of list_staff">
+            <td>{{item.fullname}}</td>
+            <td>{{item.phone}}</td>
+            <td style="text-transform: capitalize;">{{ item.role_type }}</td>
+            <td>{{ item.birth_date | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+          <tr class="active-row" *ngIf="list_staff.length === 0">
+            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div fxLayout="column" fxFlex="80" *ngIf="!onRecoverDevice">
+    <h2>Pemulihan Perangkat</h2>
+    <div fxLayout="column" class="preview-table">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Unique Device ID</th>
+            <th>Mobile Device Info</th>
+            <th>Terakhir Mencoba Akses</th>
+            <th>Tindakan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of list_devices">
+            <td>{{item.unique_device_id}}</td>
+            <td>{{item.device_info}}</td>
+            <td>{{ item.attempt_at | date: 'dd/MM/yyyy hh:mm:ss' }}</td>
+            <td>
+              <button mat-button color="warn" [disabled]="item.status === 'whitelist'"
+                (click)="setRecoveryDevice(item)">{{ item.status === 'unwhitelist'
+                ? 'Pulihkan Perangkat' : item.status_indo }}</button>
+            </td>
+          </tr>
+          <tr class="active-row" *ngIf="list_devices.length === 0">
+            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div fxLayout="column" *ngIf="onRecoverDevice">
+    <h2>Pemulihan Perangkat dengan Unique Device ID: {{ unique_device_id }}</h2>
+    <form [formGroup]="formRecovery">
+      <div fxLayout="row" fxFlex="50">
+        <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light">
+          <input matInput value="+62" readonly>
+        </mat-form-field>
+        <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light">
+          <input matInput type="tel" min="0" formControlName="applicant_phone" placeholder="Nomor Ponsel Pemohon"
+            (keypress)="numbersOnlyValidation($event)">
+          <mat-error
+            *ngIf="formRecovery.controls['applicant_phone'].hasError('required') && formRecovery.controls['applicant_phone'].touched ">
+            Nomor Ponsel Pemohon harus diisi.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Nama Pemohon" type="text" formControlName="applicant_name">
+          <mat-error
+            *ngIf="formRecovery.controls['applicant_name'].hasError('required') && formRecovery.controls['applicant_name'].touched ">
+            Nama Pemohon harus diisi.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <textarea matInput name="Catatan" formControlName="description" cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="15"
+            placeholder="Deskripsi"></textarea>
+          <mat-error
+            *ngIf="formRecovery.controls['description'].hasError('required') && formRecovery.controls['description'].touched ">
+            Deskripsi harus diisi.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Kode Toko" type="text" formControlName="retailer_code">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Nama Toko" type="text" formControlName="retailer_name">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Waktu Diblokir" type="text" formControlName="blocked_time">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Waktu Pemulihan Terakhir" type="text" formControlName="last_recover">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="is-light">
+          <input matInput placeholder="Jumlah Pemulihan Untuk perangkat ini" type="number"
+            formControlName="total_recovery_device">
+        </mat-form-field>
+      </div>
+      <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
+        <button mat-raised-button type="button" class="confirmation-button" (click)="submitRecovery()" fxFlex="20">
+          PULIHKAN PERANGKAT
+        </button>
+        <button mat-raised-button type="button" (click)="cancelRecovery()" fxFlex="20">
+          BATAL
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

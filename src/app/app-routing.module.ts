@@ -55,6 +55,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'notesretailer',
+    loadChildren: './pages/notes-retailer/notes-retailer.module#NotesRetailerModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'notifications',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]
@@ -149,6 +154,11 @@ const appRoutes: Routes = [
     loadChildren: "./pages/b2c-voucher/b2c-voucher.module#B2CVoucherModule",
     canActivate: [AuthGuard]
   },
+  {
+    path: "src-katalog-koin",
+    loadChildren: "./pages/src-katalog-koin/src-katalog-koin.module#SrcKatalogKoinModule",
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: "admin",
   //   loadChildren: "./pages/admin/admin.module#AdminModule",
@@ -161,9 +171,25 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'kpisetting',
+    loadChildren: './pages/kpi-setting/kpi-setting.module#KPISettingModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'device-management',
+    loadChildren:
+      './pages/device-management/device-management.module#DeviceManagementModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "rca",
+    loadChildren: "./pages/remote-call-activation/remote-call-activation.module#RemoteCallActivationModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
-  }
+  },
 ];
 
 @NgModule({

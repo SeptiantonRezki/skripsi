@@ -8,6 +8,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 import { PasswordValidator } from 'app/validators/password.validator';
 import { PasswordErrorMatcher } from 'app/validators/password.matcher';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 export function checkPassword(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -49,6 +50,7 @@ export class PaguyubanCreateComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -340,7 +342,7 @@ export class PaguyubanCreateComponent {
 
       this.paguyubanService.create(body).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(["user-management", "paguyuban"]);
         },
         err => {

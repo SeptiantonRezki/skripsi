@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { ListAudienceDialogComponent } from '../../schedule-program/dialog/list-audience-dialog.component';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ImportCoinComponent } from '../../schedule-program/import-coin/import-coin.component';
@@ -15,6 +15,7 @@ import { TaskVerificationService } from 'app/services/dte/task-verification.serv
 import { GeotreeService } from 'app/services/geotree.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { ConfirmDialogComponent } from '../dialog/confirm-dialog/confirm-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-verification-detail',
@@ -107,6 +108,7 @@ export class TaskVerificationDetailComponent implements OnInit {
     private taskVerificationService: TaskVerificationService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
     this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
@@ -313,7 +315,7 @@ export class TaskVerificationDetailComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: 'Data berhasil disimpan' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       }
     });
   }

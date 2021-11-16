@@ -15,6 +15,7 @@ import { startWith, map, takeUntil } from 'rxjs/operators';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
+import { Page } from "app/classes/laravel-pagination";
 
 @Component({
   selector: 'app-template-edit',
@@ -29,11 +30,20 @@ export class TemplateEditComponent {
   detailTask: any;
   frmIsBranching: FormControl = new FormControl(false);
   listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
+  listIRType: any[] = [
+    { value: 'full-ir', name: 'Full IR' },
+    { value: 'ir-for-comply', name: 'IR for Comply' },
+    { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
+    { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
+  ];
+  isIRTypeError: boolean = false;
+
   listKategoriToolbox: any[];
   listTipeMisi: any[];
   listTingkatinternalMisi: any[];
   listKategoriMisi: any[];
   listProjectMisi: any[];
+  listReason: any[];
   private _onDestroy = new Subject<void>();
   public filterLKT: FormControl = new FormControl();
   public filteredLKT: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -45,6 +55,8 @@ export class TemplateEditComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterProject: FormControl = new FormControl();
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterReason: FormControl = new FormControl();
+  public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = Config.FROALA_CONFIG;
 
 
@@ -88,6 +100,7 @@ export class TemplateEditComponent {
 
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
+  isBackgroundMisi: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -141,6 +154,7 @@ export class TemplateEditComponent {
   ]
 
   listAnswerKeys: any[] = [];
+  pagination: Page = new Page();
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -203,6 +217,7 @@ export class TemplateEditComponent {
     this.getListTingkatInternalMisi();
     this.getListKategoriMisi();
     this.getListKategoriProject();
+    this.getListReason();
 
     this.listChoose = this.listChooseOriginal.slice();
     this.filterLKT.valueChanges
@@ -231,6 +246,9 @@ export class TemplateEditComponent {
     this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filteringProject();
     });
+    this.filterReason.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+      this.filteringReason();
+    });
 
     this.keyUp.debounceTime(300)
       .flatMap(key => {
@@ -251,12 +269,15 @@ export class TemplateEditComponent {
       kategori_misi: ["", Validators.required],
       project_misi: ["", Validators.required],
       image: [""],
+      background_image: [""],
+      background_font_color: [""],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
       questions: this.formBuilder.array([], Validators.required),
       rejected_reason_choices: this.formBuilder.array([], Validators.required),
       image_description: this.formBuilder.array([]),
+      ir_type: [""],
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -292,7 +313,9 @@ export class TemplateEditComponent {
   }
 
   getListKategoriToolbox() {
-    this.pengaturanAttributeMisiService.getToolbox({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getToolbox(this.pagination).subscribe(
       (res) => {
         // console.log("res trade listKategoriToolbox", res);
         this.listKategoriToolbox = res.data.data;
@@ -348,7 +371,9 @@ export class TemplateEditComponent {
   }
 
   getListTipeMisi() {
-    this.pengaturanAttributeMisiService.getTipeMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getTipeMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
@@ -380,7 +405,9 @@ export class TemplateEditComponent {
   }
 
   getListTingkatInternalMisi() {
-    this.pengaturanAttributeMisiService.getInternalMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       (res) => {
         this.listTingkatinternalMisi = res.data.data;
         this.filteredLTKM.next(this.listTingkatinternalMisi.slice());
@@ -410,12 +437,46 @@ export class TemplateEditComponent {
   }
 
   getListKategoriProject() {
-    this.pengaturanAttributeMisiService.getProject({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listProjectMisi = res.data.data;
         this.filteredProject.next(this.listProjectMisi.slice());
         // this.listKategoriMisi = res.data;
+      },
+      (err) => {
+        console.log("err List Kategori Misi", err);
+      }
+    );
+  }
+
+  filteringReason() {
+    if (!this.listReason) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterReason.value;
+    if (!search) {
+      this.filteredReason.next(this.listReason.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredReason.next(
+      this.listReason.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListReason() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
+      (res) => {
+        this.listReason = res.data;
+        this.filteredReason.next(this.listReason.slice());
       },
       (err) => {
         console.log("err List Kategori Misi", err);
@@ -495,7 +556,9 @@ export class TemplateEditComponent {
   }
 
   getListKategoriMisi() {
-    this.pengaturanAttributeMisiService.getKategoriMisi({ status: 'active' }).subscribe(
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
@@ -585,6 +648,9 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image ? this.detailTask.image_url : '');
+    this.templateTaskForm.get('background_image').setValue(this.detailTask.background_image ? this.detailTask.background_image_url : '');
+    this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
+    this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
     this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
@@ -805,6 +871,7 @@ export class TemplateEditComponent {
     this.detailTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }));
     });
+    this.templateTaskForm.get('ir_type').setValue(this.detailTask.ir_type);
 
     if (this.isDetail) this.templateTaskForm.disable();
   }
@@ -920,6 +987,9 @@ export class TemplateEditComponent {
       this.listAnswerKeys = [];
     }
     else {
+      this.templateTaskForm.get('ir_type').setValue('');
+      this.isIRTypeError = false;
+
       if (this.frmQuiz.value === 'quiz') {
         this.listChoose = [...this.listChooseQuiz];
       } else {
@@ -1107,7 +1177,7 @@ export class TemplateEditComponent {
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: ['', Validators.required] }))
   }
 
   createAdditional(): FormGroup {
@@ -1234,6 +1304,8 @@ export class TemplateEditComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
+        background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
         video: this.detailTask.video ? this.detailTask.video : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1365,13 +1437,26 @@ export class TemplateEditComponent {
           // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason),
-        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0
+        rejected_reason_ids: rejected_reason.map(item => 
+          (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
+        ),
+        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
+        ir_type: this.templateTaskForm.get('ir_type').value,
       }
+
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
+
+      if (this.isIRTemplate.value && !body.ir_type) {
+        this.dataService.showLoading(false);
+        this.isIRTypeError = true;
+        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu IR Type" });
+        return;
+      }
+
       console.log('this body', body);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
@@ -1496,6 +1581,7 @@ export class TemplateEditComponent {
           },
           err => {
             console.log(err.error);
+            this.dialogService.openSnackBar({ message: err.error.message });
             this.dataService.showLoading(false);
           }
         )
@@ -1511,6 +1597,8 @@ export class TemplateEditComponent {
 
       if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+      else
+        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
   }
 
@@ -1541,6 +1629,22 @@ export class TemplateEditComponent {
         }
       }
     });
+  }
+
+  uploadImageBgMisi(e: any){
+    this.templateTaskForm.get('background_image').setValue(e.image);    
+    this.templateTaskForm.get('background_font_color').setValue(e.color);    
+    console.log('update => ', this.templateTaskForm);
+  }
+
+  onChangeBgMisi(){
+    if (!this.isBackgroundMisi.value) {
+      const update = {
+        image: '',
+        color: ''
+      }
+      this.uploadImageBgMisi(update);
+    }
   }
 
   deleteImage(type, idx) {

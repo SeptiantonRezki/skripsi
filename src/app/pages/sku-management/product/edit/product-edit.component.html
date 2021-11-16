@@ -18,13 +18,18 @@
           <mat-tab label="Informasi Produk">
             <div class="ayo-middle" fxLayout="column">
               <div class="p-24" fxLayout="column">
-                <div *ngIf="!isDetail" class="button" (click)="openDialog()">
-                  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
-                    <mat-icon class="secondary-text">horizontal_split</mat-icon>
-                    <span class="h5 text-center">SCAN BARCODE</span>
+                <div class="pb-24" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div *ngIf="!isDetail" class="button" (click)="openDialog()">
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                      <mat-icon class="secondary-text">horizontal_split</mat-icon>
+                      <span class="h5 text-center">SCAN BARCODE</span>
+                    </div>
+                  </div>
+                  <div *ngIf="detailProduct.cashier === 1" class="info-label" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <mat-icon>check</mat-icon>
+                    <span>Produk tersedia online</span>
                   </div>
                 </div>
-                <br>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
                   <input matInput type="text" placeholder="Kode Family" formControlName="code">
                   <mat-error

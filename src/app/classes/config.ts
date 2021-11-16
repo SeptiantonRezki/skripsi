@@ -94,7 +94,15 @@ export class Config {
     enter: 'ENTER_BR',
     toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote', 'insertLink'],
     htmlSimpleAmpersand: true,
-    entities: ''
+    entities: '',
+    events: {
+      // untuk menambahkan id pada froala
+      'froalaEditor.initialized': function(e, editor){
+        setTimeout(() => {
+          editor.el.id = e.currentTarget.getAttribute("data-froala-id");
+        }, 500);
+      },
+    }
   };
 
   public static FROALA_CUSTOM_TITLE_CONFIG = (title?) => ({

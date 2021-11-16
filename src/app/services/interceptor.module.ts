@@ -13,12 +13,18 @@ import { Observable } from "rxjs/Rx";
 import { Router } from "@angular/router";
 import { DialogService } from "./dialog.service";
 import { MatDialog } from "@angular/material";
+import { LanguagesService } from "./languages/languages.service";
 
 @Injectable()
 export class BaseInterceptor implements HttpInterceptor {
   private authenticationService: AuthenticationService;
   private refreshTokenObserver: Observable<any>;
-  constructor(private injector: Injector, private router: Router, private matDialog: MatDialog) {
+  constructor(
+    private injector: Injector,
+    private router: Router,
+    private matDialog: MatDialog,
+    private ls: LanguagesService
+  ) {
     // this.refreshTokenObserver = Observable.defer(() => {
     //   return this.injector.get(AuthenticationService).postRefreshToken();
     // }).share();
@@ -38,8 +44,9 @@ export class BaseInterceptor implements HttpInterceptor {
   authenticateRequest(request: HttpRequest<any>) {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
     if (token) {
+      const country_code = localStorage.getItem('user_country');
       const duplicate = request.clone({
-        headers: request.headers.set("Authorization", "Bearer " + token)
+        headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', country_code)
       });
       return duplicate;
     }
@@ -56,6 +63,16 @@ export class BaseInterceptor implements HttpInterceptor {
       if (err.status == 404) {
         if (err.error.status == false) {
           this.injector.get(DialogService).openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
+        } else if (err.error instanceof Blob) { 
+          // handle 404 Error response from postBlobAsJsonApi
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            this.injector.get(DialogService).openSnackBar({ message: Object.values(JSON.parse(reader.result).errors)[0][0] });
+          }, false);
+
+          if (err.error) {
+            reader.readAsText(err.error);
+          }
         }
         return Observable.throw(err);
       } else if (err.status == 400) {
@@ -64,18 +81,22 @@ export class BaseInterceptor implements HttpInterceptor {
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
+        const country_code = localStorage.getItem('user_country');
+
         if (req.method == "POST") {
           this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
         }
 
         if (err.error === "Tidak ada otorisasi") {
           window.localStorage.clear();
+          localStorage.setItem('user_country', country_code);
           this.router.navigate(["login"]);
           this.matDialog.closeAll();
           this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
         }
 
         window.localStorage.clear();
+        localStorage.setItem('user_country', country_code);
         this.router.navigate(["login"]);
         this.matDialog.closeAll();
         this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error.message}` });

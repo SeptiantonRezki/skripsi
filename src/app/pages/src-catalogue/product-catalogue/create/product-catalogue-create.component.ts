@@ -7,6 +7,7 @@ import { ProductCatalogueService } from 'app/services/src-catalogue/product-cata
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-product-catalogue-create',
@@ -40,7 +41,8 @@ export class ProductCatalogueCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private productCatalogueService: ProductCatalogueService,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
+    private ls: LanguagesService
   ) {
     let profile = this.dataService.getDecryptedProfile();
     if (profile) this.vendor_id = profile.vendor_company_id;
@@ -146,7 +148,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
       this.productCatalogueService.create(fd).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
 
         this.router.navigate(["/src-catalogue", "products"]);

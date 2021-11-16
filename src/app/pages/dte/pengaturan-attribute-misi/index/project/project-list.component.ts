@@ -14,8 +14,8 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
-import {DialogProjectComponent} from './dialog-project.component';
-import {DialogEditProjectComponent} from './dialog-edit-project.component'
+import {DialogCreateComponent} from '../dialog-create/dialog-create.component';
+import {DialogEditComponent} from '../dialog-edit/dialog-edit.component';
 
 
 @Component({
@@ -23,8 +23,8 @@ import {DialogEditProjectComponent} from './dialog-edit-project.component'
   templateUrl: "./project-list.component.html"
 })
 export class ProjectListComponent implements OnInit {
-  dialogProjectDialogRef: MatDialogRef<DialogProjectComponent>;
-  dialogProjectMisiEditDialogRef: MatDialogRef<DialogEditProjectComponent>;
+  dialogCreateRef: MatDialogRef<DialogCreateComponent>;
+  dialogEditRef: MatDialogRef<DialogEditComponent>;
 
 
   rows: any[];
@@ -75,11 +75,18 @@ export class ProjectListComponent implements OnInit {
    kategori = [];
 
    openDialogProjectMisi() {
-    this.dialogProjectDialogRef = this.Dialog.open(DialogProjectComponent, {
-      width: "300px",
-    });
+    const dataProps = {
+      data: {
+        title:'Project Misi',
+        methodGet: 'getProject',
+        methodCreate: 'createProjectMisi',
+     },
+     width: "300px"
+    }
 
-    this.dialogProjectDialogRef
+    this.dialogCreateRef = this.Dialog.open(DialogCreateComponent, dataProps);
+
+    this.dialogCreateRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {
@@ -88,12 +95,21 @@ export class ProjectListComponent implements OnInit {
       });
   }
   openDialogProjectMisiEdit(id, name, status) {
-    this.dialogProjectMisiEditDialogRef = this.Dialog.open(DialogEditProjectComponent, {
-      width: "300px",
-      data: {id: id, name: name, status: status}
-    });
+    const dataProps = {
+      data: {
+        title:'Project Misi',
+        methodPut: 'putProjectMisi',
+        paramsId: 'project_misi_id',
+        id: id,
+        name: name,
+        status: status
+     },
+     width: "300px"
+    }
 
-    this.dialogProjectMisiEditDialogRef
+    this.dialogEditRef = this.Dialog.open(DialogEditComponent, dataProps);
+
+    this.dialogEditRef
       .afterClosed()
       .pipe(filter((name) => name))
       .subscribe((name) => {

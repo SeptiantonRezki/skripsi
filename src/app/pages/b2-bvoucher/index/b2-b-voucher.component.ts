@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2-b-voucher',
@@ -35,13 +36,21 @@ export class B2BVoucherComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  opsiVoucherList = [
+    { name: 'B2B Only', value: 'b2b' },
+    { name: 'Katalog SRC Only', value: 'src-catalogue' },
+    { name: 'B2B & Katalog SRC', value: 'both' },
+    { name: 'Private Label', value: 'private-label' },
+  ];
+
   constructor(
     private http: HttpClient,
     private fuseSplashScreen: FuseSplashScreenService,
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private b2bVoucherService: BtoBVoucherService
+    private b2bVoucherService: BtoBVoucherService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     // this.selected = [];
@@ -61,6 +70,7 @@ export class B2BVoucherComponent implements OnInit {
 
   ngOnInit() {
     this.getVoucherList();
+
   }
 
   getVoucherList() {

@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Audience'">
-    <button style="min-width: 170px;" [routerLink]="['/dte', 'audience', 'create']" mat-raised-button
+    <button id="btn-create-audience" style="min-width: 170px;" [routerLink]="['/dte', 'audience', 'create']" mat-raised-button
       aria-label="Produk" type="button">
       <mat-icon>add</mat-icon>BUAT
     </button>
@@ -20,7 +20,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input id="search-audience" matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -42,9 +42,9 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Grup" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.principal_partnership.text3 }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+            <span id="nama-group" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -54,13 +54,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Trade Program" [sortable]="false" prop="trade_creator_name">
+        <ngx-datatable-column name="{{ ls.locale.dte.trade_program.text3 }}" [sortable]="false" prop="trade_creator_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name">{{row.trade_creator_name ? row.trade_creator_name : '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Pengguna" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
+        <ngx-datatable-column name="{{ ls.locale.dte.audience.text2 }}" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
 
         <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -68,25 +68,25 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status Persetujuan Audience" prop="status">
+        <ngx-datatable-column name="{{ ls.locale.dte.audience.text3 }}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span *ngIf="row.status === 'rejected'" class="text-boxed mat-red-700-bg">{{row.real_status}}</span>
-            <span *ngIf="row.status === 'pending'" class="text-boxed mat-yellow-700-bg">{{row.real_status}}</span>
-            <span *ngIf="row.status === 'approved'" class="text-boxed mat-green-700-bg">{{row.real_status}}</span>
+            <span id="status" *ngIf="row.status === 'rejected'" class="text-boxed mat-red-700-bg">{{row.real_status}}</span>
+            <span id="status" *ngIf="row.status === 'pending'" class="text-boxed mat-yellow-700-bg">{{row.real_status}}</span>
+            <span id="status" *ngIf="row.status === 'approved'" class="text-boxed mat-green-700-bg">{{row.real_status}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+              <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
+              <button id="btn-delete" mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
                 matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

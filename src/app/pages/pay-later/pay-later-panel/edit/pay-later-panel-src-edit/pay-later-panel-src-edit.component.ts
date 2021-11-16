@@ -12,6 +12,7 @@ import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.ser
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-panel-src-edit',
@@ -96,7 +97,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     private panelService: PayLaterPanelService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -608,7 +610,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       this.panelService.store(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['paylater', 'panel']);
       }, err => {

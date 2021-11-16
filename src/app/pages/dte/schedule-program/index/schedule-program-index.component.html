@@ -81,26 +81,26 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column [sortable]="false" name="Nama" prop="scheduler_name" [flexGrow]="3">
+        <ngx-datatable-column [sortable]="false" name="{{ ls.locale.global.label.name }}" prop="scheduler_name" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name"
               [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]">{{row.scheduler_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Trade Program" prop="creator_name" [flexGrow]="3">
+        <ngx-datatable-column [sortable]="false" name="{{ ls.locale.dte.trade_program.text1 }}" prop="creator_name" [flexGrow]="3">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" [sortable]="false" name="Periode" prop="start_date" [flexGrow]="3">
+        <ngx-datatable-column [width]="200" [sortable]="false" name="{{ ls.locale.dte.pengatur_jadwal_program.text11 }}" prop="start_date" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | dateToMoment}} s/d {{row.end_date | dateToMoment}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="Audience / Grup" prop="audience_name" [flexGrow]="3">
+        <ngx-datatable-column [sortable]="false" name="{{ ls.locale.dte.pengatur_jadwal_program.text12 }}" prop="audience_name" [flexGrow]="3">
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="85" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
+        <ngx-datatable-column [width]="85" [sortable]="false" name="{{ ls.locale.global.label.status }}" prop="status_scheduler" [flexGrow]="3">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: uppercase;"
@@ -119,7 +119,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="155" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="155" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button type="button" mat-icon-button color="" matTooltip="Lihat"

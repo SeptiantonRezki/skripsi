@@ -6,6 +6,7 @@ import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import { FuseMatSidenavHelperService } from "@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service";
 import { Emitter } from "app/helper/emitter.helper";
 import { Page } from 'app/classes/laravel-pagination';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
 	selector: 'fuse-quick-panel',
@@ -33,6 +34,7 @@ export class FuseQuickPanelComponent implements OnInit {
 		private router: Router,
 		private fuseMatSidenavService: FuseMatSidenavHelperService,
 		private emitter: Emitter,
+		private ls: LanguagesService
 	) {
 		console.log('126032-1639');
 		this.isLastPage = false;

@@ -7,6 +7,7 @@ import { ProductCatalogueService } from 'app/services/src-catalogue/product-cata
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { Config } from 'app/classes/config';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-product-catalogue-edit',
@@ -44,7 +45,8 @@ export class ProductCatalogueEditComponent implements OnInit {
     private dialogService: DialogService,
     private productCatalogueService: ProductCatalogueService,
     private activatedRoute: ActivatedRoute,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage("detail_product_catalogue");
     activatedRoute.url.subscribe(params => {
@@ -211,7 +213,7 @@ export class ProductCatalogueEditComponent implements OnInit {
       this.productCatalogueService.update({ product_id: this.detailProduct.id }, body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
 
         this.router.navigate(["/src-catalogue", "products"]);

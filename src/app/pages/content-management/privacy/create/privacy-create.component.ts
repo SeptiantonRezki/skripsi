@@ -6,6 +6,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PrivacyService } from 'app/services/content-management/privacy.service';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-privacy-create',
@@ -24,6 +25,7 @@ export class PrivacyCreateComponent {
     // // { name: "Paguyuban", value: "paguyuban" },
     // { name: "Customer", value: "customer" }
   ];
+  countryList: any[] = [];
 
   files: File;
   public options: Object = Config.FROALA_CONFIG;
@@ -33,12 +35,14 @@ export class PrivacyCreateComponent {
     private router: Router,
     private dialogService: DialogService,
     private privacyService: PrivacyService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formPrivacyError = {
       title: {},
       body: {},
-      user: {}
+      user: {},
+      country: {}
     };
   }
 
@@ -47,10 +51,12 @@ export class PrivacyCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user: ["", Validators.required],
+      country: ["", Validators.required],
       is_notif: [false]
     });
 
     this.getUserGroups();
+    this.getCountryList();
 
     this.formPrivacy.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formPrivacy, this.formPrivacyError);
@@ -78,6 +84,18 @@ export class PrivacyCreateComponent {
     );
   }
 
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
   submit(): void {
     if (this.formPrivacy.valid) {
       let body: Object = {
@@ -86,6 +104,7 @@ export class PrivacyCreateComponent {
         user: this.formPrivacy.get("user").value,
         type: "privacy-policy",
         is_notif: this.formPrivacy.get('is_notif').value === true ? 1 : 0,
+        country: this.formPrivacy.get("country").value,
       };
 
       this.privacyService.create(body).subscribe(
@@ -93,7 +112,7 @@ export class PrivacyCreateComponent {
           // this.loadingIndicator = false;
           this.router.navigate(["content-management", "privacy"]);
           this.dialogService.openSnackBar({
-            message: "Data berhasil disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
         },
         err => {

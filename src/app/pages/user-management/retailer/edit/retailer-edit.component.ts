@@ -10,6 +10,8 @@ import { MatSelect } from '@angular/material';
 import { GeneralService } from 'app/services/general.service';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { PagesName } from 'app/classes/pages-name';
+import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -46,7 +48,9 @@ export class RetailerEditComponent {
     { name: 'GT', value: 'GT' },
     { name: 'IMO', value: 'IMO' },
     { name: 'LAMP/HOP', value: 'LAMP/HOP' },
-    { name: 'KA', value: 'KA' }
+    { name: 'KA', value: 'KA' },
+    { name: "Official Store", value: "Official Store"},
+    { name: "RRP", value: "RRP"}
   ];
 
   listGSR: any[] = [
@@ -62,6 +66,11 @@ export class RetailerEditComponent {
   listCashierAccess: any[] = [
     { name: 'YA', value: 1 },
     { name: 'TIDAK', value: 0 }
+  ];
+
+  listBankFinalValidation: any[] = [
+    { name: 'FALSE', value: 0 },
+    { name: 'TRUE', value: 1 }
   ];
 
   listLevelArea: any[];
@@ -99,6 +108,8 @@ export class RetailerEditComponent {
     { name: 'OFF', value: 0 },
     { name: 'ON', value: 1 }
   ]
+  countryList: any[] = [];
+  country_phone: string;
 
   formRefferalCode: FormGroup;
   
@@ -111,8 +122,11 @@ export class RetailerEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private retailerService: RetailerService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
     this.formdataErrors = {
@@ -126,12 +140,14 @@ export class RetailerEditComponent {
       latitude: {},
       longitude: {},
       // type: {},
-      InternalClassification: {}
+      InternalClassification: {},
+      country: {}
     };
 
     this.formBankAccountError = {
       account_number: {},
       account_name: {},
+      bank_final_validation: {},
       bank_name: {},
       branch: {}
     };
@@ -149,7 +165,7 @@ export class RetailerEditComponent {
         'parent_id': null,
         'code': 'SLSNTL      ',
         'name': 'SLSNTL'
-      }
+      },
     ];
 
     this.list = {
@@ -164,6 +180,7 @@ export class RetailerEditComponent {
 
   async ngOnInit() {
     this.getBanks();
+    this.getCountryList();
     let regex = new RegExp(/[0-9]/g);
 
     this.formRetailer = this.formBuilder.group({
@@ -171,7 +188,7 @@ export class RetailerEditComponent {
       address: ['', Validators.required],
       business_code: ['', Validators.required],
       owner: ['', Validators.required],
-      phone: [''],
+      phone: ['', Validators.required],
       status: ['', Validators.required],
       status_user: ['', Validators.required],
       national: ['', Validators.required],
@@ -191,12 +208,14 @@ export class RetailerEditComponent {
       gsr: [0],
       gsm_pl: [0],
       version_retailer: [''],
-      version_cashier: ['']
+      version_cashier: [''],
+      country: [""],
     });
 
     this.formBankAccount = this.formBuilder.group({
       account_number: [''],
       account_name: [''],
+      bank_final_validation: [0],
       bank_name: [''],
       branch: ['']
     });
@@ -313,6 +332,21 @@ export class RetailerEditComponent {
         this.filteredBanks.next(this.listBanks.slice());
       }, err => console.log('err', err));
   }
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
+  }
+
+  handleCountryPhone(event){
+    this.country_phone = event.value === 'KH' ? "+855" : "+62";
+  }
 
   filteringBanks() {
     if (!this.listBanks) {
@@ -398,12 +432,25 @@ export class RetailerEditComponent {
 
     }
     console.log(this.detailRetailer.phone);
+    if (this.detailRetailer.country) {
+      this.country_phone = this.detailRetailer.country === 'KH' ? "+855" : "+62";
+    } else {
+      if (this.detailRetailer.phone) {
+        if ((this.detailRetailer.phone).includes('+62')) {
+          this.country_phone = "+62";
+        } else if ((this.detailRetailer.phone).includes('+855')) {
+          this.country_phone = "+855";
+        }
+      }
+    }
+    
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : this.detailRetailer.phone.split('+62')[1]) : '',
+      country: this.detailRetailer.country || '',
+      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1])) : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
@@ -429,6 +476,7 @@ export class RetailerEditComponent {
     this.formBankAccount.setValue({
       account_number: this.detailRetailer.bank_account_number || '',
       account_name: this.detailRetailer.bank_account_name || '',
+      bank_final_validation: this.detailRetailer.bank_final_validation ? 1 : 0,
       bank_name: this.detailRetailer.bank_name || '',
       branch: this.detailRetailer.branch || '',
     });
@@ -620,6 +668,8 @@ export class RetailerEditComponent {
       this.formBankAccount.get('account_number').updateValueAndValidity();
       this.formBankAccount.get('account_name').setValidators(Validators.required);
       this.formBankAccount.get('account_name').updateValueAndValidity();
+      this.formBankAccount.get('bank_final_validation').setValidators(Validators.required);
+      this.formBankAccount.get('bank_final_validation').updateValueAndValidity();
       this.formBankAccount.get('bank_name').setValidators(Validators.required);
       this.formBankAccount.get('bank_name').updateValueAndValidity();
       this.formBankAccount.get('branch').setValidators(Validators.required);
@@ -630,6 +680,8 @@ export class RetailerEditComponent {
       this.formBankAccount.get('account_number').updateValueAndValidity();
       this.formBankAccount.get('account_name').setValidators([]);
       this.formBankAccount.get('account_name').updateValueAndValidity();
+      this.formBankAccount.get('bank_final_validation').setValidators([]);
+      this.formBankAccount.get('bank_final_validation').updateValueAndValidity();
       this.formBankAccount.get('bank_name').setValidators([]);
       this.formBankAccount.get('bank_name').updateValueAndValidity();
       this.formBankAccount.get('branch').setValidators([]);
@@ -646,23 +698,28 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
+      const icValue = this.formRetailer.get('InternalClassification').value;
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+
       let body = {
         _method: 'PUT',
         name: this.formRetailer.get('name').value,
         address: this.formRetailer.get('address').value,
         business_code: this.formRetailer.get('business_code').value,
         owner: this.formRetailer.get('owner').value,
-        phone: this.formRetailer.getRawValue()['phone'] ? `+62${this.formRetailer.getRawValue()['phone']}` : '',
+        country: this.formRetailer.get('country').value,
+        phone: this.formRetailer.getRawValue()['phone'] ? this.country_phone + this.formRetailer.getRawValue()['phone'] : '',
         status: this.formRetailer.get('status').value,
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
         longitude: this.formRetailer.get('longitude').value ? this.formRetailer.get('longitude').value : null,
-        type: (this.formRetailer.get('InternalClassification').value === 'SRC' || this.formRetailer.get('InternalClassification').value === 'NON-SRC') ? 'General Trade' : this.formRetailer.get('InternalClassification').value,
-        InternalClassification: this.formRetailer.get('InternalClassification').value,
+        type: generalTrade.indexOf(icValue) >= 0 ? "General Trade" : icValue,
+        InternalClassification: icValue,
         gsr_flag: this.formRetailer.get('gsr').value,
         gsm_pl: this.formRetailer.get('gsm_pl').value,
         // cashier: this.formRetailer.get("cashier").value,
         bank_account_name: this.formBankAccount.get('account_name').value === '' ? null : this.formBankAccount.get('account_name').value,
+        bank_final_validation: this.formBankAccount.get('bank_final_validation').value,
         bank_account_number: this.formBankAccount.get('account_number').value === '' ? null : this.formBankAccount.get('account_number').value,
         bank_name: this.formBankAccount.get('bank_name').value === '' ? null : this.formBankAccount.get('bank_name').value,
         branch: this.formBankAccount.get('branch').value === '' ? null : this.formBankAccount.get('branch').value,
@@ -767,6 +824,11 @@ export class RetailerEditComponent {
 
     // const fRtl = this.formRetailer;
 
+    if (!this.isCan(['ubah', 'country'])) {
+      const fields = ['country'];
+      this.disableFields(fields);
+    }
+
     if (!this.isCan(['ubah', 'profile_toko'])) {
 
       const fields = ['name', 'address', 'business_code', 'owner', 'latitude', 'longitude', 'InternalClassification'];
@@ -797,7 +859,7 @@ export class RetailerEditComponent {
 
     if (!this.isCan(['ubah', 'rekening_toko'])) {
 
-      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch', 'bank_final_validation'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
       this.npwp.disable();

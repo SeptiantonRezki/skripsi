@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportPanelDialogComponent } from '../import-panel-dialog/import-panel-dialog.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-mitra-voucher',
@@ -57,6 +58,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   @Output() refreshDetail = new EventEmitter();
   @Input() statusVoucher: string;
   @Input() permissions: any;
+  @Input() voucherId: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,7 +68,8 @@ export class PanelMitraVoucherComponent implements OnInit {
     private geotreeService: GeotreeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -526,7 +529,7 @@ export class PanelMitraVoucherComponent implements OnInit {
       this.loadingIndicator = true;
       this.pagination['sort'] = this.dataService.getFromStorage('sort');
       this.pagination['sort_type'] = this.dataService.getFromStorage('sort_type');
-      this.b2bVoucherInjectService.getMitra(this.pagination, { business_id: this.selected.map(item => item.id) }).subscribe(res => {
+      this.b2bVoucherInjectService.getMitra(this.pagination, { business_id: this.selected.map(item => item.id), voucher_id: this.voucherId }).subscribe(res => {
         if (res.status == 'success') {
           Page.renderPagination(this.pagination, res.data);
           this.totalData = res.data.total;
@@ -690,15 +693,15 @@ export class PanelMitraVoucherComponent implements OnInit {
       body['business_id'] = this.selected.map(bsn => bsn.id);
       body['panels'] = this.selected.map(bsn => ({
         business_id: bsn.id,
-        // nominal: bsn.nominal,
-        // amount: bsn.amount
+        nominal: bsn.nominal,
+        amount: bsn.amount
       }));
     }
     this.dataService.showLoading(true);
 
     this.b2bVoucherInjectService.updatePanel({ voucher_id: this.detailVoucher.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       if (!this.isDetail && !this.isEdit) {
         this.router.navigate(['inject-b2b-voucher', 'detail']);
       } else {
@@ -722,7 +725,8 @@ export class PanelMitraVoucherComponent implements OnInit {
     this.dataService.showLoading(true);
     let fd = {
       business_id: this.selected.map(item => item.id),
-      type: 'wholesaler'
+      type: 'wholesaler',
+      type_voucher: this.detailVoucher.type,
     }
     try {
       const response = await this.b2bVoucherInjectService.exportRetailer(fd, { voucher_id: this.detailVoucher.id }).toPromise();
@@ -790,7 +794,7 @@ export class PanelMitraVoucherComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler' };
+    dialogConfig.data = { voucher_id: this.detailVoucher.id, type: 'wholesaler', type_voucher: this.detailVoucher.type };
 
     this.dialogRef = this.dialog.open(ImportPanelDialogComponent, dialogConfig);
 

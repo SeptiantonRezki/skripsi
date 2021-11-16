@@ -30,7 +30,7 @@
       <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
         <div fxLayout="row" fxLayoutAlign="center center">
           <img class="avatar" [src]="profile?.image_url || 'assets/images/avatars/profile.jpg'">
-          <span class="username mr-12" fxHide fxShow.gt-sm>{{profile?.fullname || 'John Doe'}}</span>
+          <span id="account-name" class="username mr-12" fxHide fxShow.gt-sm>{{profile?.fullname || 'John Doe'}}</span>
           <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
         </div>
       </button>
@@ -49,7 +49,7 @@
 
         <button mat-menu-item class="" [routerLink]="['/my-profile']">
           <mat-icon>person</mat-icon>
-          <span>Profil Saya</span>
+          <span>{{ ls.locale.top_navigation.topnav1 }}</span>
         </button>
 
         <!-- <button mat-menu-item id="onetrust-pc-btn-handler">
@@ -59,7 +59,7 @@
 
         <button mat-menu-item (click)="logout()">
           <mat-icon>exit_to_app</mat-icon>
-          <span>Keluar</span>
+          <span>{{ ls.locale.top_navigation.topnav2 }}</span>
         </button>
 
       </mat-menu>

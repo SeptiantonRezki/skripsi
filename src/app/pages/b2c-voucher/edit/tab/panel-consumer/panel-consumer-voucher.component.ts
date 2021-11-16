@@ -18,6 +18,7 @@ import { ImportAudienceDialogComponent } from '../import-audience-dialog/import-
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-consumer-voucher',
@@ -166,6 +167,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     private dialog: MatDialog,
     private bannerService: BannerService,
     private adapter: DateAdapter<any>,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -1146,7 +1148,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body ? body : bodyArea).subscribe(res => {
       // this.router.navigate(['b2c-voucher']);
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Data berhasil disimpan!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.onRefresh.emit();
       this.setSelectedTab.emit(3);
       setTimeout(() => {

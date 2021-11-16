@@ -6,7 +6,7 @@ import * as _ from 'underscore';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
 import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 
 @Component({
@@ -84,6 +84,22 @@ export class TaskSequencingDuplicateComponent implements OnInit {
       });
 
       this.setValue();
+  }
+
+  selectForm(form: any){
+    const selectSearch = document.getElementById('select-search-'+form);
+    let inputTag = selectSearch.querySelectorAll('input');
+    for (let index = 0; index < inputTag.length; index++) {
+      inputTag[index].id = "search-"+form;
+    }
+    
+    // Perbaiki lagi
+    let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+    if (matOption) {
+      for (let index = 0; index < matOption.length; index++) {
+        matOption[index].querySelector('span').id = 'options';
+      }
+    }
   }
 
   setValue(){

@@ -9,6 +9,7 @@ import { DialogService } from "../../../../../services/dialog.service";
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
 import { SupplierCompanyService } from "app/services/user-management/private-label/supplier-company.service";
 import { Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-supplier-company-create',
@@ -46,6 +47,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
     private supplierCompanyService: SupplierCompanyService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.isLoadingProduct = false;
@@ -183,7 +185,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
       }
       this.supplierCompanyService.create(body).subscribe(res => {
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.createForm.reset();
         this.catatanControl.reset();

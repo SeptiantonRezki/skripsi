@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { NotificationCoinAdjustmentDialogComponent } from 'app/shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component';
 import { Observable, Subject } from 'rxjs';
 
@@ -55,6 +56,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
     this.permissionNotifikasi = this.roles.getRoles('principal.dtenotifikasiapprovalcoinadjustment');

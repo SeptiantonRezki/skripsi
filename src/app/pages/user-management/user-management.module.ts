@@ -9,6 +9,8 @@ import { UserManagementRoutingModule } from "./user-management-routing.module";
 import { AdminPrincipalIndexComponent } from "./admin-principal/index/admin-principal-index.component";
 import { AdminPrincipalCreateComponent } from "./admin-principal/create/admin-principal-create.component";
 import { FieldForceIndexComponent } from "./field-force/index/field-force-index.component";
+import { TranslateModule } from "@ngx-translate/core";
+
 // import { PendingChangesGuard } from "app/pages/dte/dte.guard";
 
 import {
@@ -116,6 +118,15 @@ import { ImportAudienceDialogComponent } from "./private-label/panel-partnership
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { DokumenDialogComponent } from './wholesaler/dokumen-dialog/dokumen-dialog.component';
 import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesaler/import-list-wholesaler.component';
+import { RcaAgentComponent } from './rca-agent/rca-agent.component';
+import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
+import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
+import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
+import { VoucherPrincipalDetailComponent } from "./supplier-vouchers/detail/voucher-principal-detail.component";
+import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/order-to-mitra-hub.component';
+import { PembayaranBenefitProgramComponent } from './private-label/pembayaran-benefit-program/pembayaran-benefit-program.component';
+import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
+import { PopUpImageBlobComponent } from "../../components/popup-image-blob/popup-image-blob.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -156,9 +167,11 @@ export const MY_FORMATS = {
     MatDividerModule,
     MatListModule,
     MatSlideToggleModule,
+    TranslateModule.forChild(),
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
+    MatSlideToggleModule
   ],
   exports: [
     FieldForceIndexComponent,
@@ -200,6 +213,7 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
 
     MedalBadgeComponent,
+    OrderToMitraHubComponent
 
   ],
   declarations: [
@@ -261,7 +275,13 @@ export const MY_FORMATS = {
     ImportAudienceDialogComponent,
     ImportListWholesalerComponent,
     DokumenDialogComponent,
+    VoucherPrincipalDetailTabComponent,
+    VoucherPrincipalDetailComponent,
+    OrderToMitraHubComponent,
+    PembayaranBenefitProgramComponent,
+    SupplierVouchersComponent,
 
+    PopUpImageBlobComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -276,6 +296,7 @@ export const MY_FORMATS = {
     DokumenDialogComponent,
     PayMethodIndexComponent,
     ImportListWholesalerComponent,
+    PopUpImageBlobComponent,
   ],
   providers: [
     // PendingChangesGuard,

@@ -15,6 +15,7 @@ import { ImportAudienceDialogComponent } from '../import/import-audience-dialog.
 import { environment } from 'environments/environment';
 import { GeotreeService } from 'app/services/geotree.service';
 import { IdbService } from 'app/services/idb.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-audience-edit',
@@ -88,6 +89,14 @@ export class AudienceEditComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+  ENABLE_IMPORT_IF = ['done', 'failed'];
+  totalSelected = 0;
+  importAudienceResult = {
+    is_valid: 0,
+    preview_id: null,
+    preview_task_id: null,
+    total_selected: 0,
+  }
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -116,7 +125,8 @@ export class AudienceEditComponent {
     private rupiahFormater: RupiahFormaterPipe,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1222,7 +1232,7 @@ export class AudienceEditComponent {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
+              message: this.ls.locale.notification.popup_notifikasi.text22,
             });
             this.router.navigate(["dte", "audience"]);
           },
@@ -1297,7 +1307,7 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
               this.loadingIndicator = false;
               this.dialogService.openSnackBar({
-                message: "Data Berhasil Disimpan",
+                message: this.ls.locale.notification.popup_notifikasi.text22,
               });
               this.router.navigate(["dte", "audience"]);
             },
@@ -1354,7 +1364,7 @@ export class AudienceEditComponent {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: "Data Berhasil Disimpan",
+              message: this.ls.locale.notification.popup_notifikasi.text22,
             });
             this.router.navigate(["dte", "audience"]);
           },
@@ -1606,30 +1616,43 @@ export class AudienceEditComponent {
 
   importAudience() {
     const dialogConfig = new MatDialogConfig();
+    const {
+      id: trade_audience_group_id,
+      import_audience_status,
+      import_audience_status_type,
+    } = this.detailAudience;
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { password: 'P@ssw0rd' };
+    dialogConfig.data = {
+      password: 'P@ssw0rd',
+      trade_audience_group_id,
+      import_audience_status,
+      import_audience_status_type,
+      IMPORT_TYPE: 'AUDIENCE',
+      min: this.formAudience.get('min').value,
+      max: this.formAudience.get('max').value,
+      audience_type: this.formAudience.get('audience_type').value,
+      type: this.formAudience.get('type').value
+    };
 
     this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        let rows = this.rows.map(row => row.id);
-        this.idbService.getAll(dt => dt.is_valid).then(result => {
-          console.log('result', result);
-          // this.selected = result;
-          this.onSelect({ selected: result });
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-        })
+        
+        this.importAudienceResult = {...response};
+        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
         // this.selected = response;
         // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
       }
+      this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });
   }
 
   async exportAudience() {
+    this.dataService.showLoading(true);
     this.exportTemplate = true;
     const body = {
       retailer_id: this.selected.length > 0 ? this.selected.map(item => item.id) : []
@@ -1639,10 +1662,14 @@ export class AudienceEditComponent {
       const response = await this.audienceService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
-      this.exportTemplate = false;
+      setTimeout(() => {
+        this.exportTemplate = false;
+        this.dataService.showLoading(false);
+      }, 3000);
 
     } catch (error) {
       this.exportTemplate = false;
+      this.dataService.showLoading(false);
       throw error;
     }
   }

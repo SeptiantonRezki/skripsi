@@ -7,31 +7,32 @@
     <div class="lgn-box">
       <div class="top">
         <!-- <img [src]="environment?.image" [srcset]="environment?.image_2x" /> -->
-        <div class="big-title">Verifikasi Akun</div>
-        <div>Masukan 6 Digit Kode Verifikasi yang dikirim melalui {{username}}</div>
-        <div class="time-descrption-authentication">Sisa Waktu Penggunaan Kode Verifikasi</div>
+        <div class="big-title">{{ ls.locale.device_authentication.text1 }}</div>
+        <div>{{ ls.locale.device_authentication.text2 }} {{username}}</div>
+        <div class="time-descrption-authentication">{{ ls.locale.device_authentication.text3 }}</div>
         <div>({{value | timeRemaining}})</div>
       </div>
       <div class="middle-form">
         <form name="form" [formGroup]="activationForm">
           <div fxLayout="row wrap" fxLayoutAlign="center center" fxFlex="1 0 auto" fxLayoutGap="10px">
             <mat-form-field fxFlex="50" class="is-light form-primary" appearance="outline" style="text-align: center;">
-              <input matInput type="text" formControlName="code">
+              <input id="input-otp" matInput type="text" formControlName="code">
             </mat-form-field>
           </div>
           <div class="login-button" fxLayout="column">
-            <button mat-raised-button aria-label="Login" type="submit" color="primary-red" [disabled]="submitting"
-              (click)="submit()">
+            <button id="btn-verifikasi" mat-raised-button aria-label="Login" type="submit" color="primary-red"
+              [disabled]="submitting" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Verifikasi Perangkat
+                {{ ls.locale.device_authentication.text4 }}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
               </ng-container>
             </button>
-            <a *ngIf="!showValue" href="javascript:;" class="resend-activation" (click)="resendActivationCode()">{{(requestingResend)
+            <a *ngIf="!showValue" href="javascript:;" class="resend-activation"
+              (click)="resendActivationCode()">{{(requestingResend)
               ?
-              'Mengirim...':'Kirim Ulang Kode Verifikasi'}}</a>
+              ls.locale.device_authentication.text5:ls.locale.device_authentication.text6}}</a>
 
             <!-- <span *ngIf="showValue" style="margin: 12px 0 auto;" class="secondary-text">Kirim Ulang Kode Verifikasi
               ({{value | timeRemaining}})</span> -->

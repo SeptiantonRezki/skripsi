@@ -416,14 +416,18 @@
         >
           <mat-icon>arrow_downward</mat-icon> Import XLS
         </button>
-        <button
-          mat-raised-button
-          type="button"
-          class="is-danger"
-          (click)="exportAudience()"
-        >
-          <mat-icon>arrow_upward</mat-icon> Export Template
-        </button>
+        <div fxLayout="column">
+          <button
+            mat-raised-button
+            type="button"
+            class="is-danger"
+            (click)="exportAudience()"
+          >
+            <mat-icon>arrow_upward</mat-icon> Export Template
+          </button>
+          <label *ngIf="exportTemplate" style="color: white;">Downloading Template</label>
+        </div>
+        
       </div>
       <mat-progress-bar
         [color]="'primary'"
@@ -582,6 +586,7 @@
 
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button
+        id="btn-simpan"
         mat-raised-button
         type="button"
         class="confirmation-button"

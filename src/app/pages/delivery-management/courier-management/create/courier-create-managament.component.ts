@@ -7,6 +7,7 @@ import { CourierService } from 'app/services/delivery-management/courier.service
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-courier-create-managament',
@@ -34,7 +35,8 @@ export class CourierCreateManagamentComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private courierManagementService: CourierService,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private ls: LanguagesService
   ) {
     this.formCourierError = {
       name: {},
@@ -165,7 +167,7 @@ export class CourierCreateManagamentComponent implements OnInit {
       this.courierManagementService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         console.log('res', res);
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.router.navigate(['delivery', 'courier']);
       }, err => {
         console.log('err create courier', err);

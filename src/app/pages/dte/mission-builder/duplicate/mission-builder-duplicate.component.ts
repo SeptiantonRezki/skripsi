@@ -6,12 +6,13 @@ import { DialogService } from "../../../../services/dialog.service";
 import { Subject } from 'rxjs/Subject';
 import * as shape from 'd3-shape';
 import { SequencingService } from '../../../../services/dte/sequencing.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DialogCoinDuplicateComponent } from "./dialog-coin-duplicate/dialog-coin-duplicate.component";
 import { DialogMisiDuplicateComponent } from "./dialog-misi-duplicate/dialog-misi-duplicate.component";
 import { DialogPopUpNotifDuplicateComponent } from "./dialog-pop-up-notif-duplicate/dialog-pop-up-notif-duplicate.component";
 import { DialogPushNotifDuplicateComponent } from "./dialog-push-notif-duplicate/dialog-push-notif-duplicate.component";
 import { DialogWaktuTungguDuplicateComponent } from "./dialog-waktu-tunggu-duplicate/dialog-waktu-tunggu-duplicate.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-mission-builder-duplicate',
@@ -57,6 +58,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
     private dataService: DataService,
     private sequencingService: SequencingService,
     private dialogService: DialogService,
+    private ls: LanguagesService,
   ) {
     // this.actions = [];
     this.hierarchialGraph = {
@@ -188,7 +190,7 @@ export class MissionBuilderDuplicateComponent implements OnInit {
         this.dataService.showLoading(false);
 
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['dte', 'task-sequencing']);
       }, err => {

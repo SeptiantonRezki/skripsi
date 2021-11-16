@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
 import { DataService } from 'app/services/data.service';
@@ -52,6 +52,18 @@ export class ImportAudienceDialogComponent {
     total: 0
   }
   trials: Array<any> = [];
+  ENABLE_IMPORT_IF = ['done', 'failed'];
+  detailData: any;
+  previewData: any = {
+    is_valid: 0,
+    preview_id: null,
+    preview_task_id: null,
+    total_selected: 0,
+  };
+
+  requestingPreview:boolean = false;
+  requestingImport: boolean = false;
+  importing: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudienceDialogComponent>,
@@ -59,13 +71,50 @@ export class ImportAudienceDialogComponent {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    @Inject(MAT_DIALOG_DATA) data: any,
   ) {
     this.rows = [];
+    this.detailData = data;
     this.dataService.showLoading(false);
+
+    if(data.IMPORT_TYPE === 'AUDIENCE') {
+
+      if (!this.ENABLE_IMPORT_IF.includes(data.import_audience_status) && data.import_audience_status_type === 'preview') {
+
+        this.requestingPreview = true;
+
+      } else {
+
+        this.getPreview();
+
+      }
+      if(!this.ENABLE_IMPORT_IF.includes(data.import_audience_status) && data.import_audience_status_type === 'import') {
+        
+        this.requestingImport = true;
+
+      } else {
+        
+        this.requestingImport = false;
+
+      }
+
+    }
   }
 
   ngOnInit() {
+  }
+  onFileChange(event) {
+    const {IMPORT_TYPE} = this.detailData;
+    if(IMPORT_TYPE && IMPORT_TYPE === 'AUDIENCE') {
+
+      this.requestPreview(event);
+
+    } else {
+
+      this.preview(event);
+
+    }
   }
 
   preview(event) {
@@ -117,6 +166,34 @@ export class ImportAudienceDialogComponent {
           this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
       }
     )
+  }
+  requestPreview(event) {
+    this.files = undefined;
+    this.files = event;
+
+    const {trade_audience_group_id} = this.detailData;
+    
+    if (this.requestingPreview) {
+      this.dialogService.openSnackBar({ message: "Proses Request Preview Masih Berjalan!" });
+      return;
+    }
+
+    let fd = new FormData();
+    this.idbService.reset();
+    fd.append('file', this.files);
+    fd.append('trade_audience_group_id', trade_audience_group_id);
+    this.dataService.showLoading(true);
+    
+    this.audienceService.requestPreviewImportExcel(fd).subscribe((res) => {
+      
+      this.setRequesting('preview');
+      this.dataService.showLoading(false);
+
+    }, err => {
+
+      this.dataService.showLoading(false);
+
+    })
   }
 
   recursiveImport() {
@@ -201,6 +278,15 @@ export class ImportAudienceDialogComponent {
     return forkJoin(trialsRes);
   }
 
+  onPageChange(pageInfo) {
+    const {IMPORT_TYPE} = this.detailData;
+    if(IMPORT_TYPE === 'AUDIENCE') {
+      this.setPageFromServer(pageInfo)
+    } else {
+      this.setPage(pageInfo);
+    }
+  }
+
   setPage(pageInfo) {
     this.dataService.showLoading(true);
     this.offsetPagination = pageInfo.offset;
@@ -213,13 +299,115 @@ export class ImportAudienceDialogComponent {
       this.dataService.showLoading(false);
     });
   }
+  setPageFromServer({offset}) {
+    this.dataService.showLoading(true);
+    const {trade_audience_group_id} = this.detailData;
+    this.offsetPagination = offset;
+    this.pagination.page = offset + 1;
+    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+      
+      this.setPreview(data);
+
+    }, err => {
+
+      this.dataService.showLoading(false);
+
+    })
+
+  }
 
   submit() {
-    if (this.totalData > 0) {
-      this.dialogRef.close(true);
-    } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+    const {IMPORT_TYPE, min, max, trade_scheduler_id, type, audience_type} = this.detailData;
+    if(IMPORT_TYPE === 'AUDIENCE') {
+      const {is_valid, preview_id, preview_task_id} = this.previewData;
+
+      if(is_valid && preview_id && preview_task_id) {
+        
+        this.audienceService.requestImportExcel({
+          preview_id,
+          preview_task_id,
+          min, max,
+          trade_scheduler_id, type,
+          audience_type
+        }).subscribe(res => {
+
+          this.setRequesting('import')
+          this.dialogRef.close({...this.previewData});
+
+        })
+
+      } else {
+
+        this.dialogService.openSnackBar({ message: "Ada data yang tidak valid!" });
+
+      }
+
+
     }
+
+    else {
+      
+      if (this.totalData > 0) {
+        this.dialogRef.close(true);
+      } else {
+        this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      }
+
+    }
+  }
+  getPreview() {
+    this.dataService.showLoading(true);
+    // this.idbService.reset();
+    const {trade_audience_group_id} = this.detailData;
+    this.offsetPagination = 0;
+
+    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+      
+      this.setPreview(data);
+
+
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+    
+  }
+  setPreview(data) {
+    this.lastPage = data.data.last_page;
+    this.totalData = data.data.total;
+    this.rows = (data.data.data || []).map(item => item.preview);
+    this.previewData = {
+      is_valid: data.is_valid,
+      preview_id: data.preview_id,
+      preview_task_id: data.preview_task_id,
+      total_selected: data.data.total,
+    }
+    // this.p_pagination = { page: this.p_page, per_page: 15, last_page: this.lastPage, total: this.totalData };
+    Page.renderPagination(this.pagination, data.data);
+    this.dataService.showLoading(false);
+  }
+
+  setRequesting(reqType) {
+
+    const newStatus = {
+      import_audience_status: 'request',
+      import_audience_status_type: reqType
+    }
+
+    if(reqType === 'import') {
+      
+      this.importing = true;
+
+    } else {
+
+      this.requestingPreview = true;
+
+    }
+    const newDetailAudience = {
+      ...this.dataService.getFromStorage('detail_audience'),
+      ...newStatus
+    }
+    this.dataService.setToStorage('detail_audience', newDetailAudience);
+
   }
 
 }

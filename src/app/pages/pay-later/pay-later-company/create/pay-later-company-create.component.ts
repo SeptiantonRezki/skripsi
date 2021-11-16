@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { PayLaterCompanyService } from 'app/services/pay-later/pay-later-company.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-company-create',
@@ -21,7 +22,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private paylaterCompanyService: PayLaterCompanyService
+    private paylaterCompanyService: PayLaterCompanyService,
+    private ls: LanguagesService
   ) {
 
   }
@@ -80,7 +82,7 @@ export class PayLaterCompanyCreateComponent implements OnInit {
       this.paylaterCompanyService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         })
         this.router.navigate(['paylater', 'companies']);
       }, err => {

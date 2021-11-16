@@ -9,7 +9,7 @@ import { ProductService } from "../../../../services/sku-management/product.serv
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
-import * as moment from "moment";
+import moment from 'moment';
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "../create/dialog/scan-barcode-dialog.component";
 import html2canvas from 'html2canvas';
@@ -1026,6 +1026,8 @@ export class ProductEditComponent {
   }
 
   selectionChange(): void {
+    this.formProductGroup.get("subCategory").setValue("");
+
     let category_id = this.formProductGroup.get("category").value
     this.productService.getListCategory(category_id).subscribe(
       res => {
@@ -1130,7 +1132,7 @@ export class ProductEditComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
-          // convertion: this.formProductGroup.get("convertion").value
+          // convertion: this.formProductGroup.get("convertion").value,
         };
 
         let fd = new FormData();

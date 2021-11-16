@@ -116,7 +116,7 @@
   .content {
     form {
       width: 100%;
-      max-width: 800px !important;
+      // max-width: 800px !important;
     }
 
     .form-errors-model {
@@ -333,4 +333,23 @@
 
 :host /deep/ .mat-input-element:disabled {
   color: rgba(0, 0, 0, 1) !important;
+}
+
+.form{
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+}
+.form--edit{
+  column-gap: 88px;
+}
+
+.form__content{
+  width: 800px;
+}
+
+.background-misi{
+  width: 100%;
+  max-width: 640px;
+  min-height: 150px;
 }

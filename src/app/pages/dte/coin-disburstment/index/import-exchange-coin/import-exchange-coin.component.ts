@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, Inject, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
@@ -18,20 +18,22 @@ export class ImportExchangeCoinComponent implements OnInit {
 
   uploading: Boolean;
   rows: any[];
+  dialogData: any;
 
   constructor(
     public dialogRef: MatDialogRef<ImportExchangeCoinComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private dataService: DataService,
-    private coinDisburstmentService: CoinDisburstmentService
+    private coinDisburstmentService: CoinDisburstmentService,
+    @Inject(MAT_DIALOG_DATA) data
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
+    this.dialogData = data;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   preview(event) {
     this.files = undefined;
@@ -44,8 +46,16 @@ export class ImportExchangeCoinComponent implements OnInit {
       res => {
         this.dataService.showLoading(false);
         if (res && res.data) {
-          this.rows = res.data;
-          this.is_valid = res.is_valid;
+          // Mengecek nama_program yang diimport sama dengan nama_program yang sedang dilihat
+          const check = res.data.every(val => val.nama_program_penukaran_coin === this.dialogData.name);
+          if (check) {
+            this.rows = res.data;
+            this.is_valid = res.is_valid;            
+          }
+          else{
+            this.files = undefined;
+            this.dialogService.openSnackBar({ message: "Upload gagal, Nama Program Penukaran yang diupload tidak sesuai." })
+          }
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;

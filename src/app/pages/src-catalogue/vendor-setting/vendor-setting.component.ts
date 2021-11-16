@@ -8,7 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { GeneralService } from 'app/services/general.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
-import * as moment from "moment";
+import moment from 'moment';
 import { ReplaySubject, Subject } from 'rxjs';
 
 @Component({

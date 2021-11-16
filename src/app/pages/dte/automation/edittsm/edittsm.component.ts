@@ -8,7 +8,8 @@ import { AudienceTradeProgramService } from 'app/services/dte-automation/audienc
 import { takeUntil, debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as moment from 'moment';
+import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-edittsm',
@@ -66,7 +67,8 @@ export class EdittsmComponent implements OnInit {
     private audienceTradeProgramService: AudienceTradeProgramService,
     private dialogService: DialogService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab");
     this.selectedTab = 0;
@@ -373,7 +375,7 @@ export class EdittsmComponent implements OnInit {
         this.submitting = false;
         // console.log('ressss', res);
         // if (res && res.status) {
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Disimpan' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         // this._resetForm();
         this.router.navigate(['dte', 'automation']);
         // }

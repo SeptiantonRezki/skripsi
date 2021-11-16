@@ -9,13 +9,14 @@ import { ProductService } from "../../../../services/sku-management/product.serv
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
-import * as moment from "moment";
+import moment from 'moment';
 import { takeUntil } from "rxjs/operators";
 import { ScanBarcodeDialogComponent } from "./dialog/scan-barcode-dialog.component";
 import html2canvas from 'html2canvas';
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 import { json } from "sjcl";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-product-create",
@@ -104,7 +105,8 @@ export class ProductCreateComponent {
     private dialogService: DialogService,
     private productService: ProductService,
     private dialog: MatDialog,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -790,7 +792,7 @@ export class ProductCreateComponent {
           res => {
             this.loadingIndicator = false;
             this.router.navigate(["sku-management", "product"]);
-            this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             this.dataService.showLoading(false);
           },
           err => {

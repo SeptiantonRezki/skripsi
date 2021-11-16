@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-b2c-voucher-index',
@@ -46,7 +47,8 @@ export class B2CVoucherIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private b2cVoucherService: B2CVoucherService
+    private b2cVoucherService: B2CVoucherService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     // this.selected = [];

@@ -1,21 +1,5 @@
 <div class="dialog-content-wrapper">
-  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
-      </div>
-    </div>
-    <button
-      mat-icon-button
-      (click)="dialogRef.close()"
-      aria-label="Close Dialog"
-      [disabled]="uploading"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
-
-  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+  <div mat-dialog-content fusePerfectScrollbar>
     <div
       ngfDrop
       selectable="1"
@@ -36,7 +20,7 @@
         </span>
       </div>
     </div>
-    <div *ngIf="rows.length > 0" class="preview">
+    <div *ngIf="rows.length > 0" class="preview mb-16">
       <div class="preview-container">
         <table class="preview-table">
           <thead>
@@ -75,8 +59,8 @@
         ><span *ngIf="rowsLength > 1">Products</span>
       </div>
     </div>
-    <div class="border-top">
-      <div class="p-16">
+    <div class="border-top mt-16">
+      <div class="mt-16">
         <div
           fxFlexLayout="row"
           fxLayoutAlign="start center"

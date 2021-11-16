@@ -4,6 +4,7 @@ import { brConfig } from "../../classes/breadcrumbs.config";
 
 import { NotificationIndexComponent } from "./index/notification-index.component";
 import { NotificationCreateComponent } from "./create/notification-create.component";
+import { CustomNotificationCreateComponent } from "./create/custom-notification/custom-notification-create.component";
 
 import { PageGuard } from "app/classes/auth.guard";
 import { PopupNotificationIndexComponent } from "../popup-notification/index/popup-notification-index.component";
@@ -34,12 +35,28 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "push-notification/create-custom",
+    component: CustomNotificationCreateComponent,
+    data: {
+      breadcrumbs: brConfig.notification.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
     path: "push-notification/detail/:id",
     component: NotificationCreateComponent,
     data: {
       breadcrumbs: brConfig.notification.detail
     },
     canActivate: [PageGuard]
+  },
+  {
+    path: "push-notification/detail-custom/:id",
+    component: CustomNotificationCreateComponent,
+    data: {
+      breadcrumbs: brConfig.notification.detail
+    },
+    // canActivate: [PageGuard]
   },
   {
     path: "popup-notification",

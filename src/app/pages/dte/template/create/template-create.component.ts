@@ -18,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Page } from "app/classes/laravel-pagination";
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-template-create",
@@ -30,6 +31,13 @@ export class TemplateCreateComponent {
   dialogRef: any;
   frmIsBranching: FormControl = new FormControl(false);
   listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
+  listIRType: any[] = [
+    { value: 'full-ir', name: 'Full IR' },
+    { value: 'ir-for-comply', name: 'IR for Comply' },
+    { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
+    { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
+  ];
+  isIRTypeError: boolean = false;
   // listKategoriToolbox: any[] = [{ value: '1', name: 'Toolbox 1' }, { value: '2', name: 'Toolbox 2' }];
   // listTipeMisi: any[] = [{ value: '1', name: 'Tipe Misi 1' }, { value: '2', name: 'Tipe Misi 2' }];
 
@@ -38,6 +46,7 @@ export class TemplateCreateComponent {
   listTingkatinternalMisi: any[];
   listKategoriMisi: any[];
   listProjectMisi: any[];
+  listReason: any[];
   private _onDestroy = new Subject<void>();
   public filterLKT: FormControl = new FormControl();
   public filteredLKT: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -49,6 +58,8 @@ export class TemplateCreateComponent {
   public filteredLKM: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterProject: FormControl = new FormControl();
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterReason: FormControl = new FormControl();
+  public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = Config.FROALA_CONFIG;
 
   listChoose: Array<any> = [
@@ -91,6 +102,7 @@ export class TemplateCreateComponent {
 
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
+  isBackgroundMisi: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -168,7 +180,8 @@ export class TemplateCreateComponent {
     private taskTemplateService: TemplateTaskService,
     private dataService: DataService,
     private productService: ProductService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
@@ -182,12 +195,12 @@ export class TemplateCreateComponent {
   }
 
   ngOnInit() {
-    console.log('Unnecessary Check')
     this.getListKategoriToolbox();
     this.getListTipeMisi();
     this.getListTingkatInternalMisi();
     this.getListKategoriMisi();
     this.getListKategoriProject();
+    this.getListReason();
 
     this.frmQuiz.valueChanges.subscribe(res => {
       if (res && res === 'quiz') {
@@ -230,6 +243,9 @@ export class TemplateCreateComponent {
     this.filterProject.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filteringProject();
     });
+    this.filterReason.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+      this.filteringReason();
+    });
 
     this.listChoose = this.listChooseOriginal.slice();
     this.keyUp.debounceTime(300)
@@ -250,6 +266,8 @@ export class TemplateCreateComponent {
       kategori_misi: ["", Validators.required],
       project_misi: ["", Validators.required],
       image: [""],
+      background_image: [""],
+      background_font_color: [""],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -262,7 +280,8 @@ export class TemplateCreateComponent {
         url_iframe: '',
         imageDetailBanner: ''
       })]),
-      rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required)
+      rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
+      ir_type: [""],
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -494,6 +513,38 @@ export class TemplateCreateComponent {
     );
   }
 
+  filteringReason() {
+    if (!this.listReason) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterReason.value;
+    if (!search) {
+      this.filteredReason.next(this.listReason.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredReason.next(
+      this.listReason.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  getListReason() {
+    this.pagination.per_page = 99999999;
+    this.pagination.status = 'active';
+    this.pengaturanAttributeMisiService.getVerificationRemark(this.pagination).subscribe(
+      (res) => {
+        this.listReason = res.data;
+        this.filteredReason.next(this.listReason.slice());
+      },
+      (err) => {
+        console.log("err List Alasan", err);
+      }
+    );
+  }
+
 
   splitCheckList(template) {
     console.log('template', template);
@@ -611,6 +662,7 @@ export class TemplateCreateComponent {
     this.duplicateTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     });
+    this.templateTaskForm.get('ir_type').setValue(this.duplicateTask.ir_type);
   }
 
   addAdditional(idx) {
@@ -706,13 +758,15 @@ export class TemplateCreateComponent {
       this.listAnswerKeys = [];
     }
     else {
+      this.templateTaskForm.get('ir_type').setValue('');
+      this.isIRTypeError = false;
+
       if (this.frmQuiz.value === 'quiz') {
         this.listChoose = [...this.listChooseQuiz];
       } else {
         this.listChoose = [...this.listChooseOriginal]
       }
     }
-
   }
 
   changeType(item, idx?) {
@@ -948,7 +1002,7 @@ export class TemplateCreateComponent {
 
   addRejectedReason() {
     let rejected_reason = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
-    rejected_reason.push(this.formBuilder.group({ reason: `Alasan ${rejected_reason.length + 1}` }))
+    rejected_reason.push(this.formBuilder.group({ reason: ['', Validators.required] }))
   }
 
   createAdditional(): FormGroup {
@@ -956,7 +1010,7 @@ export class TemplateCreateComponent {
   }
 
   createRejectedReson(): FormGroup {
-    return this.formBuilder.group({ reason: 'Alasan 1' })
+    return this.formBuilder.group({ reason: ['', Validators.required] });
   }
 
   addOthers(idx): void {
@@ -1097,6 +1151,7 @@ export class TemplateCreateComponent {
     }
     console.log('ini is', this.isDetailBanner);
   }
+  
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1119,6 +1174,8 @@ export class TemplateCreateComponent {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+        background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
+        background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1241,13 +1298,26 @@ export class TemplateCreateComponent {
           }
           return mockup;
         }),
-        rejected_reason_choices: rejected_reason.map(item => item.reason)
+        rejected_reason_choices: rejected_reason.map(item => item.reason),
+        rejected_reason_ids: rejected_reason.map(item => 
+          (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
+        ),
+        ir_type: this.templateTaskForm.get('ir_type').value,
       }
+      
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
         return;
       }
+
+      if (this.isIRTemplate.value && !body.ir_type) {
+        this.dataService.showLoading(false);
+        this.isIRTypeError = true;
+        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu IR Type" });
+        return;
+      }
+
       console.log('ini masuk body', body);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
@@ -1278,7 +1348,7 @@ export class TemplateCreateComponent {
                   this.taskTemplateService.create(body).subscribe(
                     res => {
                       this.dataService.showLoading(false);
-                      this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                       this.router.navigate(['dte', 'template-task']);
                     }, err => {
                       console.log(err.error)
@@ -1290,7 +1360,7 @@ export class TemplateCreateComponent {
                 this.taskTemplateService.create(body).subscribe(
                   res => {
                     this.dataService.showLoading(false);
-                    this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                    this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                     this.router.navigate(['dte', 'template-task']);
                   },
                   err => {
@@ -1330,7 +1400,7 @@ export class TemplateCreateComponent {
               this.taskTemplateService.create(body).subscribe(
                 res => {
                   this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                  this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                   this.router.navigate(['dte', 'template-task']);
                 }, err => {
                   console.log(err.error);
@@ -1342,7 +1412,7 @@ export class TemplateCreateComponent {
             this.taskTemplateService.create(body).subscribe(
               res => {
                 this.dataService.showLoading(false);
-                this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                 this.router.navigate(['dte', 'template-task']);
               },
               err => {
@@ -1357,7 +1427,7 @@ export class TemplateCreateComponent {
         this.taskTemplateService.create(body).subscribe(
           res => {
             this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan" });
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
             this.router.navigate(['dte', 'template-task']);
           },
           err => {
@@ -1377,6 +1447,8 @@ export class TemplateCreateComponent {
 
       if (this.templateTaskForm.get('questions').invalid)
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+      else
+        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
   }
 
@@ -1407,6 +1479,22 @@ export class TemplateCreateComponent {
         }
       }
     });
+  }
+
+  uploadImageBgMisi(e: any){
+    this.templateTaskForm.get('background_image').setValue(e.image);    
+    this.templateTaskForm.get('background_font_color').setValue(e.color);    
+    console.log('update => ', this.templateTaskForm);
+  }
+
+  onChangeBgMisi(){
+    if (!this.isBackgroundMisi.value) {
+      const update = {
+        image: '',
+        color: ''
+      }
+      this.uploadImageBgMisi(update);
+    }
   }
 
   deleteImage(type, idx) {

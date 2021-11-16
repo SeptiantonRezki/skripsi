@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-group-trade-program',
@@ -39,7 +40,8 @@ export class GroupTradeProgramComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private groupTradeProgramService: GroupTradeProgramService
+    private groupTradeProgramService: GroupTradeProgramService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.permission = this.roles.getRoles('principal.dtegrouptradeprogram')
@@ -75,11 +77,32 @@ export class GroupTradeProgramComponent implements OnInit {
         this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1500);
       },
       err => {
         this.onLoad = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row';
+      // rows[index].id = 'data-row-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';          
+        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   onSelect({ selected }) {

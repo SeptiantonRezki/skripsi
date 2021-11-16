@@ -25,7 +25,8 @@ import {
   MatRadioModule,
   MatDialogModule,
   MatToolbarModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatChipsModule
 } from "@angular/material";
 
 import {
@@ -41,6 +42,8 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { ImportPopUpAudienceComponent } from "../popup-notification/import-pop-up-audience/import-pop-up-audience.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { CustomNotificationCreateComponent } from './create/custom-notification/custom-notification-create.component';
+import { ImportCustomNotificationComponent } from './create/custom-notification/import/import-custom-notification.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -73,6 +76,7 @@ export const MY_FORMATS = {
     MatProgressSpinnerModule,
     MatRadioModule,
     MatTooltipModule,
+    MatChipsModule,
     ngfModule,
     LightboxModule,
     FroalaEditorModule.forRoot(),
@@ -90,7 +94,9 @@ export const MY_FORMATS = {
     PopupNotificationIndexComponent,
     PopupNotificationCreateComponent,
     PopupNotificationEditComponent,
-    ImportPopUpAudienceComponent
+    ImportPopUpAudienceComponent,
+    CustomNotificationCreateComponent,
+    ImportCustomNotificationComponent
   ],
   exports: [
     NotificationIndexComponent,
@@ -99,7 +105,10 @@ export const MY_FORMATS = {
     PopupNotificationCreateComponent,
     PopupNotificationEditComponent
   ],
-  entryComponents: [ImportPopUpAudienceComponent],
+  entryComponents: [
+    ImportPopUpAudienceComponent,
+    ImportCustomNotificationComponent
+  ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },

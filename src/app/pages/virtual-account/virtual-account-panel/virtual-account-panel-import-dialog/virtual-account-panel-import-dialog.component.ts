@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual-account-panel.service';
 import { Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-panel-import-dialog',
@@ -31,6 +32,7 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
     private dataService: DataService,
     private router: Router,
     @Inject(MAT_DIALOG_DATA) data,
+    private ls: LanguagesService
   ) {
     this.payload = data;
     this.rows = [];
@@ -131,7 +133,7 @@ export class VirtualAccountPanelImportDialogComponent implements OnInit {
       this.mitraPanelService.store(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.dialogRef.close();
         // this.dataService.setToStorage("detail_virtual_account_panel", res.data);

@@ -144,6 +144,16 @@
               <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Pojok Bayar Validation" [formControl]="pojok_bayar_validation">
+              <mat-option *ngFor="let item of listPojokBayar" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="16" class="is-light form-primary">
+            <mat-select placeholder="Bank Account Validation" [formControl]="bank_final_validation">
+              <mat-option *ngFor="let item of listBankFinalValidation" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </form>
       <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -169,27 +179,27 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Toko" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode Agen" prop="code" summary-template="activeCell">
+        <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code" summary-template="activeCell">
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Pemilik" prop="owner">
+        <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner">
           <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directEdit(row)">{{row.owner}} </a>
           </ng-template> -->
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Retailer Classification" prop="classification" summary-template="activeCell">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text10 }}" prop="classification" summary-template="activeCell">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="SRC Classification" prop="src_classification" summary-template="activeCell">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text11 }}" prop="src_classification" summary-template="activeCell">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="SRC Type" prop="src_type" summary-template="activeCell">
+        <ngx-datatable-column name="{{ ls.locale.call_objective.text12 }}" prop="src_type" summary-template="activeCell">
         </ngx-datatable-column>
 
         <ngx-datatable-column name="GSR" prop="gsr_flag" summary-template="activeCell">
@@ -203,11 +213,11 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode WS" prop="wholesaler_code" summary-template="activeCell" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="wholesaler_code" summary-template="activeCell" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama WS" prop="wholesaler_name" summary-template="activeCell" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="wholesaler_name" summary-template="activeCell" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
           </ng-template>
         </ngx-datatable-column>
@@ -216,7 +226,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Chat Bot" prop="is_chat_bot" summary-template="activeCell" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.global.label.chat_bot }}" prop="is_chat_bot" summary-template="activeCell" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.is_chat_bot === 1 ? 'On' : 'Off'}}
           </ng-template>
@@ -227,7 +237,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="120" name="Status" prop="status">
+        <ngx-datatable-column [width]="120" name="{{ ls.locale.global.label.status }}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4 status-order"
@@ -265,7 +275,7 @@
               </div>
             </ng-template>
           </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="60" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="60" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">

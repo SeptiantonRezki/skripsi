@@ -12,6 +12,9 @@ import { takeUntil, distinctUntilChanged, debounceTime } from "rxjs/operators";
 import { GeneralService } from "app/services/general.service";
 import { PagesName } from "app/classes/pages-name";
 import { DokumenDialogComponent } from "../dokumen-dialog/dokumen-dialog.component";
+import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { PopUpImageBlobComponent } from "../../../../components/popup-image-blob/popup-image-blob.component";
 
 @Component({
   selector: 'app-wholesaler-edit',
@@ -33,6 +36,7 @@ export class WholesalerEditComponent {
     { name: "Status Belum Terdaftar", value: "not-registered" }
   ];
   listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
+  countryList: any[] = [];
   dialogRef: any;
 
   listLevelArea: any[];
@@ -61,6 +65,7 @@ export class WholesalerEditComponent {
   formDoc: FormGroup;
   branchType: any[];
   wsRoles: any[] = [];
+  country_phone: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,7 +76,10 @@ export class WholesalerEditComponent {
     private wholesalerService: WholesalerService,
     private generalService: GeneralService,
     private dialog: MatDialog,
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
+    this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
     this.formdataErrors = {
       name: {},
@@ -88,6 +96,7 @@ export class WholesalerEditComponent {
       salespoint: {},
       district: {},
       territory: {},
+      country: {},
     };
 
     this.formBankAccountError = {
@@ -122,7 +131,7 @@ export class WholesalerEditComponent {
         "parent_id": null,
         "code": "SLSNTL      ",
         "name": "SLSNTL"
-      }
+      },
     ];
 
     this.list = {
@@ -138,6 +147,7 @@ export class WholesalerEditComponent {
   ngOnInit() {
     this.getBanks();
     this.getWsRoles();
+    this.getCountryList();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
     
@@ -159,6 +169,7 @@ export class WholesalerEditComponent {
       branchShop: [false],
       formBranchStore: this.formBuilder.array([]),
       role_id: ["", [Validators.required]],
+      country: [""],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -234,6 +245,10 @@ export class WholesalerEditComponent {
       this.setFormAbility();
 
     }
+  }
+
+  handleCountryPhone(event){
+    this.country_phone = event.value === 'KH' ? "+855" : "+62";
   }
 
   initArea() {
@@ -330,12 +345,24 @@ export class WholesalerEditComponent {
 
     }
     const detailws = this.detailWholesaler;
+    if (this.detailWholesaler.country) {
+      this.country_phone = this.detailWholesaler.country === 'KH' ? "+855" : "+62";
+    } else {
+      if (this.detailWholesaler.phone) {
+        if ((this.detailWholesaler.phone).includes('+62')) {
+          this.country_phone = "+62";
+        } else if ((this.detailWholesaler.phone).includes('+855')) {
+          this.country_phone = "+855";
+        }
+      }
+    }
+
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
-      phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.formatPhoneNumber(this.detailWholesaler.phone) : parseInt(this.detailWholesaler.phone.split("+62")[1])) : '',
+      phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.formatPhoneNumber(this.detailWholesaler.phone) : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1])) : '',
       status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
@@ -348,6 +375,7 @@ export class WholesalerEditComponent {
       gsw: this.detailWholesaler.gsw === 1 ? 'on' : 'off',
       formBranchStore: [],
       role_id: this.detailWholesaler.role_id,
+      country: this.detailWholesaler.country,
     });
     let roleIdValidator = [Validators.required];
     if (this.detailWholesaler.is_branch) roleIdValidator = [];
@@ -415,6 +443,17 @@ export class WholesalerEditComponent {
     this.wholesalerService.getWsRoles().subscribe(({data}) => {
       this.wsRoles = (data) ? data : [];
     })
+  }
+  getCountryList(){
+    this.helpService.getCountry().subscribe(
+      res => {
+        this.countryList = res.data;
+      },
+      err => {
+        this.countryList = [];
+        console.error(err);
+      }
+    );
   }
 
   filteringBanks() {
@@ -621,7 +660,7 @@ export class WholesalerEditComponent {
         address: this.formWs.get("address").value,
         business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
-        phone: '+62' + this.formWs.get("phone").value,
+        phone: this.country_phone + this.formWs.get("phone").value,
         areas: this.list['territory'].filter(item => item.id === this.formWs.get('territory').value).map(item => item.id),
         status: this.formWs.get("status").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
@@ -630,6 +669,7 @@ export class WholesalerEditComponent {
         branch: this.formBankAccount.get("branch").value === "" ? null : this.formBankAccount.get("branch").value,
         gsw: this.formWs.get("gsw").value === 'on' ? 1 : 0,
         role_id: (!this.detailWholesaler.is_branch) ? this.formWs.get('role_id').value : undefined,
+        country: this.formWs.get("country").value,
       };
 
       if (this.formWs.get("branchShop").value === true) {
@@ -738,6 +778,11 @@ export class WholesalerEditComponent {
 
     }
 
+    if (!this.isCan(['ubah', 'country'])) {
+      const fields = ['country'];
+      this.disableFields(fields);
+    }
+
     if (!this.isCan(['ubah', 'profile_toko'])) {
 
       const fields = ['name', 'address', 'code', 'owner'];
@@ -788,6 +833,52 @@ export class WholesalerEditComponent {
       this.disableSubmit = true;
     }
 
+  }
+
+  openKtp() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      uuid: this.detailWholesaler.uuid
+    };
+    this.wholesalerService.showKtp(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
+  }
+
+  openNpwp() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      uuid: this.detailWholesaler.uuid
+    };
+    this.wholesalerService.showNpwp(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }

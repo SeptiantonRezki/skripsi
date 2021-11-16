@@ -194,7 +194,7 @@
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
               <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
-              <div fxFlex="40" class="h2">IDR {{task.total_budget}}</div>
+              <div fxFlex="40" class="h2">{{ ls.locale.global.currency_code }} {{task.total_budget}}</div>
             </div>
           </mat-card>
         </div>
@@ -207,7 +207,7 @@
           </mat-card>
         </div>
         <div fxFlex="10">
-          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
+          <button id="btn-simpan" mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
         </div>
       </div>
     </div>

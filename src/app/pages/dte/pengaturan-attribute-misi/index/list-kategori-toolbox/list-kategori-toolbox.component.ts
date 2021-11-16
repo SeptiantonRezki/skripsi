@@ -130,8 +130,28 @@ export class ListKategoriToolboxComponent implements OnInit {
       },
       err => {
         this.onLoad = false;
+      },
+      () => {
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1000);
       }
     );
+  }
+
+  addObjectToTable(){
+    const toolbox = document.getElementById('table-toolbox');
+    toolbox.querySelector("datatable-body").id = "datatable-body";
+
+    let rows = toolbox.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      rows[index].id = 'data-row';
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';
+      }
+    }
   }
 
   onSelect({ selected }) {

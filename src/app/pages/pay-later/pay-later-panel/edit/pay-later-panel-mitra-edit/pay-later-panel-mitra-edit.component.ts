@@ -12,7 +12,8 @@ import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.ser
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
-
+import { LanguagesService } from 'app/services/languages/languages.service';
+import * as _ from 'underscore';
 @Component({
   selector: 'app-pay-later-panel-mitra-edit',
   templateUrl: './pay-later-panel-mitra-edit.component.html',
@@ -61,6 +62,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
   @Output()
   onRowsSelected = new EventEmitter<any>();
+  beforeChangesSelected = [];
+  closeConfirm = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -70,7 +73,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
     private mitraPanelService: PayLaterPanelService,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -220,6 +224,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
         }
         setTimeout(() => {
           this.onSelect({ selected: res && res.data && res.data.mitra ? filteredMitra : [] });
+          this.beforeChangesSelected = [...filteredMitra];
           this.getPanelMitraList();
         }, 800);
       }, err => {
@@ -525,8 +530,38 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
     // alert('Open console to see the error')
   }
 
+  popUpConfirm(): void {
+    const beforeUnselected = _.pluck(this.beforeChangesSelected, 'id');
+    this.selected.map(item => {
+      const i = beforeUnselected.indexOf(item.id);
+      if(i >=0) {
+        beforeUnselected.splice(i, 1);
+      }
+    });
+
+    if( beforeUnselected.length ) {
+      let data = {
+        titleDialog: "PERINGATAN",
+        captionDialog: "Unwhitelist Mitra akan berdampak ke SRC yang menjadi downline. Pastikan melakukan unwhitelist SRC Downline dari mitra tersebut terlebih dahulu sebelum melakukan unwhitelist Mitra",
+        confirmCallback: this.submit.bind(this),
+        buttonText: ["Lanjutkan", "Batal"]
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+      this.closeConfirm = true;
+    } else {
+
+      this.closeConfirm = false;
+
+      this.submit();
+
+    }
+  }
+
   submit() {
     if (this.formPanelMitra.valid) {
+
+      if(this.closeConfirm) this.dialogService.brodcastCloseConfirmation();
+      
       if (this.selected.length === 0) {
 
         this.dialogService.openSnackBar({
@@ -556,7 +591,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
       this.mitraPanelService.store(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(['paylater', 'panel']);
 

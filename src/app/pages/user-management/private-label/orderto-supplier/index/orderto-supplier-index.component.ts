@@ -7,14 +7,16 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { FormGroup, FormBuilder } from "@angular/forms";
-import * as moment from "moment";
+import moment from 'moment';
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 import { GeneratePO } from "app/classes/generate-po";
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Endpoint } from '../../../../../classes/endpoint';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { OrdertoSupplierService } from 'app/services/user-management/private-label/orderto-supplier.service';
+import { WholesalerService } from 'app/services/user-management/wholesaler.service';
+import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
 
 @Component({
   selector: 'app-orderto-supplier-index',
@@ -58,6 +60,10 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  profileType: string = '';
+  HIDE_FOR = ['supplier'];
+
+  dialogRef: any;
 
   constructor(
     private dataService: DataService,
@@ -67,6 +73,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private convertRp: RupiahFormaterWithoutRpPipe,
+    private wholesalerService: WholesalerService,
+    private dialog: MatDialog,
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");
@@ -84,6 +92,8 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       .subscribe(data => {
         this.updateFilter(data);
       });
+    const profile = this.dataService.getDecryptedProfile() || {};
+    this.profileType = profile.type || '';
   }
 
   initFilter() {
@@ -237,10 +247,53 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     // this.loadingIndicator = true;
     this.dataService.showLoading(true);
     this.pagination.search = string;
+    let params = {};
 
     delete this.pagination.page;
     this.offsetPagination = 0;
     let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+
+    if (this.formFilter.get("status").value) {
+      this.pagination.status = this.formFilter.get("status").value;
+      params['status'] = this.pagination.status
+    } else {
+      delete this.pagination.status;
+      delete params['status'];
+    }
+    if (this.formFilter.get("from").value && this.formFilter.get("to").value) {
+      this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
+      this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
+      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xls`;
+      params['start_date'] = this.pagination.start_date;
+      params['end_date'] = this.pagination.end_date;
+    } else {
+      delete this.pagination.start_date;
+      delete this.pagination.end_date;
+      delete params['start_date'];
+      delete params['end_date'];
+    }
+    try {
+      const response = await this.ordertoSupplierService.export(params).toPromise();
+      // console.log('he', response.headers);
+      this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  async exportXLS() {
+    // this.loadingIndicator = true;
+    this.dataService.showLoading(true);
+    // this.pagination.search = string;
+
+    delete this.pagination.page;
+    this.offsetPagination = 0;
+    let fileName = `Export_Order_To_Supplier_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
 
     if (this.formFilter.get("status").value) {
       this.pagination.status = this.formFilter.get("status").value;
@@ -256,7 +309,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
       delete this.pagination.end_date;
     }
     try {
-      const response = await this.ordertoSupplierService.exportPO(this.pagination).toPromise();
+      const response = await this.ordertoSupplierService.export(this.pagination).toPromise();
       // console.log('he', response.headers);
       this.downLoadFile(response, "data:application/vnd.ms-excel", fileName);
       // this.downloadLink.nativeElement.href = response;
@@ -376,6 +429,29 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     } else {
       this.dialogService.openSnackBar({ message: "Tidak ada dokumen yang dapat dilihat!" });
     }
+  }
+
+  openDocumentOrder(row) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'popup-notif';
+
+    this.dataService.showLoading(true);
+
+    const body = {
+      invoice_number: row.invoice_number
+    };
+    this.wholesalerService.showDocumentOrder(body).subscribe(res => {
+      dialogConfig.data = {
+        blob: res
+      };
+      this.dialogRef = this.dialog.open(PopUpImageBlobComponent, dialogConfig);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }

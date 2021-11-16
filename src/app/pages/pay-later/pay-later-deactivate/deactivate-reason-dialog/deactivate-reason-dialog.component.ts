@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-deactivate-reason-dialog',
@@ -26,7 +27,8 @@ export class DeactivateReasonDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
     private deactivatePayLaterService: PayLaterDeactivateService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.payload = data;
     this.reasonForm = this.formBuilder.group({
@@ -53,7 +55,7 @@ export class DeactivateReasonDialogComponent implements OnInit {
 
       this.deactivatePayLaterService.approval(body, { deactivation_id: this.payload.row.id }).subscribe(res => {
         this.dialogService.openSnackBar({
-          message: "Data berhasil disimpan!"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.dataService.showLoading(false);
         this.dialogRef.close(res);

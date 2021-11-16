@@ -13,6 +13,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { IdbService } from 'app/services/idb.service';
 import { Observable, Subject } from 'rxjs';
 import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-coin-disburstment-exchange',
@@ -63,6 +64,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   files: File;
   dialogRef: any;
 
+  // Untuk Edit
+  detailCoin: any;
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -73,8 +77,11 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     private geotreeService: GeotreeService,
     private groupTradeProgramService: GroupTradeProgramService,
     private idbService: IdbService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
+    this.detailCoin = this.dataService.getFromStorage("detail_coin_disburstment");
+
     this.adapter.setLocale('id');
     this.rows = [];
     this.onLoad = true;
@@ -117,7 +124,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = {};
+    dialogConfig.data = {name : this.formFilterExchange.get('name').value};
 
     this.dialogRef = this.dialog.open(ImportExchangeCoinComponent, dialogConfig);
 
@@ -142,6 +149,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       opsi_penukaran: ["all"],
       payment_status: ["all"],
     })
+
+    this.formFilterExchange.get('name').setValue(this.detailCoin.name);
+    this.formFilterExchange.get('name').disable();    
 
     this.initAreaV2();
 
@@ -274,6 +284,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
+    this.pagination['coin_disbursement_id'] = this.detailCoin.id;
 
     if (this.formFilterExchange.get("group_trade_program").value) {
       this.pagination['group'] = this.formFilterExchange.get("group_trade_program").value;
@@ -708,7 +719,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     return newLastSelfArea;
   }
 
-  async exportExchange() {
+  async exportExchange(isDetail: boolean) {
     this.dataService.showLoading({ show: true });
     const params = {
       area: this.pagination['area'],
@@ -716,6 +727,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       last_self_area: this.pagination['last_self_area'],
       after_level: this.pagination['after_level'],
       group: this.pagination['group'],
+      coin_disbursement_id: this.detailCoin.id
     }
 
     if (this.formFilterExchange.get("group_trade_program").value) {
@@ -735,15 +747,28 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this.coinDisburstmentService.exportExchange(params).subscribe(res => {
-        this.downloadLink.nativeElement.href = res.data;
-        this.downloadLink.nativeElement.click();
-        this.dataService.showLoading(false);
-      }, err => {
-        console.warn('err', err);
-        alert('Terjadi kesalahan saat mendownload Data List Penukaran')
-        this.dataService.showLoading(false);
-      })
+      if (isDetail) {        
+        this.coinDisburstmentService.exportDetail(params).subscribe(res => {
+          this.downloadLink.nativeElement.href = res.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, err => {
+          console.warn('err', err);
+          alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+          this.dataService.showLoading(false);
+        })
+      }
+      else{
+        this.coinDisburstmentService.exportExchange(params).subscribe(res => {
+          this.downloadLink.nativeElement.href = res.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, err => {
+          console.warn('err', err);
+          alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+          this.dataService.showLoading(false);
+        })
+      }
     } catch (error) {
       this.dataService.showLoading(false);
       throw error;

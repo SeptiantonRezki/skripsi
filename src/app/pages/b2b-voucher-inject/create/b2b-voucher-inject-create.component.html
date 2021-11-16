@@ -25,12 +25,25 @@
                   </button>
                 </div>
               </div>
-              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-16" style="margin-left: 25px;">
 
                 <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
                   <mat-form-field fxFlex="100">
                     <mat-select placeholder="Penggunaan Voucher" formControlName="opsiVoucher">
                       <mat-option *ngFor="let ovl of opsiVoucherList" [value]="ovl.value">{{ ovl.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center" *ngIf="(formDetilVoucher.get('opsiVoucher').value === 'private-label')">
+                  <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Nama Supplier" formControlName="supplier_company_id">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="filterSupplier" placeholderLabel="Cari Supplier..."></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of filteredSupplier | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -79,7 +92,7 @@
                 </div>
 
                 <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
-                  <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'b2b' || formDetilVoucher.get('opsiVoucher').value == 'both'">
+                  <div fxFlex="50" fxLayout="column" *ngIf="['b2b','private-label'].includes(formDetilVoucher.get('opsiVoucher').value) || formDetilVoucher.get('opsiVoucher').value == 'both'">
                     <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                       <span class="opsi-type">Produk B2B</span>
                       <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -207,10 +220,10 @@
         </mat-tab>
         <mat-tab label="Panel Mitra" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'src-catalogue'">
           <app-panel-mitra-voucher (refreshDetail)="onRefreshDetail()" [statusVoucher]="detailVoucher.status"
-            [permissions]="permission">
+            [permissions]="permission" [voucherId]="detailVoucher.id">
           </app-panel-mitra-voucher>
         </mat-tab>
-        <mat-tab label="Panel Retailer" *ngIf="isDetail || isEdit">
+        <mat-tab label="Panel Retailer" *ngIf="(isDetail || isEdit) && formDetilVoucher.get('opsiVoucher').value !== 'private-label'">
           <div class="ayo-middle p-24" fxLayout="column">
             <div>
               <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
@@ -314,44 +327,44 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+                <ngx-datatable-column name="{{ ls.locale.global.label.store_name}}" prop="name" [sortable]="true">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.name || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.owner || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Classification" prop="classification" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.classification || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Kode WS" prop="ws_code" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="ws_code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_code || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nama WS" prop="ws_name" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="ws_name" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <span class="row-address">{{row.ws_name || '-'}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Jumlah Voucher" prop="amount">
+                <ngx-datatable-column name="{{ ls.locale.cn_reward.inject_b2b_voucher.text4 }}" prop="amount">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     {{row.amount | rupiahFormaterWithoutRp}}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nilai Voucher" prop="nominal">
+                <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}" prop="nominal">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                    {{row.nominal | rupiahFormater}}
+                    {{ row.nominal_format_currency }}
                   </ng-template>
                 </ngx-datatable-column>
               </ngx-datatable>
@@ -359,13 +372,13 @@
                 *ngIf="isEdit && extraPermission()">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSavePanelRetailer()">
-                  SIMPAN
+                  {{ ls.locale.global.button.save }}
                 </button>
               </div>
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Penukaran Voucher" *ngIf="isDetail || isEdit">
+        <mat-tab label="{{ ls.locale.cn_reward.b2c_voucher.text7 }}" *ngIf="isDetail || isEdit">
           <app-redeem-list></app-redeem-list>
         </mat-tab>
       </mat-tab-group>

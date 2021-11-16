@@ -1,0 +1,286 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+    <!-- HEADER -->
+    <page-content-header [contentTitle]="'Edit KPI Setting'"></page-content-header>
+    <!-- / HEADER -->
+  
+    <div class="content p-24">
+      <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+        <form [formGroup]="formKPI">
+          <div class="ayo-top px-24" fxLayout="row" fxLayoutAlign="space-between center">
+            <h3 class="font-weight-700">Edit KPI Group</h3>
+            <!-- <button *ngIf="enableEdit" -->
+            <button 
+              mat-raised-button type="button" color="primary" (click)="addKPI()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="column">
+            <mat-form-field fxLayout="row wrap" class="is-light form-primary">
+              <mat-select placeholder="Start KPS" formControlName="start_kps">
+                <!-- [disabled]="!enableEdit"> -->
+                <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.start_date  | date:'dd/MM/yyyy'}})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formKPI.controls['start_kps'].hasError('required') && formKPI.controls['start_kps'].touched">
+                Start KPS harus diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxLayout="row wrap" class="is-light form-primary">
+              <mat-select placeholder="End KPS" formControlName="end_kps">
+                <!-- [disabled]="!enableEdit"> -->
+                <mat-option *ngFor="let item of KPSList" [value]="item.id">{{item.kps_number}} ({{item.end_date  | date:'dd/MM/yyyy'}})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formKPI.controls['end_kps'].hasError('required') && formKPI.controls['end_kps'].touched">
+                End KPS harus diisi
+              </mat-error>
+            </mat-form-field>
+            <div fxLayout="row">
+            <!-- <div fxLayout="row" *ngIf="enableEdit"> -->
+              <h3>
+                <mat-slide-toggle formControlName="status">
+                  Status
+                </mat-slide-toggle>
+              </h3>
+            </div>
+            <!-- <div fxLayout="row" *ngIf="!enableEdit">
+              <h3>Status: <span class="text-boxed mat-green-700-bg">active</span></h3>
+            </div> -->
+            <div class="table-wrapper" *ngIf="existingAreas && existingAreas.length > 0">
+              <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+                <h3 class="pl-8">Existing Areas</h3>
+              </div>
+              <ngx-datatable class="material" [rows]="existingAreas" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+                [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+                [count]="existingAreas.length" [externalSorting]="false">
+
+                <!-- <ngx-datatable-column name="Area ID" prop="id" [width]="24">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-id">{{row.id}}</span>
+                  </ng-template>
+                </ngx-datatable-column> -->
+                <ngx-datatable-column name="Code" prop="code">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <span class="row-code" >{{row.code}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <!-- <ngx-datatable-column *ngIf="enableEdit" -->
+                <ngx-datatable-column
+                  [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+                    style="justify-content: center !important">
+                    <div class="button-row" style="margin-left: -10px">
+                      <button mat-icon-button color="" (click)="deleteArea(row.id)">
+                        <mat-icon class="secondary-text">delete</mat-icon>
+                      </button>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+            </div>
+            <!-- <h3 *ngIf="enableEdit && existingAreas && existingAreas.length > 0">Add Areas:</h3> -->
+            <h3 *ngIf="existingAreas && existingAreas.length > 0">Add Areas:</h3>
+            <!-- <form [formGroup]="formFilter" autoComplete="off" *ngIf="enableEdit"> -->
+            <form [formGroup]="formFilter" autoComplete="off">
+              <div
+                fxLayout="row wrap"
+                fxLayoutAlign="space-between stretch"
+                fxLayout.lt-md="column"
+                class="pt-16"
+                fxLayoutGap="20px"
+                fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="National" formControlName="national">
+                    <mat-option
+                      *ngFor="let item of listLevelArea"
+                      [value]="item.id"
+                      >{{ item.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['zone'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all" ? "Semua
+                      Zona" : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select
+                    placeholder="Regional"
+                    formControlName="region"
+                    multiple
+                  >
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['region'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all"
+                          ? "Semua
+                      Regional"
+                          : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['area'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all" ? "Semua
+                      Area" : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select
+                    placeholder="Salespoint"
+                    formControlName="salespoint"
+                    multiple
+                  >
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['salespoint'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all"
+                          ? "Semua
+                      Salespoint"
+                          : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select
+                    placeholder="District"
+                    formControlName="district"
+                    multiple
+                  >
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['district'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all"
+                          ? "Semua
+                      District"
+                          : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select
+                    placeholder="Territory"
+                    formControlName="territory"
+                    multiple
+                  >
+                    <mat-option
+                      *ngFor="let item of filteringGeotree(list['territory'])"
+                      [value]="item.id"
+                      >{{
+                        item.name === "all"
+                          ? "Semua
+                      Territori"
+                          : item.code
+                      }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                
+              </div>
+            </form>
+            <div class="" formArrayName="kpis" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
+              <div [formGroupName]="i">
+                <div class="mb-16 kpi" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50">
+                    <h3 class="">KPI {{i+1}}</h3>
+                  </div>
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                    fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <!-- <button *ngIf="enableEdit && i !== 0" -->
+                    <button *ngIf="i !== 0"
+                      mat-raised-button color="primary" type="button"
+                      (click)="moveUp(i)">
+                      <mat-icon>arrow_upward</mat-icon>
+                    </button>
+                    <!-- <button *ngIf="enableEdit && i !== (formKPI.get('kpis').value.length - 1)" -->
+                    <button *ngIf="i !== (formKPI.get('kpis').value.length - 1)"
+                      mat-raised-button color="primary" type="button"
+                      (click)="moveDown(i)">
+                      <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                    <!-- <button
+                      *ngIf="enableEdit && (formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1))" -->
+                    <button
+                      *ngIf="(formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1))"
+                      mat-raised-button type="button" (click)="addKPI()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <!-- <button mat-raised-button color="primary" type="button" *ngIf="enableEdit" -->
+                    <button mat-raised-button color="primary" type="button"
+                      (click)="deleteKPI(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="pb-8 px-24">
+                  <mat-form-field fxLayout="row wrap" class="is-light form-primary">
+                    <!-- <mat-select placeholder="Kategori KPI" formControlName="category" [disabled]="!enableEdit" (selectionChange)="resetKPIDetail(i)"> -->
+                    <mat-select placeholder="Kategori KPI" formControlName="category" (selectionChange)="resetKPIDetail(i)">
+                      <mat-option *ngFor="let item of categories" [value]="item">{{item | toCapitalize}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="kpi.controls['category'].hasError('required') && kpi.controls['category'].touched">
+                      Kategori KPI harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'"
+                    fxLayout="row wrap" class="is-light form-primary">
+                    <!-- <mat-select placeholder="Brand" formControlName="brand" [disabled]="!enableEdit"> -->
+                    <mat-select placeholder="Brand" formControlName="brand">
+                      <mat-option *ngFor="let item of brands" [value]="item.code">{{ item.code }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
+                      Brand harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="kpi.get('category').value == 'brand' || kpi.get('category').value == 'trade program'"
+                    fxLayout="row wrap" class="is-light form-primary">
+                    <!-- <mat-select *ngIf="kpi.get('category').value == 'brand'" [disabled]="!enableEdit" placeholder="Parameter" formControlName="parameter"> -->
+                    <mat-select *ngIf="kpi.get('category').value == 'brand'" placeholder="Parameter" formControlName="parameter">
+                      <mat-option *ngFor="let item of brand_parameters" [value]="item.parameter">{{ item.parameter }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-select *ngIf="kpi.get('category').value == 'trade program'" [disabled]="!enableEdit" placeholder="Parameter" formControlName="parameter"> -->
+                    <mat-select *ngIf="kpi.get('category').value == 'trade program'" placeholder="Parameter" formControlName="parameter">
+                      <mat-option *ngFor="let item of trade_program_objectives" [value]="item.objective_description">{{ item.objective_description }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
+                      Parameter harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="confirm btn-confirm px-24 py-48" fxLayout="row" fxLayoutGap="25px">
+              <!-- <button mat-raised-button type="button" [disabled]="!enableEdit" class="confirmation-button" fxFlex="20" (click)="submit()"> -->
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                SIMPAN
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

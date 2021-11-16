@@ -99,17 +99,17 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+      <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name" [sortable]="true">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.name || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.code || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="true">
+      <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner" [sortable]="true">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.owner || '-'}}</span>
         </ng-template>
@@ -129,7 +129,7 @@
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="isEdit && extraPermission()">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onSave()">
-        SIMPAN
+        {{ ls.locale.global.button.save }}
       </button>
     </div>
   </div>

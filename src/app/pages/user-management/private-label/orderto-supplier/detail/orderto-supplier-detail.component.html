@@ -236,9 +236,19 @@
                       </div>
                     </div>
                     <div style="text-align: right; font-size:18px">
+                      Voucher Belanja
+                      <span style="font-size: 18px; font-weight: 600;">Rp {{totalDiscount |
+                        rupiahFormaterWithoutRp}}</span>
+                    </div>
+                    <div style="text-align: right; font-size:18px">
+                      Total Nilai Pemesanan/Preorder
+                      <span style="font-size: 18px; font-weight: 600;">{{total -
+                        totalDiscount | rupiahFormaterWithoutRp}}</span>
+                    </div>
+                    <!-- <div style="text-align: right; font-size:18px">
                       Total Nilai Pemesanan/Preorder
                       <span style="font-size: 18px; font-weight: 600;">Rp {{total | rupiahFormaterWithoutRp}}</span>
-                    </div>
+                    </div> -->
                     <!-- <div class="pt-8 border-bottom-custom"></div> -->
                     <br>
                     <div class="text-center">
@@ -256,7 +266,7 @@
         </mat-tab>
         <mat-tab label="Dokumen">
           <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
-            <img class="attachment-img" id="image4" [src]="detailOrder?.document_image_url" />
+            <img class="attachment-img" id="image4" [src]="documentOrderUrl" />
           </div>
           <div fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
             <mat-form-field fxFlex="30">

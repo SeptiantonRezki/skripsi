@@ -18,6 +18,7 @@ export class Page {
   category_id: any;
   type: string;
   type_banner: string;
+  notification_id: any;
   
   constructor() {
     this.per_page = 15;
@@ -45,5 +46,8 @@ export class Page {
   }
   public setType(type) {
     this.type = type;
+  }
+  public renderFilters(pagination, filters) {
+    Object.keys(filters).map(keyFilter => { pagination[keyFilter] = filters[keyFilter] })
   }
 }

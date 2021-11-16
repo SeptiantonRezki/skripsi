@@ -1,0 +1,164 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="Pengajuan Produk DB">
+    <button
+      *ngIf="permission.pengaturan_approval"
+      style="min-width: 170px"
+      [routerLink]="['/sku-management', 'db-product-submission', 'approval']"
+      mat-raised-button
+      aria-label="Produk"
+      type="button"
+    >
+      <mat-icon style="font-size: 20px; margin-right: 6px">settings</mat-icon
+      >Pengaturan Approval
+    </button>
+  </page-content-header>
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="p-20">
+        <h2 style="margin: unset">Daftar Produk</h2>
+        <div class="search-field">
+          <input
+            matInput
+            placeholder="Cari"
+            (keyup)="keyUp.next($event.target.value)"
+            autocomplete="off"
+          />
+          <mat-icon style="font-size: 20px">search</mat-icon>
+        </div>
+      </div>
+      <div
+        *ngIf="onLoad"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="py-48"
+      >
+        <mat-spinner
+          [strokeWidth]="6"
+          [diameter]="50"
+          color="accent"
+        ></mat-spinner>
+      </div>
+      <div *ngIf="!onLoad">
+        <ngx-datatable
+          class="material"
+          [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
+          [columnMode]="'force'"
+          [offset]="offsetPagination"
+          [headerHeight]="48"
+          [footerHeight]="56"
+          [rowHeight]="'auto'"
+          [scrollbarH]="true"
+          [reorderable]="reorderable"
+          [count]="pagination.total"
+          [limit]="pagination.per_page"
+          [externalPaging]="true"
+          [externalSorting]="true"
+          (page)="setPage($event)"
+          (sort)="onSort($event)"
+          (select)="onSelect($event)"
+        >
+          <ngx-datatable-column name="Nama Produk" prop="name">
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span>{{ row.name }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Barcode" prop="barcode">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Perusahaan" prop="brand">
+            <ng-template ngx-datatable-cell-template let-value="value">
+              {{ value || "-" }}</ng-template
+            >
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="88"
+            name="Kategori"
+            prop="category"
+          ></ngx-datatable-column>
+          <ngx-datatable-column name="Status" prop="status" [sortable]="false">
+            <ng-template let-column="column" ngx-datatable-header-template>
+              <div
+                class="datatable-header-cell-label draggable"
+                style="
+                  display: inline-block;
+                  height: 48px;
+                  line-height: 48px;
+                  width: 150px;
+                  cursor: pointer;
+                "
+                [matMenuTriggerFor]="statusMenu"
+              >
+                {{ column.name
+                }}{{
+                  approvalStatusActive && approvalStatusActive !== "Semua"
+                    ? " - " + approvalStatusActive
+                    : ""
+                }}
+              </div>
+              <mat-menu #statusMenu="matMenu" yPosition="below">
+                <button
+                  mat-menu-item
+                  *ngFor="let item of approvalStatus"
+                  (click)="approvalStatusChange(item)"
+                >
+                  {{ item.name }}
+                </button>
+              </mat-menu>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="100"
+            name="Tindakan"
+            headerClass="textright"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div class="button-row" style="white-space: nowrap">
+                <button
+                  mat-icon-button
+                  color=""
+                  matTooltip="Ubah Produk"
+                  class="mat-custom-icon"
+                  [routerLink]="[
+                    '/sku-management',
+                    'db-product-submission',
+                    'detail',
+                    row.id
+                  ]"
+                  [disabled]="row.status !== approverType"
+                >
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Hapus Produk"
+                  class="mat-custom-icon"
+                  (click)="disapproveProduct(row)"
+                  [disabled]="row.status !== approverType"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-src-catalogue-create',
@@ -30,7 +31,8 @@ export class UserSrcCatalogueCreateComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
+    private ls: LanguagesService
   ) {
     this.submitting = false;
     this.verticalStepperStep1Errors = {
@@ -86,7 +88,7 @@ export class UserSrcCatalogueCreateComponent implements OnInit {
       this.userCatalogueService.create(body).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: "Data Berhasil Disimpan"
+          message: this.ls.locale.notification.popup_notifikasi.text22
         });
         this.router.navigate(["src-catalogue", "users"]);
       }, err => {

@@ -7,7 +7,7 @@ import { DialogService } from "app/services/dialog.service";
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from "@angular/forms";
 import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
 import html2canvas from "html2canvas";
-import * as moment from "moment";
+import moment from 'moment';
 import { QzTrayService } from "app/services/qz-tray.service";
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 import { GeneratePO } from "app/classes/generate-po";
@@ -19,7 +19,8 @@ import { Observable } from "rxjs/Observable";
 import { OrdertoSupplierService } from "app/services/user-management/private-label/orderto-supplier.service";
 import { QiscusService } from "app/services/qiscus.service";
 import { PagesName } from "app/classes/pages-name";
-
+import * as _ from 'underscore';
+import { WholesalerService } from "app/services/user-management/wholesaler.service";
 
 @Component({
   selector: 'app-orderto-supplier-detail',
@@ -55,11 +56,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
   stateUpdated: Boolean;
   productsNota: any[] = [];
   total: any;
+  totalDiscount: number;
   static EDITABLE_IF_STATUS = ['baru', 'diproses', 'konfirmasi-perubahan'];
   document: FormControl = new FormControl('');
   permission: any;
   roles: PagesName = new PagesName();
 
+  documentOrderUrl: string;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -83,6 +86,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
     private emitter: Emitter,
     private ordertoSupplierService: OrdertoSupplierService,
     private qs: QiscusService,
+    private wholesalerService: WholesalerService,
   ) {
     this.permission = this.roles.getRoles('principal.supplierorder');
     // console.log('roles',this.permission);
@@ -162,9 +166,26 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
           this.productsNota = products;
           this.total = 0;
+          this.totalDiscount = 0;
           if (this.detailOrder.document) {
             this.document.setValue(this.detailOrder.document);
           }
+
+          const body = {
+            invoice_number: res.invoice_number
+          }
+          this.wholesalerService.showDocumentOrder(body).subscribe(res => {
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+              this.documentOrderUrl = reader.result;
+            }, false);
+
+            if (res) {
+              reader.readAsDataURL(res);
+            }
+          }, err => {
+            console.log("Gagal load foto");
+          });
 
           this.editable = false;
 
@@ -215,6 +236,11 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
               })
             );
           });
+
+          if (res && res.discounts && res.discounts.length) {
+            // CALC TOTAL DISCOUNT
+            this.calcVoucherDiscount(res.discounts, res.order_products, res.limit_by, res.limit_only);
+          }
           this.productsForm.controls['listProducts'].valueChanges.debounceTime(500).subscribe(res => {
             this.edited = true;
             this.editable = true;
@@ -224,8 +250,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             if (this.detailOrder.status === "selesai" || this.detailOrder.status === "pesanan-dibatalkan") {
               // const dayLimit = moment(new Date()).diff(moment(new Date(this.detailOrder.created_at)), 'days'); // day limit is 30 days chat hidden or deleted
               // if (dayLimit < 30) {
-                // this.initDataQiscus(res);
-                this.qiscusCheck(this.detailOrder); // check login qiscus
+              // this.initDataQiscus(res);
+              this.qiscusCheck(this.detailOrder); // check login qiscus
               // } else {
               //   this.emitter.emitChatIsOpen(false); // for open chat
               // }
@@ -546,6 +572,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           // discount_nota: this.convertRp.transform(obj.discount_nota)
         };
       }),
+      grand_total: this.convertRp.transform(this.total),
       total_str: this.convertRp.transform(this.total)
       // summary: 'TOTAL NILAI PO ' + this.total
       // this.detailOrder.summary.map(obj => {
@@ -556,6 +583,13 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       //   };
       // })
     };
+    if (this.totalDiscount) {
+      bodyHtml = {
+        ...bodyHtml,
+        grand_total: this.convertRp.transform(this.total - this.totalDiscount),
+        total_discount_str: this.convertRp.transform(this.totalDiscount),
+      }
+    }
 
     let popupWin;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -645,7 +679,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             console.log('q_error_013bb', qiscusError);
           });
         } else {
-          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!'});
+          this.dialogService.openSnackBar({ message: 'Chat tidak ditemukan!' });
         }
       });
     }
@@ -662,6 +696,44 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
       this.initLoginQiscus();
       // this.emitter.emitChatIsOpen(true);
     }
+  }
+
+  calcVoucherDiscount(discounts, order_products, limit_by, limit_only) {
+    
+    if(discounts && discounts.length) {
+
+      const voucherDiscount = _.findWhere(discounts, {source: 'voucher'});
+      let includeBy = null;
+      let subTotalEligible = 0;
+
+      if(!voucherDiscount.amount) {
+        this.totalDiscount = 0;
+        return;
+      }
+
+      if(!limit_by) { subTotalEligible = this.total; }
+      else if(limit_by === 'product') includeBy = 'sku_id';
+      else if(limit_by === 'category') includeBy = 'category_id';
+
+      if(includeBy) {
+        
+        order_products.map(product => {
+          product.category_id = `${product.category_id}`;
+          if(limit_only.includes(product[includeBy])) {
+            subTotalEligible += product.total_price;
+          }
+        })
+
+      }
+
+      if(subTotalEligible > voucherDiscount.amount) this.totalDiscount = voucherDiscount.amount;
+      else this.totalDiscount = subTotalEligible;
+    }
+
+    else this.totalDiscount = 0;
+
+    console.log({discounts, order_products, limit_by, limit_only, totalDiscount: this.totalDiscount});
+
   }
 
 }

@@ -6,7 +6,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { QiscusService } from 'app/services/qiscus.service';
 import { Observable, Subject } from 'rxjs';
-import * as moment from "moment";
+import moment from 'moment';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 
 @Component({

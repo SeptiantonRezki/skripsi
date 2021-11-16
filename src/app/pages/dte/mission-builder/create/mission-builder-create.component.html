@@ -64,6 +64,7 @@
         <mat-grid-tile>
           <div class="button-row">
             <button
+              id="btn-misi"
               mat-fab
               class="mr-2"
               color="primary"
@@ -74,7 +75,8 @@
               <mat-icon>assignment</mat-icon>
             </button>
 
-            <button
+            <button            
+              id="btn-push_notif"
               mat-fab
               class="mr-2"
               color="primary"
@@ -86,6 +88,7 @@
             </button>
 
             <button
+              id="btn-pop_up_notif"
               mat-fab
               class="mr-2"
               color="primary"
@@ -96,7 +99,7 @@
               <mat-icon>notifications_active</mat-icon>
             </button>
 
-            <button mat-fab class="mr-2" color="primary" matTooltip="Coin" (click)="newDialog('coin')" [disabled]="noCoin">
+            <button id="btn-coin" mat-fab class="mr-2" color="primary" matTooltip="Coin" (click)="newDialog('coin')" [disabled]="noCoin">
               <mat-icon>monetization_on</mat-icon>
             </button>
 
@@ -105,16 +108,17 @@
 
         <mat-grid-tile>
           <div class="button-row">
-            <button mat-fab class="mr-2" color="primary" matTooltip="Split Decision" (click)="newDialog('decision')" [disabled]="noDecision">
+            <button id="btn-split_decision" mat-fab class="mr-2" color="primary" matTooltip="Split Decision" (click)="newDialog('decision')" [disabled]="noDecision">
               <mat-icon>help</mat-icon>
             </button>
 
-            <button mat-fab class="mr-2" color="primary" matTooltip="Waktu Tunggu" (click)="newDialog('time')" [disabled]="noTime"
+            <button id="btn-tunggu" mat-fab class="mr-2" color="primary" matTooltip="Waktu Tunggu" (click)="newDialog('time')" [disabled]="noTime"
             >
               <mat-icon>access_time</mat-icon>
             </button>
 
             <button
+              id="btn-end"
               mat-fab
               class="mr-2"
               color="primary"
@@ -150,7 +154,7 @@
           <ng-template #nodeTemplate let-node>
             <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="100">
               <svg:foreignObject width="150" height="100">
-                <xhtml:div class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
+                <xhtml:div [id]="'card-'+node.data.type" class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
                   <button class="closeNode" (click)="delNode(node, $event);" *ngIf="task.is_editable === 1"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
                   <label class="activeNode" *ngIf="currentNode === node.data.component_id"><mat-icon style="font-size: 16px;">check</mat-icon></label>
                   <label *ngIf="node.data.type === 'mission'"><mat-icon>assignment</mat-icon></label>
@@ -193,7 +197,7 @@
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
               <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
-              <div fxFlex="40" class="h2">IDR {{budget}}</div>
+              <div fxFlex="40" class="h2">{{ ls.locale.global.currency_code }} {{budget}}</div>
             </div>
           </mat-card>
         </div>
@@ -206,7 +210,7 @@
           </mat-card>
         </div>
         <div fxFlex="10">
-          <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
+          <button id="btn-submit-mission-builder" mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
         </div>
       </div>
     </div>

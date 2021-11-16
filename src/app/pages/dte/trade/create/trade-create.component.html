@@ -11,7 +11,7 @@
           <div>
             <mat-form-field
               [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
-              <mat-select formControlName="status">
+              <mat-select formControlName="status" (click)="selectStatusTrade()">
                 <mat-option *ngFor="let item of statusTP" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -19,7 +19,7 @@
         </div>
         <br>
         <div class="ayo-middle" fxLayout="column">
-          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+          <div id="trade-create" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
             accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag">
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
@@ -92,8 +92,7 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program"
-                numericOnly>
+              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" min="0" formControlName="budget" placeholder="Dana Trade Program">
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi
@@ -120,7 +119,7 @@
           </div>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row">
-          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+          <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
             SIMPAN
           </button>
         </div>

@@ -9,7 +9,7 @@ import { DateAdapter } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { Emitter } from 'app/helper/emitter.helper';
 import { GeneralService } from 'app/services/general.service';
-import * as moment from "moment";
+import moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { QiscusService } from 'app/services/qiscus.service';
 import { StorageHelper } from 'app/helper/storage.helper';
@@ -57,6 +57,8 @@ export class OrderCatalogueComponent implements OnInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   offsetPagination: any;
+  grand_total_coin_nominal_rupiah: string;
+
   constructor(
     private dialogService: DialogService,
     private ordersService: OrderCatalogueService,
@@ -142,6 +144,8 @@ export class OrderCatalogueComponent implements OnInit {
 
     this.ordersService.get(this.pagination).subscribe(
       async res => {
+        if (res.data && res.data.grand_total_coin_nominal_rupiah) this.grand_total_coin_nominal_rupiah = res.data.grand_total_coin_nominal_rupiah;
+
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
         await this.getAndCreateRoomById(res.data);
@@ -171,6 +175,7 @@ export class OrderCatalogueComponent implements OnInit {
     }
 
     this.ordersService.get(this.pagination).subscribe(async res => {
+      if (res.data && res.data.grand_total_coin_nominal_rupiah) this.grand_total_coin_nominal_rupiah = res.data.grand_total_coin_nominal_rupiah;
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       // await this.getAndCreateRoomById(res.data);
@@ -198,6 +203,7 @@ export class OrderCatalogueComponent implements OnInit {
     console.log("check pagination", this.pagination);
 
     this.ordersService.get(this.pagination).subscribe(async res => {
+      if (res.data && res.data.grand_total_coin_nominal_rupiah) this.grand_total_coin_nominal_rupiah = res.data.grand_total_coin_nominal_rupiah;
       Page.renderPagination(this.pagination, res.data);
       // await this.getAndCreateRoomById(res.data);
       this.rows = res.data ? res.data.data : [];
@@ -223,6 +229,7 @@ export class OrderCatalogueComponent implements OnInit {
     this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
 
     this.ordersService.get(this.pagination).subscribe(async res => {
+      if (res.data && res.data.grand_total_coin_nominal_rupiah) this.grand_total_coin_nominal_rupiah = res.data.grand_total_coin_nominal_rupiah;
 
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];

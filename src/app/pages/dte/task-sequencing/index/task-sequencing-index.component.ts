@@ -70,7 +70,6 @@ export class TaskSequencingIndexComponent implements OnInit {
   }
 
   getSequencing() {
-
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -88,11 +87,32 @@ export class TaskSequencingIndexComponent implements OnInit {
         this.onLoad = false;
         this.loadingIndicator = false;
         console.log(res.data);
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1500);
       },
       err => {
         this.onLoad = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row';
+      // rows[index].id = 'data-row-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';
+        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);
+      }
+    }
   }
 
   onSelect({ selected }) {

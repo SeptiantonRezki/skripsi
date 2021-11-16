@@ -9,7 +9,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { GeotreeService } from 'app/services/geotree.service';
-import * as moment from "moment";
+import moment from 'moment';
 
 @Component({
   selector: 'app-pay-later-activation',

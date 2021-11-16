@@ -1,11 +1,12 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
+import { DialogService } from 'app/services/dialog.service';
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -17,6 +18,9 @@ export class DiaglogMisiComponent implements OnInit {
   pushFF: FormControl = new FormControl(false);
   verifikasi: FormControl = new FormControl(false);
   verifikasiFF: FormControl = new FormControl(false);
+  status_pin_up: FormControl = new FormControl(false);
+  non_coin_reward: FormControl = new FormControl(false);
+  isRewardError: boolean = false;
 
   missions: any[];
   minDate: any;
@@ -34,6 +38,7 @@ export class DiaglogMisiComponent implements OnInit {
     public dialogRef: MatDialogRef<DiaglogMisiComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
+    private dialogService: DialogService,
   ) { }
 
 
@@ -52,6 +57,9 @@ export class DiaglogMisiComponent implements OnInit {
       coin_submission: null,
       coin_verification: null,
       is_ir_template: null,
+      status_pin_up: this.status_pin_up,
+      non_coin_reward: this.non_coin_reward,
+      reward_description: [""]
     });
 
     this.filterMission.valueChanges
@@ -78,7 +86,8 @@ export class DiaglogMisiComponent implements OnInit {
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
         is_push_to_ff: this.data.data.attribute.is_push_to_ff,
-        is_ir_template: this.data.data.attribute.is_ir_template
+        is_ir_template: this.data.data.attribute.is_ir_template,
+        reward_description: this.data.data.attribute.reward_description
       });
       this.minDate = this.data.data.min_date;
       this.maxDate = this.data.data.max_date;
@@ -104,11 +113,36 @@ export class DiaglogMisiComponent implements OnInit {
         this.form.get('verifikasiFF').patchValue(false);
       }
 
+      if (this.data.data.attribute.status_pin_up === 0) {
+        this.form.get('status_pin_up').patchValue(false);
+      } else if (this.data.data.attribute.status_pin_up === 1) {
+        this.form.get('status_pin_up').patchValue(true);
+      }
+
+      if (this.data.data.attribute.non_coin_reward === 0) {
+        this.form.get('non_coin_reward').patchValue(false);
+      } else if (this.data.data.attribute.non_coin_reward === 1) {
+        this.form.get('non_coin_reward').patchValue(true);
+      }
+    }
+  }
+
+  selectForm(form: any){
+    const selectSearch = document.getElementById('select-search-'+form);
+    let inputTag = selectSearch.querySelectorAll('input');
+    for (let index = 0; index < inputTag.length; index++) {
+      inputTag[index].id = "search-"+form;
+    }
+    
+    let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
+    if (matOption) {
+      for (let index = 0; index < matOption.length; index++) {
+        matOption[index].querySelector('span').id = 'options';
+      }
     }
   }
 
   selectChangeMisi(e: any) {
-    // console.log(e);
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
 
@@ -310,6 +344,11 @@ export class DiaglogMisiComponent implements OnInit {
     } else if (e.source.name === 'push-to-ff' && e.checked === false) {
       this.form.get('is_push_to_ff').patchValue(0);
     }
+
+    if (e.source.name === 'non_coin_reward' && e.checked === false) {
+      this.form.get('reward_description').patchValue("");
+      this.isRewardError = false;
+    }
   }
 
   numberOnly(event): boolean {
@@ -327,7 +366,17 @@ export class DiaglogMisiComponent implements OnInit {
     return date;
   }
 
+  changeRewardDesc(event){
+    this.isRewardError = event.target.value.length ? false : true;
+  }
+
   submit(form: any) {
+    if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
+      this.isRewardError = true;
+      this.dialogService.openSnackBar({ message: 'Keterangan Reward harus diisi' });
+      return;
+    }
+
     this.form.get('coin_verification').enable();
     form.get('start_date').patchValue(this.formatDate(form.value.start_date));
     form.get('end_date').patchValue(this.formatDate(form.value.end_date));
@@ -339,6 +388,12 @@ export class DiaglogMisiComponent implements OnInit {
     form.get('is_push_to_ff').patchValue(
       (form.value.pushFF === false) ? 0 :
         (form.value.pushFF === true) ? 1 : ''
+    );
+    form.get('status_pin_up').patchValue(
+      (form.value.status_pin_up === true) ? 1 : 0
+    );
+    form.get('non_coin_reward').patchValue(
+      (form.value.non_coin_reward === true) ? 1 : 0
     );
     form.removeControl('verifikasi', null);
     form.removeControl('verifikasiFF', null);
@@ -358,6 +413,7 @@ export class DiaglogMisiComponent implements OnInit {
       min_date: this.minDate,
       max_date: this.maxDate
     }
+    console.log('update => ',returnObject);
     this.dialogRef.close(returnObject);
   }
 

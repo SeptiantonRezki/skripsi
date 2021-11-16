@@ -6,6 +6,7 @@ import { DialogService } from "../../../../services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-admin-principal-create",
@@ -39,6 +40,7 @@ export class AdminPrincipalCreateComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
@@ -482,7 +484,7 @@ export class AdminPrincipalCreateComponent {
       this.adminPrincipalService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Disimpan"
+            message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.router.navigate(["user-management", "admin-principal"]);
         },

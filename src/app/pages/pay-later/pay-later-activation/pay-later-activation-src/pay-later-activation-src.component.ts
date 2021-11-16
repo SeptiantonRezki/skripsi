@@ -8,7 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import * as moment from "moment";
+import moment from 'moment';
 
 @Component({
   selector: 'app-pay-later-activation-src',

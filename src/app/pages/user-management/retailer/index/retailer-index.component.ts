@@ -14,6 +14,7 @@ import { ImportAccessCashierDialogComponent } from '../import-access-cashier-dia
 import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-index',
@@ -65,10 +66,10 @@ export class RetailerIndexComponent {
   chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
 
-  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
   listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
   listStatusChatBot: any[] = [
-    { name: 'Semua Status', value: '-1' },
+    { name: this.ls.locale.global.label.all_status, value: '-1' },
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
@@ -84,15 +85,29 @@ export class RetailerIndexComponent {
 
   gsr: FormControl = new FormControl('');
   listGSR: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'OFF', value: '0' },
     { name: 'ON', value: '1' }
   ];
   gsm_pl: FormControl = new FormControl('');
   listGSM: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'OFF', value: '0' },
     { name: 'ON', value: '1' }
+  ];
+
+  pojok_bayar_validation: FormControl = new FormControl('');
+  listPojokBayar: any[] = [
+    { name: 'Semua Status', value: 'all' },
+    { name: 'FALSE', value: '0' },
+    { name: 'TRUE', value: '1' }
+  ];
+
+  bank_final_validation: FormControl = new FormControl('');
+  listBankFinalValidation: any[] = [
+    { name: 'Semua Status', value: 'all' },
+    { name: 'FALSE', value: '0' },
+    { name: 'TRUE', value: '1' }
   ];
 
   constructor(
@@ -103,7 +118,8 @@ export class RetailerIndexComponent {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -190,6 +206,14 @@ export class RetailerIndexComponent {
     });
 
     this.gsm_pl.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    });
+
+    this.pojok_bayar_validation.valueChanges.subscribe(res => {
+      this.getRetailerList();
+    });
+
+    this.bank_final_validation.valueChanges.subscribe(res => {
       this.getRetailerList();
     });
 
@@ -994,6 +1018,8 @@ export class RetailerIndexComponent {
     this.pagination['classification'] = this.retail_classification.value ? this.retail_classification.value : 'all';
     this.pagination['gsr_flag'] = this.gsr.value;
     this.pagination['gsm_pl'] = this.gsm_pl.value;
+    this.pagination['pojok_bayar_validation'] = this.pojok_bayar_validation.value;
+    this.pagination['bank_final_validation'] = this.bank_final_validation.value;
 
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
@@ -1008,6 +1034,8 @@ export class RetailerIndexComponent {
     if (this.chatbot.value === '') this.pagination['is_chat_bot'] = null;
     if (this.gsr.value === 'all') { delete this.pagination['gsr_flag']; }
     if (this.gsm_pl.value === 'all') { delete this.pagination['gsm_pl']; }
+    if (this.pojok_bayar_validation.value === 'all') { delete this.pagination['pojok_bayar_validation']; }
+    if (this.bank_final_validation.value === 'all') { delete this.pagination['bank_final_validation']; }
 
     this.loadingIndicator = true;
     this.retailerService.get(this.pagination).subscribe(

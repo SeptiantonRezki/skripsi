@@ -44,7 +44,7 @@
               </div>
             </div>
             <div *ngIf="!files && detailFormTrade.image_url">
-              <img class="previewBanner" [src]="detailFormTrade.image_url">
+              <img id="previewBanner" class="previewBanner" [src]="detailFormTrade.image_url">
             </div>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -100,8 +100,7 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program"
-                numericOnly>
+              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" min="0" formControlName="budget" placeholder="Dana Trade Program">
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 Dana Trade Program harus diisi

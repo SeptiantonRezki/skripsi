@@ -9,6 +9,7 @@ import { TemplateTaskService } from '../../../../services/dte/template-task.serv
 import { Endpoint } from '../../../../classes/endpoint';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-template-index',
@@ -81,7 +82,7 @@ export class TemplateIndexComponent implements OnInit {
     this.getListTingkatInternalMisi();
     this.getListTipeMisi();
     setTimeout(() => {
-    this.getTemplateTask();
+      this.getTemplateTask();
     }, 800);
   }
 
@@ -114,11 +115,32 @@ export class TemplateIndexComponent implements OnInit {
           this.onLoad = false;
           this.loadingIndicator = false;
         }
+        
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1000);
       },
       err => {
         this.onLoad = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+
+    let rows = document.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row';
+      // rows[index].id = 'data-row-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';          
+        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   load() {

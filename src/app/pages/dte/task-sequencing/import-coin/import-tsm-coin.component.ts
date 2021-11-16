@@ -33,6 +33,14 @@ export class ImportTsmCoinComponent {
   pagination: Page = new Page();
   selectedUser: any;
   parentData: any;
+  ENABLE_IMPORT_IF = ['done', 'failed'];
+  requestingPreview:boolean = false;
+  importing: boolean = false;
+  loadingIndicator = false;
+  previewPagination: Page = new Page();
+  offsetPagination: any;
+  dataPreview: any;
+  requestingImport:boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ImportTsmCoinComponent>,
@@ -49,6 +57,21 @@ export class ImportTsmCoinComponent {
       this.show = true;
     }
     this.parentData = data;
+    if (!this.ENABLE_IMPORT_IF.includes(data.import_coin_status) && data.import_coin_status_type === 'preview') {
+      this.requestingPreview = true;
+    } else {
+      this.getPreview(data);
+    }
+
+    if(!this.ENABLE_IMPORT_IF.includes(data.import_coin_status) && data.import_coin_status_type === 'import') {
+      
+      this.requestingImport = true;
+
+    } else {
+
+      this.requestingImport = false;
+
+    }
   }
 
   ngOnInit() {
@@ -64,6 +87,10 @@ export class ImportTsmCoinComponent {
       .subscribe(() => {
         this.filteringMission();
       });
+
+    setTimeout(() => {
+      document.getElementById("import-coin").getElementsByTagName("input")[0].id = "upload-file-import";
+    }, 500);
   }
 
   getUserList() {
@@ -76,6 +103,44 @@ export class ImportTsmCoinComponent {
         console.log("err ", err);
       }
     );
+  }
+  getPreview(data) {
+    const page = this.dataService.getFromStorage("import_tsm_coin_preview_page");
+    this.previewPagination.page = page;
+    this.offsetPagination = page ? (page - 1) : 0;
+
+
+    const body = {
+      task_sequencing_management_id : data.id,
+      trade_creator_id : data.trade_creator_id,
+      page : this.previewPagination.page,
+      per_page : this.previewPagination.per_page,
+    };
+    
+    this.loadingIndicator = true;
+    this.sequencingService.getImportPreviewAdjustmentCoin(body).subscribe(res => {
+      this.rows = (res.data && res.data.data && res.data.data.data) ? res.data.data.data : [];
+      Page.renderPagination(this.previewPagination, res.data.data);
+      this.dataPreview = res.data;
+      this.isValid = res.data ? res.data.is_valid : false;
+      this.loadingIndicator = false;
+    }, err => {
+      this.loadingIndicator = false;
+      this.isValid = false;
+    })
+  }
+
+  setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
+
+    if (this.pagination['search']) {
+      this.previewPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("import_tsm_coin_preview_page", pageInfo.offset + 1);
+      this.previewPagination.page = this.dataService.getFromStorage("import_tsm_coin_preview_page");
+    }
+    this.getPreview(this.parentData);
+
   }
 
   filteringMission() {
@@ -116,22 +181,32 @@ export class ImportTsmCoinComponent {
     this.files = event;
 
     console.log('files info', this.files);
-    if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    // if (this.files.name.indexOf(".xlsx") > -1) {
+    //   this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    //   return;
+    // }
+    if (this.requestingPreview) {
+      this.dialogService.openSnackBar({ message: "Proses Request Preview Masih Berjalan!" });
+      return;
+    }
+    if (this.requestingImport) {
+      this.dialogService.openSnackBar({ message: "Proses Request Import Masih Berjalan!" });
       return;
     }
 
     let fd = new FormData();
 
     fd.append('file', this.files);
+    fd.append('task_sequencing_management_id', this.parentData.id);
+    fd.append('trade_creator_id', this.parentData.trade_creator_id);
     this.dataService.showLoading(true);
     this.sequencingService.previewAdjustmentCoin(fd).subscribe(
       res => {
-        this.rows = res.data ? res.data.data : [];
-        this.isValid = res.data ? res.data.is_valid : false;
+        this.requestingPreview = true;
         this.dataService.showLoading(false);
       },
       err => {
+        this.requestingPreview = false;
         this.dataService.showLoading(false);
         this.files = undefined;
 
@@ -142,9 +217,13 @@ export class ImportTsmCoinComponent {
   }
 
   submit() {
-    if (this.files) {
+    // if (this.files) {
       if (this.formNotifikasi.invalid) {
         this.dialogService.openSnackBar({ message: "User Notifikasi Belum Di set!" })
+        return;
+      }
+      if (!this.dataPreview) {
+        this.dialogService.openSnackBar({ message: "Data Preview Tidak ada!" })
         return;
       }
 
@@ -156,28 +235,37 @@ export class ImportTsmCoinComponent {
         buttonText: ['Ya, Lanjutkan', 'Batal']
       };
       this.dialogService.openCustomConfirmationDialog(data);
-    } else {
-      this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
-    }
+    // } else {
+    //   this.dialogService.openSnackBar({ message: 'Ukuran file melebihi 2mb' })
+    // }
   }
 
   confirmSubmit() {
-    const res = {
-      coins: this.rows,
-      reason: this.textReason.value,
-      user_id: this.formNotifikasi.get('name').value
-    };
+    // const res = {
+    //   coins: this.rows,
+    //   reason: this.textReason.value,
+    //   user_id: this.formNotifikasi.get('name').value
+    // };
+
+    const body = {
+      preview_id: this.dataPreview.preview_id,
+      preview_task_id: this.dataPreview.preview_task_id,
+      reason : this.textReason.value,
+      approval_id : this.selectedUser.id,
+    }
 
     this.dataService.showLoading(true);
-    this.sequencingService.importAdjustmentCoin(res).subscribe(res => {
-      this.coinAdjustmentApprovalService.sendNotification({ id: res.data.id, user_id: res.data.responded_by }, { is_tsm: true }).subscribe(res => {
+    this.importing = true;
+
+    this.sequencingService.importAdjustmentCoin(body).subscribe(res => {
+      // this.coinAdjustmentApprovalService.sendNotification({ id: res.data.id, user_id: res.data.responded_by }, { is_tsm: true }).subscribe(res => {
         this.dataService.showLoading(false);
         this.dialogRef.close(res);
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar({ message: "Berhasil menyimpan data dan mengirimkan Notifikasi!" });
-      }, err => {
-        this.dataService.showLoading(false);
-      });
+      // }, err => {
+      //   this.dataService.showLoading(false);
+      // });
     })
   }
 

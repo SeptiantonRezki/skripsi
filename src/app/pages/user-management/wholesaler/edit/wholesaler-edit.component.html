@@ -68,6 +68,13 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field fxFlex="50" class="is-light form-primary">
+            <mat-select placeholder="Negara" formControlName="country" (selectionChange)="handleCountryPhone($event)">
+              <mat-option *ngFor="let item of countryList" [value]="item.code">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">
@@ -78,7 +85,7 @@
             <small>Nomor Ponsel</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
-                <input matInput value="+62" readonly>
+                <input matInput [value]="country_phone" readonly>
               </mat-form-field>
               <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
                 <input matInput formControlName="phone" type="tel">
@@ -151,7 +158,7 @@
               </mat-form-field>
               <div fxFlex="2"><a #downloadLink></a></div>
               <div class="confirm btn-confirm py-16" fxLayout="row" fxFlex="50">
-                <a [href]="detailWholesaler.ktp_image_url" mat-raised-button type="button" class="confirmation-button"
+                <a (click)="openKtp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
                   Lihat Dokumen
                 </a>
@@ -168,7 +175,7 @@
               </mat-form-field>
               <div fxFlex="2"></div>
               <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
-                <a [href]="detailWholesaler.npwp_image_url" mat-raised-button type="button" class="confirmation-button"
+                <a (click)="openNpwp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
                   Lihat Dokumen
                 </a>

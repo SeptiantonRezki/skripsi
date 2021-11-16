@@ -311,6 +311,51 @@ export const brConfig = {
       }
     ]
   },
+  rca_agent: {
+    index: [
+      {
+        type: "current",
+        url: "/rca/agent-pengguna",
+        name: "Daftar RCA Agent"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat RCA Agent"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit RCA Agent"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/rca/agent-pengguna",
+        name: "RCA Agent"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail RCA Agent"
+      }
+    ]
+  },
   paguyuban: {
     index: [
       {
@@ -617,7 +662,7 @@ export const brConfig = {
       index: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
@@ -629,12 +674,12 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
-          name: "Produk Prinsipall"
+          url: "/user-management/private-label",
+          name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {
@@ -646,12 +691,12 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {
@@ -663,12 +708,12 @@ export const brConfig = {
       detail: [
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Produk Prinsipal"
         },
         {
           type: "parent",
-          url: "/user-management/supplier-company",
+          url: "/user-management/private-label",
           name: "Perusahaan"
         },
         {
@@ -904,6 +949,15 @@ export const brConfig = {
         }
       ],
     },
+    supplierVouchers: {
+      index: [
+        {
+          type: "current",
+          url: "/user-management/supplier-vouchers",
+          name: "Voucher Private Label"
+        }
+      ],
+    }
   },
   inappMarketing: {
     banner: {
@@ -1085,6 +1139,63 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Produk"
+        }
+      ],
+      submission: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
+          name: "Daftar Produk Kasir"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Produk Diajukan"
+        }
+      ],
+      submissionDetail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/submission",
+          name: "Produk Diajukan"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk"
+        }
+      ],
+    },
+    dbSubmission: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pengajuan Produk DB",
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Produk Diajukan"
+        }
+      ],
+      approval: [
+        {
+          type: "parent",
+          url: "/sku-management/db-product-submission",
+          name: "Pengajuan Produk DB"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Pengaturan Approval"
         }
       ],
     },
@@ -2595,6 +2706,15 @@ export const brConfig = {
           name: "Daftar Pengajuan Deaktivasi"
         }
       ],
+    },
+    distributionlist: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Distribution List"
+        }
+      ]
     }
   },
   virtualaccount: {
@@ -2936,6 +3056,31 @@ export const brConfig = {
         name: "Detail Pertanyaan Verifikasi Agent"
       },
 
-    ]
+    ],
+  },
+  device_management: {
+    index: [
+      {
+        type: "current",
+        url: "/device-management/recovery",
+        name: "Perangkat dipulihkan dan Pengaturan"
+      }
+    ],
+  },
+  remote_call_activation: {
+    grouping_pelanggan: [
+      {
+        type: "current",
+        url: "/rca/grouping-pelanggan",
+        name: "Grouping Pelanggan"
+      }
+    ],
+    route_plan: [
+      {
+        type: "current",
+        url: "/rca/rute-kunjungan",
+        name: "Rute Kunjungan"
+      }
+    ],
   }
 };

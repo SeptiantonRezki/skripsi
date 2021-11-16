@@ -5,7 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { DateAdapter, MatDialogConfig, MatDialog } from '@angular/material';
-import * as moment from 'moment';
+import moment from 'moment';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
@@ -134,6 +134,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
 
     this.taskVerificationService.getTsm(this.pagination).subscribe(
       res => {
+        console.log('1');
         if (res.total < res.per_page && page !== 1) {
           this.dataService.setToStorage('page', 1);
           this.getListTaskVerification();
@@ -143,12 +144,34 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
           this.onLoad = false;
           this.loadingIndicator = false;
         }
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 2000);
       }, err => {
         console.error(err);
         this.onLoad = false;
         this.loadingIndicator = false;
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    let tableTSM = document.getElementById("datatable-tsm");
+    
+    let rows = tableTSM.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      // let numberRow = index + 1;
+      rows[index].id = 'data-row-tsm';
+      // rows[index].id = 'data-row-tsm-'+String(numberRow);
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell-tsm';
+        // cells[indexCell].id = 'data-cell-tsm-'+String(numberRow)+'-'+String(indexCell+1);          
+      }
+    }
   }
 
   convertDate(param?: Date) {

@@ -2,15 +2,26 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Task Sequence'">
     <div class="button-row" fxLayout="row">
-      <button mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()">
-        <mat-icon>arrow_upward</mat-icon>
-        EXPORT COIN
-      </button>
+      <div fxLayout="column">
+        <button id="btn-export-coin" mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()" [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)">
+          <mat-icon>arrow_upward</mat-icon>
+          EXPORT COIN
+        </button>
+        <label *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)" style="margin: 0px 0 0 15px;">Requesting File</label>
+        <a *ngIf="taskSequenceForm.get('export_coin_status').value === 'done' && taskSequenceForm.get('export_coin_result').value"
+          [href]="taskSequenceForm.get('export_coin_result').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Download File</a>
+        <!-- <label style="margin: 0px 0 0 15px;">Download File</label> -->
+      </div>
       <a #downloadLink></a>
-      <button mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail">
-        <mat-icon>arrow_downward</mat-icon>
-        IMPORT COIN
-      </button>
+      <div fxLayout="column">
+        <button id="btn-import-coin" mat-raised-button style="border: 1px solid" (click)="import()" *ngIf="!isDetail"
+        [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value)">
+          <mat-icon>arrow_downward</mat-icon>
+          IMPORT COIN
+        </button>
+        <label
+          *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value) && taskSequenceForm.get('import_coin_status_type').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Requesting {{taskSequenceForm.get('import_coin_status_type').value.toUpperCase()}}</label>
+      </div>
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -44,7 +55,7 @@
               </mat-error>
             </mat-form-field>-->
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama" formControlName="name"
+              <input id="input-nama" matInput type="text" placeholder="Nama" formControlName="name"
                 [readonly]="data?.is_editable === 0">
               <mat-error
                 *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
@@ -95,7 +106,7 @@
             <h3 class="h3"><strong>Masa Berlaku Task Sequence</strong></h3>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
+              <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
                 placeholder="Pilih Tanggal Mulai" formControlName="start_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
@@ -107,7 +118,7 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
+              <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
                 placeholder="Pilih Tanggal Berakhir" formControlName="end_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
@@ -117,7 +128,7 @@
                 Tanggal berakhir harus diisi.
               </mat-error>
             </mat-form-field>
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
+            <button id="{{isDetail ? 'btn-detail' : 'btn-edit'}}" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
               [disabled]="taskSequenceForm.controls['name'].invalid || taskSequenceForm.controls['trade_creator_id'].invalid || taskSequenceForm.controls['trade_audience_group_id'].invalid || taskSequenceForm.controls['start_date'].invalid || taskSequenceForm.controls['end_date'].invalid"
               [routerLink]="['/dte','mission-builder',(isDetail ? 'detail' : 'edit')]">
               {{ isDetail ? 'CEK DETIL' : 'SUBMIT' }}
