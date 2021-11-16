@@ -18,6 +18,10 @@ export class ForceUpdateAppsComponent {
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
   ]
+  region: any[] = [
+    { name: 'Indonesia', value: 'ID'},
+    { name: 'Non Indonesia', value: 'KM'},
+  ]
   yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
   formForceUpdate: FormGroup;
 
@@ -27,6 +31,7 @@ export class ForceUpdateAppsComponent {
   lastVersionConsumer: any;
   lastVersionRetailer: any;
   lastVersionCashier: any;
+  listDeviceOS: any[];
 
   id: any;
   onLoad: Boolean;
@@ -62,9 +67,11 @@ export class ForceUpdateAppsComponent {
         version: ["", Validators.required],
         title: ["", Validators.required],
         notifNewVersion: ["yes", Validators.required],
-        notifMessage: ["", Validators.required],
+        notifMessage: ["", [Validators.maxLength(150) ,Validators.required]],
         forceUpdate: ["yes", Validators.required],
         os: ["", Validators.required],
+        osVersion: ["", Validators.required],
+        region: ["", Validators.required],
       })
 
       this.formForceUpdate.valueChanges.debounceTime(200).subscribe(val => {
@@ -88,6 +95,10 @@ export class ForceUpdateAppsComponent {
       if (!this.permission.buat) { this.formForceUpdate.disable() };
       this.onLoad = false;
     });
+
+    this.accessServices.deviceOS().subscribe((response) => {
+      this.listDeviceOS = response.map(({ name, version }) => ({ name, value: version }));
+    })
   }
 
   changeValue() {
@@ -111,6 +122,8 @@ export class ForceUpdateAppsComponent {
         sort_notif: this.formForceUpdate.controls['title'].value,
         notif: this.formForceUpdate.controls['notifMessage'].value,
         os: this.formForceUpdate.controls['os'].value,
+        os_version: this.formForceUpdate.controls['osVersion'].value,
+        region: this.formForceUpdate.controls['region'].value,
       }
       try {
       this.accessServices.getForceUpdateUsers(body).subscribe(res => {
