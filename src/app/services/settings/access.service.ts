@@ -79,4 +79,9 @@ export class AccessService extends BaseService {
     const url = this.getUrl(this.namespace, "device_os");
     return this.getApi(url);
   }
+
+  postForceUpdate(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'force_update_v2');
+    return this.postApi(url, body);
+  }
 }
