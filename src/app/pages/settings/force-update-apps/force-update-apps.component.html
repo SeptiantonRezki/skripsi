@@ -37,6 +37,17 @@
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-select placeholder="Minimum Operasi Sistem" formControlName="osVersion">
+                <mat-option *ngFor="let item of listDeviceOS" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formForceUpdate.controls['osVersion'].hasError('required') && formForceUpdate.controls['osVersion'].touched">
+                Minimum Sistem Operasi harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" formControlName="version" placeholder="Versi Aplikasi" decimalNumber>
               <mat-error
                 *ngIf="formForceUpdate.controls['version'].hasError('required') && formForceUpdate.controls['version'].touched">
@@ -46,6 +57,17 @@
                 *ngIf="formForceUpdate.controls['version'].hasError('min') && formForceUpdate.controls['version'].touched">
                 Versi Aplikasi {{formForceUpdate.controls['appsName'].value}} tidak boleh kurang dari versi aplikasi
                 {{formForceUpdate.controls['appsName'].value}} yang terakhir
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
+              <mat-select placeholder="Region" formControlName="region">
+                <mat-option *ngFor="let item of region" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formForceUpdate.controls['region'].hasError('required') && formForceUpdate.controls['region'].touched">
+                Region harus diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -75,10 +97,14 @@
           <div fxLayout="row wrap" fxLayoutAlign="start center"
             *ngIf="formForceUpdate.controls['notifNewVersion'].value === 'yes'" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="notifMessage" placeholder="Isi Pesan Notifikasi">
+              <textarea matInput rows="3" formControlName="notifMessage" placeholder="Isi Pesan Notifikasi"></textarea>
               <mat-error
                 *ngIf="formForceUpdate.controls['notifMessage'].hasError('required') && formForceUpdate.controls['notifMessage'].touched">
                 Isi Pesan Notifikasi harus diisi
+              </mat-error>
+              <mat-error
+                *ngIf="formForceUpdate.controls['notifMessage'].hasError('maxlength') && formForceUpdate.controls['notifMessage'].touched">
+                Isi Pesan Notifikasi maksimal 150 karakter
               </mat-error>
             </mat-form-field>
           </div>

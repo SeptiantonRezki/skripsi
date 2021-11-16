@@ -74,4 +74,9 @@ export class AccessService extends BaseService {
     const url = this.getUrl(this.namespace, 'revert_version', context);
     return this.deleteApi(url);
   }
+
+  deviceOS(): Observable<any> {
+    const url = this.getUrl(this.namespace, "device_os");
+    return this.getApi(url);
+  }
 }

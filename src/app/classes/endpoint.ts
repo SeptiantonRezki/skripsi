@@ -348,7 +348,8 @@ export class Endpoint {
         force_update: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
         force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update-user`,
         list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
-        revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`
+        revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`,
+        device_os: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/device-os`
       },
       tnc: {
         get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=terms-conditions`,
