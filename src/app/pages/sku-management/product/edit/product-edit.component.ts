@@ -1569,7 +1569,7 @@ export class ProductEditComponent {
 
     const nextVal = !expanded;
     if (nextVal && allExpanded.includes(true)) {
-      this.dialogService.openSnackBar({ message: "Ada mita yang belum tersimpan!" });
+      this.dialogService.openSnackBar({ message: "Ada mitra yang belum tersimpan!" });
       return;
     }
 
