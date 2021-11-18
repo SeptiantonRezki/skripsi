@@ -258,6 +258,8 @@ export class Endpoint {
         upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`,
         planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
         stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
+        // get_create_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized`,
+        // put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.id}`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
@@ -783,6 +785,8 @@ export class Endpoint {
         delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
         get_post_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark`,
         put_delete_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark/${context.id}`,
+        get_post_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite`,
+        put_delete_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite/${context.id}`,
       },
       paylater_activate: {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
