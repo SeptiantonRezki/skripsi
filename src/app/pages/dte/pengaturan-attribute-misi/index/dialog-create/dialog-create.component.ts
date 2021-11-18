@@ -23,6 +23,7 @@ export class DialogCreateComponent implements OnInit {
   data: any[];
   condition: boolean;
   loadingIndicator: Boolean;
+  isColor: boolean;
 
   constructor(
     private router: Router,
@@ -33,14 +34,16 @@ export class DialogCreateComponent implements OnInit {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private ls: LanguagesService,
-    @Inject(MAT_DIALOG_DATA) public dataProps: {title: string, methodGet: string, methodCreate: string},
+    @Inject(MAT_DIALOG_DATA) public dataProps: {title: string, methodGet: string, methodCreate: string, isColor?: boolean},
   ) {
     this.condition = false;
+    this.isColor = this.dataProps.isColor || false;
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: ["", Validators.required],
+      color: ['#000000'],
     });
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
@@ -78,6 +81,10 @@ export class DialogCreateComponent implements OnInit {
 
       if (this.condition === false) {
         this.dialogRef.close(`${form.value.name}`);
+
+        if (!this.isColor) {
+          delete form.value.color;
+        }
 
         this.pengaturanAttributeMisiService[this.dataProps.methodCreate](form.value).subscribe(
           (res) => {

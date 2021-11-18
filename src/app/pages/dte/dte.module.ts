@@ -146,6 +146,11 @@ import { ImportExchangeCoinComponent } from './coin-disburstment/index/import-ex
 import { BackgroundMisiComponent } from './template/dialog/background-misi/background-misi.component';
 import { NgxMaskModule } from "ngx-mask";
 import { VerificationRemarkComponent } from './pengaturan-attribute-misi/index/verification-remark/verification-remark.component';
+import { CopywritingComponent } from './pengaturan-attribute-misi/index/copywriting/copywriting.component';
+// import { TemplateCreatePersonalizeComponent } from './template/create/personalize/template-create-personalize.component';
+// import { TemplateIndexPersonalizeComponent } from './template/index/personalize/template-index-personalize.component';
+// import { TemplateEditPersonalizeComponent } from './template/edit/personalize/template-edit-personalize.component';
+// import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index/personalize/task-sequencing-index-personalize.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -308,6 +313,11 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     BackgroundMisiComponent,
     VerificationRemarkComponent,
+    CopywritingComponent,
+    // TemplateCreatePersonalizeComponent,
+    // TemplateIndexPersonalizeComponent,
+    // TemplateEditPersonalizeComponent,
+    // TaskSequencingIndexPersonalizeComponent,
   ],
   exports: [
     TemplateIndexComponent,

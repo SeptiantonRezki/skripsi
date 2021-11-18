@@ -31,6 +31,8 @@ export class DialogEditComponent implements OnInit {
 
   nameChange = false;
   statusChange = false;
+  isColor: boolean = false;
+  colorCopywriting: string;
 
   constructor(
     private router: Router,
@@ -47,20 +49,30 @@ export class DialogEditComponent implements OnInit {
     this.name = data.name;
     this.id = data.id;
     this.status = data.status;
+    
+    if (data.color) {
+      this.colorCopywriting = data.color;
+      this.isColor = true;
+    }
+    if (data.color === null) {
+      this.colorCopywriting = '#000000';
+      this.isColor = true;
+    }
    }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: this.name,
       id: this.id,
-      status: this.status
+      status: this.status,
+      color: this.colorCopywriting
     });
     this.form.patchValue({
       name: this.name,
       status: this.status,
       // id: this.id
     });
-    console.log(this.form.value);
+    
     this.form.get('name').valueChanges.subscribe(x => {
       this.nameChange = true;
     })
@@ -77,7 +89,10 @@ export class DialogEditComponent implements OnInit {
       this.form.removeControl('name');
     }
     this.dialogRef.close(`${form.value}`);
-    console.log(form.value);
+
+    if (!this.isColor) {
+      delete form.value.color;
+    }
     
     this.pengaturanAttributeMisiService[this.data.methodPut](form.value, { [this.data.paramsId]: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
@@ -94,7 +109,7 @@ export class DialogEditComponent implements OnInit {
     }, err => {
       console.log('err', err);
       this.dataService.showLoading(false);
-    })
+    });
   }
 
 }
