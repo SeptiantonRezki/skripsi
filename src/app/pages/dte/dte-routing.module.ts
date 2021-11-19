@@ -44,6 +44,8 @@ import { CoinAdjustmentApprovalDetailComponent } from "./coin-adjustment-approva
 import { CoinDisburstmentComponent } from "./coin-disburstment/index/coin-disburstment.component";
 import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin-disburstment-create.component";
 import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
+import { TemplateCreatePersonalizeComponent } from "./template/create/personalize/template-create-personalize.component";
+import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/template-edit-personalize.component";
 
 const routes: Routes = [
   {
@@ -82,6 +84,33 @@ const routes: Routes = [
     component: TemplateEditComponent,
     data: {
       breadcrumbs: brConfig.dte.template.detail
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/create-personalize",
+    component: TemplateCreatePersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.createPersonalize
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/edit-personalize",
+    component: TemplateEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.editPersonalize
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/detail-personalize",
+    component: TemplateEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.detailPersonalize
     },
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]

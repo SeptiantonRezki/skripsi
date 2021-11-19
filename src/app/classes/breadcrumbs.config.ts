@@ -1507,6 +1507,42 @@ export const brConfig = {
           url: "",
           name: "Detail Tugas"
         }
+      ],
+      createPersonalize: [
+        {
+          type: "parent",
+          url: "/dte/template-task",
+          name: "Daftar Tugas"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Tugas Personalize"
+        }
+      ],
+      editPersonalize: [
+        {
+          type: "parent",
+          url: "/dte/template-task",
+          name: "Daftar Tugas"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Tugas Personalize"
+        }
+      ],
+      detailPersonalize: [
+        {
+          type: "parent",
+          url: "/dte/template-task",
+          name: "Daftar Tugas"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Tugas Personalize"
+        }
       ]
     },
     trade: {
