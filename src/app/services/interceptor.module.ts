@@ -104,8 +104,10 @@ export class BaseInterceptor implements HttpInterceptor {
           // if (err.error.errors['status']) {
           //   this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
           // } else
-          if (err.error.errors.access_lock) {
-            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock })
+          if (err.error.message) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          } else if (err.error.errors.access_lock) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
           } else {
             let errorArray = Object.values(err.error.errors);
             this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
@@ -116,7 +118,9 @@ export class BaseInterceptor implements HttpInterceptor {
         }
 
         if (req.method === "PUT") {
-          if (err.error.errors['status']) {
+          if (err.error.message) {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          } else if (err.error.errors['status']) {
             this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
           } else if (err.error.errors.access_lock) {
             this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock })

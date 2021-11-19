@@ -96,10 +96,10 @@ export class DialogCreateComponent implements OnInit {
             this.router.navigate(["dte", "pengaturan-attribute-misi"]);
           },
           (err) => {
-            this.dialogService.openSnackBar({ message: err.error.message })
             console.log(err.error.message);
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
+            this.dialogService.openSnackBar({ message: err.error.message })
           }
         );
       }

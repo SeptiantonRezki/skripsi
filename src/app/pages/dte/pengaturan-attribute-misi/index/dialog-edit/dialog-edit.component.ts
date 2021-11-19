@@ -78,7 +78,8 @@ export class DialogEditComponent implements OnInit {
     })
     this.form.get('status').valueChanges.subscribe(x => {
       this.statusChange = true;
-    })
+    });
+    this.form.get('color').disable();
   }
 
   submit(form) {
@@ -88,12 +89,9 @@ export class DialogEditComponent implements OnInit {
     if (this.statusChange) {
       this.form.removeControl('name');
     }
+
     this.dialogRef.close(`${form.value}`);
 
-    if (!this.isColor) {
-      delete form.value.color;
-    }
-    
     this.pengaturanAttributeMisiService[this.data.methodPut](form.value, { [this.data.paramsId]: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
       if (res.success) {
@@ -109,6 +107,7 @@ export class DialogEditComponent implements OnInit {
     }, err => {
       console.log('err', err);
       this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({ message: err.error.message })
     });
   }
 
