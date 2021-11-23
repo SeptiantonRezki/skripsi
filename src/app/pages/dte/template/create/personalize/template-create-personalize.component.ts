@@ -422,7 +422,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       child.push(this.formBuilder.group({
         task_toolbox_copywrite_id: id,
         name: ['', Validators.required],
-        other_name: ['', Validators.required],
+        other_name: [''],
         description: ['', Validators.required],
         cover: [''],
         visual_header: ['', Validators.required],
