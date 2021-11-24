@@ -7,6 +7,7 @@ import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import * as _ from 'underscore';
 import { MatTabChangeEvent } from "@angular/material";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-admin-principal-edit",
@@ -21,8 +22,8 @@ export class AdminPrincipalEditComponent {
   listRole: Array<any>;
   detailAdminPrincipal: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" }
+    { name: this.ls.locale.global.label.status + " " + this.ls.locale.global.label.active, value: "active" },
+    { name: this.ls.locale.global.label.status + " " + this.ls.locale.global.label.inactive, value: "inactive" }
   ];
 
   listLevelArea: any[];
@@ -45,7 +46,8 @@ export class AdminPrincipalEditComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
-    private adminPrincipalService: AdminPrincipalService
+    private adminPrincipalService: AdminPrincipalService,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(param => {
       this.isDetail = param[1].path === 'detail' ? true : false;

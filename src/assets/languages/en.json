@@ -1,8 +1,8 @@
 {
   "global": {
     "app_name": "AYO SRC SAMPOERNA",
-    "country_calling_code": "+62",
-    "currency": "$",
+    "country_calling_code": "+63",
+    "currency": "₱",
     "currency_name": "US Dollar",
     "currency_code": "USD",
     "input_mask": "separator.2",
@@ -79,7 +79,8 @@
       "next": "Next",
       "previous": "Previous",
       "import": "Import",
-      "export": "Export"
+      "export": "Export",
+      "deactivate": "Deactivate"
     },
     "area": {
       "national": "National",
@@ -184,8 +185,21 @@
     "text2": "Roles Access Level",
     "text3": "Roles",
     "text4": "Are You Sure to Complete This?",
-    "text5": "Delete Main Admin",
-    "text6": "Are you sure you want to delete this Main Admin?"
+    "text5": "Delete Principal Admin",
+    "text6": "Are you sure you want to delete this Principal Admin?",
+    "text7": "Principal Admin List",
+    "text8": "Name",
+    "text9": "Email",
+    "text10": "Last Login",
+    "text11": "Last Updated",
+    "text12": "Status",
+    "text13": "Action",
+    "text14": "Deactivate Admin Principal",
+    "text15": "Are you sure you want to deactivate the selected data?",
+    "text16": "No principal admin selected",
+    "text17": "Admin Details",
+    "text18": "Username",
+    "text19": "Admin Detail"
   },
   "field_force": {
     "text1": "Change New Password",
@@ -944,7 +958,7 @@
       "text17": "See Popup Notification Image",
       "text18": "Transfer Credential Token",
       "text19": "Change Popup Notification",
-      "text20": "Remove Popup Notification", 
+      "text20": "Remove Popup Notification",
       "text21": "Journey Builder Notification",
       "text22": "Data Saved Successfully",
       "text23": " Are you sure you want to remove this popup notification?"
@@ -1083,5 +1097,4 @@
       "text3": "Data Saved Successfully"
     }
   }
-
 }
