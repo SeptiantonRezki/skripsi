@@ -65,4 +65,9 @@ export class AdminPrincipalService extends BaseService {
     const url = this.getUrl("general", "parent", context);
     return this.getApi(url);
   }
+
+  getCountry(): Observable<any> {
+    const url = this.getUrl("help", "getCountry");
+    return this.getApi(url);
+  }
 }

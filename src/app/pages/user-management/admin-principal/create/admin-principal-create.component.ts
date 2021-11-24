@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { AdminPrincipalService } from "../../../../services/user-management/admin-principal.service";
 import { DialogService } from "../../../../services/dialog.service";
@@ -32,6 +32,7 @@ export class AdminPrincipalCreateComponent {
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
+  Country: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,7 +49,8 @@ export class AdminPrincipalCreateComponent {
     this.verticalStepperStep1Errors = {
       nama: {},
       username: {},
-      email: {}
+      email: {},
+      country: {}
     };
     this.verticalStepperStep2Errors = {
       role: {}
@@ -88,17 +90,12 @@ export class AdminPrincipalCreateComponent {
     this.verticalStepperStep1 = this.formBuilder.group({
       nama: ["", Validators.required],
       username: [""],
-      email: ["", Validators.required]
+      email: ["", Validators.required],
+      country: [""]
     });
 
     this.wilayah = this.formBuilder.group({
-      national: ["", Validators.required],
-      zone: [""],
-      region: [""],
-      area: [""],
-      salespoint: [""],
-      district: [""],
-      territory: [""]
+      areas: this.formBuilder.array([this.createEmailFormGroup()])
     })
 
     this.wilayah_2 = this.formBuilder.group({
@@ -129,8 +126,9 @@ export class AdminPrincipalCreateComponent {
       );
     });
 
-    this.initArea();
-    this.initArea2();
+    // this.initArea();
+    // this.initArea2();
+    this.getCountry();
   }
 
   initArea() {
@@ -459,15 +457,17 @@ export class AdminPrincipalCreateComponent {
 
       let areas = [];
       let areas2 = [];
-      let value = this.wilayah.getRawValue();
+      let value = this.wilayah.getRawValue().areas;
       let area2Value = this.wilayah_2.getRawValue();
       value = Object.entries(value).map(([key, value]) => ({ key, value }));
+      console.log("++++", value);
       area2Value = Object.entries(area2Value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
         const filteredValue = value.filter(item => item.key === type && item.value);
         if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
         const filteredValueArea2 = area2Value.filter(item => item.key === type && item.value);
+        console.log("+++as+", filteredValueArea2);
         if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
       });
 
@@ -476,8 +476,9 @@ export class AdminPrincipalCreateComponent {
         username: this.verticalStepperStep1.get("username").value,
         email: this.verticalStepperStep1.get("email").value,
         role_id: this.verticalStepperStep2.get("role").value,
-        area_id: [_.last(areas), _.last(areas2)],
-        status: 'active'
+        area_id: [_.last(areas2)],
+        status: 'active',
+        country: this.verticalStepperStep1.get("country").value
       };
       console.log('body', body);
 
@@ -497,4 +498,49 @@ export class AdminPrincipalCreateComponent {
       commonFormValidator.validateAllFields(this.verticalStepperStep2);
     }
   }
+
+  getCountry() {
+
+    this.adminPrincipalService.getCountry().subscribe(
+      res => {
+        this.Country = res.data;
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    console.log("COUNTRY2", this.Country);
+
+  }
+
+  public addEmailFormGroup() {
+    const emails = this.wilayah.get('areas') as FormArray
+    emails.push(this.createEmailFormGroup())
+    console.log(this.wilayah.getRawValue().areas);
+    console.log(this.wilayah_2.getRawValue());
+    
+    
+  }
+
+  public removeOrClearEmail(i: number) {
+    const emails = this.wilayah.get('areas') as FormArray
+    if (emails.length > 1) {
+      emails.removeAt(i)
+    } else {
+      emails.reset()
+    }
+  }
+
+  private createEmailFormGroup(): FormGroup {
+    return new FormGroup({
+      'national': new FormControl('', Validators.required),
+      'zone': new FormControl(''),
+      'region': new FormControl(''),
+      'area': new FormControl(''),
+      'salespoint': new FormControl(''),
+      'district': new FormControl(''),
+      'territory': new FormControl('')
+    })
+  }
+  
 }
