@@ -40,8 +40,14 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
       return true;
     }
 
-    const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
-    if (leave) {
+    if (window.localStorage.getItem('isImport') == 'false' || !window.localStorage.getItem('isImport')){
+      const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
+      if (leave) {
+        window.localStorage.removeItem('duplicate_template_task');
+        return true;
+      }
+    }else{
+      alert("File berhasil diimport, tekan OK untuk kembali ke menu awal.");
       window.localStorage.removeItem('duplicate_template_task');
       return true;
     }

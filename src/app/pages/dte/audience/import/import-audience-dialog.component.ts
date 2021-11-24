@@ -367,7 +367,9 @@ export class ImportAudienceDialogComponent {
           is_create
         }).subscribe(res => {
 
-          this.setRequesting('import')
+          this.setRequesting('import');
+
+          window.localStorage.setItem('isImport', 'true');
           
           this.dialogRef.close({...this.previewData});
 
