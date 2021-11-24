@@ -456,27 +456,54 @@ export class AdminPrincipalCreateComponent {
       this.submitting = true;
 
       let areas = [];
+      let areas1 = [];
       let areas2 = [];
+      let areas3 = [];
+      let areas4 = [];
+      let areas5 = [];
+      let areas6 = [];
+      let areas7 = [];
+      let areas8 = [];
+      let areas9 = [];
       let value = this.wilayah.getRawValue().areas;
       let area2Value = this.wilayah_2.getRawValue();
-      value = Object.entries(value).map(([key, value]) => ({ key, value }));
+      console.log("++++", value);
+      for(let i=0; i<value.length; i++){
+      value[i] = Object.entries(value[i]).map(([key, value]) => ({ key, value }));
+      
+      }
       console.log("++++", value);
       area2Value = Object.entries(area2Value).map(([key, value]) => ({ key, value }));
 
       this.typeArea.map(type => {
-        const filteredValue = value.filter(item => item.key === type && item.value);
-        if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
-        const filteredValueArea2 = area2Value.filter(item => item.key === type && item.value);
-        console.log("+++as+", filteredValueArea2);
-        if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
+        for(let i=0; i<value.length; i++){
+        const filteredValue = value[i].filter(item => item.key === type && item.value);
+        if (filteredValue.length > 0 && i == 0) areas.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 1) areas1.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 2) areas2.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 3) areas3.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 4) areas4.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 5) areas5.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 6) areas6.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 7) areas7.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 8) areas8.push(parseInt(filteredValue[0].value));
+        if (filteredValue.length > 0 && i == 9) areas9.push(parseInt(filteredValue[0].value));
+        }
+        // const filteredValueArea2 = area2Value.filter(item => item.key === type && item.value);
+        // console.log("+++as+", filteredValueArea2);
+        // if (filteredValueArea2.length > 0) areas2.push(parseInt(filteredValueArea2[0].value));
       });
+      let area_id = [_.last(areas), _.last(areas1),_.last(areas2), _.last(areas3),_.last(areas4), _.last(areas5),_.last(areas6), _.last(areas7),_.last(areas8), _.last(areas9)];
+      area_id = area_id.filter(function( element ) {
+        return element !== undefined;
+     });  
 
       let body = {
         name: this.verticalStepperStep1.get("nama").value,
         username: this.verticalStepperStep1.get("username").value,
         email: this.verticalStepperStep1.get("email").value,
         role_id: this.verticalStepperStep2.get("role").value,
-        area_id: [_.last(areas2)],
+        area_id: area_id,
         status: 'active',
         country: this.verticalStepperStep1.get("country").value
       };

@@ -71,7 +71,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <mat-select placeholder="National" formControlName="national" id="area1_national">
-                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}{{i}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
@@ -146,12 +146,9 @@
 
             <div class="pt-24" fxLayout="row" style="place-content: flex-end;">
               <div >
-                <button class="float-right" mat-icon-button color="primary" aria-label="Add"
-                    (click)="addEmailFormGroup()" matTooltip="Add">
-                  <mat-icon>add_box_outline</mat-icon>
-                </button>
+                
                 <button class="float-right" mat-icon-button color="primary" aria-label="Remove/clear"
-                    (click)="removeOrClearEmail(i)" matTooltip="Remove">
+                    (click)="removeOrClearEmail(i)" matTooltip="Remove" *ngIf="i > 0">
                   <mat-icon>delete</mat-icon>
                 </button>
                 
@@ -161,12 +158,22 @@
             </div>
           </div>
           </form>
+          <div class="pt-24" fxLayout="row" style="place-content: flex-end;">
+            <div >
+              <button class="float-right" mat-icon-button color="primary" aria-label="Add"
+                  (click)="addEmailFormGroup()" matTooltip="Add" *ngIf="this.wilayah.getRawValue().areas.length < 10">
+                <mat-icon>add_box_outline</mat-icon>
+              </button>
+              
+            </div>
+            
+          </div>
           <button mat-raised-button matStepperNext type="button" class="confirmation-button">
                 Lanjut
               </button>
         </mat-step>
 
-        <mat-step [stepControl]="wilayah_2">
+        <!-- <mat-step [stepControl]="wilayah_2">
           <form [formGroup]="wilayah_2">
             <ng-template matStepLabel>Area 2</ng-template>
 
@@ -256,7 +263,7 @@
               </button>
             </div>
           </form>
-        </mat-step>
+        </mat-step> -->
 
         <mat-step [stepControl]="verticalStepperStep2">
 
