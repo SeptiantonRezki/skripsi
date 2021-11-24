@@ -3,8 +3,8 @@
     "app_name": "AYO SRC SAMPOERNA",
     "country_calling_code": "+63",
     "currency": "₱",
-    "currency_name": "US Dollar",
-    "currency_code": "USD",
+    "currency_name": "Philippine Peso",
+    "currency_code": "PHP",
     "input_mask": "separator.2",
     "input_separator": ",",
     "menu": {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import id from '../../../assets/languages/id.json';
 import km from '../../../assets/languages/km.json';
-import en from '../../../assets/languages/en.json';
+import en_ph from '../../../assets/languages/en-ph.json';
 import { TranslateService } from '@ngx-translate/core';
 import { GeneralService } from "../general.service";
 
@@ -54,11 +54,11 @@ export class LanguagesService {
     }
     switch (this.selectedLanguages) {
       case 'id': this.locale = id;
-      return;
-      case 'en': this.locale = en;
-      return;
+        return;
+      case 'en-ph': this.locale = en_ph;
+        return;
       case 'km': this.locale = km;
-      return;
+        return;
     }
   }
 

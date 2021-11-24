@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
     {
       code: 'ph',
       label: 'Philippines',
-      lang: 'en'
+      lang: 'en-ph'
     },
   ];
 
