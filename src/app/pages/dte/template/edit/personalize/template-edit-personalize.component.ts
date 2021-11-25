@@ -614,7 +614,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   handlePersonalize(action, id, index?){
     let children = this.templateTaskForm.get('children') as FormArray;
 
-    // TODO: ubah kembali validatornya
     if (action === 'ADD') {
       children.push(this.formBuilder.group({
         task_toolbox_copywrite_id: id,
@@ -622,8 +621,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         other_name: [''],
         description: ['', Validators.required],
         cover: [''],
-        visual_header: [''],
-        // visual_header: ['', Validators.required],
+        visual_header: ['', Validators.required],
       }));
     }
     if (action === 'DELETE') {
@@ -634,15 +632,13 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   setValuePersonalize(item){
     let children = this.templateTaskForm.get('children') as FormArray;
 
-    // TODO: visual header belum dipasang
     children.push(this.formBuilder.group({
       task_toolbox_copywrite_id: item.task_toolbox_copywrite_id,
       name: [item.name, Validators.required],
       other_name: [item.other_name],
       description: [item.description, Validators.required],
-      cover: [''],
-      visual_header: [''],
-      // visual_header: ['', Validators.required],
+      cover: [item.cover ? item.cover_url : ''],
+      visual_header: [item.visual_header_url, Validators.required],
     }));
   }
 
