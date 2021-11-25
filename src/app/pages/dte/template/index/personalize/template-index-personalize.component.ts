@@ -387,7 +387,7 @@ export class TemplateIndexPersonalizeComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.templateTaskService.deletePersonalize({ id: this.id }).subscribe(res => {
+    this.templateTaskService.deletePersonalize({ template_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         this.getTemplateTask();

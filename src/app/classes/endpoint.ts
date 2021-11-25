@@ -259,7 +259,7 @@ export class Endpoint {
         planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
         stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
         get_create_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized`,
-        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.id}`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.template_id}`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,

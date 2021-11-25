@@ -201,7 +201,7 @@
             </div>
             <div class="section-shadow">
               <mat-tab-group>
-                <mat-tab formArrayName="child" *ngFor="let item of templateTaskForm.get('copywritingList').value; let idx=index;" [label]="item.name">
+                <mat-tab formArrayName="children" *ngFor="let item of templateTaskForm.get('copywritingList').value; let idx=index;" [label]="item.name">
                   <div class="p-24" fxLayout="column" fxLayoutGap="16px">
                     <div fxLayout="row" fxFill fxLayoutGap="24px" fxLayoutAlign="start center">
                       <div fxFlex="10">Judul Misi</div>
@@ -240,15 +240,15 @@
                       <div> : </div>
                       <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start start">
                         <div ngfDrop class="input-image" selectable="1" [(validDrag)]="validComboDragDefault" [(file)]="imageContentTypeDefault" accept="image/*" [class.invalid-drag]="validComboDragDefault===false" [class.valid-drag]="validComboDragDefault" (fileChange)="handleImagePersonalize('cover', $event, idx)">
-                          <span class="input-image__text" *ngIf="!templateTaskForm.get('child').at(idx).get('cover').value; else showCover">
+                          <span class="input-image__text" *ngIf="!templateTaskForm.get('children').at(idx).get('cover').value; else showCover">
                             <mat-icon>file_upload</mat-icon>
                             <strong>PILIH FILE</strong>
                           </span>
                           <ng-template #showCover>
-                            <img width="100%" [src]="templateTaskForm.get('child').at(idx).get('cover').value" alt="Cover Misi">
+                            <img width="100%" [src]="templateTaskForm.get('children').at(idx).get('cover').value" alt="Cover Misi">
                           </ng-template>
                         </div>
-                        <button mat-icon-button class="" matTooltip="Hapus" matTooltipPosition="below" (click)="deleteCoverMisi(idx)" *ngIf="templateTaskForm.get('child').at(idx).get('cover').value">
+                        <button mat-icon-button class="" matTooltip="Hapus" matTooltipPosition="below" (click)="deleteCoverMisi(idx)" *ngIf="templateTaskForm.get('children').at(idx).get('cover').value">
                           <mat-icon class="secondary-text">close</mat-icon>
                         </button>
                       </div>
@@ -259,17 +259,14 @@
                       <div> : </div>
                       <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start start">
                         <div ngfDrop class="input-image" selectable="1" [(validDrag)]="validComboDragDefault" accept="image/*" [class.invalid-drag]="validComboDragDefault===false" [class.valid-drag]="validComboDragDefault" (fileChange)="handleImagePersonalize('visual_header', $event, idx)">
-                          <span class="input-image__text" *ngIf="!templateTaskForm.get('child').at(idx).get('visual_header').value; else showVisual">
+                          <span class="input-image__text" *ngIf="!templateTaskForm.get('children').at(idx).get('visual_header').value; else showVisual">
                             <mat-icon>file_upload</mat-icon>
                             <strong>PILIH FILE</strong>
                           </span>
                           <ng-template #showVisual>
-                            <img width="100%" [src]="templateTaskForm.get('child').at(idx).get('visual_header').value" alt="Visual Header">
+                            <img width="100%" [src]="templateTaskForm.get('children').at(idx).get('visual_header').value" alt="Visual Header">
                           </ng-template>
                         </div>
-                        <!-- <button mat-icon-button class="" matTooltip="Hapus" matTooltipPosition="below" (click)="deleteCoverMisi(idx)" *ngIf="templateTaskForm.get('child').at(idx).get('visual_header').value">
-                          <mat-icon class="secondary-text">close</mat-icon>
-                        </button> -->
                       </div>
                     </div>
                   </div>

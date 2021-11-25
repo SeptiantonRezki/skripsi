@@ -292,7 +292,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
       ir_type: ["", Validators.required],
       copywritingList: this.formBuilder.array([], Validators.required),
-      child: this.formBuilder.array([]),
+      children: this.formBuilder.array([]),
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -395,7 +395,6 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent) {
-    console.log('=>', event);
     const value = event.option.value;
     let copywritingList = this.templateTaskForm.get('copywritingList') as FormArray;
 
@@ -407,19 +406,16 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       this.handlePersonalize('ADD', value.id, null);
     }
 
-    console.log('=>', copywritingList);
-    console.log('=>', this.templateTaskForm.get('copywritingList')['controls']);
-
     this.copywritingInput.nativeElement.value = '';
     this.filterCopywriting.setValue(null);
   }
   // End-Chips
 
   handlePersonalize(action, id, index?){
-    let child = this.templateTaskForm.get('child') as FormArray;
+    let children = this.templateTaskForm.get('children') as FormArray;
 
     if (action === 'ADD') {
-      child.push(this.formBuilder.group({
+      children.push(this.formBuilder.group({
         task_toolbox_copywrite_id: id,
         name: ['', Validators.required],
         other_name: [''],
@@ -429,24 +425,24 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       }));
     }
     if (action === 'DELETE') {
-      child.removeAt(index);
+      children.removeAt(index);
     }
   }
 
   handleImagePersonalize(key, image, idx) {
     var file: File = image;
     var myReader: FileReader = new FileReader();
-    let child = this.templateTaskForm.get('child') as FormArray;
+    let children = this.templateTaskForm.get('children') as FormArray;
 
     myReader.onloadend = (e) => {
-      child.at(idx).get(key).setValue(myReader.result);
+      children.at(idx).get(key).setValue(myReader.result);
     };
     myReader.readAsDataURL(file);
   }
 
   deleteCoverMisi(idx){
-    let child = this.templateTaskForm.get('child') as FormArray;
-    child.at(idx).get('cover').setValue('');
+    let children = this.templateTaskForm.get('children') as FormArray;
+    children.at(idx).get('cover').setValue('');
   }
 
   filteringLKT() {
@@ -1545,7 +1541,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         ),
         ir_type: this.templateTaskForm.get('ir_type').value,
         task_toolbox_copywrite_ids: copywritingList.map(item => item.id),
-        child: this.templateTaskForm.get('child').value,
+        children: this.templateTaskForm.get('children').value,
       }
       
       if (questionsIsEmpty.length > 0) {
@@ -1692,7 +1688,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' });
       if (this.templateTaskForm.controls['copywritingList'].invalid)
         return this.dialogService.openSnackBar({ message: 'Copywriting belum dibuat, minimal ada satu Copywriting' });
-      if (this.templateTaskForm.get('child').invalid)
+      if (this.templateTaskForm.get('children').invalid)
         return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi Copywriting Set-Up' });
       else
         return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
