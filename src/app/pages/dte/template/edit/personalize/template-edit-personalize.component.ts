@@ -1874,7 +1874,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
           },
           err => {
             console.log(err.error);
-            this.dialogService.openSnackBar({ message: err.error.message });
             this.dataService.showLoading(false);
           }
         )
