@@ -21,7 +21,11 @@ export class ExternalWebComponent implements OnInit {
     catalogues: "katalog_keping",
     redeems: "penukaran_keping",
     sources: "riwayat_keping",
-    settings: "pengaturan_keping",
+    settings: {
+      stars: "pengaturan_keping_bintang_ke_keping",
+      coo: "pengaturan_keping_pesan_antar",
+      cashier: "pengaturan_keping_belanja_langsung",
+    },
     resets: "reset_keping",
   };
 
@@ -32,9 +36,12 @@ export class ExternalWebComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.currentUrl = this.route.snapshot.url[0].path;
-    this.permission = this.roles.getArrayRoles(
-      `principal.${this.permissionId[this.currentUrl]}`
-    );
+    let permissionId = this.permissionId[this.currentUrl];
+    if (typeof permissionId !== "string") {
+      let subCurrentUrl = this.route.snapshot.url[1].path;
+      permissionId = this.permissionId[this.currentUrl][subCurrentUrl];
+    }
+    this.permission = this.roles.getArrayRoles(`principal.${permissionId}`);
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl("");
   }
 
