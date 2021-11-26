@@ -41,6 +41,23 @@ export class LoginComponent implements OnInit {
   showExternalUserFields = false;
   internalSigningIn = false;
   language: string;
+  COUNTRIES: any = [
+    {
+      code: 'id',
+      label: 'Indonesia',
+      lang: 'id'
+    },
+    {
+      code: 'km',
+      label: 'Cambodia',
+      lang: 'km'
+    },
+    {
+      code: 'ph',
+      label: 'Philippines',
+      lang: 'en-ph'
+    },
+  ];
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -78,7 +95,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     let authCode = this.route.snapshot.queryParamMap.get('code');
-    if(authCode) {
+    if (authCode) {
       this.internalSigningIn = true;
 
       this.authenticationService.getUserCognitoAD(authCode).subscribe(res => {
@@ -109,7 +126,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = this.formBuilder.group({
       username: [this.username, [Validators.required]],
-      ...(this.showExternalUserFields && {password: [this.password, Validators.required]})
+      ...(this.showExternalUserFields && { password: [this.password, Validators.required] })
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -189,21 +206,21 @@ export class LoginComponent implements OnInit {
   submit() {
     let username = this.loginForm.get("username").value.toLowerCase();
     let internal = username.match(/.+@pmintl\.net/) || username.match(/.+@sampoerna\.com/) || username.match(/.+@contracted.sampoerna.com/);
-    if(internal) {
-      window.location.href= environment.cognito_login_url;
+    if (internal) {
+      window.location.href = environment.cognito_login_url;
       return;
     } else {
       this.authenticationService.checkUserStatus(username).subscribe(
         res => {
-          if(res.status && res.user_status === 'internal') {
+          if (res.status && res.user_status === 'internal') {
             window.location.href = environment.cognito_login_url;
           } else {
-            if(!this.showExternalUserFields) {
+            if (!this.showExternalUserFields) {
               this.showExternalUserFields = true;
               this.loginForm.addControl('password', new FormControl(this.password, [Validators.required]))
               return;
             }
-  
+
             this.loginExternal()
           }
         },
@@ -215,7 +232,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginExternal() {
-    if (this.loginForm.valid) {    
+    if (this.loginForm.valid) {
       this.submitting = true;
       let body = {
         username: this.loginForm.get("username").value,
@@ -247,7 +264,7 @@ export class LoginComponent implements OnInit {
 
   authorize(res) {
     if (!res.access_token) {
-      if(this.showExternalUserFields) {
+      if (this.showExternalUserFields) {
         let encValUsername = CryptoJS.AES.encrypt(this.loginForm.get("username").value, "dxtr-asia.sampoerna").toString();
         let encValPassword = CryptoJS.AES.encrypt(this.loginForm.get("password").value, "dxtr-asia.sampoerna").toString();
         if (this.rememberMe.value) {
@@ -301,11 +318,11 @@ export class LoginComponent implements OnInit {
         this.dataService.unSetAuthorization();
         this.dialogService.openSnackBar({ message: 'Akun Anda tidak Aktif! Harap hubungi Admin!' });
       }
-      
-      if(this.showExternalUserFields) {
+
+      if (this.showExternalUserFields) {
         let encValUsername = CryptoJS.AES.encrypt(this.loginForm.get("username").value, "dxtr-asia.sampoerna").toString();
         let encValPassword = CryptoJS.AES.encrypt(this.loginForm.get("password").value, "dxtr-asia.sampoerna").toString();
-        
+
         if (this.rememberMe.value) {
           this.cookieService.set('_udxtrn', encValUsername);
           this.cookieService.set('_pdxstr', encValPassword);

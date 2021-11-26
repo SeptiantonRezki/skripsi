@@ -80,7 +80,8 @@
       "next": "Selanjutnya",
       "previous": "Sebelumnya",
       "import": "Import",
-      "export": "Export"
+      "export": "Export",
+      "deactivate": "Non Aktifkan"
     },
     "area": {
       "national": "National",
@@ -212,7 +213,20 @@
     "text3": "Peran",
     "text4": "Apakah Anda Yakin Untuk Menyelesaikan ini?",
     "text5": "Hapus Admin Principal",
-    "text6": "Apakah anda yakin untuk menghapus Admin Principal ini?"
+    "text6": "Apakah anda yakin untuk menghapus Admin Principal ini?",
+    "text7": "Daftar Admin Principal",
+    "text8": "Nama",
+    "text9": "Email",
+    "text10": "Terakhir Masuk",
+    "text11": "Terakhir Diubah",
+    "text12": "Status",
+    "text13": "Tindakan",
+    "text14": "Non-aktifkan Admin Principal",
+    "text15": "Apakah anda yakin untuk menon-aktifkan data yang telah dipilih ?",
+    "text16": "Tidak ada admin principal yang dipilih",
+    "text17": "Detil Admin",
+    "text18": "Nama Pengguna",
+    "text19": "Admin Detil"
   },
   "field_force": {
     "text1": "Ubah Kata Sandi Baru",
