@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="isDetail ? 'Detail Tugas' : 'Ubah Tugas'">
-    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
-      type="button">SIMPAN</button>
+    <!-- <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+      type="button">SIMPAN</button> -->
   </page-content-header>
   <!-- / HEADER -->
 
@@ -793,5 +793,9 @@
       </div>
 
     </div>
+
+    <button *ngIf="!isDetail" id="btn-simpan-tugas" class="mt-24" color="primary" style="width: 100%; max-width: 250px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">
+      SIMPAN
+    </button>
   </div>
 </div>

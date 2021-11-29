@@ -5,12 +5,11 @@
   <button id="btn-buatTugas" style="width: 170px" [routerLink]="['/dte','template-task', 'create-personalize']" mat-raised-button type="button" class="confirmation-button">
     <mat-icon>add</mat-icon> BUAT
   </button>
-  <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-    <mat-icon>search</mat-icon>
-    <mat-form-field class="is-light tab-search">
-      <input id="search" matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
-    </mat-form-field>
-  </div>
+  <mat-form-field appearance="standard">
+    <mat-label>Cari</mat-label>
+    <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
 </div>
 <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">

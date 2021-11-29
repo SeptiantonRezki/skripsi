@@ -199,6 +199,10 @@
             <div class="template-task__header">
               Copywriting Set-Up
             </div>
+            <div class="template-task__label">
+              <mat-icon color="primary">info</mat-icon>
+              <span>Gunakan tanda <strong>@1</strong>, <strong>@2</strong>, <strong>@3</strong>,... sebagai parameter</span>
+            </div>
             <div class="section-shadow">
               <mat-tab-group>
                 <mat-tab formArrayName="children" *ngFor="let item of templateTaskForm.get('copywritingList').value; let idx=index;" [label]="item.name">
@@ -278,6 +282,10 @@
           <div class="mb-48" fxLayout="column" fxLayoutGap="24px" fxLayoutAlign="start">
             <div class="template-task__header">
               List Pertanyaan
+            </div>
+            <div class="template-task__label">
+              <mat-icon color="primary">info</mat-icon>
+              <span>Gunakan tanda <strong>@1</strong>, <strong>@2</strong>, <strong>@3</strong>,... sebagai parameter</span>
             </div>
             <div class="section-shadow p-24" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start">
               <div fxFlex="100">
@@ -825,7 +833,7 @@
 
         </form>
 
-        <button id="btn-simpan-tugas" class="mt-48" color="warn" style="width: 100%; max-width: 250px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">
+        <button id="btn-simpan-tugas" class="mt-48" color="primary" style="width: 100%; max-width: 250px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">
           SIMPAN
         </button>
       </div>
