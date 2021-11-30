@@ -343,7 +343,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     // this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
     this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
     this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
-    this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
+    this.frmIsBranching.setValue(this.detailTask.is_branching == 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
     this.frmQuiz.setValue(this.detailTask.is_quiz === 1 ? 'quiz' : 'non-quiz');
