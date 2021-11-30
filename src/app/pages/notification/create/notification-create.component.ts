@@ -178,8 +178,11 @@ export class NotificationCreateComponent {
     if(this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
+      this.formNotification.controls.is_target_area.setValue(false);
+      this.formNotification.controls.is_target_area.disable();
     } else {
       this.formNotification.controls.is_target_audience.enable();
+      this.formNotification.controls.is_target_area.enable();
     }
 
     if(this.typeOfRecurrence == 'Bday18') {
@@ -274,6 +277,7 @@ export class NotificationCreateComponent {
       url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
+      is_target_area: [false],
       search: [""],
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
@@ -2097,6 +2101,11 @@ export class NotificationCreateComponent {
   }
 
   isTargetAudience(event) {
+    if(this.formNotification.get('is_target_area').value) this.formNotification.get('is_target_area').setValue(false);
+    if (event.checked) this.getAudience();
+  }
+  isTargetArea(event) {
+    if(this.formNotification.get('is_target_audience').value) this.formNotification.get('is_target_audience').setValue(false);
     if (event.checked) this.getAudience();
   }
   sendAYOChange(event) {
