@@ -32,7 +32,7 @@ export class NotificationCreateComponent {
   onLoad: boolean;
   loadingIndicator: boolean;
   formFilter: FormGroup;
-  listSmoker: any[] = [{ name: "Semua", value: "all" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
+  listSmoker: any[] = [{ name: "Semua", value: "all" }, { name: "Merokok", value: "1" }, { name: "Tidak Merokok", value: "0" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
   formNotification: FormGroup;
   formArea: FormGroup;
@@ -72,9 +72,9 @@ export class NotificationCreateComponent {
     { name: "Kirim Sebagai Pesan", value: "message" },
   ];
   listConsumentType: any[] = [
-    { name: 'Semua', value: 'both' },
-    { name: 'Merokok', value: 'yes' },
-    { name: 'Tidak Merokok', value: 'no' }
+    { name: 'Semua', value: 'all' },
+    { name: 'Merokok', value: '1' },
+    { name: 'Tidak Merokok', value: '0' }
   ];
 
   imageContentType: File;
@@ -158,7 +158,7 @@ export class NotificationCreateComponent {
 
   // 2 geotree property
   endArea: String;
-  area_id_list: any = [];
+  area_ids_list: any = [];
   areaType: any;
   lastLevel: any;
   actionType: string = 'create';
@@ -223,7 +223,7 @@ export class NotificationCreateComponent {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
-    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    this.area_ids_list = this.dataService.getDecryptedProfile()['area_ids'];
     this.formNotificationError = {
       title: {},
       body: {},
@@ -277,7 +277,6 @@ export class NotificationCreateComponent {
       age: ["18+", Validators.required],
       employee_filter: ["all", Validators.required],
       employee: ["all"],
-      is_smoker: ["both"],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
@@ -294,7 +293,7 @@ export class NotificationCreateComponent {
       send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
-      is_smoking: ['both', Validators.required],
+      is_smoking: ['all', Validators.required],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -373,7 +372,7 @@ export class NotificationCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
       } else if(res === 'customer') {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "pesan_antar" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Main Bareng", value: "main_bareng" }];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "Pesan Antar" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Main Bareng", value: "Main Bareng" }];
       } else {
         this.listLandingPage = [{ name: "Pesan Antar", value: "Pesan Antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "Main Bareng" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
@@ -386,31 +385,15 @@ export class NotificationCreateComponent {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
       }
 
-      // if (res === 'customer') {
-      //   this.listContentType.push(
-      //     { name: "E-Wallet", value: "e_wallet" },
-      //     { name: "Link to Web Browser", value: "link_web" }
-      //   );
-      //   if (this.formNotification.controls['content_type'].value === "e_wallet") {
-      //     this.formNotification.get("content_wallet").enable();
-      //     this.formNotification.get("static_page_body").enable();
-      //     this.formNotification.get("button_text").enable();
-      //   }
-      // }
-
       if (res !== 'customer') {
         this.formNotification.get('notif_type').setValidators([]);
         this.formNotification.get('notif_type').setValue('');
-        this.formNotification.get('is_smoking').setValidators([]);
-        this.formNotification.get('is_smoking').setValue('');
         this.formNotification.get('content_wallet').setValidators([]);
         this.formNotification.get('content_wallet').setValue('');
         this.formNotification.updateValueAndValidity();
       } else {
         this.formNotification.get('notif_type').setValidators([Validators.required]);
         this.formNotification.get('notif_type').setValue('notif');
-        this.formNotification.get('is_smoking').setValidators([Validators.required]);
-        this.formNotification.get('is_smoking').setValue('both');
         this.formNotification.get('content_wallet').setValidators([Validators.required]);
         this.formNotification.get('content_wallet').setValue('OVO');
         this.formNotification.updateValueAndValidity();
@@ -463,7 +446,7 @@ export class NotificationCreateComponent {
       }
     })
 
-    this.formNotification.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
+    this.formNotification.controls['is_smoking'].valueChanges.debounceTime(50).subscribe(res => {
       if (this.formNotification.get("is_target_audience").value === true) {
         this.getAudience();
         this.selected.splice(0, this.selected.length);
@@ -629,23 +612,23 @@ export class NotificationCreateComponent {
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
     console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-      fd.append('area_id[]', areaSelected[0].value);
+      fd.append('area_ids[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
       if (areaSelected[0].value !== "") {
         areaSelected[0].value.map(ar => {
-          fd.append('area_id[]', ar);
+          fd.append('area_ids[]', ar);
         })
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
           console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
-              fd.append('area_id[]', ar);
+              fd.append('area_ids[]', ar);
             })
           } else {
-            fd.append('area_id[]', newAreaSelected[0].value);
+            fd.append('area_ids[]', newAreaSelected[0].value);
           }
         }
       }
@@ -654,23 +637,23 @@ export class NotificationCreateComponent {
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
       // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-        fd.append('area_id[]', areaSelected[0].value);
+        fd.append('area_ids[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
         if (areaSelected[0].value !== "") {
           areaSelected[0].value.map(ar => {
-            fd.append('area_id[]', ar);
+            fd.append('area_ids[]', ar);
           })
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
             console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
-                fd.append('area_id[]', ar);
+                fd.append('area_ids[]', ar);
               })
             } else {
-              fd.append('area_id[]', newAreaSelected[0].value);
+              fd.append('area_ids[]', newAreaSelected[0].value);
             }
           }
         }
@@ -702,7 +685,7 @@ export class NotificationCreateComponent {
       case 'zone':
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
@@ -729,7 +712,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -759,7 +742,7 @@ export class NotificationCreateComponent {
           console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -788,7 +771,7 @@ export class NotificationCreateComponent {
           console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -814,7 +797,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -837,7 +820,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
@@ -1428,9 +1411,10 @@ export class NotificationCreateComponent {
       type: this.formNotification.get("user_group").value,
       subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
-      area_id: areas[0].value,
+      area_ids: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
-      send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
+      // send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
+      send_sfmc: '0',
       status: this.formNotification.get('status').value
     };
 
@@ -1445,7 +1429,7 @@ export class NotificationCreateComponent {
 
     if (body.type === 'customer') {
       let is_smoking;
-      let is_smoker = this.formNotification.get('is_smoker').value;
+      let is_smoker = this.formNotification.get('is_smoking').value;
       if (is_smoker === 'yes') {
         is_smoking = 1;
       } else if (is_smoker === 'no') {
@@ -1455,14 +1439,12 @@ export class NotificationCreateComponent {
       }
       body['is_smoking'] = is_smoking;
       body['employee'] = this.formNotification.get('employee').value;
-      if (this.formNotification.get('is_smoker').value !== 'yes') {
+      if (this.formNotification.get('is_smoking').value !== 'yes') {
         body['verification'] = this.formNotification.get('verification').value;
       }
       body['subscription_status'] = this.formNotification.get('subscription_status').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
       body['is_smoking'] = this.formNotification.get('is_smoking').value;
-      // body['content_wallet'] = this.formNotification.get('content_wallet').value;
-      // body['button_text'] = this.formNotification.get('button_text').value;
       body['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
 
@@ -1514,7 +1496,7 @@ export class NotificationCreateComponent {
     } else if (body.content_type === 'iframe' || body.content_type === 'link_web') {
       let url = this.formNotification.get('url_link').value;
       if (!url.match(/^[a-zA-Z]+:\/\//)) { url = 'http://' + url; }
-      body[`${body.content_type==='iframe' ? 'iframe' : 'e_wallet'}_value`] = url;
+      body[`${body.content_type==='iframe' ? 'iframe' : 'link_web'}_value`] = url;
       body['transfer_token'] = this.formNotification.get('transfer_token').value;
     } else if (body.content_type === 'image') {
       if (this.imageContentTypeBase64) {
@@ -1536,7 +1518,7 @@ export class NotificationCreateComponent {
 
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
-            bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('area_ids', body.area_ids);
             bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
@@ -1598,7 +1580,7 @@ export class NotificationCreateComponent {
           }
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
-          bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('area_ids', body.area_ids);
           bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
@@ -1649,18 +1631,6 @@ export class NotificationCreateComponent {
       body['button_text'] = this.formNotification.get("button_text").value;
       body['static_page_body'] = this.formNotification.get("static_page_body").value;
     }
-    else {
-
-    }
-
-    if (body.content_type === "e_wallet") {
-      body['body'] = this.formNotification.get('body').value;
-      body['content_wallet'] = this.formNotification.get('content_wallet').value;
-      body['button_text'] = this.formNotification.get('button_text').value;
-    } else if (body.content_type === 'link_web') {
-      body['link_web_value'] = this.formNotification.get('url_iframe').value;
-      body['transfer_token'] = this.formNotification.get('transfer_token').value;
-    }
 
     if (this.formNotification.get("is_target_audience").value) {
       body['target_audience'] = 1;
@@ -1668,7 +1638,7 @@ export class NotificationCreateComponent {
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
-
+    
     this.dataService.showLoading(true);
 
     this.notificationService.create(body).subscribe(
@@ -2320,26 +2290,12 @@ export class NotificationCreateComponent {
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
       let static_page_body = '';
-      let smoker_type = '';
 
-      if (type === 'customer') {
-        if (is_smoking === '1') {
-          smoker_type = 'yes';
-        } else if (is_smoking === '0') {
-          smoker_type = 'no';
-        } else {
-          smoker_type = 'all';
-        }
-      }
-
-      if (content_type === 'iframe') {
-        this.iframe_value = content_type_value.iframe_value;
-      } else if (content_type === 'link_web') {
-        this.iframe_value = content_type_value.link_web_value;
-      }
-      const iframe_value = (content_type === 'iframe') ? content_type_value.iframe_value : '';
+      const url_link = (content_type === 'iframe') ? content_type_value.iframe_value : content_type_value.link_web_value;
       const landing_page_value = (content_type === 'landing_page') ? content_type_value.landing_page_value : '';
       const image_url = (content_type === 'image') ? content_type_value.image_value : [];
+      const wallet_value = (content_type === 'e_wallet') ? content_type_value.target_page.wallet.app_name : '';
+      const button_text = (content_type === 'e_wallet') ? content_type_value.target_page.button_text : '';
 
       if (static_page_slug) {
         const { body } = await this.notificationService.getPageContent(static_page_slug).toPromise();
@@ -2351,7 +2307,7 @@ export class NotificationCreateComponent {
       }
 
       const frm = this.formNotification;
-      frm.controls['is_smoker'].setValue(smoker_type);
+      frm.controls['is_smoking'].setValue('0');
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
@@ -2371,13 +2327,16 @@ export class NotificationCreateComponent {
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
+      
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
          */
-        frm.controls['url_link'].setValue(iframe_value);
+        frm.controls['url_link'].setValue(url_link);
         frm.controls['landing_page_value'].setValue(landing_page_value);
         frm.controls['notif_type'].setValue(notif_type);
+        frm.controls['content_wallet'].setValue(wallet_value);
+        frm.controls['button_text'].setValue(button_text);
       }, 1000);
 
       if (type_of_recurrence == 'Recurring' && recurrence) {

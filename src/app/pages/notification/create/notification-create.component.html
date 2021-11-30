@@ -60,7 +60,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
-                  Tipe Notifikasi harus diisi
+                  Tipe Konsumen harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -422,18 +422,18 @@
             <div class="">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="is_smoker" placeholder="Tipe Konsumen">
+                  <mat-select formControlName="is_smoking" placeholder="Tipe Konsumen">
                     <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
-                    *ngIf="formNotification.controls['is_smoker'].hasError('required') && formNotification.controls['is_smoker'].touched">
+                    *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
                     Tipe Konsumen harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
             </div>
 
-            <div class="" *ngIf="formNotification.get('is_smoker').value !== 'yes'" fxLayout="row" fxLayoutAlign="start center">
+            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="verification" placeholder="Jenis Konsumen">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
