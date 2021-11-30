@@ -154,6 +154,16 @@
     "topnav1": "My Profile",
     "topnav2": "Sign out"
   },
+  "device_authentication": {
+    "text1": "Account Verification",
+    "text2": "Enter the 6 Digit Verification Code sent via",
+    "text3": "Remaining Time to Use Verification Code",
+    "text4": "Device Verification",
+    "text5": "Sending...",
+    "text6": "Resend Verification Code",
+    "text7": "Your account is inactive! Please contact Admin!",
+    "text8": "Failed to authorize OTP please try again"
+  },
   "bantuan": {
     "text1": "Help",
     "text2": "Information",
