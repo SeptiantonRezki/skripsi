@@ -150,8 +150,10 @@ import { CopywritingComponent } from './pengaturan-attribute-misi/index/copywrit
 import { TemplateCreatePersonalizeComponent } from './template/create/personalize/template-create-personalize.component';
 import { TemplateIndexPersonalizeComponent } from './template/index/personalize/template-index-personalize.component';
 import { TemplateEditPersonalizeComponent } from './template/edit/personalize/template-edit-personalize.component';
-// import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index/personalize/task-sequencing-index-personalize.component';
-// import { PublishMisiComponent } from './publish-misi/publish-misi.component';
+// import { AudienceIndexPersonalizeComponent } from './audience/index/personalize/audience-index-personalize.component';
+// import { AudienceCreatePersonalizeComponent } from './audience/create/personalize/audience-create-personalize.component';
+import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index/personalize/task-sequencing-index-personalize.component';
+import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -318,8 +320,10 @@ export const MY_FORMATS = {
     TemplateCreatePersonalizeComponent,
     TemplateIndexPersonalizeComponent,
     TemplateEditPersonalizeComponent,
-    // TaskSequencingIndexPersonalizeComponent,
-    // PublishMisiComponent,
+    // AudienceIndexPersonalizeComponent,
+    // AudienceCreatePersonalizeComponent,
+    TaskSequencingIndexPersonalizeComponent,
+    PublishMisiComponent,
   ],
   exports: [
     TemplateIndexComponent,

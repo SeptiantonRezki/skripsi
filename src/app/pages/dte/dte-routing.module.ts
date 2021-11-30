@@ -46,6 +46,8 @@ import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin
 import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
 import { TemplateCreatePersonalizeComponent } from "./template/create/personalize/template-create-personalize.component";
 import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/template-edit-personalize.component";
+// import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
+import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 
 const routes: Routes = [
   {
@@ -217,6 +219,14 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
+  // {
+  //   path: "audience/create-personalize",
+  //   component: AudienceCreatePersonalizeComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.create_personalize
+  //   },
+  //   canActivate: [PageGuard]
+  // },
   {
     path: "audience/edit",
     component: AudienceEditComponent,
@@ -498,6 +508,10 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.coin_disburstment.detail
     },
   },
+  {
+    path: "publish-mission",
+    component: PublishMisiComponent,
+  }
 ];
 
 @NgModule({

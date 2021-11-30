@@ -760,7 +760,9 @@ export class Endpoint {
         get_import_preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/preview-import-coin`,
         // import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
         import_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/request-import-coin`,
-        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer` //ini yang di coin mangement
+        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`, //ini yang di coin mangement
+        get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission/${context.sequencing_id}`,
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
