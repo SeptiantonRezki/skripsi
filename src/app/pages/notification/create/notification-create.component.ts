@@ -1607,21 +1607,21 @@ export class NotificationCreateComponent {
         }
       }
     }
-    console.log('LOOK SUBMIT', body)
-    // this.dataService.showLoading(true);
     
-    // this.notificationService.create(body).subscribe(
-    //   res => {
-    //     this.router.navigate(["notifications"]);
-    //     this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-    //     this.dataService.showLoading(false);
-    //   },
-    //   err => {
-    //     // this.dialogService.openSnackBar({ message: err.error.message });
-    //     // this.loadingIndicator = false;
-    //     this.dataService.showLoading(false);
-    //   }
-    // );
+    this.dataService.showLoading(true);
+    
+    this.notificationService.create(body).subscribe(
+      res => {
+        this.router.navigate(["notifications"]);
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.dataService.showLoading(false);
+      },
+      err => {
+        // this.dialogService.openSnackBar({ message: err.error.message });
+        // this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+      }
+    );
   }
 
   contentType(value) {
