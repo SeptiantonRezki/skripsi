@@ -442,7 +442,10 @@
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               Target Audience</mat-checkbox>
-            <mat-checkbox class="mt-4 ml-20 mb-8" (change)="isTargetArea($event)"
+            <mat-checkbox
+              *ngIf="formNotification.controls['user_group'].value === 'customer'"
+              class="mt-4 ml-20 mb-8"
+              (change)="isTargetArea($event)"
               formControlName="is_target_area">
               Target Area</mat-checkbox>
           </div>
@@ -540,7 +543,7 @@
           <div [formGroup]="formFilter" fxLayout="row wrap" fxLayoutAlign="space-between stretch"
             fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
             style="margin-left: 25px; margin-right: 25px;"
-            *ngIf="formNotification.get('is_target_audience').value === true || formNotification.get('is_target_area').value === true">
+            *ngIf="formNotification.get('is_target_audience').value === true">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="National" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
@@ -653,7 +656,7 @@
               </mat-select>
             </mat-form-field> -->
           </div>
-          <div class="p-0" *ngIf="formNotification.get('is_target_audience').value === true || formNotification.get('is_target_area').value === true">
+          <div class="p-0" *ngIf="formNotification.get('is_target_audience').value === true">
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -706,6 +709,13 @@
               </ngx-datatable-column>
             </ngx-datatable>
           </div>
+          <target-area
+            *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
+            (selectedArea)="getSelectedArea($event)"
+            (selectedAll)="getSelectedAll($event)"
+            (selectedAllId)="getSelectedAllId($event)"
+            [areas]="areasInit"
+          ></target-area>
 
         </div>
 

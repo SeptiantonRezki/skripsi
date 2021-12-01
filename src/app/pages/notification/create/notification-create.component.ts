@@ -165,6 +165,11 @@ export class NotificationCreateComponent {
   isHideSaveButton: boolean = true;
   isCreateOrEditNotification: any;
 
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+  areasInit: any[] = [];
+
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
   }
@@ -285,6 +290,7 @@ export class NotificationCreateComponent {
       send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
+      area_ids: [[]],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -492,6 +498,11 @@ export class NotificationCreateComponent {
     this.selected.splice(0, this.selected.length);
     this.audienceSelected = [];
   }
+  // resetArea() {
+  //   if(this.formNotification.get('is_target_area').value === false) {
+  //     this.formNotification.get('area_ids').setValue('1');
+  //   }
+  // }
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()['areas'] || [];
@@ -1372,7 +1383,7 @@ export class NotificationCreateComponent {
       type: this.formNotification.get("user_group").value,
       subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
-      area_id: areas[0].value,
+      area_ids: areas[0].value.toString(),
       type_of_recurrence: this.typeOfRecurrence,
       send_sfmc: this.formNotification.get('send_ayo').value ? '0': '1',
       status: this.formNotification.get('status').value
@@ -1463,7 +1474,7 @@ export class NotificationCreateComponent {
 
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
-            bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('area_ids', body.area_ids);
             bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
@@ -1525,7 +1536,7 @@ export class NotificationCreateComponent {
           }
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
-          bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('area_ids', body.area_ids);
           bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
@@ -1579,21 +1590,38 @@ export class NotificationCreateComponent {
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
-
-    this.dataService.showLoading(true);
-    
-    this.notificationService.create(body).subscribe(
-      res => {
-        this.router.navigate(["notifications"]);
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.dataService.showLoading(false);
-      },
-      err => {
-        // this.dialogService.openSnackBar({ message: err.error.message });
-        // this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+    if (body.type === 'customer' && this.formNotification.get("is_target_area").value) {
+      let str = '';
+      if (this.selectedAll) {
+        const all = this.selectedAllId;
+        all.map((item, i) => i === 0 ? str += item : str += `,${item}`);
+        body['area_ids'] = str;
+      } else {
+        let selected = this.selectedArea.filter((item) => (item.id && item.id.toString() !== "1")).map((item) => item.id);
+        selected.map((item, i) => i === 0 ? str += item : str += `,${item}`);
+        if (selected.length) {
+          body['area_ids'] = str;
+        } else {
+          this.dataService.showLoading(false);
+          return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+        }
       }
-    );
+    }
+    console.log('LOOK SUBMIT', body)
+    // this.dataService.showLoading(true);
+    
+    // this.notificationService.create(body).subscribe(
+    //   res => {
+    //     this.router.navigate(["notifications"]);
+    //     this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //     this.dataService.showLoading(false);
+    //   },
+    //   err => {
+    //     // this.dialogService.openSnackBar({ message: err.error.message });
+    //     // this.loadingIndicator = false;
+    //     this.dataService.showLoading(false);
+    //   }
+    // );
   }
 
   contentType(value) {
@@ -2106,7 +2134,13 @@ export class NotificationCreateComponent {
   }
   isTargetArea(event) {
     if(this.formNotification.get('is_target_audience').value) this.formNotification.get('is_target_audience').setValue(false);
-    if (event.checked) this.getAudience();
+    if(event.checked) {
+      if(this.selectedAll) {
+        this.areasInit = this.selectedAllId;
+      } else {
+        this.areasInit = this.selectedArea;
+      };
+    };
   }
   sendAYOChange(event) {
     
@@ -2208,7 +2242,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc
+        verification, send_sfmc, area_ids
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2240,9 +2274,15 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
+      frm.controls['area_ids'].setValue(area_ids);
+      if(area_ids.length > 0 && !area_ids.includes(1)) {
+        frm.controls['is_target_area'].setValue(true);
+        this.areasInit = frm.controls['area_ids'].value.map(item => ({id:item}));
+      }
       if(type == 'customer') {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
+        frm.controls['area_ids'].setValue(area_ids);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
@@ -2252,7 +2292,7 @@ export class NotificationCreateComponent {
          */
         frm.controls['url_iframe'].setValue(iframe_value);
         frm.controls['landing_page_value'].setValue(landing_page_value);
-        frm.controls['notif_type'].setValue(notif_type); 
+        frm.controls['notif_type'].setValue(notif_type);
       }, 1000);
 
       if(type_of_recurrence == 'Recurring' && recurrence) {
@@ -2329,5 +2369,17 @@ export class NotificationCreateComponent {
     } else {
       this.isActiveInactiveShow = true;
     }
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 }
