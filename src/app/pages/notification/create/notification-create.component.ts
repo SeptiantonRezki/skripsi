@@ -32,7 +32,6 @@ export class NotificationCreateComponent {
   onLoad: boolean;
   loadingIndicator: boolean;
   formFilter: FormGroup;
-  listSmoker: any[] = [{ name: "Semua", value: "all" }, { name: "Merokok", value: "1" }, { name: "Tidak Merokok", value: "0" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
   formNotification: FormGroup;
   formArea: FormGroup;
@@ -1428,18 +1427,8 @@ export class NotificationCreateComponent {
     body['age'] = this.formNotification.get("age").value;
 
     if (body.type === 'customer') {
-      let is_smoking;
-      let is_smoker = this.formNotification.get('is_smoking').value;
-      if (is_smoker === 'yes') {
-        is_smoking = 1;
-      } else if (is_smoker === 'no') {
-        is_smoking = 0;
-      } else {
-        is_smoking = 'all';
-      }
-      body['is_smoking'] = is_smoking;
       body['employee'] = this.formNotification.get('employee').value;
-      if (this.formNotification.get('is_smoking').value !== 'yes') {
+      if (this.formNotification.get('is_smoking').value !== '1') {
         body['verification'] = this.formNotification.get('verification').value;
       }
       body['subscription_status'] = this.formNotification.get('subscription_status').value;

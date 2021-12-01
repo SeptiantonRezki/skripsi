@@ -52,20 +52,6 @@
             </div>
           </div>
 
-          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
-            <div fxLayout="row">
-              <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="is_smoking" placeholder="Tipe Konsumen">
-                  <mat-option *ngFor="let item of listConsumentType" [value]="item.value">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error
-                  *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
-                  Tipe Konsumen harus diisi
-                </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -423,7 +409,7 @@
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
                   <mat-select formControlName="is_smoking" placeholder="Tipe Konsumen">
-                    <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
+                    <mat-option *ngFor="let item of listConsumentType" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
