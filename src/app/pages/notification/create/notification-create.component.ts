@@ -1412,8 +1412,7 @@ export class NotificationCreateComponent {
       content_type: this.formNotification.get('content_type').value,
       area_ids: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
-      // send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
-      send_sfmc: '0',
+      send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       status: this.formNotification.get('status').value
     };
 
@@ -2296,7 +2295,7 @@ export class NotificationCreateComponent {
       }
 
       const frm = this.formNotification;
-      frm.controls['is_smoking'].setValue('0');
+      frm.controls['is_smoking'].setValue(is_smoking);
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
