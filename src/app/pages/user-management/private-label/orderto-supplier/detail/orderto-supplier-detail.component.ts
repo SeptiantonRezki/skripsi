@@ -172,22 +172,6 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
             this.document.setValue(this.detailOrder.document);
           }
 
-          const body = {
-            invoice_number: res.invoice_number
-          }
-          this.wholesalerService.showDocumentOrder(body).subscribe(res => {
-            let reader = new FileReader();
-            reader.addEventListener("load", () => {
-              this.documentOrderUrl = reader.result;
-            }, false);
-
-            if (res) {
-              reader.readAsDataURL(res);
-            }
-          }, err => {
-            console.log("Gagal load foto");
-          });
-
           this.editable = false;
 
           this.loadingIndicator = false;
