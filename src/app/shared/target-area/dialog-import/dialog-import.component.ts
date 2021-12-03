@@ -58,7 +58,7 @@ export class DialogImportComponent implements OnInit {
       (res) => {
         this.rows = res.data.filter((item) => item.is_valid !== 0);
         if(this.payload.isNotifValidation) {
-          this.isValid = true;
+          this.isValid = this.rows.length > 0 ? true : false;
           this.rowsValid = res.data.filter(item => item.is_valid === 1);
           this.rowsLength = this.rowsValid.length;
         } else {
