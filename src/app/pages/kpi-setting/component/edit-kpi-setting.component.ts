@@ -50,7 +50,10 @@ export class EditKPISettingComponent implements OnInit {
   KPSList: any;
 
   categories = [
-    'visit', 'brand', 'trade program', 'ecosystem'
+    // 'visit',
+    'brand',
+    // 'trade program',
+    'ecosystem'
   ];
 
   brands: Array<any>;
