@@ -36,7 +36,7 @@
         </span>
       </div>
     </div>
-    <div *ngIf="isUploaded && !isValid" class="notif notif-error mt-24">
+    <div *ngIf="isUploaded && !isValid && !payload.isNotifValidation" class="notif notif-error mt-24">
       Silahkan cek kembali produk yang anda upload!
     </div>
     <div *ngIf="rows.length > 0" class="preview">
@@ -71,7 +71,7 @@
           </tbody>
         </table>
       </div>
-      <div class="preview-total">{{ rowsLength }} Area</div>
+      <div class="preview-total">{{ rowsLength }} Area<span *ngIf="payload.isNotifValidation"> Valid</span></div>
     </div>
     <div class="border-top mt-16">
       <div class="pt-16">
