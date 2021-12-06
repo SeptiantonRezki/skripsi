@@ -184,17 +184,12 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_task_sequencing', param);
-    this.router.navigate(['dte', 'publish-mission', 'edit']);
+    this.router.navigate(['dte', 'publish-mission', 'edit', param.id]);
   }
-
-  // duplicate(param?: any): void {
-  //   this.dataService.setToStorage('detail_task_sequencing', param);
-  //   this.router.navigate(['dte', 'publish-mission', 'duplicate']);
-  // }
 
   directDetail(param?: any): void {
     this.dataService.setToStorage('detail_task_sequencing', param);
-    this.router.navigate(['dte', 'publish-mission', 'detail']);
+    this.router.navigate(['dte', 'publish-mission', 'detail', param.id]);
   }
 
   deleteTaskSequencing(id) {

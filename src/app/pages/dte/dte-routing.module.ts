@@ -514,12 +514,12 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "publish-mission/edit",
+    path: "publish-mission/edit/:id",
     component: PublishMisiComponent,
     canActivate: [PageGuard]
   },
   {
-    path: "publish-mission/detail",
+    path: "publish-mission/detail/:id",
     component: PublishMisiComponent,
     canActivate: [PageGuard]
   },
