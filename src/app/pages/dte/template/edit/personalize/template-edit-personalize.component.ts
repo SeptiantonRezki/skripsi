@@ -58,7 +58,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG_PERSONALIZE;
 
   listChoose: Array<any> = [
   ];
@@ -446,7 +446,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       }
       questions.push(this.formBuilder.group({
         id: item.id,
-        question: item.question,
+        question: this.parameterToBold(item.question),
         question_image: item['question_image'] ? item['question_image'] : '',
         question_video: item['question_video'] ? item['question_video'] : '',
         type: item.type === 'planogram' ? item.type + "_ir" : item.type,
@@ -634,12 +634,17 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
     children.push(this.formBuilder.group({
       task_toolbox_copywrite_id: item.task_toolbox_copywrite_id,
-      name: [item.name, Validators.required],
+      name: [this.parameterToBold(item.name), Validators.required],
       other_name: [item.other_name],
-      description: [item.description, Validators.required],
+      description: [this.parameterToBold(item.description), Validators.required],
       cover: [item.cover ? item.cover_url : ''],
       visual_header: [item.visual_header_url, Validators.required],
     }));
+  }
+
+  parameterToBold(str){
+    str = str.replace(/(##[0-9]+)/g, (match: any) => { return `<strong>${match}</strong>`});
+    return str;
   }
 
   handleImagePersonalize(key, image, idx) {
@@ -1572,6 +1577,13 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
   }
 
+  html2text(html) {
+    var tag = document.createElement('div');
+    tag.innerHTML = html;
+    
+    return tag.innerText;
+  }
+
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1580,6 +1592,16 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
+      let children: any[] = this.templateTaskForm.get('children').value;
+
+      questions.map((item, index) => {
+        questions[index].question = this.html2text(item.question);
+      });
+
+      children.map((child, index) => {
+        children[index].name = this.html2text(child.name);
+        children[index].description = this.html2text(child.description);
+      });
 
       let questionsIsEmpty = [];
       let body = {

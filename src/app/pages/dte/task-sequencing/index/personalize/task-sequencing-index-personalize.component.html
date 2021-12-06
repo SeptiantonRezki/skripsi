@@ -2,9 +2,9 @@
   <h2 class="pl-8">Personalize Management</h2>
 </div>
 <div class="px-12" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
-  <!-- <button id="btnBuatTaskSequencing" style="width: 170px" [routerLink]="['/dte','task-sequencing','create']" mat-raised-button type="button" class="confirmation-button">
+  <button id="btnBuatTaskSequencing" style="width: 170px" [routerLink]="['/dte','publish-mission']" mat-raised-button type="button" class="confirmation-button">
     <mat-icon>add</mat-icon> BUAT
-  </button> -->
+  </button>
   <mat-form-field appearance="standard">
     <mat-label>Cari</mat-label>
     <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
@@ -17,7 +17,7 @@
   [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
   (sort)="onSort($event)" (select)="onSelect($event)">
 
-  <ngx-datatable-column name="Nama" prop="name">
+  <ngx-datatable-column [width]="200" name="Nama" prop="name">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
     </ng-template>
@@ -65,37 +65,13 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Last Request Data" prop="last_request">
-    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span *ngIf="row.last_request">{{ renderStatusRequest(row.status_export) }} : {{row.last_request |
-        date:'dd/MM/yyyy HH:mm'}}</span>
-    </ng-template>
-  </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="Tindakan" headerClass="textright" [sortable]="false">
+  <ngx-datatable-column [width]="150" name="Tindakan" headerClass="textright" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
       style="justify-content: center !important">
       <div class="button-row" style="margin-left: -10px">
-        <!-- <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-          <mat-icon class="secondary-text">assignment</mat-icon>
-        </button> -->
-        <button id="btn-duplikat" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
+        <!-- <button id="btn-duplikat" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
           <mat-icon class="secondary-text">content_copy</mat-icon>
-        </button>
-        <button id="btn-request_file" type="button" mat-icon-button color="" matTooltip="Request File" (click)="requestFile(row)"
-          [disabled]="reqDownloadCondition(row)['request'] === false">
-          <mat-icon *ngIf="reqDownloadCondition(row)['request'] === true" class="orange-500-fg">
-            account_balance_wallet</mat-icon>
-          <mat-icon *ngIf="reqDownloadCondition(row)['request'] === false" class="secondary-text">
-            account_balance_wallet</mat-icon>
-        </button>
-        <button id="btn-export" type="button" mat-icon-button color="" matTooltip="Eksport Task Sequencing"
-          (click)="downloadFile(row)" [disabled]="reqDownloadCondition(row)['download'] === false">
-          <mat-icon *ngIf="reqDownloadCondition(row)['download'] === true" class="orange-500-fg">save_alt
-          </mat-icon>
-          <mat-icon *ngIf="reqDownloadCondition(row)['download'] === false" class="secondary-text">save_alt
-          </mat-icon>
-        </button>
+        </button> -->
         <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Edit Task Sequencing"
           (click)="directEdit(row)">
           <mat-icon class="secondary-text">edit</mat-icon>

@@ -1,0 +1,171 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Audience Personalize'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="column" fxLayoutGap="24px">
+        <form [formGroup]="formAudience" autocomplete="off">
+          <div fxLayout="row">
+            <div class="p-24" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+              <div fxLayout="column">
+                <mat-form-field class="is-light form-primary">
+                  <input matInput type="text" formControlName="name" placeholder="Nama Grup" />
+                  <mat-error>
+                    Nama Grup harus diisi
+                  </mat-error>
+                </mat-form-field>
+  
+                <!-- TODO: ubah jadi list publish misi -->
+                <mat-form-field class="is-light form-primary">
+                  <mat-select
+                    formControlName="trade_creator_id"
+                    placeholder="Pilih Template Tugas"
+                    #singleSelect
+                  >
+                    <ngx-mat-select-search
+                      [formControl]="filterTradeProgram"
+                      [placeholderLabel]="'Cari Template Tugas...'"
+                      [noEntriesFoundLabel]="'Tidak ada Template Tugas yang ditemukan'"
+                    ></ngx-mat-select-search>
+                    <!-- TODO: ubah jadi template tugas -->
+                    <mat-option
+                      *ngFor="let item of filteredTradeProgram | async"
+                      [value]="item.id"
+                    >
+                      {{ item.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formAudience.controls['trade_creator_id'].hasError('required') && formAudience.controls['trade_creator_id'].touched">
+                    Template Tugas harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="column">
+                <mat-radio-group class="mb-16" formControlName="audience_type" (change)="tsmOrScheduler($event.value)">
+                  <mat-radio-button class="mr-24" *ngFor="let item of chooseGetAudience" [value]="item.value">
+                    {{ item.name }}
+                  </mat-radio-button>
+                </mat-radio-group>
+
+                <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
+                  <!-- <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="National" formControlName="national">
+                      <mat-option *ngFor="let item of listLevelArea" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Zone" formControlName="zone" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Zona" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Regional" formControlName="region" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Regional" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Area" formControlName="area" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Area" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </form>
+                <form [formGroup]="formFilterRetailer" fxLayout="column">
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Retail Classification" formControlName="retail_classification">
+                      <mat-option *ngFor="let item of retailClassification" [value]="item.value">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="B2B Active" formControlName="b2b_active">
+                      <mat-option *ngFor="let item of b2bActiveList" [value]="item.value">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <input matInput type="text" formControlName="total_required_panel" placeholder="Total Required Panel" />
+                    <mat-error>
+                      Total Required Panel harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                </form>
+              </div>
+
+              <div fxLayout="column">
+                <mat-radio-group class="mb-16" [formControl]="radioFixed" (change)="tsmOrScheduler($event.value)">
+                  <mat-radio-button value="fixed">
+                    Fixed Panel
+                  </mat-radio-button>
+                </mat-radio-group>
+                <div fxLayout="row" fxLayoutGap="16px" *ngIf="formAudience.get('audience_type').value === 'fixed'">
+                  <div fxLayout="column">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      class="is-danger"
+                      (click)="exportAudience()"
+                    >
+                      <mat-icon>arrow_upward</mat-icon> Export Template
+                    </button>
+                    <label *ngIf="exportTemplate" style="color: white;">Downloading Template</label>
+                  </div>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    class="is-danger"
+                    (click)="importAudience()"
+                  >
+                    <mat-icon>arrow_downward</mat-icon> Import XLS
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TODO: bagian panel APTA -->
+            <div class="p-24" fxLayout="column" fxFlex>
+              <p>test</p>
+            </div>
+          </div>
+        </form>
+
+        <div class="p-24" fxLayout="row" fxLayoutGap="16px">
+          <button
+            id="btn-check"
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit()"
+            fxFlex="20"
+          >
+            CHECK
+          </button>
+          <button
+            id="btn-simpan"
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit()"
+            fxFlex="20"
+            disabled
+          >
+            SIMPAN
+          </button>
+        </div>
+      </div>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>

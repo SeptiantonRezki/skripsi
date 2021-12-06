@@ -201,7 +201,7 @@
             </div>
             <div class="template-task__label">
               <mat-icon color="primary">info</mat-icon>
-              <span>Gunakan tanda <strong>@1</strong>, <strong>@2</strong>, <strong>@3</strong>,... sebagai parameter</span>
+              <span>Gunakan tanda <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... sebagai parameter pada <strong>Judul Misi</strong> dan <strong>Deskripsi Misi</strong></span>
             </div>
             <div class="section-shadow">
               <mat-tab-group>
@@ -210,9 +210,8 @@
                     <div fxLayout="row" fxFill fxLayoutGap="24px" fxLayoutAlign="start center">
                       <div fxFlex="10">Judul Misi</div>
                       <div> : </div>
-                      <mat-form-field fxFlex appearance="fill" [formGroupName]="idx" floatLabel="never">
-                        <mat-label>Judul Misi</mat-label>
-                        <textarea matInput formControlName="name" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput" minlength="3"></textarea>
+                      <mat-form-field fxFlex [formGroupName]="idx" class="descInput exportTextarea desc-template" floatLabel="never">
+                        <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
                         <mat-error>
                           Judul Misi harus diisi
                         </mat-error>
@@ -225,6 +224,7 @@
                       <mat-form-field fxFlex appearance="fill" [formGroupName]="idx" floatLabel="never">
                         <mat-label>Nama Lain Misi</mat-label>
                         <textarea matInput formControlName="other_name" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
+                        <mat-hint>Tidak perlu menggunakan parameter</mat-hint>
                       </mat-form-field>
                     </div>
 
@@ -285,7 +285,7 @@
             </div>
             <div class="template-task__label">
               <mat-icon color="primary">info</mat-icon>
-              <span>Gunakan tanda <strong>@1</strong>, <strong>@2</strong>, <strong>@3</strong>,... sebagai parameter</span>
+              <span>Gunakan tanda <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... sebagai parameter pada <strong>Judul Pertanyaan</strong></span>
             </div>
             <div class="section-shadow p-24" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start">
               <div fxFlex="100">

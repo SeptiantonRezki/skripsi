@@ -1,0 +1,84 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
+  <h2 class="pl-8">Daftar Audience Personalize</h2>
+</div>
+<div class="mx-12" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+  <button id="btn-create-audience" style="width: 170px;" [routerLink]="['/dte', 'audience', 'create-personalize']" mat-raised-button type="button" class="confirmation-button">
+    <mat-icon>add</mat-icon>BUAT
+  </button>
+  <mat-form-field appearance="standard">
+    <mat-label>Cari</mat-label>
+    <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+
+<ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+  [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+  [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
+  [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+  (sort)="onSort($event)" (select)="onSelect($event)">
+
+  <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+      let-selectFn="selectFn">
+      <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+    </ng-template>
+
+    <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+      let-onCheckboxChangeFn="onCheckboxChangeFn">
+      <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="{{ ls.locale.principal_partnership.text3 }}" prop="name">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span id="nama-group" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="Nama Pengaturan Jadwal" [sortable]="false" prop="trade_name">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-name">{{row.trade_name ? row.trade_name : '-'}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="{{ ls.locale.dte.trade_program.text3 }}" [sortable]="false" prop="trade_creator_name">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span class="row-name">{{row.trade_creator_name ? row.trade_creator_name : '-'}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="{{ ls.locale.dte.audience.text2 }}" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
+
+  <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="created_at">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      {{row.created_at | date:'dd/MM/yyyy'}}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="{{ ls.locale.dte.audience.text3 }}" prop="status">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+      <span id="status" *ngIf="row.status === 'rejected'" class="text-boxed mat-red-700-bg">{{row.real_status}}</span>
+      <span id="status" *ngIf="row.status === 'pending'" class="text-boxed mat-yellow-700-bg">{{row.real_status}}</span>
+      <span id="status" *ngIf="row.status === 'approved'" class="text-boxed mat-green-700-bg">{{row.real_status}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+      style="justify-content: center !important">
+      <div class="button-row" style="margin-left: -10px">
+        <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+          <mat-icon class="secondary-text">assignment</mat-icon>
+        </button>
+        <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+          <mat-icon class="secondary-text">edit</mat-icon>
+        </button>
+        <button id="btn-delete" mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
+          matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

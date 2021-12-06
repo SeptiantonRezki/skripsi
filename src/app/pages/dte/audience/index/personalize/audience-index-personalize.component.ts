@@ -1,56 +1,53 @@
-import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { DataService } from "../../../../../services/data.service";
-import { Router } from "@angular/router";
-import { FuseSplashScreenService } from "@fuse/services/splash-screen.service";
-import { DialogService } from "../../../../../services/dialog.service";
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Subject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { DialogService } from 'app/services/dialog.service';
+import { AudienceService } from '../../../../../services/dte/audience.service';
+import { DataService } from '../../../../../services/data.service';
 import { PagesName } from 'app/classes/pages-name';
-import { SequencingService } from 'app/services/dte/sequencing.service';
-import { IdleService } from 'app/services/idle.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
-  selector: 'app-task-sequencing-index-personalize',
-  templateUrl: './task-sequencing-index-personalize.component.html',
-  styleUrls: ['./task-sequencing-index-personalize.component.scss']
+  selector: 'app-audience-index-personalize',
+  templateUrl: './audience-index-personalize.component.html',
+  styleUrls: ['./audience-index-personalize.component.scss']
 })
-export class TaskSequencingIndexPersonalizeComponent implements OnInit {
+export class AudienceIndexPersonalizeComponent implements OnInit {
   rows: any[];
   selected: any[];
-  id: any[];
+  id: any;
 
   loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
 
-  offsetPagination: Number = null;
+  @ViewChild(DatatableComponent)
+  table: DatatableComponent;
+
+  @ViewChild("activeCell")
+  activeCellTemp: TemplateRef<any>;
+
   keyUp = new Subject<string>();
-
-  @ViewChild("activeCell") activeCellTemp: TemplateRef<any>;
-  @ViewChild('table') table: DatatableComponent;
-
-  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   permission: any;
   roles: PagesName = new PagesName();
 
+  offsetPagination: any;
+
   constructor(
-    private http: HttpClient,
-    private fuseSplashScreen: FuseSplashScreenService,
     private router: Router,
     private dialogService: DialogService,
+    private audienceService: AudienceService,
     private dataService: DataService,
-    private sequencingService: SequencingService,
-    private userIdle: IdleService
+    private ls: LanguagesService
   ) {
-    this.onLoad = false; // temporarily set to false to show the dummy table
-    this.selected = []
+    this.onLoad = true;
+    this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.task_sequencing');
+    this.permission = this.roles.getRoles('principal.audience');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
@@ -64,31 +61,30 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getSequencing();
+    this.getAudience();
   }
 
-  getSequencing() {
+  getAudience() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
-    this.pagination.sort_type = "desc";
-    this.pagination.sort = 'created_at';
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.sequencingService.getPersonalize(this.pagination).subscribe(
+    this.audienceService.get(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data.data;
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
         this.onLoad = false;
         this.loadingIndicator = false;
-        console.log(res.data);
 
         setTimeout(() => {
           this.addObjectToTable();
-        }, 1500);
+        }, 1000);
       },
       err => {
         this.onLoad = false;
@@ -98,7 +94,7 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
 
   addObjectToTable(){
     document.querySelector("datatable-body").id = "datatable-body";
-    
+
     let rows = document.querySelectorAll("datatable-row-wrapper");
     for (let index = 0; index < rows.length; index++) {
       rows[index].id = 'data-row';
@@ -111,9 +107,10 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+
+    console.log("Select Event", selected, this.selected);
   }
 
   setPage(pageInfo) {
@@ -125,17 +122,14 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
       this.pagination.page = this.dataService.getFromStorage("page");
-      this.dataService.setToStorage("sort", 'created_at');
-      this.dataService.setToStorage("sort_type", 'desc');
     }
 
-    this.sequencingService.getPersonalize(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data.data;
+    this.audienceService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
 
       this.loadingIndicator = false;
     });
-
   }
 
   onSort(event) {
@@ -148,9 +142,9 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.sequencingService.getPersonalize(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data.data;
+    this.audienceService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
 
       this.loadingIndicator = false;
     });
@@ -169,13 +163,12 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.sequencingService.getPersonalize(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data.data;
+    this.audienceService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
 
       this.loadingIndicator = false;
     });
-
   }
 
   getActives() {
@@ -183,25 +176,20 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   }
 
   directEdit(param?: any): void {
-    this.dataService.setToStorage('detail_task_sequencing', param);
-    this.router.navigate(['dte', 'publish-mission', 'edit']);
+    this.dataService.setToStorage('detail_audience', param);
+    this.router.navigate(['dte', 'audience', 'edit']);
   }
-
-  // duplicate(param?: any): void {
-  //   this.dataService.setToStorage('detail_task_sequencing', param);
-  //   this.router.navigate(['dte', 'publish-mission', 'duplicate']);
-  // }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage('detail_task_sequencing', param);
-    this.router.navigate(['dte', 'publish-mission', 'detail']);
+    this.dataService.setToStorage('detail_audience', param);
+    this.router.navigate(['dte', 'audience', 'detail']);
   }
 
-  deleteTaskSequencing(id) {
+  deleteAudience(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Task Sequencing Personalize",
-      captionDialog: "Apakah anda yakin untuk menghapus Task Sequencing Personalize ini ?",
+      titleDialog: "Hapus Audience",
+      captionDialog: "Apakah anda yakin untuk menghapus audience ini ?",
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: ["Hapus", "Batal"]
     };
@@ -209,11 +197,13 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.sequencingService.deletePersonalize({ sequencing_id: this.id }).subscribe(res => {
-      this.dialogService.brodcastCloseConfirmation();
-      this.getSequencing();
+    this.audienceService.delete({ audience_id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getAudience();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
     });
   }
 }

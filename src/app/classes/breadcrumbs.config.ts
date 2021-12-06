@@ -1666,7 +1666,43 @@ export const brConfig = {
           url: "",
           name: "Detail Audience"
         }
-      ]
+      ],
+      create_personalize: [
+        {
+          type: "parent",
+          url: "/dte/audience",
+          name: "Audience"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Audience Personalize"
+        }
+      ],
+      edit_personalize: [
+        {
+          type: "parent",
+          url: "/dte/audience",
+          name: "Audience"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Audience Personalize"
+        }
+      ],
+      detail_personalize: [
+        {
+          type: "parent",
+          url: "/dte/audience",
+          name: "Audience"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Audience Personalize"
+        }
+      ],
     },
     automation: {
       index: [

@@ -59,7 +59,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = Config.FROALA_CONFIG_PERSONALIZE;
 
   listChoose: Array<any> = [
   ];
@@ -1387,6 +1387,13 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     }
   }
   
+  html2text(html) {
+    var tag = document.createElement('div');
+    tag.innerHTML = html;
+    
+    return tag.innerText;
+  }
+  
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1397,6 +1404,16 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
+      let children: any[] = this.templateTaskForm.get('children').value;
+
+      questions.map((item, index) => {
+        questions[index].question = this.html2text(item.question);
+      });
+
+      children.map((child, index) => {
+        children[index].name = this.html2text(child.name);
+        children[index].description = this.html2text(child.description);
+      });
 
       let questionsIsEmpty = [];
       let body = {
