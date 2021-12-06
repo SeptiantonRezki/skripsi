@@ -499,8 +499,14 @@
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               Target Audience</mat-checkbox>
+            <mat-checkbox
+              *ngIf="formNotification.controls['user_group'].value === 'customer'"
+              class="mt-4 ml-20 mb-8"
+              (change)="isTargetArea($event)"
+              formControlName="is_target_area">
+              Target Area</mat-checkbox>
           </div>
-          <div *ngIf="formNotification.get('is_target_audience').value === false">
+          <div *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">
@@ -760,6 +766,14 @@
               </ngx-datatable-column>
             </ngx-datatable>
           </div>
+          <target-area
+            *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
+            (selectedArea)="getSelectedArea($event)"
+            (selectedAll)="getSelectedAll($event)"
+            (selectedAllId)="getSelectedAllId($event)"
+            [areas]="areasInit"
+            [isNotifValidation]="true"
+          ></target-area>
 
         </div>
 

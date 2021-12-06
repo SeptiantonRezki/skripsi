@@ -171,6 +171,11 @@ export class NotificationCreateComponent {
   isCreateOrEditNotification: any;
   iframe_value: any;
 
+  selectedArea: any[] = [];
+  selectedAll: boolean = false;
+  selectedAllId: any[] = [];
+  areasInit: any[] = [];
+
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
   }
@@ -184,8 +189,11 @@ export class NotificationCreateComponent {
     if (this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
+      this.formNotification.controls.is_target_area.setValue(false);
+      this.formNotification.controls.is_target_area.disable();
     } else {
       this.formNotification.controls.is_target_audience.enable();
+      this.formNotification.controls.is_target_area.enable();
     }
 
     if (this.typeOfRecurrence == 'Bday18') {
@@ -285,6 +293,7 @@ export class NotificationCreateComponent {
       url_link: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
+      is_target_area: [false],
       search: [""],
       transfer_token: ["yes", Validators.required],
       type_of_recurrence: ["OneTime", Validators.required],
@@ -293,6 +302,7 @@ export class NotificationCreateComponent {
       status: ["Active"],
       notif_type: ['notif', Validators.required],
       is_smoking: ['all', Validators.required],
+      area_ids: [[]],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -530,6 +540,11 @@ export class NotificationCreateComponent {
     this.selected.splice(0, this.selected.length);
     this.audienceSelected = [];
   }
+  // resetArea() {
+  //   if(this.formNotification.get('is_target_area').value === false) {
+  //     this.formNotification.get('area_ids').setValue('1');
+  //   }
+  // }
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()['areas'] || [];
@@ -1410,7 +1425,7 @@ export class NotificationCreateComponent {
       type: this.formNotification.get("user_group").value,
       subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
-      area_ids: areas[0].value,
+      area_ids: areas[0].value.toString(),
       type_of_recurrence: this.typeOfRecurrence,
       send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       status: this.formNotification.get('status').value
@@ -1626,6 +1641,25 @@ export class NotificationCreateComponent {
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
+    if (body.type === 'customer' && this.formNotification.get("is_target_area").value) {
+      let str = '';
+      if (this.selectedAll) {
+        const all = this.selectedAllId;
+        all.map((item, i) => i === 0 ? str += item : str += `,${item}`);
+        body['area_ids'] = str;
+      } else {
+        let selected = this.selectedArea.filter((item) => (item.id && item.id.toString() !== "1")).map((item) => item.id);
+        selected.map((item, i) => i === 0 ? str += item : str += `,${item}`);
+        if (selected.length) {
+          body['area_ids'] = str;
+        } else {
+          this.dataService.showLoading(false);
+          return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+        }
+      }
+    }
+    
+    this.dataService.showLoading(true);
     
     this.dataService.showLoading(true);
 
@@ -2171,7 +2205,18 @@ export class NotificationCreateComponent {
   }
 
   isTargetAudience(event) {
+    if(this.formNotification.get('is_target_area').value) this.formNotification.get('is_target_area').setValue(false);
     if (event.checked) this.getAudience();
+  }
+  isTargetArea(event) {
+    if(this.formNotification.get('is_target_audience').value) this.formNotification.get('is_target_audience').setValue(false);
+    if(event.checked) {
+      if(this.selectedAll) {
+        this.areasInit = this.selectedAllId;
+      } else {
+        this.areasInit = this.selectedArea;
+      };
+    };
   }
   sendAYOChange(event) {
 
@@ -2272,8 +2317,8 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, is_smoking, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+        verification, send_sfmc, area_ids, is_smoking
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2309,9 +2354,15 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
-      if (type == 'customer') {
+      frm.controls['area_ids'].setValue(area_ids);
+      if(area_ids.length > 0 && !area_ids.includes(1)) {
+        frm.controls['is_target_area'].setValue(true);
+        this.areasInit = frm.controls['area_ids'].value.map(item => ({id:item}));
+      }
+      if(type == 'customer') {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
+        frm.controls['area_ids'].setValue(area_ids);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
@@ -2400,5 +2451,17 @@ export class NotificationCreateComponent {
     } else {
       this.isActiveInactiveShow = true;
     }
+  }
+
+  getSelectedArea(value: any) {
+    this.selectedArea = value;
+  }
+
+  getSelectedAll(value: any) {
+    this.selectedAll = value;
+  }
+
+  getSelectedAllId(value: any) {
+    this.selectedAllId = value;
   }
 }
