@@ -21,6 +21,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { BannerService } from 'app/services/inapp-marketing/banner.service';
 
 @Component({
   selector: 'app-notification-create',
@@ -31,7 +32,7 @@ export class NotificationCreateComponent {
   onLoad: boolean;
   loadingIndicator: boolean;
   formFilter: FormGroup;
-
+  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
   formNotification: FormGroup;
   formArea: FormGroup;
   formNotificationError: any;
@@ -43,7 +44,7 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
-  listSubscriptionStatus: any[] = [{name: 'Semua', value: 'all'}, {name: 'Berlangganan', value: 'subscribed'}, {name: 'Tidak Berlangganan', value:'not-subscribed'}]
+  listSubscriptionStatus: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'subscribed' }, { name: 'Tidak Berlangganan', value: 'not-subscribed' }]
   userGroup: any[] = [
     { name: "Field Force", value: "field-force" },
     { name: "Wholesaler", value: "wholesaler" },
@@ -61,13 +62,18 @@ export class NotificationCreateComponent {
   listLevelArea: any[];
   list: any;
   listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: 'Semua', value:'all'}];
-  listEmployeeFilter: any[] = [{name: 'Employee Only', value: 'employee-only'}, {name: 'Semua', value: 'all'}];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: 'Semua', value: 'all' }];
+  listEmployeeFilter: any[] = [{ name: 'Employee Only', value: 'employee-only' }, { name: 'Semua', value: 'all' }];
   listLandingPage: any[] = [];
   listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
-  listNotifType: any [] = [
+  listNotifType: any[] = [
     { name: "Kirim Sebagai Notifikasi", value: "notif" },
     { name: "Kirim Sebagai Pesan", value: "message" },
+  ];
+  listConsumentType: any[] = [
+    { name: 'Semua', value: 'all' },
+    { name: 'Merokok', value: '1' },
+    { name: 'Tidak Merokok', value: '0' }
   ];
 
   imageContentType: File;
@@ -92,10 +98,10 @@ export class NotificationCreateComponent {
   ];
 
   listRecurrenceTypes: Object[] = [
-    { id: 'Daily', name: 'Harian'},
-    { id: 'Weekly', name: 'Mingguan'},
-    { id: 'Monthly', name: 'Bulanan'},
-    { id: 'Yearly', name: 'Tahunan'}
+    { id: 'Daily', name: 'Harian' },
+    { id: 'Weekly', name: 'Mingguan' },
+    { id: 'Monthly', name: 'Bulanan' },
+    { id: 'Yearly', name: 'Tahunan' }
   ];
 
   recurrenceLabel: Object = {
@@ -116,23 +122,23 @@ export class NotificationCreateComponent {
   ]
 
   listMonths: Object[] = [
-    { id: 'Jan', name:'Januari'},
-    { id: 'Feb', name:'Februari'},
-    { id: 'Mar', name:'Maret'},
-    { id: 'Apr', name:'April'},
-    { id: 'May', name:'Mei'},
-    { id: 'Jun', name:'Juni'},
-    { id: 'Jul', name:'Juli'},
-    { id: 'Aug', name:'Agustus'},
-    { id: 'Sep', name:'September'},
-    { id: 'Oct', name:'Oktober'},
-    { id: 'Nov', name:'November'},
-    { id: 'Dec', name:'Desember'},
+    { id: 'Jan', name: 'Januari' },
+    { id: 'Feb', name: 'Februari' },
+    { id: 'Mar', name: 'Maret' },
+    { id: 'Apr', name: 'April' },
+    { id: 'May', name: 'Mei' },
+    { id: 'Jun', name: 'Juni' },
+    { id: 'Jul', name: 'Juli' },
+    { id: 'Aug', name: 'Agustus' },
+    { id: 'Sep', name: 'September' },
+    { id: 'Oct', name: 'Oktober' },
+    { id: 'Nov', name: 'November' },
+    { id: 'Dec', name: 'Desember' },
   ]
 
   listDates: number[];
 
-
+  listContentWallet: any[] = [];
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
@@ -151,7 +157,7 @@ export class NotificationCreateComponent {
 
   // 2 geotree property
   endArea: String;
-  area_id_list: any = [];
+  area_ids_list: any = [];
   areaType: any;
   lastLevel: any;
   actionType: string = 'create';
@@ -159,11 +165,11 @@ export class NotificationCreateComponent {
 
   _typeOfRecurrence: string;
   _recurrenceType: string;
-
   isActiveInactiveShow: boolean;
   recType: any;
   isHideSaveButton: boolean = true;
   isCreateOrEditNotification: any;
+  iframe_value: any;
 
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
@@ -171,18 +177,18 @@ export class NotificationCreateComponent {
 
   set typeOfRecurrence(val: string) {
     this._typeOfRecurrence = val;
-    if(this._typeOfRecurrence !== 'Recurring') {
+    if (this._typeOfRecurrence !== 'Recurring') {
       this.recurrenceType = '';
     }
 
-    if(this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
+    if (this._typeOfRecurrence == 'Bday' || this._typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.is_target_audience.setValue(false);
       this.formNotification.controls.is_target_audience.disable();
     } else {
       this.formNotification.controls.is_target_audience.enable();
     }
 
-    if(this.typeOfRecurrence == 'Bday18') {
+    if (this.typeOfRecurrence == 'Bday18') {
       this.formNotification.controls.age.setValue('18+');
       this.formNotification.controls.age.disable();
     } else {
@@ -210,12 +216,13 @@ export class NotificationCreateComponent {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private bannerService: BannerService
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
-    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+    this.area_ids_list = this.dataService.getDecryptedProfile()['area_ids'];
     this.formNotificationError = {
       title: {},
       body: {},
@@ -223,6 +230,7 @@ export class NotificationCreateComponent {
       user_group: {},
       age: {},
       notif_type: {},
+      is_smoking: {},
     };
 
     this.listLevelArea = [
@@ -267,11 +275,14 @@ export class NotificationCreateComponent {
       subscription_status: ['all'],
       age: ["18+", Validators.required],
       employee_filter: ["all", Validators.required],
+      employee: ["all"],
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
+      content_wallet: ["ovo", Validators.required],
+      button_text: ["", [Validators.maxLength(30)]],
       landing_page_value: ["belanja", Validators.required],
-      url_iframe: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      url_link: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
       areas: this.formBuilder.array([]),
       is_target_audience: [false],
       search: [""],
@@ -281,6 +292,7 @@ export class NotificationCreateComponent {
       send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
+      is_smoking: ['all', Validators.required],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -303,6 +315,16 @@ export class NotificationCreateComponent {
       }
     }
 
+    this.isCreateOrEditNotification = this.router.url;
+    if (this.isCreateOrEditNotification !== '/notifications/push-notification/create') {
+      this.recType = this.dataService.getFromStorage("detail_notif");
+      if (this.recType.type_of_recurrence.toLowerCase() === 'onetime') {
+        this.isHideSaveButton = false;
+      } else {
+        this.isActiveInactiveShow = true;
+      }
+    }
+
     this.formDailyRecurrence = this.formBuilder.group({
       recurrence_time: ["", Validators.required]
     })
@@ -311,6 +333,10 @@ export class NotificationCreateComponent {
       recurrence_day: this.formBuilder.group({}),
       recurrence_time: ["", Validators.required]
     })
+
+    this.bannerService.getListWallet().subscribe(res => {
+      this.listContentWallet = res.data;
+    });
 
     let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
     this.listWeekDays.forEach(day => {
@@ -336,7 +362,7 @@ export class NotificationCreateComponent {
       end_recurrence_count: [10]
     })
 
-    this.listDates = Array.from({length: 31}, (_, i) => i + 1)
+    this.listDates = Array.from({ length: 31 }, (_, i) => i + 1)
 
     this.typeOfRecurrence = 'OneTime';
 
@@ -344,12 +370,16 @@ export class NotificationCreateComponent {
       if (res === 'retailer' || res === 'tsm') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
+      } else if(res === 'customer') {
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "Pesan Antar" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Main Bareng", value: "Main Bareng" }];
       } else {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listLandingPage = [{ name: "Pesan Antar", value: "Pesan Antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "Main Bareng" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+      } else if(res === 'customer') {
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value:"link_web" }];
       } else {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
       }
@@ -357,10 +387,14 @@ export class NotificationCreateComponent {
       if (res !== 'customer') {
         this.formNotification.get('notif_type').setValidators([]);
         this.formNotification.get('notif_type').setValue('');
+        this.formNotification.get('content_wallet').setValidators([]);
+        this.formNotification.get('content_wallet').setValue('');
         this.formNotification.updateValueAndValidity();
       } else {
         this.formNotification.get('notif_type').setValidators([Validators.required]);
         this.formNotification.get('notif_type').setValue('notif');
+        this.formNotification.get('content_wallet').setValidators([Validators.required]);
+        this.formNotification.get('content_wallet').setValue('OVO');
         this.formNotification.updateValueAndValidity();
       }
 
@@ -387,7 +421,7 @@ export class NotificationCreateComponent {
     });
 
     this.formNotification.controls['user_group'].setValue('retailer');
-    this.formNotification.controls['url_iframe'].disable();
+    this.formNotification.controls['url_link'].disable();
 
     this.formNotification.controls['landing_page_value'].valueChanges.subscribe(res => {
       if (res) {
@@ -400,14 +434,22 @@ export class NotificationCreateComponent {
     });
 
     this.formRecurrenceCommon.get('recurrence_end_date').valueChanges.subscribe(val => {
-      if(val) {
+      if (val) {
         this.formRecurrenceCommon.controls['end_option'].setValue('end_date');
       }
     })
 
     this.formRecurrenceCommon.get('end_recurrence_count').valueChanges.subscribe(val => {
-      if(val) {
+      if (val) {
         this.formRecurrenceCommon.controls['end_option'].setValue('end_count');
+      }
+    })
+
+    this.formNotification.controls['is_smoking'].valueChanges.debounceTime(50).subscribe(res => {
+      if (this.formNotification.get("is_target_audience").value === true) {
+        this.getAudience();
+        this.selected.splice(0, this.selected.length);
+        this.audienceSelected = [];
       }
     })
 
@@ -416,21 +458,21 @@ export class NotificationCreateComponent {
     //     this.getAudience();
     //   };
     // });
-    
+
     this.addArea();
-    
-    
+
+
     // this.initFilterArea();
 
     this.initAreaV2();
 
-    
+
     if (this.actionType === 'detail') {
       console.log('GET DETAILS');
       this.getDetails();
     }
 
-    if(this.formNotification.controls.user_group.value !== 'customer') {
+    if (this.formNotification.controls.user_group.value !== 'customer') {
       this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
@@ -569,23 +611,23 @@ export class NotificationCreateComponent {
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
     console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-      fd.append('area_id[]', areaSelected[0].value);
+      fd.append('area_ids[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
       if (areaSelected[0].value !== "") {
         areaSelected[0].value.map(ar => {
-          fd.append('area_id[]', ar);
+          fd.append('area_ids[]', ar);
         })
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+        // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
           console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
-              fd.append('area_id[]', ar);
+              fd.append('area_ids[]', ar);
             })
           } else {
-            fd.append('area_id[]', newAreaSelected[0].value);
+            fd.append('area_ids[]', newAreaSelected[0].value);
           }
         }
       }
@@ -594,23 +636,23 @@ export class NotificationCreateComponent {
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
       // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-        fd.append('area_id[]', areaSelected[0].value);
+        fd.append('area_ids[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
         if (areaSelected[0].value !== "") {
           areaSelected[0].value.map(ar => {
-            fd.append('area_id[]', ar);
+            fd.append('area_ids[]', ar);
           })
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
+          // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
             console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
-                fd.append('area_id[]', ar);
+                fd.append('area_ids[]', ar);
               })
             } else {
-              fd.append('area_id[]', newAreaSelected[0].value);
+              fd.append('area_ids[]', newAreaSelected[0].value);
             }
           }
         }
@@ -642,7 +684,7 @@ export class NotificationCreateComponent {
       case 'zone':
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
@@ -669,7 +711,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -699,7 +741,7 @@ export class NotificationCreateComponent {
           console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -728,7 +770,7 @@ export class NotificationCreateComponent {
           console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -754,7 +796,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -777,7 +819,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
@@ -1238,7 +1280,7 @@ export class NotificationCreateComponent {
       this.formNotification.get('user_group').patchValue('tsm');
     }
 
-    if(e.source.value != 'customer') {
+    if (e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
       this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
@@ -1258,49 +1300,49 @@ export class NotificationCreateComponent {
       return;
     }
 
-    if(this.typeOfRecurrence === 'Recurring' && !this.recurrenceType) {
+    if (this.typeOfRecurrence === 'Recurring' && !this.recurrenceType) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       return;
     }
 
-    if(this.recurrenceType == 'Daily' && !this.formDailyRecurrence.valid) {
+    if (this.recurrenceType == 'Daily' && !this.formDailyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formDailyRecurrence);
       return;
     }
-    
+
     let selectedWeekDays = []
 
-    if(this.recurrenceType == 'Weekly') {
-      if(!this.formWeeklyRecurrence.valid) {
+    if (this.recurrenceType == 'Weekly') {
+      if (!this.formWeeklyRecurrence.valid) {
         this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
         commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
         return;
       }
       let cbRecurrenceDay = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
-      
+
       let recurrenceDayValues = cbRecurrenceDay.value
       selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key])
 
-      if(selectedWeekDays.length == 0) {
+      if (selectedWeekDays.length == 0) {
         this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
         return;
       }
     }
 
-    if(this.recurrenceType == 'Monthly' && !this.formMonthlyRecurrence.valid) {
+    if (this.recurrenceType == 'Monthly' && !this.formMonthlyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
       return;
     }
 
-    if(this.recurrenceType == 'Yearly' && !this.formYearlyRecurrence.valid) {
+    if (this.recurrenceType == 'Yearly' && !this.formYearlyRecurrence.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formYearlyRecurrence);
       return;
     }
 
-    if(this.typeOfRecurrence == 'Recurring' && !this.formRecurrenceCommon.valid) {
+    if (this.typeOfRecurrence == 'Recurring' && !this.formRecurrenceCommon.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formRecurrenceCommon);
       return;
@@ -1308,33 +1350,33 @@ export class NotificationCreateComponent {
     let startDate
     let endDate
 
-    if(this.typeOfRecurrence == 'Recurring') {
+    if (this.typeOfRecurrence == 'Recurring') {
       let startDateStr = this.formRecurrenceCommon.controls.recurrence_start_date.value
       startDate = moment(startDateStr)
 
-      if(!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
+      if (!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
         this.dialogService.openSnackBar({ message: "Tanggal mulai tidak boleh sebelum hari ini!" });
         return;
       }
-      
-      if(this.formRecurrenceCommon.controls.end_option.value === 'end_date') {
+
+      if (this.formRecurrenceCommon.controls.end_option.value === 'end_date') {
         let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
-        if(!endDateStr) {
+        if (!endDateStr) {
           this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
           return;
         }
         endDate = moment(endDateStr)
-        if(startDate.isSameOrAfter(endDate, 'day')) {
+        if (startDate.isSameOrAfter(endDate, 'day')) {
           this.dialogService.openSnackBar({ message: "Tanggal selesai harus setelah tanggal mulai!" });
           return;
         }
       }
-      
+
     }
 
     if (this.formNotification.get("is_target_audience").value) {
       let unique_set = new Set(this.audienceSelected);
-      if(this.audienceSelected.length !== unique_set.size)  {
+      if (this.audienceSelected.length !== unique_set.size) {
         this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
@@ -1368,34 +1410,39 @@ export class NotificationCreateComponent {
       type: this.formNotification.get("user_group").value,
       subscription_status: this.formNotification.get('subscription_status').value,
       content_type: this.formNotification.get('content_type').value,
-      area_id: areas[0].value,
+      area_ids: areas[0].value,
       type_of_recurrence: this.typeOfRecurrence,
-      send_sfmc: this.formNotification.get('send_ayo').value ? '0': '1',
+      send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       status: this.formNotification.get('status').value
     };
 
     //only allow edit for customer type, non one-time recurrence, else create new notification instead
-    if(body.type === 'customer' && body.type_of_recurrence !== 'OneTime' && this.idNotif) {
+    if (body.type === 'customer' && body.type_of_recurrence !== 'OneTime' && this.idNotif) {
       body.id = this.idNotif
     }
 
     let recurrenceBody: { [key: string]: any; };
 
     body['age'] = this.formNotification.get("age").value;
-    
+
     if (body.type === 'customer') {
-      body['verification'] = this.formNotification.get('verification').value;
+      body['employee'] = this.formNotification.get('employee').value;
+      if (this.formNotification.get('is_smoking').value !== '1') {
+        body['verification'] = this.formNotification.get('verification').value;
+      }
+      body['subscription_status'] = this.formNotification.get('subscription_status').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
+      body['is_smoking'] = this.formNotification.get('is_smoking').value;
       body['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
 
-    if(this.typeOfRecurrence == 'Bday18') {
+    if (this.typeOfRecurrence == 'Bday18') {
       body['age'] = '18+';
-    } else if(this.typeOfRecurrence == 'Recurring') {
+    } else if (this.typeOfRecurrence == 'Recurring') {
       recurrenceBody = {
         recurrence_type: this.recurrenceType
       }
-      switch(this.recurrenceType) {
+      switch (this.recurrenceType) {
         case 'Daily':
           recurrenceBody.recurrence_time = this.formDailyRecurrence.get('recurrence_time').value
           break;
@@ -1417,9 +1464,9 @@ export class NotificationCreateComponent {
       recurrenceBody.recurrence_pattern = "" + this.formRecurrenceCommon.get('recurrence_pattern').value
       recurrenceBody.recurrence_start_date = startDate.format('YYYY-MM-DD')
       let end_option = this.formRecurrenceCommon.get('end_option').value
-      if(end_option == 'end_date') {
+      if (end_option == 'end_date') {
         recurrenceBody.recurrence_end_date = endDate.format('YYYY-MM-DD')
-      } else if(end_option == 'end_count') {
+      } else if (end_option == 'end_count') {
         recurrenceBody.end_recurrence_count = "" + this.formRecurrenceCommon.get('end_recurrence_count').value
       }
 
@@ -1434,10 +1481,10 @@ export class NotificationCreateComponent {
       body['static_page_body'] = this.formNotification.get("static_page_body").value
     } else if (body.content_type === 'landing_page') {
       body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
-    } else if (body.content_type === 'iframe') {
-      let url = this.formNotification.get('url_iframe').value;
+    } else if (body.content_type === 'iframe' || body.content_type === 'link_web') {
+      let url = this.formNotification.get('url_link').value;
       if (!url.match(/^[a-zA-Z]+:\/\//)) { url = 'http://' + url; }
-      body['iframe_value'] = url;
+      body[`${body.content_type==='iframe' ? 'iframe' : 'link_web'}_value`] = url;
       body['transfer_token'] = this.formNotification.get('transfer_token').value;
     } else if (body.content_type === 'image') {
       if (this.imageContentTypeBase64) {
@@ -1451,7 +1498,7 @@ export class NotificationCreateComponent {
             bodyVideo.append('body', body.body);
             bodyVideo.append('type', body.type);
 
-            if(body.type == 'customer') {
+            if (body.type == 'customer') {
               bodyVideo.append('verification', body.verification);
               bodyVideo.append('age', body.age);
               bodyVideo.append('notif_type', body.notif_type);
@@ -1459,7 +1506,7 @@ export class NotificationCreateComponent {
 
             bodyVideo.append('subscription_status', body.subscription_status);
             bodyVideo.append('content_type', body.content_type);
-            bodyVideo.append('area_id', body.area_id);
+            bodyVideo.append('area_ids', body.area_ids);
             bodyVideo.append('status', body.status);
             this.multipleImageContentType.forEach((element, i) => {
               bodyVideo.append(`image_value[${i}]`, element);
@@ -1476,14 +1523,14 @@ export class NotificationCreateComponent {
             }
 
             bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
-            if(this.formNotification.get('send_ayo').value) {
+            if (this.formNotification.get('send_ayo').value) {
               bodyVideo.append('send_sfmc', '0');
             } else {
               bodyVideo.append('send_sfmc', '1');
             }
 
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
-            if(this.typeOfRecurrence == 'Recurring') {
+            if (this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
                 let [key, val] = entry
                 bodyVideo.append(key, val);
@@ -1514,14 +1561,14 @@ export class NotificationCreateComponent {
           bodyVideo.append('title', body.title);
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
-          if(body.type == 'customer') {
+          if (body.type == 'customer') {
             bodyVideo.append('verification', body.verification);
             bodyVideo.append('age', body.age);
             bodyVideo.append('notif_type', body.notif_type);
           }
           bodyVideo.append('subscription_status', body.subscription_status);
           bodyVideo.append('content_type', body.content_type);
-          bodyVideo.append('area_id', body.area_id);
+          bodyVideo.append('area_ids', body.area_ids);
           bodyVideo.append('status', body.status);
           bodyVideo.append('video_value', this.videoContentType);
           if (this.formNotification.get('is_target_audience').value) {
@@ -1536,15 +1583,15 @@ export class NotificationCreateComponent {
           }
 
           bodyVideo.append('employee_filter', this.formNotification.get('employee_filter').value);
-          if(this.formNotification.get('send_ayo').value) {
+          if (this.formNotification.get('send_ayo').value) {
             bodyVideo.append('send_sfmc', '0');
           } else {
             bodyVideo.append('send_sfmc', '1');
           }
 
           bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
-          
-          if(this.typeOfRecurrence == 'Recurring') {
+
+          if (this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
               let [key, val] = entry
               bodyVideo.append(key, val);
@@ -1567,17 +1614,21 @@ export class NotificationCreateComponent {
       } else {
         return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
       }
+    } else if(body.content_type === 'e_wallet') {
+      body['content_wallet'] = this.formNotification.get("content_wallet").value;
+      body['button_text'] = this.formNotification.get("button_text").value;
+      body['static_page_body'] = this.formNotification.get("static_page_body").value;
     }
-    
+
     if (this.formNotification.get("is_target_audience").value) {
       body['target_audience'] = 1;
       body['target_audiences'] = this.audienceSelected;
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
-
-    this.dataService.showLoading(true);
     
+    this.dataService.showLoading(true);
+
     this.notificationService.create(body).subscribe(
       res => {
         this.router.navigate(["notifications"]);
@@ -1609,27 +1660,50 @@ export class NotificationCreateComponent {
     }
 
     if (value !== 'static_page') {
+      if(value !== 'e_wallet') {
+        this.formNotification.controls['static_page_body'].setValue('');
+        this.formNotification.controls['static_page_body'].disable();
+      }
       this.formNotification.controls['static_page_title'].setValue('');
-      this.formNotification.controls['static_page_body'].setValue('');
       this.formNotification.controls['static_page_title'].disable();
-      this.formNotification.controls['static_page_body'].disable();
     } else {
       this.formNotification.controls['static_page_title'].enable();
       this.formNotification.controls['static_page_body'].enable();
     }
 
-    if (value === 'iframe') {
-      this.formNotification.controls['url_iframe'].setValue('');
-      this.formNotification.controls['url_iframe'].enable();
+    if (value === 'iframe' || value === 'link_web') {
+      this.formNotification.controls['url_link'].setValue('');
+      this.formNotification.controls['url_link'].enable();
     } else {
-      this.formNotification.controls['url_iframe'].disable();
+      this.formNotification.controls['url_link'].disable();
     }
+
+    if (value !== 'e_wallet') {
+      this.formNotification.controls['content_wallet'].disable();
+      this.formNotification.controls['button_text'].disable();
+    }
+
+    if (value === 'e_wallet') {
+      this.formNotification.get("content_wallet").enable();
+      this.formNotification.get("static_page_body").enable();
+      this.formNotification.get("button_text").enable();
+    }
+
 
     if (value === 'landing_page') {
       this.formNotification.controls['landing_page_value'].setValue('');
       this.formNotification.controls['landing_page_value'].enable();
     } else {
       this.formNotification.controls['landing_page_value'].disable();
+    }
+
+    if (value === 'e_wallet') {
+      this.formNotification.controls['content_wallet'].enable();
+      // this.formNotification.controls['content_wallet'].setValue('OVO');
+      this.formNotification.controls['button_text'].enable();
+    } else {
+      this.formNotification.controls['content_wallet'].disable();
+      this.formNotification.controls['button_text'].disable();
     }
   }
 
@@ -1707,7 +1781,7 @@ export class NotificationCreateComponent {
       }
       console.log('album', albums)
       this._lightbox.open(albums, index);
-    } else if (this.imagePrivew && !this.imageContentTypeBase64){
+    } else if (this.imagePrivew && !this.imageContentTypeBase64) {
       const album = {
         src: this.imagePrivew,
         caption: '',
@@ -1715,7 +1789,7 @@ export class NotificationCreateComponent {
       };
 
       this._lightbox.open([album], 0);
-    }else {
+    } else {
       const album = {
         src: this.imageContentTypeBase64,
         caption: '',
@@ -1855,10 +1929,10 @@ export class NotificationCreateComponent {
     this.pagination['audience'] = this.formNotification.get("user_group").value;
     if (this.formNotification.get("user_group").value === 'customer') {
       let age = this.formNotification.get("age").value;
-      if(age === '18+') age = '18plus';
-      else if(age === '18-') age = '18min';
+      if (age === '18+') age = '18plus';
+      else if (age === '18-') age = '18min';
       else age = 'all';
-      
+
 
       this.pagination['age'] = age;
       this.pagination['verification'] = this.formNotification.get('verification').value;
@@ -1984,7 +2058,7 @@ export class NotificationCreateComponent {
       }
     }
   }
-  
+
   setPage(pageInfo) {
     this.setPagination();
     this.loadingIndicator = true;
@@ -2002,7 +2076,7 @@ export class NotificationCreateComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
     this.formNotification.controls.search.disable();
-    
+
     this.setPagination();
 
     this.notificationService.getPushNotifAudience(this.pagination).subscribe(res => {
@@ -2018,7 +2092,7 @@ export class NotificationCreateComponent {
     this.table.offset = 0;
     this.pagination.search = string;
     this.pagination.page = 1;
-    
+
     this.setPagination();
 
     this.formNotification.controls.search.disable();
@@ -2063,7 +2137,7 @@ export class NotificationCreateComponent {
   onSelectAll(allRowsSelected: boolean) {
     console.log('allRowsSelected', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
-    if(this.allRowsSelected) {
+    if (this.allRowsSelected) {
       this.setPagination();
       this.loadingIndicator = true;
       this.formNotification.controls.search.disable();
@@ -2071,7 +2145,7 @@ export class NotificationCreateComponent {
       (async () => {
         let loadMoreIds = true;
         let offset = 0;
-        while(loadMoreIds) {
+        while (loadMoreIds) {
           let queryParams = {
             ...this.pagination,
             offset
@@ -2079,17 +2153,17 @@ export class NotificationCreateComponent {
           const res = await this.notificationService.getPushNotifAudienceIDs(queryParams).toPromise();
           this.audienceSelected = [...this.audienceSelected, ...res];
           this.selected = [...this.audienceSelected];
-          if(res.length >= 50000) {
+          if (res.length >= 50000) {
             offset += res.length;
           } else {
             loadMoreIds = false;
           }
         }
-        
+
         this.loadingIndicator = false;
         this.formNotification.controls.search.enable();
       })();
-      
+
     } else {
       this.audienceSelected = [];
       this.onSelect({ selected: this.audienceSelected });
@@ -2100,7 +2174,7 @@ export class NotificationCreateComponent {
     if (event.checked) this.getAudience();
   }
   sendAYOChange(event) {
-    
+
   }
 
   async export() {
@@ -2113,8 +2187,8 @@ export class NotificationCreateComponent {
     let age = null
     if (this.formNotification.get("user_group").value === 'customer') {
       age = this.formNotification.get("age").value;
-      if(age === '18+') age = '18plus';
-      else if(age === '18-') age = '18min';
+      if (age === '18+') age = '18plus';
+      else if (age === '18-') age = '18min';
       else age = 'all';
     }
     else {
@@ -2198,18 +2272,21 @@ export class NotificationCreateComponent {
     try {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
-      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
+      const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, is_smoking, audience, recurrence, status, notif_type, content_type_value,
         verification, send_sfmc
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
       let static_page_body = '';
-      const iframe_value = (content_type === 'iframe') ? content_type_value.iframe_value : '';
+
+      const url_link = (content_type === 'iframe') ? content_type_value.iframe_value : content_type_value.link_web_value;
       const landing_page_value = (content_type === 'landing_page') ? content_type_value.landing_page_value : '';
       const image_url = (content_type === 'image') ? content_type_value.image_value : [];
+      const wallet_value = (content_type === 'e_wallet') ? content_type_value.target_page.wallet.app_name : '';
+      const button_text = (content_type === 'e_wallet') ? content_type_value.target_page.button_text : '';
 
       if (static_page_slug) {
-        const {body} = await this.notificationService.getPageContent(static_page_slug).toPromise();
+        const { body } = await this.notificationService.getPageContent(static_page_slug).toPromise();
         static_page_body = body || '';
       }
       if (image_url && image_url.length) {
@@ -2218,12 +2295,13 @@ export class NotificationCreateComponent {
       }
 
       const frm = this.formNotification;
+      frm.controls['is_smoking'].setValue(is_smoking);
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
-      frm.controls['subscription_status'].setValue(subscription_status ? subscription_status: 'all');
-      frm.controls['employee_filter'].setValue(employee_filter ? employee_filter: 'all');
-      if(age) {
+      frm.controls['subscription_status'].setValue(subscription_status ? subscription_status : 'all');
+      frm.controls['employee_filter'].setValue(employee_filter ? employee_filter : 'all');
+      if (age) {
         frm.controls['age'].setValue(age);
       }
       frm.controls['content_type'].setValue(content_type);
@@ -2231,27 +2309,30 @@ export class NotificationCreateComponent {
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
-      if(type == 'customer') {
+      if (type == 'customer') {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
+      
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
          */
-        frm.controls['url_iframe'].setValue(iframe_value);
+        frm.controls['url_link'].setValue(url_link);
         frm.controls['landing_page_value'].setValue(landing_page_value);
-        frm.controls['notif_type'].setValue(notif_type); 
+        frm.controls['notif_type'].setValue(notif_type);
+        frm.controls['content_wallet'].setValue(wallet_value);
+        frm.controls['button_text'].setValue(button_text);
       }, 1000);
 
-      if(type_of_recurrence == 'Recurring' && recurrence) {
+      if (type_of_recurrence == 'Recurring' && recurrence) {
         this.formNotification.controls.type_of_recurrence.enable();
         this.typeOfRecurrence = 'Recurring'
         this.recurrenceType = recurrence.recurrence_type
 
-        switch(recurrence.recurrence_type) {
+        switch (recurrence.recurrence_type) {
           case 'Daily':
             this.formDailyRecurrence.controls['recurrence_time'].setValue(recurrence.time)
             break;
@@ -2276,11 +2357,11 @@ export class NotificationCreateComponent {
         const frmCommon = this.formRecurrenceCommon;
         frmCommon.controls['recurrence_pattern'].setValue(recurrence.recurrence_pattern);
         frmCommon.controls['recurrence_start_date'].setValue(recurrence.start_date);
-        if(recurrence.end_date) {
+        if (recurrence.end_date) {
           frmCommon.controls['end_option'].setValue('end_date');
           frmCommon.controls['recurrence_end_date'].setValue(recurrence.end_date);
         }
-        if(recurrence.end_recurrence_count) {
+        if (recurrence.end_recurrence_count) {
           frmCommon.controls['end_option'].setValue('end_count');
           frmCommon.controls['end_recurrence_count'].setValue(recurrence.end_recurrence_count);
         }
@@ -2288,7 +2369,7 @@ export class NotificationCreateComponent {
         this.typeOfRecurrence = type_of_recurrence
       }
 
-      if(type !== 'customer' || target_audience) {
+      if (type !== 'customer' || target_audience) {
         frm.controls['is_target_audience'].setValue(target_audience ? true : false);
         if (target_audience) {
           setTimeout(() => {
@@ -2304,7 +2385,6 @@ export class NotificationCreateComponent {
         frm.controls['notif_type'].setValidators([]);
         frm.controls['notif_type'].setValue('');
       }
-
       // end request
       this.dataService.showLoading(false);
     } catch (error) {
