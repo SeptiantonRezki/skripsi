@@ -15,6 +15,7 @@ export class DialogImportComponent implements OnInit {
 
   uploading: Boolean;
   rows: any[] = [];
+  rowsValid: any[] = [];
   headers: any[];
   jsonData: any[];
   asd: any[] = [];
@@ -56,8 +57,15 @@ export class DialogImportComponent implements OnInit {
     this.areaService.import(fd).subscribe(
       (res) => {
         this.rows = res.data.filter((item) => item.is_valid !== 0);
-        this.rowsLength = this.rows.length;
-        this.isValid = res.is_valid;
+        if(this.payload.isNotifValidation) {
+          this.isValid = this.rows.length > 0 ? true : false;
+          this.rowsValid = res.data.filter(item => item.is_valid === 1);
+          this.rowsLength = this.rowsValid.length;
+        } else {
+          this.isValid = res.is_valid;
+          this.rowsValid = this.rows;
+          this.rowsLength = this.rows.length;
+        };
         this.isUploaded = true;
         this.dataService.showLoading(false);
       },
@@ -68,6 +76,6 @@ export class DialogImportComponent implements OnInit {
   }
 
   submit() {
-    this.dialogRef.close(this.rows);
+    this.dialogRef.close(this.rowsValid);
   }
 }
