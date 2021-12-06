@@ -287,8 +287,12 @@
           </div>
         </mat-tab>
         <mat-tab label="Dokumen">
-          <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
-            <img class="attachment-img" id="image4" [src]="documentOrderUrl" />
+          <div *ngIf="detailOrder.document_image_url == null" class="pb-16 mt-16" fxLayout="row" fxLayoutAlign="center">
+            <mat-icon class="m-0 mr-16 secondary-text">warning</mat-icon>
+            <div class="mt-4">Anda tidak memiliki akses untuk melihat Dokumen</div>
+          </div>
+          <div *ngIf="detailOrder.document_image_url != null" class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
+            <img class="attachment-img" id="image4" [src]="detailOrder.document_image_url" />
           </div>
           <div fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
             <mat-form-field fxFlex="30">
@@ -300,7 +304,6 @@
               </mat-icon>
             </mat-form-field>
           </div>
-          <p style="text-align: center;" *ngIf="!detailOrder.document">Tidak Ada Dokumen yang Ditampilkan</p>
         </mat-tab>
       </mat-tab-group>
     </div>
