@@ -114,7 +114,7 @@ export class PagesName {
       "/dte/automation/edit": "principal.dteautomation.ubah",
       "/dte/automation/detail": "principal.dteautomation.lihat",
       "/dte/publish-mission": "principal.dtepublishmission.buat",
-      "/dte/publish-mission/edit/": "principal.dtepublishmission.edit",
+      "/dte/publish-mission/edit/": "principal.dtepublishmission.ubah",
       "/dte/publish-mission/detail/": "principal.dtepublishmission.lihat",
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",

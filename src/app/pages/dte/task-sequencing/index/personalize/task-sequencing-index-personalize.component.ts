@@ -50,7 +50,7 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
 
-    this.permission = this.roles.getRoles('principal.task_sequencing');
+    this.permission = this.roles.getRoles('principal.dtepublishmission');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
@@ -64,7 +64,11 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getSequencing();
+    if (this.permission.lihat) {
+      this.getSequencing();
+    } else {
+      this.dialogService.openSnackBar({ message: "Tidak memiliki akses Lihat Publish Misi" });
+    }
   }
 
   getSequencing() {
