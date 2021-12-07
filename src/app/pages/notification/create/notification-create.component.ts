@@ -279,7 +279,7 @@ export class NotificationCreateComponent {
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
-      content_wallet: ["ovo", Validators.required],
+      content_wallet: [1, Validators.required],
       button_text: ["", [Validators.maxLength(30)]],
       landing_page_value: ["belanja", Validators.required],
       url_link: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
@@ -336,6 +336,7 @@ export class NotificationCreateComponent {
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
+      console.log('LOOK', this.listContentWallet);
     });
 
     let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
@@ -394,7 +395,7 @@ export class NotificationCreateComponent {
         this.formNotification.get('notif_type').setValidators([Validators.required]);
         this.formNotification.get('notif_type').setValue('notif');
         this.formNotification.get('content_wallet').setValidators([Validators.required]);
-        this.formNotification.get('content_wallet').setValue('OVO');
+        this.formNotification.get('content_wallet').setValue(1);
         this.formNotification.updateValueAndValidity();
       }
 
