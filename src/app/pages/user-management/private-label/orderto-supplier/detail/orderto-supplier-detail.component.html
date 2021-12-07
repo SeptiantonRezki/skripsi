@@ -286,13 +286,10 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Dokumen">
-          <div *ngIf="detailOrder.document_image_url == null" class="pb-16 mt-16" fxLayout="row" fxLayoutAlign="center">
-            <mat-icon class="m-0 mr-16 secondary-text">warning</mat-icon>
-            <div>Anda tidak memiliki akses untuk melihat Dokumen</div>
-          </div>
-          <div *ngIf="detailOrder.document_image_url != null" class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
+        <mat-tab label="Dokumen" *ngIf="detailOrder.document_image_url != null">
+          <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
             <img class="attachment-img" id="image4" [src]="documentOrderUrl" />
+            <button mat-raised-button class="mat-accent mt-24" (click)="download()">Download</button>
           </div>
           <div class="mt-24" fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
             <mat-form-field fxFlex="30">
