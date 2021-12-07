@@ -1387,11 +1387,11 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     }
   }
   
-  html2text(html) {
+  html2text(text) {
     var tag = document.createElement('div');
-    tag.innerHTML = html;
+    tag.innerHTML = text;
     
-    return tag.innerText;
+    return tag.textContent;
   }
   
   async submit() {
