@@ -1689,6 +1689,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
           err => {
             console.log(err.error);
             this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({ message: err.error.message });
           }
         );
       }
