@@ -67,9 +67,9 @@
             </div>
           </div>
 
-          <!-- Static Page -->
-          <div class="pb-24" *ngIf="formNotification.get('content_type').value === 'static_page'">
-            <div fxLayout="row">
+          <!-- Static Page & E-Wallet -->
+          <div class="pb-24" *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
+            <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="static_page_title" placeholder="Nama Halaman">
                 <mat-error
@@ -78,6 +78,32 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <!-- E-Wallet Content -->
+            <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'e_wallet'">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="content_wallet" placeholder="Tipe Wallet">
+                  <mat-option *ngFor="let item of listContentWallet" [value]="item.app_name">{{item.app_name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['content_wallet'].hasError('required') && formNotification.controls['content_wallet'].touched">
+                  Tipe Wallet harus diisi
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'e_wallet'">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" formControlName="button_text" placeholder="Teks Button">
+                <mat-error
+                  *ngIf="formNotification.controls['button_text'].hasError('required') && formNotification.controls['button_text'].touched">
+                  Teks Button harus diisi
+                </mat-error>
+                <mat-error
+                  *ngIf="formNotification.controls['button_text'].hasError('maxlength') && formNotification.controls['button_text'].touched">
+                  Teks Button Maksimal 30 karakter
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- E-Wallet Content End -->
             <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
@@ -103,17 +129,17 @@
             </div>
           </div>
 
-          <!-- iframe -->
-          <div class="" *ngIf="formNotification.get('content_type').value === 'iframe'">
+          <!-- iframe & link_web -->
+          <div class="" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                <input matInput type="url" formControlName="url_link" placeholder="URL Link">
                 <mat-error
-                  *ngIf="formNotification.controls['url_iframe'].hasError('required') && formNotification.controls['url_iframe'].touched">
+                  *ngIf="formNotification.controls['url_link'].hasError('required') && formNotification.controls['url_link'].touched">
                   URL harus diisi
                 </mat-error>
                 <mat-error
-                  *ngIf="formNotification.controls['url_iframe'].invalid && formNotification.get('url_iframe').value !== ''">
+                  *ngIf="formNotification.controls['url_link'].invalid && formNotification.get('url_link').value !== ''">
                   URL tidak valid
                 </mat-error>
               </mat-form-field>
@@ -213,7 +239,7 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Tipe Pengulangan" (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" formControlName="type_of_recurrence" [(ngModel)]="typeOfRecurrence">
+              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence" (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" [(ngModel)]="typeOfRecurrence">
                 <mat-option *ngFor="let item of listTypeOfRecurrence" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -379,7 +405,21 @@
 
           <!-- Consumer -->
           <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+            <div class="">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="is_smoking" placeholder="Tipe Konsumen">
+                    <mat-option *ngFor="let item of listConsumentType" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
+                    Tipe Konsumen harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="verification" placeholder="Jenis Konsumen">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
@@ -390,13 +430,30 @@
                 </mat-error>
               </mat-form-field>
             </div>
-          </div>
-          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
+
+            <div class="">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="employee" placeholder="Tipe Employee">
+                    <mat-option *ngFor="let item of listEmployee" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formNotification.controls['employee'].hasError('required') && formNotification.controls['employee'].touched">
+                    Employee harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="subscription_status" placeholder="Status Berlangganan">
                   <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">
+                  Status berlangganan harus diisi
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -427,7 +484,7 @@
           </div>
         </div>
 
-        <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe'">
+        <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
           <div class="" fxLayout="row" fxLayoutAlign="start center">
             <strong class="font-size-16">Transfer Token Credential</strong>
           </div>
@@ -442,8 +499,14 @@
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               Target Audience</mat-checkbox>
+            <mat-checkbox
+              *ngIf="formNotification.controls['user_group'].value === 'customer'"
+              class="mt-4 ml-20 mb-8"
+              (change)="isTargetArea($event)"
+              formControlName="is_target_area">
+              Target Area</mat-checkbox>
           </div>
-          <div *ngIf="formNotification.get('is_target_audience').value === false">
+          <div *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">
@@ -703,6 +766,14 @@
               </ngx-datatable-column>
             </ngx-datatable>
           </div>
+          <target-area
+            *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
+            (selectedArea)="getSelectedArea($event)"
+            (selectedAll)="getSelectedAll($event)"
+            (selectedAllId)="getSelectedAllId($event)"
+            [areas]="areasInit"
+            [isNotifValidation]="true"
+          ></target-area>
 
         </div>
 

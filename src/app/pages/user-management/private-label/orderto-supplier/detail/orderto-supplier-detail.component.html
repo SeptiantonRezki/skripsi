@@ -286,11 +286,12 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Dokumen">
-          <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center" *ngIf="detailOrder?.document">
+        <mat-tab label="Dokumen" *ngIf="detailOrder.document_image_url != null">
+          <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
             <img class="attachment-img" id="image4" [src]="documentOrderUrl" />
+            <button mat-raised-button class="mat-accent mt-24" (click)="download()">Download</button>
           </div>
-          <div fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
+          <div class="mt-24" fxLayout="row" style="margin-left: 15px;" *ngIf="detailOrder?.document">
             <mat-form-field fxFlex="30">
               <input matInput [formControl]="document"
                 [placeholder]="'Nomor ' + (detailOrder?.document_type ? detailOrder?.document_type.toUpperCase() : 'Kartu') " />
@@ -300,7 +301,6 @@
               </mat-icon>
             </mat-form-field>
           </div>
-          <p style="text-align: center;" *ngIf="!detailOrder.document">Tidak Ada Dokumen yang Ditampilkan</p>
         </mat-tab>
       </mat-tab-group>
     </div>
