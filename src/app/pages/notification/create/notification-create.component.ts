@@ -287,7 +287,7 @@ export class NotificationCreateComponent {
       content_type: ["static_page", Validators.required],
       static_page_title: ["", Validators.required],
       static_page_body: ["", Validators.required],
-      content_wallet: ["ovo", Validators.required],
+      content_wallet: [1, Validators.required],
       button_text: ["", [Validators.maxLength(30)]],
       landing_page_value: ["belanja", Validators.required],
       url_link: ["", [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
@@ -346,6 +346,7 @@ export class NotificationCreateComponent {
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
+      console.log('LOOK', this.listContentWallet);
     });
 
     let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
@@ -381,9 +382,9 @@ export class NotificationCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
       } else if(res === 'customer') {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "Pesan Antar" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Main Bareng", value: "Main Bareng" }];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "pesan_antar" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Main Bareng", value: "main_bareng" }];
       } else {
-        this.listLandingPage = [{ name: "Pesan Antar", value: "Pesan Antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "Main Bareng" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listLandingPage = [{ name: "Pesan Antar", value: "pesan_antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "main_bareng" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
@@ -404,7 +405,7 @@ export class NotificationCreateComponent {
         this.formNotification.get('notif_type').setValidators([Validators.required]);
         this.formNotification.get('notif_type').setValue('notif');
         this.formNotification.get('content_wallet').setValidators([Validators.required]);
-        this.formNotification.get('content_wallet').setValue('OVO');
+        this.formNotification.get('content_wallet').setValue(1);
         this.formNotification.updateValueAndValidity();
       }
 
