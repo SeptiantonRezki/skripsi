@@ -1433,7 +1433,7 @@ export class TemplateCreateComponent {
           err => {
             console.log(err.error);
             this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: err.error.message });
+            // this.dialogService.openSnackBar({ message: err.error.message });
           }
         )
       }

@@ -1581,8 +1581,8 @@ export class TemplateEditComponent {
           },
           err => {
             console.log(err.error);
-            this.dialogService.openSnackBar({ message: err.error.message });
             this.dataService.showLoading(false);
+            // this.dialogService.openSnackBar({ message: err.error.message });
           }
         )
       }
