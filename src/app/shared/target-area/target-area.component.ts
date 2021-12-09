@@ -259,7 +259,6 @@ export class TargetAreaComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = "scrumboard-card-dialog";
     dialogConfig.data = {
       isNotifValidation: this.isNotifValidation
     };

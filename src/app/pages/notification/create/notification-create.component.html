@@ -82,7 +82,7 @@
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'e_wallet'">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="content_wallet" placeholder="Tipe Wallet">
-                  <mat-option *ngFor="let item of listContentWallet" [value]="item.app_name">{{item.app_name}}</mat-option>
+                  <mat-option *ngFor="let item of listContentWallet" [value]="item.id">{{item.app_name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_wallet'].hasError('required') && formNotification.controls['content_wallet'].touched">
