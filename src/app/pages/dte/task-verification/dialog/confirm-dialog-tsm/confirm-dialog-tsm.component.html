@@ -157,12 +157,15 @@
             </div>
           </div>
 
-          <div
-            *ngIf="item.type == 'text' || item.type == 'textarea' || item.type == 'numeric' || item.type == 'date' || item.type == 'stock_check'"
-            fxLayout="column" fxLayoutAlign="start start">
-            <div>
-              {{dataSubmission.data.submissions[i].answer[0]}}
+          <div *ngIf="item.type == 'text' || item.type == 'textarea' || item.type == 'numeric' || item.type == 'date' || item.type == 'stock_check'" fxLayout="column" fxLayoutAlign="start start">
+            <div *ngIf="isArray(dataSubmission.data.submissions[i].answer); else answerEncrypted">
+              {{ dataSubmission.data.submissions[i].answer[0] }}
             </div>
+            <ng-template #answerEncrypted>
+              <div>
+                {{ dataSubmission.data.submissions[i].answer }}
+              </div>
+            </ng-template>
           </div>
 
           <div *ngIf="item.type == 'image'" fxLayout="column" fxLayoutAlign="start start">
