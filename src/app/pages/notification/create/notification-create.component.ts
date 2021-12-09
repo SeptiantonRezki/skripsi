@@ -372,9 +372,9 @@ export class NotificationCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
       } else if(res === 'customer') {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "Pesan Antar" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Main Bareng", value: "Main Bareng" }];
+        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "pesan_antar" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Main Bareng", value: "main_bareng" }];
       } else {
-        this.listLandingPage = [{ name: "Pesan Antar", value: "Pesan Antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "Main Bareng" }, { name: "Tantangan", value: "Tantangan" }, { name: "Peluang", value: "Peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listLandingPage = [{ name: "Pesan Antar", value: "pesan_antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "main_bareng" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
