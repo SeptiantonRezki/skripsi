@@ -7,7 +7,7 @@
   </button>
   <mat-form-field appearance="standard">
     <mat-label>Cari</mat-label>
-    <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+    <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off" [disabled]="!permission.lihat">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 </div>
@@ -15,7 +15,7 @@
   [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
   [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
   [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
-  (sort)="onSort($event)" (select)="onSelect($event)">
+  (sort)="onSort($event)" (select)="onSelect($event)" *ngIf="permission.lihat">
 
   <ngx-datatable-column [width]="200" name="Nama" prop="name">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -69,9 +69,6 @@
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
       style="justify-content: center !important">
       <div class="button-row" style="margin-left: -10px">
-        <!-- <button id="btn-duplikat" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
-          <mat-icon class="secondary-text">content_copy</mat-icon>
-        </button> -->
         <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Edit Task Sequencing"
           (click)="directEdit(row)">
           <mat-icon class="secondary-text">edit</mat-icon>
@@ -83,6 +80,9 @@
       </div>
     </ng-template>
   </ngx-datatable-column>
-
 </ngx-datatable>
+
+<div class="p-12 pb-24 text-center" *ngIf="!permission.lihat">
+  Tidak memiliki akses Lihat Publish Misi
+</div>
 <a #downloadLink></a>

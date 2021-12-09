@@ -66,8 +66,6 @@ export class TaskSequencingIndexPersonalizeComponent implements OnInit {
   ngOnInit() {
     if (this.permission.lihat) {
       this.getSequencing();
-    } else {
-      this.dialogService.openSnackBar({ message: "Tidak memiliki akses Lihat Publish Misi" });
     }
   }
 
