@@ -279,4 +279,5 @@ export class ConfirmDialogTsmComponent implements OnInit {
     this._lightbox.open([album], 0);
   }
 
+  isArray(val): boolean { return typeof val === 'object'; }
 }
