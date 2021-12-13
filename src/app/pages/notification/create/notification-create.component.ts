@@ -157,7 +157,7 @@ export class NotificationCreateComponent {
 
   // 2 geotree property
   endArea: String;
-  area_ids_list: any = [];
+  area_id_list: any = [];
   areaType: any;
   lastLevel: any;
   actionType: string = 'create';
@@ -222,7 +222,7 @@ export class NotificationCreateComponent {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
-    this.area_ids_list = this.dataService.getDecryptedProfile()['area_ids'];
+    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.formNotificationError = {
       title: {},
       body: {},
@@ -336,7 +336,6 @@ export class NotificationCreateComponent {
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
-      console.log('LOOK', this.listContentWallet);
     });
 
     let recurrenceDaysControls = this.formWeeklyRecurrence.controls.recurrence_day as FormGroup
@@ -612,23 +611,23 @@ export class NotificationCreateComponent {
     // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
     console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-      fd.append('area_ids[]', areaSelected[0].value);
+      fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
       if (areaSelected[0].value !== "") {
         areaSelected[0].value.map(ar => {
-          fd.append('area_ids[]', ar);
+          fd.append('area_id[]', ar);
         })
-        // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
+        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
           console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
-              fd.append('area_ids[]', ar);
+              fd.append('area_id[]', ar);
             })
           } else {
-            fd.append('area_ids[]', newAreaSelected[0].value);
+            fd.append('area_id[]', newAreaSelected[0].value);
           }
         }
       }
@@ -637,23 +636,23 @@ export class NotificationCreateComponent {
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
       // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-        fd.append('area_ids[]', areaSelected[0].value);
+        fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
         if (areaSelected[0].value !== "") {
           areaSelected[0].value.map(ar => {
-            fd.append('area_ids[]', ar);
+            fd.append('area_id[]', ar);
           })
-          // if (areaSelected[0].value.length === 0) fd.append('area_ids[]', "1");
+          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
             console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
-                fd.append('area_ids[]', ar);
+                fd.append('area_id[]', ar);
               })
             } else {
-              fd.append('area_ids[]', newAreaSelected[0].value);
+              fd.append('area_id[]', newAreaSelected[0].value);
             }
           }
         }
@@ -685,7 +684,7 @@ export class NotificationCreateComponent {
       case 'zone':
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
@@ -712,7 +711,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -742,7 +741,7 @@ export class NotificationCreateComponent {
           console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -771,7 +770,7 @@ export class NotificationCreateComponent {
           console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
@@ -797,7 +796,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -820,7 +819,7 @@ export class NotificationCreateComponent {
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_ids_list.includes(Number(ar.id))) : res;
+              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
