@@ -75,10 +75,10 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.audienceService.get(this.pagination).subscribe(
+    this.audienceService.getPersonalize(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data.data;
         this.onLoad = false;
         this.loadingIndicator = false;
 
@@ -124,9 +124,9 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.audienceService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.audienceService.getPersonalize(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
 
       this.loadingIndicator = false;
     });
@@ -142,9 +142,9 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.audienceService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.audienceService.getPersonalize(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
 
       this.loadingIndicator = false;
     });
@@ -163,9 +163,9 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.audienceService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.audienceService.getPersonalize(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
 
       this.loadingIndicator = false;
     });
@@ -197,6 +197,7 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   }
 
   confirmDelete() {
+    // TODO: ubah service
     this.audienceService.delete({ audience_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();

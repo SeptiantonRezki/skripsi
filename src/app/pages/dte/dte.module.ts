@@ -154,6 +154,8 @@ import { AudienceIndexPersonalizeComponent } from './audience/index/personalize/
 import { AudienceCreatePersonalizeComponent } from './audience/create/personalize/audience-create-personalize.component';
 import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index/personalize/task-sequencing-index-personalize.component';
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
+import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
+import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -324,6 +326,8 @@ export const MY_FORMATS = {
     AudienceCreatePersonalizeComponent,
     TaskSequencingIndexPersonalizeComponent,
     PublishMisiComponent,
+    DialogPanelBlastComponent,
+    DialogProcessComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -426,7 +430,9 @@ export const MY_FORMATS = {
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
     DialogPushNotifDuplicateComponent,
-    ImportExchangeCoinComponent
+    ImportExchangeCoinComponent,
+    DialogPanelBlastComponent,
+    DialogProcessComponent
   ],
 })
 export class DteModule { }

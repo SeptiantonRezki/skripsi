@@ -48,7 +48,8 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="{{ ls.locale.dte.audience.text2 }}" [sortable]="false" prop="total_audiences"></ngx-datatable-column>
+  <ngx-datatable-column name="{{ ls.locale.dte.audience.text2 }}" [sortable]="false" prop="total_audiences">
+  </ngx-datatable-column>
 
   <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="created_at">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

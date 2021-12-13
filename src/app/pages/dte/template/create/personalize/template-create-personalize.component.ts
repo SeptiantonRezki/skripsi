@@ -335,6 +335,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         type: item.type,
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         image_detail: false,
+        encryption: false,
         // required: item.required,
         question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
           return this.formBuilder.group({
@@ -964,6 +965,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       type: 'radio',
       content_typePertanyaan: "static_page",
       image_detail: false,
+      encryption: false,
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
@@ -1066,6 +1068,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       content_typePertanyaan: 'static_page',
       image_detail: false,
+      encryption: false,
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
@@ -1490,6 +1493,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
             // required: item.required,
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
+            encryption: item.encryption ? 1 : 0,
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {

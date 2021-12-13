@@ -30,6 +30,8 @@ import { GeotreeService } from "app/services/geotree.service";
 import { IdbService } from "app/services/idb.service";
 import { LanguagesService } from "app/services/languages/languages.service";
 import { SequencingService } from "app/services/dte/sequencing.service";
+import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialog-panel-blast.component";
+import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
 
 @Component({
   selector: 'app-audience-create-personalize',
@@ -103,6 +105,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   saveData: Boolean;
   exportTemplate: Boolean;
   allRowsSelected: boolean;
+  isChecked: boolean = false;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -215,6 +218,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     this.formAudience = this.formBuilder.group({
       name: ["", Validators.required],
       trade_creator_id: [""],
+      publis_mission_id: [""],
       audience_type: ["tsm"],
       // min: ["", [Validators.required, Validators.min(0)]],
       // max: ["", [Validators.required, Validators.min(0)]],
@@ -342,18 +346,18 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         this.getAudienceAreaV2("salespoint", res);
       }
     });
-    this.formFilter.get("salespoint").valueChanges.subscribe((res) => {
-      console.log("salespoint", res);
-      if (res) {
-        this.getAudienceAreaV2("district", res);
-      }
-    });
-    this.formFilter.get("district").valueChanges.subscribe((res) => {
-      console.log("district", res);
-      if (res) {
-        this.getAudienceAreaV2("territory", res);
-      }
-    });
+    // this.formFilter.get("salespoint").valueChanges.subscribe((res) => {
+    //   console.log("salespoint", res);
+    //   if (res) {
+    //     this.getAudienceAreaV2("district", res);
+    //   }
+    // });
+    // this.formFilter.get("district").valueChanges.subscribe((res) => {
+    //   console.log("district", res);
+    //   if (res) {
+    //     this.getAudienceAreaV2("territory", res);
+    //   }
+    // });
 
     // this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
     //   this.getRetailer();
@@ -823,36 +827,35 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     return areaList;
   }
 
-  // TODO: SINI
   filteringPublishMisi() {
-    // if (!this.listTradePrograms) {
-    //   return;
-    // }
-    // // get the search keyword
-    // let search = this.filterTradeProgram.value;
-    // if (!search) {
-    //   this.filteredTradeProgram.next(this.listTradePrograms.slice());
-    //   return;
-    // } else {
-    //   search = search.toLowerCase();
-    // }
-    // // filter the banks
-    // this.filteredTradeProgram.next(
-    //   this.listTradePrograms.filter(
-    //     (item) => item.name.toLowerCase().indexOf(search) > -1
-    //   )
-    // );
+    if (!this.listPublishMisi) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterPublishMisi.value;
+    if (!search) {
+      this.filteredPublishMisi.next(this.listPublishMisi.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredPublishMisi.next(
+      this.listPublishMisi.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
   }
 
   getPublishMisi() {
-    this.sequencingService.getPersonalize().subscribe(
+    this.sequencingService.getPersonalize({ page: 'all' }).subscribe(
       (res) => {
         console.log("res =>", res);
-        // this.listTradePrograms = res.data;
-        // this.filteredTradeProgram.next(res.data);
+        this.listPublishMisi = res.data.data;
+        this.filteredPublishMisi.next(res.data.data);
       },
       (err) => {
-        console.log("err trade programs", err);
+        console.log("err publish misi", err);
       }
     );
   }
@@ -1531,6 +1534,19 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   submit() {
     this.dataService.showLoading(true);
     this.loadingIndicator = true;
+    // TODO: testing
+    let body = {
+      name: this.formAudience.get("name").value,
+      audience_type: this.formAudience.get("audience_type").value,
+      publis_mission_id: this.formAudience.get("publis_mission_id").value,
+      
+      retail_classification: this.formFilterRetailer.get("retail_classification").value,
+      b2b_active: this.formFilterRetailer.get("b2b_active").value,
+      total_required_panel: this.formFilterRetailer.get("total_required_panel").value,
+    };
+
+    console.log('body', body);
+
     if (this.formAudience.valid && this.selected.length > 0) {
       const selectedRetailer = this.selected.length;
       const limit = this.formAudience.get("limit").value === "limit";
@@ -1581,6 +1597,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         this.saveData = true;
         // this.loadingIndicator = false;
         // this.dataService.showLoading(false);
+        // TODO: CREATE
         this.audienceService.create(body).subscribe(
           (res) => {
             this.dataService.showLoading(false);
@@ -1654,6 +1671,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
           console.log(this.findInvalidControls());
           // this.saveData = !this.saveData;
           this.saveData = true;
+          // TODO: CREATE
           this.audienceService.create(body).subscribe(
             (res) => {
               this.dataService.showLoading(false);
@@ -1710,6 +1728,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         console.log(this.findInvalidControls());
         // this.saveData = !this.saveData;
         this.saveData = true;
+        // TODO: CREATE
         this.audienceService.create(body).subscribe(
           (res) => {
             this.dataService.showLoading(false);
@@ -1807,5 +1826,72 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       this.exportTemplate = false;
       throw error;
     }
+  }
+
+  showPanelBlast() {
+    if (this.isChecked) {
+      const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = "scrumboard-card-dialog";
+      dialogConfig.data = { password: "P@ssw0rd" };
+  
+      this.dialogRef = this.dialog.open(
+        DialogPanelBlastComponent,
+        {...dialogConfig, minWidth: '600px'}
+      );
+  
+      this.dialogRef.afterClosed().subscribe((response) => {
+        console.log('res', response);
+        
+      //   if (response) {
+      //     let rows = this.rows.map((row) => row.id);
+      //     this.idbService
+      //       .getAll((dt) => dt.is_valid)
+      //       .then((result) => {
+      //         console.log("result", result);
+      //         this.onSelect({ selected: result });
+      //         this.dialogService.openSnackBar({
+      //           message: "File berhasil diimport",
+      //         });
+      //       });
+      //   }
+      });
+    }
+  }
+
+  checkAudience(){
+    let body = {
+      name: this.formAudience.get("name").value,
+      audience_type: this.formAudience.get("audience_type").value,
+      publis_mission_id: this.formAudience.get("publis_mission_id").value,
+      
+      retail_classification: this.formFilterRetailer.get("retail_classification").value,
+      b2b_active: this.formFilterRetailer.get("b2b_active").value,
+      total_required_panel: this.formFilterRetailer.get("total_required_panel").value,
+    };
+
+    console.log('body', body);
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
+
+    this.dialogRef = this.dialog.open(
+      DialogProcessComponent,
+      {...dialogConfig, width: '400px'}
+    );
+
+    this.dialogRef.afterClosed().subscribe((response) => {
+      // console.log('res', response);
+      this.isChecked = true;
+      // if (response) {
+      //   this.isChecked = true;
+      // }
+    });
   }
 }

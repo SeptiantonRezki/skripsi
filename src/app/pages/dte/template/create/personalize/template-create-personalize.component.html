@@ -452,26 +452,30 @@
                         </button>
                       </div>
         
-                      <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
-                        <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
-                          <mat-select-trigger>
-                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
-                              <div fxFlex="10">
-                                <mat-icon class="secondary-text">{{item.get('typeSelection').value['icon']}}</mat-icon>
+                      <div fxLayout="column" fxLayoutGap="24px" class="ml-auto">
+                        <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
+                          <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
+                            <mat-select-trigger>
+                              <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
+                                <div fxFlex="10">
+                                  <mat-icon class="secondary-text">{{item.get('typeSelection').value['icon']}}</mat-icon>
+                                </div>
+                                <div fxFlex="90">
+                                  <span style="padding-left: 34px">{{item.get('typeSelection').value['name']}}</span>
+                                </div>
                               </div>
-                              <div fxFlex="90">
-                                <span style="padding-left: 34px">{{item.get('typeSelection').value['name']}}</span>
-                              </div>
-                            </div>
-                          </mat-select-trigger>
-                          <ng-container>
-                            <mat-option *ngFor="let selection of listChoose" [value]="selection.value"
-                              [disabled]="checkWording(selection.name) === true">
-                              <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
-                            </mat-option>
-                          </ng-container>
-                        </mat-select>
-                      </mat-form-field>
+                            </mat-select-trigger>
+                            <ng-container>
+                              <mat-option *ngFor="let selection of listChoose" [value]="selection.value"
+                                [disabled]="checkWording(selection.name) === true">
+                                <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
+                              </mat-option>
+                            </ng-container>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
+                      </div>
                     </div>
 
                     <!-- NOMOR SOAL -->

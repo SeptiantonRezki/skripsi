@@ -334,13 +334,9 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     this.templateTaskForm.get('kategori_misi').setValue(this.detailTask.task_toolbox_categories_id);
     this.templateTaskForm.get('project_misi').setValue(this.detailTask.task_toolbox_project_id);
     this.templateTaskForm.get('name').setValue(this.detailTask.name);
-    // this.templateTaskForm.get('other_name').setValue(this.detailTask.other_name);
-    // this.templateTaskForm.get('description').setValue(this.detailTask.description);
     this.templateTaskForm.get('material').setValue(this.detailTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.detailTask['material_description'] ? this.detailTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.detailTask.image ? this.detailTask.image_url : '');
-    // this.templateTaskForm.get('background_image').setValue(this.detailTask.background_image ? this.detailTask.background_image_url : '');
-    // this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
     this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
     this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching == 1 ? true : false);
@@ -382,6 +378,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         });
       }
     }
+
+    console.log('que =>', this.detailTask['questions']);
 
     this.detailTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
@@ -460,6 +458,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         stock_check_ir_name: item.stock_check_ir_name,
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0' ? false : true,
+        encryption: item.encryption == 1 ? true : false,
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -1255,6 +1254,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       question: `Pertanyaan`,
       type: 'radio',
       question_image_detail: false,
+      encryption: false,
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
@@ -1675,6 +1675,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             })) : [],
             required: item.type === 'stock_check' ? 1 : null,
             question_image_detail: item.question_image_detail ? 1 : 0,
+            encryption: item.encryption ? 1 : 0,
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',

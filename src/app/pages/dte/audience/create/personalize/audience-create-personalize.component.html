@@ -17,28 +17,26 @@
                   </mat-error>
                 </mat-form-field>
   
-                <!-- TODO: ubah jadi list publish misi -->
                 <mat-form-field class="is-light form-primary">
                   <mat-select
-                    formControlName="trade_creator_id"
-                    placeholder="Pilih Template Tugas"
+                    formControlName="publis_mission_id"
+                    placeholder="Pilih Publish Misi"
                     #singleSelect
                   >
                     <ngx-mat-select-search
-                      [formControl]="filterTradeProgram"
-                      [placeholderLabel]="'Cari Template Tugas...'"
-                      [noEntriesFoundLabel]="'Tidak ada Template Tugas yang ditemukan'"
+                      [formControl]="filterPublishMisi"
+                      [placeholderLabel]="'Cari Publish Misi...'"
+                      [noEntriesFoundLabel]="'Tidak ada Publish Misi yang ditemukan'"
                     ></ngx-mat-select-search>
-                    <!-- TODO: ubah jadi template tugas -->
                     <mat-option
-                      *ngFor="let item of filteredTradeProgram | async"
+                      *ngFor="let item of filteredPublishMisi | async"
                       [value]="item.id"
                     >
                       {{ item.name }}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="formAudience.controls['trade_creator_id'].hasError('required') && formAudience.controls['trade_creator_id'].touched">
-                    Template Tugas harus diisi
+                  <mat-error *ngIf="formAudience.controls['publis_mission_id'].hasError('required') && formAudience.controls['publis_mission_id'].touched">
+                    Publish Misi harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -88,14 +86,14 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <mat-form-field class="is-light form-primary">
+                  <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_type').value === 'scheduler'">
                     <mat-select placeholder="B2B Active" formControlName="b2b_active">
                       <mat-option *ngFor="let item of b2bActiveList" [value]="item.value">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <mat-form-field class="is-light form-primary">
+                  <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_type').value === 'scheduler'">
                     <input matInput type="text" formControlName="total_required_panel" placeholder="Total Required Panel" />
                     <mat-error>
                       Total Required Panel harus diisi
@@ -134,9 +132,15 @@
               </div>
             </div>
 
-            <!-- TODO: bagian panel APTA -->
-            <div class="p-24" fxLayout="column" fxFlex>
-              <p>test</p>
+            <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
+              <mat-card class="text-center cards" [ngClass]="{clickable: isChecked}" (click)="showPanelBlast()">
+                <mat-card-title class="cards__title">---</mat-card-title>
+                <mat-card-subtitle style="color: white;">Panel Blast</mat-card-subtitle>
+              </mat-card>
+              <mat-card class="text-center cards">
+                <mat-card-title class="cards__title">---</mat-card-title>
+                <mat-card-subtitle style="color: white;">Estimated Task Success</mat-card-subtitle>
+              </mat-card>
             </div>
           </div>
         </form>
@@ -147,7 +151,7 @@
             mat-raised-button
             type="button"
             class="confirmation-button"
-            (click)="submit()"
+            (click)="checkAudience()"
             fxFlex="20"
           >
             CHECK
@@ -159,7 +163,7 @@
             class="confirmation-button"
             (click)="submit()"
             fxFlex="20"
-            disabled
+            [disabled]="!isChecked"
           >
             SIMPAN
           </button>
