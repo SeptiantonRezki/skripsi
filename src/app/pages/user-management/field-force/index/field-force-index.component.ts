@@ -864,7 +864,7 @@ export class FieldForceIndexComponent {
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage(" ", param);
+    this.dataService.setToStorage("detail_field_force", param);
     this.router.navigate(["user-management", "field-force", "detail"]);
   }
 }
