@@ -177,7 +177,7 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_audience', param);
-    this.router.navigate(['dte', 'audience', 'edit']);
+    this.router.navigate(['dte', 'audience', 'create-personalize']);
   }
 
   directDetail(param?: any): void {
