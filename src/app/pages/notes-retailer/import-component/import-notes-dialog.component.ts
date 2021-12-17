@@ -83,9 +83,8 @@ export class ImportNotesDialogComponent {
           this.audienceService.showImport(this.pagination).subscribe(response => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
-            this.totalData = response.data.total;
+            this.totalData = this.totalData + response.data.data.length;
             this.idbService.bulkUpdate(response.data.data).then(res => {
-              console.log('page', this.currPage - 1, res);
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
@@ -123,9 +122,9 @@ export class ImportNotesDialogComponent {
       this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
         if (response && response.data) {
           this.idbService.bulkUpdate(response.data.data).then(res => {
-            console.log('page', this.currPage - 1, res);
             this.currPage += 1;
             this.lastPage = response.data.last_page;
+            this.totalData = this.totalData + response.data.data.length;
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({
@@ -201,7 +200,6 @@ export class ImportNotesDialogComponent {
   }
 
   setPage(pageInfo) {
-    this.dataService.showLoading(true);
     this.offsetPagination = pageInfo.offset;
     this.p_pagination['page'] = pageInfo.offset + 1;
 
@@ -209,7 +207,6 @@ export class ImportNotesDialogComponent {
       this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
       Page.renderPagination(this.pagination, this.p_pagination);
       this.rows = res && res[0] ? res[0] : [];
-      this.dataService.showLoading(false);
     });
   }
 

@@ -35,7 +35,7 @@
       <div class="responsive">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
           [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-          [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
+          [reorderable]="reorderable" [count]="pagination.total"
           [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
   
           <ngx-datatable-column name="Penjual" prop="name">
