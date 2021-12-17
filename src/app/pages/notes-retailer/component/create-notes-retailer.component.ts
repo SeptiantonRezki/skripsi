@@ -1316,8 +1316,8 @@ export class CreateNotesRetailerComponent implements OnInit {
     );
 
     this.dialogRef.afterClosed().subscribe((response) => {
-      this.dataService.showLoading(true);
       if (response) {
+        this.dataService.showLoading(true);
         let rows = this.rows.map((row) => row.id);
         this.idbService
           .getAll((dt) => dt.is_valid)
