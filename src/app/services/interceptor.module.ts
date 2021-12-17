@@ -135,7 +135,10 @@ export class BaseInterceptor implements HttpInterceptor {
           }
         }
         return Observable.throw(err);
-      } else if (err.status == 404 || err.status == 500) {
+      } else if (err.status == 500) {
+        if (req.method == "POST") {
+          this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+        }
         return Observable.throw(err);
       } else {
         const status = err.status;

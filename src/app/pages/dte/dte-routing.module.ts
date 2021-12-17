@@ -48,6 +48,7 @@ import { TemplateCreatePersonalizeComponent } from "./template/create/personaliz
 import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/template-edit-personalize.component";
 import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
 import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
+import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
 
 const routes: Routes = [
   {
@@ -220,14 +221,6 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "audience/create-personalize",
-    component: AudienceCreatePersonalizeComponent,
-    data: {
-      breadcrumbs: brConfig.dte.audience.create_personalize
-    },
-    canActivate: [PageGuard]
-  },
-  {
     path: "audience/edit",
     component: AudienceEditComponent,
     data: {
@@ -251,6 +244,30 @@ const routes: Routes = [
       // listRetailer: ListRetailerResolver
     },
     canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/create-personalize",
+    component: AudienceCreatePersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.create_personalize
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/edit-personalize",
+    component: AudienceEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.edit_personalize
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/detail-personalize",
+    component: AudienceEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.detail_personalize
+    },
     canActivate: [PageGuard]
   },
   {

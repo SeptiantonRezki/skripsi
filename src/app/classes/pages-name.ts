@@ -106,9 +106,8 @@ export class PagesName {
       "/dte/audience/edit": "principal.audience.ubah",
       "/dte/audience/detail": "principal.audience.lihat",
       "/dte/audience/create-personalize": "principal.audience.buat",
-      // TODO: periksa kembali
-      // "/dte/audience/edit": "principal.audience.ubah",
-      // "/dte/audience/detail": "principal.audience.lihat",
+      "/dte/audience/edit-personalize": "principal.audience.ubah",
+      "/dte/audience/detail-personalize": "principal.audience.lihat",
       "/dte/automation": "principal.dteautomation.lihat",
       "/dte/automation/create": "principal.dteautomation.buat",
       "/dte/automation/edit": "principal.dteautomation.ubah",

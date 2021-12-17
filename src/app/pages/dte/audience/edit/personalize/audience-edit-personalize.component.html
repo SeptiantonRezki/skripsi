@@ -133,7 +133,7 @@
             </div>
 
             <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
-              <mat-card class="text-center cards">
+              <mat-card class="text-center cards" [ngClass]="{clickable: isChecked}" (click)="showPanelBlast()">
                 <mat-card-title class="cards__title">
                   {{ formAudience.get("panel_count").value }}
                 </mat-card-title>
@@ -149,7 +149,7 @@
           </div>
         </form>
 
-        <div class="p-24" fxLayout="row" fxLayoutGap="16px">
+        <div class="p-24" fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
           <button
             id="btn-check"
             mat-raised-button

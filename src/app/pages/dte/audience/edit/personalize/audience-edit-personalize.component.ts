@@ -33,12 +33,13 @@ import { SequencingService } from "app/services/dte/sequencing.service";
 import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialog-panel-blast.component";
 import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
 
+
 @Component({
-  selector: 'app-audience-create-personalize',
-  templateUrl: './audience-create-personalize.component.html',
-  styleUrls: ['./audience-create-personalize.component.scss']
+  selector: 'app-audience-edit-personalize',
+  templateUrl: './audience-edit-personalize.component.html',
+  styleUrls: ['./audience-edit-personalize.component.scss']
 })
-export class AudienceCreatePersonalizeComponent implements OnInit {
+export class AudienceEditPersonalizeComponent implements OnInit {
   formAudience: FormGroup;
   formAudienceError: any;
   parameters: Array<string>;
@@ -96,6 +97,9 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   saveData: Boolean;
   exportTemplate: Boolean;
   allRowsSelected: boolean;
+
+  detailAudience: any;
+  isDetail: boolean;
   isChecked: boolean = false;
 
   public filterScheduler: FormControl = new FormControl();
@@ -120,18 +124,12 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    if (this.exportTemplate) {
-      return true;
-    }
+    if (this.isDetail) return true;
+    if (this.exportTemplate) return true;
 
-    if (
-      (this.valueChange && !this.saveData) ||
-      (this.selected.length > 0 && !this.saveData)
-    )
+    if ((this.valueChange && !this.saveData) || (this.selected.length !== this.detailAudience.total_audiences && !this.saveData)) {
       return false;
-
-    // if (this.selected.length > 0)
-    //   return false;
+    }
 
     return true;
   }
@@ -153,9 +151,14 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     this.exportTemplate = false;
     this.saveData = false;
     this.rows = [];
+    this.activatedRoute.url.subscribe(params => {
+      this.isDetail = params[1].path === 'detail-personalize' ? true : false;
+    })
     this.formAudienceError = {
       name: {},
-      mission_publication_id: {},
+      min: {},
+      max: {},
+      trade_scheduler_id: {},
     };
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
@@ -187,6 +190,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         this.searchingRetailer(res);
       });
     this.area = dataService.getDecryptedProfile()["area_type"];
+    this.detailAudience = dataService.getFromStorage('detail_audience');
     this.parameters = [];
   }
 
@@ -214,15 +218,14 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     this.formFilterRetailer = this.formBuilder.group({
       retail_classification: ['all'],
       b2b_active: ['all'],
-      total_required_panel: ['', Validators.required],
+      total_required_panel: [''],
     });
 
-    this.handleAudienceFilter(this.formAudience.get('audience_filter').value);
+    this.setValueDetail();
     this.initAreaV2();
     this.getPublishMisi();
-    
-    this.formAudience.get('mission_publication_id').valueChanges.subscribe((res) => {
-      console.log('res', res);
+
+    this.formAudience.get('mission_publication_id').valueChanges.subscribe(() => {
       this.isChecked = false;
     });
 
@@ -317,8 +320,6 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
             this.formFilter.controls[this.parseArea(level.type)].setValue([
               level.id,
             ]);
-            console.log("ff value", this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
 
@@ -388,7 +389,6 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     let areaSelected: any = Object.entries(this.formFilter.getRawValue())
       .map(([key, value]) => ({ key, value }))
       .filter((item) => item.key === this.parseArea(lastLevel));
-      
     console.log(
       "audienceareav2",
       this.formFilter.getRawValue(),
@@ -398,7 +398,9 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === "national") {
       fd.append("area_id[]", areaSelected[0].value);
     } else if (areaSelected.length > 0) {
+      console.log('masuk else if');
       if (areaSelected[0].value !== "") {
+        console.log('masuk else if lagi');
         areaSelected[0].value.map((ar) => {
           fd.append("area_id[]", ar);
         });
@@ -496,6 +498,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
 
     switch (this.parseArea(selection)) {
       case "zone":
+        console.log('masuk zone');
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -529,12 +532,14 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         break;
       case "region":
         // area = this.formFilter.get(selection).value;
+        console.log('masuk region -> list', this.list);
 
         if (id && id.length !== 0) {
           item = this.list["zone"].length > 0 ?
                 this.list["zone"].filter((item) => {
                   return id && id.length > 0 ? id[0] : id;
                 })[0] : {};
+          console.log('masuk region -> if', item);
 
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
@@ -610,6 +615,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
                   return id && id.length > 0 ? id[0] : id;
                 })[0]
               : {};
+          console.log("item", item);
           if (item && item.name && item.name !== "all") {
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -730,6 +736,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   getPublishMisi() {
     this.sequencingService.getPersonalize({ page: 'all' }).subscribe(
       (res) => {
+        console.log("res =>", res);
         this.listPublishMisi = res.data.data;
         this.filteredPublishMisi.next(res.data.data);
       },
@@ -742,6 +749,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   getListScheduler() {
     this.audienceService.getListScheduler().subscribe(
       (res) => {
+        console.log("res scheduler new", res);
         this.listScheduler = res.data;
         this.filteredScheduler.next(res.data);
       },
@@ -796,6 +804,11 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
+      // this.idbService.getAnyOf(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -811,6 +824,11 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
+      // this.idbService.get(rows).then(result => {
+      //   console.log('result', result);
+      //   this.selected = result;
+      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      // })
 
       this.loadingIndicator = false;
     });
@@ -1003,13 +1021,6 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
 
   handleAudienceFilter(value) {
     this.formAudience.get('audience_filter').setValue(value);
-
-    value !== 'recommended-panel' ? (
-      this.formFilterRetailer.get('total_required_panel').disable()
-    ) : (
-      this.formFilterRetailer.get('total_required_panel').enable()
-    );
-
     if (value !== 'fixed-panel') {
       this.audienceFixed.setValue('');
     }
@@ -1043,6 +1054,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     if (this.formAudience.valid) {
       const audience_filter = this.formAudience.get("audience_filter").value;
       let body = {
+        _method: "PUT",
         mission_publication_id: this.formAudience.get("mission_publication_id").value,
         name: this.formAudience.get("name").value,
         panel_count: this.formAudience.get("panel_count").value,
@@ -1062,10 +1074,11 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         };
       }
   
-      // console.log('body', body);
+      console.log('body', body);
 
-      this.audienceService.createPersonalize(body).subscribe(
+      this.audienceService.putPersonalize(body, { audience_id: this.detailAudience.id }).subscribe(
         (res) => {
+          console.log("res =>", res);
           this.loadingIndicator = false;
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({
@@ -1074,6 +1087,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
           this.router.navigate(["dte", "audience"]);
         },
         (err) => {
+          console.log("err", err);
           this.loadingIndicator = false;
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar(err.error.message);
@@ -1083,12 +1097,6 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
       commonFormValidator.validateAllFields(this.formAudience);
-
-      // if (this.formAudience.valid && this.selected.length === 0) {
-      //   return this.dialogService.openSnackBar({
-      //     message: "Belum ada Audience yang dipilih!",
-      //   });
-      // }
 
       return this.dialogService.openSnackBar({
         message: "Silakan lengkapi data terlebih dahulu!",
@@ -1126,6 +1134,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         this.idbService
           .getAll((dt) => dt.is_valid)
           .then((result) => {
+            console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
               message: "File berhasil diimport",
@@ -1152,9 +1161,43 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         this.exportTemplate = false;
       }, 3000);
     } catch (error) {
+      console.log("err", error);
       this.dataService.showLoading(false);
       this.exportTemplate = false;
       throw error;
+    }
+  }
+
+  showPanelBlast() {
+    if (this.isChecked) {
+      const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = "scrumboard-card-dialog";
+      dialogConfig.data = { password: "P@ssw0rd" };
+  
+      this.dialogRef = this.dialog.open(
+        DialogPanelBlastComponent,
+        {...dialogConfig, minWidth: '600px'}
+      );
+  
+      this.dialogRef.afterClosed().subscribe((response) => {
+        console.log('res', response);
+        
+      //   if (response) {
+      //     let rows = this.rows.map((row) => row.id);
+      //     this.idbService
+      //       .getAll((dt) => dt.is_valid)
+      //       .then((result) => {
+      //         console.log("result", result);
+      //         this.onSelect({ selected: result });
+      //         this.dialogService.openSnackBar({
+      //           message: "File berhasil diimport",
+      //         });
+      //       });
+      //   }
+      });
     }
   }
 
@@ -1163,7 +1206,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     const region = this.formFilter.get('region').value;
     const area = this.formFilter.get('area').value;
 
-    if (this.formAudience.valid && this.formFilterRetailer.valid) {
+    if (this.formAudience.valid) {
       const audience_filter = this.formAudience.get("audience_filter").value;
       let body = {
         mission_publication_id: this.formAudience.get("mission_publication_id").value,
@@ -1182,7 +1225,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         };
       }
   
-      // console.log('body', body);
+      console.log('body', body);
 
       const dialogConfig = new MatDialogConfig();
   
@@ -1198,25 +1241,52 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
 
       this.audienceService.checkAudience(body).subscribe(
         (res) => {
+          console.log("res =>", res);
           if (res.data) {
             this.isChecked = true;
             this.formAudience.get("panel_count").setValue(res.data.panel_count);
-            this.formAudience.get("est_task_compliance").setValue(res.data.est_task_compliance);
+            this.formAudience.get("est_task_compliance").setValue(`${res.data.est_task_compliance * 100}%`);
           }
           this.dialogRef.close();
           this.dialogService.openSnackBar({message : 'Proses Check Berhasil'});
         },
         (err) => {
+          console.log("err", err);
           this.dialogRef.close();
+          // this.dialogService.openSnackBar(err.error.message);
         }
       );
-    } else {
-      commonFormValidator.validateAllFields(this.formAudience);
-      commonFormValidator.validateAllFields(this.formFilterRetailer);
+    }
+  }
 
-      return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
-      });
+  setValueDetail() {
+    console.log(this.detailAudience);
+    
+    this.formAudience.get('name').setValue(this.detailAudience.name);
+    // this.formAudience.get('mission_publication_id').setValue(this.detailAudience.mission_publication_id);
+    // this.formAudience.get('audience_filter').setValue(this.detailAudience.audience_filter);
+    // this.handleAudienceFilter(this.detailAudience.audience_filter);
+    this.formAudience.get('panel_count').setValue(this.detailAudience.panel_count);
+    this.formAudience.get('est_task_compliance').setValue((this.detailAudience.est_task_compliance * 100)+'%');
+    
+    // this.formAudience.get('type').setValue(this.detailAudience.type);
+    // if (this.detailAudience.type === 'mission' && this.detailAudience.audience_type === 'scheduler') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
+    // if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
+
+    // if (this.detailAudience.status === 'approved') {
+    //   this.formAudience.get('name').disable();
+    //   this.formAudience.get('audience_type').disable();
+    // }
+
+    if (this.detailAudience.panel_count > 0) {
+      this.isChecked = true;
+    }
+
+    console.log('init audience', this.formAudience);
+
+    if (this.isDetail) {
+      this.formAudience.disable();
+      this.formFilter.disable();
     }
   }
 }

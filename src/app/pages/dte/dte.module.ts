@@ -156,6 +156,7 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -328,6 +329,7 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    AudienceEditPersonalizeComponent,
   ],
   exports: [
     TemplateIndexComponent,
