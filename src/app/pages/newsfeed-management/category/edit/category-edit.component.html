@@ -1,14 +1,18 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="isDetail ? 'Detail Kategori' : 'Ubah Kategori'"></page-content-header>
+  <page-content-header
+    [contentTitle]="isDetail ? (ls.locale.global.button.detail + ' ' + ls.locale.global.label.category) : (ls.locale.global.button.edit + ' ' + ls.locale.global.label.category)">
+  </page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column" fusePerfectScrollbar>
       <form autocomplete="off" [formGroup]="formCategoryGroup">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Kategori</h2>
-          <mat-form-field [class]="formCategoryGroup.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+          <h2 class="">{{isDetail ? (ls.locale.global.button.detail + ' ' + ls.locale.global.label.category) :
+            (ls.locale.global.button.edit + ' ' + ls.locale.global.label.category) }}</h2>
+          <mat-form-field
+            [class]="formCategoryGroup.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
             </mat-select>
@@ -16,15 +20,18 @@
         </div>
         <div class="ayo-middle" fxLayout="column">
           <mat-form-field fxFlex="45%" class="is-light form-primary">
-            <input matInput type="text" formControlName="name" placeholder="Nama Kategori">
-            <mat-error *ngIf="formCategoryGroup.controls['name'].hasError('required') && formCategoryGroup.controls['name'].touched">
-              Nama Kategori harus diisi
+            <input matInput type="text" formControlName="name"
+              placeholder="{{ ls.locale.manajemen_newsfeed.daftar_kategori.text9 }}">
+            <mat-error
+              *ngIf="formCategoryGroup.controls['name'].hasError('required') && formCategoryGroup.controls['name'].touched">
+              {{ ls.locale.manajemen_newsfeed.daftar_kategori.text9 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <div fxLayout="row" class="pt-24 pb-24" fxLayoutAlign="space-between center">
             <span class="h3">RSS Link</span>
-            <button *ngIf="!isDetail" type="button" mat-raised-button matTooltip="Tambah RSS Link" fxFlex="3" (click)="addNewRSS()">
+            <button *ngIf="!isDetail" type="button" mat-raised-button
+              matTooltip="{{ ls.locale.global.button.add }} RSS Link" fxFlex="3" (click)="addNewRSS()">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -34,15 +41,16 @@
               <mat-form-field fxFlex="100%" class="is-light form-primary">
                 <input matInput type="url" formControlName="url" placeholder="URL Link">
                 <mat-error *ngIf="item.controls['url'].hasError('required') && item.controls['url'].touched">
-                  URL harus diisi
+                  URL {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
                 <mat-error *ngIf="item.controls['url'].invalid && item.get('url').value !== ''">
-                  URL tidak valid
+                  URL {{ ls.locale.manajemen_newsfeed.daftar_kategori.text8 }}
                 </mat-error>
 
               </mat-form-field>
               <div fxFlex="5%" fxLayout="column" fxLayoutAlign="center center" *ngIf="!isDetail">
-                <button type="button" mat-icon-button color="primary" (click)="removeRSS(item, i)" [disabled]="formCategoryGroup.get('link').value.length <= 1">
+                <button type="button" mat-icon-button color="primary" (click)="removeRSS(item, i)"
+                  [disabled]="formCategoryGroup.get('link').value.length <= 1">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -53,7 +61,7 @@
         </div>
         <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>

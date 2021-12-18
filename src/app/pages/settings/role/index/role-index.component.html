@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Akses Karyawan'">
+  <page-content-header [contentTitle]="ls.locale.pengaturan.akses_karyawan.text1">
     <button style="width: 170px" [routerLink]="['/settings','access', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> BUAT PERAN
+      <mat-icon>add</mat-icon> {{ ls.locale.pengaturan.akses_karyawan.text5 }}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -10,18 +10,19 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Peran</h2>
+        <h2 class="pl-8">{{ ls.locale.pengaturan.akses_karyawan.text2 }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)">
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
             <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
@@ -34,15 +35,15 @@
             </ng-template>
           </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Nama Peran" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.pengaturan.akses_karyawan.text3 }}" prop="name">
           <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
           </ng-template> -->
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tipe Akses" prop="type"></ngx-datatable-column>
+        <ngx-datatable-column name="{{ ls.locale.pengaturan.akses_karyawan.text4 }}" prop="type"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+        <ngx-datatable-column name="{{ ls.locale.global.label.created_at }}" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date:
             'dd/MM/yyyy'}}</ng-template>
         </ngx-datatable-column>
@@ -56,16 +57,20 @@
               </ng-template>
             </ngx-datatable-column> -->
 
-        <ngx-datatable-column [width]="48" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="48" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="permission?.ubah" color="" [routerLink]="['/settings', 'access', 'edit', row.id]">
+              <button mat-icon-button *ngIf="permission?.ubah" color=""
+                [routerLink]="['/settings', 'access', 'edit', row.id]">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" [routerLink]="['/settings', 'access', 'detail', row.id]">
+              <button mat-icon-button *ngIf="!permission?.ubah" color=""
+                [routerLink]="['/settings', 'access', 'detail', row.id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)" [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteRole(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

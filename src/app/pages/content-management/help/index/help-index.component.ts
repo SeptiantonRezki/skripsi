@@ -9,6 +9,7 @@ import { HelpService } from 'app/services/content-management/help.service';
 
 import { PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-help-index',
@@ -30,7 +31,7 @@ export class HelpIndexComponent {
   keyUp = new Subject<string>();
 
   userGroup: any[] = [
-    { name: "Semua Grup Pengguna", value: "" },
+    { name: this.ls.locale.notification.buat_notifikasi.text4, value: "" },
   ];
 
   @ViewChild("activeCell")
@@ -46,7 +47,8 @@ export class HelpIndexComponent {
     private helpService: HelpService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string
+    @Inject(APP_ID) private appId: string,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -93,8 +95,8 @@ export class HelpIndexComponent {
     );
   }
 
-  onChangeTab({index}) {
-    console.log({index});
+  onChangeTab({ index }) {
+    console.log({ index });
     let type = (index === 0) ? 'video' : 'help';
     // this.helpType = helpType;
     this.pagination.setType(type);

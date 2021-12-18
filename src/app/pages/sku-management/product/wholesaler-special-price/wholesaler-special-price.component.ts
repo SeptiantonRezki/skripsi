@@ -11,11 +11,12 @@ import { WholesalerSpecialPriceService } from 'app/services/sku-management/whole
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 import { ImportWholesalerSpecialPriceComponent } from '../import-wholesaler-special-price/import-wholesaler-special-price.component';
 import * as _ from 'underscore';
+import { LanguagesService } from 'app/services/languages/languages.service';
 @Directive({
   selector: '[specialPriceSaveMitra]'
 })
 export class WholesalerSpecialPriceSaveButton {
-  constructor(public template: TemplateRef<any>) {}
+  constructor(public template: TemplateRef<any>) { }
 }
 
 @Component({
@@ -42,6 +43,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
     formBuilder: FormBuilder,
     dialog: MatDialog,
     geotreeService: GeotreeService,
+    ls: LanguagesService,
     public _wholesalerService: WholesalerSpecialPriceService,
   ) {
     super(
@@ -53,6 +55,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
       formBuilder,
       dialog,
       geotreeService,
+      ls
     );
 
   }
@@ -69,7 +72,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
     this._wholesalerService.fetching().subscribe(isFetching => {
       console.warn('CALLED');
       if (!isFetching && this.rows && this.rows.length) {
-        const selected = this.rows.filter(row => this.businessId.includes(row.id) );
+        const selected = this.rows.filter(row => this.businessId.includes(row.id));
         this.selected = this.selected.concat(selected);
       }
     });
@@ -143,7 +146,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
 
   mergeSelected(rows) {
 
-    const selected = _.pluck( this.selected, 'id');
+    const selected = _.pluck(this.selected, 'id');
     const filtered = rows.filter(row => !selected.includes(row.id));
     this.selected = this.selected.concat(filtered);
     this.onSelectWholesaler.emit(this.selected);
@@ -153,6 +156,6 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
   //     business_id: this.businessId,
   //   }
   //   super.exportwholesaler(body);
-    
+
   // }
 }

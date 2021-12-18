@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from "../../../../../../node_modul
 import { AuthenticationService } from "../../../../services/authentication.service";
 import { commonFormValidator } from "../../../../classes/commonFormValidator";
 import { DialogService } from "../../../../services/dialog.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-change-password-index',
@@ -23,7 +24,8 @@ export class ChangePasswordIndexComponent implements OnInit {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private ls: LanguagesService
   ) {
     // this.profile = this.dataService.getFromStorage("profile") || [];
     this.profile = this.dataService.getDecryptedProfile() || [];

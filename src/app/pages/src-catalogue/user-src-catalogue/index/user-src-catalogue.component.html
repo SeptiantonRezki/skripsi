@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Pengguna'">
+  <page-content-header [contentTitle]="ls.locale.katalog_src.pengguna.text2">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/src-catalogue', 'users', 'create']">
@@ -13,11 +13,12 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Pengguna</h2>
+        <h2 class="pl-8">{{ ls.locale.katalog_src.pengguna.text2 }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -26,13 +27,13 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama Vendor" prop="vendor_company_name">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.vendor.text4 }}" prop="vendor_company_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.vendor_company_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama User" prop="fullname">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.pengguna.text3 }}" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row['fullname'] }}
           </ng-template>
@@ -44,13 +45,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login">
+        <ngx-datatable-column name="{{ ls.locale.global.label.last_login }}" prop="last_login">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.last_login | date: 'dd/MM/yyyy HH:mm'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Diupdate" prop="updated_at">
+        <ngx-datatable-column name="{{ ls.locale.global.label.last_modified }}" prop="updated_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.updated_at | date: 'dd/MM/yyyy HH:mm'}}
           </ng-template>
@@ -68,7 +69,8 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">

@@ -39,9 +39,9 @@ export class HelpEditComponent {
     { name: "Please Wait...", value: "" },
   ];
   jenisGroup: any[] = [
-    { name: "Jenis", value: "" },
-    { name: "Info", value: "help" },
-    { name: "Video", value: "video" },
+    { name: this.ls.locale.manajemen_konten.manajemen_bantuan.text10, value: "" },
+    { name: this.ls.locale.manajemen_konten.manajemen_bantuan.text5, value: "help" },
+    { name: this.ls.locale.manajemen_konten.manajemen_bantuan.text4, value: "video" },
   ];
 
   files: File;
@@ -143,7 +143,7 @@ export class HelpEditComponent {
 
   getListCategory() {
     const user = this.formHelp.get('user').value;
-    this.helpService.getListCategory({user}).subscribe(
+    this.helpService.getListCategory({ user }).subscribe(
       (res: any) => {
         this.categoryGroup = res.data.map((item: any) => {
           return (
@@ -213,7 +213,7 @@ export class HelpEditComponent {
     }, 500);
   }
 
-  onTypeChange({value}) {
+  onTypeChange({ value }) {
 
     if (value === 'video') {
 
@@ -287,7 +287,7 @@ export class HelpEditComponent {
     }
   }
 
-  getCountryList(){
+  getCountryList() {
     this.helpService.getCountry().subscribe(
       res => {
         this.countryList = res.data;

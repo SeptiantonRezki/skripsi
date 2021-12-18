@@ -7,6 +7,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -74,7 +75,8 @@ export class GroupingPelangganIndexComponent implements OnInit {
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
     private rcaAgentService: RcaAgentService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];

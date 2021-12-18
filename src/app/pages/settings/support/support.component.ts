@@ -7,6 +7,7 @@ import { SupportService } from 'app/services/settings/support.service';
 import { DialogOtherHelp } from './content/dialog/dialog-other-help';
 import { Emitter } from 'app/helper/emitter.helper';
 import { QiscusService } from 'app/services/qiscus.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-support',
@@ -48,6 +49,7 @@ export class SupportComponent implements OnInit {
     public dialog: MatDialog,
     private emitter: Emitter,
     private qs: QiscusService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.menuButtons = [];
@@ -120,17 +122,17 @@ export class SupportComponent implements OnInit {
 
     this.menuButtonOthers = [
       {
-        category: 'Telepon',
+        category: this.ls.locale.bantuan.text10,
         title: '0804-1000-234',
         image_url: 'assets/images/ayo/bantuan/kontak-telepon2x.png'
       },
       {
-        category: 'Chat',
+        category: this.ls.locale.bantuan.text11,
         title: 'CHAT KE KAMI LANGSUNG',
         image_url: 'assets/images/ayo/bantuan/kontak-chat2x.png'
       },
       {
-        category: 'E-Mail',
+        category: this.ls.locale.bantuan.text12,
         title: 'csayosrc@src.id',
         image_url: 'assets/images/ayo/bantuan/kontak-email2x.png'
       }
@@ -149,7 +151,7 @@ export class SupportComponent implements OnInit {
           return [{
             id: null,
             title: "",
-            text: "HASIL PENCARIAN untuk \"" + value + "\" tidak ditemukan. Mohon hubungi tim Digital Care untuk pertanyaan ini.",
+            text: this.ls.locale.bantuan.text7 + " \"" + value + "\" " + this.ls.locale.bantuan.text7a + " " + this.ls.locale.bantuan.text7b,
             value: value,
             disabled: true
           }];
@@ -207,7 +209,7 @@ export class SupportComponent implements OnInit {
     }
   }
 
-  backToPusatBantuan() {    
+  backToPusatBantuan() {
     this.isPesanBantuanCreate = false;
     this.isListCategoryDetails = false;
     this.helpDetail = null;
@@ -325,50 +327,50 @@ export class SupportComponent implements OnInit {
 
   async getRoomListPesanBantuan() {
     // return new Promise((resolve, reject) => {
-      const params_ = { 
-        page: 1, 
-        limit: 100,
-        show_participants: false,
-        show_empty: false,
-      };
-      const isLogin = await this.qs.qiscusMC.isLogin;
-      if (isLogin) {
-        console.log('isLogin2', isLogin)
+    const params_ = {
+      page: 1,
+      limit: 100,
+      show_participants: false,
+      show_empty: false,
+    };
+    const isLogin = await this.qs.qiscusMC.isLogin;
+    if (isLogin) {
+      console.log('isLogin2', isLogin)
       this.qs.qiscusMC.loadRoomList(params_).then(async (rooms) => {
-          // On success
-          if (rooms && rooms.length > 0) {
-            let countNotif = 0;
-            await rooms.map((item) => {
-              if (item.count_notif > 0) {
-                countNotif = countNotif + 1;
-              }              
-              if (item.options) {
-                item.additionalOptions = JSON.parse(item.options);
-                if (!item.additionalOptions.is_resolved) {
-                  this.isResolved = false;
-                  this.emitter.emitSelectedHelpTabQ({ isResolved: false });
-                }
+        // On success
+        if (rooms && rooms.length > 0) {
+          let countNotif = 0;
+          await rooms.map((item) => {
+            if (item.count_notif > 0) {
+              countNotif = countNotif + 1;
+            }
+            if (item.options) {
+              item.additionalOptions = JSON.parse(item.options);
+              if (!item.additionalOptions.is_resolved) {
+                this.isResolved = false;
+                this.emitter.emitSelectedHelpTabQ({ isResolved: false });
               }
-              return item;
-            });
-            this.emitter.emitSelectedHelpTabQ({ roomList: [ ...rooms ] });
-            if (countNotif) this.countNotifPesanBantuan = countNotif;
+            }
+            return item;
+          });
+          this.emitter.emitSelectedHelpTabQ({ roomList: [...rooms] });
+          if (countNotif) this.countNotifPesanBantuan = countNotif;
 
-            // this.badgePesanBantuan = `<p><span matBadge="4" matBadgeOverlap="false">Text with a badge</span></p>`;
-            // var d1 = this.elementRef.nativeElement.querySelector('#mat-tab-label-0-1');
-            // console.log('d1', d1);
-            // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
-          }
-          console.log('success getRoomList', rooms)
+          // this.badgePesanBantuan = `<p><span matBadge="4" matBadgeOverlap="false">Text with a badge</span></p>`;
+          // var d1 = this.elementRef.nativeElement.querySelector('#mat-tab-label-0-1');
+          // console.log('d1', d1);
+          // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
+        }
+        console.log('success getRoomList', rooms)
         // resolve(console.log('success getRoomList', rooms));
       }).catch((error) => {
-          // On error
+        // On error
         // reject(console.log('error getRoomList', error));
         console.log('error getRoomList', error)
       });
     } else {
-        console.log('isLogin', isLogin)
-      }
+      console.log('isLogin', isLogin)
+    }
     // });
   }
 

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-vendors-index',
@@ -34,7 +35,8 @@ export class VendorsIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private vendorsService: VendorsService
+    private vendorsService: VendorsService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

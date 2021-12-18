@@ -1,6 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Vendor'">
+  <page-content-header
+    [contentTitle]="(isDetail ? ls.locale.global.button.detail : ls.locale.global.button.edit) + ' Vendor'">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -8,7 +9,7 @@
       <div class="mat-white-bg p-24" fxLayout="column">
         <form [formGroup]="formVendor">
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-            <h3>{{ isDetail ? 'Detil' : 'Ubah' }} Vendor</h3>
+            <h3>{{ isDetail ? ls.locale.global.button.detail : ls.locale.global.button.edit }} Vendor</h3>
             <!-- <mat-form-field
               [class]="formVendor.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
               <mat-select formControlName="status">
@@ -19,42 +20,45 @@
           <div class="ayo-middle pt-24" fxLayout="column">
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput placeholder="Nama Vendor" type="text" formControlName="nama">
+              <input matInput placeholder="{{ ls.locale.katalog_src.vendor.text4 }}" type="text" formControlName="nama">
               <mat-error
                 *ngIf="formVendor.controls['nama'].hasError('required') && formVendor.controls['nama'].touched ">
-                Nama harus diisi.
+                {{ ls.locale.katalog_src.vendor.text4 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput placeholder="Alamat Vendor" type="text" formControlName="address">
+              <input matInput placeholder="{{ ls.locale.katalog_src.vendor.text5 }}" type="text"
+                formControlName="address">
               <mat-error
                 *ngIf="formVendor.controls['address'].hasError('required') && formVendor.controls['address'].touched ">
-                Alamat Vendor harus diisi.
+                {{ ls.locale.katalog_src.vendor.text5 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput placeholder="Nama PIC" type="text" formControlName="pic_name">
+              <input matInput placeholder="{{ ls.locale.katalog_src.vendor.text2 }}" type="text"
+                formControlName="pic_name">
               <mat-error
                 *ngIf="formVendor.controls['pic_name'].hasError('required') && formVendor.controls['pic_name'].touched ">
-                Nama PIC harus diisi.
+                {{ ls.locale.katalog_src.vendor.text2 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput placeholder="Email PIC" type="email" formControlName="pic_email">
+              <input matInput placeholder="{{ ls.locale.katalog_src.vendor.text3 }}" type="email"
+                formControlName="pic_email">
               <mat-error
                 *ngIf="formVendor.controls['pic_email'].hasError('required') && formVendor.controls['pic_email'].touched ">
-                Email PIC harus diisi.
+                {{ ls.locale.katalog_src.vendor.text3 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
 
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
-              <small>Nomor Telepon</small>
+              <small>{{ ls.locale.global.label.phone }}</small>
               <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                 <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
-                  <input matInput value="+62" readonly>
+                  <input matInput value="{{ ls.locale.global.country_calling_code }}" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="95" fxFlex.xs="70" class="form-primary">
                   <input matInput formControlName="phone" type="tel">
@@ -62,7 +66,7 @@
               </div>
               <mat-error
                 *ngIf="formVendor.controls['phone'].hasError('required') && formVendor.controls['phone'].touched ">
-                Nomor Telepon harus diisi.
+                {{ ls.locale.global.label.phone }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </div>
 
@@ -73,7 +77,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formVendor.controls['InternalClassification'].hasError('required') && formVendor.controls['InternalClassification'].touched ">
-                  Internal Classification harus diisi
+                  Internal Classification {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -82,7 +86,7 @@
               style="margin-bottom: 25px;">
               <button mat-raised-button color="" matTooltip="Tambah Area" (click)="setArea1(false)">
                 <span>
-                  Tambah Area
+                  {{ ls.locale.global.button.add }} Area
                 </span>
               </button>
             </div>
@@ -236,7 +240,7 @@
             </div>
             <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
               <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-                SIMPAN
+                {{ ls.locale.global.button.save }}
               </button>
             </div>
           </div>

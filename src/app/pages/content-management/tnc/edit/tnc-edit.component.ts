@@ -7,6 +7,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DataService } from '../../../../services/data.service';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-tnc-edit',
@@ -38,7 +39,8 @@ export class TncEditComponent {
     private dialogService: DialogService,
     private tncService: TncService,
     private dataService: DataService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formTncError = {
       title: {},
@@ -100,7 +102,7 @@ export class TncEditComponent {
     );
   }
 
-  getCountryList(){
+  getCountryList() {
     this.helpService.getCountry().subscribe(
       res => {
         this.countryList = res.data;

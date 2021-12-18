@@ -17,12 +17,12 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 export class ProductCatalogueEditComponent implements OnInit {
   formProduct: FormGroup;
   listCategory: Array<any>;
-  listStock: Array<any> = [{ id: 'in-stock', name: 'Tersedia' }, { id: 'out-of-stock', name: 'Tidak Tersedia' }];
-  listStatus: Array<any> = [{ id: 'active', name: 'Aktif' }, { id: 'inactive', name: 'Tidak Aktif' }];
+  listStock: Array<any> = [{ id: 'in-stock', name: this.ls.locale.global.label.available }, { id: 'out-of-stock', name: this.ls.locale.global.label.unavailable }];
+  listStatus: Array<any> = [{ id: 'active', name: this.ls.locale.global.label.active }, { id: 'inactive', name: this.ls.locale.global.label.inactive }];
   listStages: Array<any> = [
-    { checked: false, id: 1, name: 'Baru bergabung menjadi SRC ?' },
-    { checked: false, id: 2, name: 'Ingin meningkatkan penjualan toko ?' },
-    { checked: false, id: 3, name: 'Ingin mengembangkan usaha lebih besar lagi ?' }
+    { checked: false, id: 1, name: this.ls.locale.katalog_src.produk.text21 },
+    { checked: false, id: 2, name: this.ls.locale.katalog_src.produk.text22 },
+    { checked: false, id: 3, name: this.ls.locale.katalog_src.produk.text23 }
   ]
   listVendor: Array<any>;
   shortDetail: any;

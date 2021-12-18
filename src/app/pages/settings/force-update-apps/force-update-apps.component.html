@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Pemberitahuan Pembaruan Aplikasi'">
+  <page-content-header [contentTitle]="ls.locale.pengaturan.force_update_apps.text2">
 
   </page-content-header>
   <!-- / HEADER -->
@@ -9,52 +9,55 @@
       <form [formGroup]="formForceUpdate" autocomplete="off" class="mat-elevation-z4 mr-24 mb-24 p-24" fxLayout="column"
         fxLayoutAlign="start" fxFlex="65%">
         <div fxLayout="row" class="pb-16" fxLayoutAlign="start center">
-          <h2 class="">Pemberitahuan Pembaruan Aplikasi</h2>
+          <h2 class="">{{ ls.locale.pengaturan.force_update_apps.text2 }}</h2>
         </div>
         <div class="ayo-content-middle pb-48">
 
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Aplikasi" formControlName="appsName">
+              <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="appsName">
                 <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formForceUpdate.controls['appsName'].hasError('required') && formForceUpdate.controls['appsName'].touched">
-                Nama Aplikasi harus diisi
+                {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <mat-select placeholder="Operasi Sistem" formControlName="os">
+              <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text4 }}" formControlName="os">
                 <mat-option *ngFor="let item of listOs" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formForceUpdate.controls['os'].hasError('required') && formForceUpdate.controls['os'].touched">
-                Operasi Sistem harus diisi
+                {{ ls.locale.pengaturan.force_update_apps.text4 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="version" placeholder="Versi Aplikasi" decimalNumber>
+              <input matInput type="text" formControlName="version"
+                placeholder="{{ ls.locale.pengaturan.force_update_apps.text5 }}" decimalNumber>
               <mat-error
                 *ngIf="formForceUpdate.controls['version'].hasError('required') && formForceUpdate.controls['version'].touched">
-                Versi Aplikasi harus diisi
+                {{ ls.locale.pengaturan.force_update_apps.text5 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <mat-error
                 *ngIf="formForceUpdate.controls['version'].hasError('min') && formForceUpdate.controls['version'].touched">
-                Versi Aplikasi {{formForceUpdate.controls['appsName'].value}} tidak boleh kurang dari versi aplikasi
-                {{formForceUpdate.controls['appsName'].value}} yang terakhir
+                {{ ls.locale.pengaturan.force_update_apps.text5 }} {{formForceUpdate.controls['appsName'].value}} {{
+                ls.locale.pengaturan.force_update_apps.text14 }}
+                {{formForceUpdate.controls['appsName'].value}} {{ ls.locale.pengaturan.force_update_apps.text15 }}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="title" placeholder="Isi Pesan">
+              <input matInput type="text" formControlName="title"
+                placeholder="{{ ls.locale.pengaturan.force_update_apps.text6 }}">
               <mat-error
                 *ngIf="formForceUpdate.controls['title'].hasError('required') && formForceUpdate.controls['title'].touched">
-                Isi Pesan harus diisi
+                {{ ls.locale.pengaturan.force_update_apps.text6 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -62,7 +65,7 @@
           <div class="pb-16">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
-                <strong>Notifikasi Versi Terbaru</strong>
+                <strong>{{ ls.locale.pengaturan.force_update_apps.text7 }}</strong>
               </h3>
             </div>
             <mat-radio-group formControlName="notifNewVersion" (change)="changeValue()">
@@ -75,10 +78,11 @@
           <div fxLayout="row wrap" fxLayoutAlign="start center"
             *ngIf="formForceUpdate.controls['notifNewVersion'].value === 'yes'" fxFlex="1 0 auto">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="notifMessage" placeholder="Isi Pesan Notifikasi">
+              <input matInput type="text" formControlName="notifMessage"
+                placeholder="{{ ls.locale.pengaturan.force_update_apps.text8 }}">
               <mat-error
                 *ngIf="formForceUpdate.controls['notifMessage'].hasError('required') && formForceUpdate.controls['notifMessage'].touched">
-                Isi Pesan Notifikasi harus diisi
+                {{ ls.locale.pengaturan.force_update_apps.text8 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -113,18 +117,18 @@
         <div class="confirm pt-8 pb-24" fxLayout="row" *ngIf="permission?.buat">
           <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="30"
             (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>
       <div fxLayout="column" fxFlex="32%">
         <div class="ayo-main-wrapper mat-bg-white" fxFlex="1 0 auto">
           <div fxLayout="row" class="py-16" fxLayoutAlign="start center">
-            <h2 class="">Versi Aplikasi Consumer Terakhir</h2>
+            <h2 class="">{{ ls.locale.pengaturan.force_update_apps.text9 }}</h2>
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngFor="let item of listVersionConsumer">
             <div class="info-line pb-16">
-              <small class="secondary-text">Versi Aplikasi</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text5 }}</small>
               <div class="info" fxLayout="row" fxLayoutAlign="space-between center">
                 {{item.version}}
                 <!-- <mat-icon class="secondary-text" color="primary">delete_forever</mat-icon> -->
@@ -137,17 +141,17 @@
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngIf="listVersionConsumer.length === 0">
             <div class="info-line pb-16">
-              <small class="secondary-text">Tidak ada data</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text12 }}</small>
             </div>
           </div>
         </div>
         <div class="ayo-main-wrapper mat-bg-white mt-24" fxFlex="1 0 auto">
           <div fxLayout="row" class="py-16" fxLayoutAlign="start center">
-            <h2 class="">Versi Aplikasi Retailer Terakhir</h2>
+            <h2 class="">{{ ls.locale.pengaturan.force_update_apps.text10 }}</h2>
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngFor="let item of listVersionRetailer">
             <div class="info-line pb-16">
-              <small class="secondary-text">Versi Aplikasi</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text5 }}</small>
               <div class="info" fxLayout="row" fxLayoutAlign="space-between center">
                 {{item.version}}
                 <button mat-icon-button color="primary" matTooltip="Hapus" (click)="revertVersion(item)"
@@ -159,17 +163,17 @@
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngIf="listVersionRetailer.length === 0">
             <div class="info-line pb-16">
-              <small class="secondary-text">Tidak ada data</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text12 }}</small>
             </div>
           </div>
         </div>
         <div class="ayo-main-wrapper mat-bg-white mt-24" fxFlex="1 0 auto">
           <div fxLayout="row" class="py-16" fxLayoutAlign="start center">
-            <h2 class="">Versi Aplikasi Kasir Terakhir</h2>
+            <h2 class="">{{ ls.locale.pengaturan.force_update_apps.text11 }}</h2>
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngFor="let item of listVersionCashier">
             <div class="info-line pb-16">
-              <small class="secondary-text">Versi Aplikasi</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text5 }}</small>
               <div class="info" fxLayout="row" fxLayoutAlign="space-between center">
                 {{item.version}}
                 <button mat-icon-button color="primary" matTooltip="Hapus" (click)="revertVersion(item)"
@@ -181,7 +185,7 @@
           </div>
           <div class="profile-box info-box work" fxLayout="column" *ngIf="listVersionCashier.length === 0">
             <div class="info-line pb-16">
-              <small class="secondary-text">Tidak ada data</small>
+              <small class="secondary-text">{{ ls.locale.pengaturan.force_update_apps.text12 }}</small>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-report-detail',
@@ -14,7 +15,8 @@ export class ReportDetailComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab");
     // this.selectedTab = selectedTab ? selectedTab : 0;

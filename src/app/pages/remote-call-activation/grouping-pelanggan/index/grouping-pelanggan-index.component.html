@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Grouping Pelanggan'">
+  <page-content-header [contentTitle]="ls.locale.rca_grouping.page_title">
     <!-- <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
         SIMPAN
@@ -20,7 +20,7 @@
     </div>
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-tab-group>
-        <mat-tab label="Pelanggan">
+        <mat-tab label="{{ ls.locale.rca_grouping.customer }}">
           <div class="ayo-middle" fxLayout="column">
             <form [formGroup]="formFilter" autoComplete="off">
               <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="p-16 px-24"
@@ -32,11 +32,12 @@
               </div>
 
               <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-                <h2 class="p-24">Grouping Pelanggan</h2>
+                <h2 class="p-24">{{ ls.locale.rca_grouping.page_title }}</h2>
                 <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
                   <mat-icon>search</mat-icon>
                   <mat-form-field class="is-light tab-search">
-                    <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                    <input matInput placeholder="{{ ls.locale.global.label.search }}"
+                      (keyup)="keyUp.next($event.target.value)" autocomplete="off">
                   </mat-form-field>
                 </div>
               </div>
@@ -148,7 +149,7 @@
                     [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
                   </ngx-mat-select-search>
                   <mat-option>None</mat-option>
-                  <mat-option value="blank">Belum di Set</mat-option>
+                  <mat-option value="blank">{{ ls.locale.rca_grouping.unset }}</mat-option>
                   <mat-option *ngFor="let item of filteredPosition | async" [value]="item.id">
                     {{item.code}}
                   </mat-option>
@@ -173,7 +174,7 @@
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <a class="direct-edit" (click)="openDialogPositionCode(row)">{{ row.position_code ?
                       row.position_code :
-                      'Kosong, Klik untuk merubah' }}</a>
+                      ls.locale.rca_grouping.empty_position }}</a>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Customer Name" prop="name"></ngx-datatable-column>

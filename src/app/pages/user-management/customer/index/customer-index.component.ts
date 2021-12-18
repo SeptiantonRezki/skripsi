@@ -8,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { CustomerService } from 'app/services/user-management/customer.service';
 import { GeneralService } from "app/services/general.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-customer-index',
@@ -48,7 +49,8 @@ export class CustomerIndexComponent {
     private dataService: DataService,
     private customerService: CustomerService,
     private formBuilder: FormBuilder,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
