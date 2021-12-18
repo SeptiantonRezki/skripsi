@@ -1,13 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Tanda'">
+  <page-content-header [contentTitle]="ls.locale.pengaturan.tanda_new_menu.text2">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-bg-white">
       <form autocomplete="off" [formGroup]="formNewSign">
         <div fxLayout="column" class="px-16 pt-24 pb-8">
-          <label id="example-radio-group-label" style="font-weight: bold;font-size: 16px;">Aplikasi</label>
+          <label id="example-radio-group-label" style="font-weight: bold;font-size: 16px;">{{
+            ls.locale.pengaturan.tanda_new_menu.text3 }}</label>
           <mat-radio-group class="is-light form-primary" fxFlex="50" formControlName="application" fxLayout="column">
             <mat-radio-button class="radio-button pr-48" *ngFor="let item of listApplication" [value]="item.value">
               {{ item.name }}
@@ -16,12 +17,12 @@
         </div>
         <div fxLayout="row" style="margin-left: 10px;">
           <mat-form-field fxFlex="50" class="is-light form-primary">
-            <mat-select formControlName="menu" placeholder="Daftar Menu" multiple>
+            <mat-select formControlName="menu" placeholder="{{ ls.locale.pengaturan.tanda_new_menu.text4 }}" multiple>
               <mat-option *ngFor="let item of menuList" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
             <mat-error
               *ngIf="formNewSign.controls['menu'].hasError('required') && formNewSign.controls['menu'].touched">
-              Menu Wajib Diisi
+              {{ ls.locale.pengaturan.tanda_new_menu.text4 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -29,10 +30,10 @@
           style="margin-left: 10px;">
           <mat-form-field fxFlex="20" class="is-light form-primary">
             <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
-              placeholder="Tanggal Terbit">
+              placeholder="{{ ls.locale.pengaturan.tanda_new_menu.text5 }}">
             <mat-error
               *ngIf="formNewSign.controls['date'].hasError('required') && formNewSign.controls['date'].touched">
-              Tanggal Terbit harus diisi
+              {{ ls.locale.pengaturan.tanda_new_menu.text5 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
             <!-- <mat-datepicker-toggle matSuffix [for]="tanggal_terbit">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -40,21 +41,21 @@
             <mat-datepicker #tanggal_terbit></mat-datepicker>
           </mat-form-field>
           <mat-form-field fxFlex="15" class="is-light form-primary" id="time">
-            <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime" [format]="24"
-              readonly>
+            <input matInput formControlName="time" placeholder="{{ ls.locale.pengaturan.tanda_new_menu.text6 }}"
+              [ngxTimepicker]="fullTime" [format]="24" readonly>
             <!-- <mat-icon matSuffix>access_time</mat-icon> -->
             <ngx-material-timepicker #fullTime></ngx-material-timepicker>
             <mat-error
               *ngIf="formNewSign.controls['time'].hasError('required') && formNewSign.controls['time'].touched">
-              Waktu harus diisi
+              {{ ls.locale.pengaturan.tanda_new_menu.text6 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="20" class="is-light form-primary">
             <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
-              formControlName="endDate" placeholder="Tanggal Berakhir">
+              formControlName="endDate" placeholder="{{ ls.locale.pengaturan.tanda_new_menu.text7 }}">
             <mat-error
               *ngIf="formNewSign.controls['endDate'].hasError('required') && formNewSign.controls['endDate'].touched">
-              Tanggal Berakhir harus diisi
+              {{ ls.locale.pengaturan.tanda_new_menu.text7 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
             <!-- <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -62,17 +63,18 @@
             <mat-datepicker #tanggal_berakhir></mat-datepicker>
           </mat-form-field>
           <mat-form-field fxFlex="20" class="is-light form-primary" id="time1">
-            <input matInput formControlName="endTime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1"
-              [format]="24" readonly>
+            <input matInput formControlName="endTime" placeholder="{{ ls.locale.pengaturan.tanda_new_menu.text8 }}"
+              [ngxTimepicker]="fullTime1" [format]="24" readonly>
             <!-- <mat-icon matSuffix>access_time</mat-icon> -->
             <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
             <mat-error
               *ngIf="formNewSign.controls['endTime'].hasError('required') && formNewSign.controls['endTime'].touched">
-              Waktu harus diisi
+              {{ ls.locale.pengaturan.tanda_new_menu.text8 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
         </div>
-        <label id="example-radio-group-label" style="font-weight: bold;font-size: 16px;">Pilih Tanda</label>
+        <label id="example-radio-group-label" style="font-weight: bold;font-size: 16px;">{{
+          ls.locale.pengaturan.tanda_new_menu.text9 }}</label>
         <div fxFlex="100" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           style="margin-left: 10px;margin-bottom: 20px;margin-top: 20px;">
           <mat-radio-group class="is-light form-primary" fxFlex="100" formControlName="icon">
@@ -81,7 +83,7 @@
             </mat-radio-button>
           </mat-radio-group>
           <mat-error *ngIf="formNewSign.controls['icon'].hasError('required') && formNewSign.controls['icon'].touched">
-            Icon harus diisi
+            {{ ls.locale.pengaturan.tanda_new_menu.text1 }} {{ ls.locale.global.messages.mandatory_text }}
           </mat-error>
         </div>
         <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
@@ -100,14 +102,16 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="Zone" formControlName="zone" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
+                    'all' ? 'Semua
                     Zona' :
                     item.code}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="Regional" formControlName="region" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                    'all' ? 'Semua
                     Regional'
                     :
                     item.code}}</mat-option>
@@ -115,7 +119,8 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="Area" formControlName="area" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
+                    'all' ? 'Semua
                     Area'
                     :
                     item.code}}</mat-option>
@@ -123,7 +128,8 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                  <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
+                    === 'all' ?
                     'Semua
                     Salespoint'
                     :
@@ -132,7 +138,8 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="District" formControlName="district" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                    'all' ? 'Semua
                     District'
                     :
                     item.code}}</mat-option>
@@ -140,7 +147,8 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select placeholder="Territory" formControlName="territory" multiple>
-                  <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                  <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                    'all' ? 'Semua
                     Territori'
                     :
                     item.code}}</mat-option>
@@ -181,8 +189,8 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
-              <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
+              <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="Code" prop="code" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   {{row.code ? row.code : '-'}}
                 </ng-template>
@@ -192,7 +200,7 @@
                   {{row.owner ? row.owner : '-'}}
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Tipe" prop="type">
+              <ngx-datatable-column name="Type" prop="type">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   {{row.type.toUpperCase()}}
                 </ng-template>
@@ -232,7 +240,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                      National harus diisi
+                      National {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -243,7 +251,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                      Zone harus diisi
+                      Zone {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -254,7 +262,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                      Regional harus diisi
+                      Regional {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -265,7 +273,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                      Area harus diisi
+                      Area {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -277,7 +285,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                      Salespoint harus diisi
+                      Salespoint {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -290,7 +298,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                      Distrik harus diisi
+                      Distrik {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -301,7 +309,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                      Territori harus diisi
+                      Territori {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -313,7 +321,7 @@
       <div class="confirm pl-16 pt-8 pb-24" fxLayout="row">
         <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25"
           (click)="submit()">
-          SIMPAN
+          {{ ls.locale.global.button.save }}
         </button>
       </div>
     </div>

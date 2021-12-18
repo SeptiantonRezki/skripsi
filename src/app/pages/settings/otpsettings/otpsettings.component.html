@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Pengaturan OTP'">
+  <page-content-header [contentTitle]="ls.locale.pengaturan.pengaturan_otp.text2">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -32,7 +32,7 @@
       <div *ngIf="!isDetail" class="confirm pl-16 pt-8 pb-24" fxLayout="row">
         <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25"
           (click)="submit()">
-          SIMPAN
+          {{ ls.locale.global.button.save }}
         </button>
       </div>
     </div>

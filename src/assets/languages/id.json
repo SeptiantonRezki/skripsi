@@ -566,7 +566,26 @@
       "text4": "Informasi Kurir",
       "text5": "Daftar Layanan",
       "text6": "Tambah Layanan",
-      "text7": "Layanan Kurir"
+      "text7": "Layanan Kurir",
+      "text8": "Ubah Status Kurir",
+      "text9": "Nama Kurir",
+      "text10": "Nomor Kontak",
+      "text11": "Nama Layanan",
+      "text12": "Durasi Pengiriman",
+      "text13": "Estimasi Paling Cepat",
+      "text14": "Durasi",
+      "text15": "Estimasi Paling Lama",
+      "text16": "Hari",
+      "text17": "Jam",
+      "text18": "Pengaturan Tarif Standar",
+      "text19": "Harga Flat",
+      "text20": "Tentukan Jarak Maksimum",
+      "text21": "Jarak Maksimum",
+      "text22": "Tentukan Batas Waktu Menerima Pesanan",
+      "text23": "Batas Waktu Menerima Pesan Tidak Valid Gunakan Format HH:MM (ex: 17:00)",
+      "text24": "Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka",
+      "text25": "Batas Waktu Menerima Pesanan (HH:MM)",
+      "text26": "Ubah Kurir"
     },
     "panel_mitra": {
       "text1": "Panel Mitra",
@@ -1214,7 +1233,9 @@
       "text7": "Buat Tingkatan Akses",
       "text8": "Nama Tingkatan Akses",
       "text9": "Hapus Akses Peran",
-      "text10": "Apakah anda yakin untuk menghapus peran ini?"
+      "text10": "Apakah anda yakin untuk menghapus peran ini?",
+      "text11": "Ubah Tingkatan Akses",
+      "text12": "Detil Tingkatan Akses"
     },
     "ubah_kata_sandi": {
       "text1": "Ubah Kata Sandi",
@@ -1247,7 +1268,10 @@
       "text9": "Versi Aplikasi Consumer Terakhir",
       "text10": "Versi Aplikasi Retailer Terakhir",
       "text11": "Versi Aplikasi Kasir Terakhir",
-      "text12": "Tidak ada data"
+      "text12": "Tidak ada data",
+      "text13": "Nama Aplikasi",
+      "text14": "tidak boleh kurang dari versi aplikasi",
+      "text15": "yang terakhir"
     },
     "pengaturan_otp": {
       "text1": "Pengaturan OTP",

@@ -6,6 +6,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PagesName } from 'app/classes/pages-name';
 import { forkJoin } from 'rxjs';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-force-update-apps',
@@ -18,7 +19,7 @@ export class ForceUpdateAppsComponent {
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
   ]
-  yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
+  yesOrNo: any[] = [{ name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 'yes' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 'no' }];
   formForceUpdate: FormGroup;
 
   listVersionConsumer: any[];
@@ -38,7 +39,8 @@ export class ForceUpdateAppsComponent {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private accessServices: AccessService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
 
@@ -113,27 +115,27 @@ export class ForceUpdateAppsComponent {
         os: this.formForceUpdate.controls['os'].value,
       }
       try {
-      this.accessServices.getForceUpdateUsers(body).subscribe(res => {
-        console.log('res', res);
+        this.accessServices.getForceUpdateUsers(body).subscribe(res => {
+          console.log('res', res);
           this.dataService.showLoading(false);
-        if (res.status === 'success') {
-          this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
-          this.ngOnInit();
-        }
-        // if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
-        // this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
-        //   console.log('res force updates', res);
-        //   this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
-        //   this.ngOnInit();
-        //   this.dataService.showLoading(false);
-        // }, err => {
-        //   this.dataService.showLoading(false);
-        //   console.log('err', err)
-        // });
-      }, err => {
-        this.dataService.showLoading(false);
-        console.log('err', err)
-      });
+          if (res.status === 'success') {
+            this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
+            this.ngOnInit();
+          }
+          // if (!res.data || res.data && res.data.length == 0 ) this.dataService.showLoading(false);
+          // this.paralellForceUpdates(res.data && res.data > 0 ? res.data : [], body).subscribe(res => {
+          //   console.log('res force updates', res);
+          //   this.dialogService.openSnackBar({ message: 'Pemberitahuan Pembaruan Aplikasi berhasil disimpan' });
+          //   this.ngOnInit();
+          //   this.dataService.showLoading(false);
+          // }, err => {
+          //   this.dataService.showLoading(false);
+          //   console.log('err', err)
+          // });
+        }, err => {
+          this.dataService.showLoading(false);
+          console.log('err', err)
+        });
       } catch (ex) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: 'Maaf, Terjadi Kesalahan Sistem!' });

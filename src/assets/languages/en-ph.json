@@ -559,7 +559,26 @@
       "text4": "Courier Information",
       "text5": "Services List",
       "text6": "Add Service",
-      "text7": "Courier Service"
+      "text7": "Courier Service",
+      "text8": "Change Courier Status",
+      "text9": "Courier Name",
+      "text10": "Contact Number",
+      "text11": "Service Name",
+      "text12": "Shipping Duration",
+      "text13": "Fastest Estimate",
+      "text14": "Duration",
+      "text15": "Lowest Estimate",
+      "text16": "Days",
+      "text17": "Hours",
+      "text18": "Standard Rate Setting",
+      "text19": "Flat Price",
+      "text20": "Determine Maximum Distance",
+      "text21": "Max Distance",
+      "text22": "Determine the Deadline for Receiving Orders",
+      "text23": "Deadline for Receiving Invalid Orders Use Format HH:MM (ex: 17:00)",
+      "text24": "Invalid Contact Number, Contact Number must be a number",
+      "text25": "Deadline for Receiving Orders (HH:MM)",
+      "text26": "Change Courier"
     },
     "panel_mitra": {
       "text1": "Partner Panel ",
@@ -1178,7 +1197,7 @@
       "text9": "Category Name"
     },
     "daftar_berita": {
-      "text1": "Register News",
+      "text1": "News List",
       "text2": "News Title",
       "text3": "News Details",
       "text4": "Published",
@@ -1199,7 +1218,7 @@
     "text": "Settings",
     "akses_karyawan": {
       "text1": "Employee Access",
-      "text2": "Register Role",
+      "text2": "Registered Role",
       "text3": "Role Name",
       "text4": "Access Type",
       "text5": "Create Role",
@@ -1207,7 +1226,9 @@
       "text7": "Create Access Tiers",
       "text8": "Access Tier Name",
       "text9": "Remove Role Access",
-      "text10": "Are you sure you want to delete this role?"
+      "text10": "Are you sure you want to delete this role?",
+      "text11": "Edit Access Tiers",
+      "text12": "Detail Access Tiers"
     },
     "ubah_kata_sandi": {
       "text1": "Change Password",
@@ -1230,7 +1251,7 @@
     },
     "force_update_apps": {
       "text1": "Force Update Apps",
-      "text2": "App Update Notification =",
+      "text2": "App Update Notification",
       "text3": "Application",
       "text4": "System Operation",
       "text5": "Application Version",
@@ -1240,7 +1261,10 @@
       "text9": "Lastest Consumer App Version",
       "text10": "Latest Retailer App Version",
       "text11": "Latest Cashier App Version",
-      "text12": "No data"
+      "text12": "No data",
+      "text13": "Application Name",
+      "text14": "can not be less than the application version",
+      "text15": "last version"
     },
     "pengaturan_otp": {
       "text1": "OTP Settings",
