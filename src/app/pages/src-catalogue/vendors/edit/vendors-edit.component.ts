@@ -190,7 +190,7 @@ export class VendorsEditComponent implements OnInit {
       this.formVendor.get('address').setValue(res.data.address);
       this.formVendor.get('pic_name').setValue(res.data.pic_name);
       this.formVendor.get('pic_email').setValue(res.data.pic_email);
-      this.formVendor.get('phone').setValue(res.data.phone_number && res.data.phone_number.split("+62")[1] ? res.data.phone_number.split("+62")[1] : res.data.phone_number);
+      this.formVendor.get('phone').setValue(res.data.phone_number && res.data.phone_number.split(this.ls.locale.global.country_calling_code)[1] ? res.data.phone_number.split(this.ls.locale.global.country_calling_code)[1] : res.data.phone_number);
       this.formVendor.get('InternalClassification').setValue(this.detailVendor.classification || '');
 
       try {
@@ -653,7 +653,7 @@ export class VendorsEditComponent implements OnInit {
         pic_email: this.formVendor.get("pic_email").value,
         area_id: area_id,
         address: this.formVendor.get("address").value,
-        phone_number: "+62" + this.formVendor.get("phone").value,
+        phone_number: this.ls.locale.global.country_calling_code + this.formVendor.get("phone").value,
         status: 'active',
         classification: this.formVendor.get("InternalClassification").value
       };

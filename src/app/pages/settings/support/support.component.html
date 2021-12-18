@@ -1,8 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Bantuan'">
-    <button *ngIf="selectedTab == 1 && !isPesanBantuan" style="min-width: 120px;" (click)="redirectToCreatePesanBantuan()" mat-raised-button aria-label="Cabang"  type="button">
-      <mat-icon>add</mat-icon>BUAT
+  <page-content-header [contentTitle]="ls.locale.bantuan.text1">
+    <button *ngIf="selectedTab == 1 && !isPesanBantuan" style="min-width: 120px;"
+      (click)="redirectToCreatePesanBantuan()" mat-raised-button aria-label="Cabang" type="button">
+      <mat-icon>add</mat-icon>{{ ls.locale.global.button.add }}
     </button>
   </page-content-header>
 
@@ -14,17 +15,17 @@
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <mat-tab-group [selectedIndex]="selectedTab" *ngIf="!isListCategoryDetails"
         (selectedIndexChange)="selectedTabChange($event)">
-        <mat-tab label="Informasi">
+        <mat-tab label="{{ ls.locale.bantuan.text2 }}">
           <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
             <div class="help-title" fxLayout="column" fxLayoutAlign="center center">
-              <div class="title-red"><strong>Hai SAHABAT HMS</strong></div>
-              <div class="title-black"><strong>hal apa yang bisa kami bantu hari ini ?</strong></div>
+              <div class="title-red"><strong>{{ ls.locale.bantuan.text4 }}</strong></div>
+              <div class="title-black"><strong>{{ ls.locale.bantuan.text5 }}</strong></div>
               <div class="search-container">
                 <div class="full-width" fxLayout="row">
                   <div class="search-icon-layout" fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon class="search-icon">search</mat-icon>
                   </div>
-                  <input class="search-input" type="text" placeholder="Ketik kata kunci dari kendala anda"
+                  <input class="search-input" type="text" placeholder="{{ ls.locale.bantuan.text6 }}"
                     aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
                   <div class="cancel-icon-layout" fxLayout="row" fxLayoutAlign="center center" (click)="deleteSearch()"
                     *ngIf="myControl.value">
@@ -35,16 +36,16 @@
                   <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title"
                     (click)="openHelpDetails({id: option.id, type: 'search'})" [disabled]="option.disabled">
                     <span *ngIf="isFound">{{option.title}}</span>
-                    <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk
-                      <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim
-                      Digital Care untuk pertanyaan ini.</span>
+                    <span *ngIf="!isFound" title="{{option.text}}">{{ ls.locale.bantuan.text7 }}
+                      <span style="font-weight: 800;">"{{option.value}}"</span> {{ ls.locale.bantuan.text7a }} {{
+                      ls.locale.bantuan.text7b }}</span>
                   </mat-option>
                 </mat-autocomplete>
               </div>
             </div>
             <div class="help" fxLayout="column" fxLayoutAlign="center center">
               <div class="hc-title">
-                <span>Pilih topik yang sesuai dengan pertanyaan / kendala anda</span>
+                <span>{{ ls.locale.bantuan.text8 }}</span>
               </div>
               <div class="help-content" fxLayout="row" fxLayoutAlign="center center" flexWrap>
                 <div *ngFor="let menuButton of menuButtons; let i = index">
@@ -66,7 +67,7 @@
             </div>
             <div class="help-other" fxLayout="column">
               <div class="hco-title">
-                <span>Butuh Bantuan Lainnya ?</span>
+                <span>{{ ls.locale.bantuan.text9 }}</span>
               </div>
               <div class="hco-content" fxLayout="row" fxLayoutAlign="center center" flexWrap>
                 <div *ngFor="let menuButtonOther of menuButtonOthers; let i = index" fxLayout="row" fxFlex="100">
@@ -96,7 +97,7 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Pesan Bantuan">
+        <mat-tab label="{{ ls.locale.bantuan.text3 }}">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <pesan-bantuan> </pesan-bantuan>
             <!-- <div class="full-size" style="min-height: 700px;" fxLayout="row" fxLayoutAlign="center center">
@@ -117,7 +118,7 @@
           <mat-list class="pt-0">
             <mat-list-item class="mb-20" (click)="backToPusatBantuan()">
               <mat-icon class="button-back">navigate_before</mat-icon>
-              <span class="back pl-8">Kembali ke Homepage Bantuan</span>
+              <span class="back pl-8">{{ ls.locale.bantuan.text15 }}</span>
               <mat-divider></mat-divider>
             </mat-list-item>
             <mat-list-item class="ml-20" *ngFor="let item of menuButtons; let i = index"
@@ -146,15 +147,15 @@
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option.title"
                   (click)="openHelpDetails({id: option.id, type: 'search'})" [disabled]="option.disabled">
                   <span *ngIf="isFound">{{option.title}}</span>
-                  <span *ngIf="!isFound" title="{{option.text}}">HASIL PENCARIAN untuk <span
-                      style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan. Mohon hubungi tim Digital
-                    Care untuk pertanyaan ini.</span>
+                  <span *ngIf="!isFound" title="{{option.text}}">{{ ls.locale.bantuan.text7 }} <span
+                      style="font-weight: 800;">"{{option.value}}"</span> {{ ls.locale.bantuan.text7a }} {{
+                    ls.locale.bantuan.text7b }}</span>
                 </mat-option>
               </mat-autocomplete>
             </div>
             <div *ngIf="!helpDetail && listCategoryDetails">
               <div class="bold-title" fxLayout="row" fxLayoutAlign="center center">
-                <span>Pilih salah satu dari beberapa topik yang sesuai dengan kendala / pertanyaan Anda</span>
+                <span>{{ ls.locale.bantuan.text8 }}</span>
               </div>
               <mat-list class="pt-0">
                 <mat-list-item *ngFor="let item of listCategoryDetails"
@@ -176,7 +177,7 @@
               </div>
             </div>
             <div *ngIf="helpDetail && !listCategoryDetails" class="help-detail-footer mt-20" fxLayout="column">
-              <span class="title">Apakah informasi ini berguna?</span>
+              <span class="title">{{ ls.locale.bantuan.text20 }}</span>
               <div class="like pb-8" fxLayout="row" fxLayoutAlign="start center" (click)="like(helpDetail)">
                 <mat-icon *ngIf="!isLike" class="thumb-up">thumb_up</mat-icon>
                 <mat-icon *ngIf="isLike" class="thumb-up-red">thumb_up</mat-icon>
@@ -188,8 +189,8 @@
                 <span class="pl-8">{{helpDetail.unlikes_count}}</span>
               </div>
               <div class="help-next mt-20 mb-20" (click)="onHelpNext()" fxLayout="column" fxLayoutAlign="start start">
-                <span>Butuh bantuan lebih lanjut mengenai hal ini?</span>
-                <span>Tim Digital Care AYOSRC siap membantu anda</span>
+                <span>{{ ls.locale.bantuan.text21 }}</span>
+                <span>{{ ls.locale.bantuan.text22 }}</span>
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-privacy-index',
@@ -34,7 +35,8 @@ export class PrivacyIndexComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private privacyService: PrivacyService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -127,7 +129,7 @@ export class PrivacyIndexComponent {
     //   queryParams: param
     // }
     this.dataService.setToStorage("detail_privacy", param);
-    this.router.navigate(['content-management','privacy', 'edit']);
+    this.router.navigate(['content-management', 'privacy', 'edit']);
   }
 
   getActives() {

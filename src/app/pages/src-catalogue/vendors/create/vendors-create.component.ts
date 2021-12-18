@@ -493,7 +493,7 @@ export class VendorsCreateComponent implements OnInit {
         pic_email: this.verticalStepperStep1.get("pic_email").value,
         area_id: [_.last(areas), _.last(areas2)],
         address: this.verticalStepperStep1.get("address").value,
-        phone_number: "+62" + this.verticalStepperStep1.get("phone").value,
+        phone_number: this.ls.locale.global.country_calling_code + this.verticalStepperStep1.get("phone").value,
         status: 'active',
         classification: this.verticalStepperStep4.get('InternalClassification').value
       };

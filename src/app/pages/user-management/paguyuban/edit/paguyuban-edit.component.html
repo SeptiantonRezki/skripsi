@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Paguyuban Detail'">
+  <page-content-header [contentTitle]="ls.locale.paguyuban.detail">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -8,8 +8,9 @@
 
       <form [formGroup]="formPaguyuban">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-          <h3>Paguyuban Detail</h3>
-          <mat-form-field [class]="formPaguyuban.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+          <h3>{{ ls.locale.paguyuban.detail }}</h3>
+          <mat-form-field
+            [class]="formPaguyuban.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
             <mat-select formControlName="status">
               <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
             </mat-select>
@@ -18,51 +19,61 @@
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama Paguyuban" type="text" formControlName="group_name">
-            <mat-error *ngIf="formPaguyuban.controls['group_name'].hasError('required') && formPaguyuban.controls['group_name'].touched ">
-              Nama Paguyuban harus diisi.
+            <input matInput placeholder="{{ ls.locale.paguyuban.paguyuban_name }}" type="text"
+              formControlName="group_name">
+            <mat-error
+              *ngIf="formPaguyuban.controls['group_name'].hasError('required') && formPaguyuban.controls['group_name'].touched ">
+              {{ ls.locale.paguyuban.paguyuban_name }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama Pengguna" type="text" formControlName="fullname">
-            <mat-error *ngIf="formPaguyuban.controls['fullname'].hasError('required') && formPaguyuban.controls['fullname'].touched ">
-              Nama Pengguna harus diisi.
+            <input matInput placeholder="{{ ls.locale.global.label.name }}" type="text" formControlName="fullname">
+            <mat-error
+              *ngIf="formPaguyuban.controls['fullname'].hasError('required') && formPaguyuban.controls['fullname'].touched ">
+              {{ ls.locale.global.label.name }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput disabled placeholder="Username" type="text" formControlName="username">
-            <mat-error *ngIf="formPaguyuban.controls['username'].hasError('required') && formPaguyuban.controls['username'].touched ">
-              Username harus diisi.
+            <input matInput disabled placeholder="{{ ls.locale.global.label.username }}" type="text"
+              formControlName="username">
+            <mat-error
+              *ngIf="formPaguyuban.controls['username'].hasError('required') && formPaguyuban.controls['username'].touched ">
+              {{ ls.locale.global.label.username }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <div *ngIf="!isDetail">
             <div fxLayout="column" class="mb-20">
-              <label for="" style="color: #333333;" class="mb-20">Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil</label>
+              <label for="" style="color: #333333;" class="mb-20">{{ ls.locale.global.messages.text30 }}</label>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password" placeholder="Kata Sandi">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showPassword = !showPassword">
+                <input matInput type="text" *ngIf="showPassword" formControlName="password"
+                  placeholder="{{ ls.locale.login.text3 }}">
+                <input matInput type="password" *ngIf="!showPassword" formControlName="password"
+                  placeholder="{{ ls.locale.login.text3 }}">
+                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                  (click)="showPassword = !showPassword">
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
                 </button>
-                <mat-error *ngIf="
+                <mat-error
+                  *ngIf="
                   (formPaguyuban.controls['password'].hasError('required') && formPaguyuban.controls['password'].touched) ||
                   (formPaguyuban.controls['password'].hasError('minlength') && formPaguyuban.controls['password'].touched) ||
                   (formPaguyuban.controls['password'].hasError('strong') && formPaguyuban.controls['password'].touched)">
-                  Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil
+                  {{ ls.locale.global.messages.text30 }}
                 </mat-error>
               </mat-form-field>
             </div>
             <div fxLayout="row">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi baru">
+                  placeholder="{{ ls.locale.reset_password.text4 }}">
                 <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi baru">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="showConfirmPassword = !showConfirmPassword">
+                  placeholder="{{ ls.locale.reset_password.text4 }}">
+                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                  (click)="showConfirmPassword = !showConfirmPassword">
                   <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
                   <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
                 </button>
@@ -70,52 +81,67 @@
             </div>
           </div>
 
-          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+            fxLayoutAlign="space-between stretch">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national" matTooltip="{{getToolTipData(formPaguyuban.get('national').value, listLevelArea)}}">
+              <mat-select placeholder="{{ ls.locale.global.area.national }}" formControlName="national"
+                matTooltip="{{getToolTipData(formPaguyuban.get('national').value, listLevelArea)}}">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" matTooltip="{{getToolTipData(formPaguyuban.get('zone').value, list['zone'])}}" (selectionChange)="getAudienceArea('region', formPaguyuban.get('zone').value)">
+              <mat-select placeholder="{{ ls.locale.global.area.zone }}" formControlName="zone"
+                matTooltip="{{getToolTipData(formPaguyuban.get('zone').value, list['zone'])}}"
+                (selectionChange)="getAudienceArea('region', formPaguyuban.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" matTooltip="{{getToolTipData(formPaguyuban.get('region').value, list['region'])}}" (selectionChange)="getAudienceArea('area', formPaguyuban.get('region').value)">
+              <mat-select placeholder="{{ ls.locale.global.area.regional }}" formControlName="region"
+                matTooltip="{{getToolTipData(formPaguyuban.get('region').value, list['region'])}}"
+                (selectionChange)="getAudienceArea('area', formPaguyuban.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" matTooltip="{{getToolTipData(formPaguyuban.get('area').value, list['area'])}}" (selectionChange)="getAudienceArea('salespoint', formPaguyuban.get('area').value)">
+              <mat-select placeholder="Area" formControlName="area"
+                matTooltip="{{getToolTipData(formPaguyuban.get('area').value, list['area'])}}"
+                (selectionChange)="getAudienceArea('salespoint', formPaguyuban.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" matTooltip="{{getToolTipData(formPaguyuban.get('salespoint').value, list['salespoint'])}}" (selectionChange)="getAudienceArea('district', formPaguyuban.get('salespoint').value)">
+              <mat-select placeholder="Salespoint" formControlName="salespoint"
+                matTooltip="{{getToolTipData(formPaguyuban.get('salespoint').value, list['salespoint'])}}"
+                (selectionChange)="getAudienceArea('district', formPaguyuban.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" matTooltip="{{getToolTipData(formPaguyuban.get('district').value, list['district'])}}" (selectionChange)="getAudienceArea('territory', formPaguyuban.get('district').value)">
+              <mat-select placeholder="{{ ls.locale.global.area.district }}" formControlName="district"
+                matTooltip="{{getToolTipData(formPaguyuban.get('district').value, list['district'])}}"
+                (selectionChange)="getAudienceArea('territory', formPaguyuban.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory" matTooltip="{{getToolTipData(formPaguyuban.get('territory').value, list['territory'])}}">
+              <mat-select placeholder="{{ ls.locale.global.area.territory }}" formControlName="territory"
+                matTooltip="{{getToolTipData(formPaguyuban.get('territory').value, list['territory'])}}">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div fxFlex="100" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16 pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
-              <mat-form-field fxFlex="31%" class="is-light">
+          <div fxFlex="100" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16 pb-24" fxLayoutGap="20px"
+            fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
+            <mat-form-field fxFlex="31%" class="is-light">
               <mat-select formControlName="principal_id" placeholder="Admin HMS">
                 <mat-option *ngFor="let item of listAdminPrincipal" [value]="item.id">{{item.username}}</mat-option>
               </mat-select>
-              <mat-error *ngIf="formPaguyuban.controls['principal_id'].hasError('required') && formPaguyuban.controls['principal_id'].touched ">
-                Admin HMS harus diisi.
+              <mat-error
+                *ngIf="formPaguyuban.controls['principal_id'].hasError('required') && formPaguyuban.controls['principal_id'].touched ">
+                Admin HMS {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -123,7 +149,7 @@
           <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
               <ng-container *ngIf="!submitting">
-                SIMPAN
+                {{ls.locale.global.button.save}}
               </ng-container>
               <ng-container *ngIf="submitting">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

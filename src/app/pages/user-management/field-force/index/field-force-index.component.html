@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Field Force'">
+  <page-content-header [contentTitle]="ls.locale.field_force.page_title">
     <div class="button-row" fxLayout="row">
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
         <mat-icon>add</mat-icon>TAMBAH
@@ -13,47 +13,52 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Field Force</h2>
+        <h2 class="pl-8">{{ ls.locale.field_force.page_title }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
           </mat-form-field>
         </div>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select [placeholder]="ls.locale.global.area.national" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select [placeholder]="ls.locale.global.area.zone" formControlName="zone" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
                 Zona' :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select [placeholder]="ls.locale.global.area.regional" formControlName="region" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
+                ? 'Semua
                 Regional'
                 :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select [placeholder]="ls.locale.global.area.area" formControlName="area" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua
                 Area'
                 :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+            <mat-select [placeholder]="ls.locale.global.area.salespoint" formControlName="salespoint" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                'all' ?
                 'Semua
                 Salespoint'
                 :
@@ -61,16 +66,18 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select [placeholder]="ls.locale.global.area.district" formControlName="district" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                'all' ? 'Semua
                 District'
                 :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+            <mat-select [placeholder]="ls.locale.global.area.territory" formControlName="territory" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                'all' ? 'Semua
                 Territori'
                 :
                 item.code}}</mat-option>
@@ -80,17 +87,17 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           style="margin-bottom: 25px;">
           <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select placeholder="Apps Version" [formControl]="version">
+            <mat-select [placeholder]="ls.locale.field_force.app_version" [formControl]="version">
               <mat-option *ngFor="let item of listVersions" [value]="item.version">{{item.version}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select placeholder="Status" [formControl]="status">
+            <mat-select [placeholder]="ls.locale.global.label.status" [formControl]="status">
               <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select placeholder="Clasification" [formControl]="clasification">
+            <mat-select [placeholder]="ls.locale.global.label.classification" [formControl]="clasification">
               <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -113,26 +120,28 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Nama" prop="fullname">
+        <ngx-datatable-column [name]="ls.locale.global.label.name" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Username" prop="username" summary-template="activeCell"></ngx-datatable-column>
+        <ngx-datatable-column [name]="ls.locale.global.label.username" prop="username" summary-template="activeCell">
+        </ngx-datatable-column>
         <ngx-datatable-column name="Clasification" prop="clasification" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.classification}}</ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Teritori" prop="area_code" [sortable]="false">
+        <ngx-datatable-column [name]="ls.locale.global.area.territory" prop="area_code" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Apps Version" prop="version" summary-template="activeCell" [sortable]="false">
+        <ngx-datatable-column [name]="ls.locale.field_force.app_version" prop="version" summary-template="activeCell"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="status">
+        <ngx-datatable-column [width]="100" [name]="ls.locale.global.label.status" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4"
@@ -144,13 +153,14 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Terakhir Masuk" prop="last_login" [sortable]="false">
+        <ngx-datatable-column [name]="ls.locale.global.label.last_login" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" [name]="ls.locale.global.label.action" headerClass="textright"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

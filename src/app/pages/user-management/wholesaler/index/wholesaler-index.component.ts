@@ -13,6 +13,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { GeotreeService } from "app/services/geotree.service";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ImportListWholesalerComponent } from "../import-list-wholesaler/import-list-wholesaler.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-wholesaler-index",
@@ -47,14 +48,14 @@ export class WholesalerIndexComponent {
 
   offsetPagination: any;
   area_id_list: any = [];
-  
+
   gsw: FormControl = new FormControl('');
   dialogRef: any;
   // 2 geotree property
   endArea: String;
   lastLevel: any;
-  listGsw: any[] = [{ name: 'Semua GSW', value: 'all' },  { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
-  
+  listGsw: any[] = [{ name: 'Semua GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
+
   /** shared component */
   // @Input() customExportImport = false;
   // @Input() wholesalerSelectable = false;
@@ -71,10 +72,11 @@ export class WholesalerIndexComponent {
     private wholesalerService: WholesalerService,
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.wholesalerServiceGetList = this.wholesalerService.get;
-    
+
     this.onLoad = true;
     this.selected = [];
 
@@ -161,8 +163,8 @@ export class WholesalerIndexComponent {
         this.getAudienceAreaV2('territory', res);
       }
     });
-    
-    this.gsw.valueChanges.subscribe(res =>{
+
+    this.gsw.valueChanges.subscribe(res => {
       if (res) {
         this.getWholesalerList();
       }

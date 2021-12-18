@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detil Pesanan'">
+  <page-content-header [contentTitle]="ls.locale.katalog_src.lihat_pesanan.text9">
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -10,20 +10,20 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <mat-tab-group [selectedIndex]="selectedTab">
-        <mat-tab label="Detil Pemesanan">
+        <mat-tab label="{{ ls.locale.katalog_src.lihat_pesanan.text10 }}">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
-              <div class="h2 secondary-text">Pelanggan</div>
+              <div class="h2 secondary-text">{{ ls.locale.rca_grouping.customer }}</div>
             </div>
 
             <div class="customer">
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Nama</th>
-                    <th>No Telepon / No Ponsel</th>
-                    <th>Tipe Pelanggan</th>
+                    <th>{{ ls.locale.global.label.name }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text11 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text12 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -48,7 +48,7 @@
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Alamat Pengiriman</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text13 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -64,7 +64,7 @@
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Note</th>
+                    <th>{{ ls.locale.global.label.note }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,15 +79,15 @@
             </div>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">av_timer</mat-icon>
-              <div class="h2 secondary-text">Status Pemesanan</div>
+              <div class="h2 secondary-text">{{ ls.locale.global.label.order_status }}</div>
             </div>
             <div class="customer">
               <table class="simple">
                 <thead>
                   <tr>
                     <th>Status</th>
-                    <th>Diperbarui pada</th>
-                    <th>Diperbarui oleh Staff</th>
+                    <th>{{ ls.locale.global.label.updated_at_2 }}</th>
+                    <th>{{ ls.locale.global.label.updated_by_staff }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,7 +112,7 @@
                     <td class="w-600">{{item.name}}</td>
                   </tr>
                   <tr *ngIf="statusLogs.length == 0">
-                    <td colspan="3">Tidak ada data</td>
+                    <td colspan="3">{{ ls.locale.pengaturan.force_update_apps.text12 }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -120,26 +120,26 @@
             <form class="update-status p-24" *ngIf="orderStatuses.length > 0" [formGroup]="statusForm" fxLayout="row"
               fxLayoutAlign="start center">
               <mat-form-field class="mr-16 is-light" fxFlex>
-                <mat-select formControlName="newStatus" placeholder="Pilih Status Pemesanan" required>
+                <mat-select formControlName="newStatus" placeholder="{{ ls.locale.katalog_src.lihat_pesanan.text14 }}"
+                  required>
                   <mat-option *ngFor="let status of orderStatuses" [value]="status.value">{{status.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
 
-              <button mat-raised-button class="mat-accent" (click)="updateStatus()"
-                [disabled]="statusForm.invalid">PERBARUI
-                STATUS</button>
+              <button mat-raised-button class="mat-accent" (click)="updateStatus()" [disabled]="statusForm.invalid">{{
+                ls.locale.global.button.update_status }}</button>
             </form>
             <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">credit_card</mat-icon>
-              <div class="h2 secondary-text">Status Pembayaran</div>
+              <div class="h2 secondary-text">{{ ls.locale.global.label.payment_status }}</div>
             </div>
             <div class="customer pb-24">
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Nomor Pembayaran</th>
-                    <th>Total Pembayaran</th>
-                    <th>Tanggal Pembayaran</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text15 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text16 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text17 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,9 +165,9 @@
                 <thead>
                   <tr>
                     <!-- <th>Kode Lacak</th> -->
-                    <th>Jenis Pengiriman</th>
-                    <th>Harga Pengiriman</th>
-                    <th>Estimasi Pesanan akan Sampai pada Tanggal</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text18 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text19 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text20 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,7 +189,7 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Produk Yang Dibeli">
+        <mat-tab label="{{ ls.locale.katalog_src.lihat_pesanan.text21 }}">
           <div class="ayo-middle p-24" fxLayout="column">
             <div class="products tab-content" fusePerfectScrollbar>
               <table class="simple">
@@ -197,11 +197,11 @@
                   <tr>
                     <th>No</th>
                     <th></th>
-                    <th>Nama Produk</th>
-                    <th>Kategori</th>
-                    <th>Harga</th>
-                    <th style="text-align: center;">Jumlah</th>
-                    <th style="text-align: center;" *ngIf="editable">Tindakan</th>
+                    <th>{{ ls.locale.manajemen_barang_sku.produk.text4 }}</th>
+                    <th>{{ ls.locale.global.label.category }}</th>
+                    <th>{{ ls.locale.global.label.price }}</th>
+                    <th style="text-align: center;">{{ ls.locale.global.label.amount }}</th>
+                    <th style="text-align: center;" *ngIf="editable">{{ ls.locale.global.label.action }}</th>
                   </tr>
                 </thead>
                 <tbody [formGroup]="productsForm">
@@ -258,13 +258,13 @@
               <div fxLayout="row" style="width: 300px;">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
                   <input matInput type="tel" currencyMask min="0" [formControl]="shipping_cost"
-                    placeholder="Biaya Pengiriman">
+                    placeholder="{{ ls.locale.katalog_src.lihat_pesanan.text19 }}">
                 </mat-form-field>
               </div>
               <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
                 <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
                   (click)="saveUpdateQty()">
-                  SIMPAN
+                  {{ ls.locale.global.button.save }}
                 </button>
                 <!-- <button mat-raised-button *ngIf="showRedBG(detailOrder.status) && isAnyUpdate > -1" fxFlex="20"
                   (click)="updateAllPrice()" style="margin-left: 10px;">
@@ -274,14 +274,14 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Nota">
+        <mat-tab label="{{ ls.locale.global.label.shopping_note }}">
           <div id="invoice" class="ayo-main-wrapper modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
             <div class="invoice-container" fxFlex="100" fxLayout="column">
               <div class="px-24 py-16">
                 <div class="button" (click)="print()">
                   <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                     <mat-icon class="secondary-text">print</mat-icon>
-                    <span class="h3 pr-48">CETAK</span>
+                    <span class="h3 pr-48">{{ ls.locale.global.label.print }}</span>
                   </div>
                 </div>
               </div>
@@ -291,18 +291,18 @@
                   fxLayoutGap.lt-md="0px">
                   <div fxFlex="90" class="py-16 pr-16">
                     <div class="text-center">
-                      <div class="text-bold">DETAIL PENGIRIMAN</div>
+                      <div class="text-bold">{{ ls.locale.katalog_src.lihat_pesanan.text22 }}</div>
                       <div class="text-bold">{{detailOrder?.vendor_company?.name || '-'}}</div>
                       <div>{{detailOrder?.vendor_company?.phone_number || '-'}}</div>
                       <div class="py-16" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
                         <span>No. Order: {{detailOrder?.invoice_number}}</span>
                       </div>
-                      <div class="pt-8">DETAIL PEMESANAN</div>
+                      <div class="pt-8">{{ ls.locale.katalog_src.lihat_pesanan.text10 }}</div>
                       <div class="mt-8 detail-order2" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
                         <div class="text-bold">{{detailOrder?.name}}</div>
                         <div>{{detailOrder?.address || '-'}}</div>
                         <div>{{detailOrder?.phone || '-'}}</div>
-                        <div class="text-bold">TAGIH TUNAI</div>
+                        <div class="text-bold">{{ ls.locale.global.label.cash_bill }}</div>
                       </div>
                     </div>
                     <div class="pt-16">
@@ -341,7 +341,7 @@
                     </div>
                     <div class="py-16">
                       <div class="py-4" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
-                        <span class="mat-caption" fxFlex="50">TOTAL HEMAT BELANJA</span>
+                        <span class="mat-caption" fxFlex="50">{{ ls.locale.katalog_src.lihat_pesanan.text23 }}</span>
                         <span class="mat-caption text-right" fxFlex="50">{{detailOrder?.grand_total |
                           rupiahFormaterWithoutRp}}</span>
                       </div>
@@ -359,7 +359,7 @@
                     </div> -->
                     <br>
                     <div class="text-center">
-                      <div class="mat-caption">ORDER DISIAPKAN OLEH:</div>
+                      <div class="mat-caption">{{ ls.locale.katalog_src.lihat_pesanan.text24 }}</div>
                       <div class="mat-caption">{{detailOrder?.created_at | date: 'dd/MM/yyyy HH:mm'}}</div>
                       <br>
                       <div class="mat-caption">CUSTOMER SERVICE AYO SRC 0804 1000 234</div>

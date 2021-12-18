@@ -10,6 +10,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CatalogueProductImportFileDialogComponent } from './import-file-dialog/import-file-dialog.component';
 import { serviceServer, server } from '../../../../../environments/environment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class ProductCatalogueComponent implements OnInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   listCategory: Array<any>;
-  statusFilter: Array<any> = [{ value: 'active', name: 'Aktif' }, { value: 'inactive', name: 'Tidak Aktif' }];
+  statusFilter: Array<any> = [{ value: 'active', name: this.ls.locale.global.label.active }, { value: 'inactive', name: this.ls.locale.global.label.inactive }];
   dialogRef: any;
   vendor_id: any;
 
@@ -48,7 +49,8 @@ export class ProductCatalogueComponent implements OnInit {
     private dataService: DataService,
     private productCatalogueService: ProductCatalogueService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

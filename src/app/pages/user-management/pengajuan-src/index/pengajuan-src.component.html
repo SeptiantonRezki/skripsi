@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Pengajuan SRC'">
+  <page-content-header [contentTitle]="ls.locale.pengajuan_src.index_title">
     <div class="button-row" fxLayout="row">
       <button mat-raised-button aria-label="Login" (click)="export()" type="button">EXPORT
-        PENGAJUAN SRC</button>
+        {{ ls.locale.pengajuan_src.page_title }}</button>
       <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','pengajuan-src','create']">
-        <mat-icon>add</mat-icon>TAMBAH
+        <mat-icon>add</mat-icon>{{ ls.locale.global.button.add }}
       </button>
       <!-- <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button"
         class="is-danger" (click)="deleteAllPaguyuban()">HAPUS</button> -->
@@ -17,36 +17,39 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Pengajuan SRC</h2>
+        <h2 class="pl-8">{{ ls.locale.pengajuan_src.index_title }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
           </mat-form-field>
         </div>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="20%" class="is-light form-primary">
-            <mat-select placeholder="Provinsi" formControlName="province_id">
-              <mat-option [value]="-1">Semua Provinsi</mat-option>
+            <mat-select placeholder="{{ ls.locale.global.label.Province }}" formControlName="province_id">
+              <mat-option [value]="-1">{{ ls.locale.global.label.all_province }}</mat-option>
               <mat-option *ngFor="let item of listProvince" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="20%" class="is-light form-primary">
-            <mat-select placeholder="Kabupaten / Kota" formControlName="city_id">
+            <mat-select placeholder="{{ ls.locale.global.label.city_county }}" formControlName="city_id">
               <mat-option *ngIf="listCities.length > 0"
-                [value]="{value: formFilter.get('province_id').value, key: 'province_id'}">Semua Kota
+                [value]="{value: formFilter.get('province_id').value, key: 'province_id'}">{{
+                ls.locale.global.label.all_cities }}
               </mat-option>
               <mat-option *ngFor="let item of listCities" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="20%" class="is-light form-primary">
-            <mat-select placeholder="Kecamatan" formControlName="district_id">
+            <mat-select placeholder="{{ ls.locale.global.label.district }}" formControlName="district_id">
               <mat-option *ngIf="listDistricts.length > 0"
-                [value]="{ value: formFilter.get('city_id').value, key: 'city_id'}">Semua Kecamatan
+                [value]="{ value: formFilter.get('city_id').value, key: 'city_id'}">{{
+                ls.locale.global.label.all_district }}
               </mat-option>
               <mat-option *ngFor="let item of listDistricts" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
@@ -60,25 +63,25 @@
         [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama Toko" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Masuk" prop="created_at" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.pengajuan_src.date_in }}" prop="created_at" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{row.created_at | date:'dd/MM/yyyy HH:mm'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kota" prop="province_name" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.global.label.city }}" prop="province_name" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{row.city_name}} </span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Alamat" prop="last_login" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.global.label.address }}" prop="last_login" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{ row.address }}</span>
           </ng-template>
@@ -99,7 +102,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="S&K" prop="is_syarat_ketentuan" [sortable]="false">
+        <ngx-datatable-column name="{{ ls.locale.pengajuan_src.tnc }}" prop="is_syarat_ketentuan" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-8">
@@ -125,7 +128,8 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="88" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="88" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

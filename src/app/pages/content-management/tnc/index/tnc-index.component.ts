@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { TncService } from 'app/services/content-management/tnc.service';
 import { Router } from '@angular/router';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-tnc-index',
@@ -34,7 +35,8 @@ export class TncIndexComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private tncService: TncService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -128,7 +130,7 @@ export class TncIndexComponent {
     //   queryParams: param
     // }
     this.dataService.setToStorage("detail_tnc", param);
-    this.router.navigate(['content-management','terms-and-condition', 'edit']);
+    this.router.navigate(['content-management', 'terms-and-condition', 'edit']);
   }
 
   getActives() {

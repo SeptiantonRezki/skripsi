@@ -1,4 +1,4 @@
-import { 
+import {
   Component,
   ViewChild,
   ElementRef,
@@ -18,6 +18,7 @@ import { DialogOtherHelp } from '../../content/dialog/dialog-other-help';
 import { DataService } from "../../../../../services/data.service";
 import { environment } from '../../../../../../environments/environment';
 import { UploadImageComponent } from "./dialog/upload-image/upload-image.component";
+import { LanguagesService } from 'app/services/languages/languages.service';
 @Component({
   selector: 'pesan-bantuan',
   templateUrl: './pesan-bantuan.html',
@@ -31,7 +32,7 @@ export class PesanBantuan {
   formNewInquiry: FormGroup;
   formNewInquiryErrors: any;
   searchRoomControl = new FormControl();
-  
+
   onLoad: boolean;
   categoryList: any;
   isCreate: boolean;
@@ -63,7 +64,7 @@ export class PesanBantuan {
   dialogRef: any;
   isCancelReply: boolean;
   isLoadMessage: boolean;
-  selectedRoomIndex: number;  
+  selectedRoomIndex: number;
   isResolved: boolean;
 
 
@@ -74,7 +75,8 @@ export class PesanBantuan {
     private qs: QiscusService,
     private dataService: DataService,
     private formBuilder: FormBuilder,
-  ){
+    private ls: LanguagesService
+  ) {
     this.onLoad = true;
     this.categoryList = [];
     this.isCreate = false;
@@ -120,8 +122,8 @@ export class PesanBantuan {
     this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
     this.emitter.listenSelectedHelpTabQ.subscribe((data: any) => {
       if (data.isCreate !== undefined) {
-        this.isCreate = data.isCreate;        
-        if(!this.isResolved && this.isCreate) {
+        this.isCreate = data.isCreate;
+        if (!this.isResolved && this.isCreate) {
           this.openDialogNotResolved();
         }
         if (data.isCreate) {
@@ -150,19 +152,19 @@ export class PesanBantuan {
         if (this.roomList.length > 0) {
           const index = this.roomList.map((item: any) => { return item.id; }).indexOf(data.newMessage.room_id);
           if (index >= 0) {
-            if(data.newMessage.type == "file_attachment"){
+            if (data.newMessage.type == "file_attachment") {
               this.roomList[index].last_comment_message = data.newMessage.payload.caption ? data.newMessage.payload.caption : 'Melampirkan File/Gambar';
             } else {
               this.roomList[index].last_comment_message = data.newMessage.message;
             }
-            if (this.dataRoomSelected && String(data.newMessage.room_id_str) === String(this.dataRoomSelected.id)){
+            if (this.dataRoomSelected && String(data.newMessage.room_id_str) === String(this.dataRoomSelected.id)) {
               this.roomList[index].count_notif = 0;
             } else {
               if (data.newMessage.email !== this.userQiscus.email) {
                 this.roomList[index].count_notif = 1;
               }
             }
-          }          
+          }
           this.emitter.emitSelectedHelpTabQ({ roomList: this.roomList });
         }
         if (data.newMessage.room_options) {
@@ -185,7 +187,7 @@ export class PesanBantuan {
   ngOnInit() {
     this.supportService.getBantuanListCategory({ user: 'principal' }).subscribe((res: any) => {
       this.categoryList = res.data;
-      if(res && res.data.length > 0) {
+      if (res && res.data.length > 0) {
         this.isCreate = false;
       } else {
         this.isCreate = true;
@@ -193,13 +195,13 @@ export class PesanBantuan {
       this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
       this.onLoad = false;
     });
-    
+
 
     this.formNewInquiry = this.formBuilder.group({
       kategoriKendala: ['', Validators.required],
       detailKendala: ['', Validators.required],
     });
-    
+
     this.formNewInquiry.valueChanges.subscribe((e) => {
       commonFormValidator.parseFormChanged(
         this.formNewInquiry,
@@ -218,9 +220,9 @@ export class PesanBantuan {
         debounceTime(400),
         tap(() => this.isLoadingSearch = true),
         distinctUntilChanged(),
-        switchMap(value => this.filter(value) )
+        switchMap(value => this.filter(value))
       )
-    
+
     this.getRoomListPesanBantuan();
   }
 
@@ -232,7 +234,7 @@ export class PesanBantuan {
           timezone_offset: new Date().getTimezoneOffset() / -60,
           username: this.dataProfile.fullname,
           usercategory: 'Principal',
-          phonenumber: this.dataProfile.phone? (this.dataProfile.phone.substr(0, 1) === '+' ? '0' + this.dataProfile.phone.substr(3, this.dataProfile.phone.length) + '@mail.com' : this.dataProfile.phone + '@mail.com') : this.dataProfile.email,
+          phonenumber: this.dataProfile.phone ? (this.dataProfile.phone.substr(0, 1) === '+' ? '0' + this.dataProfile.phone.substr(3, this.dataProfile.phone.length) + '@mail.com' : this.dataProfile.phone + '@mail.com') : this.dataProfile.email,
           city: this.dataProfile.city_name ? this.dataProfile.city_name : null,
           storename: null,
           ismscode: null,
@@ -253,43 +255,43 @@ export class PesanBantuan {
             nonce: res.nonce,
             reset_extras: true,
           };
-          await this.qs.qiscusCreateRoomMultichannel(params).subscribe(async(res_2: any) => {
+          await this.qs.qiscusCreateRoomMultichannel(params).subscribe(async (res_2: any) => {
             this.openDialogSuccess();
             // console.log('qiscusLoginMultichannel', res_2);
             const initiateData = res_2.data;
-              if (!this.qs.qiscusMC.isInit) await this.qs.initQiscusMC();
-              this.qs.qiscusMC.verifyIdentityToken(initiateData.identity_token).then(async (verifyResponse) => {
-                this.qs.qiscusMC.setUserWithIdentityToken(verifyResponse);
-                const tempUniqId = String(moment().unix()) + String(Math.random());
-                await this.qs.qiscusMC.sendComment(initiateData.room_id, extras.detailedinquiry, tempUniqId, null, null, null);
-                const qiscusMC = await this.qs.qiscusMC.getRoomById(initiateData.room_id);
-                // console.log('qiscusMC', qiscusMC);
-                if (qiscusMC) {
-                  const dataQiscus = {
-                      roomId: initiateData.room_id,
-                      retailer: {
-                        username: params.name, // agar saat ganti nama akun d apps terganti juga di Qiscus
-                        email: params.user_id // email user QISCUS
-                      },
-                      roomType: qiscusMC.room_type,
-                      isOpenChat: true,
-                      lastCommentAt: moment(new Date()).format('DD MMMM'),
-                      ...qiscusMC
-                  };
-                  this.getRoomListPesanBantuan();
-                  this.dataRoomSelected = dataQiscus;
-                  this.dataRoomSelected.additionalOptions = JSON.parse(dataQiscus.options);
-                  if (this.dataRoomSelected.additionalOptions.is_resolved) {
-                    this.chatIsOver = true;
-                  } else {
-                    this.chatIsOver = false;
-                  }
-                  this.isCreate = false;
-                  this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
-                  this.isLoadMessage = true;
-                  this._loadRoom(initiateData.room_id);
+            if (!this.qs.qiscusMC.isInit) await this.qs.initQiscusMC();
+            this.qs.qiscusMC.verifyIdentityToken(initiateData.identity_token).then(async (verifyResponse) => {
+              this.qs.qiscusMC.setUserWithIdentityToken(verifyResponse);
+              const tempUniqId = String(moment().unix()) + String(Math.random());
+              await this.qs.qiscusMC.sendComment(initiateData.room_id, extras.detailedinquiry, tempUniqId, null, null, null);
+              const qiscusMC = await this.qs.qiscusMC.getRoomById(initiateData.room_id);
+              // console.log('qiscusMC', qiscusMC);
+              if (qiscusMC) {
+                const dataQiscus = {
+                  roomId: initiateData.room_id,
+                  retailer: {
+                    username: params.name, // agar saat ganti nama akun d apps terganti juga di Qiscus
+                    email: params.user_id // email user QISCUS
+                  },
+                  roomType: qiscusMC.room_type,
+                  isOpenChat: true,
+                  lastCommentAt: moment(new Date()).format('DD MMMM'),
+                  ...qiscusMC
+                };
+                this.getRoomListPesanBantuan();
+                this.dataRoomSelected = dataQiscus;
+                this.dataRoomSelected.additionalOptions = JSON.parse(dataQiscus.options);
+                if (this.dataRoomSelected.additionalOptions.is_resolved) {
+                  this.chatIsOver = true;
+                } else {
+                  this.chatIsOver = false;
                 }
-              });
+                this.isCreate = false;
+                this.emitter.emitSelectedHelpTabQ({ isCreate: this.isCreate });
+                this.isLoadMessage = true;
+                this._loadRoom(initiateData.room_id);
+              }
+            });
           });
         });
       } else {
@@ -348,7 +350,7 @@ export class PesanBantuan {
       const ret = await this.roomList.filter((item: any) => {
         return item.additionalOptions.extras.inquirycategory.includes(value);
       })
-      if (ret && ret.length > 0){
+      if (ret && ret.length > 0) {
         this.isSearchFound = true;
         this.roomList = ret;
         return [];
@@ -393,7 +395,7 @@ export class PesanBantuan {
       kategoriKendala: '',
       detailKendala: '',
     });
-    this.emitter.emitSelectedHelpTabQ({ selectedTab: 1});
+    this.emitter.emitSelectedHelpTabQ({ selectedTab: 1 });
   }
 
   //QISCUS===========
@@ -405,7 +407,7 @@ export class PesanBantuan {
 
   scrollToBottom(): void {
     try {
-      if  (this.myScrollContainer && this.myScrollContainer.nativeElement) {
+      if (this.myScrollContainer && this.myScrollContainer.nativeElement) {
         this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
       }
     } catch (err) {
@@ -415,16 +417,16 @@ export class PesanBantuan {
 
   @HostListener('scroll', ['$event']) onScroll($event: Event): void {
     const target = $event.srcElement as HTMLTextAreaElement;
-    if(target.scrollTop == 0 && !this.state_.isLoadMore){
+    if (target.scrollTop == 0 && !this.state_.isLoadMore) {
       this.state_.isLoadMore = false;
-      if(this.dataChat !== null){
-        if(this.dataChat.length > 0){
+      if (this.dataChat !== null) {
+        if (this.dataChat.length > 0) {
           this.lastMessageId = this.dataChat[0].id;
           this.loadMore();
         }
       }
     }
-  }   
+  }
 
   //------------------------------FUNCTION ---------------------------------
 
@@ -438,7 +440,7 @@ export class PesanBantuan {
       .then((res: any) => {
         if (res.length > 0) {
           // console.log("new Loadmore..", res);
-          let last = res.map((d: any) => { return this.renderMessageOnLoadMore(d) } );
+          let last = res.map((d: any) => { return this.renderMessageOnLoadMore(d) });
           // this.lastMessageId = res[0].id;
           // console.log("Loadmore..", last);
           Promise.all(last).then(() => this.dataChat.unshift(...last));
@@ -483,11 +485,11 @@ export class PesanBantuan {
   }
 
   onMessageSameName(email: any, i: number) {
-    if(i !== 0){
-      if(email !== this.dataChat[i-1].username_real){
+    if (i !== 0) {
+      if (email !== this.dataChat[i - 1].username_real) {
         return true;
       }
-      if(this.onDateFilter(this.dataChat[i].timestamp, i)){
+      if (this.onDateFilter(this.dataChat[i].timestamp, i)) {
         return true;
       }
     } else {
@@ -497,10 +499,10 @@ export class PesanBantuan {
   }
 
   onDateFilter(lastTime: any, i: number) {
-    if(i !== 0){
+    if (i !== 0) {
       let lt = String(moment(lastTime).format('dddd, DD MMMM YYYY'));
-      let pt = String(moment(this.dataChat[i-1].timestamp).format('dddd, DD MMMM YYYY'));
-      if(lt !== pt){
+      let pt = String(moment(this.dataChat[i - 1].timestamp).format('dddd, DD MMMM YYYY'));
+      if (lt !== pt) {
         return true;
       }
     } else {
@@ -509,20 +511,20 @@ export class PesanBantuan {
     return false;
   }
 
-  isDateToday(date: any){
+  isDateToday(date: any) {
     let d = String(moment(date).format('dddd, DD MMMM YYYY'));
     let t = String(moment(new Date()).format('dddd, DD MMMM YYYY'));
-    if(d === t){
+    if (d === t) {
       return true;
     }
     return false;
   }
 
-  dateLive(date: any){
+  dateLive(date: any) {
     return String(moment(date).format('dddd, DD MMMM YYYY'));
   }
 
-  _loadRoom(roomId: any, index?: number){
+  _loadRoom(roomId: any, index?: number) {
     this.qs.qiscusMC.getRoomById(roomId).then((data: any) => {
       if (index !== undefined) {
         this.roomList[index].count_notif = 0;
@@ -531,35 +533,35 @@ export class PesanBantuan {
       this.dataQiscus = data;
       // localStorage.setItem('dataQiscus', JSON.stringify(data));
       try {
-          // const reversedData = data.comments.length > 0 ? [...data.comments].reverse() : [];
-          const reversedData = data.comments.length > 0 ? [...data.comments] : [];
-          const arrayFilter = [];
-          const arrayDuplicate = [];
-          for (let i = 0; i < reversedData.length; i++) {
-            let isDuplicate = false;
-            for (let j = 0; j < reversedData.length; j++) {
-              if (i !== j && i > j) {
-                if (reversedData[i].unique_id === reversedData[j].unique_id) {
-                  isDuplicate = true;
-                }
-              }
-            }
-            if (!isDuplicate) {
-              const index = arrayDuplicate.map((val) => { return val.unique_id; }).indexOf(reversedData[i].unique_id);
-              if (index < 0) {
-                arrayFilter.push(reversedData[i]);
+        // const reversedData = data.comments.length > 0 ? [...data.comments].reverse() : [];
+        const reversedData = data.comments.length > 0 ? [...data.comments] : [];
+        const arrayFilter = [];
+        const arrayDuplicate = [];
+        for (let i = 0; i < reversedData.length; i++) {
+          let isDuplicate = false;
+          for (let j = 0; j < reversedData.length; j++) {
+            if (i !== j && i > j) {
+              if (reversedData[i].unique_id === reversedData[j].unique_id) {
+                isDuplicate = true;
               }
             }
           }
-          // console.log('ARRAY', arrayFilter);
-          this.dataChat = arrayFilter;
-          // this.lastMessageId = arrayFilter[0].id;
-          this.isLoadMessage = false;
+          if (!isDuplicate) {
+            const index = arrayDuplicate.map((val) => { return val.unique_id; }).indexOf(reversedData[i].unique_id);
+            if (index < 0) {
+              arrayFilter.push(reversedData[i]);
+            }
+          }
+        }
+        // console.log('ARRAY', arrayFilter);
+        this.dataChat = arrayFilter;
+        // this.lastMessageId = arrayFilter[0].id;
+        this.isLoadMessage = false;
         setTimeout(() => {
           this.scrollToBottom();
         }, 200);
       } catch (e) {
-        console.warn("exception_",e);
+        console.warn("exception_", e);
         this.isLoadMessage = false;
 
       }
@@ -572,7 +574,7 @@ export class PesanBantuan {
 
   _onNewMessage(data: any) {
     if (this.userQiscus && this.dataRoomSelected) {
-      if (String(data.room_id_str) === String(this.dataRoomSelected.id)){
+      if (String(data.room_id_str) === String(this.dataRoomSelected.id)) {
         if (this.dataChat.length > 0) {
           const tempData = [...this.dataChat];
           const index = tempData.map((uniq) => {
@@ -650,7 +652,7 @@ export class PesanBantuan {
       setTimeout(() => {
         this.qs.qiscusMC.publishTyping(0);
       }, 3000)
-    } else{
+    } else {
       this.sendChat();
     }
   }
@@ -668,153 +670,153 @@ export class PesanBantuan {
     }
 
     const uniqeIdMessage = String(moment().unix()) + String(Math.random());
-    if(this.dataChat !== null)
-    if(this.dataChat.length > 0){
-      if(this.message !== this.dataChat[this.dataChat.length - 1].message || String(this.dataChat[this.dataChat.length - 1].time) !== String(moment(new Date()).format("HH:mm")))
-      if(this.dataQiscus && this.message) {
-        if(this.isReply){
-          const payload = {
-            text: this.message ? this.message : '',
-            replied_comment_id: this.dataReplied.replyId,
-            replied_comment_message: this.dataReplied.replyMessage ? this.dataReplied.replyMessage : '',
-            replied_comment_payload: isEmpty(this.dataReplied.replyPayload) ? {} : this.dataReplied.replyPayload,
-            replied_comment_sender_email: this.dataReplied.replyEmailUser,
-            replied_comment_sender_username: this.dataReplied.replyNameUser,
-            replied_comment_type: 'text'
-          };
-          const dataChatTemp = {
-            id: uniqeIdMessage,
-            uniqueId: uniqeIdMessage,
-            unique_temp_id: uniqeIdMessage,
-            message: this.message,
-            isDelivered: false,
-            isFailed: false,
-            isPending: true,
-            isRead: false,
-            isSent: false,
-            is_deleted: false,
-            payload: payload,
-            time: moment().format('HH:mm'),
-            date: moment().format('DD-MM-YYYY'),
-            status: 'sending',
-            type: 'text',
-            username_as: this.userProfile.fullname,
-            username_real: this.userQiscus.email
-          }
-          // console.log('message success!', payload)
-          this.dataReplied =  {};
-          this.isReply = false;
-          this.dataChat.push(dataChatTemp);
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 100);
+    if (this.dataChat !== null)
+      if (this.dataChat.length > 0) {
+        if (this.message !== this.dataChat[this.dataChat.length - 1].message || String(this.dataChat[this.dataChat.length - 1].time) !== String(moment(new Date()).format("HH:mm")))
+          if (this.dataQiscus && this.message) {
+            if (this.isReply) {
+              const payload = {
+                text: this.message ? this.message : '',
+                replied_comment_id: this.dataReplied.replyId,
+                replied_comment_message: this.dataReplied.replyMessage ? this.dataReplied.replyMessage : '',
+                replied_comment_payload: isEmpty(this.dataReplied.replyPayload) ? {} : this.dataReplied.replyPayload,
+                replied_comment_sender_email: this.dataReplied.replyEmailUser,
+                replied_comment_sender_username: this.dataReplied.replyNameUser,
+                replied_comment_type: 'text'
+              };
+              const dataChatTemp = {
+                id: uniqeIdMessage,
+                uniqueId: uniqeIdMessage,
+                unique_temp_id: uniqeIdMessage,
+                message: this.message,
+                isDelivered: false,
+                isFailed: false,
+                isPending: true,
+                isRead: false,
+                isSent: false,
+                is_deleted: false,
+                payload: payload,
+                time: moment().format('HH:mm'),
+                date: moment().format('DD-MM-YYYY'),
+                status: 'sending',
+                type: 'text',
+                username_as: this.userProfile.fullname,
+                username_real: this.userQiscus.email
+              }
+              // console.log('message success!', payload)
+              this.dataReplied = {};
+              this.isReply = false;
+              this.dataChat.push(dataChatTemp);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
 
-          this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, 'reply', JSON.stringify(payload), null)
-            .then(() => {
-              this.qs.qiscusMC.publishTyping(0);
-            })
-            .catch((e: any) => {
-              console.warn('message failed!', e);
-              const tempArrayFailedData = [...this.dataChat];
-              const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
-              failedTempData.isPending = false;
-              failedTempData.isFailed = true;
-              tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
-              this.dataChat = tempArrayFailedData;
-            });
-          this.message = null;
-        } else {
-          const dataChatTemp = {
-            id: uniqeIdMessage,
-            uniqueId: uniqeIdMessage,
-            unique_temp_id: uniqeIdMessage,
-            message: this.message ? this.message : '',
-            isDelivered: false,
-            isFailed: false,
-            isPending: true,
-            isRead: false,
-            isSent: false,
-            is_deleted: false,
-            payload: {},
-            time: moment().format('HH:mm'),
-            date: moment().format('DD-MM-YYYY'),
-            status: 'sending',
-            type: 'text',
-            username_as: this.userProfile.fullname,
-            username_real: this.userQiscus.email
-          }
-          // console.log('message success!')
-          this.dataChat.push(dataChatTemp);
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 100)
-
-          this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, null, null, null)
-            .then((resp: any) => {
-              // localStorage.setItem('dataQiscus', JSON.stringify(this.dataChat));
-              this.qs.qiscusMC.publishTyping(0);
+              this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, 'reply', JSON.stringify(payload), null)
+                .then(() => {
+                  this.qs.qiscusMC.publishTyping(0);
+                })
+                .catch((e: any) => {
+                  console.warn('message failed!', e);
+                  const tempArrayFailedData = [...this.dataChat];
+                  const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
+                  failedTempData.isPending = false;
+                  failedTempData.isFailed = true;
+                  tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
+                  this.dataChat = tempArrayFailedData;
+                });
+              this.message = null;
+            } else {
+              const dataChatTemp = {
+                id: uniqeIdMessage,
+                uniqueId: uniqeIdMessage,
+                unique_temp_id: uniqeIdMessage,
+                message: this.message ? this.message : '',
+                isDelivered: false,
+                isFailed: false,
+                isPending: true,
+                isRead: false,
+                isSent: false,
+                is_deleted: false,
+                payload: {},
+                time: moment().format('HH:mm'),
+                date: moment().format('DD-MM-YYYY'),
+                status: 'sending',
+                type: 'text',
+                username_as: this.userProfile.fullname,
+                username_real: this.userQiscus.email
+              }
               // console.log('message success!')
-            })
-            .catch((e: any) => {
-              console.log('message failed!', e);
-              const tempArrayFailedData = [...this.dataChat];
-              const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
-              failedTempData.isPending = false;
-              failedTempData.isFailed = true;
-              tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
-              this.dataChat = tempArrayFailedData;
-            })
-          this.message = null;
-        }
-      }
-    } else {
-      const dataChatTemp = {
-        id: uniqeIdMessage,
-        uniqueId: uniqeIdMessage,
-        unique_temp_id: uniqeIdMessage,
-        message: this.message ? this.message : '',
-        isDelivered: false,
-        isFailed: false,
-        isPending: true,
-        isRead: false,
-        isSent: false,
-        is_deleted: false,
-        payload: {},
-        time: moment().format('HH:mm'),
-        date: moment().format('DD-MM-YYYY'),
-        status: 'sending',
-        type: 'text',
-        username_as: this.userProfile.fullname,
-        username_real: this.userQiscus.email
-      }
-      // console.log('message success!')
-      this.dataChat.push(dataChatTemp);
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 100)
+              this.dataChat.push(dataChatTemp);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100)
 
-      this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, null, null, null)
-        .then((resp: any) => {
-          // localStorage.setItem('dataQiscus', JSON.stringify(this.dataChat));
-          this.qs.qiscusMC.publishTyping(0);
-          // console.log('message success!')
-        })
-        .catch((e: any) => {
-          console.log('message failed!', e);
-          const tempArrayFailedData = [...this.dataChat];
-          const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
-          failedTempData.isPending = false;
-          failedTempData.isFailed = true;
-          tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
-          this.dataChat = tempArrayFailedData;
-        })
-      this.message = null;
-    }
+              this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, null, null, null)
+                .then((resp: any) => {
+                  // localStorage.setItem('dataQiscus', JSON.stringify(this.dataChat));
+                  this.qs.qiscusMC.publishTyping(0);
+                  // console.log('message success!')
+                })
+                .catch((e: any) => {
+                  console.log('message failed!', e);
+                  const tempArrayFailedData = [...this.dataChat];
+                  const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
+                  failedTempData.isPending = false;
+                  failedTempData.isFailed = true;
+                  tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
+                  this.dataChat = tempArrayFailedData;
+                })
+              this.message = null;
+            }
+          }
+      } else {
+        const dataChatTemp = {
+          id: uniqeIdMessage,
+          uniqueId: uniqeIdMessage,
+          unique_temp_id: uniqeIdMessage,
+          message: this.message ? this.message : '',
+          isDelivered: false,
+          isFailed: false,
+          isPending: true,
+          isRead: false,
+          isSent: false,
+          is_deleted: false,
+          payload: {},
+          time: moment().format('HH:mm'),
+          date: moment().format('DD-MM-YYYY'),
+          status: 'sending',
+          type: 'text',
+          username_as: this.userProfile.fullname,
+          username_real: this.userQiscus.email
+        }
+        // console.log('message success!')
+        this.dataChat.push(dataChatTemp);
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 100)
+
+        this.qs.qiscusMC.sendComment(this.dataQiscus.id, this.message ? this.message : '', uniqeIdMessage, null, null, null)
+          .then((resp: any) => {
+            // localStorage.setItem('dataQiscus', JSON.stringify(this.dataChat));
+            this.qs.qiscusMC.publishTyping(0);
+            // console.log('message success!')
+          })
+          .catch((e: any) => {
+            console.log('message failed!', e);
+            const tempArrayFailedData = [...this.dataChat];
+            const failedTempData = tempArrayFailedData[tempArrayFailedData.length - 1];
+            failedTempData.isPending = false;
+            failedTempData.isFailed = true;
+            tempArrayFailedData[tempArrayFailedData.length - 1] = failedTempData;
+            this.dataChat = tempArrayFailedData;
+          })
+        this.message = null;
+      }
   }
 
-  async onReplyMessage(item: any){
+  async onReplyMessage(item: any) {
     let tempMessage: any;
-    let uriImage: any; 
+    let uriImage: any;
     let tempName: any = {};
     let lastPayload: any = {};
     let pending: any;
@@ -835,7 +837,7 @@ export class PesanBantuan {
       uriImage = '';
       lastPayload = await item.payload;
       if (item.type == 'file_attachment') {
-        tempMessage = await item.payload.caption? item.payload.caption : '';
+        tempMessage = await item.payload.caption ? item.payload.caption : '';
         uriImage = await item.payload.url;
       }
     }
@@ -853,7 +855,7 @@ export class PesanBantuan {
       replyEmailUser: item.username_real,
       replyNameUser: tempName,
       replyPayload: lastPayload,
-      replyMessage: tempMessage? tempMessage : '',
+      replyMessage: tempMessage ? tempMessage : '',
       replyUriImage: uriImage,
     };
     this.pendingMessage = pending;
@@ -878,7 +880,7 @@ export class PesanBantuan {
     this.dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
-      if(response) {
+      if (response) {
         switch (type) {
           case 'product_tagging':
             const dataChatTempProduct = {
@@ -911,11 +913,11 @@ export class PesanBantuan {
                 response.payload,
                 null
               )
-              .then((resp: any) => { 
-                // console.log('Message sent', resp);
-              }).catch((e: any) => {
-                console.warn('Message failed to send', e);
-              });
+                .then((resp: any) => {
+                  // console.log('Message sent', resp);
+                }).catch((e: any) => {
+                  console.warn('Message failed to send', e);
+                });
             }, 100)
             break;
           case 'image':
@@ -950,11 +952,11 @@ export class PesanBantuan {
                 response.payload,
                 null
               )
-              .then((resp: any) => { 
-                // console.log('Message sent', resp);
-              }).catch((e: any) => {
-                console.warn('Message failed to send', e);
-              });
+                .then((resp: any) => {
+                  // console.log('Message sent', resp);
+                }).catch((e: any) => {
+                  console.warn('Message failed to send', e);
+                });
             }, 100)
             break;
           default:
@@ -974,37 +976,37 @@ export class PesanBantuan {
         type: item.type,
         name: item.fileName
       };
-        // console.log('responsePicker', responsePicker);
-        // console.log('obj', obj);
+      // console.log('responsePicker', responsePicker);
+      // console.log('obj', obj);
       this.qs.qiscusMC.upload(obj, (error: any, progress: any, fileURL: any) => {
         if (error) return console.warn('error when uploading', error);
         if (progress) return console.warn(progress.percent);
         if (fileURL != null) {
-            const payload = JSON.stringify({
-              type: 'image',
-              content: {
-                url: fileURL,
-                file_name: name,
-                caption: item.message
-              }
+          const payload = JSON.stringify({
+            type: 'image',
+            content: {
+              url: fileURL,
+              file_name: name,
+              caption: item.message
+            }
+          });
+
+          this.qs.qiscusMC.sendComment(
+            this.dataRoomSelected.id, // room id
+            item.message,
+            uniqueId,
+            'custom', // message type
+            payload
+          )
+            .then(resp => {
+              // console.warn('Message sent', resp);
             });
-            
-            this.qs.qiscusMC.sendComment(
-                this.dataRoomSelected.id, // room id
-                item.message,
-                uniqueId,
-                'custom', // message type
-                payload
-              )
-              .then(resp => { 
-                // console.warn('Message sent', resp);
-              });
         }
       });
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.qs.qiscusMC.exitChatRoom();
   }
 
@@ -1019,66 +1021,66 @@ export class PesanBantuan {
   }
 
   async getRoomListPesanBantuan() {
-      const params_ = { 
-        page: 1, 
-        limit: 100,
-        show_participants: false,
-        show_empty: false,
-      };
-      const isLogin = await this.qs.qiscusMC.isLogin;
-      if (isLogin) {
-        // console.log('isLogin2', isLogin)
+    const params_ = {
+      page: 1,
+      limit: 100,
+      show_participants: false,
+      show_empty: false,
+    };
+    const isLogin = await this.qs.qiscusMC.isLogin;
+    if (isLogin) {
+      // console.log('isLogin2', isLogin)
       this.userQiscus = await this.qs.qiscusMC.userData;
       console.log('userQiscus', this.userQiscus);
       this.qs.qiscusMC.loadRoomList(params_).then(async (rooms: any) => {
         // console.log('success getRoomList1', rooms)
-          // On success
-          // if (rooms && rooms.length > 0) {
-          //   let countNotif = 0;
-          //   await rooms.map((item) => {
-          //     if (item.count_notif > 0) {
-          //       countNotif = countNotif + 1;
-          //     }
-          //     return item;
-          //   });
-          //   console.log('countNotif', countNotif);
-          //   this.emitter.emitSelectedHelpTabQ({ roomList: [ ...rooms ] });
-          //   if (countNotif) this.countNotifPesanBantuan = countNotif;
+        // On success
+        // if (rooms && rooms.length > 0) {
+        //   let countNotif = 0;
+        //   await rooms.map((item) => {
+        //     if (item.count_notif > 0) {
+        //       countNotif = countNotif + 1;
+        //     }
+        //     return item;
+        //   });
+        //   console.log('countNotif', countNotif);
+        //   this.emitter.emitSelectedHelpTabQ({ roomList: [ ...rooms ] });
+        //   if (countNotif) this.countNotifPesanBantuan = countNotif;
 
-            // this.badgePesanBantuan = `<p><span matBadge="4" matBadgeOverlap="false">Text with a badge</span></p>`;
-            // var d1 = this.elementRef.nativeElement.querySelector('#mat-tab-label-0-1');
-            // console.log('d1', d1);
-            // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
-          // }
-          if(rooms.length > 0) {
-            let countNotif = 0;
-            this.roomList = rooms.map((item: any) => {
-              if (item.count_notif > 0) {
-                countNotif = countNotif + 1;
+        // this.badgePesanBantuan = `<p><span matBadge="4" matBadgeOverlap="false">Text with a badge</span></p>`;
+        // var d1 = this.elementRef.nativeElement.querySelector('#mat-tab-label-0-1');
+        // console.log('d1', d1);
+        // d1.insertAdjacentHTML('beforeend', this.badgePesanBantuan);
+        // }
+        if (rooms.length > 0) {
+          let countNotif = 0;
+          this.roomList = rooms.map((item: any) => {
+            if (item.count_notif > 0) {
+              countNotif = countNotif + 1;
+            }
+            if (item.options) {
+              item.additionalOptions = JSON.parse(item.options);
+              if (!item.additionalOptions.is_resolved) {
+                this.isResolved = false;
               }
-              if (item.options) {
-                item.additionalOptions = JSON.parse(item.options);
-                if (!item.additionalOptions.is_resolved) {
-                  this.isResolved = false;
-                }
-              }
-              return {...item};
-            });            
-            this.emitter.emitSelectedHelpTabQ({ countNotif: countNotif });
-            this.roomListCopy = this.roomList;
-          }
-          // console.log('success getRoomList2', rooms)
+            }
+            return { ...item };
+          });
+          this.emitter.emitSelectedHelpTabQ({ countNotif: countNotif });
+          this.roomListCopy = this.roomList;
+        }
+        // console.log('success getRoomList2', rooms)
         // resolve(console.log('success getRoomList', rooms));
       }).catch((error: any) => {
-          // On error
+        // On error
         // reject(console.log('error getRoomList', error));
         console.warn('failed to get room list', error)
       });
     } else {
-        // console.log('isLogin', isLogin)
-        setTimeout(() => {
-          this.getRoomListPesanBantuan()
-        }, 1500);
+      // console.log('isLogin', isLogin)
+      setTimeout(() => {
+        this.getRoomListPesanBantuan()
+      }, 1500);
     }
   }
 

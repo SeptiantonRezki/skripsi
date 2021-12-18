@@ -1,6 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
     <!-- HEADER -->
-    <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Pengguna'">
+    <page-content-header
+        [contentTitle]="(isDetail ? ls.locale.global.button.detail : ls.locale.global.button.edit) + ' ' + ls.locale.katalog_src.pengguna.text1">
     </page-content-header>
     <!-- / HEADER -->
     <div class="content p-24">
@@ -8,7 +9,8 @@
             <div class="mat-white-bg p-24" fxLayout="column">
                 <form [formGroup]="formUserCatalogue">
                     <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-                        <h3>{{ isDetail ? 'Detil' : 'Ubah' }} Pengguna</h3>
+                        <h3>{{ isDetail ? ls.locale.global.button.detail : ls.locale.global.button.edit }} {{
+                            ls.locale.katalog_src.pengguna.text1 }}</h3>
                         <!-- <mat-form-field
                 [class]="formUserCatalogue.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="status">
@@ -19,10 +21,12 @@
                     <div class="ayo-middle pt-24" fxLayout="column">
 
                         <mat-form-field fxFlex="100" class="is-light">
-                            <input matInput placeholder="Nama Pengguna" type="text" formControlName="name">
+                            <input matInput placeholder="{{ ls.locale.katalog_src.pengguna.text3 }}" type="text"
+                                formControlName="name">
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['name'].hasError('required') && formUserCatalogue.controls['name'].touched ">
-                                Nama harus diisi.
+                                {{ ls.locale.katalog_src.pengguna.text3 }} {{ ls.locale.global.messages.mandatory_text
+                                }}
                             </mat-error>
                         </mat-form-field>
 
@@ -30,7 +34,7 @@
                             <input matInput placeholder="Username" type="text" formControlName="username">
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['username'].hasError('required') && formUserCatalogue.controls['username'].touched ">
-                                Username harus diisi.
+                                Username {{ ls.locale.global.messages.mandatory_text }}
                             </mat-error>
                         </mat-form-field>
 
@@ -38,38 +42,39 @@
                             <input matInput placeholder="Email" type="email" formControlName="email">
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['email'].hasError('required') && formUserCatalogue.controls['email'].touched ">
-                                Email harus diisi.
+                                Email {{ ls.locale.global.messages.mandatory_text }}
                             </mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex="100" class="is-light">
-                            <mat-select placeholder="Nama Vendor" formControlName="vendor">
+                            <mat-select placeholder="{{ ls.locale.katalog_src.vendor.text4 }}" formControlName="vendor">
                                 <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
                             </mat-select>
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['email'].hasError('required') && formUserCatalogue.controls['email'].touched ">
-                                Email harus diisi.
+                                Email {{ ls.locale.global.messages.mandatory_text }}
                             </mat-error>
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['email'].hasError('email') && formUserCatalogue.controls['email'].touched ">
-                                Email Tidak Valid
+                                {{ ls.locale.global.messages.invalid_email }}
                             </mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex="100" class="is-light">
-                            <mat-select placeholder="Tingkatan Akses" formControlName="role">
+                            <mat-select placeholder="{{ ls.locale.katalog_src.pengguna.text4 }}" formControlName="role">
                                 <mat-option *ngFor="let item of listRole" [value]="item.id">{{item.name}}</mat-option>
                             </mat-select>
                             <mat-error
                                 *ngIf="formUserCatalogue.controls['role'].hasError('required') && formUserCatalogue.controls['role'].touched">
-                                Tingkatan Akses harus diisi
+                                {{ ls.locale.katalog_src.pengguna.text4 }} {{ ls.locale.global.messages.mandatory_text
+                                }}
                             </mat-error>
                         </mat-form-field>
 
                         <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
                             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
                                 (click)="submit()">
-                                SIMPAN
+                                {{ ls.locale.global.button.save }}
                             </button>
                         </div>
                     </div>

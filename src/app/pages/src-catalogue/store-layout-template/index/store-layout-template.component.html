@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Template Layout Toko'">
+  <page-content-header [contentTitle]="ls.locale.katalog_src.template_layout_toko.text1">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/src-catalogue', 'store-layout-template', 'create']">
@@ -13,11 +13,12 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Template Layout Toko</h2>
+        <h2 class="pl-8">{{ ls.locale.katalog_src.template_layout_toko.text2 }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -26,19 +27,19 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama Layout Toko" prop="name">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.template_layout_toko.text3 }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Panjang Toko (m)" prop="length">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.template_layout_toko.text4 }} (m)" prop="length">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row['length'] }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Lebar Toko (m)" prop="width">
+        <ngx-datatable-column name="{{ ls.locale.katalog_src.template_layout_toko.text5 }} (m)" prop="width">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row['width'] }}
           </ng-template>
@@ -54,7 +55,8 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+          [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">

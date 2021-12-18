@@ -7,6 +7,7 @@ import { PaguyubanService } from 'app/services/user-management/paguyuban.service
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
 import { PasswordValidator } from 'app/validators/password.validator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-paguyuban-edit',
@@ -45,7 +46,8 @@ export class PaguyubanEditComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private dataService: DataService,
-    private paguyubanService: PaguyubanService
+    private paguyubanService: PaguyubanService,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
     this.listLevelArea = [

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Pengajuan SRC'">
+  <page-content-header [contentTitle]="ls.locale.global.button.edit + ' ' + ls.locale.pengajuan_src.page_title">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -11,97 +11,102 @@
           <h3>Ubah Pengajuan SRC</h3>
         </div> -->
         <mat-tab-group>
-          <mat-tab label="Informasi Pengajuan SRC">
+          <mat-tab label="{{ ls.locale.pengajuan_src.submission_info }}">
             <div class="ayo-middle pt-24" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Toko" formControlName="name">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.store_name }}"
+                  formControlName="name">
                 <mat-error
                   *ngIf="formPengajuanSrc.controls['name'].hasError('required') && formPengajuanSrc.controls['name'].touched ">
-                  Nama Toko harus diisi.
+                  {{ ls.locale.global.label.store_name }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Alamat" formControlName="address">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.address }}"
+                  formControlName="address">
                 <mat-error
                   *ngIf="formPengajuanSrc.controls['address'].hasError('required') && formPengajuanSrc.controls['address'].touched ">
-                  Alamat harus diisi.
+                  {{ ls.locale.global.label.address }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Provinsi" formControlName="province_id">
+                <mat-select placeholder="{{ ls.locale.global.label.Province }}" formControlName="province_id">
                   <mat-option *ngFor="let item of listProvinces" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formPengajuanSrc.controls['province_id'].hasError('required') && formPengajuanSrc.controls['province_id'].touched ">
-                  Provinsi harus diisi.
+                  {{ ls.locale.global.label.Province }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Kabupaten / Kota" formControlName="city_id">
+                <mat-select placeholder="{{ ls.locale.global.label.city_county }}" formControlName="city_id">
                   <mat-option *ngFor="let item of listCities" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formPengajuanSrc.controls['city_id'].hasError('required') && formPengajuanSrc.controls['city_id'].touched ">
-                  Kabupaten / Kota harus diisi.
+                  {{ ls.locale.global.label.city_county }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Kecamatan" formControlName="district_id">
+                <mat-select placeholder="{{ ls.locale.global.label.district }}" formControlName="district_id">
                   <mat-option *ngFor="let item of listDistricts" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formPengajuanSrc.controls['district_id'].hasError('required') && formPengajuanSrc.controls['district_id'].touched ">
-                  Kecamatan harus diisi.
+                  {{ ls.locale.global.label.district }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Koordinat GPS (Latitude)" formControlName="lat">
+                <input matInput type="text" placeholder="{{ ls.locale.pengajuan_src.gps_coor }} (Latitude)"
+                  formControlName="lat">
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Koordinat GPS (Longitude)" formControlName="lng">
+                <input matInput type="text" placeholder="{{ ls.locale.pengajuan_src.gps_coor }} (Longitude)"
+                  formControlName="lng">
               </mat-form-field>
 
               <div fxFlex="1 0 auto" fxLayout="column">
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="Nama Pemilik Toko" formControlName="owner">
+                  <input matInput type="text" placeholder="{{ ls.locale.global.label.owner_name }}"
+                    formControlName="owner">
                   <mat-error
                     *ngIf="formPengajuanSrc.controls['owner'].hasError('required') && formPengajuanSrc.controls['owner'].touched ">
-                    Nama Pemilik Toko harus diisi.
+                    {{ ls.locale.global.label.owner_name }} {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
                 <div fxLayout="row">
                   <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
-                    <input matInput value="+62" readonly>
+                    <input matInput value="{{ ls.locale.global.country_calling_code }}" readonly>
                   </mat-form-field>
                   <mat-form-field fxFlex="93" class="is-light">
-                    <input matInput placeholder="Nomor Ponsel Pemilik Toko Yang Bisa Dihubungi" formControlName="phone"
+                    <input matInput placeholder="{{ ls.locale.pengajuan_src.owner_phone }}" formControlName="phone"
                       type="tel" min="0">
                     <mat-error
                       *ngIf="formPengajuanSrc.controls['phone'].hasError('required') && formPengajuanSrc.controls['phone'].touched ">
-                      Nomor Ponsel harus diisi.
+                      {{ ls.locale.global.label.phone }} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" style="margin-bottom: 20px;">
-                  <h4 style="margin-bottom: 3px;">Produk apa saja yang dijual di Toko Anda</h4>
+                  <h4 style="margin-bottom: 3px;">{{ ls.locale.pengajuan_src.selling_product }}</h4>
                   <mat-checkbox fxFlex *ngFor="let item of listProducts" (click)="addToProducts(item)"
                     class="example-margin" [checked]="productChecked[item ? item.toLowerCase() : '']">{{ item }}
                   </mat-checkbox>
                 </div>
                 <mat-form-field fxFlex="100" class="is-light">
-                  <mat-select placeholder="Tahu SRC darimana ?" formControlName="source">
+                  <mat-select placeholder="{{ ls.locale.pengajuan_src.src_information }}" formControlName="source">
                     <mat-option *ngFor="let item of listSources" [value]="item">{{item}}
                     </mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formPengajuanSrc.controls['source'].hasError('required') && formPengajuanSrc.controls['source'].touched ">
-                    Sumber harus diisi.
+                    {{ ls.locale.pengajuan_src.source }} {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
@@ -110,18 +115,18 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPengajuanSrc.controls['channel'].hasError('required') && formPengajuanSrc.controls['channel'].touched ">
-                    Channel harus diisi.
+                    Channel {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
 
                 <div fxLayout="row" fxFlex="100" style="margin-bottom: 20px;">
                   <div fxFlex="30">
                     <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="snk">
-                      Persetujuan Syarat & Ketentuan</mat-checkbox>
+                      {{ ls.locale.pengajuan_src.approval_tnc }}</mat-checkbox>
                   </div>
                   <div fxFlex="30">
                     <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="pnp">
-                      Persetujuan Kebijakan Privasi</mat-checkbox>
+                      {{ ls.locale.pengajuan_src.approval_pp }}</mat-checkbox>
                   </div>
                 </div>
 
@@ -129,7 +134,7 @@
                   <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
                     [disabled]="submitting">
                     <ng-container *ngIf="!submitting">
-                      SIMPAN
+                      {{ ls.locale.global.button.save }}
                     </ng-container>
                     <ng-container *ngIf="submitting">
                       <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;">
@@ -140,7 +145,7 @@
               </div>
             </div>
           </mat-tab>
-          <mat-tab label="Gambar Toko">
+          <mat-tab label="{{ ls.locale.pengajuan_src.store_image }}">
             <div fxFlex="1 0 auto" fxLayout="column" style="margin-bottom: 15px;margin-top: 25px;">
               <div class="px-24">
                 <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
@@ -150,9 +155,8 @@
                     <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline
                     </mat-icon>
                     <br>
-                    <span matPrefix>Tarik Gambar Toko Anda kesini /
-                      <strong>Pilih File</strong></span>
-                    <span matPrefix>Besar file maksimal 2mb</span>
+                    <span matPrefix>{{ ls.locale.pengajuan_src.upload_store_image }}</span>
+                    <span matPrefix>{{ ls.locale.pengajuan_src.max_image }}</span>
                   </div>
                 </div>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" *ngIf="image" ngfDrop selectable="1"
