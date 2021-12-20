@@ -75,6 +75,18 @@ export class EditKPISettingComponent implements OnInit {
   areaFromLogin;
   formFilter: FormGroup;
 
+  levelAreas = [
+    "national",
+    "division",
+    "region",
+    "area",
+    "salespoint",
+    "district",
+    "territory",
+  ];
+  limitArea: any = {};
+  limitAreaIndex: number = 0;
+
   // 2 geotree property
   endArea: String;
   area_id_list: any = [];
@@ -134,6 +146,8 @@ export class EditKPISettingComponent implements OnInit {
     };
 
     this.area = dataService.getDecryptedProfile()["area_type"];
+
+    this.setLimitArea(this.areaFromLogin);
   }
 
   async ngOnInit() {
@@ -216,6 +230,30 @@ export class EditKPISettingComponent implements OnInit {
     }
   }
 
+  setLimitArea(data: any) {
+    data.forEach((item: any) => {
+      if (Array.isArray(item)) {
+        this.setLimitArea(item);
+      } else {
+        const itemIndex = this.levelAreas.indexOf(item.level_desc);
+        if (!this.limitArea.hasOwnProperty(item.level_desc))
+          this.limitArea[item.level_desc] = [];
+        if (this.limitAreaIndex < itemIndex) this.limitAreaIndex = itemIndex;
+        this.limitArea[item.level_desc].push(item.id);
+      }
+    });
+  }
+
+  isArrayDiffer(arr1: any, arr2: any) {
+    let differ = [];
+    if (arr1.length > arr2.length) {
+      differ = arr1.filter((item: any) => !arr2.includes(item));
+    } else {
+      differ = arr2.filter((item: any) => !arr1.includes(item));
+    }
+    return differ.length > 0;
+  };
+
   setDetail() {
     this.formKPI.controls['start_kps'].setValue(this.KPIGroup.start_kps);
     this.formKPI.controls['end_kps'].setValue(this.KPIGroup.end_kps);
@@ -273,16 +311,7 @@ export class EditKPISettingComponent implements OnInit {
     let areasDisabled = this.geotreeService.disableArea(sameArea);
     this.lastLevel = areasDisabled;
     let lastLevelDisabled = null;
-    let levelAreas = [
-      "national",
-      "division",
-      "region",
-      "area",
-      "salespoint",
-      "district",
-      "territory",
-    ];
-    let lastDiffLevelIndex = levelAreas.findIndex(
+    let lastDiffLevelIndex = this.levelAreas.findIndex(
       (level) =>
         level === (sameArea.type === "teritory" ? "territory" : sameArea.type)
     );
@@ -298,7 +327,7 @@ export class EditKPISettingComponent implements OnInit {
     areas.map((area, index) => {
       area.map((level, i) => {
         let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex((lvl) => lvl === level.type);
+        let levelIndex = this.levelAreas.findIndex((lvl) => lvl === level.type);
         if (lastDiffLevelIndex > levelIndex - 2) {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (
@@ -718,11 +747,8 @@ export class EditKPISettingComponent implements OnInit {
       let areaSelected = Object.entries(this.formFilter.getRawValue())
         .map(([key, value]) => ({ key, value }))
         .filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-        
-      console.log("areaSelected", areaSelected);
 
       let existingAreaIds = this.existingAreas.map(area => area.id);
-
       let lastAreaSelected = areaSelected[areaSelected.length - 1];
       let areaIDs: any;
       if(typeof lastAreaSelected.value == 'number') {
@@ -735,7 +761,17 @@ export class EditKPISettingComponent implements OnInit {
         areaIDs = lastAreaSelected.value;
       }
 
-      let newAreaIDs = Array.from(new Set<number>([...existingAreaIds, ...areaIDs]));
+      const accountAreaIds = Array.from(new Set([...this.limitArea[this.levelAreas[this.limitAreaIndex]]]));
+
+      let newAreaIDs = 
+        existingAreaIds.length ? 
+          this.isArrayDiffer(areaIDs, accountAreaIds) ? 
+            [...existingAreaIds, ...areaIDs] :
+            [...existingAreaIds] :
+          this.isArrayDiffer(areaIDs, accountAreaIds) ?
+            [...areaIDs] :
+            [...accountAreaIds];
+      newAreaIDs = Array.from(new Set<number>(newAreaIDs));
 
       let level = this.levels[lastAreaSelected.key];
 
