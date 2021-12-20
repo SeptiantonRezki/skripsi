@@ -27,7 +27,7 @@ export class ImportNotesDialogComponent {
 
   loadingIndicator = false;
   reorderable = true;
-  onLoad: boolean;
+  onLoad: boolean = false;
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -70,6 +70,10 @@ export class ImportNotesDialogComponent {
   preview(event) {
     this.files = undefined;
     this.files = event;
+    this.rows = [];
+    this.totalData = 0;
+    this.currPage = 1;
+    this.lastPage = 1;
 
     let fd = new FormData();
     this.idbService.reset();
@@ -159,6 +163,7 @@ export class ImportNotesDialogComponent {
 
           this.idbService.bulkUpdate(bowls).then(resUpdate => {
             this.pagination['per_page'] = 15;
+            this.offsetPagination = this.p_page ? this.p_page - 1 : 0;
             this.idbService.paginate(this.pagination).then(resPaginate => {
               this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
               Page.renderPagination(this.pagination, this.p_pagination);
@@ -179,11 +184,13 @@ export class ImportNotesDialogComponent {
         });
       } else {
         this.pagination['per_page'] = 15;
+        this.offsetPagination = this.p_page ? this.p_page - 1 : 0;
         this.idbService.paginate(this.pagination).then(res => {
           this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
           Page.renderPagination(this.pagination, this.p_pagination);
           this.rows = res && res[0] ? res[0] : [];
           this.dataService.showLoading(false);
+          this.onLoad = true;
         })
       }
     }

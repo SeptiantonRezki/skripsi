@@ -18,7 +18,7 @@
     </mat-toolbar>
   
     <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-      <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      <div ngfDrop selectable="1" class="rectangle-16 mb-16" [(validDrag)]="validComboDrag" [(file)]="files"
         accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
         (fileChange)="preview($event)">
         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
@@ -29,10 +29,7 @@
           </span>
         </div>
       </div>
-      <br>
-      <div class="">
-      </div>
-      <div class="responsive">
+      <div *ngIf="onLoad" class="responsive">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
           [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
           [reorderable]="reorderable" [count]="pagination.total"
