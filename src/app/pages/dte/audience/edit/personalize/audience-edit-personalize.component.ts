@@ -32,6 +32,8 @@ import { LanguagesService } from "app/services/languages/languages.service";
 import { SequencingService } from "app/services/dte/sequencing.service";
 import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialog-panel-blast.component";
 import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
+import { merge } from "rxjs/observable/merge";
+import { ImportAudiencePersonalizeComponent } from "../../import/personalize/import-audience-personalize.component";
 
 
 @Component({
@@ -101,6 +103,13 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   detailAudience: any;
   isDetail: boolean;
   isChecked: boolean = false;
+  data_imported: any = [];
+  initDetailGeoTree: any = {
+    zone: false,
+    region: false,
+    area: false,
+  };
+  previewAudienceList: any[];
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -202,7 +211,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       mission_publication_id: ["", Validators.required],
       audience_filter: ["population-blast"],
       panel_count: ["---"],
-      est_task_compliance: []
+      est_task_compliance: [""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -221,20 +230,17 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       total_required_panel: [''],
     });
 
-    this.setValueDetail();
     this.initAreaV2();
     this.getPublishMisi();
 
-    this.formAudience.get('mission_publication_id').valueChanges.subscribe(() => {
-      this.isChecked = false;
-    });
-
-    this.formFilter.valueChanges.subscribe(() => {
-      this.isChecked = false;
-    });
-
-    this.formFilterRetailer.valueChanges.subscribe(() => {
-      this.isChecked = false;
+    merge(
+      this.formAudience.get('mission_publication_id').valueChanges,
+      this.formFilter.valueChanges,
+      this.formFilterRetailer.valueChanges,
+    ).subscribe((res) => {
+      if (res) {
+        this.isChecked = false;
+      }
     });
 
     this.filterScheduler.valueChanges
@@ -268,12 +274,8 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       }
     });
 
-    
-    // TODO: ketika EDIT
-    // setTimeout(() => {
-    //   this.formFilter.get('zone').setValue([4, 5, 6]);
-    //   this.getAudienceAreaV2("region", [4, 5, 6]);
-    // }, 2000);
+    this.setValueDetail();
+    this.getPreviewAudience(this.detailAudience.id);
   }
 
   initAreaV2() {
@@ -398,9 +400,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === "national") {
       fd.append("area_id[]", areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      console.log('masuk else if');
       if (areaSelected[0].value !== "") {
-        console.log('masuk else if lagi');
         areaSelected[0].value.map((ar) => {
           fd.append("area_id[]", ar);
         });
@@ -498,11 +498,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
     switch (this.parseArea(selection)) {
       case "zone":
-        console.log('masuk zone');
-        // area = this.formFilter.get(selection).value;
+        this.dataService.showLoading(true);
         this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
+          this.dataService.showLoading(false);
           this.list[this.parseArea(selection)] =
             expectedArea.length > 0
               ? res.data.filter((dt) =>
@@ -510,7 +508,12 @@ export class AudienceEditPersonalizeComponent implements OnInit {
                 )
               : res.data;
 
-          // fd = null
+          if (!this.initDetailGeoTree.zone) {
+            if (this.detailAudience.hasOwnProperty('zones')) {
+              this.formFilter.get('zone').setValue(this.detailAudience.zones);
+              this.initDetailGeoTree.zone = true
+            }
+          }
         });
 
         this.formFilter.get("region").setValue("");
@@ -531,27 +534,29 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         );
         break;
       case "region":
-        // area = this.formFilter.get(selection).value;
-        console.log('masuk region -> list', this.list);
-
         if (id && id.length !== 0) {
           item = this.list["zone"].length > 0 ?
                 this.list["zone"].filter((item) => {
                   return id && id.length > 0 ? id[0] : id;
                 })[0] : {};
-          console.log('masuk region -> if', item);
 
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
-              // fd = null
+              
+              if (!this.initDetailGeoTree.region) {
+                if (this.detailAudience.hasOwnProperty('regions')) {
+                  this.formFilter.get('region').setValue(this.detailAudience.regions);
+                  this.initDetailGeoTree.region = true
+                }
+              }
             });
           } else {
             this.list[selection] = [];
@@ -570,7 +575,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         this.list["territory"] = [];
         break;
       case "area":
-        // area = this.formFilter.get(selection).value;
         if (id && id.length !== 0) {
           item =
             this.list["region"].length > 0
@@ -580,16 +584,22 @@ export class AudienceEditPersonalizeComponent implements OnInit {
               : {};
           console.log("area hitted", selection, item, this.list["region"]);
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               this.list[selection] =
                 expectedArea.length > 0
                   ? res.data.filter((dt) =>
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
-              // fd = null
+              
+              if (!this.initDetailGeoTree.area) {
+                if (this.detailAudience.hasOwnProperty('areas')) {
+                  this.formFilter.get('area').setValue(this.detailAudience.areas);
+                  this.initDetailGeoTree.area = true
+                }
+              }
             });
           } else {
             this.list[selection] = [];
@@ -606,104 +616,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         this.list["district"] = [];
         this.list["territory"] = [];
         break;
-      case "salespoint":
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item =
-            this.list["area"].length > 0
-              ? this.list["area"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          console.log("item", item);
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["salespoint"] = [];
-        }
-
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "district":
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item =
-            this.list["salespoint"].length > 0
-              ? this.list["salespoint"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["district"] = [];
-        }
-
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["territory"] = [];
-        break;
-      case "territory":
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item =
-            this.list["district"].length > 0
-              ? this.list["district"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["territory"] = [];
-        }
-
-        this.formFilter.get("territory").setValue("");
-        break;
-
       default:
         break;
     }
@@ -736,7 +648,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   getPublishMisi() {
     this.sequencingService.getPersonalize({ page: 'all' }).subscribe(
       (res) => {
-        console.log("res =>", res);
         this.listPublishMisi = res.data.data;
         this.filteredPublishMisi.next(res.data.data);
       },
@@ -749,7 +660,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   getListScheduler() {
     this.audienceService.getListScheduler().subscribe(
       (res) => {
-        console.log("res scheduler new", res);
         this.listScheduler = res.data;
         this.filteredScheduler.next(res.data);
       },
@@ -804,11 +714,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
-      // this.idbService.getAnyOf(rows).then(result => {
-      //   console.log('result', result);
-      //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      // })
 
       this.loadingIndicator = false;
     });
@@ -824,18 +729,12 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
-      // this.idbService.get(rows).then(result => {
-      //   console.log('result', result);
-      //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
-      // })
 
       this.loadingIndicator = false;
     });
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (allRowsSelected) {
       this.formAudience.get('limit').setValue('pick-all');
@@ -1021,8 +920,17 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
   handleAudienceFilter(value) {
     this.formAudience.get('audience_filter').setValue(value);
+
+    value !== 'recommended-panel' ? (
+      this.formFilterRetailer.get('total_required_panel').disable()
+    ) : (
+      this.formFilterRetailer.get('total_required_panel').enable()
+    );
+
     if (value !== 'fixed-panel') {
       this.audienceFixed.setValue('');
+    } else {
+      this.audienceFixed.setValue(value);
     }
   }
 
@@ -1053,32 +961,46 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
     if (this.formAudience.valid) {
       const audience_filter = this.formAudience.get("audience_filter").value;
-      let body = {
-        _method: "PUT",
-        mission_publication_id: this.formAudience.get("mission_publication_id").value,
-        name: this.formAudience.get("name").value,
-        panel_count: this.formAudience.get("panel_count").value,
-        est_task_compliance: this.formAudience.get("est_task_compliance").value,
-        audience_filter: audience_filter,
-        
-        class_groups: [this.formFilterRetailer.get("retail_classification").value],
-        zones: zones.length ? zones : ["all"],
-        regions: region.length ? region : ["all"],
-        areas: area.length ? area : ["all"],
-      };
+      let body = {};
 
-      if (audience_filter === "recommended-panel") {
-        body['audience_filter_data'] = {
-          b2b_active: this.formFilterRetailer.get("b2b_active").value,
-          panel_required: this.formFilterRetailer.get("total_required_panel").value
+      if (audience_filter !== "fixed-panel") {
+        body = {
+          _method: "PUT",
+          mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          name: this.formAudience.get("name").value,
+          panel_count: this.formAudience.get("panel_count").value,
+          est_task_compliance: this.formAudience.get("est_task_compliance").value,
+          audience_filter: audience_filter,
+          
+          class_groups: [this.formFilterRetailer.get("retail_classification").value],
+          zones: zones.length ? zones : ["all"],
+          regions: region.length ? region : ["all"],
+          areas: area.length ? area : ["all"],
         };
+
+        if (audience_filter === "recommended-panel") {
+          body['audience_filter_data'] = {
+            b2b_active: this.formFilterRetailer.get("b2b_active").value,
+            panel_required: this.formFilterRetailer.get("total_required_panel").value
+          };
+        }
+      } else {
+        body = {
+          _method: "PUT",
+          mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          name: this.formAudience.get("name").value,
+          panel_count: this.formAudience.get("panel_count").value,
+          est_task_compliance: this.formAudience.get("est_task_compliance").value,
+          audience_filter: audience_filter,
+
+          retailers: this.data_imported.map(item => item.id)
+        }
       }
-  
-      console.log('body', body);
+
+      // console.log('body', body);
 
       this.audienceService.putPersonalize(body, { audience_id: this.detailAudience.id }).subscribe(
         (res) => {
-          console.log("res =>", res);
           this.loadingIndicator = false;
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({
@@ -1087,7 +1009,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           this.router.navigate(["dte", "audience"]);
         },
         (err) => {
-          console.log("err", err);
           this.loadingIndicator = false;
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar(err.error.message);
@@ -1124,22 +1045,13 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      ImportAudienceDialogComponent,
+      ImportAudiencePersonalizeComponent,
       dialogConfig
     );
 
     this.dialogRef.afterClosed().subscribe((response) => {
       if (response) {
-        let rows = this.rows.map((row) => row.id);
-        this.idbService
-          .getAll((dt) => dt.is_valid)
-          .then((result) => {
-            console.log("result", result);
-            this.onSelect({ selected: result });
-            this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
-            });
-          });
+        this.data_imported = response;
       }
     });
   }
@@ -1148,8 +1060,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     this.dataService.showLoading(true);
     this.exportTemplate = true;
     const body = {
-      retailer_id:
-        this.selected.length > 0 ? this.selected.map((item) => item.id) : [],
+      retailer_id: [1]
     };
 
     try {
@@ -1169,13 +1080,16 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   }
 
   showPanelBlast() {
-    if (this.isChecked) {
+    if (this.isDetail) {
       const dialogConfig = new MatDialogConfig();
   
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       dialogConfig.panelClass = "scrumboard-card-dialog";
-      dialogConfig.data = { password: "P@ssw0rd" };
+      dialogConfig.data = {
+        password: "P@ssw0rd",
+        dataRows: this.previewAudienceList
+      };
   
       this.dialogRef = this.dialog.open(
         DialogPanelBlastComponent,
@@ -1184,19 +1098,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   
       this.dialogRef.afterClosed().subscribe((response) => {
         console.log('res', response);
-        
-      //   if (response) {
-      //     let rows = this.rows.map((row) => row.id);
-      //     this.idbService
-      //       .getAll((dt) => dt.is_valid)
-      //       .then((result) => {
-      //         console.log("result", result);
-      //         this.onSelect({ selected: result });
-      //         this.dialogService.openSnackBar({
-      //           message: "File berhasil diimport",
-      //         });
-      //       });
-      //   }
       });
     }
   }
@@ -1206,26 +1107,43 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     const region = this.formFilter.get('region').value;
     const area = this.formFilter.get('area').value;
 
-    if (this.formAudience.valid) {
+    if (this.formAudience.valid && this.formFilterRetailer.valid) {
       const audience_filter = this.formAudience.get("audience_filter").value;
-      let body = {
-        mission_publication_id: this.formAudience.get("mission_publication_id").value,
-        audience_filter: audience_filter,
-        
-        class_groups: [this.formFilterRetailer.get("retail_classification").value],
-        zones: zones.length ? zones : ["all"],
-        regions: region.length ? region : ["all"],
-        areas: area.length ? area : ["all"],
-      };
+      let body = {};
 
-      if (audience_filter === "recommended-panel") {
-        body['audience_filter_data'] = {
-          b2b_active: this.formFilterRetailer.get("b2b_active").value,
-          panel_required: this.formFilterRetailer.get("total_required_panel").value
+      if (audience_filter !== "fixed-panel") {
+        body = {
+          mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          audience_filter: audience_filter,
+          
+          class_groups: [this.formFilterRetailer.get("retail_classification").value],
+          zones: zones.length ? zones : ["all"],
+          regions: region.length ? region : ["all"],
+          areas: area.length ? area : ["all"],
+        };
+
+        if (audience_filter === "recommended-panel") {
+          body['audience_filter_data'] = {
+            b2b_active: this.formFilterRetailer.get("b2b_active").value,
+            panel_required: this.formFilterRetailer.get("total_required_panel").value
+          };
+        }
+      } else {
+        if (!this.data_imported.length) {
+          this.dialogService.openSnackBar({
+            message: "Silahkan import file terlebih dahulu",
+          });
+          return;
+        }
+
+        body = {
+          mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          audience_filter: audience_filter,
+          retailers: this.data_imported.map(item => item.id)
         };
       }
-  
-      console.log('body', body);
+
+      // console.log('body', body);
 
       const dialogConfig = new MatDialogConfig();
   
@@ -1239,54 +1157,79 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         {...dialogConfig, width: '400px'}
       );
 
-      this.audienceService.checkAudience(body).subscribe(
+      const processCheck = this.audienceService.checkAudience(body).subscribe(
         (res) => {
-          console.log("res =>", res);
           if (res.data) {
             this.isChecked = true;
             this.formAudience.get("panel_count").setValue(res.data.panel_count);
-            this.formAudience.get("est_task_compliance").setValue(`${res.data.est_task_compliance * 100}%`);
+            this.formAudience.get("est_task_compliance").setValue(res.data.est_task_compliance);
           }
           this.dialogRef.close();
           this.dialogService.openSnackBar({message : 'Proses Check Berhasil'});
         },
         (err) => {
-          console.log("err", err);
           this.dialogRef.close();
-          // this.dialogService.openSnackBar(err.error.message);
         }
       );
+
+      this.dialogRef.afterClosed().subscribe(() => {
+        processCheck.unsubscribe();
+      });
+
+    } else {
+      commonFormValidator.validateAllFields(this.formAudience);
+      commonFormValidator.validateAllFields(this.formFilterRetailer);
+
+      return this.dialogService.openSnackBar({
+        message: "Silakan lengkapi data terlebih dahulu!",
+      });
     }
   }
 
   setValueDetail() {
-    console.log(this.detailAudience);
-    
     this.formAudience.get('name').setValue(this.detailAudience.name);
-    // this.formAudience.get('mission_publication_id').setValue(this.detailAudience.mission_publication_id);
-    // this.formAudience.get('audience_filter').setValue(this.detailAudience.audience_filter);
-    // this.handleAudienceFilter(this.detailAudience.audience_filter);
+    this.formAudience.get('mission_publication_id').setValue(this.detailAudience.mission_publication_id);
     this.formAudience.get('panel_count').setValue(this.detailAudience.panel_count);
-    this.formAudience.get('est_task_compliance').setValue((this.detailAudience.est_task_compliance * 100)+'%');
+    this.formAudience.get('est_task_compliance').setValue(this.detailAudience.est_task_compliance);
     
-    // this.formAudience.get('type').setValue(this.detailAudience.type);
-    // if (this.detailAudience.type === 'mission' && this.detailAudience.audience_type === 'scheduler') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
-    // if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
+    const filter = this.detailAudience.audience_filter;
+    this.handleAudienceFilter(filter);
 
-    // if (this.detailAudience.status === 'approved') {
-    //   this.formAudience.get('name').disable();
-    //   this.formAudience.get('audience_type').disable();
-    // }
+    if (filter !== 'fixed-panel') {
+      this.formFilterRetailer.get('retail_classification').setValue(this.detailAudience.class_group[0]);
+
+      if (filter === 'recommended-panel') {
+        const {b2b_active, panel_required} = this.detailAudience.audience_filter_data;
+        this.formFilterRetailer.get('b2b_active').setValue(b2b_active);
+        this.formFilterRetailer.get('total_required_panel').setValue(panel_required);
+      }
+    }
+    // TODO: kalau untuk fixed-panel gimana ?
 
     if (this.detailAudience.panel_count > 0) {
       this.isChecked = true;
     }
 
-    console.log('init audience', this.formAudience);
-
     if (this.isDetail) {
       this.formAudience.disable();
       this.formFilter.disable();
+      this.formFilterRetailer.disable();
     }
+  }
+
+  handleEstimate(value){
+    return typeof(value) === 'number' ? `${value * 100}%` : '---';
+  }
+
+  getPreviewAudience(id){
+    this.audienceService.previewAudience({trade_audience_group_id: id}).subscribe(
+      (res) => {
+        const {data} = res;
+        // TODO: filter copywritingnya
+        this.previewAudienceList = data;
+      },
+      (err) => {
+        console.log("err", err);
+      })
   }
 }

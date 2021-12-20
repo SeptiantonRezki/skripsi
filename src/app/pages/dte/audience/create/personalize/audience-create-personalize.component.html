@@ -126,7 +126,7 @@
                     class="is-danger"
                     (click)="importAudience()"
                   >
-                    <mat-icon>arrow_downward</mat-icon> Import XLS
+                    <mat-icon>arrow_downward</mat-icon> Import XLSX
                   </button>
                 </div>
               </div>
@@ -141,7 +141,7 @@
               </mat-card>
               <mat-card class="text-center cards">
                 <mat-card-title class="cards__title">
-                  {{ formAudience.get("est_task_compliance").value ? (formAudience.get("est_task_compliance").value * 100)+'%' : "---" }}
+                  {{ handleEstimate(formAudience.get("est_task_compliance").value) }}
                 </mat-card-title>
                 <mat-card-subtitle style="color: white;">Estimated Task Success</mat-card-subtitle>
               </mat-card>

@@ -137,4 +137,9 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, 'check_audience');
     return this.postApi(url, body);
   }
+
+  previewAudience(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'preview_audience');
+    return this.postApi(url, body);
+  }
 }

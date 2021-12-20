@@ -49,13 +49,6 @@
                 </mat-radio-group>
 
                 <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
-                  <!-- <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="National" formControlName="national">
-                      <mat-option *ngFor="let item of listLevelArea" [value]="item.id">
-                        {{ item.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field> -->
                   <mat-form-field class="is-light form-primary">
                     <mat-select placeholder="Zone" formControlName="zone" multiple>
                       <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
@@ -103,7 +96,7 @@
               </div>
 
               <div fxLayout="column">
-                <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)">
+                <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)" [disabled]="isDetail">
                   <mat-radio-button value="fixed-panel">
                     Fixed Panel
                   </mat-radio-button>
@@ -125,15 +118,16 @@
                     type="button"
                     class="is-danger"
                     (click)="importAudience()"
+                    [disabled]="isDetail"
                   >
-                    <mat-icon>arrow_downward</mat-icon> Import XLS
+                    <mat-icon>arrow_downward</mat-icon> Import XLSX
                   </button>
                 </div>
               </div>
             </div>
 
             <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
-              <mat-card class="text-center cards" [ngClass]="{clickable: isChecked}" (click)="showPanelBlast()">
+              <mat-card class="text-center cards" [ngClass]="{clickable: isDetail}" (click)="showPanelBlast()">
                 <mat-card-title class="cards__title">
                   {{ formAudience.get("panel_count").value }}
                 </mat-card-title>
@@ -141,7 +135,7 @@
               </mat-card>
               <mat-card class="text-center cards">
                 <mat-card-title class="cards__title">
-                  {{ formAudience.get("est_task_compliance").value ? (formAudience.get("est_task_compliance").value * 100)+'%' : "---" }}
+                  {{ handleEstimate(formAudience.get("est_task_compliance").value) }}
                 </mat-card-title>
                 <mat-card-subtitle style="color: white;">Estimated Task Success</mat-card-subtitle>
               </mat-card>

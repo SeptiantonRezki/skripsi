@@ -14,58 +14,38 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <!-- <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-      (fileChange)="onFileChange($event)">
-      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
-        <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
-        </span>
-      </div>
-    </div> -->
-    
-    <!-- <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
-      <div fxFlex>
-        <span for="" style="font-weight: bolder;">Requesting Preview</span>
-        <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
-      </div>
-    </div> -->
-
-    <!-- <div class="responsive" *ngIf="!requestingPreview"> -->
     <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
       [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
       [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
-      [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
+      [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
 
-      <ngx-datatable-column name="Retailer_id" prop="name">
+      <ngx-datatable-column name="Retailer_id" prop="retailer_id">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
-          {{ row.name }}
+          {{ row.retailer_id }}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Copywrites" prop="code">
+      <ngx-datatable-column name="Copywrites" prop="copywrites">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{ row.code }}
+          {{ row.copywrites }}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Blasted Time" prop="tipe">
+      <ngx-datatable-column name="Blasted Time" prop="blasted_time">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{ row.tipe }}
+          {{ row.blasted_time | date:'dd/MM/yyyy' }}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Coin Submission" prop="ff_name">
+      <ngx-datatable-column name="Coin Submission" prop="coin_submission">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{ row.ff_name }}
+          {{ row.coin_submission }}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Coin Verification" prop="registered">
+      <ngx-datatable-column name="Coin Verification" prop="coin_verification">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          {{ row.registered }}
+          {{ row.coin_verification }}
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>

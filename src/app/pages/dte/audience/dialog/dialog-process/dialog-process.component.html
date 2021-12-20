@@ -1,16 +1,5 @@
 <div class="dialog-content-wrapper">
 
-  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Panel Blast</span>
-      </div>
-    </div>
-    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
-
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar fxLayout="column" fxLayoutAlign=" center">
     <mat-spinner diameter="100"></mat-spinner>
     <div class="dialog__title mt-24">Data Sedang Diproses</div>
@@ -18,17 +7,27 @@
   </div>
 
   <div class="border-top">
-    <div class="p-16 text-center">
-      <a [routerLink]="['/dte', 'audience']" target="_blank" rel="noopener noreferrer">
+    <div class="p-16 text-center" fxLayout="row" fxLayoutGap="16px">
+      <a [routerLink]="['/dte', 'audience']" target="_blank" rel="noopener noreferrer" fxFlex="50">
         <button
           id="btn-to-dashboard"
           mat-raised-button
           type="button"
-          class="confirmation-button"
+          class="dialog__btn--primary"
         >
-          kembali ke Dashboard
+          Kembali ke Dashboard
         </button>
       </a>
+      <button
+        id="btn-cancel"
+        mat-raised-button
+        type="button"
+        class="confirmation-button"
+        (click)="dialogRef.close()"
+        fxFlex="50"
+      >
+        Batalkan Check
+      </button>
     </div>
   </div>
 </div>
