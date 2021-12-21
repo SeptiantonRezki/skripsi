@@ -66,7 +66,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   b2bActiveList: any[] = [
-    { name: "All", value: "all" },
     { name: "Active", value: "active" },
     { name: "Not Active", value: "inactive" },
   ];
@@ -226,7 +225,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
     this.formFilterRetailer = this.formBuilder.group({
       retail_classification: [['all']],
-      b2b_active: ['all'],
+      b2b_active: ['', Validators.required],
       total_required_panel: ['', Validators.required],
     });
 
@@ -921,11 +920,15 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   handleAudienceFilter(value) {
     this.formAudience.get('audience_filter').setValue(value);
 
-    value !== 'recommended-panel' ? (
-      this.formFilterRetailer.get('total_required_panel').disable()
-    ) : (
-      this.formFilterRetailer.get('total_required_panel').enable()
-    );
+    if (value !== 'recommended-panel') {
+      this.formFilterRetailer.get('b2b_active').setValue('');
+      this.formFilterRetailer.get('total_required_panel').setValue('');
+      this.formFilterRetailer.get('b2b_active').disable();
+      this.formFilterRetailer.get('total_required_panel').disable();
+    } else {
+      this.formFilterRetailer.get('b2b_active').enable();
+      this.formFilterRetailer.get('total_required_panel').enable();
+    }
 
     if (value !== 'fixed-panel') {
       this.audienceFixed.setValue('');

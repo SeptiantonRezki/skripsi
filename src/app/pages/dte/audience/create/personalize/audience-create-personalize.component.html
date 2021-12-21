@@ -85,6 +85,9 @@
                         {{item.name}}
                       </mat-option>
                     </mat-select>
+                    <mat-error>
+                      B2B Active harus diisi
+                    </mat-error>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
                     <input matInput type="text" formControlName="total_required_panel" placeholder="Total Required Panel" />
