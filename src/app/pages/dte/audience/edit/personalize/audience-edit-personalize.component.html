@@ -73,8 +73,8 @@
                 </form>
                 <form [formGroup]="formFilterRetailer" fxLayout="column">
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Retail Classification" formControlName="retail_classification">
-                      <mat-option *ngFor="let item of retailClassification" [value]="item.value">
+                    <mat-select placeholder="Retail Classification" formControlName="retail_classification" multiple>
+                      <mat-option *ngFor="let item of retailClassification" [value]="item.value" (onSelectionChange)="handleClassification($event)">
                         {{item.name}}
                       </mat-option>
                     </mat-select>

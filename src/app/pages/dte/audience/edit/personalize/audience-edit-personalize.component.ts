@@ -225,9 +225,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     });
 
     this.formFilterRetailer = this.formBuilder.group({
-      retail_classification: ['all'],
+      retail_classification: [['all']],
       b2b_active: ['all'],
-      total_required_panel: [''],
+      total_required_panel: ['', Validators.required],
     });
 
     this.initAreaV2();
@@ -972,7 +972,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           est_task_compliance: this.formAudience.get("est_task_compliance").value,
           audience_filter: audience_filter,
           
-          class_groups: [this.formFilterRetailer.get("retail_classification").value],
+          class_groups: this.formFilterRetailer.get("retail_classification").value,
           zones: zones.length ? zones : ["all"],
           regions: region.length ? region : ["all"],
           areas: area.length ? area : ["all"],
@@ -1116,7 +1116,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
           audience_filter: audience_filter,
           
-          class_groups: [this.formFilterRetailer.get("retail_classification").value],
+          class_groups: this.formFilterRetailer.get("retail_classification").value,
           zones: zones.length ? zones : ["all"],
           regions: region.length ? region : ["all"],
           areas: area.length ? area : ["all"],
@@ -1196,7 +1196,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     this.handleAudienceFilter(filter);
 
     if (filter !== 'fixed-panel') {
-      this.formFilterRetailer.get('retail_classification').setValue(this.detailAudience.class_group[0]);
+      this.formFilterRetailer.get('retail_classification').setValue(this.detailAudience.class_group);
 
       if (filter === 'recommended-panel') {
         const {b2b_active, panel_required} = this.detailAudience.audience_filter_data;
@@ -1231,5 +1231,24 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       (err) => {
         console.log("err", err);
       })
+  }
+
+  handleClassification(event){
+    if (event.isUserInput) {
+      const {value, selected} = event.source;
+      const retailer = this.formFilterRetailer.get('retail_classification');
+
+      if (value !== 'all' && selected) {
+        if (retailer.value.includes('all')) {
+          let newValue = retailer.value;
+          newValue.shift();
+          retailer.setValue(newValue);
+        }
+      } else if (value === 'all' && selected) {
+        let newValue = retailer.value;
+        newValue.splice(0, newValue.length);
+        retailer.setValue(newValue);
+      }
+    }
   }
 }

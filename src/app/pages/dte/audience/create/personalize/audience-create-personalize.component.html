@@ -49,13 +49,6 @@
                 </mat-radio-group>
 
                 <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
-                  <!-- <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="National" formControlName="national">
-                      <mat-option *ngFor="let item of listLevelArea" [value]="item.id">
-                        {{ item.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field> -->
                   <mat-form-field class="is-light form-primary">
                     <mat-select placeholder="Zone" formControlName="zone" multiple>
                       <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
@@ -80,8 +73,8 @@
                 </form>
                 <form [formGroup]="formFilterRetailer" fxLayout="column">
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Retail Classification" formControlName="retail_classification">
-                      <mat-option *ngFor="let item of retailClassification" [value]="item.value">
+                    <mat-select placeholder="Retail Classification" formControlName="retail_classification" multiple>
+                      <mat-option *ngFor="let item of retailClassification" [value]="item.value" (onSelectionChange)="handleClassification($event)">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
