@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Admin Principal'">
+  <page-content-header [contentTitle]="ls.locale.global.button.add + ' ' + ls.locale.katalog_src.pengguna.text1">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -13,15 +13,15 @@
 
           <form [formGroup]="verticalStepperStep1">
 
-            <ng-template matStepLabel>Informasi Dasar</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.admin_principal.text1 }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="nama">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.name }}" formControlName="nama">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
-                  Nama harus diisi.
+                  {{ ls.locale.global.label.name }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
@@ -29,22 +29,22 @@
                 <input matInput type="text" placeholder="Username" formControlName="username">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                  Username harus diisi.
+                  Username {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="email" placeholder="Alamat Email" formControlName="email">
+                <input matInput type="email" placeholder="{{ ls.locale.global.label.email }}" formControlName="email">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['email'].hasError('required') && verticalStepperStep1.controls['email'].touched ">
-                  Alamat email harus diisi.
+                  {{ ls.locale.global.label.email }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -56,32 +56,32 @@
 
           <form [formGroup]="verticalStepperStep2">
 
-            <ng-template matStepLabel>Tingkatan Akses</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.katalog_src.pengguna.text4 }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Nama Vendor" formControlName="vendor">
+                <mat-select placeholder="{{ ls.locale.katalog_src.vendor.text4 }}" formControlName="vendor">
                   <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['vendor'].hasError('required') && verticalStepperStep2.controls['vendor'].touched">
-                  Nama Vendor harus diisi
+                  {{ ls.locale.katalog_src.vendor.text4 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Tingkatan Akses" formControlName="role">
+                <mat-select placeholder="{{ ls.locale.katalog_src.pengguna.text4 }}" formControlName="role">
                   <mat-option *ngFor="let item of listRole" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['role'].hasError('required') && verticalStepperStep2.controls['role'].touched">
-                  Tingkatan Akses harus diisi
+                  {{ ls.locale.katalog_src.pengguna.text4 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -91,19 +91,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ ls.locale.global.button.finish }}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ ls.locale.admin_principal.text4 }}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ ls.locale.global.button.back }}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Selesai
+                {{ ls.locale.global.button.finish }}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

@@ -11,6 +11,7 @@ import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
 import { GeotreeService } from "app/services/geotree.service";
 import { GeneralService } from "app/services/general.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-field-force-index",
@@ -55,7 +56,7 @@ export class FieldForceIndexComponent {
   status: FormControl = new FormControl('');
   clasification: FormControl = new FormControl('');
   listClasification: any[] = [{ name: 'All Classifications', value: '' }, { name: 'WEE', value: 'WEE' }, { name: 'REE', value: 'REE' }];
-  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -64,7 +65,8 @@ export class FieldForceIndexComponent {
     private fieldForceService: FieldForceService,
     private formBuilder: FormBuilder,
     private geotreeService: GeotreeService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -126,7 +128,7 @@ export class FieldForceIndexComponent {
       this.getFfList();
     })
 
-    this.clasification.valueChanges.subscribe(res =>{
+    this.clasification.valueChanges.subscribe(res => {
       this.getFfList();
     })
 
@@ -756,7 +758,7 @@ export class FieldForceIndexComponent {
       res => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
-        
+
         console.log(res.data);
         this.onLoad = false;
         this.loadingIndicator = false;

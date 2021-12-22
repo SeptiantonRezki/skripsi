@@ -6,6 +6,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PagesName } from 'app/classes/pages-name';
 import { forkJoin } from 'rxjs';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-force-update-apps',
@@ -22,7 +23,8 @@ export class ForceUpdateAppsComponent {
     { name: 'Indonesia', value: 'ID'},
     { name: 'Non Indonesia', value: 'KM'},
   ]
-  yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
+  // yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
+  yesOrNo: any[] = [{ name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 'yes' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 'no' }];
   formForceUpdate: FormGroup;
 
   listVersionConsumer: any[];
@@ -43,7 +45,8 @@ export class ForceUpdateAppsComponent {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private accessServices: AccessService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
 

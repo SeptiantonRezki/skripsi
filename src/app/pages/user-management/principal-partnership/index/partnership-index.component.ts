@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { Endpoint } from '../../../../classes/endpoint';
 import { PagesName } from 'app/classes/pages-name';
 import { PrincipalPartnershipService } from 'app/services/principal-partnership/principal-partnership.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-partnership-index',
@@ -41,7 +42,8 @@ export class PartnershipIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private principalPartnershipService: PrincipalPartnershipService
+    private principalPartnershipService: PrincipalPartnershipService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

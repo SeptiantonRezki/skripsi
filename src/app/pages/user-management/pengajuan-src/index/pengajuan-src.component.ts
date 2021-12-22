@@ -10,6 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pengajuan-src',
@@ -58,7 +59,8 @@ export class PengajuanSrcComponent implements OnInit {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private geotreeService: GeotreeService,
-    private pengajuanSrcService: PengajuanSrcService
+    private pengajuanSrcService: PengajuanSrcService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

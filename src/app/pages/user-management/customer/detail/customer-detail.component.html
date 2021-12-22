@@ -20,23 +20,24 @@
 
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Nama" type="text" formControlName="fullname">
+              <input matInput placeholder="{{ ls.locale.global.label.name }}" type="text" formControlName="fullname">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Jenis Kelamin" type="text" formControlName="gender">
+              <input matInput placeholder="{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text19 }}" type="text"
+                formControlName="gender">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Kota" type="text" formControlName="city">
+              <input matInput placeholder="{{ ls.locale.global.label.city }}" type="text" formControlName="city">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Tanggal Lahir" type="text" formControlName="birth_date">
+              <input matInput placeholder="{{ ls.locale.customer.text8 }}" type="text" formControlName="birth_date">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Merokok?" type="text" formControlName="is_smoking">
+              <input matInput placeholder="{{ ls.locale.customer.text6 }}" type="text" formControlName="is_smoking">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
@@ -44,17 +45,17 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Retailer Toko" type="text" formControlName="refferal_name">
+              <input matInput placeholder="{{ ls.locale.customer.text9 }}" type="text" formControlName="refferal_name">
             </mat-form-field>
 
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Kode Referensi" type="text" formControlName="refferal_code">
+              <input matInput placeholder="{{ ls.locale.customer.text5 }}" type="text" formControlName="refferal_code">
             </mat-form-field>
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Apps Version" formControlName="version">
+              <input matInput placeholder="{{ ls.locale.global.label.app_version }}" formControlName="version">
             </mat-form-field>
             <mat-form-field fxFlex="45" class="is-light">
-              <input matInput placeholder="Nomor Ponsel" formControlName="phone">
+              <input matInput placeholder="{{ ls.locale.global.label.phone }}" formControlName="phone">
             </mat-form-field>
           </div>
 
@@ -80,14 +81,14 @@
         </div>
         <div fxLayout="column" class="rectangle-point px-16">
           <h3>
-            <strong>Total Kupon</strong>
+            <strong>{{ ls.locale.customer.text7 }}</strong>
           </h3>
           <div fxLayout="row" class="pt-16" fxLayoutAlign="space-between center">
             <div class="oval-coupon">
               <span>C</span>
             </div>
-            <span
-              class="value-target-pembelian">{{formCustomer.get('total_coupon').value | rupiahFormaterWithoutRp}}</span>
+            <span class="value-target-pembelian">{{formCustomer.get('total_coupon').value |
+              rupiahFormaterWithoutRp}}</span>
           </div>
         </div>
         <div class="pb-64"></div>

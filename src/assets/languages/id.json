@@ -32,6 +32,8 @@
       "address": "Alamat",
       "city": "Kota",
       "Province": "Provinsi",
+      "city_county": "Kabupaten / Kota",
+      "district": "Kecamatan",
       "bank_account_number": "Nomor Rekening Bank",
       "bank_account_name": "Nama Pada Rekening Bank",
       "bank_name": "Nama Bank",
@@ -64,7 +66,49 @@
       "invoice_redeem": "Invoice Penukaran",
       "edit_status_voucher": "Ubah Status Voucher",
       "delete_salestree": "Hapus Salestree",
-      "all_status": "Semua Status"
+      "all_status": "Semua Status",
+      "active_status": "Status Aktif",
+      "inactive_status": "Status Tidak Aktif",
+      "unregistered_status": "Status Belum Terdaftar",
+      "country": "Negara",
+      "ktp_number": "Nomor KTP",
+      "tax_number": "Nomor NPWP",
+      "confirm_password": "Konfirmasi Kata Sandi",
+      "date": "Tanggal",
+      "note": "Catatan",
+      "order_status": "Status Pemesanan",
+      "updated_at_2": "Diperbarui pada",
+      "updated_by_staff": "Diperbarui oleh Staff",
+      "payment_status": "Status Pembayaran",
+      "category": "Kategori",
+      "price": "Harga",
+      "amount": "Jumlah",
+      "shopping_note": "Nota",
+      "print": "Cetak",
+      "cash_bill": "Tagih Tunai",
+      "all_category": "Semua Kategori",
+      "available": "Tersedia",
+      "unavailable": "Tidak Tersedia",
+      "all_province": "Semua Provinsi",
+      "all_cities": "Semua Kota",
+      "all_district": "Semua Kecamatan",
+      "owner_information": "Informasi Pemilik",
+      "upload_image": "Unggah Gambar",
+      "updated_by": "Diperbarui Oleh"
+    },
+    "order_status": {
+      "new_order": "Pesanan Baru",
+      "canceled_order": "Pesanan Dibatalkan",
+      "process_order": "Pesanan Diproses",
+      "send_order": "Pesanan Dikirim",
+      "received_order": "Pesanan Diterima",
+      "completed_order": "Pesanan Selesai",
+      "change_confirmation": "Konfirmasi Perubahan",
+      "change_agreed": "Perubahan Disetujui",
+      "delivery_ready": "Siap Dikirim",
+      "pickup_ready": "Siap Diambil",
+      "on_delivery": "Dalam Pengiriman",
+      "not_paid_off": "Belum Lunas"
     },
     "button": {
       "save": "Simpan",
@@ -80,7 +124,9 @@
       "next": "Selanjutnya",
       "previous": "Sebelumnya",
       "import": "Import",
-      "export": "Export"
+      "export": "Export",
+      "deactivate": "Non Aktifkan",
+      "update_status": "PERBARUI STATUS"
     },
     "area": {
       "national": "National",
@@ -125,7 +171,10 @@
       "text26": "Lengkapi bagian yang harus diisi!",
       "text27": "Pilih audience untuk di export!",
       "text28": "Terdapat duplikat sales tree, mohon periksa kembali data anda!",
-      "text29": "Apakah anda yakin untuk menghapus Salestree {{ index }}?"
+      "text29": "Apakah anda yakin untuk menghapus Salestree {{ index }}?",
+      "text30": "Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
+      "export_option": "atau pilih Eksport File sebagai acuan File Anda.",
+      "invalid_email": "Email Tidak Valid"
     }
   },
   "login": {
@@ -204,7 +253,13 @@
     "text16": "Kirim Kendala Baru",
     "text17": "Kategori Kendala",
     "text18": "Detail Kendala Anda",
-    "text19": "Tulis Detail Kendala Anda disini"
+    "text19": "Tulis Detail Kendala Anda disini",
+    "text20": "Apakah informasi ini berguna?",
+    "text21": "Butuh bantuan lebih lanjut mengenai hal ini?",
+    "text22": "Tim Digital Care AYOSRC siap membantu anda",
+    "text23": "Balas",
+    "text24": "Tulis Pesan",
+    "text25": "Sesi Diskusi Telah Berakhir"
   },
   "admin_principal": {
     "text1": "Informasi Dasar",
@@ -212,9 +267,24 @@
     "text3": "Peran",
     "text4": "Apakah Anda Yakin Untuk Menyelesaikan ini?",
     "text5": "Hapus Admin Principal",
-    "text6": "Apakah anda yakin untuk menghapus Admin Principal ini?"
+    "text6": "Apakah anda yakin untuk menghapus Admin Principal ini?",
+    "text7": "Daftar Admin Principal",
+    "text8": "Nama",
+    "text9": "Email",
+    "text10": "Terakhir Masuk",
+    "text11": "Terakhir Diubah",
+    "text12": "Status",
+    "text13": "Tindakan",
+    "text14": "Non-aktifkan Admin Principal",
+    "text15": "Apakah anda yakin untuk menon-aktifkan data yang telah dipilih ?",
+    "text16": "Tidak ada admin principal yang dipilih",
+    "text17": "Detil Admin",
+    "text18": "Nama Pengguna",
+    "text19": "Admin Detil"
   },
   "field_force": {
+    "page_title": "Daftar Field Force",
+    "app_version": "Versi Aplikasi",
     "text1": "Ubah Kata Sandi Baru",
     "text2": "Kata Sandi Baru",
     "text3": "Konfirmasi Kata Sandi Baru",
@@ -222,16 +292,30 @@
     "text5": "Apakah anda yakin untuk menghapus Field Force ini?"
   },
   "wholesaler": {
+    "page_title": "Daftar Wholesaler",
     "text1": "Wholesaler Id",
     "text2": "Kode Wholesaler",
     "text3": "Toko Cabang",
     "text4": "Lihat Dokumen",
     "text5": "Lihat Pemberian Akses",
     "text6": "Mempuyai Toko Cabang",
-    "text7": "Jumlah Toko Cabang"
+    "text7": "Jumlah Toko Cabang",
+    "agent_code": "Kode Agen",
+    "feature_role": "Tingkat Fitur",
+    "create_wholesaler": "Buat Wholesaler",
+    "ws_code": "Kode WS",
+    "store_information": "Informasi Toko",
+    "owner_data": "Data Pemilik",
+    "detail_wholesaler": "Detil Wholesaler",
+    "search_bank_name": "Cari Nama Bank ...",
+    "view_document": "Lihat Dokumen",
+    "grant_access": "Lihat Pemberian Akses",
+    "has_branch": "Mempunyai Toko Cabang",
+    "total_branch": "Jumlah Toko Cabang"
   },
   "retailer": {
     "list": {
+      "page_title": "Daftar Retailer",
       "text1": "Tergabung dalam Paguyuban",
       "text2": "Nama Paguyuban",
       "text3": "Internal Classification",
@@ -254,25 +338,32 @@
     }
   },
   "paguyuban": {
+    "page_title": "Daftar Paguyuban",
+    "paguyuban_name": "Nama Paguyuban",
+    "create": "Buat Paguyuban",
     "text1": "paguyuban",
     "text2": "Nama Paguyuban",
     "text3": "Konfirmasi Kata Sandi Tidak Sesuai",
     "text4": "Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
-    "text5": "Apakah anda yakin untuk menyelesaikan isian ini?"
+    "text5": "Apakah anda yakin untuk menyelesaikan isian ini?",
+    "detail": "Detil Paguyuban"
   },
   "customer": {
     "text1": "Customer",
     "text2": "Nama Customer",
     "text3": "Daftar Customer",
     "text4": "Nama Referensi Toko",
-    "text5": "Kodde Referensi Toko",
+    "text5": "Kode Referensi Toko",
     "text6": "Merokok?",
-    "text7": "Total Kupon"
+    "text7": "Total Kupon",
+    "text8": "Tanggal Lahir",
+    "text9": "Retailer Toko"
   },
   "principal_partnership": {
     "text1": "Principal Partnership",
     "text2": "Daftar Undian YBKS",
-    "text3": "Nama Grup"
+    "text3": "Nama Grup",
+    "principal_name": "Nama Principal"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -362,7 +453,8 @@
       "text7": "Unggah Gambar Layout Toko",
       "text8": "Tarik Gambar Kesini atau Pilih File",
       "text9": "Deskripsi Layout",
-      "text10": "Buat Template Layout Toko"
+      "text10": "Buat Template Layout Toko",
+      "image_dimension": "Dimensi 410px410p, Besar file maksimal 2mb"
     },
     "vendor": {
       "text1": "Daftar Vendor",
@@ -376,7 +468,8 @@
     "pengguna": {
       "text1": "Pengguna",
       "text2": "Daftar Pengguna",
-      "text3": "Nama Pengguna"
+      "text3": "Nama Pengguna",
+      "text4": "Tingkatan Akses"
     },
     "lihat_pesanan": {
       "text1": "Lihat Pesanan",
@@ -385,7 +478,29 @@
       "text4": "Total Pembayaran",
       "text5": "Total Redeem Coin",
       "text6": "Group Trade Program",
-      "text7": "Grand Total Redeem Coin"
+      "text7": "Grand Total Redeem Coin",
+      "text8": "Kode Pesanan",
+      "text9": "Detil Pesanan",
+      "text10": "Detil Pemesanan",
+      "text11": "No Telepon / No Ponsel",
+      "text12": "Tipe Pelanggan",
+      "text13": "Alamat Pengiriman",
+      "text14": "Pilih Status Pemesanan",
+      "text15": "Nomor Pembayaran",
+      "text16": "Total Pembayaran",
+      "text17": "Tanggal Pembayaran",
+      "text18": "Jenis Pengiriman",
+      "text19": "Biaya Pengiriman",
+      "text20": "Estimasi Pesanan akan Sampai pada Tanggal",
+      "text21": "Produk yang dibeli",
+      "text22": "DETAIL PENGIRIMAN",
+      "text23": "TOTAL HEMAT BELANJA",
+      "text24": "ORDER DISIAPKAN PADA:",
+      "text25": "Estimasi Durasi Pengiriman",
+      "text26": "Estimasi Pengiriman",
+      "text27": "Estimasi Pengiriman Minimal 0 Hari",
+      "text28": "Estimasi Pengiriman Maksimal 31 Hari",
+      "day": "Hari"
     },
     "produk": {
       "text1": "Produk Katalog SRC",
@@ -399,7 +514,18 @@
       "text9": "Gram",
       "text10": "Meter",
       "text11": "Harga Produk",
-      "text12": "Ketersediaan"
+      "text12": "Ketersediaan",
+      "text13": "Stok",
+      "text14": "Buat Produk",
+      "text15": "Nama Produk",
+      "text16": "Deskripsi Produk",
+      "text17": "Kategori Produk",
+      "text18": "Masukan ke Tahapan?",
+      "text19": "Unggah Gambar Layout",
+      "text20": "Status Produk",
+      "text21": "Baru bergabung menjadi SRC ?",
+      "text22": "Ingin meningkatkan penjualan toko ?",
+      "text23": "Ingin mengembangkan usaha lebih besar lagi ?"
     }
   },
   "iklan_dalam_aplikasi": {
@@ -444,7 +570,26 @@
       "text4": "Informasi Kurir",
       "text5": "Daftar Layanan",
       "text6": "Tambah Layanan",
-      "text7": "Layanan Kurir"
+      "text7": "Layanan Kurir",
+      "text8": "Ubah Status Kurir",
+      "text9": "Nama Kurir",
+      "text10": "Nomor Kontak",
+      "text11": "Nama Layanan",
+      "text12": "Durasi Pengiriman",
+      "text13": "Estimasi Paling Cepat",
+      "text14": "Durasi",
+      "text15": "Estimasi Paling Lama",
+      "text16": "Hari",
+      "text17": "Jam",
+      "text18": "Pengaturan Tarif Standar",
+      "text19": "Harga Flat",
+      "text20": "Tentukan Jarak Maksimum",
+      "text21": "Jarak Maksimum",
+      "text22": "Tentukan Batas Waktu Menerima Pesanan",
+      "text23": "Batas Waktu Menerima Pesan Tidak Valid Gunakan Format HH:MM (ex: 17:00)",
+      "text24": "Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka",
+      "text25": "Batas Waktu Menerima Pesanan (HH:MM)",
+      "text26": "Ubah Kurir"
     },
     "panel_mitra": {
       "text1": "Panel Mitra",
@@ -991,7 +1136,8 @@
       "text6": "Kirim Push Notification?",
       "text7": "Ubah Syarat & Ketentuan",
       "text8": "Hapus Syarat & Ketentuan",
-      "text9": "Apakah anda yakin untuk menghapus data syarat & ketentuan ini?"
+      "text9": "Apakah anda yakin untuk menghapus data syarat & ketentuan ini?",
+      "text10": "Pilih Perusahaan"
     },
     "kebijakan_privasi": {
       "text1": "Kebijakan Privasi",
@@ -1014,7 +1160,19 @@
       "text12": "Buat Topik Bantuan",
       "text13": "Ubah Topik Bantuan",
       "text14": "disukai",
-      "text15": "dibagikan"
+      "text15": "dibagikan",
+      "text16": "Dislikes",
+      "text17": "Format JPG, PNG, Ukuran maksimal 500KB.",
+      "text18": "Ukuran gambar tidak boleh melebihi 500KB!",
+      "text19": "Format gambar tidak didukung! Hapus",
+      "text20": "Judul Topik Bantuan",
+      "text21": "URL Video",
+      "text22": "Konten Bantuan",
+      "text23": "Topik Bantuan",
+      "text24": "LIHAT VIDEO",
+      "text25": "INFORMASI",
+      "text26": "KONTAK",
+      "text27": "PESAN BANTUAN"
     },
     "daftar_laporan": {
       "text1": "Laporan",
@@ -1027,7 +1185,13 @@
       "text8": "Tanggal akhir Promo",
       "text9": "Tolak",
       "text10": "Anda yakin akan menolak laporan ini?",
-      "text11": "Anda yakin akan menghapus laporan ini?"
+      "text11": "Anda yakin akan menghapus laporan ini?",
+      "text12": "Daftar Riwayat",
+      "text13": "Pelapor",
+      "text14": "Daftar Pelapor",
+      "text15": "Nama Pelapor",
+      "text16": "Jenis Laporan",
+      "text17": "Tanggal Lapor"
     }
   },
   "manajemen_newsfeed": {
@@ -1040,7 +1204,8 @@
       "text5": "RSS Link",
       "text6": "Tambah RSS Link",
       "text7": "URL Link",
-      "text8": "tidak Valid"
+      "text8": "tidak Valid",
+      "text9": "Nama Kategori"
     },
     "daftar_berita": {
       "text1": "Daftar Berita",
@@ -1072,7 +1237,9 @@
       "text7": "Buat Tingkatan Akses",
       "text8": "Nama Tingkatan Akses",
       "text9": "Hapus Akses Peran",
-      "text10": "Apakah anda yakin untuk menghapus peran ini?"
+      "text10": "Apakah anda yakin untuk menghapus peran ini?",
+      "text11": "Ubah Tingkatan Akses",
+      "text12": "Detil Tingkatan Akses"
     },
     "ubah_kata_sandi": {
       "text1": "Ubah Kata Sandi",
@@ -1105,12 +1272,54 @@
       "text9": "Versi Aplikasi Consumer Terakhir",
       "text10": "Versi Aplikasi Retailer Terakhir",
       "text11": "Versi Aplikasi Kasir Terakhir",
-      "text12": "Tidak ada data"
+      "text12": "Tidak ada data",
+      "text13": "Nama Aplikasi",
+      "text14": "tidak boleh kurang dari versi aplikasi",
+      "text15": "yang terakhir"
     },
     "pengaturan_otp": {
       "text1": "Pengaturan OTP",
       "text2": "Ubah Pengaturan OTP",
       "text3": "Data Berhasil Disimpan"
     }
+  },
+  "rca_agent": {
+    "page_title": "RCA Agent",
+    "index_title": "Daftar RCA Agent",
+    "email_validation": "Pastikan Email dan username sesuai dengan Akun SSO anda."
+  },
+  "rca_grouping": {
+    "page_title": "Grouping Pelanggan",
+    "customer": "Pelanggan",
+    "summary": "Summary",
+    "unset": "Belum diset",
+    "empty_position": "Kosong, Klik untuk merubah"
+  },
+  "route_plan": {
+    "page_title": "Rute Kunjungan",
+    "route": "Rute",
+    "find_position": "Cari Position Code...",
+    "position_not_found": "Tidak ada Position Code yang ditemukan",
+    "day_visit": "Hari Kunjungan"
+  },
+  "pengajuan_src": {
+    "page_title": "Pengajuan SRC",
+    "index_title": "Daftar Pengajuan SRC",
+    "date_in": "Tanggal Masuk",
+    "tnc": "S&K",
+    "gps_coor": "Kordinat GPS",
+    "owner_phone": "Nomor Ponsel Pemilik Toko Yang Bisa Dihubungi",
+    "selling_product": "Produk apa saja yang dijual di Toko Anda",
+    "src_information": "Tahu SRC darimana ?",
+    "source": "Sumber",
+    "upload_store_image": "Tarik Gambar Toko Anda kesini / Pilih File",
+    "max_image": "Besar file maksimal 2mb",
+    "submission_info": "Informasi Pengajuan SRC",
+    "store_image": "Gambar Toko",
+    "approval_tnc": "Persetujuan Syarat & Ketentuan",
+    "approval_pp": "Persetujuan Kebijakan Privasi",
+    "detail_submission": "Detil Pengajuan",
+    "application_status": "Status Aplikasi",
+    "choose_submission_status": "Pilih Status Pengajuan"
   }
 }

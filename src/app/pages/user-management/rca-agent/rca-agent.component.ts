@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeneralService } from 'app/services/general.service';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 import { FieldForceService } from 'app/services/user-management/field-force.service';
 import { Observable, Subject } from 'rxjs';
@@ -55,7 +56,7 @@ export class RcaAgentComponent implements OnInit {
   status: FormControl = new FormControl('');
   clasification: FormControl = new FormControl('');
   listClasification: any[] = [{ name: 'All Classifications', value: '' }, { name: 'WEE', value: 'WEE' }, { name: 'REE', value: 'REE' }];
-  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
 
   constructor(
     private router: Router,
@@ -65,7 +66,8 @@ export class RcaAgentComponent implements OnInit {
     private geotreeService: GeotreeService,
     private generalService: GeneralService,
     private fieldForceService: FieldForceService,
-    private rcaAgentService: RcaAgentService
+    private rcaAgentService: RcaAgentService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

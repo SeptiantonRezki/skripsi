@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Rute Kunjungan'">
+  <page-content-header [contentTitle]="ls.locale.route_plan.page_title">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -27,11 +27,12 @@
               </div>
 
               <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-                <h2 class="p-24">Rute Kunjungan</h2>
+                <h2 class="p-24">{{ ls.locale.route_plan.page_title }}</h2>
                 <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
                   <mat-icon>search</mat-icon>
                   <mat-form-field class="is-light tab-search">
-                    <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                    <input matInput placeholder="{{ ls.locale.global.label.search }}"
+                      (keyup)="keyUp.next($event.target.value)" autocomplete="off">
                   </mat-form-field>
                 </div>
               </div>
@@ -39,8 +40,9 @@
               <div fxLayout="row" fxFlex="20" class="p-24">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
                   <mat-select placeholder="Position Code" [formControl]="positionCode" #singleSelect>
-                    <ngx-mat-select-search [formControl]="filterPosition" [placeholderLabel]="'Cari Position Code...'"
-                      [noEntriesFoundLabel]="'Tidak ada Position Code yang ditemukan'" [clearSearchInput]="false">
+                    <ngx-mat-select-search [formControl]="filterPosition"
+                      [placeholderLabel]="ls.locale.route_plan.find_position"
+                      [noEntriesFoundLabel]="ls.locale.route_plan.position_not_found" [clearSearchInput]="false">
                     </ngx-mat-select-search>
                     <mat-option value="">None</mat-option>
                     <!-- <mat-option value="blank">Belum Di Set</mat-option> -->
@@ -54,7 +56,7 @@
               <div fxLayout="row wrap" fxLayoutAlign="flex-start" fxLayout.lt-md="column" class="p-16"
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Hari Kunjungan" formControlName="plannedDay">
+                  <mat-select placeholder="{{ ls.locale.route_plan.day_visit }}" formControlName="plannedDay">
                     <mat-option value="">None</mat-option>
                     <mat-option *ngFor="let item of plannedDays" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
@@ -170,11 +172,11 @@
                 [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
                 [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
                 [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
-                <ngx-datatable-column name="Hari Kunjungan" prop="kunjungan">
+                <ngx-datatable-column name="{{ ls.locale.route_plan.day_visit }}" prop="kunjungan">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <a class="direct-edit" (click)="openDialogRoutePlanDay(row)">{{ row.kunjungan ?
                       row.kunjungan.toUpperCase() :
-                      'Kosong, Klik untuk merubah' }}</a>
+                      ls.locale.rca_grouping.empty_position }}</a>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Position Code" prop="position_code" [sortable]="false">
@@ -215,7 +217,7 @@
               <table class="styled-table">
                 <thead>
                   <tr>
-                    <th>Hari Kunjungan</th>
+                    <th>{{ ls.locale.route_plan.day_visit }}</th>
                     <th>#Customer</th>
                   </tr>
                 </thead>
