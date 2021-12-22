@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Topik Bantuan'">
+  <page-content-header [contentTitle]="ls.locale.manajemen_konten.manajemen_bantuan.text12">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formHelp">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
-          <h2 class="">Buat Topik Bantuan</h2>
+          <h2 class="">{{ ls.locale.manajemen_konten.manajemen_bantuan.text12 }}</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div ngfDrop multiple="1" selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
@@ -16,9 +16,8 @@
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
-              <span class="text-center" matPrefix>Tarik gambar kesini /
-                <strong>Pilih File</strong> <br>
-                Format JPG, PNG, Ukuran maksimal 500KB.
+              <span class="text-center" matPrefix>{{ ls.locale.katalog_src.template_layout_toko.text8 }} <br>
+                {{ ls.locale.manajemen_konten.manajemen_bantuan.text17 }}
               </span>
             </div>
           </div>
@@ -29,14 +28,14 @@
               </div>
               <div class="previewIcon" [ngfBackground]="files"></div>
               <mat-error class="pt-8" *ngIf="!isValidFile">
-                Ukuran gambar tidak boleh melebihi 500KB!
+                {{ ls.locale.manajemen_konten.manajemen_bantuan.text18 }}
               </mat-error>
             </div>
           </div>
           <div class="py-24" *ngIf="files && ['image/gif','image/png','image/jpeg'].indexOf(files.type)<0">
             <mat-error class="pt-8" *ngIf="!isValidFile" (click)="removeImage()" fxLayout="row"
               fxLayoutAlign="start center">
-              <span>Format gambar tidak didukung! Hapus </span>
+              <span>{{ ls.locale.manajemen_konten.manajemen_bantuan.text19 }}</span>
               <mat-icon style="cursor: pointer;" (click)="removeImage()">delete</mat-icon>
             </mat-error>
           </div>
@@ -47,9 +46,10 @@
           <br>
           <div fxLayout="row">
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <input matInput type="text" formControlName="title" placeholder="Judul Topik Bantuan">
+              <input matInput type="text" formControlName="title"
+                placeholder="{{ ls.locale.manajemen_konten.manajemen_bantuan.text20 }}">
               <mat-error *ngIf="formHelp.controls['title'].hasError('required') && formHelp.controls['title'].touched">
-                Judul Bantuan Wajib Diisi
+                {{ ls.locale.manajemen_konten.manajemen_bantuan.text20 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -61,12 +61,12 @@
               <!-- GRUP PENGGUNA -->
               <div fxLayout="row">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="user" placeholder="Grup Pengguna">
+                  <mat-select formControlName="user" placeholder="{{ ls.locale.notification.buat_notifikasi.text4 }}">
                     <mat-option *ngFor="let item of userGroup" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formHelp.controls['user'].hasError('required') && formHelp.controls['user'].touched">
-                    Grup Pengguna Wajib Diisi
+                    {{ ls.locale.notification.buat_notifikasi.text4 }} {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -74,12 +74,14 @@
 
               <div fxLayout="row">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="country" placeholder="Negara">
-                    <mat-option *ngFor="let item of countryList" [value]="item.code" style="text-transform: capitalize;">
+                  <mat-select formControlName="country" placeholder="{{ ls.locale.global.label.country }}">
+                    <mat-option *ngFor="let item of countryList" [value]="item.code"
+                      style="text-transform: capitalize;">
                       {{item.name}}</mat-option>
                   </mat-select>
-                  <mat-error *ngIf="formHelp.controls['country'].hasError('required') && formHelp.controls['country'].touched">
-                    Negara harus diisi
+                  <mat-error
+                    *ngIf="formHelp.controls['country'].hasError('required') && formHelp.controls['country'].touched">
+                    {{ ls.locale.global.label.country }} harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -87,12 +89,15 @@
               <!-- JENIS -->
               <div fxLayout="row">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="type" placeholder="Jenis" (selectionChange)="onTypeChange($event)">
+                  <mat-select formControlName="type"
+                    placeholder="{{ ls.locale.manajemen_konten.manajemen_bantuan.text10 }}"
+                    (selectionChange)="onTypeChange($event)">
                     <mat-option *ngFor="let item of jenisGroup" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formHelp.controls['type'].hasError('required') && formHelp.controls['type'].touched">
-                    Jenis Wajib Diisi
+                    {{ ls.locale.manajemen_konten.manajemen_bantuan.text10 }} {{
+                    ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -101,12 +106,12 @@
               <!-- KATEGORY -->
               <div fxLayout="row" *ngIf="formHelp.get('type').value === 'help'">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="category" placeholder="Kategori">
+                  <mat-select formControlName="category" placeholder="{{ ls.locale.global.label.category }}">
                     <mat-option *ngFor="let item of categoryGroup" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formHelp.controls['category'].hasError('required') && formHelp.controls['category'].touched">
-                    Kategori Wajib Diisi
+                    {{ ls.locale.global.label.category }} {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -115,9 +120,12 @@
               <!-- VIDEO URL -->
               <div fxLayout="row" *ngIf="formHelp.get('type').value === 'video'">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput type="text" formControlName="video_url" placeholder="URL Video">
-                  <mat-error *ngIf="formHelp.controls['video_url'].hasError('required') && formHelp.controls['video_url'].touched">
-                    URL Video Wajib Diisi
+                  <input matInput type="text" formControlName="video_url"
+                    placeholder="{{ ls.locale.manajemen_konten.manajemen_bantuan.text21 }}">
+                  <mat-error
+                    *ngIf="formHelp.controls['video_url'].hasError('required') && formHelp.controls['video_url'].touched">
+                    {{ ls.locale.manajemen_konten.manajemen_bantuan.text21 }} {{
+                    ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -128,8 +136,10 @@
 
             <!-- RIGHT -->
             <div fxFlex="50">
-              <yt-video-preview [src]="formHelp.get('video_url').value" *ngIf="formHelp.get('type').value === 'video'"></yt-video-preview>
-              <info-preview *ngIf="formHelp.get('type').value === 'help'" [preview]="formHelp.get('body').value"></info-preview>
+              <yt-video-preview [src]="formHelp.get('video_url').value" *ngIf="formHelp.get('type').value === 'video'">
+              </yt-video-preview>
+              <info-preview *ngIf="formHelp.get('type').value === 'help'" [preview]="formHelp.get('body').value">
+              </info-preview>
             </div>
             <!-- RIGHT -->
 
@@ -148,29 +158,29 @@
                   {{keyword}}
                   <mat-icon matChipRemove *ngIf="keywordRemovable">cancel</mat-icon>
                 </mat-chip>
-                <input matInput placeholder="Kata Kunci Lain" [matChipInputFor]="chipList"
-                  [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes" [matChipInputAddOnBlur]="keywordAddOnBlur"
-                  (matChipInputTokenEnd)="add($event)">
+                <input matInput placeholder="{{ ls.locale.manajemen_konten.manajemen_bantuan.text11 }}"
+                  [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="keywordSeparatorKeysCodes"
+                  [matChipInputAddOnBlur]="keywordAddOnBlur" (matChipInputTokenEnd)="add($event)">
               </mat-chip-list>
               <mat-error *ngIf="keywords.length == 0">
-                Kata Kunci Wajib Diisi
+                {{ ls.locale.manajemen_konten.manajemen_bantuan.text11 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
           <!-- KEYWORD -->
 
           <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
-            <h3 class="">Konten Bantuan</h3>
+            <h3 class="">{{ls.locale.manajemen_konten.manajemen_bantuan.text22 }}</h3>
           </div>
           <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
           <mat-error style="padding-top: 6px !important; font-size: .86em;"
             *ngIf="formHelp.controls['body'].hasError('required') && formHelp.controls['body'].touched">
-            Konten Bantuan Wajib Diisi
+            {{ ls.locale.manajemen_konten.manajemen_bantuan.text22 }} {{ ls.locale.global.messages.mandatory_text }}
           </mat-error>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>

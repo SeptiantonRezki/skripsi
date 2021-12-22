@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detil Pesanan'">
+  <page-content-header [contentTitle]="ls.locale.pengajuan_src.detail_submission">
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -10,22 +10,23 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <mat-tab-group [selectedIndex]="selectedTab">
-        <mat-tab label="Detil Pengajuan">
+        <mat-tab label="{{ ls.locale.pengajuan_src.detail_submission }}">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
-              <div class="h2 secondary-text">Detil Pengajuan SRC</div>
+              <div class="h2 secondary-text">{{ ls.locale.pengajuan_src.page_title }} {{ ls.locale.global.button.detail
+                }}</div>
             </div>
 
             <div class="customer">
-              <h2>Pelanggan</h2>
+              <h2>{{ ls.locale.katalog_src.pengguna.text1 }}</h2>
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Nama Toko</th>
-                    <th>Nomor Ponsel</th>
-                    <th>Produk Yang Dijual</th>
-                    <th>Alamat</th>
+                    <th>{{ ls.locale.global.label.store_name }}</th>
+                    <th>{{ ls.locale.global.label.phone }}</th>
+                    <th>{{ ls.locale.pengajuan_src.selling_product }}</th>
+                    <th>{{ ls.locale.global.label.address }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -47,13 +48,13 @@
               </table>
             </div>
             <div class="customer" style="margin-top: 50px;">
-              <h2>Status Aplikasi</h2>
+              <h2>{{ ls.locale.pengajuan_src.application_status }}</h2>
               <table class="simple">
                 <thead>
                   <tr>
                     <th>Status</th>
-                    <th>Diperbaharui Pada</th>
-                    <th>Diperbaharui Oleh</th>
+                    <th>{{ ls.locale.global.label.updated_at_2 }}</th>
+                    <th>{{ ls.locale.global.label.updated_by }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,18 +77,19 @@
             <form class="update-status p-24" fxLayout="row" fxLayoutAlign="start center"
               *ngIf="permission?.ubah && orderStatuses.length > 0">
               <mat-form-field class="mr-16 is-light" fxFlex>
-                <mat-select [formControl]="statusForm" placeholder="Pilih Status Pengajuan" required>
+                <mat-select [formControl]="statusForm"
+                  placeholder="{{ ls.locale.pengajuan_src.choose_submission_status }}" required>
                   <mat-option *ngFor="let status of orderStatuses" [value]="status">
                     <span
                       [ngStyle]="{ 'background-color': renderStatusName(status).bgColor, 'color': renderStatusName(status).textColor }"
-                      style="text-align: center;padding: 5px 15px; border-radius: 10px;">{{status ? renderStatusName(status).name : ''}}</span>
+                      style="text-align: center;padding: 5px 15px; border-radius: 10px;">{{status ?
+                      renderStatusName(status).name : ''}}</span>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
 
-              <button mat-raised-button class="mat-accent" (click)="updateStatus()"
-                [disabled]="statusForm.invalid">PERBARUI
-                STATUS</button>
+              <button mat-raised-button class="mat-accent" (click)="updateStatus()" [disabled]="statusForm.invalid">{{
+                ls.locale.global.button.update_status }}</button>
             </form>
           </div>
         </mat-tab>
@@ -95,7 +97,7 @@
           <div class="ayo-middle p-24" fxLayout="column">
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">photo_camera</mat-icon>
-              <div class="h2 secondary-text">Foto Toko</div>
+              <div class="h2 secondary-text">{{ ls.locale.pengajuan_src.store_image }}</div>
             </div>
             <div fxFlex>
               <img [src]="detailPengajuan?.image_url" alt="Foto toko terkait"

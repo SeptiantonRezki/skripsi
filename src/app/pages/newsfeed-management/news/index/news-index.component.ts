@@ -9,6 +9,7 @@ import { DateAdapter } from '@angular/material';
 import moment from 'moment';
 import { ActivatedRoute, Router } from '../../../../../../node_modules/@angular/router';
 import { DataService } from '../../../../services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-news-index',
@@ -42,7 +43,8 @@ export class NewsIndexComponent {
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale("id");
     this.rows = [];
@@ -82,7 +84,7 @@ export class NewsIndexComponent {
     this.pagination.sort = sort || "date";
 
     this.offsetPagination = page ? (page - 1) : 0;
-    
+
     this.newsService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res);
@@ -98,7 +100,7 @@ export class NewsIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {

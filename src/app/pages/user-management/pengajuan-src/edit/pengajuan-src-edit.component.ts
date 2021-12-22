@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pengajuan-src-edit',
@@ -36,7 +37,8 @@ export class PengajuanSrcEditComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private pengajuanSrcService: PengajuanSrcService
+    private pengajuanSrcService: PengajuanSrcService,
+    private ls: LanguagesService
   ) {
     this.shortDetail = this.dataService.getFromStorage('detail_pengajuan_src');
   }

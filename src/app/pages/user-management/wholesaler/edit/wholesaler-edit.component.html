@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Wholesaler Detail'">
+  <page-content-header [contentTitle]="ls.locale.wholesaler.detail_wholesaler">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
@@ -8,18 +8,19 @@
 
       <form [formGroup]="formWs">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-          <h3>Detil Wholesaler</h3>
+          <h3>{{ ls.locale.wholesaler.detail_wholesaler }}</h3>
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
             <div fxFlex="50" class="px-8" *ngIf="!detailWholesaler.is_branch">
 
-              <mat-form-field [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
+              <mat-form-field
+                [class]="formWs.get('status').value === 'A' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="role_id">
                   <mat-option [value]="wsRole.id" *ngFor="let wsRole of wsRoles">{{wsRole.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
 
             </div>
-            
+
             <div fxFlex="50" class="px-8">
 
               <mat-form-field
@@ -35,29 +36,30 @@
         </div>
         <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama" type="text" formControlName="name">
+            <input matInput [placeholder]="ls.locale.global.label.name" type="text" formControlName="name">
             <mat-error *ngIf="formWs.controls['name'].hasError('required') && formWs.controls['name'].touched ">
-              Nama Toko harus diisi.
+              {{ ls.locale.global.label.store_name }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Alamat Toko" type="address" formControlName="address">
+            <input matInput [placeholder]="ls.locale.global.label.store_address" type="address"
+              formControlName="address">
             <mat-error *ngIf="formWs.controls['address'].hasError('required') && formWs.controls['address'].touched ">
-              Alamat Toko harus diisi.
+              {{ ls.locale.global.label.store_address }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Kode Agen" formControlName="code">
+            <input matInput type="text" [placeholder]="ls.locale.wholesaler.agent_code" formControlName="code">
             <mat-error *ngIf="formWs.controls['code'].hasError('required') && formWs.controls['code'].touched ">
-              Kode Agen harus diisi.
+              {{ ls.locale.wholesaler.agent_code }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+            <input matInput type="text" [placeholder]="ls.locale.global.label.owner_name" formControlName="owner">
             <mat-error *ngIf="formWs.controls['owner'].hasError('required') && formWs.controls['owner'].touched ">
-              Nama Pemilik harus diisi.
+              {{ ls.locale.global.label.owner_name }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -70,7 +72,8 @@
         </div>
         <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field fxFlex="50" class="is-light form-primary">
-            <mat-select placeholder="Negara" formControlName="country" (selectionChange)="handleCountryPhone($event)">
+            <mat-select [placeholder]="ls.locale.global.label.country" formControlName="country"
+              (selectionChange)="handleCountryPhone($event)">
               <mat-option *ngFor="let item of countryList" [value]="item.code">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -78,11 +81,11 @@
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
+            <input matInput type="text" placeholder="ls.locale.global.label.phone" formControlName="phone">
           </mat-form-field>
 
           <div *ngIf="!isDetail && seePhone" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <small>Nomor Ponsel</small>
+            <small>{{ ls.locale.global.label.phone }}</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
                 <input matInput [value]="country_phone" readonly>
@@ -92,7 +95,7 @@
               </mat-form-field>
             </div>
             <mat-error *ngIf="formWs.controls['phone'].hasError('required') && formWs.controls['phone'].touched ">
-              Nomor ponsel harus diisi.
+              {{ ls.locale.global.label.phone }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </div>
 
@@ -100,19 +103,20 @@
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input matInput type="text" maxlength="16" pattern="[0-9]*" inputmode="numeric"
-                  formControlName="account_number" placeholder="Nomor Rekening Bank" numericOnly
-                  (keyup)="bindFormBankAccountValidator()">
+                  formControlName="account_number" [placeholder]="ls.locale.global.label.bank_account_number"
+                  numericOnly (keyup)="bindFormBankAccountValidator()">
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['account_number'].hasError('required') && formBankAccount.controls['account_number'].touched">
-                Nomor Rekening harus diisi.
+                {{ls.locale.global.label.bank_account_number}} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="bank_name" placeholder="Nama Bank" #singleSelect
+                <mat-select formControlName="bank_name" [placeholder]="ls.locale.global.label.bank_name" #singleSelect
                   (selectionChange)="bindFormBankAccountValidator()">
-                  <ngx-mat-select-search [formControl]="filterBank" [placeholderLabel]="'Cari Nama Bank...'"
+                  <ngx-mat-select-search [formControl]="filterBank"
+                    [placeholderLabel]="ls.locale.wholesaler.search_bank_name"
                     [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'">
                   </ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
@@ -122,7 +126,7 @@
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
-                Nama Bank harus diisi.
+                {{ ls.locale.global.label.bank_name }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <div fxFlex="2" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
                 <button mat-icon-button color="" (click)="clearBankName()">
@@ -132,21 +136,22 @@
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <input matInput placeholder="Nama pada Rekening Bank" formControlName="account_name"
+                <input matInput [placeholder]="ls.locale.global.label.bank_account_name" formControlName="account_name"
                   (keyup)="bindFormBankAccountValidator()">
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['account_name'].hasError('required') && formBankAccount.controls['account_name'].touched">
-                Nama pada Rekening Bank harus diisi.
+                {{ls.locale.global.label.bank_account_name}} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <input matInput placeholder="Cabang" formControlName="branch" (keyup)="bindFormBankAccountValidator()">
+                <input matInput placeholder="{{ls.locale.global.label.bank_branch}}" formControlName="branch"
+                  (keyup)="bindFormBankAccountValidator()">
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['branch'].hasError('required') && formBankAccount.controls['branch'].touched">
-                Cabang Bank harus diisi.
+                {{ls.locale.global.label.bank_branch}} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </div>
           </div>
@@ -154,35 +159,35 @@
           <div [formGroup]="formDoc" class="ayo-middle pt-24" fxLayout="column">
             <div fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
-                <input matInput placeholder="Nomor KTP" type="text" formControlName="ktp">
+                <input matInput placeholder="{{ ls.locale.wholesaler.ktp_number }}" type="text" formControlName="ktp">
               </mat-form-field>
               <div fxFlex="2"><a #downloadLink></a></div>
               <div class="confirm btn-confirm py-16" fxLayout="row" fxFlex="50">
                 <a (click)="openKtp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
-                  Lihat Dokumen
+                  {{ ls.locale.wholesaler.view_document }}
                 </a>
                 <div fxFlex="2"></div>
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
                   (click)="cekDokumenAkses('ktp')">
-                  Lihat Pemberian Akses
+                  {{ ls.locale.wholesaler.grant_access }}
                 </button>
               </div>
             </div>
             <div fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
-                <input matInput placeholder="Nomor NPWP" type="text" formControlName="npwp">
+                <input matInput placeholder="{{ ls.locale.wholesaler.tax_number }}" type="text" formControlName="npwp">
               </mat-form-field>
               <div fxFlex="2"></div>
               <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
                 <a (click)="openNpwp()" mat-raised-button type="button" class="confirmation-button"
                   fxFlex="30" target="_self" download>
-                  Lihat Dokumen
+                  {{ ls.locale.wholesaler.view_document }}
                 </a>
                 <div fxFlex="2"></div>
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
                   (click)="cekDokumenAkses('npwp')">
-                  Lihat Pemberian Akses
+                  {{ ls.locale.wholesaler.grant_access }}
                 </button>
               </div>
             </div>
@@ -191,40 +196,40 @@
           <!-- <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Area" formControlName="area_code">
                 <mat-error *ngIf="formWs.controls['area_code'].hasError('required') && formWs.controls['area_code'].touched ">
-                  Area harus diisi.
+                  Area {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field> -->
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
             fxLayoutAlign="space-between stretch" *ngIf="seeSalestree">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national"
+              <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                 matTooltip="{{getToolTipData(formWs.get('national').value, listLevelArea)}}">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formWs.controls['national'].hasError('required') && formWs.controls['national'].touched">
-                National harus diisi
+                {{ls.locale.global.area.national}} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone"
+              <mat-select placeholder="{{ ls.locale.global.area.zone }}" formControlName="zone"
                 matTooltip="{{getToolTipData(formWs.get('zone').value, list['zone'])}}"
                 (selectionChange)="getAudienceArea('region', formWs.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formWs.controls['zone'].hasError('required') && formWs.controls['zone'].touched">
-                Zone harus diisi
+                {{ ls.locale.global.area.zone }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region"
+              <mat-select placeholder="{{ ls.locale.global.area.regional }}" formControlName="region"
                 matTooltip="{{getToolTipData(formWs.get('region').value, list['region'])}}"
                 (selectionChange)="getAudienceArea('area', formWs.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formWs.controls['region'].hasError('required') && formWs.controls['region'].touched">
-                Regional harus diisi
+                {{ ls.locale.global.area.regional }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -234,7 +239,7 @@
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formWs.controls['area'].hasError('required') && formWs.controls['area'].touched">
-                Area harus diisi
+                Area {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -245,7 +250,7 @@
               </mat-select>
               <mat-error
                 *ngIf="formWs.controls['salespoint'].hasError('required') && formWs.controls['salespoint'].touched">
-                Salespoint harus diisi
+                Salespoint {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -256,7 +261,7 @@
               </mat-select>
               <mat-error
                 *ngIf="formWs.controls['district'].hasError('required') && formWs.controls['district'].touched">
-                Distrik harus diisi
+                {{ ls.locale.global.area.district }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -266,19 +271,20 @@
               </mat-select>
               <mat-error
                 *ngIf="formWs.controls['territory'].hasError('required') && formWs.controls['territory'].touched">
-                Territori harus diisi
+                {{ ls.locale.global.area.territory }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
 
           <div fxLayout="row" *ngIf="seeTokoCabang && !detailWholesaler.is_branch">
-            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">Mempunyai
-              Toko Cabang</mat-checkbox>
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="branchShop">{{ ls.locale.wholesaler.has_branch }}
+            </mat-checkbox>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 5px;"
             *ngIf="formWs.get('branchShop').value === true && seeTokoCabang">
             <mat-form-field fxFlex="50" class="is-light form-primary">
-              <input matInput type="number" [formControl]="frmTotalBranch" placeholder="Jumlah Toko Cabang">
+              <input matInput type="number" [formControl]="frmTotalBranch"
+                placeholder="{{ ls.locale.wholesaler.total_branch }}">
             </mat-form-field>
           </div>
 
@@ -289,11 +295,13 @@
               *ngFor="let item of formWs.get('formBranchStore')['controls']; let i = index;">
               <div [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
-                  <input matInput type="text" formControlName="name" placeholder="Nama Toko">
+                  <input matInput type="text" formControlName="name"
+                    placeholder="{{ ls.locale.global.label.store_name }}">
                 </mat-form-field>
 
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
-                  <input matInput type="text" formControlName="address" placeholder="Alamat">
+                  <input matInput type="text" formControlName="address"
+                    placeholder="{{ ls.locale.global.label.store_address }}">
                 </mat-form-field>
 
                 <mat-form-field fxFlex.lt-md="20" fxFlex.lt-lg="50" class="is-light form-primary">
@@ -324,10 +332,10 @@
           <!-- <div class="btn-confirm" fxLayout="row" fxLayoutGap="25px">
               <button mat-stroked-button>Reset Password</button>
             </div> -->
-            
+
           <div *ngIf="!isDetail && !disableSubmit" class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-              SIMPAN
+              {{ls.locale.global.button.save}}
             </button>
           </div>
 

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <div fxLayout="row">
-    <h2 class="pl-20">Daftar Pelapor 356</h2>
+    <h2 class="pl-20">{{ ls.locale.manajemen_konten.daftar_laporan.text14 }}</h2>
   </div>
   <div class="p-0">
     <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
@@ -9,13 +9,13 @@
       [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
       (select)="onSelect($event)">
 
-      <ngx-datatable-column name="Nama Pelapor" prop="user_name">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text15 }}" prop="user_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span>{{row.user_name}}</span>
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Jenis Laporan" prop="reasons">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text16 }}" prop="reasons">
         <ng-template ngx-datatable-cell-template let-row="row" let-rowIndex="rowIndex" let-value="value">
           <span *ngIf="!row.other_status">{{row.reasons}}</span>
           <p *ngIf="row.other_status" style="color: #4A90E2;text-decoration:underline;cursor: pointer;"
@@ -24,7 +24,7 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Tanggal Lapor" prop="created_at">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text17 }}" prop="created_at">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.created_at | date:'dd/MM/yyyy HH:mm'}}
         </ng-template>

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Paguyuban'">
+  <page-content-header [contentTitle]="ls.locale.paguyuban.create">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -13,23 +13,23 @@
 
           <form [formGroup]="verticalStepperStep1">
 
-            <ng-template matStepLabel>Informasi Dasar</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.admin_principal.text1 }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Paguyuban" formControlName="group_name">
+                <input matInput type="text" placeholder="{{ ls.locale.paguyuban.text2 }}" formControlName="group_name">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['group_name'].hasError('required') && verticalStepperStep1.controls['group_name'].touched ">
-                  Nama Paguyuban harus diisi.
+                  {{ ls.locale.paguyuban.text2 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Pengguna" formControlName="fullname">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.name }}" formControlName="fullname">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['fullname'].hasError('required') && verticalStepperStep1.controls['fullname'].touched ">
-                  Nama Pengguna harus diisi.
+                  {{ ls.locale.global.label.name }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
@@ -37,37 +37,37 @@
                 <input matInput type="text" placeholder="Username" formControlName="username">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                  Username harus diisi.
+                  Username {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <div fxLayout="column" class="mb-20">
-                <label for="" class="mb-20" style="color: #333333;">Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil</label>
+                <label for="" class="mb-20" style="color: #333333;">{{ ls.locale.global.messages.text30 }}</label>
                 <mat-form-field fxFlex="100" class="is-light mb-24">
-                  <input matInput type="text" *ngIf="showPassword" formControlName="password" placeholder="Kata Sandi">
+                  <input matInput type="text" *ngIf="showPassword" formControlName="password"
+                    placeholder="{{ ls.locale.login.text3 }}">
                   <input matInput type="password" *ngIf="!showPassword" formControlName="password"
-                    placeholder="Kata Sandi">
+                    placeholder="{{ ls.locale.login.text3 }}">
                   <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
                     (click)="showPassword = !showPassword">
                     <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
                     <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
                   </button>
-                  <mat-error *ngIf="
+                  <mat-error
+                    *ngIf="
                   (verticalStepperStep1.controls['password'].hasError('required') && verticalStepperStep1.controls['password'].touched) ||
                   (verticalStepperStep1.controls['password'].hasError('minlength') && verticalStepperStep1.controls['password'].touched) ||
                   (verticalStepperStep1.controls['password'].hasError('strong') && verticalStepperStep1.controls['password'].touched)">
                     <!-- Kata sandi Anda setidaknya harus memiliki, Panjang 8 karakter, 1 huruf besar & 1 karakter huruf kecil
                     & 1 angka & 1 spesial karakter -->
-                    Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil
+                    {{ ls.locale.global.messages.text30 }}
                   </mat-error>
                 </mat-form-field>
               </div>
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi"
-                  [errorStateMatcher]="passwordMatcher">
+                  placeholder="{{ ls.locale.global.label.confirm_password }}" [errorStateMatcher]="passwordMatcher">
                 <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi kata sandi"
-                  [errorStateMatcher]="passwordMatcher">
+                  placeholder="{{ ls.locale.global.label.confirm_password }}" [errorStateMatcher]="passwordMatcher">
                 <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
                   (click)="showConfirmPassword = !showConfirmPassword">
                   <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
@@ -75,21 +75,22 @@
                 </button>
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched">
-                  Konfirmasi kata sandi harus diisi.
+                  {{ ls.locale.global.label.confirm_password }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
                 <!-- <mat-error
                   *ngIf="!verticalStepperStep1.controls['password_confirmation'].hasError('required') && verticalStepperStep1.controls['password_confirmation'].touched && verticalStepperStep1.controls['password_confirmation'].hasError('notSame')">
-                  Konfirmasi kata sandi tidak sesuai.
+                  {{ ls.locale.global.label.confirm_password }} tidak sesuai.
                 </mat-error> -->
-                <mat-error *ngIf="verticalStepperStep1.hasError('notMatch') && verticalStepperStep1.controls['password_confirmation'].touched">
-                  Konfirmasi kata sandi tidak sesuai.
+                <mat-error
+                  *ngIf="verticalStepperStep1.hasError('notMatch') && verticalStepperStep1.controls['password_confirmation'].touched">
+                  {{ ls.locale.reset_password.text8 }}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -104,18 +105,18 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="{{ ls.locale.global.area.national }}" formControlName="national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone"
+                <mat-select placeholder="{{ ls.locale.global.area.zone }}" formControlName="zone"
                   (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)">
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region"
+                <mat-select placeholder="{{ ls.locale.global.area.regional }}" formControlName="region"
                   (selectionChange)="getAudienceArea('area', wilayah.get('region').value)">
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
@@ -133,13 +134,13 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district"
+                <mat-select placeholder="{{ ls.locale.global.area.district }}" formControlName="district"
                   (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory">
+                <mat-select placeholder="{{ ls.locale.global.area.territory }}" formControlName="territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -155,7 +156,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
           </form>
@@ -165,7 +166,7 @@
 
           <form [formGroup]="verticalStepperStep2">
 
-            <ng-template matStepLabel>Level Akses Peran</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.admin_principal.text2 }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
@@ -174,7 +175,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['principal_id'].hasError('required') && verticalStepperStep2.controls['principal_id'].touched">
-                  Admin HMS harus diisi
+                  {{ ls.locale.admin_principal.text2 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
@@ -184,7 +185,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -194,19 +195,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ ls.locale.global.button.finish }}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ ls.locale.admin_principal.text4 }}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ ls.locale.global.button.back }}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Selesai
+                {{ ls.locale.global.button.finish }}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

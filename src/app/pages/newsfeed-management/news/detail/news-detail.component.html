@@ -1,15 +1,16 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detail Berita'">
+  <page-content-header [contentTitle]="ls.locale.manajemen_newsfeed.daftar_berita.text3">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formBerita">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="">
-          <h2 class="">Detail Berita</h2>
+          <h2 class="">{{ ls.locale.manajemen_newsfeed.daftar_berita.text3 }}</h2>
           <div>
-            <mat-form-field [class]="formBerita.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
+            <mat-form-field
+              [class]="formBerita.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
               <mat-select formControlName="status">
                 <mat-option *ngFor="let item of statusNews;" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
@@ -35,11 +36,11 @@
           <div fxLayout="column" class="pb-48">
             <p [innerHtml]="detailNews.description" style="text-align: justify"></p>
           </div>
-          <mat-checkbox formControlName="is_notif">Kirim push notification?</mat-checkbox>
+          <mat-checkbox formControlName="is_notif">{{ ls.locale.manajemen_konten.tnc.text6 }}</mat-checkbox>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="25" (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>

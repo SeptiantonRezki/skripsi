@@ -13,6 +13,7 @@ import moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { QiscusService } from 'app/services/qiscus.service';
 import { StorageHelper } from 'app/helper/storage.helper';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-order-catalogue',
@@ -31,18 +32,18 @@ export class OrderCatalogueComponent implements OnInit {
   selectedOrderToUpdate: any;
   vendor_id: any;
   statusFilter: any[] = [
-    { name: 'Semua Status', value: '' },
-    { name: 'Pesanan Baru', value: 'pesanan-baru' },
-    { name: 'Diproses', value: 'diproses' },
-    { name: 'Konfirmasi Perubahan', value: 'konfirmasi-perubahan' },
-    { name: 'Perubahan Disetujui', value: 'perubahan-disetujui' },
-    { name: 'Pesanan Dibatalkan', value: 'pesanan-dibatalkan' },
-    { name: 'Siap Dikirim', value: 'siap-dikirim' },
-    { name: 'Siap Diambil', value: 'siap-diambil' },
-    { name: 'Dalam Pengiriman', value: 'dalam-pengiriman' },
-    { name: 'Pesanan Diterima', value: 'pesanan-diterima' },
-    { name: 'Belum Lunas', value: 'belum-lunas' },
-    { name: 'Selesai', value: 'selesai' },
+    { name: this.ls.locale.global.label.all_status, value: '' },
+    { name: this.ls.locale.global.order_status.new_order, value: 'pesanan-baru' },
+    { name: this.ls.locale.global.order_status.process_order, value: 'diproses' },
+    { name: this.ls.locale.global.order_status.change_confirmation, value: 'konfirmasi-perubahan' },
+    { name: this.ls.locale.global.order_status.change_agreed, value: 'perubahan-disetujui' },
+    { name: this.ls.locale.global.order_status.canceled_order, value: 'pesanan-dibatalkan' },
+    { name: this.ls.locale.global.order_status.delivery_ready, value: 'siap-dikirim' },
+    { name: this.ls.locale.global.order_status.pickup_ready, value: 'siap-diambil' },
+    { name: this.ls.locale.global.order_status.on_delivery, value: 'dalam-pengiriman' },
+    { name: this.ls.locale.global.order_status.received_order, value: 'pesanan-diterima' },
+    { name: this.ls.locale.global.order_status.not_paid_off, value: 'belum-lunas' },
+    { name: this.ls.locale.global.order_status.completed_order, value: 'selesai' },
   ]
 
   courierFilter: any[] = [];
@@ -68,7 +69,8 @@ export class OrderCatalogueComponent implements OnInit {
     private emitter: Emitter,
     private generalService: GeneralService,
     private qs: QiscusService,
-    private storageHelper: StorageHelper
+    private storageHelper: StorageHelper,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale("id");
 

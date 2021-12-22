@@ -6,10 +6,10 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="setSelectedTab($event)">
-        <mat-tab label="Laporan">
+        <mat-tab label="{{ ls.locale.manajemen_konten.daftar_laporan.text1 }}">
           <app-detail-report *ngIf="selectedTab === 0"></app-detail-report>
         </mat-tab>
-        <mat-tab label="Pelapor">
+        <mat-tab label="{{ ls.locale.manajemen_konten.daftar_laporan.text13 }}">
           <app-reporter-list *ngIf="selectedTab === 1"></app-reporter-list>
         </mat-tab>
       </mat-tab-group>

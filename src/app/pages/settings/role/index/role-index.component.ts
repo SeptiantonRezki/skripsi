@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { AccessService } from '../../../../services/settings/access.service';
 import { Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-role-index',
@@ -40,7 +41,8 @@ export class RoleIndexComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private accessService: AccessService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -95,7 +97,7 @@ export class RoleIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;      
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-create-pengajuan-src',
@@ -37,7 +38,8 @@ export class CreatePengajuanSrcComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private pengajuanSrcService: PengajuanSrcService
+    private pengajuanSrcService: PengajuanSrcService,
+    private ls: LanguagesService
   ) {
 
   }
@@ -180,7 +182,7 @@ export class CreatePengajuanSrcComponent implements OnInit {
   submit() {
     if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid && this.verticalStepperStep3.valid) {
       this.submitting = true;
-      let phoneNumber = this.verticalStepperStep2.getRawValue()["phone"] && this.verticalStepperStep2.getRawValue()["phone"].slice(0, 3) === '+62' ? this.verticalStepperStep2.getRawValue()["phone"].slice(3, this.verticalStepperStep2.getRawValue()["phone"].length) : `+62${this.verticalStepperStep2.getRawValue()["phone"]}`
+      let phoneNumber = this.verticalStepperStep2.getRawValue()["phone"] && this.verticalStepperStep2.getRawValue()["phone"].slice(0, 3) === this.ls.locale.global.country_calling_code ? this.verticalStepperStep2.getRawValue()["phone"].slice(3, this.verticalStepperStep2.getRawValue()["phone"].length) : `${this.ls.locale.global.country_calling_code}${this.verticalStepperStep2.getRawValue()["phone"]}`
 
       let fd = new FormData();
       fd.append('name', this.verticalStepperStep1.get('name').value);

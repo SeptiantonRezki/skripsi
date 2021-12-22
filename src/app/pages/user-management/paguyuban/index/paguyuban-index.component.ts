@@ -9,6 +9,7 @@ import { DataService } from 'app/services/data.service';
 import { PaguyubanService } from 'app/services/user-management/paguyuban.service';
 import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-paguyuban-index',
@@ -55,7 +56,8 @@ export class PaguyubanIndexComponent {
     private dataService: DataService,
     private paguyubanService: PaguyubanService,
     private formBuilder: FormBuilder,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

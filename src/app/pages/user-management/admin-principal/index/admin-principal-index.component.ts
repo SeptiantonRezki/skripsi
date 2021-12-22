@@ -156,10 +156,10 @@ export class AdminPrincipalIndexComponent {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Admin Principal",
-      captionDialog: "Apakah anda yakin untuk menghapus Admin Principal ini ?",
+      titleDialog: this.ls.locale.admin_principal.text5,
+      captionDialog: this.ls.locale.admin_principal.text6,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -168,7 +168,7 @@ export class AdminPrincipalIndexComponent {
     this.adminPrincipalService.delete({ principal_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
 
         this.getAdminList();
         this.selected = [];
@@ -182,14 +182,14 @@ export class AdminPrincipalIndexComponent {
   deleteAllUser(): void {
     if (this.selected.length > 0) {
       let data = {
-        titleDialog: "Non-aktifkan Admin Principal",
-        captionDialog: "Apakah anda yakin untuk menon-aktifkan data yang telah dipilih ?",
+        titleDialog: this.ls.locale.admin_principal.text14,
+        captionDialog: this.ls.locale.admin_principal.text15,
         confirmCallback: this.confirmAllDelete.bind(this),
-        buttonText: ["Non-aktifkan", "Batal"]
+        buttonText: [this.ls.locale.global.button.deactivate, this.ls.locale.global.button.cancel]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
-      this.dialogService.openSnackBar({ message: 'Tidak ada admin principal yang dipilih' })
+      this.dialogService.openSnackBar({ message: this.ls.locale.admin_principal.text16 })
     }
   }
 
@@ -201,7 +201,7 @@ export class AdminPrincipalIndexComponent {
     this.adminPrincipalService.deleteMultiple(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
 
         this.getAdminList();
         this.selected = [];
