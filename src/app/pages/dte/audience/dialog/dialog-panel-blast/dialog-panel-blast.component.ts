@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
@@ -23,6 +23,7 @@ export class DialogPanelBlastComponent implements OnInit {
   reorderable = true;
   onLoad: boolean;
 
+  @ViewChild("downloadLink") downloadLink: ElementRef;
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
 
@@ -69,6 +70,8 @@ export class DialogPanelBlastComponent implements OnInit {
     if (this.detailData.dataRows) {
       this.currPage += 1;
       this.totalData = this.detailData.dataRows.length;
+      this.detailData.dataRows.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
+
       this.idbService.bulkUpdate(this.detailData.dataRows).then(res => {
         this.recursiveImport();
       }, err => {
@@ -101,4 +104,40 @@ export class DialogPanelBlastComponent implements OnInit {
       this.dataService.showLoading(false);
     });
   }
+  
+  async export() {
+    this.dataService.showLoading(true);
+    const body = {
+      trade_audience_group_id: this.detailData.id
+    };
+
+    try {
+      const response = await this.audienceService.exportPreviewAudience(body).toPromise();
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Export_Audience_Personalize_${new Date().toLocaleString()}.xlsx`;
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
+      this.dataService.showLoading(false);
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
+
+  getRowClass = (row) => {    
+    return {
+      'row-invalid': row.is_valid === 0,
+    };
+   }
 }

@@ -66,6 +66,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   b2bActiveList: any[] = [
+    { name: "All", value: "all" },
     { name: "Active", value: "active" },
     { name: "Not Active", value: "inactive" },
   ];
@@ -1091,17 +1092,14 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       dialogConfig.panelClass = "scrumboard-card-dialog";
       dialogConfig.data = {
         password: "P@ssw0rd",
-        dataRows: this.previewAudienceList
+        dataRows: this.previewAudienceList,
+        id: this.detailAudience.id
       };
   
       this.dialogRef = this.dialog.open(
         DialogPanelBlastComponent,
         {...dialogConfig, minWidth: '600px'}
       );
-  
-      this.dialogRef.afterClosed().subscribe((response) => {
-        console.log('res', response);
-      });
     }
   }
 
@@ -1221,7 +1219,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   }
 
   handleEstimate(value){
-    return typeof(value) === 'number' ? `${value * 100}%` : '---';
+    return typeof(value) === 'number' ? `${Math.round(value * 100)}%` : '---';
   }
 
   getPreviewAudience(id){

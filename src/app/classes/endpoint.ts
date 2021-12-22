@@ -315,6 +315,7 @@ export class Endpoint {
         put_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/${context.audience_id}`,
         check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/check-audience`,
         preview_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/preview-audience`,
+        export_preview_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience-personalized/export`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,

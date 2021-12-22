@@ -65,6 +65,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   b2bActiveList: any[] = [
+    { name: "All", value: "all" },
     { name: "Active", value: "active" },
     { name: "Not Active", value: "inactive" },
   ];
@@ -1137,7 +1138,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   }
 
   handleEstimate(value){
-    return typeof(value) === 'number' ? `${value * 100}%` : '---';
+    return typeof(value) === 'number' ? `${Math.round(value * 100)}%` : '---';
   }
 
   handleClassification(event){
