@@ -117,6 +117,7 @@
         <img src="assets/images/ayo/coin.png" width="20" height="20" class="mr-8" />
         {{dataSubmission.data.coin_verification}}
       </div>
+
       <div *ngFor="let item of dataSubmission.data.submissions; let i = index;" fxLayout="row"
         fxLayoutAlign="start start" class="info mb-8">
         <div class="number" fxLayout="column" fxLayoutAlign="start start">{{i + 1}}.</div>
@@ -129,6 +130,7 @@
             (click)="previewImage(dataSubmission.data.questions[i].question_image)" />
           <!-- <span style="text-align: left;">{{item.question}}</span> -->
           <div style="text-align: left;" [innerHtml]="item.question | safeHtml"></div>
+
           <div *ngIf="item.type == 'radio'" fxLayout="column" fxLayoutAlign="start start">
             <div *ngFor="let answer of item.additional;" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer !== item.answer[0]">
@@ -156,6 +158,20 @@
               </div>
             </div>
           </div>
+          
+          <div *ngIf="item.type == 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea'" fxLayout="column" fxLayoutAlign="start start">
+            <div *ngFor="let answer of item.additional;" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer === item.answer[0]">
+                radio_button_checked
+              </mat-icon>
+              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer !== item.answer[0]">
+                radio_button_unchecked
+              </mat-icon>
+              <div>
+                {{answer}}
+              </div>
+            </div>
+          </div>
 
           <div *ngIf="item.type == 'text' || item.type == 'textarea' || item.type == 'numeric' || item.type == 'date' || item.type == 'stock_check'" fxLayout="column" fxLayoutAlign="start start">
             <div *ngIf="isArray(dataSubmission.data.submissions[i].answer); else answerEncrypted">
@@ -171,7 +187,6 @@
           <div *ngIf="item.type == 'image'" fxLayout="column" fxLayoutAlign="start start">
             <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)" />
           </div>
-
 
           <div class="item-question-img" *ngIf="item.type == 'planogram'" fxLayout="column" fxLayoutAlign="start start">
             <div class="p-12 planogram-template" fxLayout="column" fxLayoutAlign="center center">

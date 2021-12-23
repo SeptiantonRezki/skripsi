@@ -141,6 +141,16 @@ export class ConfirmDialogTsmComponent implements OnInit {
           }
         }
 
+        dataSubmission_.data.submissions.forEach(item => {
+          if (item.type === 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea') {
+            if (!item.additional.includes(item.answer[0])) {
+              let newAdditional = [...item.additional];              
+              newAdditional[newAdditional.length - 1] = `Lainnya - ${item.answer[0]}`;
+              item.additional = newAdditional;
+            }
+          }
+        });
+
         this.dataSubmission = dataSubmission_;
         console.log('dataSub => ', this.dataSubmission);
       }, err => {
