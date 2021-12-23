@@ -63,7 +63,7 @@ export class RetailerService extends BaseService {
 
   getAccessCashier(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export_access_cashier");
-    return this.postBlobApi(url, body);
+    return this.postApiTest(url, body);
   }
 
   getIdNumber(body): Observable<any> {
