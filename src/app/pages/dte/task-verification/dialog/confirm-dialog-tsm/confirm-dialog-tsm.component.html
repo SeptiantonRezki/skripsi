@@ -160,16 +160,32 @@
           </div>
           
           <div *ngIf="item.type == 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea'" fxLayout="column" fxLayoutAlign="start start">
-            <div *ngFor="let answer of item.additional;" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer === item.answer[0]">
-                radio_button_checked
-              </mat-icon>
-              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer !== item.answer[0]">
-                radio_button_unchecked
-              </mat-icon>
-              <div>
-                {{answer}}
+            <div *ngFor="let additional of item.additional; let idx = index" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+              <div *ngIf="isArray(item.answer); else answerEncryptedCombine">
+                <mat-icon class="secondary-text" fxFlex="5" *ngIf="additional === item.answer[0]">
+                  radio_button_checked
+                </mat-icon>
+                <mat-icon class="secondary-text" fxFlex="5" *ngIf="additional !== item.answer[0]">
+                  radio_button_unchecked
+                </mat-icon>
               </div>
+              <ng-template #answerEncryptedCombine>
+                <mat-icon class="secondary-text" fxFlex="5" *ngIf="additional === item.answer">
+                  radio_button_checked
+                </mat-icon>
+                <mat-icon class="secondary-text" fxFlex="5" *ngIf="additional !== item.answer">
+                  radio_button_unchecked
+                </mat-icon>
+              </ng-template>
+              
+              <div *ngIf="idx !== (item.additional.length - 1); else jawabLainnya">
+                {{additional}}
+              </div>
+              <ng-template #jawabLainnya>
+                <div class="text-left">
+                  Lainnya - {{ additional }}
+                </div>
+              </ng-template>
             </div>
           </div>
 
