@@ -1205,7 +1205,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         this.formFilterRetailer.get('total_required_panel').setValue(panel_required);
       }
     }
-    // TODO: kalau untuk fixed-panel gimana ?
 
     if (this.detailAudience.panel_count > 0) {
       this.isChecked = true;
@@ -1226,7 +1225,6 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     this.audienceService.previewAudience({trade_audience_group_id: id}).subscribe(
       (res) => {
         const {data} = res;
-        // TODO: filter copywritingnya
         this.previewAudienceList = data;
       },
       (err) => {
