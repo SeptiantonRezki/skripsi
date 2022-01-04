@@ -8,6 +8,7 @@ import { TemplateTaskService } from '../../../../../services/dte/template-task.s
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from "app/services/dialog.service";
+import { DataService } from "app/services/data.service";
 
 @Component({
   selector: 'app-dialog-misi-edit',
@@ -41,7 +42,8 @@ export class DialogMisiEditComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogMisiEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private dataService: DataService,
   ) { }
 
   ngOnInit() {
@@ -336,17 +338,34 @@ export class DialogMisiEditComponent implements OnInit {
     if (isFirstLoad && this.data && this.data.data && this.data.data.attribute && this.data.data.attribute.task_template_id) {
       this.pagination['id'] = this.data.data.attribute.task_template_id;
     }
-    this.templateTaskService.get(this.pagination).subscribe(
-      (res) => {
-        this.missions = res.data.data;
-        this.filteredMission.next(this.missions.slice());
-        this.filteredMissionOther.next(this.missions.slice());
-        this.checkTaskTemplate();
-      },
-      (err) => {
-        console.log("err ", err);
-      }
-    );
+
+    const dataLocal = this.dataService.getFromStorage('detail_task_sequencing');
+    if (dataLocal.type === "personalization") {
+      this.templateTaskService.getPersonalize(this.pagination).subscribe(
+        (res) => {
+          this.missions = res.data.data;
+          this.filteredMission.next(this.missions.slice());
+          this.filteredMissionOther.next(this.missions.slice());
+          this.checkTaskTemplate();
+          this.form.get("task_template_other_name_id").disable();
+        },
+        (err) => {
+          console.log("err ", err);
+        }
+      );
+    } else {
+      this.templateTaskService.get(this.pagination).subscribe(
+        (res) => {
+          this.missions = res.data.data;
+          this.filteredMission.next(this.missions.slice());
+          this.filteredMissionOther.next(this.missions.slice());
+          this.checkTaskTemplate();
+        },
+        (err) => {
+          console.log("err ", err);
+        }
+      );
+    }
   }
 
   selectChangeFF(e: any) {
