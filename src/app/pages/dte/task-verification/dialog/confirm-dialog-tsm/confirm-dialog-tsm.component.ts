@@ -106,6 +106,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
         task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
         task_sequencing_management_id: this.data.task_sequencing_management_id,
         retailer_id: this.data.retailer_id,
+        submission_id: this.data.submission_id
       }).subscribe(async res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -244,6 +245,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
         verification: 'rejected',
         reason: reason,
         retailer_id: this.data.retailer_id,
+        submission_id: this.data.submission_id,
       }).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
@@ -259,6 +261,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
         verification: 'approved',
         reason: null,
         retailer_id: this.data.retailer_id,
+        submission_id: this.data.submission_id,
       }).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
