@@ -1186,8 +1186,6 @@ export class RetailerIndexComponent {
 
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
-      // const selectedRetailer = [];
-      // const response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
       let response:any;
       if (!this.permission.idnumber) {
         response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
@@ -1195,13 +1193,23 @@ export class RetailerIndexComponent {
         response = await this.retailerService.getIdNumber({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
       }
 
-      console.log('he', response.headers);
+      console.log('he', response);
       const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url= window.URL.createObjectURL(blob);
-      window.open(url);
-      // this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_Retailer_${new Date().toLocaleString()}.xlsx`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Export_Retailer_${new Date().toLocaleString()}.xlsx`;
+
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
       this.exportAccessCashier = false;
       this.dataService.showLoading(false);
 
