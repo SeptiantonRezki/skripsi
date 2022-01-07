@@ -87,8 +87,8 @@
       "print": "Print",
       "cash_bill": "Cash Bill",
       "all_category": "All Category",
-      "available": "Tersedia",
-      "unavailable": "Tidak Tersedia",
+      "available": "Available",
+      "unavailable": "Unavailable",
       "all_province": "All Province",
       "all_cities": "All City",
       "all_district": "All District",
@@ -126,7 +126,9 @@
       "import": "Import",
       "export": "Export",
       "deactivate": "Deactivate",
-      "update_status": "UPDATE STATUS"
+      "update_status": "UPDATE STATUS",
+			"yes_continue": "Yes, continue",
+			"no_cancel": "No, cancel"
     },
     "area": {
       "national": "National",
@@ -447,7 +449,7 @@
       "text8": "Drag an Image Here or Select a File",
       "text9": "Layout Description",
       "text10": "Create a Store Layout Template",
-      "image_dimension": "Dimensi 410px410p, Besar file maksimal 2mb"
+      "image_dimension": "Dimensions 410px410p, Maximum file size 2mb"
     },
     "vendor": {
       "text1": "Vendors List",
@@ -582,7 +584,8 @@
       "text23": "Deadline for Receiving Invalid Orders Use Format HH:MM (ex: 17:00)",
       "text24": "Invalid Contact Number, Contact Number must be a number",
       "text25": "Deadline for Receiving Orders (HH:MM)",
-      "text26": "Change Courier"
+      "text26": "Change Courier",
+      "text27": "Are you sure you want to change this Courier status?"
     },
     "panel_mitra": {
       "text1": "Partner Panel ",
