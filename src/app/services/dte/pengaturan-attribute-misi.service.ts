@@ -128,4 +128,22 @@ export class PengaturanAttributeMisiService extends BaseService {
     return this.deleteApi(url);
   }
 
+  // Copywriting
+  getCopywriting(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_copywriting');
+    return this.getApi(url, queryParams);
+  }
+  createCopywriting(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_copywriting');
+    return this.postApi(url, body);
+  }
+  putCopywriting(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_copywriting', context);
+    return this.putApi(url, body);
+  }
+  deleteCopywriting(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_copywriting', context);
+    return this.deleteApi(url);
+  }
+
 }

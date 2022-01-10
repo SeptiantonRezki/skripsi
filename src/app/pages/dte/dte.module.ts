@@ -147,6 +147,18 @@ import { BackgroundMisiComponent } from './template/dialog/background-misi/backg
 import { NgxMaskModule } from "ngx-mask";
 import { VerificationRemarkComponent } from './pengaturan-attribute-misi/index/verification-remark/verification-remark.component';
 import { DynamicPricingComponent } from './dynamic-pricing/dynamic-pricing.component';
+import { CopywritingComponent } from './pengaturan-attribute-misi/index/copywriting/copywriting.component';
+import { TemplateCreatePersonalizeComponent } from './template/create/personalize/template-create-personalize.component';
+import { TemplateIndexPersonalizeComponent } from './template/index/personalize/template-index-personalize.component';
+import { TemplateEditPersonalizeComponent } from './template/edit/personalize/template-edit-personalize.component';
+import { AudienceIndexPersonalizeComponent } from './audience/index/personalize/audience-index-personalize.component';
+import { AudienceCreatePersonalizeComponent } from './audience/create/personalize/audience-create-personalize.component';
+import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index/personalize/task-sequencing-index-personalize.component';
+import { PublishMisiComponent } from './publish-misi/publish-misi.component';
+import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
+import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
+import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -310,6 +322,18 @@ export const MY_FORMATS = {
     BackgroundMisiComponent,
     VerificationRemarkComponent,
     DynamicPricingComponent,
+    CopywritingComponent,
+    TemplateCreatePersonalizeComponent,
+    TemplateIndexPersonalizeComponent,
+    TemplateEditPersonalizeComponent,
+    AudienceIndexPersonalizeComponent,
+    AudienceCreatePersonalizeComponent,
+    TaskSequencingIndexPersonalizeComponent,
+    PublishMisiComponent,
+    DialogPanelBlastComponent,
+    DialogProcessComponent,
+    AudienceEditPersonalizeComponent,
+    ImportAudiencePersonalizeComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -412,7 +436,10 @@ export const MY_FORMATS = {
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
     DialogPushNotifDuplicateComponent,
-    ImportExchangeCoinComponent
+    ImportExchangeCoinComponent,
+    DialogPanelBlastComponent,
+    DialogProcessComponent,
+    ImportAudiencePersonalizeComponent
   ],
 })
 export class DteModule { }
