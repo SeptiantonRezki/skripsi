@@ -187,6 +187,14 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
   openConfirmDialog(item: any, popupType: string) {
     const dialogConfig = new MatDialogConfig();
     item.popupType = popupType;
+
+    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
+    // const data = item;
+    // if (item.task_sequencing_management_type === 'personalization') {
+    //   data.submission_id = item.submission_id;
+    // }
+    // dialogConfig.data = data;
+
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';

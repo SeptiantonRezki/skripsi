@@ -792,7 +792,11 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     data.name = item.name;
     data.code = item.code;
     data.status_coin = item.status_coin;
-    data.submission_id = item.submission_id;
+
+    if (this.dataTsm.task_sequencing_management_type === 'personalization') {
+      data.submission_id = item.submission_id;
+    }
+
     dialogConfig.data = data;
     if (popupType === 'Verifikasi Misi') {
       dialogConfig.disableClose = false;
