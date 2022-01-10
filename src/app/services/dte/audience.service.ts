@@ -116,4 +116,35 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "show_status");
     return this.getApi(url, queryParams);
   }
+  
+  // Personalize
+  getPersonalize(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_personalize');
+    return this.getApi(url, queryParams);
+  }
+
+  createPersonalize(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_personalize');
+    return this.postApi(url, body);
+  }
+
+  putPersonalize(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_personalize', context);
+    return this.postApi(url, body);
+  }
+
+  checkAudience(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'check_audience');
+    return this.postApi(url, body);
+  }
+
+  previewAudience(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'preview_audience');
+    return this.postApi(url, body);
+  }
+
+  exportPreviewAudience(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_preview_audience");
+    return this.postBlobApi(url, body);
+  }
 }

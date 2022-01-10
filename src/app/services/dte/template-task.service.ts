@@ -45,4 +45,24 @@ export class TemplateTaskService extends BaseService {
     const url = this.getUrl(this.namespace, 'planogram_ir');
     return this.getApi(url, queryParams);
   }
+
+  getPersonalize(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_create_personalize');
+    return this.getApi(url, queryParams);
+  }
+
+  createPersonalize(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_create_personalize');
+    return this.postApi(url, body);
+  }
+
+  putPersonalize(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
+    return this.postApi(url, body);
+  }
+
+  deletePersonalize(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
+    return this.deleteApi(url);
+  }
 }

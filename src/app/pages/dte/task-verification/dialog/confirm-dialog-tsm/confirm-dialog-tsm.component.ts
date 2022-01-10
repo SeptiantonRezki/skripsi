@@ -73,6 +73,13 @@ export class ConfirmDialogTsmComponent implements OnInit {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.jumlahMisi = this.data.task_need_verify;
+
+      // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
+      // let body = { template_id: this.data.task_sequencing_management_template_id };
+      // if (this.data.submission_id) {
+      //   body['submission_id'] = this.data.submission_id;
+      // }
+      
       this.taskVerificationService.listReasonTsm({ template_id: this.data.task_sequencing_management_template_id }).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -102,11 +109,18 @@ export class ConfirmDialogTsmComponent implements OnInit {
     } else if (this.data.popupType === 'Verifikasi Misi TSM') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      await this.taskVerificationService.submissionTsm({
+
+      let body = {
         task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
         task_sequencing_management_id: this.data.task_sequencing_management_id,
         retailer_id: this.data.retailer_id,
-      }).subscribe(async res => {
+      };
+
+      if (this.data.submission_id) {
+        body['submission_id'] = this.data.submission_id;
+      }
+
+      await this.taskVerificationService.submissionTsm(body).subscribe(async res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
         const dataSubmission_ = res;
@@ -186,6 +200,13 @@ export class ConfirmDialogTsmComponent implements OnInit {
       return;
     }
     this.dataService.showLoading(true);
+
+    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
+    // let body = {};
+    // if (this.data.submission_id) {
+    //   body['submission_id'] = this.data.submission_id;
+    // }
+
     this.taskVerificationService.verificationAllTsm({
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       verification: this.isDisagree ? 'rejected' : 'approved',
@@ -201,6 +222,13 @@ export class ConfirmDialogTsmComponent implements OnInit {
 
   releaseCoinOnTsmIndex() {
     this.dataService.showLoading(true);
+
+    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
+    // let body = {};
+    // if (this.data.submission_id) {
+    //   body['submission_id'] = this.data.submission_id;
+    // }
+    
     this.taskVerificationService.releaseCoinAllTsm({
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
@@ -217,6 +245,13 @@ export class ConfirmDialogTsmComponent implements OnInit {
   releaseCoinTsm() {
     this.dataService.showLoading(true);
     console.log('data', this.data);
+
+    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
+    // let body = {};
+    // if (this.data.submission_id) {
+    //   body['submission_id'] = this.data.submission_id;
+    // }
+
     this.taskVerificationService.releaseCoinTsm({
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
@@ -257,15 +292,27 @@ export class ConfirmDialogTsmComponent implements OnInit {
   }
 
   confirmVerifikasiMisi(reason: string) {
+    let body = {
+      task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
+      retailer_id: this.data.retailer_id,
+    };
+
+    if (reason) {
+      body['verification'] = 'rejected';
+      body['reason'] = reason;
+    } else {
+      body['verification'] = 'approved';
+      body['reason'] = null;
+    }
+
+    if (this.data.submission_id) {
+      body['submission_id'] = this.data.submission_id;
+    }
+
     if (reason) {
       console.log('TOLAK')
       this.dataService.showLoading(true);
-      this.taskVerificationService.verificationTsm({
-        task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
-        verification: 'rejected',
-        reason: reason,
-        retailer_id: this.data.retailer_id,
-      }).subscribe(res => {
+      this.taskVerificationService.verificationTsm(body).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
         this.dialogRef.close('data');
@@ -275,12 +322,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
     } else {
       console.log('SETUJU');
       this.dataService.showLoading(true);
-      this.taskVerificationService.verificationTsm({
-        task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
-        verification: 'approved',
-        reason: null,
-        retailer_id: this.data.retailer_id,
-      }).subscribe(res => {
+      this.taskVerificationService.verificationTsm(body).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
         this.dialogRef.close('data');
