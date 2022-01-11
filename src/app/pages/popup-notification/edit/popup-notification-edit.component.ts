@@ -188,8 +188,6 @@ export class PopupNotificationEditComponent {
       enddate: [moment(), Validators.required],
       time: ["00:00", Validators.required],
       endtime: ["00:00", Validators.required],
-      date_ws_downline: [moment(), Validators.required],
-      time_ws_downline: ["00:00", Validators.required],
       positive_button: ["", Validators.required],
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
@@ -258,7 +256,6 @@ export class PopupNotificationEditComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -281,12 +278,10 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
         this.formPopupGroup.controls['landing_page'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
 
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
         this.formPopupGroup.controls['landing_page'].disable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         // this.formPopupGroup.controls['body'].setValue('');
         this.formPopupGroup.controls['body'].disable();
@@ -326,7 +321,6 @@ export class PopupNotificationEditComponent {
 
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -367,10 +361,6 @@ export class PopupNotificationEditComponent {
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
-        }
-
-        if (this.formPopupGroup.controls['group_type'].value === 'downline') {
-          this.formPopupGroup.controls['date_ws_downline'].enable();
         }
       }
 
@@ -434,15 +424,6 @@ export class PopupNotificationEditComponent {
     })
 
     this.formPopupGroup.controls['group_type'].valueChanges.debounceTime(50).subscribe(res => {
-      if (!this.onLoad) {
-        if (res === 'downline') {
-          this.formPopupGroup.controls['date_ws_downline'].enable();
-        } else {
-          this.formPopupGroup.controls['date_ws_downline'].setValue('');
-          this.formPopupGroup.controls['date_ws_downline'].disable();
-        }
-      }
-
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
         if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
@@ -1085,12 +1066,6 @@ export class PopupNotificationEditComponent {
       if (response.type === 'retailer') {
         const group_type = response.areas.map(item => item.pivot.type)[0];
         this.formPopupGroup.get('group_type').setValue(response.retailer_type);
-
-        if (group_type === 'downline') {
-          const date_ws_downline = moment(response.date_ws_downline);
-          this.formPopupGroup.get('date_ws_downline').setValue(date_ws_downline);
-          this.formPopupGroup.get('time_ws_downline').setValue(date_ws_downline.format('HH:mm'));
-        }
       }
 
       if (response.type === 'customer') {
@@ -1564,17 +1539,10 @@ export class PopupNotificationEditComponent {
 
       if (body.type === 'retailer') {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
-
-        if (body['retailer_type'] === 'downline') {
-          body['date_ws_downline'] = `${moment(this.formPopupGroup.get('date_ws_downline').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time_ws_downline').value}:00`;
-        } else {
-          body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-          body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
-        }
-      } else {
-        body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-        body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
       }
+
+      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
 
       if (body.type === 'customer') {
         let smoker_type = '';
